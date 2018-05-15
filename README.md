@@ -45,6 +45,8 @@ Features
 -   Charlson and Van Walraven score calculations
 -   Hierarchical Condition Codes (HCC) from CMS
 -   Clinical Classifcations Software (CCS) comorbidities from AHRQ
+-   Pediatric Complex Chronic Condition comorbidities
+-   AHRQ ICD-10 procedure code classification
 -   validation of ICD codes from different annual revisions of ICD-9-CM
     and ICD-10-CM
 -   summarizing ICD codes into groups, and to human-readable
@@ -83,11 +85,12 @@ Relevance
 ICD-9 codes are still in heavy use around the world, particularly in the
 USA where the ICD-9-CM (Clinical Modification) was in widespread use
 until the end of 2015. ICD-10 has been used worldwide for reporting
-cause of death for more than a decade. ICD-10-CM is now the primary
-coding scheme for US hospital admission and discharge diagnoses used for
-regulatory purposes and billing. A vast amount of patient data is
-recorded with ICD-9 codes of some kind: this package enables their use
-in R alongside ICD-10.
+cause of death for more than a decade, and ICD-11 is due to be released
+in 2018. ICD-10-CM is now the primary coding scheme for US hospital
+admission and discharge diagnoses used for regulatory purposes and
+billing. A vast amount of electronic patient data is recorded with ICD-9
+codes of some kind: this package enables their use in R alongside
+ICD-10.
 
 Comorbidities
 -------------
@@ -230,6 +233,5 @@ and feature requests. Documentation, vignettes and examples are very
 welcome, especially if accompanied by some real-world data.
 
 To build `icd`, `Rcpp` must be compiled from source. This happens
-automatically on Linux, but on Mac and Windows, the following is
-required: `install.packages("Rcpp", type="source")` to avoid build
-errors.
+automatically on Linux, but on Mac and Windows, the following may be
+required: `install.packages("Rcpp", type="source")`

@@ -29,12 +29,10 @@ along with icd. If not, see <http:#www.gnu.org/licenses/>.
 rmarkdown::render("README.Rmd")
 -->
 ```{r, echo = FALSE}
-
 suppressPackageStartupMessages({
   library(icd)
   library(magrittr)
 })
-
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
@@ -65,6 +63,8 @@ patient_data <- data.frame(
  * Charlson and Van Walraven score calculations
  * Hierarchical Condition Codes (HCC) from CMS
  * Clinical Classifcations Software (CCS) comorbidities from AHRQ
+ * Pediatric Complex Chronic Condition comorbidities
+ * AHRQ ICD-10 procedure code classification
  * validation of ICD codes from different annual revisions of ICD-9-CM and ICD-10-CM
  * summarizing ICD codes into groups, and to human-readable descriptions
  * correct conversion between different representations of ICD codes, with and without a decimal points, leading and trailing characters (this is not trivial for ICD-9-CM). ICD-9 to ICD-10 cross-walk is not yet implemented
@@ -79,13 +79,13 @@ install.packages("icd")
 
 ## Introduction
 
-```{r pkgdesc, results='asis', echo = FALSE}
+```{r pkgdesc, results = 'asis', echo = FALSE}
 cat(packageDescription("icd")$Description)
 ```
 
 ## Relevance
 
-ICD-9 codes are still in heavy use around the world, particularly in the USA where the ICD-9-CM (Clinical Modification) was in widespread use until the end of 2015. ICD-10 has been used worldwide for reporting cause of death for more than a decade. ICD-10-CM is now the primary coding scheme for US hospital admission and discharge diagnoses used for regulatory purposes and billing. A vast amount of patient data is recorded with ICD-9 codes of some kind: this package enables their use in R alongside ICD-10.
+ICD-9 codes are still in heavy use around the world, particularly in the USA where the ICD-9-CM (Clinical Modification) was in widespread use until the end of 2015. ICD-10 has been used worldwide for reporting cause of death for more than a decade, and ICD-11 is due to be released in 2018. ICD-10-CM is now the primary coding scheme for US hospital admission and discharge diagnoses used for regulatory purposes and billing. A vast amount of electronic patient data is recorded with ICD-9 codes of some kind: this package enables their use in R alongside ICD-10.
 
 ## Comorbidities
 
@@ -147,6 +147,5 @@ The _master_ branch at github should always build and pass all tests and R CMD c
 
 A substantial amount of code has now been contributed to the package. Contributions of any kind to `icd` are very welcome. See the [GitHub issues page]](https://github.com/jackwasey/icd/issues) to see jobs and feature requests. Documentation, vignettes and examples are very welcome, especially if accompanied by some real-world data.
 
-To build `icd`, `Rcpp` must be compiled from source. This happens automatically on Linux, but on Mac and Windows, the following is required:
+To build `icd`, `Rcpp` must be compiled from source. This happens automatically on Linux, but on Mac and Windows, the following may be required:
 `install.packages("Rcpp", type="source")`
-to avoid build errors.
