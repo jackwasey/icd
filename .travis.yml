@@ -50,6 +50,7 @@ matrix:
   - env: LINTR_COMMENT_BOT=true
   - env: ICD_COVERAGE=true ICD_TEST_DEPRECATED=true ICD_TEST_BUILD_DATA=true ICD_TEST_SLOW=true
   allow_failures:
+  - env: ICD_COVERAGE=true ICD_TEST_DEPRECATED=true ICD_TEST_BUILD_DATA=true ICD_TEST_SLOW=true
   - r: oldrel
 
 before_script:
