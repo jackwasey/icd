@@ -25,5 +25,5 @@ MAKEFLAGS="-j8" \
   _R_CHECK_TESTS_NLINES_=0 \
   _R_CHECK_USE_INSTALL_LOG_=FALSE \
   _R_CHECK_VIGNETTES_NLINES_=0 \
- R CMD check --as-cran "$(ls -t /tmp/icd*.tar.gz | head -1)"
+ R CMD check "$(ls -t /tmp/icd*.tar.gz | head -1)"
 popd

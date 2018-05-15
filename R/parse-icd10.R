@@ -121,10 +121,10 @@ icd10_parse_ahrq_pcs <- function(save_data = TRUE, offline = FALSE) {
                                  "Major Diagnostic", "Major Therapeutic"))
   dat$class_number <- NULL
   dat$code <- gsub(dat$code, pattern = "'", replacement = "")
-  icd10cm2018pcs <- dat[c("code", "desc")]
+  icd10_pcs <- list("2018" = dat[c("code", "desc")])
   icd10_map_ahrq_pcs <- split(dat$code, dat$class)
   if (save_data) {
-    save_in_data_dir(icd10cm2018pcs)
+    save_in_data_dir(icd10_pcs)
     save_in_data_dir(icd10_map_ahrq_pcs)
   }
 }
