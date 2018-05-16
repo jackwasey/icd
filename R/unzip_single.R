@@ -30,32 +30,28 @@ unzip_single <- function(url, file_name, save_path) {
   checkmate::assert_character(file_name, len = 1)
   checkmate::assert_character(save_path, len = 1)
   zipfile <- tempfile()
-  # using libcurl because it seems the internal method works inconsistently
-  curl_cap <- capabilities("libcurl")
-  if (length(curl_cap) > 0 && curl_cap)
-    method <- "libcurl"
-  else
-    method <- "auto"
   dl_code <- utils::download.file(url = url, destfile = zipfile,
-                                  quiet = TRUE, method = method, mode = "wb")
+                                  quiet = TRUE, method = "libcurl", mode = "wb")
   stopifnot(dl_code == 0)
   zipdir <- tempfile() # i do want tempfile, so I get an empty new directory
   dir.create(zipdir)
   utils::unzip(zipfile, exdir = zipdir)  # files="" so extract all
   files <- list.files(zipdir)
-  if (is.null(file_name)) {
+  if (missing(file_name)) {
     if (length(files) == 1) {
       file_name <- files
     } else {
       stop("multiple files in zip, but no file name specified: ",
            paste(files, collapse = ", "))
     }
-  } else
-    stopifnot(file_name %in% files)
-
+  } else {
+    if (!file_name %in% files) {
+      message(files, file_name)
+      stop(paste(file_name, " not found in ", paste(files, collapse = ", ")))
+    }
+  }
   ret <- file.copy(file.path(zipdir, file_name), save_path, overwrite = TRUE)
   unlink(zipdir, recursive = TRUE)
   ret
 }
-
 # nocov end

@@ -10,3 +10,5 @@ Tabular.xml
 .~lock.Dtab12.rtf#
 ccs_dx_icd10cm_2018_1.csv
 pc_icd10pcs_2018.csv
+icd10*_order_201*.txt
+icd10cm_codes_2016.txt
