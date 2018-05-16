@@ -192,11 +192,28 @@ icd9_generate_sources <- function(save_data = FALSE) {
       "Dtab07.RTF", "Dtab06.rtf"),
     stringsAsFactors = FALSE
   )
-
-  if (save_data)
-    save_in_data_dir(icd9_sources)
-
+  if (save_data) save_in_data_dir(icd9_sources)
   invisible(icd9_sources)
+}
+
+generate_icd10_sources <- function(save_data = TRUE) {
+  base_url <- "https://www.cms.gov/Medicare/Coding/ICD10/Downloads/"
+  icd10_sources <- list(
+    "2018" = list(
+      base_url = base_url,
+      desc_zip = "2018-ICD-10-Code-Descriptions.zip",
+      xml_zip = "2018-ICD-10-Code-Tables-Index.zip",
+      dx_flat = "icd10cm_codes_2018.txt",
+      pcs_flat = ""),
+    "2017" = list(
+      base_url = base_url,
+      desc_zip = "2017-ICD10-Code-Descriptions.zip",
+      xml_zip = "2017-ICD10-Code-Tables-Index.zip",
+      dx_flat = "icd10cm_codes_2017.txt",
+      pcs_flat = "")
+  )
+  if (save_data) save_in_data_dir(icd10_sources)
+  invisible(icd10_sources)
 }
 
 #nocov end
