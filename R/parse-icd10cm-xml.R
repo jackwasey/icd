@@ -44,32 +44,26 @@ icd10cm_extract_sub_chapters <- function(save_data = FALSE, offline = TRUE) {
   # could do xpath, but harder to loop
   xml2::xml_children(j) %>%
     magrittr::extract(chapter_indices) -> chaps
-
   icd10_sub_chapters <- list()
   for (chap in chaps) {
     c_kids <- chap %>% xml2::xml_children()
     subchap_indices <- xml2::xml_name(c_kids) == "section"
     subchaps <- c_kids[subchap_indices]
-
     for (subchap in subchaps) {
       subchap  %>%
         xml2::xml_children()  %>%
         magrittr::extract(1) %>%
         xml2::xml_text() %>%
         chapter_to_desc_range.icd10 -> new_sub_chap_range
-
       # should only match one at a time
       stopifnot(length(new_sub_chap_range) == 1)
-
       # check that this is a real sub-chapter, not an extra range defined in the
       # XML, e.g. C00-C96 is an empty range declaration for some neoplasms.
-
       ndiags <- length(xml2::xml_find_all(subchap, "diag"))
       if (ndiags == 0) {
         message("skipping empty range definition for ", new_sub_chap_range)
         next
       }
-
       # there is a defined Y09 in both ICD-10 WHO and CM, but the range is
       # incorrectly specified (in 2016 version of XML, at least)
       if (new_sub_chap_range[[1]]["end"] == "Y08")
@@ -78,9 +72,7 @@ icd10cm_extract_sub_chapters <- function(save_data = FALSE, offline = TRUE) {
       icd10_sub_chapters <- append(icd10_sub_chapters, new_sub_chap_range)
     } #subchaps
   } #chapters
-  if (save_data)
-    save_in_data_dir(icd10_sub_chapters)
-
+  if (save_data) save_in_data_dir(icd10_sub_chapters)
   invisible(icd10_sub_chapters)
 }
 
