@@ -153,6 +153,6 @@ children_defined.icd10cm <- function(x, short_code = guess_short(x), warn = FALS
   x <- toupper(x)
   if (!short_code)
     x <- decimal_to_short.icd10cm(x)
-  kids <- icd10cm_children_defined_cpp(x, icd::icd10cm2016, .nc)
+  kids <- icd10cm_children_defined_cpp(x, icd10cm2016, .nc)
   as.icd10cm(kids, short_code)
 }

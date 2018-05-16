@@ -251,7 +251,7 @@ generate_random_short_icd9 <- function(n = 50000) {
 #' @template short_code
 #' @keywords internal debugging datagen
 generate_random_short_icd10cm_bill <- function(n = 10, short_code = TRUE) {
-  x <- sample(unlist(icd::icd10cm2016[icd::icd10cm2016$billable == 1, "code"]), replace = TRUE, size = n)
+  x <- sample(unlist(icd10cm2016[icd10cm2016$billable == 1, "code"]), replace = TRUE, size = n)
   if (short_code)
     x
   else

@@ -132,7 +132,7 @@ explain_table.icd9cm <- function(x, short_code = guess_short(x),
 #' @keywords internal
 explain_table.icd10cm <- function(x, short_code = guess_short(x),
                                   condense = FALSE, brief = TRUE, warn = TRUE, ...)
-  explain_table_worker(x = x, hierarchy = icd::icd10cm2016,
+  explain_table_worker(x = x, hierarchy = icd10cm2016,
                        short_code = short_code, condense = condense,
                        brief = brief, warn = warn, ...)
 

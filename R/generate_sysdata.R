@@ -53,7 +53,7 @@ generate_sysdata <- function(save_data = TRUE) {
           paste(long_fns[long_fns != make.names(long_fns)]))
   message("non-portable short file names: ",
           paste(short_fns[short_fns != make.names(short_fns)]))
-  .nc <- nchar(icd::icd10cm2016[["code"]]) # nolint
+  .nc <- nchar(icd10cm2016[["code"]]) # nolint
   # minimal test here just to use variable names to avoid warnings!
   stopifnot(all(!is.na(.nc)))
   stopifnot(length(icd9_short_n$vec) == length(icd9_short_n$env))

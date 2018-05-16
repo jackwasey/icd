@@ -51,20 +51,8 @@
 #'   icd9_majors
 NULL
 
-#' ICD-10 chapters
-#'
-#' The WHO ICD-10 scheme chapters. The chapter level is the highest in the
-#' hierarchy, each chapter containing sets of codes which span multiple
-#' three-digit 'major' codes, and in some cases also span codes across two
-#' alphabetic initial characters. E.g. Chapter I spans A00 to B99.
-#'
-#' 2017 ICD-10-CM does not have any U codes (codes for special purposes).
-#' U00-U49 - Provisional assignment of new diseases of uncertain etiology or
-#' emergency use U82-U85 - Resistance to antimicrobial and anti-neoplastic drugs
-#' @source http://apps.who.int/classifications/icd10/browse/2016/en
-#' @format list with chapter names stored in list names, each with two element
-#'   named character vector with start and end codes.
 #' @name icd10_chapters
+#' @inherit icd.data::icd10_chapters
 NULL
 
 #' ICD-10 sub-chapters
@@ -362,7 +350,7 @@ NULL
 #' List of ICD-9 data sources for different versions of ICD-9-CM
 #' @name icd9_sources
 #' @docType data
-#' @keywords datasets
+#' @keywords datasets internal
 NULL
 
 #' Pediatric Complex Chronic Conditions

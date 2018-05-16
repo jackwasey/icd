@@ -3,11 +3,6 @@
 \name{icd10_chapters}
 \alias{icd10_chapters}
 \title{ICD-10 chapters}
-\format{list with chapter names stored in list names, each with two element
-  named character vector with start and end codes.}
-\source{
-http://apps.who.int/classifications/icd10/browse/2016/en
-}
 \description{
 The WHO ICD-10 scheme chapters. The chapter level is the highest in the
 hierarchy, each chapter containing sets of codes which span multiple
