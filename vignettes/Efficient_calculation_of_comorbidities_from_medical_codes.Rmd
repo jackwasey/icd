@@ -62,7 +62,8 @@ pkgdown:
 # https://www.jstatsoft.org/pages/view/style
 suppressPackageStartupMessages({
   requireNamespace("knitr")
-  library(icd)
+  library(icd.data, warn.conflicts = FALSE)
+  library(icd, warn.conflicts = FALSE)
 })
 fig.width = 6.5
 knitr::opts_chunk$set(fig.width = fig.width)

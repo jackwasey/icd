@@ -49,6 +49,7 @@ Depends:
     R (>= 3.4)
 Imports:
     checkmate (>= 1.7.0),
+    icd.data,
     magrittr,
     stats,
     Rcpp (>= 0.12.3),

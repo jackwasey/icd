@@ -34,7 +34,6 @@ environment:
   USE_RTOOLS: true
   R_BUILD_ARGS: ""
   NOT_CRAN: true
-  R_VERSION: devel
   matrix:
     - R_VERSION: release
     - R_VERSION: devel

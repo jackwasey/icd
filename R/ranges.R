@@ -116,12 +116,12 @@ expand_range.icd10cm <- function(start, end, short_code = guess_short(c(start, e
   new_end <- end_kids[length(end_kids)]
 
   # find the start and end code positions in the master list
-  pos <- match(c(start, new_end), icd::icd10cm2016[["code"]])
+  pos <- match(c(start, new_end), icd10cm2016[["code"]])
   if (is.na(pos[1])) stop(sprintf("start code '%s' not found", start))
   if (is.na(pos[2])) stop(sprintf("calculated end code '%s' not found", end))
   stopifnot(pos[2] >= pos[1])
 
-  icd::icd10cm2016[pos[1]:pos[2], "code"]
+  icd10cm2016[pos[1]:pos[2], "code"]
 }
 
 #' Expand major codes to range
@@ -158,7 +158,7 @@ expand_range_major.icd10cm <- function(start, end) {
   se <- as_char_no_warn(c(start, end)) %>%
     trim %>%
     toupper
-  unique_mjrs <- icd::icd10cm2016$three_digit %>% unique
+  unique_mjrs <- icd10cm2016$three_digit %>% unique
   if (!is_major.icd10cm(se[[1]]))
     stop("start: ", start, " is not an ICD-10-CM major (three character) code")
   if (!is_major.icd10cm(se[[2]]))
