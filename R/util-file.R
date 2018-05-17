@@ -17,6 +17,20 @@
 
 #nocov start
 
+icd10cm_get_xml_file <- function(...) {
+  .Deprecated("fetch_icd10cm_year")
+  unzip_to_data_raw(
+    url = "http://www.cdc.gov/nchs/data/icd/icd10cm/2016/ICD10CM_FY2016_Full_XML.ZIP",
+    file_name = "Tabular.xml", ...)
+}
+
+icd10cm_get_flat_file <- function(...) {
+  .Deprecated("fetch_icd10cm_year")
+  unzip_to_data_raw(
+    url = "http://www.cdc.gov/nchs/data/icd/icd10cm/2016/ICD10CM_FY2016_code_descriptions.zip",
+    file_name = "icd10cm_order_2016.txt", ...)
+}
+
 #' Fetch ICD-10-CM data from the CMS web site
 #'
 #' YEAR-ICD10-Code-Descriptions has flat files, YEAR-ICD10-Code-Tables-Index has

@@ -25,7 +25,6 @@ IFS=$'\n\t'
 old_ulimit=$(ulimit -s)
 ulimit -s unlimited
 # verify with Cstack_info()
-
 function finish {
 	ulimit -s "$old_ulimit"
 }
