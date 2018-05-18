@@ -114,9 +114,6 @@ ambiguities and code formats are handled.
   diagnosis. \code{\link{icd9_chapters}} contains definitions of chapters,
   sub-chapters and three-digit groups.} }
 }
-\references{
-\url{http://www.hcup-us.ahrq.gov/toolssoftware/comorbidity/comorbidity.jsp}
-}
 \seealso{
 Useful links:
 \itemize{

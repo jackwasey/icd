@@ -78,12 +78,12 @@ children.icd9cm <- function(x, short_code = guess_short(x),
   res <- if (short_code)
     .Call("_icd_icd9ChildrenShortUnordered",
           icd9Decimal = toupper(x),
-          icd9cmReal = icd::icd9cm_hierarchy$code,
+          icd9cmReal = icd9cm_hierarchy$code,
           onlyReal = defined)
   else
     .Call("_icd_icd9ChildrenDecimalCpp",
           icd9Decimal = toupper(x),
-          icd9cmReal = icd::icd9cm_hierarchy$code,
+          icd9cmReal = icd9cm_hierarchy$code,
           onlyReal = defined)
   res <- sort_icd.icd9(res)
   res <- if (billable)

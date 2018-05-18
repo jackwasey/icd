@@ -226,7 +226,7 @@ test_that("condense single major and its children", {
   expect_equal(explain.icd9(children.icd9("391", short_code = TRUE, defined = TRUE)), rheum_fever)
 })
 
-icd::vermont_dx %>%
+vermont_dx %>%
   wide_to_long  %>%
   extract2("icd_code")  %>%
   sort_icd.icd9(short_code = TRUE) %>%

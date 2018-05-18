@@ -95,5 +95,5 @@ test_that("guess and update version", {
 })
 
 test_that("guess uranium codes are long", {
-  expect_false(guess_short(icd::uranium_pathology$icd10))
+  expect_false(guess_short(uranium_pathology$icd10))
 })

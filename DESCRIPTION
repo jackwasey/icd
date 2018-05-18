@@ -46,10 +46,10 @@ License: GPL-3
 URL: https://jackwasey.github.io/icd/
 BugReports: https://github.com/jackwasey/icd/issues
 Depends:
-    R (>= 3.4)
+    R (>= 3.4),
+    icd.data
 Imports:
     checkmate (>= 1.7.0),
-    icd.data,
     magrittr,
     stats,
     Rcpp (>= 0.12.3),

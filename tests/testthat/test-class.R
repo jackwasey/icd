@@ -96,8 +96,8 @@ test_that("constructing a comorbidity map works", {
 test_that("constructing a comorbidity map with unnamed list, etc. fails", {
   expect_error(as.comorbidity_map(unname(unclass(x))))
   # and data frames should definitely fail
-  expect_error(as.comorbidity_map(icd::vermont_dx))
-  expect_error(as.comorbidity_map(icd::uranium_pathology))
+  expect_error(as.comorbidity_map(vermont_dx))
+  expect_error(as.comorbidity_map(uranium_pathology))
 })
 
 test_that("subsetting a comorbidity map gives the right class", {
@@ -129,24 +129,24 @@ test_that("subsetting a comorbidity map gives the right class", {
 })
 
 test_that("constructing wide data works", {
-  expect_equal(as.icd_wide_data(icd::vermont_dx), icd::vermont_dx)
-  expect_equivalent(as.icd_wide_data(icd::vermont_dx), icd::vermont_dx)
-  expect_equivalent(as.icd_wide_data(as.data.frame(icd::vermont_dx)), icd::vermont_dx)
+  expect_equal(as.icd_wide_data(vermont_dx), vermont_dx)
+  expect_equivalent(as.icd_wide_data(vermont_dx), vermont_dx)
+  expect_equivalent(as.icd_wide_data(as.data.frame(vermont_dx)), vermont_dx)
 })
 
 test_that("constructing long data works", {
-  expect_equal(as.icd_long_data(icd::uranium_pathology), icd::uranium_pathology)
-  expect_equivalent(as.icd_long_data(icd::uranium_pathology), icd::uranium_pathology)
-  expect_equivalent(as.icd_long_data(as.data.frame(icd::uranium_pathology)), icd::uranium_pathology)
+  expect_equal(as.icd_long_data(uranium_pathology), uranium_pathology)
+  expect_equivalent(as.icd_long_data(uranium_pathology), uranium_pathology)
+  expect_equivalent(as.icd_long_data(as.data.frame(uranium_pathology)), uranium_pathology)
 })
 
 test_that("is long or wide data?", {
-  expect_true(is.icd_wide_data(as.icd_wide_data(icd::vermont_dx)))
-  expect_true(is.icd_long_data(as.icd_long_data(icd::uranium_pathology)))
-  expect_true(is.icd_wide_data(icd::vermont_dx))
-  expect_true(is.icd_long_data(icd::uranium_pathology))
-  expect_is(as.icd_wide_data(icd::vermont_dx), "icd_wide_data")
-  expect_is(as.icd_long_data(icd::uranium_pathology), "icd_long_data")
+  expect_true(is.icd_wide_data(as.icd_wide_data(vermont_dx)))
+  expect_true(is.icd_long_data(as.icd_long_data(uranium_pathology)))
+  expect_true(is.icd_wide_data(vermont_dx))
+  expect_true(is.icd_long_data(uranium_pathology))
+  expect_is(as.icd_wide_data(vermont_dx), "icd_wide_data")
+  expect_is(as.icd_long_data(uranium_pathology), "icd_long_data")
 })
 
 test_that("constructing wide or long format for non-data frame gives error", {
@@ -155,16 +155,16 @@ test_that("constructing wide or long format for non-data frame gives error", {
 })
 
 test_that("subsetting data frame works", {
-  expect_equal(unclass(icd::vermont_dx[1, 6]), as.short_diag("27801"))
-  expect_equal(unclass(icd::vermont_dx[1, "DX1"]), as.short_diag("27801"))
-  expect_is(icd::vermont_dx[1, "DX1"], c("icd9cm", "icd9", "character"))
-  expect_equivalent(unclass(icd::vermont_dx[[1, 6]]), "27801")
-  expect_is(icd::vermont_dx[[1, "DX1"]], c("icd9cm", "icd9", "character"))
-  expect_true(is.icd9(icd::vermont_dx[[1, "DX9"]]))
-  expect_true(is.icd9cm(icd::vermont_dx[[1, "DX12"]]))
+  expect_equal(unclass(vermont_dx[1, 6]), as.short_diag("27801"))
+  expect_equal(unclass(vermont_dx[1, "DX1"]), as.short_diag("27801"))
+  expect_is(vermont_dx[1, "DX1"], c("icd9cm", "icd9", "character"))
+  expect_equivalent(unclass(vermont_dx[[1, 6]]), "27801")
+  expect_is(vermont_dx[[1, "DX1"]], c("icd9cm", "icd9", "character"))
+  expect_true(is.icd9(vermont_dx[[1, "DX9"]]))
+  expect_true(is.icd9cm(vermont_dx[[1, "DX12"]]))
   # columns
-  expect_is(icd::vermont_dx[6], c("icd9cm", "icd9", "data.frame")) # not necessarily wide anymore...
-  expect_is(icd::vermont_dx[[6]], c("icd9cm", "icd9", "character"))
+  expect_is(vermont_dx[6], c("icd9cm", "icd9", "data.frame")) # not necessarily wide anymore...
+  expect_is(vermont_dx[[6]], c("icd9cm", "icd9", "character"))
 })
 
 test_that("data frame subsetting doesn't incorrectly set class on columns", {

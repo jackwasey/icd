@@ -53,20 +53,20 @@ patient_data <- data.frame(
 [![codecov.io](https://codecov.io/github/jackwasey/icd/coverage.svg?branch=master "Core Code Coverage")](https://codecov.io/github/jackwasey/icd?branch=master)
 [![CRAN RStudio mirror downloads](https://cranlogs.r-pkg.org/badges/icd "RStudio Mirror Downloads")](https://cran.r-project.org/package=icd)
 
-# ICD-9 and ICD-10 comorbidities, manipulation and validation
+# Comorbidities from ICD-9 and ICD-10 codes, manipulation and validation
 
 ## Features
 
  * find comorbidities of patients based on admission or discharge ICD-9 or ICD-10 codes, e.g. Cancer, Heart Disease
      + several standard mappings of ICD codes to comorbidities are included (Quan, Deyo, Elixhauser, AHRQ)
      + very fast assignment of ICD codes to comorbidities (using matrix multiplication with C and C++ internally)
+ * summarizing groups of ICD codes in natural language
  * Charlson and Van Walraven score calculations
  * Hierarchical Condition Codes (HCC) from CMS
  * Clinical Classifcations Software (CCS) comorbidities from AHRQ
  * Pediatric Complex Chronic Condition comorbidities
  * AHRQ ICD-10 procedure code classification
  * validation of ICD codes from different annual revisions of ICD-9-CM and ICD-10-CM
- * summarizing ICD codes into groups, and to human-readable descriptions
  * correct conversion between different representations of ICD codes, with and without a decimal points, leading and trailing characters (this is not trivial for ICD-9-CM). ICD-9 to ICD-10 cross-walk is not yet implemented
  * comprehensive test suite to increase confidence in accurate processing of ICD codes
  * all internal ICD and comorbidity data is extracted directly from publically available data or code, increasing confidence in the results

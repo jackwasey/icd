@@ -4,10 +4,6 @@
 \name{vermont_dx}
 \alias{vermont_dx}
 \title{Hospital discharge data from Vermont}
-\format{CSV original, minimally processed into R data frame.}
-\source{
-\url{http://www.healthvermont.gov/health-statistics-vital-records/health-care-systems-reporting/hospital-discharge-data}
-}
 \description{
 Anonymous data from public Vermont source for 2013
 }
@@ -29,8 +25,10 @@ requestor]. VAHHS-NSO and BISHCA disclaim responsibility for any such
 analyses, interpretations or conclusions. In addition, as the data have been
 edited and processed by VAHHS-NSO, BISHCA assumes no responsibility for
 errors in the data due to coding or processing"
+
+Format:  CSV original, minimally processed into R data frame.
 }
-\author{
-Vermont Division of Health Care Administration
+\seealso{
+\code{\link[icd.data]{ls_icd_data}}
 }
 \keyword{datasets}

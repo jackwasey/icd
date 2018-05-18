@@ -112,10 +112,9 @@
 #'   package-icd10
 #' @author Jack O. Wasey \email{jack@@jackwasey.com}
 #' @keywords misc utilities
-#' @references
-#' \url{http://www.hcup-us.ahrq.gov/toolssoftware/comorbidity/comorbidity.jsp}
 #' @concept ICD-9 ICD-10 comorbidity comorbidities
 #' @useDynLib icd, .registration=TRUE
+#' @importFrom icd.data assign_icd_data
 #' @importFrom Rcpp cppFunction
 #' @importFrom checkmate assert assert_flag assert_list assert_data_frame
 #'   assert_string check_string check_null check_factor check_character
@@ -128,19 +127,4 @@
 #' @importFrom stats setNames
 "_PACKAGE"
 
-icd10_chapters <- icd.data::icd10_chapters
-icd10_pcs <- icd.data::icd10_pcs
-icd10_pcs_2014 <- icd.data::icd10_pcs_2014
-icd10_pcs_2015 <- icd.data::icd10_pcs_2015
-icd10_pcs_2016 <- icd.data::icd10_pcs_2016
-icd10_pcs_2017 <- icd.data::icd10_pcs_2017
-icd10_pcs_2018 <- icd.data::icd10_pcs_2018
-icd10_sub_chapters <- icd.data::icd10_sub_chapters
-icd10cm2016 <- icd.data::icd10cm2016
-icd9_chapters <- icd.data::icd9_chapters
-icd9_majors <- icd.data::icd9_majors
-icd9_sub_chapters <- icd.data::icd9_sub_chapters
-icd9cm_billable <- icd.data::icd9cm_billable
-icd9cm_hierarchy <- icd.data::icd9cm_hierarchy
-uranium_pathology <- icd.data::uranium_pathology
-vermont_dx <- icd.data::vermont_dx
+icd.data::assign_icd_data()

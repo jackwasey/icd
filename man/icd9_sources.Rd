@@ -3,7 +3,8 @@
 \docType{data}
 \name{icd9_sources}
 \alias{icd9_sources}
-\title{ICD-9 data sources}
+\alias{icd10_sources}
+\title{ICD-9 and ICD-10 data sources}
 \description{
 List of ICD-9 data sources for different versions of ICD-9-CM
 }

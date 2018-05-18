@@ -247,7 +247,7 @@ get_major.icd9 <- function(x, short_code) {
     .Call(`_icd_icd9GetMajor`, x, short_code)
 }
 
-#' @name fastIntToString
+#' @rdname fastIntToString
 #' @title Fast convert integer vector to character vector
 #' @description Fast conversion from integer vector to character vector using C++
 #' @param x vector of integers
