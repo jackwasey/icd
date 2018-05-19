@@ -122,7 +122,7 @@ categorize <- function(x,
   if (!return_df)
     return(mat)
   if (visit_was_factor)
-    row_names <- factor_nosort(x = rownames(mat), levels = iv_levels)
+    row_names <- factor_fun(x = rownames(mat), levels = iv_levels)
   else
     row_names <- rownames(mat)
   df_out <- cbind(row_names, as.data.frame(mat),
