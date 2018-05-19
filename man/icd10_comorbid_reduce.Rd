@@ -10,6 +10,6 @@ icd10_comorbid_reduce(x = x, map, visit_name, icd_name, short_code, short_map,
 \description{
 Use method to reduce ICD-10 problem by initially finding only relevant codes
 in the map, then populating map only with the exact patient ICD codes (not
-the original map codes), before doing 'comorbid_common'
+the original map codes), before doing categorization.
 }
 \keyword{internal}

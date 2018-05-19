@@ -58,12 +58,7 @@ poa_choices <- c("yes", "no", "notYes", "notNo")
 #' @template abbrev_names
 #' @template hierarchy
 #' @template return_df
-#' @param return_binary Single logical value, if \code{TRUE}, the returned
-#'   \code{matrix} or \code{data.frame} will be composed of \code{1} and
-#'   \code{0}, instead of \code{TRUE} and \code{FALSE}, respectively. This
-#'   conversion can also be done by the internal functions
-#'   \code{icd:::logical_to_binary} and \code{icd:::binary_to_logical}, or using
-#'   other tools, e.g. \code{apply(x, 2, as.integer)}
+#' @template return_binary
 #' @template dotdotdot
 #' @details The order of visits may change depending on the original sequence,
 #'   and the underlying algorithm used. Usually this would be the order of the
@@ -164,17 +159,18 @@ icd10_comorbid <- function(x,
 #'
 #' Use method to reduce ICD-10 problem by initially finding only relevant codes
 #' in the map, then populating map only with the exact patient ICD codes (not
-#' the original map codes), before doing 'comorbid_common'
+#' the original map codes), before doing categorization.
 #' @keywords internal
 icd10_comorbid_reduce <- function(x = x, map, visit_name, icd_name, short_code,
                                   short_map, return_df,
                                   return_binary = FALSE, ...) {
   if (!short_code)
     x[[icd_name]] <- decimal_to_short.icd10(x[[icd_name]])
+  # TODO: could  reduce list of input visits here, as we are scanning the codes
   reduced_map <- simplify_map_lex(as_char_or_levels(x[[icd_name]]), map)
-  comorbid_common(x = x, map = reduced_map,
-                  visit_name = visit_name, icd_name = icd_name,
-                  return_df = return_df, return_binary = return_binary, ...)
+  categorize(x = x, map = reduced_map,
+             visit_name = visit_name, icd_name = icd_name,
+             return_df = return_df, return_binary = return_binary, ...)
 }
 
 #' @describeIn comorbid Get comorbidities from \code{data.frame} of ICD-9
@@ -219,11 +215,9 @@ icd9_comorbid <- function(x,
   assert_string(icd_name)
   assert_flag(short_code)
   assert_flag(short_map)
-
   # confirm class is ICD-9, and add leading zeroes if missing, and if levels
   # like 010 and 10 exists, then these get contracted by decimal_to_short,
   # making the results different if icd codes are short or not.
-
   if (!short_code)
     x[[icd_name]] <- icd9(decimal_to_short.icd9(x[[icd_name]]))
   else if (preclean)
@@ -231,125 +225,9 @@ icd9_comorbid <- function(x,
 
   if (!short_map)
     map <- lapply(map, decimal_to_short)
-  comorbid_common(x = x, map = map, visit_name = visit_name,
-                  icd_name = icd_name, return_df = return_df,
-                  return_binary = return_binary, ...)
-}
-
-#' Internal function to calculate co-morbidities.
-#'
-#' This common comorbidity calculation code does not depend on ICD type. There
-#' is some type conversion so the map and input codes are all in 'short' format,
-#' fast factor generation, then fast comorbidity assignment.
-#' @param comorbid_fun function i.e. the function (not character string) to be
-#'   called to do the comorbidity calculation
-#' @keywords internal
-comorbid_common <- function(x,
-                            map,
-                            visit_name = NULL,
-                            icd_name,
-                            return_df = FALSE,
-                            return_binary = FALSE,
-                            comorbid_fun = comorbidMatMul,
-                            ...) {
-  assert_data_frame(x, min.cols = 2, col.names = "unique")
-  assert_list(map, any.missing = FALSE, min.len = 1, names = "unique")
-  assert(check_string(visit_name), check_null(visit_name))
-  assert(check_string(icd_name), check_null(icd_name))
-  visit_name <- get_visit_name(x, visit_name)
-  icd_name <- get_icd_name(x, icd_name)
-  assert_string(visit_name)
-  stopifnot(visit_name %in% names(x))
-  map <- lapply(map, as_char_no_warn)
-  # need to convert to string and group these anyway, and much easier and
-  # pretty quick to do it here than in C++
-  visit_was_factor <- is.factor(x[[visit_name]])
-  if (visit_was_factor)
-    iv_levels <- levels(x[[visit_name]]) # maybe superfluous as we rebuild at end?
-  if (nrow(x) == 0) {
-    empty_mat_out <- matrix(nrow = 0,
-                            ncol = length(map),
-                            dimnames = list(character(0), names(map)))
-    if (!return_df) return(empty_mat_out)
-    if (visit_was_factor)
-      row_names <- factor_nosort(character(0), levels = iv_levels)
-    else
-      row_names <- character(0)
-    df_empty_out <- cbind(row_names, as.data.frame(empty_mat_out), stringsAsFactors = visit_was_factor)
-    names(df_empty_out)[1] <- visit_name
-    rownames(df_empty_out) <- NULL
-    return(df_empty_out)
-  }
-  # may be slow for big data. `rle` might be quicker if we know that
-  # patient-visit rows are always contiguous.
-  uniq_visits <- unique(x[[visit_name]]) # factor or vector
-  if (!is.character(x[[visit_name]]))
-    x[[visit_name]] <- as_char_no_warn(x[[visit_name]])
-  # start with a factor for the icd codes in x, recode (and drop superfluous)
-  # icd codes in the mapping, then do very fast match on integer without need
-  # for N, V or E distinction. Char to factor conversion in R is very fast.
-  relevant_codes <- intersect(
-    unlist(map, use.names = FALSE),
-    x[[icd_name]]
-  )
-  # Internally, the \code{sort} is slow. This step is one of the slowest steps
-  # with very large numbers of patients. #TODO SLOW
-  x[[icd_name]] <- factor_nosort(x[[icd_name]], levels = relevant_codes)
-  # get the visits where there is at least one code which is not in comorbidity
-  # map. many rows are NA, because most are NOT in comorbidity maps: but first
-  # keep track of the visits with no comorbidities in the given map using
-  # internal subset for speed
-  visit_not_comorbid <- unique(
-    .subset2(
-      .subset(x, is.na(
-        .subset2(x, icd_name))), visit_name))
-  # then drop the rows where the code was not in a map
-  visit_not_comorbid <- unique(.subset2(x, visit_name)[is.na(.subset2(x, icd_name))])
-  x <- x[!is.na(x[[icd_name]]), ]
-  # now make remove rows where there was both NA and a real code:
-  visit_not_comorbid <- visit_not_comorbid[visit_not_comorbid %nin% x[[visit_name]]]
-  map <- lapply(map, function(y) {
-    f <- factor_nosort(y, levels = relevant_codes)
-    # drop map codes that were not in the input comorbidities
-    f[!is.na(f)]
-  })
-
-  # We can now do pure integer matching for icd9 codes. The only string manip
-  # becomes (optionally) defactoring the visit_name for the matrix row names.
-  # This is now insansely quick and not a bottleneck.
-  mat_comorbid <- comorbid_fun(icd9df = x, icd9Mapping = map, visitId = visit_name,
-                               icd9Field = icd_name,
-                               threads = getOption("icd.threads", get_omp_cores()),
-                               chunk_size = getOption("icd.chunk_size", 256L),
-                               omp_chunk_size = getOption("icd.omp_chunk_size", 1L)
-  ) # nolint
-
-  # replace dropped rows (which therefore have no comorbidities) TODO SLOW even
-  # just creating a large number of patients without comorbidities takes a long
-  # time, then also a long time to rbind them, then sort them. A lot of time is
-  # actually garbage collection.
-  mat_not_comorbid <- matrix(data = FALSE,
-                             nrow = length(visit_not_comorbid),
-                             ncol = ncol(mat_comorbid),
-                             dimnames = list(visit_not_comorbid))
-  mat_comb <- rbind(mat_comorbid, mat_not_comorbid)
-  # now put the visits back in original order (bearing in mind that they may not
-  # have started that way)
-  mat_new_row_order <- match(rownames(mat_comb), uniq_visits)
-  mat <- mat_comb[order(mat_new_row_order),, drop = FALSE] #nolint
-  if (return_binary) mat <- logical_to_binary(mat)
-  if (!return_df)
-    return(mat)
-  if (visit_was_factor)
-    row_names <- factor_nosort(x = rownames(mat), levels = iv_levels)
-  else
-    row_names <- rownames(mat)
-  df_out <- cbind(row_names, as.data.frame(mat),
-                  stringsAsFactors = visit_was_factor,
-                  row.names = NULL)
-  names(df_out)[1] <- visit_name
-  rownames(df_out) <- NULL
-  df_out
+  categorize(x = x, map = map, visit_name = visit_name,
+             icd_name = icd_name, return_df = return_df,
+             return_binary = return_binary, ...)
 }
 
 #' @describeIn comorbid AHRQ comorbidities for ICD-9 codes
@@ -518,15 +396,15 @@ apply_hier_elix <- function(x, abbrev_names = TRUE, hierarchy = TRUE) {
 
     # drop HTNcx without converting to vector if matrix only has one row
     x <- x[, -which(colnames(x) == "HTNcx"), drop = FALSE]
-    if (abbrev_names)
-      colnames(x)[cr(x)] <- icd::names_elix_abbrev
+    colnames(x)[cr(x)] <- if (abbrev_names)
+      names_elix_abbrev
     else
-      colnames(x)[cr(x)] <- icd::names_elix
+      names_elix
   } else {
-    if (abbrev_names)
-      colnames(x)[cr(x)] <- icd::names_elix_htn_abbrev
+    colnames(x)[cr(x)] <- if (abbrev_names)
+      names_elix_htn_abbrev
     else
-      colnames(x)[cr(x)] <- icd::names_elix_htn
+      names_elix_htn
   }
   x
 }
@@ -550,15 +428,15 @@ apply_hier_quan_elix <- function(cbd, abbrev_names = TRUE, hierarchy = TRUE) {
     # about, e.g. POA, or anything else the user provides in the data frame, so
     # these are just dropped, leaving the fields for visit_name and all the
     # comorbidities:
-    if (abbrev_names)
-      colnames(cbd)[cr(cbd)] <- icd::names_quan_elix_abbrev
+    colnames(cbd)[cr(cbd)] <- if (abbrev_names)
+      names_quan_elix_abbrev
     else
-      colnames(cbd)[cr(cbd)] <- icd::names_quan_elix
+      names_quan_elix
   } else {
-    if (abbrev_names)
-      colnames(cbd)[cr(cbd)] <- icd::names_quan_elix_htn_abbrev
+    colnames(cbd)[cr(cbd)] <- if (abbrev_names)
+      names_quan_elix_htn_abbrev
     else
-      colnames(cbd)[cr(cbd)] <- icd::names_quan_elix_htn
+      names_quan_elix_htn
   }
   cbd
 }
@@ -573,10 +451,10 @@ apply_hier_quan_deyo <- function(cbd, abbrev_names = TRUE, hierarchy = TRUE) {
     cbd[cbd[, "DMcx"] > 0, "DM"] <- FALSE
     cbd[cbd[, "LiverSevere"] > 0, "LiverMild"] <- FALSE
   }
-  if (abbrev_names)
-    colnames(cbd)[cr(cbd)] <- icd::names_charlson_abbrev
+  colnames(cbd)[cr(cbd)] <- if (abbrev_names)
+    names_charlson_abbrev
   else
-    colnames(cbd)[cr(cbd)] <- icd::names_charlson
+    names_charlson
 
   cbd
 }
@@ -596,15 +474,15 @@ apply_hier_ahrq <- function(cbd, abbrev_names = TRUE, hierarchy = TRUE) {
 
     # drop HTNcx without converting to vector if matrix only has one row
     cbd <- cbd[, -which(colnames(cbd) == "HTNcx"), drop = FALSE]
-    if (abbrev_names)
-      colnames(cbd)[cr(cbd)] <- icd::names_ahrq_abbrev
+    colnames(cbd)[cr(cbd)] <- if (abbrev_names)
+      names_ahrq_abbrev
     else
-      colnames(cbd)[cr(cbd)] <- icd::names_ahrq
+      names_ahrq
   } else {
-    if (abbrev_names)
-      colnames(cbd)[cr(cbd)] <- icd::names_ahrq_htn_abbrev
+    colnames(cbd)[cr(cbd)] <- if (abbrev_names)
+      names_ahrq_htn_abbrev
     else
-      colnames(cbd)[cr(cbd)] <- icd::names_ahrq_htn
+      names_ahrq_htn
   }
   cbd
 }

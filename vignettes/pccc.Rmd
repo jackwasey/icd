@@ -1,0 +1,36 @@
+---
+title: "Pediatric Complex Chronic Conditions"
+author: "Jack O. Wasey"
+date: "May 18, 2018"
+output: html_document
+vignette: >
+  %\VignetteIndexEntry{Quick Introduction to icd}
+  %\VignetteEngine{knitr::rmarkdown}
+  \usepackage[utf8]{inputenc}
+---
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+n <- 10000
+set.seed(1441)
+dat <- data.frame(id = n + seq(n),
+                  icd_dx1 = sample(icd10cm2016$code, n, replace = TRUE),
+                  icd_dx2 = sample(icd10cm2016$code, n, replace = TRUE),
+                  icd_pcs1 = sample(icd10_pcs_2018$pcs, n, replace = TRUE),
+                  icd_pcs2 = sample(icd10_pcs_2018$pcs, n, replace = TRUE)
+)
+
+```
+
+## Preparing the data
+
+The following sample data has two columns for ICD-10 diagnostic code, and two for ICD-10 procedure codes.
+
+```{r prep}
+head(dat)
+
+dx <- icd::wide_to_long(dat[1:3])
+pcs <- icd::wide_to_long(dat[c(1, 4:5)], icd_name = "pcs", icd_regex = "icd_pcs")
+
+pccc_dx <- icd::comorbid_pccc_dx(dx)
+pccc_pcs <- icd::comorbid_pccc_pcs(pcs)
+```
