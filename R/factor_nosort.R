@@ -34,14 +34,9 @@
 #'   sorted in advance, especially not for ICD-9 codes where a simple
 #'   alphanumeric sorting will likely be completely wrong.
 #' @keywords internal
-factor_nosort <- function(x, levels, labels = levels, exclude = NA) {
-  if (missing(levels)) {
-    levels <- unique.default(x)
-  }
-  # drop levels with no values
-  levels <- levels[is.na(match(levels, exclude))]
+factor_nosort <- function(x, levels = unique.default(x)) {
   suppressWarnings(f <- match(x, levels))
-  levels(f) <- as.character(labels)
+  levels(f) <- as.character(levels)
   class(f) <- "factor"
   f
 }

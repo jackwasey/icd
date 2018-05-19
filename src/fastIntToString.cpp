@@ -22,3 +22,17 @@ Rcpp::CharacterVector fastIntToStringRcpp(Rcpp::IntegerVector x) {
   }
   return out;
 }
+
+//' @title Fast factor generation with hashing, no sorting
+//' @description Rcpp minimal factor creation
+//' @param x vector of strings
+//' @param levels vector of levels
+//' @keywords internal manip
+// [[Rcpp::export(factor_nosort_rcpp)]]
+  Rcpp::IntegerVector factorNoSort(const Rcpp::Vector<STRSXP>& x,
+                                   const Rcpp::Vector<STRSXP>& levels) {
+    Rcpp::IntegerVector out = match(x, levels);
+    out.attr("levels") = Rcpp::as<Rcpp::CharacterVector>(levels);
+    out.attr("class") = "factor";
+    return out;
+  }

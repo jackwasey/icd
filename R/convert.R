@@ -290,9 +290,8 @@ comorbid_df_to_mat <- function(x, visit_name = get_visit_name(x),
 #' @param x ICD codes
 #' @export
 #' @keywords internal
-short_to_decimal <- function(x) {
+short_to_decimal <- function(x)
   UseMethod("short_to_decimal")
-}
 
 #' @describeIn short_to_decimal convert ICD codes of unknown type from short
 #'   to decimal format
@@ -320,7 +319,6 @@ short_to_decimal.icd9 <- function(x)
 #' @keywords internal manip
 short_to_decimal.icd10 <- function(x) {
   x <- trim(x)
-  # todo: these could/should be seperate functions
   out <- substr(x, 0, 3) # majors
   minors <- substr(x, 4, 100L)
   out[minors != ""] <- paste0(out[minors != ""], ".", minors[minors != ""])
@@ -374,9 +372,8 @@ decimal_to_short.icd10 <- function(x) {
 #'   format
 #' @export
 #' @keywords internal manip
-decimal_to_short.icd10cm <- function(x) {
+decimal_to_short.icd10cm <- function(x)
   as.icd10cm(decimal_to_short.icd10(x))
-}
 
 #' @describeIn decimal_to_short Guess ICD version and convert decimal to
 #'   short format
@@ -394,16 +391,14 @@ decimal_to_short.default <- function(x) {
 #' Convert decimal ICD codes to component parts
 #' @export
 #' @keywords internal
-decimal_to_parts <- function(x, mnr_empty = "") {
+decimal_to_parts <- function(x, mnr_empty = "")
   UseMethod("decimal_to_parts")
-}
 
 #' Convert short format ICD codes to component parts
 #' @export
 #' @keywords internal manip
-short_to_parts <- function(x, mnr_empty = "") {
+short_to_parts <- function(x, mnr_empty = "")
   UseMethod("short_to_parts")
-}
 
 #' @describeIn short_to_parts Convert short format ICD-9 code to parts
 #' @export
@@ -417,34 +412,30 @@ short_to_parts.icd9 <- function(x, mnr_empty = "") {
 #' @describeIn decimal_to_parts Convert decimal ICD-9 code to parts
 #' @export
 #' @keywords internal manip
-decimal_to_parts.icd9 <- function(x, mnr_empty = "") {
+decimal_to_parts.icd9 <- function(x, mnr_empty = "")
   .Call("_icd_icd9DecimalToPartsCpp", x, mnr_empty)
-}
 
 #' @describeIn short_to_parts Convert short format ICD code to parts,
 #'   guessing whether ICD-9 or ICD-10
 #' @export
 #' @keywords internal manip
-short_to_parts.character <- function(x, mnr_empty = "") {
-  # Cannot specify default values in both header and C++ function body, so use a
-  # shim here.
+short_to_parts.character <- function(x, mnr_empty = "")
+  # No default values in header plus C++ function body, so shim here.
   switch(
     guess_version(x, short_code = TRUE),
     "icd9" = .Call("_icd_icd9ShortToPartsCpp", x, mnr_empty),
     "icd10" = short_to_parts.icd10(x, mnr_empty = mnr_empty),
     stop("Unknown ICD version guessed from input")
   )
-}
 
 #' @describeIn decimal_to_parts Convert decimal ICD code to parts, guessing
 #'   ICD version
 #' @export
 #' @keywords internal manip
-decimal_to_parts.character <- function(x, mnr_empty = "") {
+decimal_to_parts.character <- function(x, mnr_empty = "")
   switch(
     guess_version(x, short_code = FALSE),
     "icd9" = .Call("_icd_icd9DecimalToPartsCpp", x, mnr_empty),
     "icd10" = decimal_to_parts.icd10(x, mnr_empty = mnr_empty),
     stop("Unknown ICD version guessed from input")
   )
-}

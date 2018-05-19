@@ -126,20 +126,6 @@ binary_to_logical <- function(x) {
   x
 }
 
-
-#' \code{regexec} which accepts \code{perl} argument even in older R
-#'
-#' TODO: deprecate this as we won't support ancient R versions indefinitely.
-#' @keywords internal
-regexec32 <- function(pattern, text, ...) {
-  dots <- list(...)
-  dots[["pattern"]] <- pattern
-  dots[["text"]] <- text
-  if (!.have_regexec_perl)
-    dots[["perl"]] <- NULL
-  do.call(regexec, dots)
-}
-
 #' Match pairs of strings to get named vector
 #'
 #' Match a character vector against a regular expression with at least two
@@ -165,7 +151,7 @@ str_pair_match <- function(string, pattern, pos, swap = FALSE, ...) {
 
   res <- lapply(string,
                 function(x) unlist(
-                  regmatches(x = x, m = regexec32(pattern = pattern, text = x, ...))
+                  regmatches(x = x, m = regexec(pattern = pattern, text = x, ...))
                 )[-1]
   )
 
@@ -419,19 +405,16 @@ dir.exists <- function(paths) {
 }
 
 #' return all matches for regular expression
-#'
-#' \code{perl} is taken out if not supported, allows compatibility with older
-#' versions of R. TODO: check for newer \code{stringr} function to do this.
-#' @keywords internal
+#' @keywords internal manip
 str_match_all <- function(string, pattern, ...) {
   string <- as.character(string)
-  regmatches(x = string, m = regexec32(pattern = pattern, text = string, ...))
+  regmatches(x = string, m = regexec(pattern = pattern, text = string, ...))
 }
 
 #' \code{stringr} does this, but here we have a small amount of base R code
 #' @keywords internal
 str_extract <- function(string, pattern, ...) {
-  vapply(regmatches(x = string, m = regexec32(pattern = pattern, text = string, ...)),
+  vapply(regmatches(x = string, m = regexec(pattern = pattern, text = string, ...)),
          FUN = `[[`, 1, FUN.VALUE = character(1L))
 }
 
