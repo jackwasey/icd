@@ -4,7 +4,7 @@
 \alias{factor_nosort}
 \title{Fast Factor Generation}
 \usage{
-factor_nosort(x, levels, labels = levels, exclude = NA)
+factor_nosort(x, levels = unique.default(x))
 }
 \arguments{
 \item{x}{An object of atomic type \code{integer}, \code{numeric},

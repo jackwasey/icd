@@ -334,15 +334,7 @@ The ICD-9-CM scheme is structured as follows:
  - sub-division (first decimal place)
  - sub-sub-division (second decimal place)
  
- For most combinations of zero to nine, nothing is defined. Sometimes, nodes at one level in the hierarchy are descriptive only of their children (branch nodes), whereas some are themselves billable. For this example, let's find those numeric-only codes which have no children, and by implication are themselves directly billable codes. Here are the first ten:
-```{r "find three digit billable"}
-icd9cm_hierarchy$code %>% get_defined -> all_real
-# select the non-V and non-E codes
-three_digit_real <- all_real[icd9_is_n(all_real)]
-# display
-three_digit_df <- data.frame(code = three_digit_real, description = explain(three_digit_real, condense = FALSE))
-print(three_digit_df[1:10, ], row.names = FALSE)
-```
+ For most combinations of zero to nine, nothing is defined. Sometimes, nodes at one level in the hierarchy are descriptive only of their children (branch nodes), whereas some are themselves billable.
 
 ### Which ICD-9 codes have changed between versions of ICD-9
 ```{r "compare ICD-9 versions"}

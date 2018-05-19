@@ -41,7 +41,8 @@ Given vector of short_code or decimal ICD-9 codes, return (in the
 
 \item \code{icd9}: Get valid ICD-9 codes
 
-\item \code{icd10}: Get valid ICD-10 codes
+\item \code{icd10}: Get valid ICD-10 codes, currently based on ICD-10-CM
+structure, which is a superset of WHO ICD-10
 
 \item \code{icd10cm}: Get valid ICD-10-CM codes
 }}

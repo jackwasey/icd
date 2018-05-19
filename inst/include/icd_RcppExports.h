@@ -440,6 +440,25 @@ namespace icd {
         return Rcpp::as<Rcpp::CharacterVector >(rcpp_result_gen);
     }
 
+    inline Rcpp::IntegerVector factor_nosort_rcpp(const Rcpp::Vector<STRSXP>& x, const Rcpp::Vector<STRSXP>& levels) {
+        typedef SEXP(*Ptr_factor_nosort_rcpp)(SEXP,SEXP);
+        static Ptr_factor_nosort_rcpp p_factor_nosort_rcpp = NULL;
+        if (p_factor_nosort_rcpp == NULL) {
+            validateSignature("Rcpp::IntegerVector(*factor_nosort_rcpp)(const Rcpp::Vector<STRSXP>&,const Rcpp::Vector<STRSXP>&)");
+            p_factor_nosort_rcpp = (Ptr_factor_nosort_rcpp)R_GetCCallable("icd", "_icd_factor_nosort_rcpp");
+        }
+        RObject rcpp_result_gen;
+        {
+            RNGScope RCPP_rngScope_gen;
+            rcpp_result_gen = p_factor_nosort_rcpp(Shield<SEXP>(Rcpp::wrap(x)), Shield<SEXP>(Rcpp::wrap(levels)));
+        }
+        if (rcpp_result_gen.inherits("interrupted-error"))
+            throw Rcpp::internal::InterruptedException();
+        if (rcpp_result_gen.inherits("try-error"))
+            throw Rcpp::exception(Rcpp::as<std::string>(rcpp_result_gen).c_str());
+        return Rcpp::as<Rcpp::IntegerVector >(rcpp_result_gen);
+    }
+
     inline bool guess_short(SEXP x_, SEXP short_code = R_NilValue, int n = 1000L, SEXP icd_name = R_NilValue) {
         typedef SEXP(*Ptr_guess_short)(SEXP,SEXP,SEXP,SEXP);
         static Ptr_guess_short p_guess_short = NULL;

@@ -1,4 +1,23 @@
- <- unname(unlist(icd9_map_ahrq))
+library(icd)
+# benchmarking factor generation with known levels and no sorting:
+n = 1e7
+random_short_icd10_codes <- sample(unlist(icd::icd10_map_elix), replace = TRUE, size = n)
+lvls <- unique(random_short_icd10_codes)
+
+microbenchmark::microbenchmark(
+  icd:::factor_nosort_rcpp(random_short_icd10_codes, lvls),
+  icd:::factor_nosort(random_short_icd10_codes, lvls),
+  factor(random_short_icd10_codes, lvls),
+  times = 10
+)
+
+
+
+## below needs tidying up
+
+
+
+<- unname(unlist(icd9_map_ahrq))
  codes <- c(codes, icd:::randomMajorCpp(1e7))
  microbenchmark::microbenchmark(
 				  icd:::factor_fast(codes),

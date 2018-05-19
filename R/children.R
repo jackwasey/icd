@@ -74,7 +74,6 @@ children.icd9cm <- function(x, short_code = guess_short(x),
   assert_flag(short_code)
   assert_flag(defined)
   assert_flag(billable)
-  # TODO order/unorder consistently for decimal and short
   res <- if (short_code)
     .Call("_icd_icd9ChildrenShortUnordered",
           icd9Decimal = toupper(x),
