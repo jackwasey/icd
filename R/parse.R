@@ -62,6 +62,7 @@ update_everything <- function() {
   # reload the newly saved data before generating chapters.
   # The next step depends on icd9cm_billable
   icd9cm_generate_chapters_hierarchy(save_data = TRUE, offline = FALSE, verbose = FALSE)
+  generate_maps_pccc(save_data = TRUE)
 }
 
 # quick sanity checks - full tests of x in test-parse.R

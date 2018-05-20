@@ -9,13 +9,12 @@
 comorbid_pccc_dx <- function(x, visit_name = get_visit_name(x),
                              icd_name = get_icd_name(x),
                              short_code = guess_short(x, icd_name = icd_name),
-                             return_df = FALSE, return_binary = FALSE, ...) {
+                             return_df = FALSE, return_binary = FALSE, ...)
   switch_ver_cmb(x = x, funs = list(icd9 = icd9_comorbid_pccc_dx,
                                     icd10 = icd10_comorbid_pccc_dx),
                  visit_name = visit_name, icd_name = icd_name,
                  short_code = short_code, return_df = return_df,
                  return_binary = return_binary, ...)
-}
 
 #' @describeIn comorbid_pccc_dx Calculate PCCC comorbidities from ICD-9
 #'   diagnosis codes
@@ -25,7 +24,7 @@ icd9_comorbid_pccc_dx <-
            short_code = guess_short(x, icd_name = icd_name),
            return_df = FALSE, return_binary = FALSE, ...)
     icd9_comorbid(x = x,
-                  map = icd::icd9_map_pccc_dx,
+                  map = icd9_map_pccc_dx,
                   visit_name = visit_name,
                   icd_name = icd_name,
                   short_code = short_code,
@@ -42,7 +41,7 @@ icd10_comorbid_pccc_dx <-
            short_code = guess_short(x, icd_name = icd_name),
            return_df = FALSE, return_binary = FALSE, ...)
     icd10_comorbid(x = x,
-                   map = icd::icd10_map_pccc_dx,
+                   map = icd10_map_pccc_dx,
                    visit_name = visit_name,
                    icd_name = icd_name,
                    short_code = short_code,
@@ -50,3 +49,18 @@ icd10_comorbid_pccc_dx <-
                    return_df = return_df,
                    return_binary = return_binary,
                    ...)
+
+#' @describeIn comorbid_pccc_dx Calculate PCCC comorbidities from ICD-9
+#'   procedure codes
+#' @export
+icd9_comorbid_pccc_pcs <- function(x, map, visit_name, code_name,
+                                   return_df = FALSE, return_binary = FALSE)
+  categorize(x = x,
+             map = icd9_map_pccc_pcs,
+             visit_name = visit_name, code_name = code_name,
+             return_df = FALSE, return_binary = FALSE)
+
+#' @describeIn comorbid_pccc_dx Calculate PCCC comorbidities from ICD-10
+#'   procedure codes
+#' @export
+icd10_comorbid_pccc_pcs <- icd9_comorbid_pccc_pcs

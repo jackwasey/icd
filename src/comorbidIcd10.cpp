@@ -129,40 +129,49 @@ Rcpp::LogicalMatrix icd10ComorbidParentSearchCpp(Rcpp::DataFrame x,
 //'
 //' @keywords internal
 // [[Rcpp::export(simplify_map_lex)]]
-Rcpp::List simplifyMapLexicographic(CV pt_codes, Rcpp::List map) {
+Rcpp::List simplifyMapLexicographic(const CV pt_codes, const Rcpp::List map) {
   std::string ptCode;
-  Rcpp::String oneCbd;
-  std::string codeCur;
-  CV cmbRef;
-  Rcpp::List newMap;
-
+  size_t searchLen;
+  size_t pos;
+  size_t cmb_len;
   CV icd_codes = Rcpp::unique(pt_codes); // hmm, would be nice to only scan the pt_codes once, but I don't want to write my own hash map code....
-
   std::vector<std::unordered_set<std::string> > newMapStd(map.length());
   for (R_xlen_t i = 0; i != icd_codes.size(); ++i) {
     ptCode = icd_codes[i];
     size_t codeLen = ptCode.length();
     if (codeLen < 3)
       continue; // cannot be a valid ICD-10 code
-    for (R_xlen_t j = 0; j != map.size(); ++j) {
-      const CV cmbCodes = map[j];
-      for (CV::const_iterator k = cmbCodes.cbegin(); k != cmbCodes.cend(); ++k) {
-        std::string cmb = Rcpp::as<std::string>(*k);
-        if (cmb.length() > codeLen)
+// cannot break or goto in openmp loops #pragma omp parallel for private(searchLen, pos, cmb_len)
+    for (R_xlen_t j = 0; j < map.size(); ++j) {
+      const CV &cmbCodes = map[j];
+      for (size_t k = 0; k != cmbCodes.length(); ++k) {
+        cmb_len = cmbCodes[k].size();
+        if (cmb_len > codeLen)
           continue; // if map code is longer than the patient's code, it'll never match
-        size_t searchLen = std::min(cmb.length(), codeLen);
-        size_t pos = 0;
+        // we always have at least three characters, so spare looping inside strcmp
+        if (cmbCodes[k][0] != ptCode[0] ||
+            cmbCodes[k][1] != ptCode[1] ||
+            cmbCodes[k][2] != ptCode[2])
+          goto no_match;
+        searchLen = std::min(cmb_len, codeLen);
+        pos = 3;
         while(pos != searchLen) {
-          if (cmb[pos] != ptCode[pos])
+          if (cmbCodes[k][pos] != ptCode[pos])
             goto no_match;
           ++pos;
         }
-        newMapStd[j].insert(ptCode); // push the patient's code, not the comorbidity onto the new map
+        // push the patient's ICD code, not the original comorbidity ICD code
+        // onto the new map. This should be okay with openmp without critical
+        // pragma.
+        newMapStd[j].insert(ptCode);
         no_match:
           ;
       } // end of codes in current comorbidity
+      next_comorbidity:
+        ;
     } // each comorbidity
   } // each row of input data
+  Rcpp::List newMap = Rcpp::List::create();
   for (auto cmbSet : newMapStd) {
     CV cmbOut;
     for (auto cmbCode : cmbSet) {

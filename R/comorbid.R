@@ -167,9 +167,10 @@ icd10_comorbid_reduce <- function(x = x, map, visit_name, icd_name, short_code,
   if (!short_code)
     x[[icd_name]] <- decimal_to_short.icd10(x[[icd_name]])
   # TODO: could  reduce list of input visits here, as we are scanning the codes
-  reduced_map <- simplify_map_lex(as_char_or_levels(x[[icd_name]]), map)
+  x[[icd_name]] <- factor_nosort_rcpp(x[[icd_name]])
+  reduced_map <- simplify_map_lex(levels(x[[icd_name]]), map)
   categorize(x = x, map = reduced_map,
-             visit_name = visit_name, icd_name = icd_name,
+             visit_name = visit_name, code_name = icd_name,
              return_df = return_df, return_binary = return_binary, ...)
 }
 
@@ -226,7 +227,7 @@ icd9_comorbid <- function(x,
   if (!short_map)
     map <- lapply(map, decimal_to_short)
   categorize(x = x, map = map, visit_name = visit_name,
-             icd_name = icd_name, return_df = return_df,
+             code_name = icd_name, return_df = return_df,
              return_binary = return_binary, ...)
 }
 

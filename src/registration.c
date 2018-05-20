@@ -11,7 +11,6 @@
 extern SEXP _icd_comorbidMatMul(SEXP, SEXP, SEXP, SEXP, SEXP, SEXP, SEXP);
 extern SEXP _icd_debug_parallel();
 extern SEXP _icd_debug_parallel_env();
-extern SEXP _icd_factor_fast(SEXP);
 extern SEXP _icd_factorNoSort(SEXP, SEXP);
 extern SEXP _icd_fastIntToString_alt_Std(SEXP);
 extern SEXP _icd_fastIntToStringRcpp(SEXP);
@@ -87,7 +86,6 @@ static const R_CallMethodDef CallEntries[] = {
     {"_icd_comorbidMatMul",                        (DL_FUNC) &_icd_comorbidMatMul,                        7},
     {"_icd_debug_parallel",                        (DL_FUNC) &_icd_debug_parallel,                        0},
     {"_icd_debug_parallel_env",                    (DL_FUNC) &_icd_debug_parallel_env,                    0},
-    {"_icd_factor_fast",                           (DL_FUNC) &_icd_factor_fast,                           1},
     {"_icd_factorNoSort",                          (DL_FUNC) &_icd_factorNoSort,                          2},
     {"_icd_fastIntToString_alt_Std",               (DL_FUNC) &_icd_fastIntToString_alt_Std,               1},
     {"_icd_fastIntToStringRcpp",                   (DL_FUNC) &_icd_fastIntToStringRcpp,                   1},

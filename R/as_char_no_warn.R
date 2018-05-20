@@ -33,6 +33,7 @@ as_char_no_warn <- function(x) {
 
 #' @describeIn as_char_no_warn If the argument is a factor, return the levels
 #'   instead
+#' @keywords internal
 as_char_or_levels <- function(x) {
   if (is.character(x))
     return(x)

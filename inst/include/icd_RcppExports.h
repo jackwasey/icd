@@ -193,11 +193,11 @@ namespace icd {
         return Rcpp::as<Rcpp::LogicalMatrix >(rcpp_result_gen);
     }
 
-    inline Rcpp::List simplify_map_lex(CV pt_codes, Rcpp::List map) {
+    inline Rcpp::List simplify_map_lex(const CV pt_codes, const Rcpp::List map) {
         typedef SEXP(*Ptr_simplify_map_lex)(SEXP,SEXP);
         static Ptr_simplify_map_lex p_simplify_map_lex = NULL;
         if (p_simplify_map_lex == NULL) {
-            validateSignature("Rcpp::List(*simplify_map_lex)(CV,Rcpp::List)");
+            validateSignature("Rcpp::List(*simplify_map_lex)(const CV,const Rcpp::List)");
             p_simplify_map_lex = (Ptr_simplify_map_lex)R_GetCCallable("icd", "_icd_simplify_map_lex");
         }
         RObject rcpp_result_gen;
@@ -438,25 +438,6 @@ namespace icd {
         if (rcpp_result_gen.inherits("try-error"))
             throw Rcpp::exception(Rcpp::as<std::string>(rcpp_result_gen).c_str());
         return Rcpp::as<Rcpp::CharacterVector >(rcpp_result_gen);
-    }
-
-    inline Rcpp::IntegerVector factor_nosort_rcpp(const Rcpp::Vector<STRSXP>& x, const Rcpp::Vector<STRSXP>& levels) {
-        typedef SEXP(*Ptr_factor_nosort_rcpp)(SEXP,SEXP);
-        static Ptr_factor_nosort_rcpp p_factor_nosort_rcpp = NULL;
-        if (p_factor_nosort_rcpp == NULL) {
-            validateSignature("Rcpp::IntegerVector(*factor_nosort_rcpp)(const Rcpp::Vector<STRSXP>&,const Rcpp::Vector<STRSXP>&)");
-            p_factor_nosort_rcpp = (Ptr_factor_nosort_rcpp)R_GetCCallable("icd", "_icd_factor_nosort_rcpp");
-        }
-        RObject rcpp_result_gen;
-        {
-            RNGScope RCPP_rngScope_gen;
-            rcpp_result_gen = p_factor_nosort_rcpp(Shield<SEXP>(Rcpp::wrap(x)), Shield<SEXP>(Rcpp::wrap(levels)));
-        }
-        if (rcpp_result_gen.inherits("interrupted-error"))
-            throw Rcpp::internal::InterruptedException();
-        if (rcpp_result_gen.inherits("try-error"))
-            throw Rcpp::exception(Rcpp::as<std::string>(rcpp_result_gen).c_str());
-        return Rcpp::as<Rcpp::IntegerVector >(rcpp_result_gen);
     }
 
     inline bool guess_short(SEXP x_, SEXP short_code = R_NilValue, int n = 1000L, SEXP icd_name = R_NilValue) {
@@ -1065,23 +1046,23 @@ namespace icd {
         return Rcpp::as<std::vector<std::size_t> >(rcpp_result_gen);
     }
 
-    inline SEXP factor_fast(SEXP x) {
-        typedef SEXP(*Ptr_factor_fast)(SEXP);
-        static Ptr_factor_fast p_factor_fast = NULL;
-        if (p_factor_fast == NULL) {
-            validateSignature("SEXP(*factor_fast)(SEXP)");
-            p_factor_fast = (Ptr_factor_fast)R_GetCCallable("icd", "_icd_factor_fast");
+    inline Rcpp::IntegerVector factor_nosort_rcpp_worker(const Rcpp::Vector<STRSXP>& x, const Rcpp::Vector<STRSXP>& levels) {
+        typedef SEXP(*Ptr_factor_nosort_rcpp_worker)(SEXP,SEXP);
+        static Ptr_factor_nosort_rcpp_worker p_factor_nosort_rcpp_worker = NULL;
+        if (p_factor_nosort_rcpp_worker == NULL) {
+            validateSignature("Rcpp::IntegerVector(*factor_nosort_rcpp_worker)(const Rcpp::Vector<STRSXP>&,const Rcpp::Vector<STRSXP>&)");
+            p_factor_nosort_rcpp_worker = (Ptr_factor_nosort_rcpp_worker)R_GetCCallable("icd", "_icd_factor_nosort_rcpp_worker");
         }
         RObject rcpp_result_gen;
         {
             RNGScope RCPP_rngScope_gen;
-            rcpp_result_gen = p_factor_fast(Shield<SEXP>(Rcpp::wrap(x)));
+            rcpp_result_gen = p_factor_nosort_rcpp_worker(Shield<SEXP>(Rcpp::wrap(x)), Shield<SEXP>(Rcpp::wrap(levels)));
         }
         if (rcpp_result_gen.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();
         if (rcpp_result_gen.inherits("try-error"))
             throw Rcpp::exception(Rcpp::as<std::string>(rcpp_result_gen).c_str());
-        return Rcpp::as<SEXP >(rcpp_result_gen);
+        return Rcpp::as<Rcpp::IntegerVector >(rcpp_result_gen);
     }
 
 }

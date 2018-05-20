@@ -4,6 +4,8 @@
 \alias{comorbid_pccc_dx}
 \alias{icd9_comorbid_pccc_dx}
 \alias{icd10_comorbid_pccc_dx}
+\alias{icd9_comorbid_pccc_pcs}
+\alias{icd10_comorbid_pccc_pcs}
 \title{Calculate pediatric complex chronic conditions (PCCC) comorbidities}
 \usage{
 comorbid_pccc_dx(x, visit_name = get_visit_name(x),
@@ -17,6 +19,12 @@ icd9_comorbid_pccc_dx(x, visit_name = NULL, icd_name = NULL,
 icd10_comorbid_pccc_dx(x, visit_name = NULL, icd_name = NULL,
   short_code = guess_short(x, icd_name = icd_name), return_df = FALSE,
   return_binary = FALSE, ...)
+
+icd9_comorbid_pccc_pcs(x, map, visit_name, code_name, return_df = FALSE,
+  return_binary = FALSE)
+
+icd10_comorbid_pccc_pcs(x, map, visit_name, code_name, return_df = FALSE,
+  return_binary = FALSE)
 }
 \arguments{
 \item{x}{\code{data.frame} containing a column of patient-visit identifiers
@@ -59,6 +67,15 @@ conversion can also be done by the internal functions
 other tools, e.g. \code{apply(x, 2, as.integer)}}
 
 \item{...}{arguments passed on to other functions}
+
+\item{map}{list of the comorbidities with each list item containing a vector
+of decimal ICD-9 codes. This is in the form of a list, with the names of
+the items corresponding to the comorbidities (e.g. \sQuote{HTN}, or
+\sQuote{diabetes}) and the contents of each list item being a character
+vector of short-form (no decimal place, zero left-padded) ICD codes. There
+is no default: the user should use the family of functions, e.g.
+\code{comorbid_ahrq}, since these also name the fields correctly, apply any
+hierarchical rules (see \code{hierarchy} below)}
 }
 \description{
 Calculate pediatric complex chronic conditions (PCCC) comorbidities
@@ -70,6 +87,12 @@ diagnosis codes
 
 \item \code{icd10_comorbid_pccc_dx}: Calculate PCCC comorbidities from ICD-10
 diagnosis codes
+
+\item \code{icd9_comorbid_pccc_pcs}: Calculate PCCC comorbidities from ICD-9
+procedure codes
+
+\item \code{icd10_comorbid_pccc_pcs}: Calculate PCCC comorbidities from ICD-10
+procedure codes
 }}
 
 \examples{

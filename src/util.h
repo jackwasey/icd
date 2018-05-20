@@ -32,10 +32,8 @@
 #endif
 
 typedef std::pair<std::string, std::size_t> pas;
-
 std::string trimLeftCpp(std::string s);
 std::string strimCpp(std::string s);
-
 int getOmpCores();
 int getOmpThreads();
 int getOmpMaxThreads();
@@ -46,10 +44,8 @@ VecStr icd9RandomShortN(VecStr::size_type n);
 VecStr icd9RandomShortV(VecStr::size_type n);
 VecStr icd9RandomShortE(VecStr::size_type n);
 VecStr icd9RandomShort(VecStr::size_type n);
-
 int valgrindCallgrindStart(bool zerostats);
 int valgrindCallgrindStop();
-
 bool icd9CompareStrings(std::string a, std::string b);
 std::vector<std::size_t> icd9OrderCpp(VecStr x);
 
@@ -61,15 +57,4 @@ void my_concat (COCiter start, COCiter end, Oiter dest) {
     ++start;
   }
 }
-
-// template for factors of different S types
-template <int RTYPE>
-Rcpp::IntegerVector fast_factor_template( const Rcpp::Vector<RTYPE>& x ) {
-  Rcpp::Vector<RTYPE> levs = unique(x); // or sort_unique
-  Rcpp::IntegerVector out = match(x, levs);
-  out.attr("levels") = Rcpp::as<Rcpp::CharacterVector>(levs);
-  out.attr("class") = "factor";
-  return out;
-}
-
 #endif /* UTIL_H_ */

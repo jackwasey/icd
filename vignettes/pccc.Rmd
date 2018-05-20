@@ -10,6 +10,7 @@ vignette: >
 ---
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+library(icd)
 n <- 10000
 set.seed(1441)
 dat <- data.frame(id = n + seq(n),
@@ -19,18 +20,23 @@ dat <- data.frame(id = n + seq(n),
                   icd_pcs2 = sample(icd10_pcs_2018$pcs, n, replace = TRUE)
 )
 
+
+head(dat)
+
+dx <- wide_to_long(dat[1:3])
+pcs <- wide_to_long(dat[c(1, 4:5)], icd_name = "pcs", icd_regex = "icd_pcs")
+pccc_dx <- comorbid_pccc_dx(dx)
+pccc_pcs <- icd10_comorbid_pccc_pcs(pcs, map = icd10_map_pccc_pcs, 
+                                    visit_name = "id", code_name = "pcs")
+res <- pccc_dx | pccc_pcs
 ```
 
 ## Preparing the data
 
-The following sample data has two columns for ICD-10 diagnostic code, and two for ICD-10 procedure codes.
+The following 'wide' sample data has two columns for ICD-10 diagnostic code, and two for ICD-10 procedure codes.
 
-```{r prep}
-head(dat)
-
-dx <- icd::wide_to_long(dat[1:3])
-pcs <- icd::wide_to_long(dat[c(1, 4:5)], icd_name = "pcs", icd_regex = "icd_pcs")
-
-pccc_dx <- icd::comorbid_pccc_dx(dx)
-pccc_pcs <- icd::comorbid_pccc_pcs(pcs)
+```{r pcccbarplot, fig.asp=0.5, echo=FALSE}
+barplot(sort(colSums(res), decreasing = TRUE), 
+        ylim = c(0, 70),
+        ylab = "count", las = 2)
 ```

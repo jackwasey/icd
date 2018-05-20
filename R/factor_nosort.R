@@ -35,8 +35,19 @@
 #'   alphanumeric sorting will likely be completely wrong.
 #' @keywords internal
 factor_nosort <- function(x, levels = unique.default(x)) {
+  if (is.factor(x)) return(x) # don't refactor
   suppressWarnings(f <- match(x, levels))
   levels(f) <- as.character(levels)
   class(f) <- "factor"
   f
+}
+
+#' @describeIn factor_nosort R wrapper to the Rcpp function
+#' @keywords internal
+factor_nosort_rcpp <- function(x, levels = unique.default(x)) {
+  if (is.factor(x)) {
+    # assume all new levels exist in old levels
+    return(x)
+  }
+  factor_nosort_rcpp_worker(x, levels)
 }

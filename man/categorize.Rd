@@ -6,7 +6,7 @@
 \usage{
 categorize(x, map, visit_name, code_name, return_df = FALSE,
   return_binary = FALSE, comorbid_fun = comorbidMatMul,
-  factor_fun = factor_nosort, ...)
+  factor_fun = factor_nosort_rcpp, ...)
 }
 \arguments{
 \item{x}{Data frame containing a column for an 'id' and a column for a code,
@@ -42,7 +42,8 @@ and 1s instead of TRUE and FALSE.}
 \item{comorbid_fun}{function i.e. the function symbol (not character string)
 to be called to do the comorbidity calculation}
 
-\item{factor_fun}{function symbol to call to generate factors}
+\item{factor_fun}{function symbol to call to generate factors. Default is a
+very simple \code{Rcpp} implementation \code{factor_nosort_rcpp}.}
 }
 \description{
 This is the function which optimizes the input data for the categorization,

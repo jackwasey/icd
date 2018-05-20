@@ -257,15 +257,6 @@ fastIntToStringRcpp <- function(x) {
     .Call(`_icd_fastIntToStringRcpp`, x)
 }
 
-#' @title Fast factor generation with hashing, no sorting
-#' @description Rcpp minimal factor creation
-#' @param x vector of strings
-#' @param levels vector of levels
-#' @keywords internal manip
-factor_nosort_rcpp <- function(x, levels) {
-    .Call(`_icd_factorNoSort`, x, levels)
-}
-
 #' @rdname fastIntToString
 #' @title Fast convert integer vector to character vector
 #' @description Fast conversion from integer vector to character vector using C++
@@ -498,10 +489,11 @@ icd9_order_cpp <- function(x) {
     .Call(`_icd_icd9OrderCpp`, x)
 }
 
-#' fast factor generation WIP
+#' @describeIn factor_nosort Rcpp implementation, requiring character vector
+#'   inputs only, no argument checking.
 #' @keywords internal manip
-factor_fast <- function(x) {
-    .Call(`_icd_factor_fast`, x)
+factor_nosort_rcpp_worker <- function(x, levels) {
+    .Call(`_icd_factorNoSort`, x, levels)
 }
 
 # Register entry points for exported C++ functions

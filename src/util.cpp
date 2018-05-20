@@ -233,30 +233,27 @@ VecStr icd9RandomShort(VecStr::size_type n = 5) {
 // [[Rcpp::export]]
 int valgrindCallgrindStart(bool zerostats = false) {
 #ifdef ICD_VALGRIND
-#ifdef ICD_DEBUG
   Rcpp::Rcout << "Starting callgrind instrumentation...\n";
-#endif
   CALLGRIND_START_INSTRUMENTATION;
   if (zerostats) {
     Rcpp::Rcout << "Zeroing callgrind stats.\n";
     CALLGRIND_ZERO_STATS;
   }
 #else
-#ifdef ICD_DEBUG
-  Rcpp::Rcout << "NOT starting valgrind instrumentation.\n";
-#endif
+  Rcpp::Rcout << "NOT starting Valgrind callgrind " <<
+    "instrumentation, not linked.\n";
 #endif
   return 0;
 }
 
-
 // [[Rcpp::export]]
 int valgrindCallgrindStop() {
 #ifdef ICD_VALGRIND
-#ifdef ICD_DEBUG
-  Rcpp::Rcout << "Stopping callgrind instrumentation...\n";
-#endif
+  Rcpp::Rcout << "Stopping Valgrind callgrind instrumentation...\n";
   CALLGRIND_STOP_INSTRUMENTATION;
+#else
+  Rcpp::Rcout << "NOT stopping Valgrind callgrind " <<
+    "instrumentation, not linked.\n";
 #endif
   return 0;
 }
@@ -310,14 +307,14 @@ std::vector<std::size_t> icd9OrderCpp(VecStr x) {
   return out;
 }
 
-//' fast factor generation WIP
+//' @describeIn factor_nosort Rcpp implementation, requiring character vector
+//'   inputs only, no argument checking.
 //' @keywords internal manip
-// [[Rcpp::export]]
-SEXP factor_fast( SEXP x ) {
-  switch( TYPEOF(x) ) {
-  case INTSXP: return fast_factor_template<INTSXP>(x);
-  case REALSXP: return fast_factor_template<REALSXP>(x);
-  case STRSXP: return fast_factor_template<STRSXP>(x);
-  }
-  return R_NilValue;
+// [[Rcpp::export(factor_nosort_rcpp_worker)]]
+Rcpp::IntegerVector factorNoSort(const Rcpp::Vector<STRSXP>& x,
+                                 const Rcpp::Vector<STRSXP>& levels) {
+  Rcpp::IntegerVector out = match(x, levels);
+  out.attr("levels") = Rcpp::as<Rcpp::CharacterVector>(levels);
+  out.attr("class") = "factor";
+  return out;
 }

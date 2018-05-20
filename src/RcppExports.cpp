@@ -361,12 +361,12 @@ RcppExport SEXP _icd_icd10ComorbidParentSearchCpp(SEXP xSEXP, SEXP mapSEXP, SEXP
     return rcpp_result_gen;
 }
 // simplifyMapLexicographic
-Rcpp::List simplifyMapLexicographic(CV pt_codes, Rcpp::List map);
+Rcpp::List simplifyMapLexicographic(const CV pt_codes, const Rcpp::List map);
 static SEXP _icd_simplifyMapLexicographic_try(SEXP pt_codesSEXP, SEXP mapSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
-    Rcpp::traits::input_parameter< CV >::type pt_codes(pt_codesSEXP);
-    Rcpp::traits::input_parameter< Rcpp::List >::type map(mapSEXP);
+    Rcpp::traits::input_parameter< const CV >::type pt_codes(pt_codesSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::List >::type map(mapSEXP);
     rcpp_result_gen = Rcpp::wrap(simplifyMapLexicographic(pt_codes, map));
     return rcpp_result_gen;
 END_RCPP_RETURN_ERROR
@@ -807,37 +807,6 @@ RcppExport SEXP _icd_fastIntToStringRcpp(SEXP xSEXP) {
     {
         Rcpp::RNGScope rcpp_rngScope_gen;
         rcpp_result_gen = PROTECT(_icd_fastIntToStringRcpp_try(xSEXP));
-    }
-    Rboolean rcpp_isInterrupt_gen = Rf_inherits(rcpp_result_gen, "interrupted-error");
-    if (rcpp_isInterrupt_gen) {
-        UNPROTECT(1);
-        Rf_onintr();
-    }
-    Rboolean rcpp_isError_gen = Rf_inherits(rcpp_result_gen, "try-error");
-    if (rcpp_isError_gen) {
-        SEXP rcpp_msgSEXP_gen = Rf_asChar(rcpp_result_gen);
-        UNPROTECT(1);
-        Rf_error(CHAR(rcpp_msgSEXP_gen));
-    }
-    UNPROTECT(1);
-    return rcpp_result_gen;
-}
-// factorNoSort
-Rcpp::IntegerVector factorNoSort(const Rcpp::Vector<STRSXP>& x, const Rcpp::Vector<STRSXP>& levels);
-static SEXP _icd_factorNoSort_try(SEXP xSEXP, SEXP levelsSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::traits::input_parameter< const Rcpp::Vector<STRSXP>& >::type x(xSEXP);
-    Rcpp::traits::input_parameter< const Rcpp::Vector<STRSXP>& >::type levels(levelsSEXP);
-    rcpp_result_gen = Rcpp::wrap(factorNoSort(x, levels));
-    return rcpp_result_gen;
-END_RCPP_RETURN_ERROR
-}
-RcppExport SEXP _icd_factorNoSort(SEXP xSEXP, SEXP levelsSEXP) {
-    SEXP rcpp_result_gen;
-    {
-        Rcpp::RNGScope rcpp_rngScope_gen;
-        rcpp_result_gen = PROTECT(_icd_factorNoSort_try(xSEXP, levelsSEXP));
     }
     Rboolean rcpp_isInterrupt_gen = Rf_inherits(rcpp_result_gen, "interrupted-error");
     if (rcpp_isInterrupt_gen) {
@@ -1905,21 +1874,22 @@ RcppExport SEXP _icd_icd9OrderCpp(SEXP xSEXP) {
     UNPROTECT(1);
     return rcpp_result_gen;
 }
-// factor_fast
-SEXP factor_fast(SEXP x);
-static SEXP _icd_factor_fast_try(SEXP xSEXP) {
+// factorNoSort
+Rcpp::IntegerVector factorNoSort(const Rcpp::Vector<STRSXP>& x, const Rcpp::Vector<STRSXP>& levels);
+static SEXP _icd_factorNoSort_try(SEXP xSEXP, SEXP levelsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
-    Rcpp::traits::input_parameter< SEXP >::type x(xSEXP);
-    rcpp_result_gen = Rcpp::wrap(factor_fast(x));
+    Rcpp::traits::input_parameter< const Rcpp::Vector<STRSXP>& >::type x(xSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::Vector<STRSXP>& >::type levels(levelsSEXP);
+    rcpp_result_gen = Rcpp::wrap(factorNoSort(x, levels));
     return rcpp_result_gen;
 END_RCPP_RETURN_ERROR
 }
-RcppExport SEXP _icd_factor_fast(SEXP xSEXP) {
+RcppExport SEXP _icd_factorNoSort(SEXP xSEXP, SEXP levelsSEXP) {
     SEXP rcpp_result_gen;
     {
         Rcpp::RNGScope rcpp_rngScope_gen;
-        rcpp_result_gen = PROTECT(_icd_factor_fast_try(xSEXP));
+        rcpp_result_gen = PROTECT(_icd_factorNoSort_try(xSEXP, levelsSEXP));
     }
     Rboolean rcpp_isInterrupt_gen = Rf_inherits(rcpp_result_gen, "interrupted-error");
     if (rcpp_isInterrupt_gen) {
@@ -1949,7 +1919,7 @@ static int _icd_RcppExport_validate(const char* sig) {
         signatures.insert("SEXP(*icd9ComorbidShortCpp)(const SEXP&,const Rcpp::List&,const std::string,const std::string,const int,const int,const int)");
         signatures.insert("void(*lookupComorbidByChunkFor)(const VecVecInt&,const VecVecInt&,const VecVecIntSz,const VecVecIntSz,ComorbidOut&)");
         signatures.insert("Rcpp::LogicalMatrix(*icd10_comorbid_parent_search_cpp)(Rcpp::DataFrame,Rcpp::List,std::string,std::string)");
-        signatures.insert("Rcpp::List(*simplify_map_lex)(CV,Rcpp::List)");
+        signatures.insert("Rcpp::List(*simplify_map_lex)(const CV,const Rcpp::List)");
         signatures.insert("LogicalMatrix(*comorbidMatMul)(const Rcpp::DataFrame&,const Rcpp::List&,const std::string,const std::string,const int,const int,const int)");
         signatures.insert("CV(*icd9PartsToShort)(const Rcpp::List)");
         signatures.insert("CV(*icd9PartsToDecimal)(const Rcpp::List)");
@@ -1962,7 +1932,6 @@ static int _icd_RcppExport_validate(const char* sig) {
         signatures.insert("CV(*icd9_decimal_to_short_cpp)(const CV)");
         signatures.insert("CV(*get_major.icd9)(const CV,const bool)");
         signatures.insert("Rcpp::CharacterVector(*fastIntToStringRcpp)(Rcpp::IntegerVector)");
-        signatures.insert("Rcpp::IntegerVector(*factor_nosort_rcpp)(const Rcpp::Vector<STRSXP>&,const Rcpp::Vector<STRSXP>&)");
         signatures.insert("bool(*guess_short)(SEXP,SEXP,int,SEXP)");
         signatures.insert("bool(*guessShortPlusFactorCpp)(SEXP,int)");
         signatures.insert("std::vector<bool>(*icd9_is_n_cpp)(const VecStr&)");
@@ -1995,7 +1964,7 @@ static int _icd_RcppExport_validate(const char* sig) {
         signatures.insert("int(*valgrindCallgrindStop)()");
         signatures.insert("VecStr(*icd9_sort_cpp)(VecStr)");
         signatures.insert("std::vector<std::size_t>(*icd9_order_cpp)(VecStr)");
-        signatures.insert("SEXP(*factor_fast)(SEXP)");
+        signatures.insert("Rcpp::IntegerVector(*factor_nosort_rcpp_worker)(const Rcpp::Vector<STRSXP>&,const Rcpp::Vector<STRSXP>&)");
     }
     return signatures.find(sig) != signatures.end();
 }
@@ -2024,7 +1993,6 @@ RcppExport SEXP _icd_RcppExport_registerCCallable() {
     R_RegisterCCallable("icd", "_icd_icd9_decimal_to_short_cpp", (DL_FUNC)_icd_icd9DecimalToShort_try);
     R_RegisterCCallable("icd", "_icd_get_major.icd9", (DL_FUNC)_icd_icd9GetMajor_try);
     R_RegisterCCallable("icd", "_icd_fastIntToStringRcpp", (DL_FUNC)_icd_fastIntToStringRcpp_try);
-    R_RegisterCCallable("icd", "_icd_factor_nosort_rcpp", (DL_FUNC)_icd_factorNoSort_try);
     R_RegisterCCallable("icd", "_icd_guess_short", (DL_FUNC)_icd_guessShortCompleteCpp_try);
     R_RegisterCCallable("icd", "_icd_guessShortPlusFactorCpp", (DL_FUNC)_icd_guessShortPlusFactorCpp_try);
     R_RegisterCCallable("icd", "_icd_icd9_is_n_cpp", (DL_FUNC)_icd_icd9_is_n_cpp_try);
@@ -2057,7 +2025,7 @@ RcppExport SEXP _icd_RcppExport_registerCCallable() {
     R_RegisterCCallable("icd", "_icd_valgrindCallgrindStop", (DL_FUNC)_icd_valgrindCallgrindStop_try);
     R_RegisterCCallable("icd", "_icd_icd9_sort_cpp", (DL_FUNC)_icd_icd9SortCpp_try);
     R_RegisterCCallable("icd", "_icd_icd9_order_cpp", (DL_FUNC)_icd_icd9OrderCpp_try);
-    R_RegisterCCallable("icd", "_icd_factor_fast", (DL_FUNC)_icd_factor_fast_try);
+    R_RegisterCCallable("icd", "_icd_factor_nosort_rcpp_worker", (DL_FUNC)_icd_factorNoSort_try);
     R_RegisterCCallable("icd", "_icd_RcppExport_validate", (DL_FUNC)_icd_RcppExport_validate);
     return R_NilValue;
 }
