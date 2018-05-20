@@ -123,7 +123,7 @@ Rcpp::LogicalMatrix icd10ComorbidParentSearchCpp(Rcpp::DataFrame x,
 //' stopifnot(simple_map$PVD == "I26019")
 //'
 //' umap <- icd:::simplify_map_lex(uranium_pathology$icd10, icd10_map_ahrq)
-//' head(icd:::comorbid_common(uranium_pathology, icd10_map_ahrq,
+//' head(icd:::categorize(uranium_pathology, icd10_map_ahrq,
 //'                            visit_name = "case", icd_name = "icd10",
 //'                            comorbid_fun = icd:::comorbidMatMul))
 //'
@@ -162,14 +162,14 @@ Rcpp::List simplifyMapLexicographic(const CV pt_codes, const Rcpp::List map) {
         }
         // push the patient's ICD code, not the original comorbidity ICD code
         // onto the new map. This should be okay with openmp without critical
-        // pragma.
+        // pragma, but goto is not.
         newMapStd[j].insert(ptCode);
+        goto next_ptCode;
         no_match:
           ;
       } // end of codes in current comorbidity
-      next_comorbidity:
-        ;
     } // each comorbidity
+    next_ptCode:;
   } // each row of input data
   Rcpp::List newMap = Rcpp::List::create();
   for (auto cmbSet : newMapStd) {

@@ -240,8 +240,10 @@ int valgrindCallgrindStart(bool zerostats = false) {
     CALLGRIND_ZERO_STATS;
   }
 #else
+#ifdef ICD_DEBUG
   Rcpp::Rcout << "NOT starting Valgrind callgrind " <<
     "instrumentation, not linked.\n";
+#endif
 #endif
   return 0;
 }
@@ -252,8 +254,10 @@ int valgrindCallgrindStop() {
   Rcpp::Rcout << "Stopping Valgrind callgrind instrumentation...\n";
   CALLGRIND_STOP_INSTRUMENTATION;
 #else
+#ifdef ICD_DEBUG
   Rcpp::Rcout << "NOT stopping Valgrind callgrind " <<
     "instrumentation, not linked.\n";
+#endif
 #endif
   return 0;
 }

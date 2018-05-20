@@ -32,6 +32,11 @@
 #' @param factor_fun function symbol to call to generate factors. Default is a
 #'   very simple \code{Rcpp} implementation \code{factor_nosort_rcpp}.
 #' @keywords internal
+#' @examples
+#' u <- uranium_pathology
+#' u$icd10 <- decimal_to_short(u$icd10)
+#' j <- icd:::categorize(u, icd10_map_ahrq, visit_name = "case",
+#'                       code_name = "icd10")
 #' @export
 categorize <- function(x,
                        map,
@@ -74,29 +79,24 @@ categorize <- function(x,
   # start with a factor for the icd codes in x, recode (and drop superfluous)
   # icd codes in the mapping, then do very fast match on integer without need
   # for N, V or E distinction. Char to factor conversion in R is very fast.
-  relevant_codes <- intersect(
-    unlist(map, use.names = FALSE),
-    x[[code_name]] # implicit unique in here, which could be costly
-  )
+  # Implicit unique in next step, which could be costly
+  relevant_codes <- if (is.factor(x[[code_name]]))
+    intersect(unlist(map, use.names = FALSE), levels(x[[code_name]]))
+  else
+    intersect(unlist(map, use.names = FALSE), x[[code_name]])
   split_factor <- factor_split_na(x[[code_name]],
                                   levels = relevant_codes,
                                   factor_fun = factor_fun)
-  x[[code_name]] <- split_factor[[1]]
-  # get the visits where there is at least one code which is not in comorbidity
-  # map. many rows are NA, because most are NOT in comorbidity maps: but first
-  # keep track of the visits with no comorbidities in the given map using
-  # internal subset for speed
-  visit_not_comorbid <- unique(.subset2(split_factor[[2]], visit_name))
-  # but we need to identify visits which had both non-map and map codes
-  x <- x[!is.na(x[[code_name]]), ]
-  # now remove rows where there was both NA and a (non-map) real code:
-  visit_not_comorbid <- visit_not_comorbid[visit_not_comorbid %nin% x[[visit_name]]]
+  x_ <- x[split_factor$inc_mask, visit_name, drop = FALSE]
+  x_[[code_name]] <- split_factor$factor
+  visit_not_comorbid <- x[!split_factor$inc_mask, visit_name]
+  #TODO SLOW ?fastmatch ?Rcpp
+  visit_not_comorbid <- visit_not_comorbid[visit_not_comorbid %nin% x_[[visit_name]]]
   map <- lapply(map, function(y) {
     f <- factor_fun(y, levels = relevant_codes)
-    # drop map codes that were not in the input comorbidities
     f[!is.na(f)]
   })
-  mat_comorbid <- comorbid_fun(icd9df = x,
+  mat_comorbid <- comorbid_fun(icd9df = x_,
                                icd9Mapping = map,
                                visitId = visit_name,
                                icd9Field = code_name) #nolint
@@ -110,7 +110,7 @@ categorize <- function(x,
                              dimnames = list(visit_not_comorbid))
   mat_comb <- rbind(mat_comorbid, mat_not_comorbid)
   # now put the visits back in original order (bearing in mind that they may not
-  # have started that way)
+  # have started that way) # TODO SLOW
   mat_new_row_order <- match(rownames(mat_comb), uniq_visits)
   mat <- mat_comb[order(mat_new_row_order),, drop = FALSE] #nolint
   if (return_binary) mat <- logical_to_binary(mat)
@@ -130,7 +130,11 @@ categorize <- function(x,
 
 comorbid_common <- categorize
 
-#' factor quickly and split into matched and unmatched elements
+#' (re-)factor and split into matched and unmatched elements
+#'
+#' Critically, this function does not convert factor to character vector and
+#' back to factor in order to modify factor levels, resulting in huge speed
+#' improvements for long vectors.
 #' @examples
 #' icd:::factor_nosort_rcpp(c("1", NA)) # NA becomes a level
 #' icd:::factor_nosort_rcpp(c("1", "2"), "1") # NA not a level, just dropped!
@@ -161,24 +165,18 @@ factor_split_na <- function(x, levels, factor_fun = factor_nosort_rcpp) {
   if (is.factor(x)) {
     xi <- as.integer(x)
     lx <- levels(x)
-    any_na_levels <- anyNA(lx)
-    no_na_levels <- ifelse(any_na_levels, lx[!is.na(lx)], lx)
-    new_level_idx <- match(no_na_levels, levels)
-    # re-factor, but using integers instead of going back to strings
-    f <- match(xi, new_level_idx)
-    f <- f[!is.na(f)]
+    any_na_xlevels <- anyNA(lx)
+    no_na_xlevels <- if (any_na_xlevels) lx[!is.na(lx)] else lx
+    new_level_idx <- match(no_na_xlevels, levels)
+    f <- new_level_idx[xi]
+    inc_mask <- !is.na(f)
+    f <- f[inc_mask]
     attr(f, "levels") <- levels
     class(f) <- "factor"
-    # get indices of the dropped items, accounting for NA levels or not:
-    dropped_idx <-
-      ifelse(anyNA(x), # anyNA doesn't work for factors with NA levels
-             which((match(xi, new_level_idx, nomatch = 0L) == 0L) | is.na(x)),
-             which(match(xi, seq_along(lx)[-new_level_idx], nomatch = 0L)))
   } else {
     f <- factor_fun(x, levels)
-    na <- is.na(f)
-    dropped_idx <- which(na)
-    f <- f[!na]
+    inc_mask <- !is.na(f)
+    f <- f[inc_mask]
   }
-  list(f, dropped_idx)
+  list(factor = f, inc_mask = inc_mask)
 }

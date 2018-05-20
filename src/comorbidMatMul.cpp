@@ -199,7 +199,11 @@ LogicalMatrix comorbidMatMul(const Rcpp::DataFrame& icd9df, const Rcpp::List& ic
         Rcpp::Rcout << "not found in lookup, so adding to map at " <<
           "row " << row << ", col " << col << std::endl;
 #endif
+#ifdef ICD_DEBUG
+        map(row, col) = true;
+#else
         map.coeffRef(row, col) = true; // coeffRef doesn't do bounds check
+#endif
         map_lookup.insert(std::make_pair(this_code_factor_number, row));
         ++row;
       } else {
@@ -207,7 +211,11 @@ LogicalMatrix comorbidMatMul(const Rcpp::DataFrame& icd9df, const Rcpp::List& ic
         Rcpp::Rcout << "inserting duplicate while building map" <<
           " into row " << found_it->second << ", col " << col << std::endl;
 #endif
+#ifdef ICD_DEBUG
+        map(found_it->second, col) = true;
+#else
         map.coeffRef(found_it->second, col) = true;
+#endif
         // do not update lookup, or increment row
       }
     }
