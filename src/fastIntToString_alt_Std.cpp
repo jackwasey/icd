@@ -1,9 +1,6 @@
 #include <Rcpp.h>
 
-//' @rdname fastIntToString
-//' @title Fast convert integer vector to character vector
-//' @description Fast conversion from integer vector to character vector using C++
-//' @param x vector of integers
+//' @rdname fastIntToStringRcpp
 //' @param bufferSize int if any input strings are longer than this number
 //'   (default 16) there will be memory errors. No checks done for speed.
 //' @keywords internal

@@ -34,9 +34,9 @@
 #' @keywords internal
 #' @examples
 #' u <- uranium_pathology
+#' m <- icd10_map_ahrq
 #' u$icd10 <- decimal_to_short(u$icd10)
-#' j <- icd:::categorize(u, icd10_map_ahrq, visit_name = "case",
-#'                       code_name = "icd10")
+#' j <- icd:::categorize(u, m, visit_name = "case", code_name = "icd10")
 #' @export
 categorize <- function(x,
                        map,
@@ -58,7 +58,7 @@ categorize <- function(x,
   # pretty quick to do it here than in C++
   visit_was_factor <- is.factor(x[[visit_name]])
   if (visit_was_factor)
-    iv_levels <- levels(x[[visit_name]]) # maybe superfluous as we rebuild at end?
+    iv_levels <- levels(x[[visit_name]])
   if (nrow(x) == 0) {
     empty_mat_out <- matrix(nrow = 0,
                             ncol = length(map),
@@ -89,9 +89,18 @@ categorize <- function(x,
                                   factor_fun = factor_fun)
   x_ <- x[split_factor$inc_mask, visit_name, drop = FALSE]
   x_[[code_name]] <- split_factor$factor
-  visit_not_comorbid <- x[!split_factor$inc_mask, visit_name]
-  #TODO SLOW %fnin% about 25% quicker than base R equivalent
-  visit_not_comorbid <- visit_not_comorbid[visit_not_comorbid %fnin% x_[[visit_name]]]
+  # visit either has: no comorbid codes, mixed comorbid and not codes, or all
+  # comorbid codes. If no comorbid codes, we're fine as the visit row will be
+  # picked up as not in the split factor. Also fine for only comorbid. If mixed,
+  # we keep the visit in the comorbid calc, so don't need it at the end.
+  # visit_not_comorbid must therefore only have visit where the visit had no
+  # comorbidities at all.
+
+  # selecting only those comorbidities with at least one NOT comorbid hardly
+  # helps, as many codes are not in maps
+
+  #TODO SLOW %fnin% about 25% quicker than base R equivalent (if working!)
+  visit_not_comorbid <- unique(x[x[[visit_name]] %nin% x_[[visit_name]], visit_name])
   map <- lapply(map, function(y) {
     f <- factor_fun(y, levels = relevant_codes)
     f[!is.na(f)]
@@ -128,55 +137,5 @@ categorize <- function(x,
   df_out
 }
 
-comorbid_common <- categorize
-
-#' (re-)factor and split into matched and unmatched elements
-#'
-#' Critically, this function does not convert factor to character vector and
-#' back to factor in order to modify factor levels, resulting in huge speed
-#' improvements for long vectors.
-#' @examples
-#' icd:::factor_nosort_rcpp(c("1", NA)) # NA becomes a level
-#' icd:::factor_nosort_rcpp(c("1", "2"), "1") # NA not a level, just dropped!
-#' icd:::factor_nosort_rcpp(c("1", "2"), c("1", NA)) # NA IS a level
-#' suppressWarnings(
-#'   print(icd:::factor_nosort_rcpp(c("1", "2"), c("1", NA, NA)))
-#' ) # Two NA levels
-#'
-#' x <- c("A", "B", "C", "d", "A", "C")
-#' levels <- c("A", "B")
-#' stopifnot(
-#'   identical(factor_split_na(factor(x), levels),
-#'             factor_split_na(x, levels))
-#' )
-#' y <- c("A", NA, "B", "A", NA)
-#' yf <- factor(y)
-#' yf_na <- factor(y, levels = c("A", NA, "B"), exclude = NULL)
-#' stopifnot(
-#'   identical(factor_split_na(y, "A"),
-#'             factor_split_na(yf, "A"))
-#' )
-#' stopifnot(
-#'   identical(factor_split_na(y, "A"),
-#'             factor_split_na(yf_na, "A"))
-#' )
-#' @keywords internal manip
-factor_split_na <- function(x, levels, factor_fun = factor_nosort_rcpp) {
-  if (is.factor(x)) {
-    xi <- as.integer(x)
-    lx <- levels(x)
-    any_na_xlevels <- anyNA(lx)
-    no_na_xlevels <- if (any_na_xlevels) lx[!is.na(lx)] else lx
-    new_level_idx <- match(no_na_xlevels, levels)
-    f <- new_level_idx[xi]
-    inc_mask <- !is.na(f)
-    f <- f[inc_mask]
-    attr(f, "levels") <- levels
-    class(f) <- "factor"
-  } else {
-    f <- factor_fun(x, levels)
-    inc_mask <- !is.na(f)
-    f <- f[inc_mask]
-  }
-  list(factor = f, inc_mask = inc_mask)
-}
+comorbid_common <- function(..., icd_name)
+  categorize(..., code_name = icd_name)

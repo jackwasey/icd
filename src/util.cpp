@@ -365,20 +365,3 @@ SEXP inFast(SEXP x, SEXP table) {
   }
   return R_NilValue;
 }
-
-template <int RTYPE>
-LogicalVector ninFastTemplate(const Vector<RTYPE>& x, const Vector<RTYPE>& table) {
-  return(!inFast(x, table));
-}
-
-//' @describeIn match_rcpp Use faster Rcpp matching for %nin%
-//' @keywords internal
-// [[Rcpp::export(fnin)]]
-SEXP ninFast(SEXP x, SEXP table) {
-  switch( TYPEOF(x) ) {
-  case INTSXP: return ninFastTemplate<INTSXP>(x, table);
-  case REALSXP: return ninFastTemplate<REALSXP>(x, table);
-  case STRSXP: return ninFastTemplate<STRSXP>(x, table);
-  }
-  return R_NilValue;
-}

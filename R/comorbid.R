@@ -15,6 +15,17 @@
 # You should have received a copy of the GNU General Public License
 # along with icd. If not, see <http:#www.gnu.org/licenses/>.
 
+utils::globalVariables(c(
+  "icd9_map_ahrq", "icd9_map_elix", "icd9_map_quan_deyo", "icd9_map_quan_elix",
+  "icd10_map_ahrq", "icd10_map_elix", "icd10_map_quan_deyo",
+  "icd10_map_quan_elix", "icd9_map_single_ccs", "icd9_map_multi_ccs",
+  "icd10_map_ccs",
+  "names_ahrq", "names_ahrq_abbrev", "names_ahrq_htn", "names_ahrq_htn_abbrev",
+  "names_charlson", "names_charlson_abbrev", "names_elix", "names_elix_abbrev",
+  "names_elix_htn", "names_elix_htn_abbrev", "names_quan_elix",
+  "names_quan_elix_abbrev", "names_quan_elix_htn", "names_quan_elix_htn_abbrev"
+))
+
 #' Present-on-admission flags
 #'
 #' See \link{filter_poa} for more details.

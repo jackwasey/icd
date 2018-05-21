@@ -8,9 +8,9 @@
 \usage{
 factor_nosort_rcpp_worker(x, levels)
 
-factor_nosort(x, levels = unique.default(x))
+factor_nosort(x, levels)
 
-factor_nosort_rcpp(x, levels = unique.default(x))
+factor_nosort_rcpp(x, levels)
 }
 \arguments{
 \item{x}{An object of atomic type \code{integer}, \code{numeric},
@@ -44,7 +44,8 @@ I don't think there is any requirement for factor levels to be
 \item \code{factor_nosort_rcpp_worker}: Rcpp implementation, requiring character vector
 inputs only, no argument checking.
 
-\item \code{factor_nosort_rcpp}: R wrapper to the Rcpp function
+\item \code{factor_nosort_rcpp}: R wrapper to the Rcpp function. Will re-factor a
+factor with new levels without converting to string vector.
 }}
 
 \examples{

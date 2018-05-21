@@ -20,10 +20,10 @@ icd10_comorbid_pccc_dx(x, visit_name = NULL, icd_name = NULL,
   short_code = guess_short(x, icd_name = icd_name), return_df = FALSE,
   return_binary = FALSE, ...)
 
-icd9_comorbid_pccc_pcs(x, map, visit_name, code_name, return_df = FALSE,
+icd9_comorbid_pccc_pcs(x, map, visit_name, icd_name, return_df = FALSE,
   return_binary = FALSE)
 
-icd10_comorbid_pccc_pcs(x, map, visit_name, code_name, return_df = FALSE,
+icd10_comorbid_pccc_pcs(x, map, visit_name, icd_name, return_df = FALSE,
   return_binary = FALSE)
 }
 \arguments{

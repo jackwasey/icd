@@ -1103,25 +1103,6 @@ namespace icd {
         return Rcpp::as<SEXP >(rcpp_result_gen);
     }
 
-    inline SEXP fnin(SEXP x, SEXP table) {
-        typedef SEXP(*Ptr_fnin)(SEXP,SEXP);
-        static Ptr_fnin p_fnin = NULL;
-        if (p_fnin == NULL) {
-            validateSignature("SEXP(*fnin)(SEXP,SEXP)");
-            p_fnin = (Ptr_fnin)R_GetCCallable("icd", "_icd_fnin");
-        }
-        RObject rcpp_result_gen;
-        {
-            RNGScope RCPP_rngScope_gen;
-            rcpp_result_gen = p_fnin(Shield<SEXP>(Rcpp::wrap(x)), Shield<SEXP>(Rcpp::wrap(table)));
-        }
-        if (rcpp_result_gen.inherits("interrupted-error"))
-            throw Rcpp::internal::InterruptedException();
-        if (rcpp_result_gen.inherits("try-error"))
-            throw Rcpp::exception(Rcpp::as<std::string>(rcpp_result_gen).c_str());
-        return Rcpp::as<SEXP >(rcpp_result_gen);
-    }
-
 }
 
 #endif // RCPP_icd_RCPPEXPORTS_H_GEN_

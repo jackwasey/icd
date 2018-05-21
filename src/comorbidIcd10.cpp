@@ -124,7 +124,7 @@ Rcpp::LogicalMatrix icd10ComorbidParentSearchCpp(Rcpp::DataFrame x,
 //'
 //' umap <- icd:::simplify_map_lex(uranium_pathology$icd10, icd10_map_ahrq)
 //' head(icd:::categorize(uranium_pathology, icd10_map_ahrq,
-//'                            visit_name = "case", icd_name = "icd10",
+//'                            visit_name = "case", code_name = "icd10",
 //'                            comorbid_fun = icd:::comorbidMatMul))
 //'
 //' @keywords internal

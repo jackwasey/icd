@@ -1,3 +1,22 @@
+# Copyright (C) 2014 - 2018  Jack O. Wasey
+#
+# This file is part of icd.
+#
+# icd is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# icd is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with icd. If not, see <http:#www.gnu.org/licenses/>.
+
+globalVariables(c("code_name", "icd10_map_pccc_dx", "icd9_map_pccc_dx",
+                "icd9_map_pccc_pcs"))
 
 #' Calculate pediatric complex chronic conditions (PCCC) comorbidities
 #'
@@ -53,7 +72,7 @@ icd10_comorbid_pccc_dx <-
 #' @describeIn comorbid_pccc_dx Calculate PCCC comorbidities from ICD-9
 #'   procedure codes
 #' @export
-icd9_comorbid_pccc_pcs <- function(x, map, visit_name, code_name,
+icd9_comorbid_pccc_pcs <- function(x, map, visit_name, icd_name,
                                    return_df = FALSE, return_binary = FALSE)
   categorize(x = x,
              map = icd9_map_pccc_pcs,

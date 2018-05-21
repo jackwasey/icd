@@ -51,8 +51,8 @@ and forms the core of the package, along with the C++ matrix code.
 }
 \examples{
 u <- uranium_pathology
+m <- icd10_map_ahrq
 u$icd10 <- decimal_to_short(u$icd10)
-j <- icd:::categorize(u, icd10_map_ahrq, visit_name = "case",
-                      code_name = "icd10")
+j <- icd:::categorize(u, m, visit_name = "case", code_name = "icd10")
 }
 \keyword{internal}

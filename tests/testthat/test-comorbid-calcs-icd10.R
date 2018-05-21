@@ -115,13 +115,13 @@ test_that("using reduction method for ICD-10", {
     skip("icd10_comorbid_reduce not available")
   res <- icd10_comorbid(uranium_pathology, map = icd10_map_ahrq, icd10_comorbid_fun = icd10_comorbid_reduce)
   expect_equal(ncol(res), 30)
-  expect_identical(
-    icd10_comorbid_parent_search_use_cpp(uranium_pathology, icd10_map_ahrq,
-                                         visit_name = "case", icd_name = "icd10",
-                                         short_code = FALSE, short_map = TRUE, return_df = FALSE),
-    icd10_comorbid_reduce(uranium_pathology, icd10_map_ahrq,
-                          visit_name = "case", icd_name = "icd10",
-                          short_code = FALSE, short_map = TRUE, return_df = FALSE))
+  gold <- icd10_comorbid_parent_search_use_cpp(
+    uranium_pathology, icd10_map_ahrq, visit_name = "case", icd_name = "icd10",
+    short_code = FALSE, short_map = TRUE, return_df = FALSE)
+  redc <- icd10_comorbid_reduce(
+    uranium_pathology, icd10_map_ahrq, visit_name = "case", icd_name = "icd10",
+    short_code = FALSE, short_map = TRUE, return_df = FALSE)
+  expect_identical(gold, redc)
 })
 
 test_that("providing icd_name to `comorbid` actually works", {

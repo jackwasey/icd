@@ -28,6 +28,7 @@ test_that("single icd9 code comorbidity", {
 })
 
 test_that("icd9 comorbidities for thousands of random patients to stress OpenMP", {
+  set.seed(1441)
   x <- generate_random_pts(10000, np = 20)
   res <- icd9_comorbid_quan_deyo(x, short_code = FALSE, applyHierarchy = TRUE)
   expect_equal(dim(res), c(500, 17))

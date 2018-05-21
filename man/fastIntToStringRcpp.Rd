@@ -12,8 +12,6 @@ fastIntToString_alt_Std(x)
 \arguments{
 \item{x}{Vector of integers}
 
-\item{x}{vector of integers}
-
 \item{bufferSize}{int if any input strings are longer than this number
 (default 16) there will be memory errors. No checks done for speed.}
 }
@@ -22,8 +20,6 @@ Vector of characters
 }
 \description{
 Have tried R, sprintf with Rcpp and C++ standard library.
-
-Fast conversion from integer vector to character vector using C++
 }
 \keyword{internal}
 \keyword{manip}

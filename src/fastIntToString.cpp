@@ -10,7 +10,6 @@
 //' @param x Vector of integers
 //' @return Vector of characters
 //' @keywords internal manip
-//' @rdname fastIntToString
 // [[Rcpp::export]]
 Rcpp::CharacterVector fastIntToStringRcpp(Rcpp::IntegerVector x) {
   size_t len = x.size();
