@@ -2,12 +2,14 @@
 % Please edit documentation in R/categorize.R
 \name{factor_split_na}
 \alias{factor_split_na}
-\title{factor quickly and split into matched and unmatched elements}
+\title{(re-)factor and split into matched and unmatched elements}
 \usage{
 factor_split_na(x, levels, factor_fun = factor_nosort_rcpp)
 }
 \description{
-factor quickly and split into matched and unmatched elements
+Critically, this function does not convert factor to character vector and
+back to factor in order to modify factor levels, resulting in huge speed
+improvements for long vectors.
 }
 \examples{
 icd:::factor_nosort_rcpp(c("1", NA)) # NA becomes a level

@@ -44,8 +44,18 @@ trim <- function(x) {
   x
 }
 
-"%nin%" <- function(x, table) {
+"%nin%" <- function(x, table)
   match(x, table, nomatch = 0) == 0
+
+#' @describeIn match_rcpp Use faster Rcpp matching for %in%
+#' @keywords internal
+"%fin%" <- function(x, table)
+  fin(x, table)
+
+#' @describeIn match_rcpp Use faster Rcpp matching for %nin%
+#' @keywords internal
+"%fnin%" <- function(x, table) {
+  fnin(x, table)
 }
 
 #' Strip character(s) from character vector

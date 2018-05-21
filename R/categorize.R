@@ -90,8 +90,8 @@ categorize <- function(x,
   x_ <- x[split_factor$inc_mask, visit_name, drop = FALSE]
   x_[[code_name]] <- split_factor$factor
   visit_not_comorbid <- x[!split_factor$inc_mask, visit_name]
-  #TODO SLOW ?fastmatch ?Rcpp
-  visit_not_comorbid <- visit_not_comorbid[visit_not_comorbid %nin% x_[[visit_name]]]
+  #TODO SLOW %fnin% about 25% quicker than base R equivalent
+  visit_not_comorbid <- visit_not_comorbid[visit_not_comorbid %fnin% x_[[visit_name]]]
   map <- lapply(map, function(y) {
     f <- factor_fun(y, levels = relevant_codes)
     f[!is.na(f)]

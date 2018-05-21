@@ -49,4 +49,10 @@ very simple \code{Rcpp} implementation \code{factor_nosort_rcpp}.}
 This is the function which optimizes the input data for the categorization,
 and forms the core of the package, along with the C++ matrix code.
 }
+\examples{
+u <- uranium_pathology
+u$icd10 <- decimal_to_short(u$icd10)
+j <- icd:::categorize(u, icd10_map_ahrq, visit_name = "case",
+                      code_name = "icd10")
+}
 \keyword{internal}

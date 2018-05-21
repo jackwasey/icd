@@ -1,8 +1,20 @@
 library(icd)
-# benchmarking factor generation with known levels and no sorting:
+library(microbenchmark)
+##########################
+# factoring and matching #
+##########################
+
 n = 1e7
 random_short_icd10_codes <- sample(unlist(icd::icd10_map_elix),
                                    replace = TRUE, size = n)
+lookup <- unique(unname(unlist(icd10_map_quan_deyo)))
+microbenchmark(match(random_short_icd10_codes, lookup),
+               icd:::match_rcpp(random_short_icd10_codes, lookup),
+               times = 10)
+# yep, Rcpp is twice to thrice as fast for ten million items.
+
+
+# benchmarking factor generation with known levels and no sorting:
 # getting unique levels is fast, 0.1 seconds for 1e7 codes
 system.time(lvls <- unique(random_short_icd10_codes))
 microbenchmark::microbenchmark(

@@ -496,6 +496,28 @@ factor_nosort_rcpp_worker <- function(x, levels) {
     .Call(`_icd_factorNoSort`, x, levels)
 }
 
+#' @title Faster match
+#' @name match_rcpp
+#' @description Try Rcpp hashing (and simpler logic) compared to R's internal
+#'   do_match and match5 morass. Lose the ability to use \code{incomparables}
+#'   in initial implementation.
+#' @keywords internal
+match_rcpp <- function(x, table) {
+    .Call(`_icd_matchFast`, x, table)
+}
+
+#' @describeIn match_rcpp Use faster Rcpp matching for %in%
+#' @keywords internal
+fin <- function(x, table) {
+    .Call(`_icd_inFast`, x, table)
+}
+
+#' @describeIn match_rcpp Use faster Rcpp matching for %nin%
+#' @keywords internal
+fnin <- function(x, table) {
+    .Call(`_icd_ninFast`, x, table)
+}
+
 # Register entry points for exported C++ functions
 methods::setLoadAction(function(ns) {
     .Call('_icd_RcppExport_registerCCallable', PACKAGE = 'icd')

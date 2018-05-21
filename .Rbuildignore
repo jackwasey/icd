@@ -63,6 +63,7 @@ scrape_icd10_who
 ^todo$
 ^tools$
 ^\.travis\.yml$
+^vignettes\/pccc.Rmd$
 ^vignettes\/jss\.bst$
 ^vignettes\/jss\.cls$
 ^vignettes\/.*_files$

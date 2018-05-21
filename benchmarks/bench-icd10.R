@@ -9,10 +9,11 @@ library(icd)
 # factor we should not be converting to string and back, just work on the factor
 # levels.
 
-# simulating NEDS db for size
+# simulating NEDS db for size (also need to simulate width!)
 n <- 2.8584301 * 1e7
 set.seed(1441)
 dat <- data.frame(id = n + seq(n),
                   icd_code = sample(icd:::as_char_no_warn(icd10cm2016$code), n, replace = TRUE),
                   stringsAsFactors = TRUE)
-system.time(pccc_dx <- comorbid_pccc_dx(dat))
+#system.time(pccc_dx <- comorbid_pccc_dx(dat))
+profvis::profvis(pccc_dx <- comorbid_pccc_dx(dat))

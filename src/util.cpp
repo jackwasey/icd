@@ -28,10 +28,15 @@
 #include <vector>                              // for vector, vector<>::size...
 #include "local.h"                             // for ICD_OPENMP
 #include "config.h"                             // for ICD_VALGRIND
-
 #ifdef ICD_OPENMP
 #include <omp.h>
 #endif
+
+using Rcpp::Vector;
+using Rcpp::LogicalVector;
+using Rcpp::IntegerVector;
+using Rcpp::CharacterVector;
+using Rcpp::as;
 
 // trim one string from right
 std::string trimRightCpp(std::string s) {
@@ -321,4 +326,59 @@ Rcpp::IntegerVector factorNoSort(const Rcpp::Vector<STRSXP>& x,
   out.attr("levels") = Rcpp::as<Rcpp::CharacterVector>(levels);
   out.attr("class") = "factor";
   return out;
+}
+
+template <int RTYPE>
+IntegerVector matchFastTemplate(const Vector<RTYPE>& x, const Vector<RTYPE>& table) {
+  return(match(x, table));
+}
+
+//' @title Faster match
+//' @name match_rcpp
+//' @description Try Rcpp hashing (and simpler logic) compared to R's internal
+//'   do_match and match5 morass. Lose the ability to use \code{incomparables}
+//'   in initial implementation.
+//' @keywords internal
+// [[Rcpp::export(match_rcpp)]]
+SEXP matchFast(SEXP x, SEXP table) {
+  switch( TYPEOF(x) ) {
+  case INTSXP: return matchFastTemplate<INTSXP>(x, table);
+  case REALSXP: return matchFastTemplate<REALSXP>(x, table);
+  case STRSXP: return matchFastTemplate<STRSXP>(x, table);
+  }
+  return R_NilValue;
+}
+
+template <int RTYPE>
+LogicalVector inFastTemplate(const Vector<RTYPE>& x, const Vector<RTYPE>& table) {
+  return(!is_na(match(x, table)));
+}
+
+//' @describeIn match_rcpp Use faster Rcpp matching for %in%
+//' @keywords internal
+// [[Rcpp::export(fin)]]
+SEXP inFast(SEXP x, SEXP table) {
+  switch( TYPEOF(x) ) {
+  case INTSXP: return inFastTemplate<INTSXP>(x, table);
+  case REALSXP: return inFastTemplate<REALSXP>(x, table);
+  case STRSXP: return inFastTemplate<STRSXP>(x, table);
+  }
+  return R_NilValue;
+}
+
+template <int RTYPE>
+LogicalVector ninFastTemplate(const Vector<RTYPE>& x, const Vector<RTYPE>& table) {
+  return(!inFast(x, table));
+}
+
+//' @describeIn match_rcpp Use faster Rcpp matching for %nin%
+//' @keywords internal
+// [[Rcpp::export(fnin)]]
+SEXP ninFast(SEXP x, SEXP table) {
+  switch( TYPEOF(x) ) {
+  case INTSXP: return ninFastTemplate<INTSXP>(x, table);
+  case REALSXP: return ninFastTemplate<REALSXP>(x, table);
+  case STRSXP: return ninFastTemplate<STRSXP>(x, table);
+  }
+  return R_NilValue;
 }

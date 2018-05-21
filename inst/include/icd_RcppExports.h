@@ -1065,6 +1065,63 @@ namespace icd {
         return Rcpp::as<Rcpp::IntegerVector >(rcpp_result_gen);
     }
 
+    inline SEXP match_rcpp(SEXP x, SEXP table) {
+        typedef SEXP(*Ptr_match_rcpp)(SEXP,SEXP);
+        static Ptr_match_rcpp p_match_rcpp = NULL;
+        if (p_match_rcpp == NULL) {
+            validateSignature("SEXP(*match_rcpp)(SEXP,SEXP)");
+            p_match_rcpp = (Ptr_match_rcpp)R_GetCCallable("icd", "_icd_match_rcpp");
+        }
+        RObject rcpp_result_gen;
+        {
+            RNGScope RCPP_rngScope_gen;
+            rcpp_result_gen = p_match_rcpp(Shield<SEXP>(Rcpp::wrap(x)), Shield<SEXP>(Rcpp::wrap(table)));
+        }
+        if (rcpp_result_gen.inherits("interrupted-error"))
+            throw Rcpp::internal::InterruptedException();
+        if (rcpp_result_gen.inherits("try-error"))
+            throw Rcpp::exception(Rcpp::as<std::string>(rcpp_result_gen).c_str());
+        return Rcpp::as<SEXP >(rcpp_result_gen);
+    }
+
+    inline SEXP fin(SEXP x, SEXP table) {
+        typedef SEXP(*Ptr_fin)(SEXP,SEXP);
+        static Ptr_fin p_fin = NULL;
+        if (p_fin == NULL) {
+            validateSignature("SEXP(*fin)(SEXP,SEXP)");
+            p_fin = (Ptr_fin)R_GetCCallable("icd", "_icd_fin");
+        }
+        RObject rcpp_result_gen;
+        {
+            RNGScope RCPP_rngScope_gen;
+            rcpp_result_gen = p_fin(Shield<SEXP>(Rcpp::wrap(x)), Shield<SEXP>(Rcpp::wrap(table)));
+        }
+        if (rcpp_result_gen.inherits("interrupted-error"))
+            throw Rcpp::internal::InterruptedException();
+        if (rcpp_result_gen.inherits("try-error"))
+            throw Rcpp::exception(Rcpp::as<std::string>(rcpp_result_gen).c_str());
+        return Rcpp::as<SEXP >(rcpp_result_gen);
+    }
+
+    inline SEXP fnin(SEXP x, SEXP table) {
+        typedef SEXP(*Ptr_fnin)(SEXP,SEXP);
+        static Ptr_fnin p_fnin = NULL;
+        if (p_fnin == NULL) {
+            validateSignature("SEXP(*fnin)(SEXP,SEXP)");
+            p_fnin = (Ptr_fnin)R_GetCCallable("icd", "_icd_fnin");
+        }
+        RObject rcpp_result_gen;
+        {
+            RNGScope RCPP_rngScope_gen;
+            rcpp_result_gen = p_fnin(Shield<SEXP>(Rcpp::wrap(x)), Shield<SEXP>(Rcpp::wrap(table)));
+        }
+        if (rcpp_result_gen.inherits("interrupted-error"))
+            throw Rcpp::internal::InterruptedException();
+        if (rcpp_result_gen.inherits("try-error"))
+            throw Rcpp::exception(Rcpp::as<std::string>(rcpp_result_gen).c_str());
+        return Rcpp::as<SEXP >(rcpp_result_gen);
+    }
+
 }
 
 #endif // RCPP_icd_RCPPEXPORTS_H_GEN_
