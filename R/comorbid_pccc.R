@@ -76,7 +76,7 @@ icd9_comorbid_pccc_pcs <- function(x, map, visit_name, icd_name,
                                    return_df = FALSE, return_binary = FALSE)
   categorize(x = x,
              map = icd9_map_pccc_pcs,
-             visit_name = visit_name, code_name = code_name,
+             visit_name = visit_name, code_name = icd_name,
              return_df = FALSE, return_binary = FALSE)
 
 #' @describeIn comorbid_pccc_dx Calculate PCCC comorbidities from ICD-10

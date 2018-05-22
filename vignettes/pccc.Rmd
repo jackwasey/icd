@@ -4,7 +4,7 @@ author: "Jack O. Wasey"
 date: "May 18, 2018"
 output: html_document
 vignette: >
-  %\VignetteIndexEntry{Quick Introduction to icd}
+  %\VignetteIndexEntry{Pediatric Complex Chronic Conditions}
   %\VignetteEngine{knitr::rmarkdown}
   \usepackage[utf8]{inputenc}
 ---
@@ -19,21 +19,35 @@ dat <- data.frame(id = n + seq(n),
                   icd_pcs1 = sample(icd10_pcs_2018$pcs, n, replace = TRUE),
                   icd_pcs2 = sample(icd10_pcs_2018$pcs, n, replace = TRUE)
 )
-
-
-head(dat)
-
-dx <- wide_to_long(dat[1:3])
-pcs <- wide_to_long(dat[c(1, 4:5)], icd_name = "pcs", icd_regex = "icd_pcs")
-pccc_dx <- comorbid_pccc_dx(dx)
-pccc_pcs <- icd10_comorbid_pccc_pcs(pcs, map = icd10_map_pccc_pcs, 
-                                    visit_name = "id", code_name = "pcs")
-res <- pccc_dx | pccc_pcs
 ```
 
-## Preparing the data
+# Pediatric Complex Chronic Conditions
 
-The following 'wide' sample data has two columns for ICD-10 diagnostic code, and two for ICD-10 procedure codes.
+## Introduction
+
+The adult comorbidities defined by authors such as Charlson, Quan and Elixhuaser are not suitable for pediatric research. Feudtner and others produced comorbidity definitions suitable for infants and children, with mappings defined for both ICD-9 and ICD-10 codes. These are now included in `icd`.
+
+## Calculating PCCC comorbidities.
+
+The PCCC comorbidities may be derived from both diagnostic and procedure codes. The following simulated data has both:
+
+```{r headdat}
+head(dat)
+```
+The data is in 'wide' format. Currently `icd` requires it be in 'long' format, which can be achieved as follows:
+```{r widelong}
+dx <- wide_to_long(dat[1:3])
+pcs <- wide_to_long(dat[c(1, 4:5)], icd_name = "pcs", icd_regex = "icd_pcs")
+head(dx)
+head(pcs)
+```
+Now the PCCC comorbidity classes can be computed and summarized in a plot:
+```{r calc}
+pccc_dx <- comorbid_pccc_dx(dx)
+pccc_pcs <- icd10_comorbid_pccc_pcs(pcs, map = icd10_map_pccc_pcs, 
+                                    visit_name = "id", icd_name = "pcs")
+res <- pccc_dx | pccc_pcs
+```
 
 ```{r pcccbarplot, fig.asp=0.5, echo=FALSE}
 barplot(sort(colSums(res), decreasing = TRUE), 
