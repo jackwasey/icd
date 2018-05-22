@@ -36,7 +36,17 @@ environment:
   NOT_CRAN: true
   matrix:
     - R_VERSION: release
+      ICD_TEST_DEPRECATED: true
+      ICD_TEST_BUILD_DATA: true
+      ICD_TEST_SLOW: true
     - R_VERSION: devel
+      ICD_TEST_DEPRECATED: true
+      ICD_TEST_BUILD_DATA: true
+      ICD_TEST_SLOW: true
+    - R_VERSION: devel
+      ICD_TEST_DEPRECATED: false
+      ICD_TEST_BUILD_DATA: false
+      ICD_TEST_SLOW: false
 
 test_script:
   - travis-tool.sh run_tests

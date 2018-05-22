@@ -48,6 +48,7 @@ categorize <- function(x,
                        factor_fun = factor_nosort_rcpp,
                        ...) {
   assert_data_frame(x, min.cols = 2, col.names = "unique")
+  class(x) <- "data.frame"
   assert_list(map, any.missing = FALSE, min.len = 1, names = "unique")
   assert(check_string(visit_name), check_null(visit_name))
   assert(check_string(code_name), check_null(code_name))
