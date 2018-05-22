@@ -56,7 +56,7 @@ fetch_icd10cm_year <- function(year = "2018", dx = TRUE,
   url <- paste0(s$base_url, s$dx_zip)
   file_name <- s$dx_flat
   if (!dx) {
-    if (("pcs_zip" %nin% names(s) || is.na(s$pcs_zip))) {
+    if ("pcs_zip" %nin% names(s) || is.na(s$pcs_zip)) {
       if (verbose) message("No PCS flat file zip name.")
       return()
     }
