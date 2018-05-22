@@ -32,7 +32,7 @@
 
 <meta property="og:description" content="Use method to reduce ICD-10 problem by initially finding only relevant codes
 in the map, then populating map only with the exact patient ICD codes (not
-the original map codes), before doing 'comorbid_common'" />
+the original map codes), before doing categorization." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -60,7 +60,7 @@ the original map codes), before doing 'comorbid_common'" />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">icd</a>
-        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">3.1.2</span>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">3.2.0</span>
       </span>
     </div>
 
@@ -103,6 +103,9 @@ the original map codes), before doing 'comorbid_common'" />
     <li>
       <a href="../articles/introduction.html">Quick Introduction to icd</a>
     </li>
+    <li>
+      <a href="../articles/pccc.html">Pediatric Complex Chronic Conditions</a>
+    </li>
   </ul>
 </li>
 <li>
@@ -133,13 +136,12 @@ the original map codes), before doing 'comorbid_common'" />
     
     <p>Use method to reduce ICD-10 problem by initially finding only relevant codes
 in the map, then populating map only with the exact patient ICD codes (not
-the original map codes), before doing 'comorbid_common'</p>
+the original map codes), before doing categorization.</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>icd10_comorbid_reduce</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>x</span>, <span class='kw'>map</span> <span class='kw'>=</span> <span class='no'>map</span>, <span class='kw'>visit_name</span> <span class='kw'>=</span> <span class='no'>visit_name</span>,
-  <span class='kw'>icd_name</span> <span class='kw'>=</span> <span class='no'>icd_name</span>, <span class='kw'>short_code</span> <span class='kw'>=</span> <span class='no'>short_code</span>, <span class='kw'>short_map</span> <span class='kw'>=</span> <span class='no'>short_map</span>,
-  <span class='kw'>return_df</span> <span class='kw'>=</span> <span class='no'>return_df</span>, <span class='no'>...</span>)</pre>
+    <pre class="usage"><span class='fu'>icd10_comorbid_reduce</span>(<span class='kw'>x</span> <span class='kw'>=</span> <span class='no'>x</span>, <span class='no'>map</span>, <span class='no'>visit_name</span>, <span class='no'>icd_name</span>, <span class='no'>short_code</span>, <span class='no'>short_map</span>,
+  <span class='no'>return_df</span>, <span class='kw'>return_binary</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='no'>...</span>)</pre>
         
 
   </div>

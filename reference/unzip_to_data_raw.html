@@ -61,7 +61,7 @@ NULL is returned if the file isn't already downloaded." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">icd</a>
-        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">3.1.2</span>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">3.2.0</span>
       </span>
     </div>
 
@@ -104,6 +104,9 @@ NULL is returned if the file isn't already downloaded." />
     <li>
       <a href="../articles/introduction.html">Quick Introduction to icd</a>
     </li>
+    <li>
+      <a href="../articles/pccc.html">Pediatric Complex Chronic Conditions</a>
+    </li>
   </ul>
 </li>
 <li>
@@ -140,7 +143,8 @@ directory. If the file already exists there, it is only retrieved if
     </div>
 
     <pre class="usage"><span class='fu'>unzip_to_data_raw</span>(<span class='no'>url</span>, <span class='no'>file_name</span>, <span class='kw'>force</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>offline</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>data_raw_path</span> <span class='kw'>=</span> <span class='fu'><a href='get_raw_data_dir.html'>get_raw_data_dir</a></span>())
+  <span class='kw'>offline</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>data_raw_path</span> <span class='kw'>=</span> <span class='fu'><a href='get_raw_data_dir.html'>get_raw_data_dir</a></span>(),
+  <span class='kw'>save_name</span> <span class='kw'>=</span> <span class='no'>file_name</span>)
 
 <span class='fu'>download_to_data_raw</span>(<span class='no'>url</span>, <span class='kw'>file_name</span> <span class='kw'>=</span> <span class='fu'>regmatches</span>(<span class='no'>url</span>, <span class='fu'>regexpr</span>(<span class='st'>"[^/]*$"</span>, <span class='no'>url</span>)),
   <span class='kw'>offline</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>data_raw_path</span> <span class='kw'>=</span> <span class='fu'><a href='get_raw_data_dir.html'>get_raw_data_dir</a></span>())</pre>

@@ -37,7 +37,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="index.html">icd</a>
-        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">3.1.2</span>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">3.2.0</span>
       </span>
     </div>
 
@@ -79,6 +79,9 @@
     </li>
     <li>
       <a href="articles/introduction.html">Quick Introduction to icd</a>
+    </li>
+    <li>
+      <a href="articles/pccc.html">Pediatric Complex Chronic Conditions</a>
     </li>
   </ul>
 </li>
@@ -127,9 +130,9 @@ rmarkdown::render("README.Rmd")
 <a href="#icd" class="anchor"></a>icd</h1></div>
 
 </div>
-<div id="icd-9-and-icd-10-comorbidities-manipulation-and-validation" class="section level1">
+<div id="comorbidities-from-icd-9-and-icd-10-codes-manipulation-and-validation" class="section level1">
 <h1 class="hasAnchor">
-<a href="#icd-9-and-icd-10-comorbidities-manipulation-and-validation" class="anchor"></a>ICD-9 and ICD-10 comorbidities, manipulation and validation</h1>
+<a href="#comorbidities-from-icd-9-and-icd-10-codes-manipulation-and-validation" class="anchor"></a>Comorbidities from ICD-9 and ICD-10 codes, manipulation and validation</h1>
 <div id="features" class="section level2">
 <h2 class="hasAnchor">
 <a href="#features" class="anchor"></a>Features</h2>
@@ -140,11 +143,13 @@ rmarkdown::render("README.Rmd")
 <li>very fast assignment of ICD codes to comorbidities (using matrix multiplication with C and C++ internally)</li>
 </ul>
 </li>
+<li>summarizing groups of ICD codes in natural language</li>
 <li>Charlson and Van Walraven score calculations</li>
 <li>Hierarchical Condition Codes (HCC) from CMS</li>
 <li>Clinical Classifcations Software (CCS) comorbidities from AHRQ</li>
+<li>Pediatric Complex Chronic Condition comorbidities</li>
+<li>AHRQ ICD-10 procedure code classification</li>
 <li>validation of ICD codes from different annual revisions of ICD-9-CM and ICD-10-CM</li>
-<li>summarizing ICD codes into groups, and to human-readable descriptions</li>
 <li>correct conversion between different representations of ICD codes, with and without a decimal points, leading and trailing characters (this is not trivial for ICD-9-CM). ICD-9 to ICD-10 cross-walk is not yet implemented</li>
 <li>comprehensive test suite to increase confidence in accurate processing of ICD codes</li>
 <li>all internal ICD and comorbidity data is extracted directly from publically available data or code, increasing confidence in the results</li>
@@ -163,7 +168,7 @@ rmarkdown::render("README.Rmd")
 <div id="relevance" class="section level2">
 <h2 class="hasAnchor">
 <a href="#relevance" class="anchor"></a>Relevance</h2>
-<p>ICD-9 codes are still in heavy use around the world, particularly in the USA where the ICD-9-CM (Clinical Modification) was in widespread use until the end of 2015. ICD-10 has been used worldwide for reporting cause of death for more than a decade. ICD-10-CM is now the primary coding scheme for US hospital admission and discharge diagnoses used for regulatory purposes and billing. A vast amount of patient data is recorded with ICD-9 codes of some kind: this package enables their use in R alongside ICD-10.</p>
+<p>ICD-9 codes are still in heavy use around the world, particularly in the USA where the ICD-9-CM (Clinical Modification) was in widespread use until the end of 2015. ICD-10 has been used worldwide for reporting cause of death for more than a decade, and ICD-11 is due to be released in 2018. ICD-10-CM is now the primary coding scheme for US hospital admission and discharge diagnoses used for regulatory purposes and billing. A vast amount of electronic patient data is recorded with ICD-9 codes of some kind: this package enables their use in R alongside ICD-10.</p>
 </div>
 <div id="comorbidities" class="section level2">
 <h2 class="hasAnchor">
@@ -251,7 +256,7 @@ patient_data <span class="op">%&gt;%</span><span class="st"> </span>filter_poa <
 <h3 class="hasAnchor">
 <a href="#contributing-and-building" class="anchor"></a>Contributing and Building</h3>
 <p>A substantial amount of code has now been contributed to the package. Contributions of any kind to <code>icd</code> are very welcome. See the [GitHub issues page]](<a href="https://github.com/jackwasey/icd/issues" class="uri">https://github.com/jackwasey/icd/issues</a>) to see jobs and feature requests. Documentation, vignettes and examples are very welcome, especially if accompanied by some real-world data.</p>
-<p>To build <code>icd</code>, <code>Rcpp</code> must be compiled from source. This happens automatically on Linux, but on Mac and Windows, the following is required: <code>install.packages("Rcpp", type="source")</code> to avoid build errors.</p>
+<p>To build <code>icd</code>, <code>Rcpp</code> must be compiled from source. This happens automatically on Linux, but on Mac and Windows, the following may be required: <code>install.packages("Rcpp", type="source")</code></p>
 </div>
 </div>
 </div>

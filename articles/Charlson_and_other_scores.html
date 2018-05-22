@@ -29,7 +29,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">icd</a>
-        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">3.1.2</span>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">3.2.0</span>
       </span>
     </div>
 
@@ -71,6 +71,9 @@
     </li>
     <li>
       <a href="../articles/introduction.html">Quick Introduction to icd</a>
+    </li>
+    <li>
+      <a href="../articles/pccc.html">Pediatric Complex Chronic Conditions</a>
     </li>
   </ul>
 </li>
@@ -130,7 +133,7 @@ along with icd. If not, see <http:#www.gnu.org/licenses/>.
 <h2 class="hasAnchor">
 <a href="#vermont-example-data-charlson-scores" class="anchor"></a>Vermont example data, Charlson scores</h2>
 <p>The Vermont data are actually discharge, not admission diagnoses, but can be used to demonstrate generating Charlson scores.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">head</span>(vermont_dx[<span class="dv">1</span><span class="op">:</span><span class="dv">10</span>])
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">head</span>(icd.data<span class="op">::</span>vermont_dx[<span class="dv">1</span><span class="op">:</span><span class="dv">10</span>])
 <span class="co">#&gt;   visit_id   age_group    sex death DRG   DX1   DX2   DX3   DX4   DX5</span>
 <span class="co">#&gt; 1        7       40-44   male  TRUE 640 27801 03842 51881 41519 99591</span>
 <span class="co">#&gt; 2       10 75 and over female FALSE 470 71526 25000 42830  4280  4019</span>
@@ -138,7 +141,7 @@ along with icd. If not, see <http:#www.gnu.org/licenses/>.
 <span class="co">#&gt; 4       16       55-59 female FALSE 470 71535 49390 53081 27800  V140</span>
 <span class="co">#&gt; 5       37       70-74   male FALSE 462 71536  4241  2859  2720  4414</span>
 <span class="co">#&gt; 6       41       70-74   male FALSE 462 71536 V1259 V1582  V160  V171</span>
-v &lt;-<span class="st"> </span><span class="kw"><a href="../reference/wide_to_long.html">wide_to_long</a></span>(vermont_dx)
+v &lt;-<span class="st"> </span><span class="kw"><a href="../reference/wide_to_long.html">wide_to_long</a></span>(icd.data<span class="op">::</span>vermont_dx)
 <span class="kw">head</span>(v)
 <span class="co">#&gt;   visit_id age_group  sex death DRG icd_code</span>
 <span class="co">#&gt; 1        7     40-44 male  TRUE 640    27801</span>
@@ -149,7 +152,7 @@ v &lt;-<span class="st"> </span><span class="kw"><a href="../reference/wide_to_l
 <span class="co">#&gt; 6        7     40-44 male  TRUE 640    42842</span>
 <span class="kw"><a href="../reference/charlson.html">charlson</a></span>(v) <span class="op">%&gt;%</span><span class="st"> </span>summary
 <span class="co">#&gt;    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. </span>
-<span class="co">#&gt;    0.00    0.00    1.00    1.57    2.00    9.00</span>
+<span class="co">#&gt;   0.000   0.000   1.000   1.573   2.000   9.000</span>
 <span class="kw">head</span>(<span class="kw"><a href="../reference/charlson.html">charlson</a></span>(v))
 <span class="co">#&gt;  7 10 13 16 37 41 </span>
 <span class="co">#&gt;  5  3  0  1  1  0</span>

@@ -29,7 +29,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">icd</a>
-        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">3.1.2</span>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">3.2.0</span>
       </span>
     </div>
 
@@ -71,6 +71,9 @@
     </li>
     <li>
       <a href="../articles/introduction.html">Quick Introduction to icd</a>
+    </li>
+    <li>
+      <a href="../articles/pccc.html">Pediatric Complex Chronic Conditions</a>
     </li>
   </ul>
 </li>
@@ -196,10 +199,10 @@ vermont_dx[<span class="dv">1</span><span class="op">:</span><span class="dv">5<
 <p>In real life, there are often problems with the data, such as <code>NA</code> values, out-of-order <code>visit_id</code>s, non-existent or invalid ICD codes, etc.. Although standard R tools or the <code>tidyverse</code> can be used to clean the data, knowing the specific validation rules for ICD-9 and ICD-10 codes, as well as the standardized structure of healthcare data enables faster and more accurate data cleaning.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># use AHRQ revision of Elixhauser comorbidities, show only first eight columns</span>
 <span class="kw"><a href="../reference/comorbid.html">comorbid_ahrq</a></span>(patients_icd9)[, <span class="dv">1</span><span class="op">:</span><span class="dv">8</span>]
-<span class="co">#&gt;        CHF Valvular  PHTN   PVD   HTN Paralysis NeuroOther Pulmonary</span>
-<span class="co">#&gt; 1000  TRUE    FALSE FALSE FALSE FALSE     FALSE      FALSE     FALSE</span>
-<span class="co">#&gt; 1001 FALSE    FALSE FALSE FALSE  TRUE      TRUE      FALSE     FALSE</span>
-<span class="co">#&gt; 1002 FALSE    FALSE FALSE FALSE  TRUE     FALSE      FALSE     FALSE</span></code></pre></div>
+<span class="co">#&gt;        CHF Valvular  PHTN   PVD  HTN Paralysis NeuroOther Pulmonary</span>
+<span class="co">#&gt; 1000  TRUE    FALSE FALSE FALSE TRUE     FALSE      FALSE     FALSE</span>
+<span class="co">#&gt; 1001 FALSE    FALSE FALSE FALSE TRUE      TRUE      FALSE     FALSE</span>
+<span class="co">#&gt; 1002 FALSE    FALSE FALSE FALSE TRUE     FALSE      FALSE     FALSE</span></code></pre></div>
 <p>Things work beautifully using <a href="https://cran.r-project.org/package=magrittr">magrittr</a> <code>%&gt;%</code> to chain functions together. <code>magrittr</code> is useful for chains of commands, such as the following:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># find Elixhauser comorbidities which were present-on-arrival</span>
 patients_icd9 <span class="op">%&gt;%</span><span class="st"> </span>filter_poa <span class="op">%&gt;%</span><span class="st"> </span>comorbid_elix
@@ -682,24 +685,7 @@ my_map &lt;-<span class="st"> </span>icd<span class="op">:::</span><span class="
 <h3 class="hasAnchor">
 <a href="#which-three-character-icd-9-codes-have-no-child-codes" class="anchor"></a>Which three-character ICD-9 codes have no child codes</h3>
 <p>The ICD-9-CM scheme is structured as follows: - Chapter - Sub-chapter - Major part (three-digit codes) - sub-division (first decimal place) - sub-sub-division (second decimal place)</p>
-<p>For most combinations of zero to nine, nothing is defined. Sometimes, nodes at one level in the hierarchy are descriptive only of their children (branch nodes), whereas some are themselves billable. For this example, let’s find those numeric-only codes which have no children, and by implication are themselves directly billable codes. Here are the first ten:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">icd9cm_hierarchy<span class="op">$</span>code <span class="op">%&gt;%</span><span class="st"> </span>get_defined -&gt;<span class="st"> </span>all_real
-<span class="co"># select the non-V and non-E codes</span>
-three_digit_real &lt;-<span class="st"> </span>all_real[<span class="kw"><a href="../reference/icd9_is_n.html">icd9_is_n</a></span>(all_real)]
-<span class="co"># display</span>
-three_digit_df &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">code =</span> three_digit_real, <span class="dt">description =</span> <span class="kw"><a href="../reference/explain.html">explain</a></span>(three_digit_real, <span class="dt">condense =</span> <span class="ot">FALSE</span>))
-<span class="kw">print</span>(three_digit_df[<span class="dv">1</span><span class="op">:</span><span class="dv">10</span>, ], <span class="dt">row.names =</span> <span class="ot">FALSE</span>)
-<span class="co">#&gt;  code                                  description</span>
-<span class="co">#&gt;   001                                      Cholera</span>
-<span class="co">#&gt;  0010               Typhoid and paratyphoid fevers</span>
-<span class="co">#&gt;  0011                  Other salmonella infections</span>
-<span class="co">#&gt;  0019                                  Shigellosis</span>
-<span class="co">#&gt;   002             Other food poisoning (bacterial)</span>
-<span class="co">#&gt;  0020                                    Amebiasis</span>
-<span class="co">#&gt;  0021          Other protozoal intestinal diseases</span>
-<span class="co">#&gt;  0022 Intestinal infections due to other organisms</span>
-<span class="co">#&gt;  0023            Ill-defined intestinal infections</span>
-<span class="co">#&gt;  0029                Primary tuberculous infection</span></code></pre></div>
+<p>For most combinations of zero to nine, nothing is defined. Sometimes, nodes at one level in the hierarchy are descriptive only of their children (branch nodes), whereas some are themselves billable.</p>
 </div>
 <div id="which-icd-9-codes-have-changed-between-versions-of-icd-9" class="section level3">
 <h3 class="hasAnchor">

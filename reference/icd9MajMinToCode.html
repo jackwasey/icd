@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Convert <code>mjr</code> and <code>mnr</code> vectors to single code — icd9MajMinToCode_alt_PrePadded • icd</title>
+<title>Convert <code>mjr</code> and <code>mnr</code> vectors to single code — icd9MajMinToCode • icd</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -28,7 +28,7 @@
 
 
 
-<meta property="og:title" content="Convert <code>mjr</code> and <code>mnr</code> vectors to single code — icd9MajMinToCode_alt_PrePadded" />
+<meta property="og:title" content="Convert <code>mjr</code> and <code>mnr</code> vectors to single code — icd9MajMinToCode" />
 
 <meta property="og:description" content="In debug mode, will check that mjr and mnr are same length." />
 <meta name="twitter:card" content="summary" />
@@ -58,7 +58,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">icd</a>
-        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">3.1.2</span>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">3.2.0</span>
       </span>
     </div>
 
@@ -101,6 +101,9 @@
     <li>
       <a href="../articles/introduction.html">Quick Introduction to icd</a>
     </li>
+    <li>
+      <a href="../articles/pccc.html">Pediatric Complex Chronic Conditions</a>
+    </li>
   </ul>
 </li>
 <li>
@@ -133,9 +136,7 @@
     
     </div>
 
-    <pre class="usage"><span class='fu'>icd9MajMinToCode_alt_PrePadded</span>(<span class='no'>mjr</span>, <span class='no'>mnr</span>, <span class='no'>isShort</span>)
-
-<span class='fu'>icd9MajMinToCode</span>(<span class='no'>mjr</span>, <span class='no'>mnr</span>, <span class='no'>isShort</span>)</pre>
+    <pre class="usage"><span class='fu'>icd9MajMinToCode</span>(<span class='no'>mjr</span>, <span class='no'>mnr</span>, <span class='no'>isShort</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -163,13 +164,9 @@ leading zeroes which may be inferred; the last two characters represent the
     </tr>
     </table>
     
-    <h2 class="hasAnchor" id="functions"><a class="anchor" href="#functions"></a>Functions</h2>
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <ul>
-<li><p><code>icd9MajMinToCode_alt_PrePadded</code>: Same as <code>icd9MajMinToCode</code> but assume
-codes are already trimmed and correctly padded with zeros, e.g. E001, V09,
-001. This version does handle NA values correctly. ' @keywords internal</p></li>
-</ul>
+    <p>Character vector</p>
     
 
   </div>
@@ -178,7 +175,7 @@ codes are already trimmed and correctly padded with zeros, e.g. E001, V09,
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
       
-      <li><a href="#functions">Functions</a></li>
+      <li><a href="#value">Value</a></li>
           </ul>
 
   </div>

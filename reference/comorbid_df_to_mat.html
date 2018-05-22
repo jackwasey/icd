@@ -59,7 +59,7 @@ information" />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">icd</a>
-        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">3.1.2</span>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">3.2.0</span>
       </span>
     </div>
 
@@ -101,6 +101,9 @@ information" />
     </li>
     <li>
       <a href="../articles/introduction.html">Quick Introduction to icd</a>
+    </li>
+    <li>
+      <a href="../articles/pccc.html">Pediatric Complex Chronic Conditions</a>
     </li>
   </ul>
 </li>
@@ -191,14 +194,14 @@ argument used in, among other base functions <code>as.data.frame</code>.</p></td
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='no'>longdf</span> <span class='kw'>&lt;-</span> <span class='fu'>icd_long_data</span>(
             <span class='kw'>visit</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"a"</span>, <span class='st'>"b"</span>, <span class='st'>"b"</span>, <span class='st'>"c"</span>),
-            <span class='kw'>icd9</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"441"</span>, <span class='st'>"4424"</span>, <span class='st'>"443"</span>, <span class='st'>"441"</span>)
+            <span class='kw'>icd9</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"441"</span>, <span class='st'>"4240"</span>, <span class='st'>"443"</span>, <span class='st'>"441"</span>)
             )
 <span class='no'>cmbdf</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='comorbid.html'>icd9_comorbid_elix</a></span>(<span class='no'>longdf</span>, <span class='kw'>return_df</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
 <span class='fu'>class</span>(<span class='no'>cmbdf</span>)</div><div class='output co'>#&gt; [1] "data.frame"</div><div class='input'><span class='fu'>rownames</span>(<span class='no'>cmbdf</span>)</div><div class='output co'>#&gt; [1] "1" "2" "3"</div><div class='input'><span class='no'>mat.out</span> <span class='kw'>&lt;-</span> <span class='fu'>comorbid_df_to_mat</span>(<span class='no'>cmbdf</span>)
 <span class='fu'>stopifnot</span>(<span class='fu'>is.matrix</span>(<span class='no'>mat.out</span>))
 <span class='no'>mat.out</span>[, <span class='fl'>1</span>:<span class='fl'>4</span>]</div><div class='output co'>#&gt;     CHF Arrhythmia Valvular  PHTN
 #&gt; a FALSE      FALSE    FALSE FALSE
-#&gt; b FALSE      FALSE    FALSE FALSE
+#&gt; b FALSE      FALSE     TRUE FALSE
 #&gt; c FALSE      FALSE    FALSE FALSE</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">

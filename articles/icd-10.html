@@ -29,7 +29,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">icd</a>
-        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">3.1.2</span>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">3.2.0</span>
       </span>
     </div>
 
@@ -71,6 +71,9 @@
     </li>
     <li>
       <a href="../articles/introduction.html">Quick Introduction to icd</a>
+    </li>
+    <li>
+      <a href="../articles/pccc.html">Pediatric Complex Chronic Conditions</a>
     </li>
   </ul>
 </li>
@@ -120,8 +123,8 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with icd. If not, see <http:#www.gnu.org/licenses/>.
 -->
-<p>This package now includes ICD-10 support, with some sample ICD-10-CM codes, and comorbidity mappings from ICD-10 codes to comorbidities. The sample data are from <a href="https://ustur.wsu.edu/about-us/" class="uri">https://ustur.wsu.edu/about-us/</a> where de-identified diagnoses are given for a few hundred pathology cases relating to uranium exposure.</p>
-<p>The sample data is in the ‘long’ format, i.e. multiple rows per case</p>
+<p>This package now includes ICD-10 support, with some sample ICD-10-CM data, and comorbidity mappings from ICD-10 codes to comorbidities. There are also 2018 ICD-10-CM procedure codes, and a mapping to categorize these from AHRQ. The sample data are from <a href="https://ustur.wsu.edu/about-us/" class="uri">https://ustur.wsu.edu/about-us/</a> where de-identified diagnoses are given for a few hundred pathology cases relating to uranium exposure.</p>
+<p>The sample data is in the ‘long’ format, i.e., multiple rows per case</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">uranium_pathology[<span class="dv">1</span><span class="op">:</span><span class="dv">10</span>, ]
 <span class="co">#&gt;    case icd10</span>
 <span class="co">#&gt; 1     1 F17.9</span>
@@ -171,12 +174,46 @@ patients &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span 
 <span class="co">#&gt; [1] TRUE</span>
 <span class="co">#&gt; attr(,"class")</span>
 <span class="co">#&gt; [1] "icd10"     "character"</span></code></pre></div>
+<div id="procedure-codes" class="section level2">
+<h2 class="hasAnchor">
+<a href="#procedure-codes" class="anchor"></a>Procedure codes</h2>
+<p>The AHRQ publishes an annually updated categorization of ICD-10-CM procedure codes into four classes, representing diagnostic and therapeutic procedures, each being either minor or major.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">set.seed</span>(<span class="dv">1441</span>)
+pts &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">id =</span> <span class="kw">sample</span>(LETTERS, <span class="dv">10</span>),
+                  <span class="dt">pc =</span> <span class="kw">sample</span>(icd10_pcs[[<span class="st">"2018"</span>]]<span class="op">$</span>code, <span class="dv">10</span>))
+res &lt;-<span class="st"> </span><span class="kw"><a href="../reference/comorbid.html">icd10_comorbid</a></span>(pts,
+                      <span class="dt">map =</span> icd10_map_ahrq_pcs, 
+                      <span class="dt">icd_name =</span> <span class="st">"pc"</span>,
+                      <span class="dt">return_binary =</span> <span class="ot">TRUE</span>)
+<span class="kw">print</span>(res)
+<span class="co">#&gt;   Minor Diagnostic Minor Therapeutic Major Diagnostic Major Therapeutic</span>
+<span class="co">#&gt; J                0                 0                0                 1</span>
+<span class="co">#&gt; A                0                 0                0                 1</span>
+<span class="co">#&gt; Z                1                 0                0                 0</span>
+<span class="co">#&gt; L                0                 1                0                 0</span>
+<span class="co">#&gt; H                0                 0                0                 1</span>
+<span class="co">#&gt; D                0                 1                0                 0</span>
+<span class="co">#&gt; E                0                 1                0                 0</span>
+<span class="co">#&gt; C                0                 0                0                 1</span>
+<span class="co">#&gt; W                0                 0                0                 1</span>
+<span class="co">#&gt; T                1                 0                0                 0</span>
+<span class="kw">colSums</span>(res)
+<span class="co">#&gt;  Minor Diagnostic Minor Therapeutic  Major Diagnostic Major Therapeutic </span>
+<span class="co">#&gt;                 2                 3                 0                 5</span></code></pre></div>
 <p>For more information on working with ICD-10 codes, see the introduction vignette, and function examples. E.g.</p>
 <pre><code><a href="../reference/comorbid.html">?comorbid
 ?explain</a></code></pre>
+</div>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
+        <div id="tocnav">
+      <h2 class="hasAnchor">
+<a href="#tocnav" class="anchor"></a>Contents</h2>
+      <ul class="nav nav-pills nav-stacked">
+<li><a href="#procedure-codes">Procedure codes</a></li>
+      </ul>
+</div>
       </div>
 
 </div>

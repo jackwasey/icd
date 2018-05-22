@@ -59,7 +59,7 @@ codes which are defined or billable (leaf nodes)." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">icd</a>
-        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">3.1.2</span>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">3.2.0</span>
       </span>
     </div>
 
@@ -102,6 +102,9 @@ codes which are defined or billable (leaf nodes)." />
     <li>
       <a href="../articles/introduction.html">Quick Introduction to icd</a>
     </li>
+    <li>
+      <a href="../articles/pccc.html">Pediatric Complex Chronic Conditions</a>
+    </li>
   </ul>
 </li>
 <li>
@@ -139,6 +142,10 @@ codes which are <em>defined</em> or <em>billable</em> (leaf nodes).</p>
 
 <span class='co'># S3 method for character</span>
 <span class='fu'>children</span>(<span class='no'>x</span>, <span class='no'>...</span>)
+
+<span class='co'># S3 method for icd9cm</span>
+<span class='fu'>children</span>(<span class='no'>x</span>, <span class='kw'>short_code</span> <span class='kw'>=</span> <span class='fu'><a href='guess_short.html'>guess_short</a></span>(<span class='no'>x</span>), <span class='kw'>defined</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
+  <span class='kw'>billable</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='no'>...</span>)
 
 <span class='co'># S3 method for icd9</span>
 <span class='fu'>children</span>(<span class='no'>x</span>, <span class='kw'>short_code</span> <span class='kw'>=</span> <span class='fu'><a href='guess_short.html'>guess_short</a></span>(<span class='no'>x</span>), <span class='kw'>defined</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
@@ -208,7 +215,9 @@ designed for billing, but for public health and death reporting.</p></td>
     <ul>
 <li><p><code>character</code>: Get child codes, guessing ICD version and short
 versus decimal format</p></li>
-<li><p><code>icd9</code>: Get children of ICD-9 codes</p></li>
+<li><p><code>icd9cm</code>: Get children of ICD-9-CM codes</p></li>
+<li><p><code>icd9</code>: Get children of ICD-9 codes, based on the superset
+ICD-9-CM at present</p></li>
 <li><p><code>icd10</code>: Get children of ICD-10 codes (warns because this
 only applies to ICD-10-CM for now).</p></li>
 <li><p><code>icd10cm</code>: Get children of ICD-10-CM codes</p></li>

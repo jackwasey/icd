@@ -62,7 +62,7 @@ large number of codes in it." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">icd</a>
-        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">3.1.2</span>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">3.2.0</span>
       </span>
     </div>
 
@@ -104,6 +104,9 @@ large number of codes in it." />
     </li>
     <li>
       <a href="../articles/introduction.html">Quick Introduction to icd</a>
+    </li>
+    <li>
+      <a href="../articles/pccc.html">Pediatric Complex Chronic Conditions</a>
     </li>
   </ul>
 </li>
@@ -197,8 +200,8 @@ the column using this argument avoids the guesswork.</p></td>
 <span class='fu'>stopifnot</span>(<span class='no'>simple_map</span>$<span class='no'>PVD</span> <span class='kw'>==</span> <span class='st'>"I26019"</span>)
 
 <span class='no'>umap</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>icd</span><span class='kw ns'>:::</span><span class='fu'><a href='http://www.rdocumentation.org/packages/icd/topics/simplify_map_lex'>simplify_map_lex</a></span>(<span class='no'>uranium_pathology</span>$<span class='no'>icd10</span>, <span class='no'>icd10_map_ahrq</span>)
-<span class='fu'>head</span>(<span class='kw pkg'>icd</span><span class='kw ns'>:::</span><span class='fu'><a href='http://www.rdocumentation.org/packages/icd/topics/comorbid_common'>comorbid_common</a></span>(<span class='no'>uranium_pathology</span>, <span class='no'>icd10_map_ahrq</span>,
-                           <span class='kw'>visit_name</span> <span class='kw'>=</span> <span class='st'>"case"</span>, <span class='kw'>icd_name</span> <span class='kw'>=</span> <span class='st'>"icd10"</span>,
+<span class='fu'>head</span>(<span class='kw pkg'>icd</span><span class='kw ns'>:::</span><span class='fu'><a href='http://www.rdocumentation.org/packages/icd/topics/categorize'>categorize</a></span>(<span class='no'>uranium_pathology</span>, <span class='no'>icd10_map_ahrq</span>,
+                           <span class='kw'>visit_name</span> <span class='kw'>=</span> <span class='st'>"case"</span>, <span class='kw'>code_name</span> <span class='kw'>=</span> <span class='st'>"icd10"</span>,
                            <span class='kw'>comorbid_fun</span> <span class='kw'>=</span> <span class='kw pkg'>icd</span><span class='kw ns'>:::</span><span class='no'><a href='http://www.rdocumentation.org/packages/icd/topics/comorbidMatMul'>comorbidMatMul</a></span>))</div><div class='output co'>#&gt;     CHF Valvular  PHTN   PVD   HTN HTNcx Paralysis NeuroOther Pulmonary    DM
 #&gt; 1 FALSE    FALSE FALSE FALSE FALSE FALSE     FALSE      FALSE     FALSE FALSE
 #&gt; 2 FALSE    FALSE FALSE FALSE FALSE FALSE     FALSE      FALSE     FALSE FALSE

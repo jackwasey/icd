@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Fast convert integer vector to character vector — fastIntToString • icd</title>
+<title>Fast convert integer vector to character vector — fastIntToString_alt_Std • icd</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -28,9 +28,10 @@
 
 
 
-<meta property="og:title" content="Fast convert integer vector to character vector — fastIntToString" />
+<meta property="og:title" content="Fast convert integer vector to character vector — fastIntToString_alt_Std" />
 
-<meta property="og:description" content="Fast conversion from integer vector to character vector using C++" />
+<meta property="og:description" content="Fast conversion from integer vector to character vector using C++
+Have tried R, sprintf with Rcpp and C++ standard library." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -58,7 +59,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">icd</a>
-        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">3.1.2</span>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">3.2.0</span>
       </span>
     </div>
 
@@ -130,6 +131,7 @@
     <div class="ref-description">
     
     <p>Fast conversion from integer vector to character vector using C++</p>
+<p>Have tried R, sprintf with Rcpp and C++ standard library.</p>
     
     </div>
 
@@ -149,13 +151,15 @@
       <td><p>int if any input strings are longer than this number
 (default 16) there will be memory errors. No checks done for speed.</p></td>
     </tr>
+    <tr>
+      <th>x</th>
+      <td><p>Vector of integers</p></td>
+    </tr>
     </table>
     
-    <h2 class="hasAnchor" id="functions"><a class="anchor" href="#functions"></a>Functions</h2>
+    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <ul>
-<li><p><code>fastIntToStringRcpp</code>: Same using <code>Rcpp</code></p></li>
-</ul>
+    <p>Vector of characters</p>
     
 
   </div>
@@ -164,7 +168,7 @@
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
       
-      <li><a href="#functions">Functions</a></li>
+      <li><a href="#value">Value</a></li>
           </ul>
 
   </div>

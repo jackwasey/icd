@@ -67,7 +67,7 @@ comorbid_ccs." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">icd</a>
-        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">3.1.2</span>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">3.2.0</span>
       </span>
     </div>
 
@@ -110,6 +110,9 @@ comorbid_ccs." />
     <li>
       <a href="../articles/introduction.html">Quick Introduction to icd</a>
     </li>
+    <li>
+      <a href="../articles/pccc.html">Pediatric Complex Chronic Conditions</a>
+    </li>
   </ul>
 </li>
 <li>
@@ -151,16 +154,19 @@ Clinical Classification Software (CCS) rules from AHRQ, see
     
     </div>
 
-    <pre class="usage"><span class='fu'>comorbid</span>(<span class='no'>x</span>, <span class='no'>map</span>, <span class='no'>...</span>)
+    <pre class="usage"><span class='fu'>comorbid</span>(<span class='no'>x</span>, <span class='no'>map</span>, <span class='kw'>visit_name</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>icd_name</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>short_code</span> <span class='kw'>=</span> <span class='fu'><a href='guess_short.html'>guess_short</a></span>(<span class='no'>x</span>, <span class='kw'>icd_name</span> <span class='kw'>=</span> <span class='no'>icd_name</span>),
+  <span class='kw'>short_map</span> <span class='kw'>=</span> <span class='fu'><a href='guess_short.html'>guess_short</a></span>(<span class='no'>map</span>), <span class='kw'>return_df</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>return_binary</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='no'>...</span>)
 
 <span class='fu'>icd10_comorbid</span>(<span class='no'>x</span>, <span class='no'>map</span>, <span class='kw'>visit_name</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>icd_name</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>short_code</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>short_map</span> <span class='kw'>=</span> <span class='fu'><a href='guess_short.html'>guess_short</a></span>(<span class='no'>map</span>), <span class='kw'>return_df</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>icd10_comorbid_fun</span> <span class='kw'>=</span> <span class='no'>icd10_comorbid_reduce</span>, <span class='no'>...</span>)
+  <span class='kw'>return_binary</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>icd10_comorbid_fun</span> <span class='kw'>=</span> <span class='no'>icd10_comorbid_reduce</span>, <span class='no'>...</span>)
 
 <span class='fu'>icd9_comorbid</span>(<span class='no'>x</span>, <span class='no'>map</span>, <span class='kw'>visit_name</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>icd_name</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>short_code</span> <span class='kw'>=</span> <span class='fu'><a href='guess_short.html'>guess_short</a></span>(<span class='no'>x</span>, <span class='kw'>icd_name</span> <span class='kw'>=</span> <span class='no'>icd_name</span>),
-  <span class='kw'>short_map</span> <span class='kw'>=</span> <span class='fu'><a href='guess_short.html'>guess_short</a></span>(<span class='no'>map</span>), <span class='kw'>return_df</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>preclean</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-  <span class='kw'>visitId</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>icd9Field</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>...</span>)
+  <span class='kw'>short_map</span> <span class='kw'>=</span> <span class='fu'><a href='guess_short.html'>guess_short</a></span>(<span class='no'>map</span>), <span class='kw'>return_df</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>return_binary</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>preclean</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>visitId</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>icd9Field</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>...</span>)
 
 <span class='fu'>icd9_comorbid_ahrq</span>(<span class='no'>x</span>, <span class='no'>...</span>, <span class='kw'>abbrev_names</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>hierarchy</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
 
@@ -230,10 +236,6 @@ is no default: the user should use the family of functions, e.g.
 hierarchical rules (see <code>hierarchy</code> below)</p></td>
     </tr>
     <tr>
-      <th>...</th>
-      <td><p>arguments passed on to other functions</p></td>
-    </tr>
-    <tr>
       <th>visit_name</th>
       <td><p>The name of the column in the data frame which contains the
 patient or visit identifier. Typically this is the visit identifier, since
@@ -272,6 +274,19 @@ same type, i.e. short or decimal.</p></td>
       <td><p>single logical value, if <code>TRUE</code>, return the result as a data frame with the first column being
 the <code>visit_id</code>, and the second being the count. If <code>visit_id</code> was a factor or named differently in the
 input, this is preserved.</p></td>
+    </tr>
+    <tr>
+      <th>return_binary</th>
+      <td><p>Single logical value, if <code>TRUE</code>, the returned
+<code>matrix</code> or <code>data.frame</code> will be composed of <code>1</code> and
+<code>0</code>, instead of <code>TRUE</code> and <code>FALSE</code>, respectively. This
+conversion can also be done by the internal functions
+<code>icd:::logical_to_binary</code> and <code>icd:::binary_to_logical</code>, or using
+other tools, e.g. <code>apply(x, 2, as.integer)</code></p></td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td><p>arguments passed on to other functions</p></td>
     </tr>
     <tr>
       <th>icd10_comorbid_fun</th>
