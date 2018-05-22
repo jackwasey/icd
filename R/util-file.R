@@ -75,6 +75,18 @@ fetch_icd10cm_year <- function(year = "2018", dx = TRUE,
                     offline = offline, ...)
 }
 
+#' Fetch ICD-10-CM data from the CMS web site
+#'
+#' YEAR-ICD10-Code-Descriptions has flat files, YEAR-ICD10-Code-Tables-Index has
+#' XML
+#' @keywords internal
+fetch_icd10cm_year <- function(year = "2018", type = c("dx", "pcs"), ...) {
+  s <- icd::icd10_sources[[year]]
+  unzip_to_data_raw(
+    url = paste0(s$base_url, s$desc_zip),
+    file_name = s$dx_flat, ...)
+}
+
 #' Get the raw data directory
 #'
 #' Following Hadley Wickham recommendations
