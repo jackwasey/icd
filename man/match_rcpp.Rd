@@ -3,7 +3,6 @@
 \name{match_rcpp}
 \alias{match_rcpp}
 \alias{fin}
-\alias{fnin}
 \alias{\%fin\%}
 \alias{\%fnin\%}
 \title{Faster match}
@@ -11,8 +10,6 @@
 match_rcpp(x, table)
 
 fin(x, table)
-
-fnin(x, table)
 
 x \%fin\% table
 
@@ -26,8 +23,6 @@ Try Rcpp hashing (and simpler logic) compared to R's internal
 \section{Functions}{
 \itemize{
 \item \code{fin}: Use faster Rcpp matching for %in%
-
-\item \code{fnin}: Use faster Rcpp matching for %nin%
 
 \item \code{\%fin\%}: Use faster Rcpp matching for %in%
 
