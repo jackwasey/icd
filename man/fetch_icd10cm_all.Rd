@@ -7,7 +7,8 @@
 \usage{
 fetch_icd10cm_all(verbose = FALSE, ...)
 
-fetch_icd10cm_year(year = "2018", type = c("dx", "pcs"), ...)
+fetch_icd10cm_year(year = "2018", dx = TRUE, verbose = FALSE,
+  offline = FALSE, ...)
 }
 \description{
 YEAR-ICD10-Code-Descriptions has flat files, YEAR-ICD10-Code-Tables-Index has
