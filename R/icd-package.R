@@ -93,7 +93,7 @@
 #'   \code{\link{wide_to_long}} and \code{\link{long_to_wide}} convert the two
 #'   most common data structures containing patient disease data. This is more
 #'   sophisticated and tailored to the problem than base reshaping or packages
-#'   like \pkg{dplyr}, although these could no doubt be used.}
+#'   like \CRANpkg{dplyr}, although these could no doubt be used.}
 #'
 #'   \item{Explanation and decoding}{
 #'

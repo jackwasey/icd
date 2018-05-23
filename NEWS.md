@@ -1,9 +1,10 @@
 # Version 3.2
- * fixed 588 instead of 588.0 in Quan Elixhauser ICD-9 comorbidity map
- * fix regression where codes appearing in two comorbidities would only count once.
+ * use new package [icd.data](https://github.com/jackwasey/icd.data) for large, rarely modified data files
  * added Pediatric Complex Chronic Condition comorbidity classification
- * added ICD-10 procedure code data, and AHRQ procedure code classification. See ICD-10 vignette.
+ * added ICD-10 procedure code data, and AHRQ procedure code classification -- ee [ICD-10 vignette](https://jackwasey.github.io/icd/articles/icd-10.html)
  * added ICD-10-CM data from US CMS for 2015 to 2018
+ * fixed 588 instead of 588.0 in Quan Elixhauser ICD-9 comorbidity map
+ * fix regression where codes appearing in two comorbidities would only count once
  
 # Version 3.1.2
  * Documentation improved
