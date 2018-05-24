@@ -5,8 +5,8 @@
 \title{Categorize codes according to a mapping}
 \usage{
 categorize(x, map, visit_name, code_name, return_df = FALSE,
-  return_binary = FALSE, comorbid_fun = comorbidMatMul,
-  factor_fun = factor_nosort_rcpp, ...)
+  return_binary = FALSE, restore_visit_order = TRUE, unique_ids = FALSE,
+  comorbid_fun = comorbidMatMul, factor_fun = factor_nosort_rcpp, ...)
 }
 \arguments{
 \item{x}{Data frame containing a column for an 'id' and a column for a code,
@@ -38,6 +38,16 @@ input, this is preserved.}
 
 \item{return_binary}{Logical value, if \code{TRUE}, the output will be in 0s
 and 1s instead of TRUE and FALSE.}
+
+\item{restore_visit_order}{Logical value, if \code{TRUE}, the default, the
+order of the visit IDs will match the order of visit IDs first encountered
+in the input data. This takes a third of the time in calculations on data
+with tens of millions of rows, so, if the visit IDs will be discarded when
+summarizing data, this can be set to \code{FALSE} for a big speed-up.}
+
+\item{unique_ids}{Single logical value, if \code{TRUE} then the visit IDs in
+column given by \code{visit_name} are assumed to be unique. Otherwise, the
+default action is to ensure they are unique.}
 
 \item{comorbid_fun}{function i.e. the function symbol (not character string)
 to be called to do the comorbidity calculation}

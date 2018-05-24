@@ -32,6 +32,9 @@
 #'   in the input data. This takes a third of the time in calculations on data
 #'   with tens of millions of rows, so, if the visit IDs will be discarded when
 #'   summarizing data, this can be set to \code{FALSE} for a big speed-up.
+#' @param unique_ids Single logical value, if \code{TRUE} then the visit IDs in
+#'   column given by \code{visit_name} are assumed to be unique. Otherwise, the
+#'   default action is to ensure they are unique.
 #' @param comorbid_fun function i.e. the function symbol (not character string)
 #'   to be called to do the comorbidity calculation
 #' @param factor_fun function symbol to call to generate factors. Default is a
@@ -50,6 +53,7 @@ categorize <- function(x,
                        return_df = FALSE,
                        return_binary = FALSE,
                        restore_visit_order = TRUE,
+                       unique_ids = FALSE,
                        comorbid_fun = comorbidMatMul,
                        factor_fun = factor_nosort_rcpp,
                        ...) {
@@ -81,7 +85,9 @@ categorize <- function(x,
     return(df_empty_out)
   }
   # unique.default re-factors the result, which takes a long time
-  uniq_visits <- if (is.factor(x[[visit_name]]))
+  uniq_visits <- if (unique_ids)
+    x[[visit_name]]
+  else if (is.factor(x[[visit_name]]))
     unique(levels(x[[visit_name]])) # factor or vector
   else
     unique(x[[visit_name]]) # factor or vector
@@ -111,7 +117,7 @@ categorize <- function(x,
   # helps, as many codes are not in maps
 
   #TODO SLOW %fnin% about 25% quicker than base R equivalent (if working!)
-  visit_not_comorbid <- unique(x[x[[visit_name]] %nin% x_[[visit_name]], visit_name])
+  visit_not_comorbid <- unique(x[x[[visit_name]] %fnin% x_[[visit_name]], visit_name])
   map <- lapply(map, function(y) {
     f <- factor_fun(y, levels = relevant_codes)
     f[!is.na(f)]

@@ -60,9 +60,11 @@ res <- lapply(
     message("working on column: ", x);
     tm <- system.time(
       if (do_icd9)
-        icd9_comorbid_pccc_dx(dat_wide[c("id", x)], icd_name = x, restore_visit_order = FALSE)
+        icd9_comorbid_pccc_dx(dat_wide[c("id", x)], icd_name = x,
+                              restore_visit_order = FALSE, unique_ids = TRUE)
       else
-        icd10_comorbid_pccc_dx(dat_wide[c("id", x)], icd_name = x, restore_visit_order = FALSE)
+        icd10_comorbid_pccc_dx(dat_wide[c("id", x)], icd_name = x,
+                               restore_visit_order = FALSE, unique_ids = TRUE)
     )
     print(tm)
     #gc(verbose = TRUE)
@@ -70,12 +72,16 @@ res <- lapply(
 )
 print(proc.time() - ptm)
 
-# NEDS simulated data result: 14 mins on Mac (4 core, just 2.5Ghz 16G RAM)
-# after some simple optimization, with GC each step, 5m40s (vs 18 mins in JAMA letter)
-# without garbage collection, 10 seconds per col, more with more occupancy: 4m40s
+# NEDS simulated data result: 14 mins on Mac (4 core, just 2.5Ghz 16G RAM) after
+# some simple optimization, with GC each step, 5m40s (vs 18 mins in JAMA letter)
+# without garbage collection, 10 seconds per col, more with more occupancy:
+# 4m40s, which is similar on xeon and mac
 
 if (FALSE)
-  profvis::profvis(icd9_comorbid_pccc_dx(dat_wide[c("id", "dx10")], icd_name = "dx10", restore_visit_order = FALSE))
+  profvis::profvis(icd9_comorbid_pccc_dx(dat_wide[c("id", "dx10")],
+                                         icd_name = "dx10",
+                                         restore_visit_order = FALSE,
+                                         unique_ids = TRUE))
 # profiling shows that converting the ID column to string was a big time sink (repeated for each column!),
 # as was re-ordering the visit IDs, which could be skipped if we just want summary data.
 
@@ -91,8 +97,7 @@ for (m in c(m_tens, n)) {
   pccc_timings[as.character(m)] <- as.list(st)$elapsed
   message(" - took ", as.list(st)$elapsed, "seconds")
 }
-# simply extrapolating, it will take at least half an hour for PCCC to complete on Mac.
-# full simulated NEDS 20 mins on xeon 4 core.
+# full simulated NEDS 21 mins on xeon 4 core, (likely similar on Mac)
 
 if (FALSE)
 pccc::ccc(head(dat_wide),
@@ -101,5 +106,10 @@ pccc::ccc(head(dat_wide),
           #dx_cols = tidyselect::vars_select(names(dat_wide), tidyselect::starts_with("dx")),
           pc_cols = NULL,
           icdv = 9)
+
+# finding unique values is slowest step: consider
+# https://github.com/jl2922/omp_hash_map or
+# https://github.com/efficient/libcuckoo or
+# https://github.com/preshing/junction
 
 # repeat with character instead of factor
