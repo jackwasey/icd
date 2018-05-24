@@ -65,7 +65,7 @@ res <- lapply(
         icd10_comorbid_pccc_dx(dat_wide[c("id", x)], icd_name = x, restore_visit_order = FALSE)
     )
     print(tm)
-    #gc(verbose = FALSE)
+    #gc(verbose = TRUE)
   }
 )
 print(proc.time() - ptm)
@@ -80,7 +80,18 @@ if (FALSE)
 # as was re-ordering the visit IDs, which could be skipped if we just want summary data.
 
 # try to get pccc working at all:
-pccc:::ccc_mat_rcpp(dat_wide$id, as.matrix(dat_wide[-1]), matrix("", nrow = nrow(dat_wide)), 9)
+m_tens <- 10^c(3, 4, 5)
+pccc_timings <- list()
+for (m in c(m_tens, n)) {
+  message("working on pccc:ccc_mat_rcpp with", m, "rows")
+  st <- system.time(
+    pccc:::ccc_mat_rcpp(as.matrix(dat_wide[seq_len(m), -1]),
+                        matrix("", nrow = m), 9) # gave up after about 10 minutes on first run.
+  )
+  pccc_timings[as.character(m)] <- as.list(st)$elapsed
+  message(" - took ", as.list(st)$elapsed, "seconds")
+}
+# simply extrapolating, it will take at least half an hour for PCCC to complete
 
 pccc::ccc(head(dat_wide),
           "id",
