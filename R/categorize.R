@@ -27,6 +27,11 @@
 #' @template return_df
 #' @param return_binary Logical value, if \code{TRUE}, the output will be in 0s
 #'   and 1s instead of TRUE and FALSE.
+#' @param restore_visit_order Logical value, if \code{TRUE}, the default, the
+#'   order of the visit IDs will match the order of visit IDs first encountered
+#'   in the input data. This takes a third of the time in calculations on data
+#'   with tens of millions of rows, so, if the visit IDs will be discarded when
+#'   summarizing data, this can be set to \code{FALSE} for a big speed-up.
 #' @param comorbid_fun function i.e. the function symbol (not character string)
 #'   to be called to do the comorbidity calculation
 #' @param factor_fun function symbol to call to generate factors. Default is a
@@ -44,6 +49,7 @@ categorize <- function(x,
                        code_name,
                        return_df = FALSE,
                        return_binary = FALSE,
+                       restore_visit_order = TRUE,
                        comorbid_fun = comorbidMatMul,
                        factor_fun = factor_nosort_rcpp,
                        ...) {
@@ -118,11 +124,13 @@ categorize <- function(x,
                              nrow = length(visit_not_comorbid),
                              ncol = ncol(mat_comorbid),
                              dimnames = list(visit_not_comorbid))
-  mat_comb <- rbind(mat_comorbid, mat_not_comorbid)
+  mat <- rbind(mat_comorbid, mat_not_comorbid)
   # now put the visits back in original order (bearing in mind that they may not
   # have started that way) # TODO SLOW
-  mat_new_row_order <- match(rownames(mat_comb), uniq_visits)
-  mat <- mat_comb[order(mat_new_row_order),, drop = FALSE] #nolint
+  if (restore_visit_order) {
+    mat_new_row_order <- match(rownames(mat), uniq_visits)
+    mat <- mat[order(mat_new_row_order),, drop = FALSE] #nolint
+  }
   if (return_binary) mat <- logical_to_binary(mat)
   if (!return_df)
     return(mat)

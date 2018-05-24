@@ -6,6 +6,7 @@
 library(icd)
 library(magrittr)
 library(R.cache)
+library(pccc)
 # try with and without ICD codes as a factor: need strings either way, but a
 # factor we should not be converting to string and back, just work on the factor
 # levels.
@@ -18,7 +19,7 @@ n <- 28584301L
 n <- n %/% divide
 codes <- if (do_icd9) unclass(icd:::as_char_no_warn(icd.data::icd9cm_hierarchy$code)) else unclass(icd:::as_char_no_warn(icd.data::icd10cm2016$code))
 set.seed(1441)
-dat <- data.frame(id = n + seq(n),
+dat <- data.frame(id = as.character(n + seq(n)),
                   icd_code = sample(codes, n, replace = TRUE),
                   stringsAsFactors = TRUE)
 #system.time(pccc_dx <- comorbid_pccc_dx(dat))
@@ -52,25 +53,40 @@ if (FALSE)
 # ugh - very slow - 10 or 20 seconds on Mac on 1% of data
 
 # can we just calculate comorbidities for each column, then OR?
-system.time(
-  res <- lapply(rev(names(dat_wide)[-1]),
-                function(x) {
-                  message(x);
-                  system.time(
-                    if (do_icd9)
-                      icd9_comorbid_pccc_dx(dat_wide[c("id", x)], icd_name = x)
-                    else
-                      icd10_comorbid_pccc_dx(dat_wide[c("id", x)], icd_name = x)
-                  )
-                  gc(verbose = TRUE)
-                }
-  )
+ptm <- proc.time()
+res <- lapply(
+  rev(names(dat_wide)[-1]),
+  function(x) {
+    message("working on column: ", x);
+    tm <- system.time(
+      if (do_icd9)
+        icd9_comorbid_pccc_dx(dat_wide[c("id", x)], icd_name = x, restore_visit_order = FALSE)
+      else
+        icd10_comorbid_pccc_dx(dat_wide[c("id", x)], icd_name = x, restore_visit_order = FALSE)
+    )
+    print(tm)
+    #gc(verbose = FALSE)
+  }
 )
+print(proc.time() - ptm)
 
-pccc::ccc(ned,
-    subject_id,
-    dx_cols = dplyr::vars(dplyr::num_range("dx", c(2,21))),
-    pc_cols = NULL,
-    icdv = 9)
+# NEDS simulated data result: 14 mins on Mac (4 core, just 2.5Ghz 16G RAM)
+# after some simple optimization, with GC each step, 5m40s (vs 18 mins in JAMA letter)
+# without garbage collection, 10 seconds per col, more with more occupancy: 4m40s
+
+if (FALSE)
+  profvis::profvis(icd9_comorbid_pccc_dx(dat_wide[c("id", "dx10")], icd_name = "dx10", restore_visit_order = FALSE))
+# profiling shows that converting the ID column to string was a big time sink (repeated for each column!),
+# as was re-ordering the visit IDs, which could be skipped if we just want summary data.
+
+# try to get pccc working at all:
+pccc:::ccc_mat_rcpp(dat_wide$id, as.matrix(dat_wide[-1]), matrix("", nrow = nrow(dat_wide)), 9)
+
+pccc::ccc(head(dat_wide),
+          "id",
+          dx_cols = seq(2, ncol(dat_wide)),
+          #dx_cols = tidyselect::vars_select(names(dat_wide), tidyselect::starts_with("dx")),
+          pc_cols = NULL,
+          icdv = 9)
 
 # repeat with character instead of factor
