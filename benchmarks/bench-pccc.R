@@ -91,8 +91,10 @@ for (m in c(m_tens, n)) {
   pccc_timings[as.character(m)] <- as.list(st)$elapsed
   message(" - took ", as.list(st)$elapsed, "seconds")
 }
-# simply extrapolating, it will take at least half an hour for PCCC to complete
+# simply extrapolating, it will take at least half an hour for PCCC to complete on Mac.
+# full simulated NEDS 20 mins on xeon 4 core.
 
+if (FALSE)
 pccc::ccc(head(dat_wide),
           "id",
           dx_cols = seq(2, ncol(dat_wide)),

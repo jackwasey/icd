@@ -80,7 +80,11 @@ categorize <- function(x,
     rownames(df_empty_out) <- NULL
     return(df_empty_out)
   }
-  uniq_visits <- unique(x[[visit_name]]) # factor or vector
+  # unique.default re-factors the result, which takes a long time
+  uniq_visits <- if (is.factor(x[[visit_name]]))
+    unique(levels(x[[visit_name]])) # factor or vector
+  else
+    unique(x[[visit_name]]) # factor or vector
   if (!is.character(x[[visit_name]])) # might be quick to keep as factor
     x[[visit_name]] <- as_char_no_warn(x[[visit_name]])
   # start with a factor for the icd codes in x, recode (and drop superfluous)
