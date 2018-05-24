@@ -32,7 +32,7 @@ if (FALSE) {
 pts_per_code_pos <- as.integer(n / (1:20) ^ 4)
 key = list(paste0("bench-pccc-div", divide, ifelse(do_icd9, "-icd9", "-icd10")))
 dat_wide <- R.cache::loadCache(key)
-if (is.null(dat_wide) || nrow(dat_wide != n)) {
+if (is.null(dat_wide) || nrow(dat_wide) != n) {
   dat_wide <- data.frame(id = dat$id,
                          dx01 = dat$icd_code,
                          stringsAsFactors = TRUE)
@@ -98,6 +98,7 @@ for (m in c(m_tens, n)) {
   message(" - took ", as.list(st)$elapsed, "seconds")
 }
 # full simulated NEDS 21 mins on xeon 4 core, (likely similar on Mac)
+# twice the time for PCCC compared to icd on 72-core server (busy server)
 
 if (FALSE)
 pccc::ccc(head(dat_wide),
