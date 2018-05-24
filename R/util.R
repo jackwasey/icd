@@ -193,23 +193,20 @@ get_visit_name <- function(x, visit_name = NULL) {
   UseMethod("get_visit_name")
 }
 
-.visit_name_guesses <- c("visit.?Id", "patcom", "encounter.?id", "enc.?id",
-                         "in.*enc", "out.*enc", "encounter", "visit", "enc")
-
 #' @keywords internal
 #' @export
 get_visit_name.data.frame <- function(x, visit_name = NULL) {
   assert_data_frame(x, min.cols = 1, col.names = "named")
-
+  visit_name_guesses <- c("visit.?Id", "patcom", "encounter.?id", "enc.?id",
+                          "in.*enc", "out.*enc", "encounter", "visit", "enc")
   if (is.null(visit_name)) {
-    for (guess in .visit_name_guesses) {
+    for (guess in visit_name_guesses) {
       guess_matched <- grep(guess, names(x), ignore.case = TRUE, value = TRUE)
       if (length(guess_matched) == 1) {
         visit_name <- guess_matched
         break
       }
     }
-    # if still null, then guess the name of the first column
     if (is.null(visit_name))
       visit_name <- names(x)[1]
   }
@@ -220,9 +217,9 @@ get_visit_name.data.frame <- function(x, visit_name = NULL) {
 
 #' @keywords internal
 #' @export
-get_visit_name.matrix <- function(x, visit_name = NULL) {
-  stop("matrices of comorbidity data are expected to be of logical type, and have row names corresponding to the visit or patient.")
-}
+get_visit_name.matrix <- function(x, visit_name = NULL)
+  stop("matrices of comorbidity data are expected to be of logical type, ",
+       "and have row names corresponding to the visit or patient.")
 
 #' get the name of a \code{data.frame} column which is most likely to contain
 #' the ICD codes
@@ -244,7 +241,6 @@ get_icd_name <- function(x, icd_name = NULL, valid_codes = TRUE, defined_codes =
          "using 'wide_to_long'. ",
          "If the data is indeed 'long' format, remove the class 'icd_wide_data' and ",
          "use 'as.icd_long_data' to set the correct class. See '?icd_long_data' for help.")
-
   if (!is.null(icd_name)) {
     assert_string(icd_name)
     stopifnot(icd_name %in% names(x))
@@ -288,10 +284,10 @@ get_icd_name <- function(x, icd_name = NULL, valid_codes = TRUE, defined_codes =
   else
     get_icd_valid_percent(x[[icd_name]])
   if (pc$icd9 < 10 && pc$icd10 < 10)
-    stop(paste("identified field with ICD codes as: '", icd_name,
-               "' but fewer than 10% of codes are valid ICD-9 or ICD-10.",
-               "If this really is a valid column, set the class using something like",
-               "x[[icd_name]] <- as.icd9[[x[[icd_name]]"))
+    stop("identified field with ICD codes as: '", icd_name,
+         "' but fewer than 10% of codes are valid ICD-9 or ICD-10. ",
+         "If this really is a valid column, set the class using something like",
+         " x[[icd_name]] <- as.icd9[[x[[icd_name]]")
   icd_name
 }
 
