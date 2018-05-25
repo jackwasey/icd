@@ -1046,11 +1046,11 @@ namespace icd {
         return Rcpp::as<std::vector<std::size_t> >(rcpp_result_gen);
     }
 
-    inline Rcpp::IntegerVector factor_nosort_rcpp_worker(const Rcpp::Vector<STRSXP>& x, const Rcpp::Vector<STRSXP>& levels) {
+    inline IntegerVector factor_nosort_rcpp_worker(const Vector<STRSXP>& x, const Vector<STRSXP>& levels) {
         typedef SEXP(*Ptr_factor_nosort_rcpp_worker)(SEXP,SEXP);
         static Ptr_factor_nosort_rcpp_worker p_factor_nosort_rcpp_worker = NULL;
         if (p_factor_nosort_rcpp_worker == NULL) {
-            validateSignature("Rcpp::IntegerVector(*factor_nosort_rcpp_worker)(const Rcpp::Vector<STRSXP>&,const Rcpp::Vector<STRSXP>&)");
+            validateSignature("IntegerVector(*factor_nosort_rcpp_worker)(const Vector<STRSXP>&,const Vector<STRSXP>&)");
             p_factor_nosort_rcpp_worker = (Ptr_factor_nosort_rcpp_worker)R_GetCCallable("icd", "_icd_factor_nosort_rcpp_worker");
         }
         RObject rcpp_result_gen;
@@ -1062,7 +1062,7 @@ namespace icd {
             throw Rcpp::internal::InterruptedException();
         if (rcpp_result_gen.inherits("try-error"))
             throw Rcpp::exception(Rcpp::as<std::string>(rcpp_result_gen).c_str());
-        return Rcpp::as<Rcpp::IntegerVector >(rcpp_result_gen);
+        return Rcpp::as<IntegerVector >(rcpp_result_gen);
     }
 
     inline SEXP match_rcpp(SEXP x, SEXP table) {
@@ -1101,6 +1101,25 @@ namespace icd {
         if (rcpp_result_gen.inherits("try-error"))
             throw Rcpp::exception(Rcpp::as<std::string>(rcpp_result_gen).c_str());
         return Rcpp::as<SEXP >(rcpp_result_gen);
+    }
+
+    inline List factorSplit(IntegerVector x, CharacterVector levels) {
+        typedef SEXP(*Ptr_factorSplit)(SEXP,SEXP);
+        static Ptr_factorSplit p_factorSplit = NULL;
+        if (p_factorSplit == NULL) {
+            validateSignature("List(*factorSplit)(IntegerVector,CharacterVector)");
+            p_factorSplit = (Ptr_factorSplit)R_GetCCallable("icd", "_icd_factorSplit");
+        }
+        RObject rcpp_result_gen;
+        {
+            RNGScope RCPP_rngScope_gen;
+            rcpp_result_gen = p_factorSplit(Shield<SEXP>(Rcpp::wrap(x)), Shield<SEXP>(Rcpp::wrap(levels)));
+        }
+        if (rcpp_result_gen.inherits("interrupted-error"))
+            throw Rcpp::internal::InterruptedException();
+        if (rcpp_result_gen.inherits("try-error"))
+            throw Rcpp::exception(Rcpp::as<std::string>(rcpp_result_gen).c_str());
+        return Rcpp::as<List >(rcpp_result_gen);
     }
 
 }

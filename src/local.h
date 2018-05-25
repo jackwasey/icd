@@ -30,13 +30,37 @@ extern "C" {
 }
 
 // debugging:
-// #define ICD_DEBUG
+#define ICD_DEBUG
 // #define ICD_DEBUG_TRACE
 // #define ICD_DEBUG_SETUP
 // #define ICD_DEBUG_SETUP_SLOW
 // #define ICD_DEBUG_SETUP_TRACE
 // #define ICD_DEBUG_PARALLEL
 // #define ICD_VALGRIND
+
+#ifdef ICD_DEBUG
+#define DEBUG(x) do { std::cerr << x << std::endl; } while (0)
+#else
+#define DEBUG(x) // no-op
+#endif
+
+#ifdef ICD_DEBUG_VALGRIND
+#define DEBUG_VALGRIND(x) do { std::cerr << x << std::endl; } while (0)
+#else
+#define DEBUG_VALGRIND(x) // no-op
+#endif
+
+#ifdef ICD_DEBUG_PARALLEL
+#define DEBUG_PARALLEL(x) do { std::cerr << x << std::endl; } while (0)
+#else
+#define DEBUG_PARALLEL(x) // no-op
+#endif
+
+#ifdef ICD_DEBUG
+#define DEBUG_VEC(x) do { std::cerr << #x << ": "; printVec(x); } while (0);
+#else
+#define DEBUG_VEC(x) // no-op
+#endif
 
 // not enough to test whether header is available, because it may be disabled in
 // R: #ifdef _OPENMP

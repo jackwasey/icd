@@ -16,6 +16,8 @@
 // along with icd. If not, see <http://www.gnu.org/licenses/>.
 
 // [[Rcpp::interfaces(r, cpp)]]
+#include "local.h"                             // for ICD_OPENMP
+#include "config.h"                             // for ICD_VALGRIND
 #include "util.h"
 #include <stdlib.h>
 #include <math.h>                              // for floor
@@ -26,17 +28,19 @@
 #include <ostream>                             // for size_t, operator<<
 #include <string>                              // for string, basic_string
 #include <vector>                              // for vector, vector<>::size...
-#include "local.h"                             // for ICD_OPENMP
-#include "config.h"                             // for ICD_VALGRIND
 #ifdef ICD_OPENMP
 #include <omp.h>
 #endif
 
+using Rcpp::List;
 using Rcpp::Vector;
 using Rcpp::LogicalVector;
 using Rcpp::IntegerVector;
 using Rcpp::CharacterVector;
+using Rcpp::String;
+using Rcpp::Rcout;
 using Rcpp::as;
+using Rcpp::Named;
 
 // trim one string from right
 std::string trimRightCpp(std::string s) {
@@ -75,11 +79,19 @@ VecStr trimCpp(VecStr sv) {
 #ifdef ICD_DEBUG
 void printCharVec(CV cv) {
   for (CV::iterator i=cv.begin(); i!=cv.end(); ++i) {
-    Rcpp::String s = *i;
-    Rcpp::Rcout << s.get_cstring() << " ";
+    String s = *i;
+    Rcout << s.get_cstring() << " ";
   }
-  Rcpp::Rcout << "\n";
+  Rcout << std::endl;
   return;
+}
+
+template <int RTYPE>
+void printVec(Vector<RTYPE> v) {
+  for (auto i: v) {
+    Rcout << i << " ";
+  }
+  Rcout << std::endl;
 }
 #endif
 
@@ -117,20 +129,20 @@ int getOmpThreads() {
 // [[Rcpp::export]]
 void debug_parallel_env() {
 #ifdef ICD_DEBUG_PARALLEL
-  Rcpp::Rcout << "checking OpenMP flags...\n";
+  Rcout << "checking OpenMP flags...\n";
 #ifdef HAVE_R_OPENMP
-  Rcpp::Rcout << "HAVE_R_OPENMP is defined.\n";
+  Rcout << "HAVE_R_OPENMP is defined.\n";
 #endif
 #ifdef _OPENMP
-  Rcpp::Rcout << "_OPENMP is defined.\n";
+  Rcout << "_OPENMP is defined.\n";
 #else
-  Rcpp::Rcout << "_OPENMP is not defined.\n";
+  Rcout << "_OPENMP is not defined.\n";
 #endif
 
 #ifdef ICD_OPENMP
-  Rcpp::Rcout << "ICD_OPENMP is defined.\n";
+  Rcout << "ICD_OPENMP is defined.\n";
 #else
-  Rcpp::Rcout << "ICD_OPENMP is not defined.\n";
+  Rcout << "ICD_OPENMP is not defined.\n";
 #endif
 #endif
 }
@@ -237,18 +249,16 @@ VecStr icd9RandomShort(VecStr::size_type n = 5) {
 
 // [[Rcpp::export]]
 int valgrindCallgrindStart(bool zerostats = false) {
+  if (zerostats) {}; // no-op
 #ifdef ICD_VALGRIND
-  Rcpp::Rcout << "Starting callgrind instrumentation...\n";
+  Rcout << "Starting callgrind instrumentation..." << std::endl;
   CALLGRIND_START_INSTRUMENTATION;
   if (zerostats) {
-    Rcpp::Rcout << "Zeroing callgrind stats.\n";
+    Rcout << "Zeroing callgrind stats." << std::endl;
     CALLGRIND_ZERO_STATS;
   }
 #else
-#ifdef ICD_DEBUG
-  Rcpp::Rcout << "NOT starting Valgrind callgrind " <<
-    "instrumentation, not linked.\n";
-#endif
+  DEBUG("NOT starting Valgrind callgrind instrumentation, not linked");
 #endif
   return 0;
 }
@@ -256,13 +266,10 @@ int valgrindCallgrindStart(bool zerostats = false) {
 // [[Rcpp::export]]
 int valgrindCallgrindStop() {
 #ifdef ICD_VALGRIND
-  Rcpp::Rcout << "Stopping Valgrind callgrind instrumentation...\n";
+  Rcout << "Stopping Valgrind callgrind instrumentation..." << std::endl;
   CALLGRIND_STOP_INSTRUMENTATION;
 #else
-#ifdef ICD_DEBUG
-  Rcpp::Rcout << "NOT stopping Valgrind callgrind " <<
-    "instrumentation, not linked.\n";
-#endif
+  DEBUG("NOT stopping Valgrind callgrind instrumentation, not linked.");
 #endif
   return 0;
 }
@@ -288,7 +295,6 @@ bool icd9CompareStrings(std::string a, std::string b) {
 bool icd9ComparePair(pas a, pas b) {
   std::string af = a.first;
   std::string bf = b.first;
-  //return icd9Comp(af, bf);
   return icd9CompareStrings(af, bf);
 }
 
@@ -299,11 +305,12 @@ VecStr icd9SortCpp(VecStr x) {
 }
 
 // add one because R indexes from 1, not 0
-inline std::size_t getSecondPlusOne(const std::pair<std::string, std::size_t>& p) { return p.second + 1; }
+inline std::size_t getSecondPlusOne(const std::pair<std::string, std::size_t>& p) {
+  return p.second + 1;
+}
 
 // [[Rcpp::export(icd9_order_cpp)]]
 std::vector<std::size_t> icd9OrderCpp(VecStr x) {
-
   std::vector<std::pair<std::string, std::size_t> > vp;
   std::vector<std::size_t> out;
   out.reserve(x.size());
@@ -320,10 +327,10 @@ std::vector<std::size_t> icd9OrderCpp(VecStr x) {
 //'   inputs only, no argument checking.
 //' @keywords internal manip
 // [[Rcpp::export(factor_nosort_rcpp_worker)]]
-Rcpp::IntegerVector factorNoSort(const Rcpp::Vector<STRSXP>& x,
-                                 const Rcpp::Vector<STRSXP>& levels) {
-  Rcpp::IntegerVector out = match(x, levels);
-  out.attr("levels") = Rcpp::as<Rcpp::CharacterVector>(levels);
+IntegerVector factorNoSort(const Vector<STRSXP>& x,
+                           const Vector<STRSXP>& levels) {
+  IntegerVector out = match(x, levels);
+  out.attr("levels") = as<CharacterVector>(levels);
   out.attr("class") = "factor";
   return out;
 }
@@ -364,4 +371,60 @@ SEXP inFast(SEXP x, SEXP table) {
   case STRSXP: return inFastTemplate<STRSXP>(x, table);
   }
   return R_NilValue;
+}
+
+//' @title Split a factor into two based on desired levels
+//' @description Using C++ because I also want to quickly return the visits
+//'   corresponding to the NA or non-NA factor elements.
+//' @examples
+//'   icd:::factorSplit(factor(c("A", "B")), c("A"))
+//'   icd:::factorSplit(factor(c("A", "B")), c("A", "B"))
+//'   icd:::factorSplit(factor(c("A", "B")), c("B"))
+//'   icd:::factorSplit(factor(c("A", "B")), c("C"))
+//'   icd:::factorSplit(factor(c("A", "B")), c(NA_STRING_))
+//'   icd:::factorSplit(factor(c("A", "B")), character())
+//'   icd:::factorSplit(factor(c("A", "B")), c("C"))
+//' @keywords internal manip
+// [[Rcpp::export]]
+List factorSplit(IntegerVector x, CharacterVector levels) {
+  List out = List();
+  CharacterVector no_na_xlevels;
+  IntegerVector f(x.size());
+  CharacterVector lx = x.attr("levels");
+  if (lx.isNULL()) Rcpp::stop("x must be a factor");
+  bool any_na_xlevels = false;
+  for (auto l : lx) {
+    if (l == NA_STRING) {
+      any_na_xlevels = true;
+      break;
+    }
+    DEBUG("No NA level found in factor");
+  }
+  if (any_na_xlevels)
+    no_na_xlevels = lx[!Rcpp::is_na(lx)];
+  else
+    no_na_xlevels = lx;
+  DEBUG_VEC(lx);
+  DEBUG_VEC(levels);
+  //DEBUG("no_na_xlevels: " << no_na_xlevels[0] << ", " << no_na_xlevels[1]);
+  IntegerVector new_level_idx = Rcpp::match(no_na_xlevels, levels);
+  DEBUG_VEC(new_level_idx);
+  DEBUG_VEC(x);
+  //if (Rcpp::any(Rcpp::is_na(new_level_idx)))
+  //  Rcpp::stop("NA level found");
+#pragma omp parallel for schedule(static, 16384)
+  for (R_xlen_t i = 0; i != f.size(); ++i) {
+    auto cur = new_level_idx[i];
+    if (IntegerVector::is_na(cur))
+      f[i] = NA_INTEGER;
+    else
+      f[i] = new_level_idx[i] - 1; // R to C indexing
+  }
+  f = new_level_idx[x - 1];
+  LogicalVector inc_mask = !is_na(f);
+  f = f[inc_mask];
+  f.attr("levels") = levels;
+  f.attr("class") = "factor";
+  out = List::create(Named("factor") = f, Named("inc_mask") = inc_mask);
+  return out;
 }

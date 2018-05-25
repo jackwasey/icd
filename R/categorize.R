@@ -116,7 +116,7 @@ categorize <- function(x,
   # selecting only those comorbidities with at least one NOT comorbid hardly
   # helps, as many codes are not in maps
 
-  #TODO SLOW %fnin% about 25% quicker than base R equivalent (if working!)
+  #TODO SLOW %fnin% about 25% quicker than base R equivalent
   visit_not_comorbid <- unique(x[x[[visit_name]] %fnin% x_[[visit_name]], visit_name])
   map <- lapply(map, function(y) {
     f <- factor_fun(y, levels = relevant_codes)

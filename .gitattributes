@@ -3,10 +3,10 @@
 *.rtf	 diff=astextplain
 *.RTF	 diff=astextplain
 
-# git config diff.nodiff.command /usr/bin/true or /bin/true
-*RcppExports* diff=nodiff
-#*.Rd diff=nodiff
-# git config then has 'merge.theirs.driver true'
+## git config diff.nodiff.command /usr/bin/true or /bin/true
+# *RcppExports* diff=nodiff
+# *.Rd diff=nodiff
+## git config then has 'merge.theirs.driver true'
 # *RcppExports* merge=theirs
 # *.Rd merge=theirs
 
