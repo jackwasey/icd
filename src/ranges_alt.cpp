@@ -16,7 +16,6 @@
 // along with icd. If not, see <http://www.gnu.org/licenses/>.
 
 #include "icd_types.h"                  // for VecStr, CV, Str
-#include <Rcpp.h>
 #include <algorithm>                    // for set_intersection
 #include <iterator>                     // for insert_iterator, inserter
 #include <set>                          // for _Rb_tree_const_iterator, set

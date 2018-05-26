@@ -18,7 +18,6 @@
 #ifndef ATTR_H_
 #define ATTR_H_
 
-#include <Rcpp.h>  // for RObject - RCPP_API_CLASS unavailable if only specific parts included
 #include "icd_types.h"     // for CV
 
 void setDecimalDiag(Rcpp::RObject& x, bool value);

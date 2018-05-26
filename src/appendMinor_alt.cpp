@@ -17,7 +17,6 @@
 
 #include "icd_types.h"                       // for VecStr, CV, Str
 #include "appendMinor.h"
-#include <Rcpp.h>
 #include <string.h>                          // for strlen
 #include <algorithm>                         // for fill
 #include <iterator>                          // for distance

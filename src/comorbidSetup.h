@@ -23,7 +23,6 @@
 #include "icd_types.h"                        // for VecInt, VecVecInt, VecV...
 #include "local.h"                            // for VisLk
 #include "config.h"                            // for valgrind etc
-#include <Rcpp.h>
 #include <map>                                // for _Rb_tree_iterator
 #include <string>                             // for string, basic_string
 #include <utility>                            // for make_pair, pair

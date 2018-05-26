@@ -30,7 +30,7 @@ extern "C" {
 }
 
 // debugging:
-#define ICD_DEBUG
+// #define ICD_DEBUG
 // #define ICD_DEBUG_TRACE
 // #define ICD_DEBUG_SETUP
 // #define ICD_DEBUG_SETUP_SLOW
@@ -39,27 +39,33 @@ extern "C" {
 // #define ICD_VALGRIND
 
 #ifdef ICD_DEBUG
-#define DEBUG(x) do { std::cerr << x << std::endl; } while (0)
+#define DEBUG(x) do { Rcpp::Rcout << x << std::endl; } while (0)
 #else
-#define DEBUG(x) // no-op
+#define DEBUG(x) ((void)0)
+#endif
+
+#ifdef ICD_DEBUG_TRACE
+#define TRACE(x) do { Rcpp::Rcout << x << std::endl; } while (0)
+#else
+#define TRACE(x) ((void)0)
 #endif
 
 #ifdef ICD_DEBUG_VALGRIND
-#define DEBUG_VALGRIND(x) do { std::cerr << x << std::endl; } while (0)
+#define DEBUG_VALGRIND(x) do { Rcpp::Rcout << x << std::endl; } while (0)
 #else
-#define DEBUG_VALGRIND(x) // no-op
+#define DEBUG_VALGRIND(x) ((void)0)
 #endif
 
 #ifdef ICD_DEBUG_PARALLEL
-#define DEBUG_PARALLEL(x) do { std::cerr << x << std::endl; } while (0)
+#define DEBUG_PARALLEL(x) do { Rcpp::Rcout << x << std::endl; } while (0)
 #else
-#define DEBUG_PARALLEL(x) // no-op
+#define DEBUG_PARALLEL(x) ((void)0)
 #endif
 
 #ifdef ICD_DEBUG
-#define DEBUG_VEC(x) do { std::cerr << #x << ": "; printVec(x); } while (0);
+#define DEBUG_VEC(x) do { Rcpp::Rcout << #x << ": " << std::flush; printIt(x); } while (0);
 #else
-#define DEBUG_VEC(x) // no-op
+#define DEBUG_VEC(x) ((void)0)
 #endif
 
 // not enough to test whether header is available, because it may be disabled in
@@ -78,6 +84,9 @@ extern "C" {
 
 #define ICD_CATCH
 #ifndef HAVE_TESTTHAT_H
+#undef ICD_CATCH
+#endif
+#ifdef NDEBUG
 #undef ICD_CATCH
 #endif
 
@@ -104,37 +113,39 @@ typedef Eigen::MatrixXi DenseMap;
 // (no common parent class), without Boost
 template<typename VT>
 void printIt(std::vector<VT> v) {
-  typename std::vector<VT>::iterator i;
   std::ostringstream o;
-  for (i=v.begin(); i!=v.end(); ++i) {o << *i << " ";}
-  o << "\n";
+  for (auto i: v) o << i << " ";
+  o << std::endl;
+  Rcpp::Rcout << o.str();
+  Rcpp::Rcout.flush();
+}
+//overloads (no common STL container class)
+template <int VT>
+void printIt(Rcpp::Vector<VT> v) {
+  std::ostringstream o;
+  for (auto i: v) o << i << " ";
+  o << std::endl;
   Rcpp::Rcout << o.str();
   Rcpp::Rcout.flush();
 }
 
-//overload for set
 template<typename ST>
 void printIt(std::set<ST> v) {
-  typename std::set<ST>::iterator i;
   std::ostringstream o;
-  for (i=v.begin(); i!=v.end(); ++i) {o << *i << " ";}
-  o << "\n";
+  for (auto i: v) o << i << " ";
+  o << std::endl;
   Rcpp::Rcout << o.str();
   Rcpp::Rcout.flush();
 }
 
-//overload for map
 template<typename MK, typename MV>
 void printIt(std::map<MK,MV> v) {
-  typename std::vector<MK,MV>::iterator i;
   std::ostringstream o;
-  for (i=v.begin(); i!=v.end(); ++i) {o << *i << " ";}
-  o << "\n";
+  for (auto i: v) o << i << " ";
+  o << std::endl;
   Rcpp::Rcout << o.str();
   Rcpp::Rcout.flush();
 }
-
 #endif // end (defined ICD_DEBUG || defined ICD_DEBUG_SETUP)
-
 #endif // LOCAL_H_
 

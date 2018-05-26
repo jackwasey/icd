@@ -1968,21 +1968,23 @@ RcppExport SEXP _icd_inFast(SEXP xSEXP, SEXP tableSEXP) {
     return rcpp_result_gen;
 }
 // factorSplit
-List factorSplit(IntegerVector x, CharacterVector levels);
-static SEXP _icd_factorSplit_try(SEXP xSEXP, SEXP levelsSEXP) {
+List factorSplit(const List& df, const CharacterVector& relevant, const String& visit_name, const String& code_name);
+static SEXP _icd_factorSplit_try(SEXP dfSEXP, SEXP relevantSEXP, SEXP visit_nameSEXP, SEXP code_nameSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
-    Rcpp::traits::input_parameter< IntegerVector >::type x(xSEXP);
-    Rcpp::traits::input_parameter< CharacterVector >::type levels(levelsSEXP);
-    rcpp_result_gen = Rcpp::wrap(factorSplit(x, levels));
+    Rcpp::traits::input_parameter< const List& >::type df(dfSEXP);
+    Rcpp::traits::input_parameter< const CharacterVector& >::type relevant(relevantSEXP);
+    Rcpp::traits::input_parameter< const String& >::type visit_name(visit_nameSEXP);
+    Rcpp::traits::input_parameter< const String& >::type code_name(code_nameSEXP);
+    rcpp_result_gen = Rcpp::wrap(factorSplit(df, relevant, visit_name, code_name));
     return rcpp_result_gen;
 END_RCPP_RETURN_ERROR
 }
-RcppExport SEXP _icd_factorSplit(SEXP xSEXP, SEXP levelsSEXP) {
+RcppExport SEXP _icd_factorSplit(SEXP dfSEXP, SEXP relevantSEXP, SEXP visit_nameSEXP, SEXP code_nameSEXP) {
     SEXP rcpp_result_gen;
     {
         Rcpp::RNGScope rcpp_rngScope_gen;
-        rcpp_result_gen = PROTECT(_icd_factorSplit_try(xSEXP, levelsSEXP));
+        rcpp_result_gen = PROTECT(_icd_factorSplit_try(dfSEXP, relevantSEXP, visit_nameSEXP, code_nameSEXP));
     }
     Rboolean rcpp_isInterrupt_gen = Rf_inherits(rcpp_result_gen, "interrupted-error");
     if (rcpp_isInterrupt_gen) {
@@ -2060,7 +2062,7 @@ static int _icd_RcppExport_validate(const char* sig) {
         signatures.insert("IntegerVector(*factor_nosort_rcpp_worker)(const Vector<STRSXP>&,const Vector<STRSXP>&)");
         signatures.insert("SEXP(*match_rcpp)(SEXP,SEXP)");
         signatures.insert("SEXP(*fin)(SEXP,SEXP)");
-        signatures.insert("List(*factorSplit)(IntegerVector,CharacterVector)");
+        signatures.insert("List(*factor_split_rcpp)(const List&,const CharacterVector&,const String&,const String&)");
     }
     return signatures.find(sig) != signatures.end();
 }
@@ -2124,7 +2126,7 @@ RcppExport SEXP _icd_RcppExport_registerCCallable() {
     R_RegisterCCallable("icd", "_icd_factor_nosort_rcpp_worker", (DL_FUNC)_icd_factorNoSort_try);
     R_RegisterCCallable("icd", "_icd_match_rcpp", (DL_FUNC)_icd_matchFast_try);
     R_RegisterCCallable("icd", "_icd_fin", (DL_FUNC)_icd_inFast_try);
-    R_RegisterCCallable("icd", "_icd_factorSplit", (DL_FUNC)_icd_factorSplit_try);
+    R_RegisterCCallable("icd", "_icd_factor_split_rcpp", (DL_FUNC)_icd_factorSplit_try);
     R_RegisterCCallable("icd", "_icd_RcppExport_validate", (DL_FUNC)_icd_RcppExport_validate);
     return R_NilValue;
 }

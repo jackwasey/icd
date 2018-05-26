@@ -1,7 +1,6 @@
 #include "config.h"
 #include "icd_types.h"
 #include "local.h"
-#include <Rcpp.h>
 #include "is.h"
 #include "manip.h"
 #include "util.h"

@@ -18,8 +18,7 @@
 #ifndef CONVERT_H_
 #define CONVERT_H_
 
-#include <Rcpp.h>
-#include "icd_types.h"                  // for CV
+#include "icd_types.h"
 
 // need default argument here for other functions to exploit,
 // but this is then not exported by Rcpp (which works on the function body).

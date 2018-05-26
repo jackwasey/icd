@@ -35,17 +35,22 @@
 #' @param unique_ids Single logical value, if \code{TRUE} then the visit IDs in
 #'   column given by \code{visit_name} are assumed to be unique. Otherwise, the
 #'   default action is to ensure they are unique.
+#' @param preserve_visit_id_type Single logical value, if \code{TRUE}, the visit
+#'   ID column will be converted back to its original type. The default of
+#'   \code{FALSE} means only \code{factors} and \code{character} types are
+#'   restored in the returned data frame. For matrices, the row names are
+#'   necessarily stored as character vectors.
 #' @param comorbid_fun function i.e. the function symbol (not character string)
 #'   to be called to do the comorbidity calculation
 #' @param factor_fun function symbol to call to generate factors. Default is a
 #'   very simple \code{Rcpp} implementation \code{factor_nosort_rcpp}.
-#' @keywords internal
 #' @examples
 #' u <- uranium_pathology
 #' m <- icd10_map_ahrq
 #' u$icd10 <- decimal_to_short(u$icd10)
-#' j <- icd:::categorize(u, m, visit_name = "case", code_name = "icd10")
+#' j <- categorize(u, m, visit_name = "case", code_name = "icd10")
 #' @export
+#' @keywords internal
 categorize <- function(x,
                        map,
                        visit_name,
@@ -54,6 +59,7 @@ categorize <- function(x,
                        return_binary = FALSE,
                        restore_visit_order = TRUE,
                        unique_ids = FALSE,
+                       preserve_visit_id_type = FALSE,
                        comorbid_fun = comorbidMatMul,
                        factor_fun = factor_nosort_rcpp,
                        ...) {
@@ -68,6 +74,7 @@ categorize <- function(x,
   # need to convert to string and group these anyway, and much easier and
   # pretty quick to do it here than in C++
   visit_was_factor <- is.factor(x[[visit_name]])
+  visit_class <- class(x[[visit_name]])
   if (visit_was_factor)
     iv_levels <- levels(x[[visit_name]])
   if (nrow(x) == 0) {
@@ -87,37 +94,27 @@ categorize <- function(x,
   # unique.default re-factors the result, which takes a long time
   uniq_visits <- if (unique_ids)
     x[[visit_name]]
-  else if (is.factor(x[[visit_name]]))
-    unique(levels(x[[visit_name]])) # factor or vector
+  # else if (visit_was_factor)
+  #   unique(levels(x[[visit_name]])) # quicker, but in wrong order
   else
-    unique(x[[visit_name]]) # factor or vector
-  if (!is.character(x[[visit_name]])) # might be quick to keep as factor
-    x[[visit_name]] <- as_char_no_warn(x[[visit_name]])
+    unique(x[[visit_name]])
+
+  #if (!is.character(x[[visit_name]])) # might be quick to keep as factor or int!
+  #  x[[visit_name]] <- as_char_no_warn(x[[visit_name]])
+
   # start with a factor for the icd codes in x, recode (and drop superfluous)
   # icd codes in the mapping, then do very fast match on integer without need
   # for N, V or E distinction. Char to factor conversion in R is very fast.
   # Implicit unique in next step, which could be costly
-  relevant_codes <- if (is.factor(x[[code_name]]))
-    intersect(unlist(map, use.names = FALSE), levels(x[[code_name]]))
-  else
-    intersect(unlist(map, use.names = FALSE), x[[code_name]])
-  split_factor <- factor_split_na(x[[code_name]],
-                                  levels = relevant_codes,
-                                  factor_fun = factor_fun)
-  x_ <- x[split_factor$inc_mask, visit_name, drop = FALSE]
-  x_[[code_name]] <- split_factor$factor
-  # visit either has: no comorbid codes, mixed comorbid and not codes, or all
-  # comorbid codes. If no comorbid codes, we're fine as the visit row will be
-  # picked up as not in the split factor. Also fine for only comorbid. If mixed,
-  # we keep the visit in the comorbid calc, so don't need it at the end.
-  # visit_not_comorbid must therefore only have visit where the visit had no
-  # comorbidities at all.
-
-  # selecting only those comorbidities with at least one NOT comorbid hardly
-  # helps, as many codes are not in maps
-
-  #TODO SLOW %fnin% about 25% quicker than base R equivalent
-  visit_not_comorbid <- unique(x[x[[visit_name]] %fnin% x_[[visit_name]], visit_name])
+  if (!is.factor(x[[code_name]]))
+    x[[code_name]] <- factor_fun(x[[code_name]])
+  relevant_codes <- intersect(unlist(map, use.names = FALSE),
+                              levels(x[[code_name]]))
+  split_factor <- factor_split_rcpp(x, relevant = relevant_codes,
+                                    visit_name = visit_name,
+                                    code_name = code_name)
+  x_ <- split_factor$comorbid_df
+  visit_not_comorbid <- split_factor$unique_no_comorbid
   map <- lapply(map, function(y) {
     f <- factor_fun(y, levels = relevant_codes)
     f[!is.na(f)]
@@ -135,10 +132,13 @@ categorize <- function(x,
                              ncol = ncol(mat_comorbid),
                              dimnames = list(visit_not_comorbid))
   mat <- rbind(mat_comorbid, mat_not_comorbid)
-  # now put the visits back in original order (bearing in mind that they may not
-  # have started that way) # TODO SLOW
+  # now put the visits back in original order if requested, beacuse we put all
+  # matches before non-matches. If the visit column was a factor, we can't use
+  # uniq_visits because the factor levels are not necessarily in the same order
+  # as the first occurences of the visit ids. If uniq_visits was an int, we need
+  # to convert, too.
   if (restore_visit_order) {
-    mat_new_row_order <- match(rownames(mat), uniq_visits)
+    mat_new_row_order <- match(rownames(mat), as_char_no_warn(uniq_visits))
     mat <- mat[order(mat_new_row_order),, drop = FALSE] #nolint
   }
   if (return_binary) mat <- logical_to_binary(mat)
@@ -146,8 +146,13 @@ categorize <- function(x,
     return(mat)
   if (visit_was_factor)
     row_names <- factor_fun(x = rownames(mat), levels = iv_levels)
-  else
+  else if (preserve_visit_id_type) {
+    row_names <- switch(visit_class,
+                        "integer" = as.integer(rownames(mat)),
+                        "numeric" = as.numeric(rownames(mat)))
+  } else
     row_names <- rownames(mat)
+
   df_out <- cbind(row_names, as.data.frame(mat),
                   stringsAsFactors = visit_was_factor,
                   row.names = NULL)

@@ -16,15 +16,13 @@
 // along with icd. If not, see <http://www.gnu.org/licenses/>.
 
 // [[Rcpp::plugins(openmp)]]
-//#include "comorbid_alt.h"              // for lookupComorbid_alt_ByChunkForTaskloop
-#include "comorbidSetup.h"
-#include <Rcpp.h>
-#include <algorithm>                   // for binary_search, copy
-#include <vector>                      // for vector, vector<>::const_iterator
-#include "Rcpp/iostream/Rstreambuf.h"  // for Rcout
 #include "icd_types.h"                 // for ComorbidOut, VecVecInt, VecVec...
 #include "local.h"                     // for ICD_OPENMP
 #include "config.h"                     // for valgrind, CXX11 etc
+#include "comorbidSetup.h"
+#include <algorithm>                   // for binary_search, copy
+#include <vector>                      // for vector, vector<>::const_iterator
+#include "Rcpp/iostream/Rstreambuf.h"  // for Rcout
 #include "util.h"                     // for debug_parallel
 
 //' alternate comorbidity search

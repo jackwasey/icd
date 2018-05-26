@@ -16,7 +16,6 @@
 // along with icd. If not, see <http://www.gnu.org/licenses/>.
 
 #include "icd_types.h"                   // for CV, VecStr
-#include <Rcpp.h>
 #include <iterator>                      // for advance
 #include <vector>                        // for vector
 

@@ -3,7 +3,6 @@
 #include "config.h"                     // for valgrind, CXX11 etc
 #include "local.h"                     // for ICD_OPENMP
 #include "icd_types.h"                 // for ComorbidOut, VecVecInt, VecVec...
-#include <Rcpp.h>
 #include "comorbidCommon.h"
 #include "comorbidSetup.h"
 #include <algorithm>                   // for binary_search, copy

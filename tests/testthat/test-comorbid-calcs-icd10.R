@@ -19,15 +19,6 @@ context("ICD-10 comorbidity calculations")
 # since most of the code is common to ICD-9 and ICD-10, this doesn't need to be
 # very extensive.
 
-test_that("ICD-10 comorbidities from uranium", {
-  expect_warning(comorbid(uranium_pathology, icd10_map_quan_elix), regexp = NA)
-  expect_warning(comorbid(uranium_pathology, icd10_map_quan_deyo), regexp = NA)
-  expect_warning(comorbid(uranium_pathology, icd10_map_elix), regexp = NA)
-  expect_warning(comorbid(uranium_pathology, icd10_map_ahrq), regexp = NA)
-})
-
-context("icd10 comorbidity lookups")
-
 test_that("ahrq comorbidities found for test data", {
   # test_two are all invalid codes
   test_two <- icd10_all_ahrq_one_pt
@@ -47,7 +38,6 @@ test_that("ahrq comorbidities found for test data", {
                  regexp = NA, info = test_name)
     for (n in colnames(res))
       expect_true(res[, n], info = paste("method three comorbidity:", n, ", test: ", test_name))
-
   }
 })
 
@@ -154,4 +144,18 @@ test_that("comorbid for icd10 gives binary values if asked for data.frames", {
   expect_true(all(vapply(res_log[-1], is.logical, logical(1))))
   expect_identical(res_bin, logical_to_binary(res_log))
   expect_identical(res_log, binary_to_logical(res_bin))
+})
+
+test_that("NA icd10 code", {
+  d <- data.frame(visit = c("visit 1", "visit 1"), icd10 = c(NA, "G809"))
+  res <- icd10_comorbid_ahrq(d)
+  d <- data.frame(visit = c("visit 1", "visit 1"), icd10 = c(NA, "sillycode"))
+  res <- icd10_comorbid_ahrq(d)
+})
+
+test_that("ICD-10 comorbidities from uranium", {
+  comorbid(uranium_pathology, icd10_map_quan_elix)
+  comorbid(uranium_pathology, icd10_map_quan_deyo)
+  comorbid(uranium_pathology, icd10_map_elix)
+  comorbid(uranium_pathology, icd10_map_ahrq)
 })

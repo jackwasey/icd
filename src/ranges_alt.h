@@ -19,8 +19,6 @@
 #define RANGES_ALT_H_
 
 #include "icd_types.h"
-#include <Rcpp.h>
-
 #include "range-const.h"
 #include <stddef.h> // for size_t
 

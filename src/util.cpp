@@ -16,6 +16,7 @@
 // along with icd. If not, see <http://www.gnu.org/licenses/>.
 
 // [[Rcpp::interfaces(r, cpp)]]
+// [[Rcpp::plugins(openmp)]]
 #include "local.h"                             // for ICD_OPENMP
 #include "config.h"                             // for ICD_VALGRIND
 #include "util.h"
@@ -75,25 +76,6 @@ VecStr trimCpp(VecStr sv) {
     *i = strimCpp(*i);
   return sv;
 }
-
-#ifdef ICD_DEBUG
-void printCharVec(CV cv) {
-  for (CV::iterator i=cv.begin(); i!=cv.end(); ++i) {
-    String s = *i;
-    Rcout << s.get_cstring() << " ";
-  }
-  Rcout << std::endl;
-  return;
-}
-
-template <int RTYPE>
-void printVec(Vector<RTYPE> v) {
-  for (auto i: v) {
-    Rcout << i << " ";
-  }
-  Rcout << std::endl;
-}
-#endif
 
 // [[Rcpp::export(get_omp_cores)]]
 int getOmpCores() {
@@ -377,54 +359,87 @@ SEXP inFast(SEXP x, SEXP table) {
 //' @description Using C++ because I also want to quickly return the visits
 //'   corresponding to the NA or non-NA factor elements.
 //' @examples
-//'   icd:::factorSplit(factor(c("A", "B")), c("A"))
-//'   icd:::factorSplit(factor(c("A", "B")), c("A", "B"))
-//'   icd:::factorSplit(factor(c("A", "B")), c("B"))
-//'   icd:::factorSplit(factor(c("A", "B")), c("C"))
-//'   icd:::factorSplit(factor(c("A", "B")), c(NA_STRING_))
-//'   icd:::factorSplit(factor(c("A", "B")), character())
-//'   icd:::factorSplit(factor(c("A", "B")), c("C"))
+//'   v <- c("X", "Y")
+//'   df <- data.frame(visit_id = factor(c("visit1", "visit2", "visit1")),
+//'                    icd_code = factor(c("410", "0010", "E999")))
+//'   icd:::factor_split_rcpp(df, "410", "visit_id", "icd_code")
 //' @keywords internal manip
-// [[Rcpp::export]]
-List factorSplit(IntegerVector x, CharacterVector levels) {
+// [[Rcpp::export(factor_split_rcpp)]]
+List factorSplit(const List &df,
+                 const CharacterVector &relevant,
+                 const String &visit_name,
+                 const String &code_name) {
   List out = List();
-  CharacterVector no_na_xlevels;
-  IntegerVector f(x.size());
+  // need to template over this for character or integer/factor?
+  const CharacterVector visits = df[visit_name];
+  const IntegerVector &x = df[code_name];
+  VecStr no_na_lx_std;
+  VecInt f_std;
+  f_std.reserve(x.size());
+  LogicalVector inc_mask(x.size());
   CharacterVector lx = x.attr("levels");
-  if (lx.isNULL()) Rcpp::stop("x must be a factor");
-  bool any_na_xlevels = false;
-  for (auto l : lx) {
-    if (l == NA_STRING) {
-      any_na_xlevels = true;
-      break;
-    }
-    DEBUG("No NA level found in factor");
-  }
-  if (any_na_xlevels)
-    no_na_xlevels = lx[!Rcpp::is_na(lx)];
-  else
-    no_na_xlevels = lx;
-  DEBUG_VEC(lx);
-  DEBUG_VEC(levels);
-  //DEBUG("no_na_xlevels: " << no_na_xlevels[0] << ", " << no_na_xlevels[1]);
-  IntegerVector new_level_idx = Rcpp::match(no_na_xlevels, levels);
-  DEBUG_VEC(new_level_idx);
+  no_na_lx_std.reserve(lx.size());
   DEBUG_VEC(x);
-  //if (Rcpp::any(Rcpp::is_na(new_level_idx)))
-  //  Rcpp::stop("NA level found");
-#pragma omp parallel for schedule(static, 16384)
-  for (R_xlen_t i = 0; i != f.size(); ++i) {
-    auto cur = new_level_idx[i];
-    if (IntegerVector::is_na(cur))
-      f[i] = NA_INTEGER;
-    else
-      f[i] = new_level_idx[i] - 1; // R to C indexing
+  DEBUG_VEC(lx);
+  if (lx.isNULL()) Rcpp::stop("icd codes must be in a factor");
+  for (auto l : lx) {
+    if (l == NA_STRING) { // can't use is_na on a String
+      DEBUG("Found NA in factor level");
+      continue;
+    }
+    no_na_lx_std.push_back(as<std::string>(l));
   }
-  f = new_level_idx[x - 1];
-  LogicalVector inc_mask = !is_na(f);
-  f = f[inc_mask];
-  f.attr("levels") = levels;
+  DEBUG_VEC(no_na_lx_std);
+  CV no_na_lx = Rcpp::wrap(no_na_lx_std);
+  DEBUG_VEC(no_na_lx);
+  DEBUG_VEC(relevant);
+  IntegerVector new_level_idx = Rcpp::match(no_na_lx, relevant);
+  DEBUG_VEC(new_level_idx);
+  R_xlen_t fsz = x.size();
+  DEBUG("fsz = " << fsz);
+//#pragma omp parallel for
+  for (R_xlen_t i = 0; i < fsz; ++i) {
+    TRACE("considering index x[i] - 1: " << x[i] - 1 << " from new_level_idx");
+    if (IntegerVector::is_na(x[i])) {
+      inc_mask[i] = false;
+      TRACE("inserting NA at pos " << i << "due to NA factor level in codes");
+      continue;
+    }
+    auto cur = new_level_idx[x[i] - 1]; // get new index from old using lookup.
+    if (IntegerVector::is_na(cur)) {
+      inc_mask[i] = false;
+      TRACE("inserting NA at pos " << i);
+    } else {
+      inc_mask[i] = true;
+      f_std.push_back(cur);
+      TRACE("inserting " << cur << " at pos " << i);
+      assert(cur > 0);
+    }
+  }
+  DEBUG_VEC(x);
+  DEBUG_VEC(f_std);
+  IntegerVector f = Rcpp::wrap(f_std);
+  f.attr("levels") = relevant;
   f.attr("class") = "factor";
-  out = List::create(Named("factor") = f, Named("inc_mask") = inc_mask);
+  CharacterVector all_visits_comorbid = visits[inc_mask];
+  CharacterVector all_visits_no_comorbid =
+    visits[is_na(match(visits, all_visits_comorbid))];
+  assert((all(f > 0)).is_true()); // Rcpp::stop("index errors in code name");
+  assert(max(f) < f.size() + 1); // if relevant was correct, this should be =
+  //assert(max(f) == f.size() + 1);
+  List comorbid_df = List::create(Named(visit_name) = all_visits_comorbid,
+                                  Named(code_name) = f);
+  Rcpp::CharacterVector rownames(f.size());
+  char buffer[32];
+  for (R_xlen_t i = 0; i != f.size(); ++i) {
+    sprintf(buffer, "%lu", i);
+    rownames(i) = buffer;
+  }
+  comorbid_df.attr("row.names") = rownames;
+  comorbid_df.attr("names") = CharacterVector::create(visit_name, code_name);
+  comorbid_df.attr("class") = "data.frame";
+  out = List::create(
+    Named("comorbid_df") = comorbid_df,
+    Named("unique_no_comorbid") = unique(all_visits_no_comorbid));
   return out;
 }

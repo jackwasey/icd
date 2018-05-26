@@ -1,7 +1,7 @@
 #ifndef FASTINTTOSTRING_H_
 #define FASTINTTOSTRING_H_
 
-#include <Rcpp.h>
+#include "icd_types.h"
 Rcpp::CharacterVector fastIntToStringRcpp(Rcpp::IntegerVector x);
 
 #endif /* FASTINTTOSTRING_H_ */

@@ -1,4 +1,4 @@
-#include <Rcpp.h>
+#include <icd_types.h>
 #include <stdio.h>                      // for sprintf, size_t
 #include <string>                       // for string, basic_string
 #include <vector>                       // for vector, vector<>::size_type
@@ -14,7 +14,7 @@
 Rcpp::CharacterVector fastIntToStringRcpp(Rcpp::IntegerVector x) {
   size_t len = x.size();
   Rcpp::CharacterVector out(len);
-  char buffer[64];
+  char buffer[32];
   for (size_t i = 0; i != len; ++i) {
     sprintf(buffer, "%u", x[i]);
     out[i] = buffer;

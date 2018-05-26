@@ -18,14 +18,13 @@
 // [[Rcpp::interfaces(r, cpp)]]
 // [[Rcpp::plugins(openmp)]]
 
-#include <Rcpp.h>
+#include "icd_types.h"                          // for VecVecInt, ComorbidOut
+#include "local.h"                              // for buildMap, buildVisitC...
+#include "config.h"                              // for buildMap, buildVisitC...
 #include <string>                               // for string
 #include <vector>                               // for vector, operator-
 #include <iterator>
 #include <algorithm>
-#include "icd_types.h"                          // for VecVecInt, ComorbidOut
-#include "local.h"                              // for buildMap, buildVisitC...
-#include "config.h"                              // for buildMap, buildVisitC...
 #include "util.h" // for valgrind helper and openmp helper functions
 #include "comorbidCommon.h"
 #include "comorbidSetup.h"

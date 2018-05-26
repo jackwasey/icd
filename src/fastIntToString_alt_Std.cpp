@@ -1,4 +1,4 @@
-#include <Rcpp.h>
+#include "icd_types.h"
 
 //' @rdname fastIntToStringRcpp
 //' @param bufferSize int if any input strings are longer than this number

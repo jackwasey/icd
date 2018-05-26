@@ -509,16 +509,13 @@ fin <- function(x, table) {
 #' @description Using C++ because I also want to quickly return the visits
 #'   corresponding to the NA or non-NA factor elements.
 #' @examples
-#'   icd:::factorSplit(factor(c("A", "B")), c("A"))
-#'   icd:::factorSplit(factor(c("A", "B")), c("A", "B"))
-#'   icd:::factorSplit(factor(c("A", "B")), c("B"))
-#'   icd:::factorSplit(factor(c("A", "B")), c("C"))
-#'   icd:::factorSplit(factor(c("A", "B")), c(NA_STRING_))
-#'   icd:::factorSplit(factor(c("A", "B")), character())
-#'   icd:::factorSplit(factor(c("A", "B")), c("C"))
+#'   v <- c("X", "Y")
+#'   df <- data.frame(visit_id = factor(c("visit1", "visit2", "visit1")),
+#'                    icd_code = factor(c("410", "0010", "E999")))
+#'   icd:::factor_split_rcpp(df, "410", "visit_id", "icd_code")
 #' @keywords internal manip
-factorSplit <- function(x, levels) {
-    .Call(`_icd_factorSplit`, x, levels)
+factor_split_rcpp <- function(df, relevant, visit_name, code_name) {
+    .Call(`_icd_factorSplit`, df, relevant, visit_name, code_name)
 }
 
 # Register entry points for exported C++ functions

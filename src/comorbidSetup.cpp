@@ -19,7 +19,6 @@
 #include "config.h"                            // for valgrind etc
 #include "local.h"                            // for VisLk
 #include "icd_types.h"                        // for VecInt, VecVecInt, VecV...
-#include <Rcpp.h>
 #include <algorithm>
 #include <map>                                // for _Rb_tree_iterator
 #include <string>                             // for string, basic_string

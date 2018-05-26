@@ -16,13 +16,12 @@
 // along with icd. If not, see <http://www.gnu.org/licenses/>.
 
 // [[Rcpp::interfaces(r, cpp)]]
-#include <Rcpp.h>
+#include "icd_types.h"                       // for VecStr, CV, Str
 #include <string.h>                          // for strlen
 #include <algorithm>                         // for fill
 #include <iterator>                          // for distance
 #include <string>                            // for basic_string, operator!=
 #include <vector>                            // for vector, vector<>::iterator
-#include "icd_types.h"                       // for VecStr, CV, Str
 #include "is.h"                              // for icd9IsASingleVE
 
 //' Convert \code{mjr} and \code{mnr} vectors to single code

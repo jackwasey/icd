@@ -25,7 +25,6 @@
 #include <string>                       // for string
 #include <utility>                      // for pair
 #include <vector>                       // for vector
-#include <Rcpp.h> // IWYU pragma: keep
 
 #ifdef ICD_OPENMP
 #include <omp.h>

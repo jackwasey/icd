@@ -19,7 +19,6 @@
 #define APPENDMINOR_ALT_H_
 
 #include "icd_types.h"
-#include <Rcpp.h>
 VecStr icd9MajMinToShort_alt_Std(const VecStr& mjr, const VecStr& mnr);
 VecStr icd9MajMinToShortSingle_alt_Std(const Str& mjr, const VecStr& mnr);
 

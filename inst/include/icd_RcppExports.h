@@ -1103,17 +1103,17 @@ namespace icd {
         return Rcpp::as<SEXP >(rcpp_result_gen);
     }
 
-    inline List factorSplit(IntegerVector x, CharacterVector levels) {
-        typedef SEXP(*Ptr_factorSplit)(SEXP,SEXP);
-        static Ptr_factorSplit p_factorSplit = NULL;
-        if (p_factorSplit == NULL) {
-            validateSignature("List(*factorSplit)(IntegerVector,CharacterVector)");
-            p_factorSplit = (Ptr_factorSplit)R_GetCCallable("icd", "_icd_factorSplit");
+    inline List factor_split_rcpp(const List& df, const CharacterVector& relevant, const String& visit_name, const String& code_name) {
+        typedef SEXP(*Ptr_factor_split_rcpp)(SEXP,SEXP,SEXP,SEXP);
+        static Ptr_factor_split_rcpp p_factor_split_rcpp = NULL;
+        if (p_factor_split_rcpp == NULL) {
+            validateSignature("List(*factor_split_rcpp)(const List&,const CharacterVector&,const String&,const String&)");
+            p_factor_split_rcpp = (Ptr_factor_split_rcpp)R_GetCCallable("icd", "_icd_factor_split_rcpp");
         }
         RObject rcpp_result_gen;
         {
             RNGScope RCPP_rngScope_gen;
-            rcpp_result_gen = p_factorSplit(Shield<SEXP>(Rcpp::wrap(x)), Shield<SEXP>(Rcpp::wrap(levels)));
+            rcpp_result_gen = p_factor_split_rcpp(Shield<SEXP>(Rcpp::wrap(df)), Shield<SEXP>(Rcpp::wrap(relevant)), Shield<SEXP>(Rcpp::wrap(visit_name)), Shield<SEXP>(Rcpp::wrap(code_name)));
         }
         if (rcpp_result_gen.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();

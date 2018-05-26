@@ -144,7 +144,7 @@ Rcpp::List simplifyMapLexicographic(const CV pt_codes, const Rcpp::List map) {
 // cannot break or goto in openmp loops #pragma omp parallel for private(searchLen, pos, cmb_len)
     for (R_xlen_t j = 0; j < map.size(); ++j) {
       const CV &cmbCodes = map[j];
-      for (size_t k = 0; k != cmbCodes.length(); ++k) {
+      for (R_xlen_t k = 0; k != cmbCodes.length(); ++k) {
         cmb_len = cmbCodes[k].size();
         if (cmb_len > codeLen)
           continue; // if map code is longer than the patient's code, it'll never match

@@ -10,14 +10,7 @@ test_that("github #133 doesn't crash R", {
   y <- x[x$CLAIMNO %in% c("8534028", "8534030") & !is.na(x$icd10), ]
   res1 <- icd10_comorbid_ahrq(y, visit_name = "CLAIMNO", icd_name = "icd10")
   expect_identical(rownames(res1), c("8534028", "8534030"))
-
-  res <- icd10_comorbid(x,
-                        icd10_map_ahrq,
-                        visit_name = "CLAIMNO",
-                        icd_name = "icd10",
-                        aggregate = FALSE)
-
-
+  res <- icd10_comorbid(x, icd10_map_ahrq, visit_name = "CLAIMNO")
   expect_equal(dim(res), c(20, 30))
   expect_equal(
     rownames(res),
