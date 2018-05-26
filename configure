@@ -659,6 +659,7 @@ infodir
 docdir
 oldincludedir
 includedir
+runstatedir
 localstatedir
 sharedstatedir
 sysconfdir
@@ -734,6 +735,7 @@ datadir='${datarootdir}'
 sysconfdir='${prefix}/etc'
 sharedstatedir='${prefix}/com'
 localstatedir='${prefix}/var'
+runstatedir='${localstatedir}/run'
 includedir='${prefix}/include'
 oldincludedir='/usr/include'
 docdir='${datarootdir}/doc/${PACKAGE}'
@@ -986,6 +988,15 @@ do
   | -silent | --silent | --silen | --sile | --sil)
     silent=yes ;;
 
+  -runstatedir | --runstatedir | --runstatedi | --runstated \
+  | --runstate | --runstat | --runsta | --runst | --runs \
+  | --run | --ru | --r)
+    ac_prev=runstatedir ;;
+  -runstatedir=* | --runstatedir=* | --runstatedi=* | --runstated=* \
+  | --runstate=* | --runstat=* | --runsta=* | --runst=* | --runs=* \
+  | --run=* | --ru=* | --r=*)
+    runstatedir=$ac_optarg ;;
+
   -sbindir | --sbindir | --sbindi | --sbind | --sbin | --sbi | --sb)
     ac_prev=sbindir ;;
   -sbindir=* | --sbindir=* | --sbindi=* | --sbind=* | --sbin=* \
@@ -1123,7 +1134,7 @@ fi
 for ac_var in	exec_prefix prefix bindir sbindir libexecdir datarootdir \
 		datadir sysconfdir sharedstatedir localstatedir includedir \
 		oldincludedir docdir infodir htmldir dvidir pdfdir psdir \
-		libdir localedir mandir
+		libdir localedir mandir runstatedir
 do
   eval ac_val=\$$ac_var
   # Remove trailing slashes.
@@ -1276,6 +1287,7 @@ Fine tuning of the installation directories:
   --sysconfdir=DIR        read-only single-machine data [PREFIX/etc]
   --sharedstatedir=DIR    modifiable architecture-independent data [PREFIX/com]
   --localstatedir=DIR     modifiable single-machine data [PREFIX/var]
+  --runstatedir=DIR       modifiable per-process data [LOCALSTATEDIR/run]
   --libdir=DIR            object code libraries [EPREFIX/lib]
   --includedir=DIR        C header files [PREFIX/include]
   --oldincludedir=DIR     C header files for non-gcc [/usr/include]
@@ -4432,7 +4444,7 @@ if ac_fn_c_try_link "$LINENO"; then :
   ac_cv_prog_c_openmp='none needed'
 else
   ac_cv_prog_c_openmp='unsupported'
-	  	  	  	  	            	  	            	  	  	  	                                	  	  	  	  	  	  	  for ac_option in -xopenmp -fopenmp -qopenmp \
+	  	  	  	  	            	  	            	  	  	  	                                	  	  	  	  	  	  	  	  for ac_option in -xopenmp -fopenmp -qopenmp \
                            -openmp -mp -omp -qsmp=omp -homp \
 			   -fopenmp=libomp \
                            -Popenmp --openmp; do
@@ -4689,30 +4701,8 @@ echo "Rcpp include dir is $RCPP_INCLUDE_DIR"
 echo "RcppEigen include dir is $RCPPEIGEN_INCLUDE_DIR"
 
 CPPFLAGS="$CPPFLAGS -I$R_INCLUDE_DIR -I$TESTTHAT_INCLUDE_DIR -I$RCPPEIGEN_INCLUDE_DIR -I$RCPP_INCLUDE_DIR"
-for ac_header in testthat.h
-do :
-  ac_fn_cxx_check_header_mongrel "$LINENO" "testthat.h" "ac_cv_header_testthat_h" "$ac_includes_default"
-if test "x$ac_cv_header_testthat_h" = xyes; then :
-  cat >>confdefs.h <<_ACEOF
-#define HAVE_TESTTHAT_H 1
-_ACEOF
-
-fi
-
-done
-
-for ac_header in RcppEigen.h
-do :
-  ac_fn_cxx_check_header_mongrel "$LINENO" "RcppEigen.h" "ac_cv_header_RcppEigen_h" "$ac_includes_default"
-if test "x$ac_cv_header_RcppEigen_h" = xyes; then :
-  cat >>confdefs.h <<_ACEOF
-#define HAVE_RCPPEIGEN_H 1
-_ACEOF
-
-fi
-
-done
-
+#AC_CHECK_HEADERS([testthat.h])
+#AC_CHECK_HEADERS([RcppEigen.h])
 
 #NO_CLANG_PRAGMA_WARNING=''
 #if test "x$ac_cv_header_RcppEigen_h" = xyes; then :

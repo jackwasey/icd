@@ -19,7 +19,7 @@
 #define LOCAL_H_
 
 #include "config.h"
-#include "icd_types.h"                        // for VecInt, VecVecInt, VecV...
+#include "icd_types.h"
 #include <set>
 #include <unordered_map>
 #include <unordered_set>
@@ -30,7 +30,7 @@ extern "C" {
 }
 
 // debugging:
-// #define ICD_DEBUG
+#define ICD_DEBUG
 // #define ICD_DEBUG_TRACE
 // #define ICD_DEBUG_SETUP
 // #define ICD_DEBUG_SETUP_SLOW
@@ -39,25 +39,25 @@ extern "C" {
 // #define ICD_VALGRIND
 
 #ifdef ICD_DEBUG
-#define DEBUG(x) do { Rcpp::Rcout << x << std::endl; } while (0)
+#define DEBUG(x) do { Rcpp::Rcout << #x << ": " << x << std::endl; } while (0)
 #else
 #define DEBUG(x) ((void)0)
 #endif
 
 #ifdef ICD_DEBUG_TRACE
-#define TRACE(x) do { Rcpp::Rcout << x << std::endl; } while (0)
+#define TRACE(x) do { Rcpp::Rcout << #x << ": " << x << std::endl; } while (0)
 #else
 #define TRACE(x) ((void)0)
 #endif
 
 #ifdef ICD_DEBUG_VALGRIND
-#define DEBUG_VALGRIND(x) do { Rcpp::Rcout << x << std::endl; } while (0)
+#define DEBUG_VALGRIND(x) do { Rcpp::Rcout << #x << ": " << x << std::endl; } while (0)
 #else
 #define DEBUG_VALGRIND(x) ((void)0)
 #endif
 
 #ifdef ICD_DEBUG_PARALLEL
-#define DEBUG_PARALLEL(x) do { Rcpp::Rcout << x << std::endl; } while (0)
+#define DEBUG_PARALLEL(x) do { Rcpp::Rcout << #x << ": " << x << std::endl; } while (0)
 #else
 #define DEBUG_PARALLEL(x) ((void)0)
 #endif
@@ -78,14 +78,9 @@ extern "C" {
 #endif
 
 #define ICD_EIGEN
-#ifndef HAVE_RCPPEIGEN_H
-#undef ICD_EIGEN
-#endif
-
+//#ifndef HAVE_RCPPEIGEN_H
 #define ICD_CATCH
-#ifndef HAVE_TESTTHAT_H
-#undef ICD_CATCH
-#endif
+// #ifndef HAVE_TESTTHAT_H
 #ifdef NDEBUG
 #undef ICD_CATCH
 #endif

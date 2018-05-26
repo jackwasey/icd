@@ -376,7 +376,7 @@ List factorSplit(const List &df,
   VecStr no_na_lx_std;
   VecInt f_std;
   f_std.reserve(x.size());
-  LogicalVector inc_mask(x.size());
+  LogicalVector inc_mask(x.size(), false);
   CharacterVector lx = x.attr("levels");
   no_na_lx_std.reserve(lx.size());
   DEBUG_VEC(x);
@@ -401,19 +401,17 @@ List factorSplit(const List &df,
   for (R_xlen_t i = 0; i < fsz; ++i) {
     TRACE("considering index x[i] - 1: " << x[i] - 1 << " from new_level_idx");
     if (IntegerVector::is_na(x[i])) {
-      inc_mask[i] = false;
-      TRACE("inserting NA at pos " << i << "due to NA factor level in codes");
+      TRACE("leaving NA at pos " << i << "due to NA factor level in codes");
       continue;
     }
     auto cur = new_level_idx[x[i] - 1]; // get new index from old using lookup.
     if (IntegerVector::is_na(cur)) {
-      inc_mask[i] = false;
-      TRACE("inserting NA at pos " << i);
+      TRACE("leaving NA at pos " << i);
     } else {
-      inc_mask[i] = true;
-      f_std.push_back(cur);
       TRACE("inserting " << cur << " at pos " << i);
+      inc_mask[i] = true;
       assert(cur > 0);
+      f_std.push_back(cur);
     }
   }
   DEBUG_VEC(x);
@@ -425,8 +423,9 @@ List factorSplit(const List &df,
   CharacterVector all_visits_no_comorbid =
     visits[is_na(match(visits, all_visits_comorbid))];
   assert((all(f > 0)).is_true()); // Rcpp::stop("index errors in code name");
+  DEBUG(max(f));
+  DEBUG(f.size());
   assert(max(f) < f.size() + 1); // if relevant was correct, this should be =
-  //assert(max(f) == f.size() + 1);
   List comorbid_df = List::create(Named(visit_name) = all_visits_comorbid,
                                   Named(code_name) = f);
   Rcpp::CharacterVector rownames(f.size());

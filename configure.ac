@@ -98,8 +98,8 @@ echo "Rcpp include dir is $RCPP_INCLUDE_DIR"
 echo "RcppEigen include dir is $RCPPEIGEN_INCLUDE_DIR"
 
 CPPFLAGS="$CPPFLAGS -I$R_INCLUDE_DIR -I$TESTTHAT_INCLUDE_DIR -I$RCPPEIGEN_INCLUDE_DIR -I$RCPP_INCLUDE_DIR"
-AC_CHECK_HEADERS([testthat.h])
-AC_CHECK_HEADERS([RcppEigen.h])
+#AC_CHECK_HEADERS([testthat.h])
+#AC_CHECK_HEADERS([RcppEigen.h])
 
 #NO_CLANG_PRAGMA_WARNING=''
 #if test "x$ac_cv_header_RcppEigen_h" = xyes; then :
