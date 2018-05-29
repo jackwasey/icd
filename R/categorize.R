@@ -160,7 +160,7 @@ categorize_simple <- function(x, map, visit_name, code_name,
                        restore_visit_order = TRUE,
                        unique_ids = FALSE,
                        preserve_visit_id_type = FALSE,
-                       comorbid_fun = comorbidMatMulMore,
+                       comorbid_fun = comorbidMatMulSimple,
                        ...) {
   assert_data_frame(x, min.cols = 2, col.names = "unique")
   class(x) <- "data.frame"

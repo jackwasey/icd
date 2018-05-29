@@ -206,7 +206,7 @@ icd9_comorbid <- function(x, map, visit_name = NULL, icd_name = NULL,
                           preclean = TRUE,
                           visitId = NULL, icd9Field = NULL, #nolint
                           categorize_fun = categorize_simple,
-                          comorbid_fun = comorbidMatMulMore,
+                          comorbid_fun = comorbidMatMulSimple,
                           ...) {
   if (!missing(visitId)) { #nolint
     warning("Use visit_name instead of visit_id.")

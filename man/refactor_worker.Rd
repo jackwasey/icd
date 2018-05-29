@@ -4,7 +4,7 @@
 \alias{refactor_worker}
 \title{Re-generate a factor with new levels, without doing string matching}
 \usage{
-refactor_worker(x, levels)
+refactor_worker(x, new_levels, na_rm, exclude_na)
 }
 \keyword{internal}
 \keyword{manip}

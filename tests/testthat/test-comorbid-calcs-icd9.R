@@ -455,6 +455,7 @@ test_that("float visit IDs", {
 
 test_that("matmul vs matmulmore", {
   expect_identical(
-  icd9_comorbid_elix(simple_poa_pts, categorize_fun = categorize, comorbid_fun = comorbidMatMul),
-  icd9_comorbid_elix(simple_poa_pts, categorize_fun = categorize_simple, comorbid_fun = comorbidMatMulMore)
+    icd9_comorbid_elix(simple_poa_pts, categorize_fun = categorize, comorbid_fun = comorbidMatMul),
+    icd9_comorbid_elix(simple_poa_pts, categorize_fun = categorize_simple, comorbid_fun = comorbidMatMulSimple)
+  )
 })

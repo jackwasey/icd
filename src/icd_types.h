@@ -55,4 +55,6 @@ typedef Eigen::MatrixXi DenseMap; // col major unless otherwise stated, I think
 
 typedef std::pair<std::string, VecInt::size_type> VisLkPair;
 
+typedef Rcpp::sugar::IndexHash<STRSXP> IHS;
+
 #endif /* ICD_TYPES_H_ */

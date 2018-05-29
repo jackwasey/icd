@@ -322,38 +322,41 @@ IntegerVector factorNoSort(const CharacterVector& x,
   return(out[!is_na(out)]);
 }
 
+// TODO someday: can the following be done using the R_StringHash global cache
+// instead of making a new hash table to do the integer matching?
+
 //' @title Re-generate a factor with new levels, without doing string matching
 //' @keywords internal manip
 // [[Rcpp::export(refactor_worker)]]
 Rcpp::IntegerVector refactor(const IntegerVector x, const CV new_levels,
-                             bool na_rm = false, bool exclude_na = true) {
+                             bool na_rm, bool exclude_na) {
   IntegerVector f(x.size());
   CharacterVector lx = x.attr("levels");
-  DEBUG_VEC(x);
-  DEBUG_VEC(lx);
+  DEBUG_UTIL_VEC(x);
+  DEBUG_UTIL_VEC(lx);
   if (lx.isNULL()) Rcpp::stop("icd codes must be in a factor");
   CV no_na_lx;
   CV no_na_new_levels;
   LogicalVector which_na_new_levels = is_na(new_levels); // may be redundant
   if (na_rm || exclude_na) {
-    DEBUG("Found NA in input factor levels: dropping");
+    DEBUG_UTIL("Found NA in input factor levels: dropping");
     no_na_lx = lx[!is_na(lx)];
   } else {
     no_na_lx = lx;
   }
 
   if (na_rm || exclude_na) {
-    DEBUG("Found NA in input levels: requested to drop");
+    DEBUG_UTIL("Found NA in input levels: requested to drop");
     no_na_new_levels = new_levels[!which_na_new_levels];
   } else {
     no_na_new_levels = new_levels;
   }
-  DEBUG_VEC(no_na_lx);
-  DEBUG_VEC(no_na_new_levels);
+  DEBUG_UTIL_VEC(no_na_lx);
+  DEBUG_UTIL_VEC(no_na_new_levels);
   IntegerVector new_level_old_idx = Rcpp::match(no_na_lx, no_na_new_levels);
-  DEBUG_VEC(new_level_old_idx);
+  DEBUG_UTIL_VEC(new_level_old_idx);
   R_xlen_t fsz = x.size();
-  DEBUG("fsz = " << fsz);
+  DEBUG_UTIL("fsz = " << fsz);
   LogicalVector matched_na_level(fsz, false);
 #pragma omp parallel for
   for (R_xlen_t i = 0; i < fsz; ++i) {
@@ -380,8 +383,8 @@ Rcpp::IntegerVector refactor(const IntegerVector x, const CV new_levels,
       f[i] = cur;
     }
   }
-  DEBUG_VEC(f);
-  DEBUG_VEC(matched_na_level);
+  DEBUG_UTIL_VEC(f);
+  DEBUG_UTIL_VEC(matched_na_level);
   if (na_rm)
     f = f[!matched_na_level];
   else {
@@ -389,28 +392,28 @@ Rcpp::IntegerVector refactor(const IntegerVector x, const CV new_levels,
     // the NAs in the integer vector to the NA level. Base factor will keep NA
     // values when there was no match, but index the NA level if it exists.
     if (!exclude_na) {
-      DEBUG("fixing NA values when there are NA levels");
-      DEBUG_VEC(which_na_new_levels);
+      DEBUG_UTIL("fixing NA values when there are NA levels");
+      DEBUG_UTIL_VEC(which_na_new_levels);
       R_xlen_t n = 0;
       while (n < which_na_new_levels.size()) {
         if (which_na_new_levels[n]) break;
         ++n;
       }
-      DEBUG("n = " << n);
+      DEBUG_UTIL("n = " << n);
       if (n != which_na_new_levels.size()) {
-        DEBUG("NA level found");
+        DEBUG_UTIL("NA level found");
         f[is_na(x)] = (int)n + 1; // R index from C match. ?matched_na_level
       }
       else
-        DEBUG("No NA level found");
+        DEBUG_UTIL("No NA level found");
     }
   }
-  DEBUG_VEC(x);
-  DEBUG_VEC(f);
+  DEBUG_UTIL_VEC(x);
+  DEBUG_UTIL_VEC(f);
   f.attr("levels") = no_na_new_levels;
   f.attr("class") = "factor";
-  DEBUG("max(f) " << max(f));
-  DEBUG("f.size() " << f.size());
+  DEBUG_UTIL("max(f) " << max(f));
+  DEBUG_UTIL("f.size() " << f.size());
   if (na_rm) {
     // drop NA levels, too TODO
     return(f[!is_na(f)]);

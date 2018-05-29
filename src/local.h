@@ -34,6 +34,7 @@ extern "C" {
 // debugging:
 #define ICD_DEBUG
 #define ICD_DEBUG_TRACE
+// #define ICD_DEBUG_UTIL
 // #define ICD_DEBUG_SETUP
 // #define ICD_DEBUG_SETUP_SLOW
 // #define ICD_DEBUG_SETUP_TRACE
@@ -46,28 +47,36 @@ extern "C" {
 #define DEBUG(x) ((void)0)
 #endif
 
+#ifdef ICD_DEBUG
+#define DEBUG_VEC(x) do { Rcpp::Rcout << #x << ": " << std::flush; printIt(x); } while (0);
+#else
+#define DEBUG_VEC(x) ((void)0)
+#endif
+
 #ifdef ICD_DEBUG_TRACE
-#define TRACE(x) do { Rcpp::Rcout << x << std::endl; } while (0)
+#define TRACE(x) DEBUG(x)
 #else
 #define TRACE(x) ((void)0)
 #endif
 
+#ifdef ICD_DEBUG_UTIL
+#define DEBUG_UTIL(x) DEBUG(x)
+#define DEBUG_UTIL_VEC(x) DEBUG_VEC(x)
+#else
+#define DEBUG_UTIL(x) ((void)0)
+#define DEBUG_UTIL_VEC(x) ((void)0)
+#endif
+
 #ifdef ICD_DEBUG_VALGRIND
-#define DEBUG_VALGRIND(x) do { Rcpp::Rcout << #x << ": " << x << std::endl; } while (0)
+#define DEBUG_VALGRIND(x) DEBUG(x)
 #else
 #define DEBUG_VALGRIND(x) ((void)0)
 #endif
 
 #ifdef ICD_DEBUG_PARALLEL
-#define DEBUG_PARALLEL(x) do { Rcpp::Rcout << #x << ": " << x << std::endl; } while (0)
+#define DEBUG_PARALLEL(x) DEBUG(x)
 #else
 #define DEBUG_PARALLEL(x) ((void)0)
-#endif
-
-#ifdef ICD_DEBUG
-#define DEBUG_VEC(x) do { Rcpp::Rcout << #x << ": " << std::flush; printIt(x); } while (0);
-#else
-#define DEBUG_VEC(x) ((void)0)
 #endif
 
 // not enough to test whether header is available, because it may be disabled in

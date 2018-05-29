@@ -34,7 +34,7 @@ void buildVisitCodesSparse(const SEXP& icd9df,
                            PtsSparse& sparse_db,
                            VecStr& visitIds);
 
-Rcpp::LogicalMatrix comorbidMatMulMore(const Rcpp::DataFrame& icd9df,
+Rcpp::LogicalMatrix comorbidMatMulSimple(const Rcpp::DataFrame& icd9df,
                                  const Rcpp::List& map,
                                  const string visitId,
                                  const string icd9Field);

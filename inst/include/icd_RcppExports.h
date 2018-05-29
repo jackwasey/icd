@@ -250,30 +250,11 @@ namespace icd {
         return Rcpp::as<Rcpp::List >(rcpp_result_gen);
     }
 
-    inline List remap(const List& map, const CharacterVector& relevant) {
-        typedef SEXP(*Ptr_remap)(SEXP,SEXP);
-        static Ptr_remap p_remap = NULL;
-        if (p_remap == NULL) {
-            validateSignature("List(*remap)(const List&,const CharacterVector&)");
-            p_remap = (Ptr_remap)R_GetCCallable("icd", "_icd_remap");
-        }
-        RObject rcpp_result_gen;
-        {
-            RNGScope RCPP_rngScope_gen;
-            rcpp_result_gen = p_remap(Shield<SEXP>(Rcpp::wrap(map)), Shield<SEXP>(Rcpp::wrap(relevant)));
-        }
-        if (rcpp_result_gen.inherits("interrupted-error"))
-            throw Rcpp::internal::InterruptedException();
-        if (rcpp_result_gen.inherits("try-error"))
-            throw Rcpp::exception(Rcpp::as<std::string>(rcpp_result_gen).c_str());
-        return Rcpp::as<List >(rcpp_result_gen);
-    }
-
-    inline CV getRelevant(List map, CV codes) {
+    inline CV getRelevant(const List& map, const CV& codes) {
         typedef SEXP(*Ptr_getRelevant)(SEXP,SEXP);
         static Ptr_getRelevant p_getRelevant = NULL;
         if (p_getRelevant == NULL) {
-            validateSignature("CV(*getRelevant)(List,CV)");
+            validateSignature("CV(*getRelevant)(const List&,const CV&)");
             p_getRelevant = (Ptr_getRelevant)R_GetCCallable("icd", "_icd_getRelevant");
         }
         RObject rcpp_result_gen;
@@ -288,17 +269,17 @@ namespace icd {
         return Rcpp::as<CV >(rcpp_result_gen);
     }
 
-    inline LogicalMatrix comorbidMatMulMore(const DataFrame& icd9df, const List& icd9Mapping, const std::string visitId, const std::string icd9Field) {
-        typedef SEXP(*Ptr_comorbidMatMulMore)(SEXP,SEXP,SEXP,SEXP);
-        static Ptr_comorbidMatMulMore p_comorbidMatMulMore = NULL;
-        if (p_comorbidMatMulMore == NULL) {
-            validateSignature("LogicalMatrix(*comorbidMatMulMore)(const DataFrame&,const List&,const std::string,const std::string)");
-            p_comorbidMatMulMore = (Ptr_comorbidMatMulMore)R_GetCCallable("icd", "_icd_comorbidMatMulMore");
+    inline LogicalMatrix comorbidMatMulSimple(const DataFrame& icd9df, const List& icd9Mapping, const std::string visitId, const std::string icd9Field) {
+        typedef SEXP(*Ptr_comorbidMatMulSimple)(SEXP,SEXP,SEXP,SEXP);
+        static Ptr_comorbidMatMulSimple p_comorbidMatMulSimple = NULL;
+        if (p_comorbidMatMulSimple == NULL) {
+            validateSignature("LogicalMatrix(*comorbidMatMulSimple)(const DataFrame&,const List&,const std::string,const std::string)");
+            p_comorbidMatMulSimple = (Ptr_comorbidMatMulSimple)R_GetCCallable("icd", "_icd_comorbidMatMulSimple");
         }
         RObject rcpp_result_gen;
         {
             RNGScope RCPP_rngScope_gen;
-            rcpp_result_gen = p_comorbidMatMulMore(Shield<SEXP>(Rcpp::wrap(icd9df)), Shield<SEXP>(Rcpp::wrap(icd9Mapping)), Shield<SEXP>(Rcpp::wrap(visitId)), Shield<SEXP>(Rcpp::wrap(icd9Field)));
+            rcpp_result_gen = p_comorbidMatMulSimple(Shield<SEXP>(Rcpp::wrap(icd9df)), Shield<SEXP>(Rcpp::wrap(icd9Mapping)), Shield<SEXP>(Rcpp::wrap(visitId)), Shield<SEXP>(Rcpp::wrap(icd9Field)));
         }
         if (rcpp_result_gen.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();
@@ -1160,7 +1141,7 @@ namespace icd {
         return Rcpp::as<IntegerVector >(rcpp_result_gen);
     }
 
-    inline Rcpp::IntegerVector refactor_worker(const IntegerVector x, const CV new_levels, bool na_rm = false, bool exclude_na = true) {
+    inline Rcpp::IntegerVector refactor_worker(const IntegerVector x, const CV new_levels, bool na_rm, bool exclude_na) {
         typedef SEXP(*Ptr_refactor_worker)(SEXP,SEXP,SEXP,SEXP);
         static Ptr_refactor_worker p_refactor_worker = NULL;
         if (p_refactor_worker == NULL) {

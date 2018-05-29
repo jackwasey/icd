@@ -162,10 +162,6 @@ simplify_map_lex <- function(pt_codes, map) {
     .Call(`_icd_simplifyMapLexicographic`, pt_codes, map)
 }
 
-remap <- function(map, relevant) {
-    .Call(`_icd_remap`, map, relevant)
-}
-
 getRelevant <- function(map, codes) {
     .Call(`_icd_getRelevant`, map, codes)
 }
@@ -191,13 +187,13 @@ getRelevant <- function(map, codes) {
 #' dense matrix is then the comorbidity map
 #' \url{https://eigen.tuxfamily.org/dox/TopicMultiThreading.html}
 #' @examples
-#' # show how many discrete ICD codes there are in the AHRQ map, before reducing
+#' # show how many unique ICD codes there are in the AHRQ map, before reducing
 #' # to the number which actually appear in a group of patient visitsben
 #' library(magrittr)
 #' sapply(icd::icd9_map_ahrq, length) %>% sum
 #' @keywords internal array algebra
-comorbidMatMulMore <- function(icd9df, icd9Mapping, visitId, icd9Field) {
-    .Call(`_icd_comorbidMatMulMore`, icd9df, icd9Mapping, visitId, icd9Field)
+comorbidMatMulSimple <- function(icd9df, icd9Mapping, visitId, icd9Field) {
+    .Call(`_icd_comorbidMatMulSimple`, icd9df, icd9Mapping, visitId, icd9Field)
 }
 
 #' @title Comorbidity calculation as a matrix multiplication
@@ -563,7 +559,7 @@ factor_nosort_rcpp_worker <- function(x, levels, na_rm) {
 
 #' @title Re-generate a factor with new levels, without doing string matching
 #' @keywords internal manip
-refactor_worker <- function(x, new_levels, na_rm = FALSE, exclude_na = TRUE) {
+refactor_worker <- function(x, new_levels, na_rm, exclude_na) {
     .Call(`_icd_refactor`, x, new_levels, na_rm, exclude_na)
 }
 

@@ -54,3 +54,62 @@ microbenchmark::microbenchmark(factor(pts$code),
                                # factor_(pts$code),
                                factor_nosort(pts$code),
                                times = 25)
+
+
+################################
+# benchmark refactoring in C++ #
+################################
+
+# see tests-slow to show the results are identical
+
+# test various combos with NAs and mis-matches
+n = 1e6
+nl = n %/% 50L
+times = 5
+set.seed(1441)
+v1 <- icd:::icd9RandomShort(n)
+v2 <- v1
+v2[1] <- "INVALID"
+l1 <- sample(v1, size = nl)
+l2 <- c(NA_character_, l1)
+l3 <- c(l1, NA_character_)
+l4 <- c(l1, "XXX")
+l5 <- unique(icd:::icd9RandomShort(n * 2))
+test_cases <- expand.grid(
+  list(v1, v2),
+  list(l1, l2, l3, l4, l5),
+  list(l1, l2, l3, l4, l5))
+# get empty mb to build
+mb <- microbenchmark(NULL, times = 1)
+mb <- mb[-1,]
+for (tc in seq_along(test_cases[[1]])) {
+  m <- test_cases[tc, 1][[1]]
+  nl <- unique(test_cases[tc, 2][[1]])
+  pl <- unique(test_cases[tc, 3][[1]])
+  f <- factor(m, levels = pl)
+  mb <- rbind(mb, microbenchmark(
+    refactor(f, nl),
+    factor(f, levels = nl),
+    times = times
+  ))
+  mb <- rbind(mb, microbenchmark(
+    refactor(f, nl, na.rm = FALSE, exclude_na = FALSE),
+    factor(f, levels = nl, exclude = NULL),
+    times = times
+  ))
+}
+print(mb)
+
+# test one huge factor
+n = 1e8
+nl = n %/% 50L
+times = 5
+set.seed(1441)
+v1 <- icd:::icd9RandomShort(n)
+l1 <- unique(sample(v1, size = nl))
+l2 <- unique(sample(v1, size = nl))
+f <- factor(v1, l1)
+microbenchmark(
+  refactor(f, l2),
+  factor(f, levels = l2),
+  times = times)

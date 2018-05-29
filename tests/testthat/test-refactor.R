@@ -41,57 +41,23 @@ test_that("basic refactoring", {
   x = c("X", NA_character_)
   test_cases <- expand.grid(
     list(u, v, w, x),
+    list(u, v, w, x),
     list(u, v, w, x))
   for (tc in seq_along(test_cases[[1]])) {
     m <- test_cases[tc, 1][[1]]
     n <- test_cases[tc, 2][[1]]
-    print(paste("x: ", paste(unlist(m), collapse = " "),
-                "new levels: ", paste(unlist(n), collapse = " ")))
+    p <- unique(test_cases[tc, 3][[1]])
+    if (FALSE) print(paste("x: ", paste(unlist(m), collapse = " "),
+                           "new levels: ", paste(unlist(n), collapse = " ")))
     expect_identical(
-      refactor(factor(m), n),
-      factor(m, levels = n), # exclude NA by default, as factor does
-      info = paste("m = c('", paste(unlist(test_cases[tc, 1]), collapse = "', '"), "')\n",
-                   "n = c('", paste(unlist(test_cases[tc, 2]), collapse = "', '"), "')", sep = "")
-      )
-    expect_identical(
-      refactor(factor(m), n, na.rm = FALSE, exclude_na = FALSE),
-      factor(m, levels = n, exclude = NULL),
-      info = paste("m = c('", paste(unlist(test_cases[tc, 1]), collapse = "', '"), "')\n",
-                   "n = c('", paste(unlist(test_cases[tc, 2]), collapse = "', '"), "')", sep = "")
-    )
-  }
-})
-
-test_that("longer factor to touch openmp", {
-  n = 1e1
-  nl = 1e0
-  set.seed(1441)
-  v1 <- icd:::icd9RandomShort(n)
-  v2 <- v1
-  v2[1] <- "INVALID"
-  l1 <- sample(v1, size = nl)
-  l2 <- c(NA_character_, l1)
-  l3 <- c(l1, NA_character_)
-  l4 <- c(l1, "XXX")
-  l5 <- unique(icd:::icd9RandomShort(n * 2))
-  test_cases <- expand.grid(
-    list(v1, v2),
-    list(l1, l2, l3, l4, l5))
-  for (tc in seq_along(test_cases[[1]])) {
-    m <- test_cases[tc, 1][[1]]
-    n <- test_cases[tc, 2][[1]]
-    print(paste("x: ", paste(unlist(m), collapse = " "),
-                "new levels: ", paste(unlist(n), collapse = " ")))
-    # construct different factors to start out?
-    expect_identical(
-      refactor(factor(m), n),
-      factor(m, levels = n), # NA levels exclude?
+      refactor(factor(m, levels = p), n),
+      factor(factor(m, levels = p), levels = n), # exclude NA by default, as factor does
       info = paste("m = c('", paste(unlist(test_cases[tc, 1]), collapse = "', '"), "')\n",
                    "n = c('", paste(unlist(test_cases[tc, 2]), collapse = "', '"), "')", sep = "")
     )
     expect_identical(
-      refactor(factor(m), n, na.rm = FALSE, exclude_na = FALSE),
-      factor(m, levels = n, exclude = NULL),
+      refactor(factor(m, levels = p), n, na.rm = FALSE, exclude_na = FALSE),
+      factor(factor(m, levels = p), levels = n, exclude = NULL),
       info = paste("m = c('", paste(unlist(test_cases[tc, 1]), collapse = "', '"), "')\n",
                    "n = c('", paste(unlist(test_cases[tc, 2]), collapse = "', '"), "')", sep = "")
     )

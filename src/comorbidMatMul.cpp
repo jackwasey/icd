@@ -1,5 +1,6 @@
 // [[Rcpp::depends(RcppEigen)]]
 // [[Rcpp::interfaces(r, cpp)]]
+// [[Rcpp::plugins(cpp11)]]
 #include "config.h"                     // for valgrind, CXX11 etc
 #include "local.h"                     // for ICD_OPENMP
 #include "icd_types.h"                 // for ComorbidOut, VecVecInt, VecVec...
@@ -19,28 +20,54 @@ extern "C" {
 
 using namespace Rcpp;
 
-// [[Rcpp::export]]
-List remap(const List& map, const CharacterVector& relevant) {
-  // TODO at this point, could switch to STL
+// take a map of character vectors or factors and reduce it to only relevant
+// codes using hashmap
+//
+// downside is that each list element has a copy of the same relevant levels.
+List remap(const List& map, const IHS& relevantHash) {
+  DEBUG_VEC(relevantHash.keys());
   List out = List::create();
-  CharacterVector cmbs = map.names(); // what if already a factor? TODO:
+  CharacterVector cmbs = map.names();
   for (R_xlen_t i = 0; i != map.size(); ++i) {
-    String cmb = cmbs[i];
-    out[cmb] = factorNoSort(map[cmb], relevant, true);
+    String cmb_name = cmbs[i];
+    TRACE("remapping: " << cmb_name.get_cstring());
+    bool areFactors = (TYPEOF(map[0]) == INTSXP);
+    if (!areFactors && TYPEOF(map[0]) != STRSXP)
+      Rcpp::stop("remap expects a list of only character vectors or factors.");
+    if (areFactors) {
+      TRACE("factor in input map");
+      IntegerVector this_map_cmb = map[i];
+      out[i] = refactor(this_map_cmb, relevantHash.keys(), true, true);
+    } else { // most common case (re-use the hash!)
+      CV this_map_cmb = map[i];
+      DEBUG(this_map_cmb.size());
+      IntegerVector this_cmb = (IntegerVector) relevantHash.lookup(this_map_cmb);
+      DEBUG(this_cmb.size());
+      this_cmb.attr("levels") = (CharacterVector) relevantHash.keys();
+      this_cmb.attr("class") = "factor";
+      this_cmb = this_cmb[!is_na(this_cmb)];
+      DEBUG_VEC(this_cmb);
+      out[cmb_name] = this_cmb;
+    }
   }
   return(out);
 }
 
 // [[Rcpp::export]]
-CV getRelevant(List map, CV codes) {
+CV getRelevant(const List& map, const CV& codes) {
   VecStr relevant;
   relevant.reserve(100 * map.size());
-  Rcpp::sugar::IndexHash<16> codeHash(codes);
+  IHS codeHash(codes);
   codeHash.fill();
+  DEBUG_VEC(codes);
+  DEBUG_VEC(codeHash.keys());
+  // TODO codes may be factor, if so, return levels
   for (CV cmb : map) {
     for (auto code : cmb) {
-      if (codeHash.contains(code))
+      if (codeHash.contains(code)) {
+        DEBUG("Pushing back " << code);
         relevant.push_back(((String)code).get_cstring());
+      }
     }
   }
   return wrap(relevant);
@@ -77,95 +104,96 @@ void printCornerSparse(PtsSparse visMat) {
 #define ICD_ASSIGN(row,col) mapMat.coeffRef(row, col) = true;
 #endif
 
-void buildVisitCodesSparseSimple(const SEXP& icd9df,
-                                 const std::string& visitId,
-                                 const std::string& icd9Field,
-                                 const CV relevant,
+// This is a complicated function
+//
+// Goal is to avoid any string matching or even hash calculation at all.
+//
+// visitids are easier, because we need to build an IndexHash for them, but we
+// have to do this in a type specific way. int, numeric, string, factor...
+//
+// icd codes are either factor or character type. if a factor, we can use the
+// factor level index as the column in the visit matrix, but we need to know
+// this also to construct the comorbidity matrix where the codes are rows.
+//
+// If the icd codes are character, we can construct the indexhash, then return a
+// new factor. This is basically what factorNosort does, but I need the hash
+// internals for lookups, so can't use it directly here.
+void buildVisitCodesSparseSimple(SEXP visits,
+                                 SEXP icds,
+                                 const IHS& relevantHash,
                                  PtsSparse& visMat,
                                  VecStr& visitIds // get this from sparse matrix at end, but needed?
 ) {
-  SEXP icds = PROTECT(getRListOrDfElement(icd9df, icd9Field.c_str())); // this is a factor
-  SEXP vsexp = PROTECT(getRListOrDfElement(icd9df, visitId.c_str())); // this may be anything
-  IntegerVector icd9dfFactor;
+  const CV relevant = relevantHash.keys();
+  int vlen = Rf_length(visits);
+  IHS visHash((CV) visits); // TODO need to let work for factors, too.
+  visHash.fill();
+  RObject visit_levels = ((RObject) visits).attr("levels");
+  RObject code_levels = ((RObject) icds).attr("levels");
+  TRACE("got levels");
   switch(TYPEOF(icds)) {
   case STRSXP: {
-    TRACE("got a string expression");
-    icd9dfFactor = factorNoSort(icds, relevant);
-    break;
-  }
+    TRACE("icds is string");
+    break; }
   case INTSXP: {
     TRACE("got integers");
-    if (icd9dfFactor.attr("levels") == R_NilValue) {
-      TRACE("not a factor");
-      icd9dfFactor = factorNoSort(fastIntToStringRcpp(icds), relevant);
+    if (((RObject) icds).attr("levels") == R_NilValue) {
+      TRACE("icds not a factor");
     } else {
-      TRACE("is factor");
-      icd9dfFactor = factorNoSort(icds, relevant);
+      TRACE("icds is factor");
     }
-  }
+    break; }
   default: {
     Rcpp::stop("cannot convert this type of visit ID yet: use character or factor");
-  }
-  }
-  CV factorLevels = icd9dfFactor.attr("levels");
-  R_xlen_t numUniqueCodes = factorLevels.length();
-  // random long string TODO: test consequences of going over length.
-  std::string lastVisit = "JJ94967295JJ94967295JJ";
-  int vlen = icd9dfFactor.size();
-  // make an unordered set for quick check for duplicates while building list of unique visit ids
-  VisLk vis_lookup;
-  vis_lookup.reserve(vlen);
-  // also maintain list of (ordered as first encountered) visit ids
-  visitIds.resize(vlen); // resize and trim at end, as alternative to reserve
-  int n;
-  VecVecIntSz vcdb_max_idx = -1; // we increment immediately to zero as first index
-  VecVecIntSz vcdb_new_idx;
-  VecVecIntSz vcdb_last_idx = 2094967295; // extremely unlikely random, < 2^32 (to avoid 32bit R build warn)
-  visMat.resize(vlen, numUniqueCodes); // overestimate badly to start
-  visMat.reserve(vlen); // but memory commitment is known and limited.
+  }}
+  DEBUG("n unique = " << relevant.size());
+  // R's global string cache R_StringHash does not provide an obvious mechanism
+  // to lookup an index, just insertion and return of reference to found
+  // CHARSXP. R_HashGetLoc is indexed by hashcode itself, no sequentially. Stick
+  // with Rcpp hashing for now, which at least hashes based on integer address
+  // of the string, not string itself.
+  visMat.resize(vlen, relevant.size()); // vlen is upper-bound, cols is correct
+  visMat.reserve(vlen); // but memory commitment is known and limited to just vlen.
   std::vector<Triplet> visTriplets;
-  visTriplets.reserve(vlen * 30); // overestimate codes per patient to avoid resizing while filling
-  // the result matrix size should have dimensions rows: number of unique
-  // visitIds, cols: number of unique ICD codes.
-  for (int i = 0; i != vlen; ++i) {
-    TRACE("vcdb_max_idx: " << vcdb_max_idx <<
-      " vcdb_new_idx: " << vcdb_new_idx <<
-        " vcdb_last_idx: " <<  vcdb_last_idx);
-    std::string visit = CHAR(STRING_ELT(vsexp, i)); // may not be string
-    n = icd9dfFactor[i]; // ICD codes are in a factor, so get the 1-indexed integer index
-    if (lastVisit != visit) {
-      TRACE("visit has changed");
-      vcdb_new_idx = vcdb_max_idx + 1;
-      VisLk::iterator found = vis_lookup.find(visit); // did we see this visit already? Get name-index pair.
-      if (found != vis_lookup.end()) { // we found the old visit
-        // we saved the index in the map, so use that to insert a triplet:
-        TRACE("Found " << found->first << " with row id: " << found->second);
-        TRACE("adding true at index (" << found->second << ", " << n - 1 << ")");
-        visTriplets.push_back(Triplet(found->second, n - 1, true));
-        continue; // and continue with next row
-      } else { // otherwise we found a new visitId, so add it to our lookup table
-        TRACE("visit is new");
-        VisLkPair vis_lookup_pair = std::make_pair(visit, vcdb_new_idx);
-        vis_lookup.insert(vis_lookup_pair); // new visit, with associated position in vcdb
-      }
-      // we didn't find an existing visitId
-      TRACE("adding true at index (" << vcdb_new_idx << ", " << n - 1 << ")");
-      visTriplets.push_back(Triplet(vcdb_new_idx, n - 1, true));
-      visitIds[vcdb_new_idx] = visit; // keep list of visitIds in order encountered.
-      lastVisit = visit;
-      vcdb_last_idx = vcdb_new_idx;
-      ++vcdb_max_idx;
-    } else { // last visitId was the same as the current one, so we can skip all the logic
-      TRACE("adding true at index (" << vcdb_last_idx << ", " << n-1 << ")");
-      visTriplets.push_back(Triplet(vcdb_last_idx, n - 1, true));
-    }
-  } // end loop through all visit-code input data
-  UNPROTECT(2);
-
-  // visMat and visitIds are updated
+  visTriplets.reserve(vlen * 30);
+  IntegerVector rows, cols;
+  if (code_levels.isNULL()) {
+    DEBUG("codes are character");
+    CV codes_cv = icds;
+    DEBUG_VEC(codes_cv);
+    DEBUG_VEC(relevantHash.keys());
+    cols = relevantHash.lookup(codes_cv); // C indexed
+  } else {
+    // if the codes are a factor, with _relevant_ levels, the cols are the values
+    CV code_levels_cv = (CV) code_levels;
+    assert(Rf_length(code_levels) == relevant.size());
+    assert(code_levels_cv[0] == relevantHash.keys()[0]); // TODO better checks?
+    cols = ((IntegerVector) icds) - 1; // all -1 for R to C indexing.
+  }
+  if (visit_levels.isNULL()) {
+    DEBUG("self-matching");
+    const auto self_keys = visHash.keys();
+    DEBUG_VEC(self_keys);
+    rows = visHash.lookup(self_keys); // C index
+  } else {
+    DEBUG("visits are factors");
+    //  use the factor level as the row number (R vs C index)
+    //rows = ((IntegerVector) visHash.keys()) - 1;
+    rows = ((IntegerVector) visits - 1);  // R index
+  }
+  DEBUG_VEC(rows);
+  DEBUG_VEC(cols);
+  assert(rows.size() == cols.size());
+  // now we have rows and columns, just make the triplets and insert.
+  for (R_xlen_t i = 0; i != rows.size(); ++i) {
+    if (IntegerVector::is_na(cols[i])) continue;
+    visTriplets.push_back(Triplet(rows[i], cols[i], true));
+    // TODO: what about no-match situations???
+  }
+  TRACE("visMat and visitIds are updated, setting visMat from triplets...");
   visMat.setFromTriplets(visTriplets.begin(), visTriplets.end());
-  visMat.conservativeResize(vcdb_max_idx + 1, numUniqueCodes);
-  visitIds.resize(vcdb_max_idx + 1); // we over-sized (not just over-reserved) so now we trim.
+  visitIds = as<VecStr>(visHash.keys()); // char vs factor
+  visMat.conservativeResize(visitIds.size(), relevant.size());
   DEBUG("Built visMt, rows:" << visMat.rows() << ", cols: " << visMat.cols());
   PRINTCORNERSP(visMat);
 }
@@ -263,27 +291,17 @@ void buildVisitCodesSparse(const SEXP& icd9df,
   visitIds.resize(vcdb_max_idx + 1); // we over-sized (not just over-reserved) so now we trim.
 }
 
-void buildMapMat(const List& map, const CV& relevant, DenseMap& mapMat) {
+// takes a map of factors produced by remap
+void buildMapMat(const List& map, DenseMap& mapMat) {
   mapMat.setZero();
-  std::unordered_map<int, int> map_lookup;
-  std::unordered_map<int, int>::iterator found_it;
-  map_lookup.reserve(relevant.length());
-  R_xlen_t row = 0;
-  for (List::const_iterator li = map.begin(); li != map.end(); ++li) {
+  for (auto li = map.begin(); li != map.end(); ++li) {
     auto col = std::distance(map.begin(), li);
     TRACE("working on map item/col: " << col);
     IntegerVector v = *li;
-    for (IntegerVector::iterator vi = v.begin(); vi != v.end(); ++vi) {
-      TRACE("working on: " << std::distance(v.begin(), vi) << " row: " << row);
-      const int this_code_factor_number = *vi;
-      found_it = map_lookup.find(this_code_factor_number);
-      if (found_it == map_lookup.end()) {
-        TRACE("not found in lookup, adding row " << row << ", col " << col);
-        ICD_ASSIGN(row, col);
-        map_lookup.insert(std::make_pair(this_code_factor_number, row++));
-      } else {
-        TRACE("inserting dupe at row " << found_it->second << ", col " << col);
-        ICD_ASSIGN(found_it->second, col); // assign in existing row/visit
+    for (R_xlen_t vi = 0; vi != v.size(); ++vi) {
+      //TRACE("working on cmb item: " << vi);
+      if (!IntegerVector::is_na(v[vi])) {
+        ICD_ASSIGN(v[vi] - 1, col); // R to C indexing: the factor index is row
       }
     }
   }
@@ -311,24 +329,39 @@ void buildMapMat(const List& map, const CV& relevant, DenseMap& mapMat) {
 //' dense matrix is then the comorbidity map
 //' \url{https://eigen.tuxfamily.org/dox/TopicMultiThreading.html}
 //' @examples
-//' # show how many discrete ICD codes there are in the AHRQ map, before reducing
+//' # show how many unique ICD codes there are in the AHRQ map, before reducing
 //' # to the number which actually appear in a group of patient visitsben
 //' library(magrittr)
 //' sapply(icd::icd9_map_ahrq, length) %>% sum
 //' @keywords internal array algebra
 // [[Rcpp::export]]
-LogicalMatrix comorbidMatMulMore(const DataFrame& icd9df,
-                                 const List& icd9Mapping,
-                                 const std::string visitId,
-                                 const std::string icd9Field) {
+LogicalMatrix comorbidMatMulSimple(const DataFrame& icd9df,
+                                   const List& icd9Mapping,
+                                   const std::string visitId,
+                                   const std::string icd9Field) {
   VecStr out_row_names; // size is reserved in buildVisitCodesVec
-  const CV relevant = getRelevant(icd9Mapping, icd9df[icd9Field]);
-  const List map = remap(icd9Mapping, relevant);
+  SEXP visits = icd9df[visitId];
+  SEXP codes = icd9df[icd9Field];
+  CV relevant = getRelevant(icd9Mapping, codes);
+  IHS relevantHash(relevant);
+  relevantHash.fill();
+  DEBUG_VEC(relevant);
+  CV r_tmp = relevantHash.keys();
+  DEBUG_VEC(r_tmp);
+  const List map = remap(icd9Mapping, relevantHash);
+  DEBUG("remap complete");
+  DEBUG("length new map " << map.size());
+  // debug only:
+  IntegerVector map_debug = map[1];
+  CV debug_one = map_debug.attr("levels");
+  DEBUG_VEC(map_debug);
+  DEBUG_VEC(debug_one);
   DenseMap mapMat(relevant.length(), map.length());
-  buildMapMat(map, relevant, mapMat);
+  buildMapMat(map, mapMat);
+  DEBUG("mapMat created");
   PtsSparse visMat; // reservation and sizing done within next function
-  buildVisitCodesSparseSimple(icd9df, visitId, icd9Field, relevant,
-                              visMat, out_row_names);
+  buildVisitCodesSparseSimple(visits, codes, relevantHash, visMat, out_row_names);
+  DEBUG("built visit matrix");
   if (visMat.cols() != mapMat.rows())
     Rcpp::stop("matrix multiplication won't work");
   DenseMap result = visMat * mapMat; // col major result

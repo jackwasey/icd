@@ -453,44 +453,13 @@ RcppExport SEXP _icd_simplifyMapLexicographic(SEXP pt_codesSEXP, SEXP mapSEXP) {
     UNPROTECT(1);
     return rcpp_result_gen;
 }
-// remap
-List remap(const List& map, const CharacterVector& relevant);
-static SEXP _icd_remap_try(SEXP mapSEXP, SEXP relevantSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::traits::input_parameter< const List& >::type map(mapSEXP);
-    Rcpp::traits::input_parameter< const CharacterVector& >::type relevant(relevantSEXP);
-    rcpp_result_gen = Rcpp::wrap(remap(map, relevant));
-    return rcpp_result_gen;
-END_RCPP_RETURN_ERROR
-}
-RcppExport SEXP _icd_remap(SEXP mapSEXP, SEXP relevantSEXP) {
-    SEXP rcpp_result_gen;
-    {
-        Rcpp::RNGScope rcpp_rngScope_gen;
-        rcpp_result_gen = PROTECT(_icd_remap_try(mapSEXP, relevantSEXP));
-    }
-    Rboolean rcpp_isInterrupt_gen = Rf_inherits(rcpp_result_gen, "interrupted-error");
-    if (rcpp_isInterrupt_gen) {
-        UNPROTECT(1);
-        Rf_onintr();
-    }
-    Rboolean rcpp_isError_gen = Rf_inherits(rcpp_result_gen, "try-error");
-    if (rcpp_isError_gen) {
-        SEXP rcpp_msgSEXP_gen = Rf_asChar(rcpp_result_gen);
-        UNPROTECT(1);
-        Rf_error(CHAR(rcpp_msgSEXP_gen));
-    }
-    UNPROTECT(1);
-    return rcpp_result_gen;
-}
 // getRelevant
-CV getRelevant(List map, CV codes);
+CV getRelevant(const List& map, const CV& codes);
 static SEXP _icd_getRelevant_try(SEXP mapSEXP, SEXP codesSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
-    Rcpp::traits::input_parameter< List >::type map(mapSEXP);
-    Rcpp::traits::input_parameter< CV >::type codes(codesSEXP);
+    Rcpp::traits::input_parameter< const List& >::type map(mapSEXP);
+    Rcpp::traits::input_parameter< const CV& >::type codes(codesSEXP);
     rcpp_result_gen = Rcpp::wrap(getRelevant(map, codes));
     return rcpp_result_gen;
 END_RCPP_RETURN_ERROR
@@ -515,24 +484,24 @@ RcppExport SEXP _icd_getRelevant(SEXP mapSEXP, SEXP codesSEXP) {
     UNPROTECT(1);
     return rcpp_result_gen;
 }
-// comorbidMatMulMore
-LogicalMatrix comorbidMatMulMore(const DataFrame& icd9df, const List& icd9Mapping, const std::string visitId, const std::string icd9Field);
-static SEXP _icd_comorbidMatMulMore_try(SEXP icd9dfSEXP, SEXP icd9MappingSEXP, SEXP visitIdSEXP, SEXP icd9FieldSEXP) {
+// comorbidMatMulSimple
+LogicalMatrix comorbidMatMulSimple(const DataFrame& icd9df, const List& icd9Mapping, const std::string visitId, const std::string icd9Field);
+static SEXP _icd_comorbidMatMulSimple_try(SEXP icd9dfSEXP, SEXP icd9MappingSEXP, SEXP visitIdSEXP, SEXP icd9FieldSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::traits::input_parameter< const DataFrame& >::type icd9df(icd9dfSEXP);
     Rcpp::traits::input_parameter< const List& >::type icd9Mapping(icd9MappingSEXP);
     Rcpp::traits::input_parameter< const std::string >::type visitId(visitIdSEXP);
     Rcpp::traits::input_parameter< const std::string >::type icd9Field(icd9FieldSEXP);
-    rcpp_result_gen = Rcpp::wrap(comorbidMatMulMore(icd9df, icd9Mapping, visitId, icd9Field));
+    rcpp_result_gen = Rcpp::wrap(comorbidMatMulSimple(icd9df, icd9Mapping, visitId, icd9Field));
     return rcpp_result_gen;
 END_RCPP_RETURN_ERROR
 }
-RcppExport SEXP _icd_comorbidMatMulMore(SEXP icd9dfSEXP, SEXP icd9MappingSEXP, SEXP visitIdSEXP, SEXP icd9FieldSEXP) {
+RcppExport SEXP _icd_comorbidMatMulSimple(SEXP icd9dfSEXP, SEXP icd9MappingSEXP, SEXP visitIdSEXP, SEXP icd9FieldSEXP) {
     SEXP rcpp_result_gen;
     {
         Rcpp::RNGScope rcpp_rngScope_gen;
-        rcpp_result_gen = PROTECT(_icd_comorbidMatMulMore_try(icd9dfSEXP, icd9MappingSEXP, visitIdSEXP, icd9FieldSEXP));
+        rcpp_result_gen = PROTECT(_icd_comorbidMatMulSimple_try(icd9dfSEXP, icd9MappingSEXP, visitIdSEXP, icd9FieldSEXP));
     }
     Rboolean rcpp_isInterrupt_gen = Rf_inherits(rcpp_result_gen, "interrupted-error");
     if (rcpp_isInterrupt_gen) {
@@ -2175,9 +2144,8 @@ static int _icd_RcppExport_validate(const char* sig) {
         signatures.insert("void(*lookupComorbidByChunkFor)(const VecVecInt&,const VecVecInt&,const VecVecIntSz,const VecVecIntSz,ComorbidOut&)");
         signatures.insert("Rcpp::LogicalMatrix(*icd10_comorbid_parent_search_cpp)(Rcpp::DataFrame,Rcpp::List,std::string,std::string)");
         signatures.insert("Rcpp::List(*simplify_map_lex)(const CV,const Rcpp::List)");
-        signatures.insert("List(*remap)(const List&,const CharacterVector&)");
-        signatures.insert("CV(*getRelevant)(List,CV)");
-        signatures.insert("LogicalMatrix(*comorbidMatMulMore)(const DataFrame&,const List&,const std::string,const std::string)");
+        signatures.insert("CV(*getRelevant)(const List&,const CV&)");
+        signatures.insert("LogicalMatrix(*comorbidMatMulSimple)(const DataFrame&,const List&,const std::string,const std::string)");
         signatures.insert("LogicalMatrix(*comorbidMatMul)(const DataFrame&,const List&,const std::string,const std::string,const int,const int,const int)");
         signatures.insert("CV(*icd9PartsToShort)(const Rcpp::List)");
         signatures.insert("CV(*icd9PartsToDecimal)(const Rcpp::List)");
@@ -2244,9 +2212,8 @@ RcppExport SEXP _icd_RcppExport_registerCCallable() {
     R_RegisterCCallable("icd", "_icd_lookupComorbidByChunkFor", (DL_FUNC)_icd_lookupComorbidByChunkFor_try);
     R_RegisterCCallable("icd", "_icd_icd10_comorbid_parent_search_cpp", (DL_FUNC)_icd_icd10ComorbidParentSearchCpp_try);
     R_RegisterCCallable("icd", "_icd_simplify_map_lex", (DL_FUNC)_icd_simplifyMapLexicographic_try);
-    R_RegisterCCallable("icd", "_icd_remap", (DL_FUNC)_icd_remap_try);
     R_RegisterCCallable("icd", "_icd_getRelevant", (DL_FUNC)_icd_getRelevant_try);
-    R_RegisterCCallable("icd", "_icd_comorbidMatMulMore", (DL_FUNC)_icd_comorbidMatMulMore_try);
+    R_RegisterCCallable("icd", "_icd_comorbidMatMulSimple", (DL_FUNC)_icd_comorbidMatMulSimple_try);
     R_RegisterCCallable("icd", "_icd_comorbidMatMul", (DL_FUNC)_icd_comorbidMatMul_try);
     R_RegisterCCallable("icd", "_icd_icd9PartsToShort", (DL_FUNC)_icd_icd9PartsToShort_try);
     R_RegisterCCallable("icd", "_icd_icd9PartsToDecimal", (DL_FUNC)_icd_icd9PartsToDecimal_try);

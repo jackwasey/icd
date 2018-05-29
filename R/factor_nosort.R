@@ -94,6 +94,7 @@ factor_nosort_rcpp <- function(x, levels, na.rm = FALSE) {
 #' @keywords internal manip
 factor_split_na <- function(x, levels, factor_fun = factor_nosort_rcpp) {
   # input may have no levels!
+  stop("use refactor C++")
   if (is.factor(x)) {
     xi <- as.integer(x)
     lx <- levels(x)
@@ -114,10 +115,15 @@ factor_split_na <- function(x, levels, factor_fun = factor_nosort_rcpp) {
 }
 
 #' Refactor by integer matching levels in C++
+#'
+#' Slightly slower for small factors, three times faster for one hundred million
+#' elemeents with two million new levels. Three times faster for any `n > 1e6`.
+#' With NAs, margin is smaller, but still beats base `factor`.
 #' @examples
 #' \donttest{
 #'
 #' }
+#' @md
 #' @keywords internal manip
 refactor <- function(x, levels, na.rm = FALSE, exclude_na = TRUE) {
   checkmate::assert_factor(x)
