@@ -42,12 +42,6 @@ typedef std::unordered_map<std::string, VecInt::size_type> VisLk;
 typedef std::unordered_set<std::string> icd_set;
 typedef Rcpp::CharacterVector CV;
 
-#define ICD_EIGEN
-#ifndef HAVE_RCPPEIGEN_H
-#undef ICD_EIGEN
-#endif
-
-#ifdef ICD_EIGEN
 #include <RcppEigen.h> // also add LinkingTo element in DESCRIPTION to enable
 #include <Eigen/SparseCore>
 
@@ -58,7 +52,6 @@ typedef int SparseValue;
 typedef Eigen::Triplet<SparseValue> Triplet;
 typedef Eigen::SparseMatrix<SparseValue, Eigen::RowMajor> PtsSparse;
 typedef Eigen::MatrixXi DenseMap; // col major unless otherwise stated, I think
-#endif
 
 typedef std::pair<std::string, VecInt::size_type> VisLkPair;
 

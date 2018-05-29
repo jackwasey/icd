@@ -18,6 +18,8 @@
 #ifndef LOCAL_H_
 #define LOCAL_H_
 
+// [[Rcpp::plugins(cpp11)]]
+
 #include "config.h"
 #include "icd_types.h"
 #include <set>
@@ -31,7 +33,7 @@ extern "C" {
 
 // debugging:
 #define ICD_DEBUG
-// #define ICD_DEBUG_TRACE
+#define ICD_DEBUG_TRACE
 // #define ICD_DEBUG_SETUP
 // #define ICD_DEBUG_SETUP_SLOW
 // #define ICD_DEBUG_SETUP_TRACE
@@ -39,13 +41,13 @@ extern "C" {
 // #define ICD_VALGRIND
 
 #ifdef ICD_DEBUG
-#define DEBUG(x) do { Rcpp::Rcout << #x << ": " << x << std::endl; } while (0)
+#define DEBUG(x) do { Rcpp::Rcout << x << std::endl; } while (0)
 #else
 #define DEBUG(x) ((void)0)
 #endif
 
 #ifdef ICD_DEBUG_TRACE
-#define TRACE(x) do { Rcpp::Rcout << #x << ": " << x << std::endl; } while (0)
+#define TRACE(x) do { Rcpp::Rcout << x << std::endl; } while (0)
 #else
 #define TRACE(x) ((void)0)
 #endif
@@ -77,22 +79,11 @@ extern "C" {
 #undef ICD_OPENMP
 #endif
 
-#define ICD_EIGEN
 //#ifndef HAVE_RCPPEIGEN_H
 #define ICD_CATCH
 // #ifndef HAVE_TESTTHAT_H
 #ifdef NDEBUG
 #undef ICD_CATCH
-#endif
-
-#ifdef ICD_EIGEN
-#include <RcppEigen.h> // also add LinkingTo element in DESCRIPTION to enable
-#include <Eigen/SparseCore>
-// https://eigen.tuxfamily.org/dox/group__TutorialSparse.html
-typedef int SparseValue;
-typedef Eigen::Triplet<SparseValue> Triplet;
-typedef Eigen::SparseMatrix<SparseValue, Eigen::RowMajor> PtsSparse;
-typedef Eigen::MatrixXi DenseMap;
 #endif
 
 #if defined(ICD_VALGRIND) && defined(HAVE_VALGRIND_VALGRIND_H)

@@ -6,7 +6,8 @@
 \usage{
 categorize(x, map, visit_name, code_name, return_df = FALSE,
   return_binary = FALSE, restore_visit_order = TRUE, unique_ids = FALSE,
-  comorbid_fun = comorbidMatMul, factor_fun = factor_nosort_rcpp, ...)
+  preserve_visit_id_type = FALSE, comorbid_fun = comorbidMatMul,
+  factor_fun = factor_nosort_rcpp, ...)
 }
 \arguments{
 \item{x}{Data frame containing a column for an 'id' and a column for a code,
@@ -49,6 +50,12 @@ summarizing data, this can be set to \code{FALSE} for a big speed-up.}
 column given by \code{visit_name} are assumed to be unique. Otherwise, the
 default action is to ensure they are unique.}
 
+\item{preserve_visit_id_type}{Single logical value, if \code{TRUE}, the visit
+ID column will be converted back to its original type. The default of
+\code{FALSE} means only \code{factors} and \code{character} types are
+restored in the returned data frame. For matrices, the row names are
+necessarily stored as character vectors.}
+
 \item{comorbid_fun}{function i.e. the function symbol (not character string)
 to be called to do the comorbidity calculation}
 
@@ -63,6 +70,6 @@ and forms the core of the package, along with the C++ matrix code.
 u <- uranium_pathology
 m <- icd10_map_ahrq
 u$icd10 <- decimal_to_short(u$icd10)
-j <- icd:::categorize(u, m, visit_name = "case", code_name = "icd10")
+j <- categorize(u, m, visit_name = "case", code_name = "icd10")
 }
 \keyword{internal}

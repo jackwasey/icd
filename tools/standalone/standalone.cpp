@@ -2,7 +2,7 @@
 
 #include "icd.h"
 
-void buildVisitCodesVecSparse(const SEXP& icd9df,
+void buildVisitCodesSparse(const SEXP& icd9df,
                               const std::string& visitId,
                               const std::string& icd9Field,
                               PtsSparse& sparse_db,

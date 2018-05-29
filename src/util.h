@@ -47,6 +47,10 @@ int valgrindCallgrindStart(bool zerostats);
 int valgrindCallgrindStop();
 bool icd9CompareStrings(std::string a, std::string b);
 std::vector<std::size_t> icd9OrderCpp(VecStr x);
+Rcpp::IntegerVector factorNoSort(const Rcpp::CharacterVector& x,
+                           const Rcpp::CharacterVector& levels,
+                           const bool na_rm = false);
+Rcpp::IntegerVector refactor(const Rcpp::IntegerVector x, const CV new_levels);
 
 // concatenate a vector of vectors
 template <class COCiter, class Oiter>

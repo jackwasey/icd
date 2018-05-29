@@ -46,15 +46,18 @@ factor_nosort <- function(x, levels) {
 
 #' @describeIn factor_nosort R wrapper to the Rcpp function. Will re-factor a
 #'   factor with new levels without converting to string vector.
+#' @param na.rm Logical, if `TRUE`, simple drop all NA values, i.e. values with
+#'   no corresponding level.
+#' @md
 #' @keywords internal
-factor_nosort_rcpp <- function(x, levels) {
+factor_nosort_rcpp <- function(x, levels, na.rm = FALSE) {
   if (missing(levels)) {
     if (is.factor(x))
       return(x)
     else
       levels <- unique.default(x)
   }
-  factor_nosort_rcpp_worker(as.character(x), levels)
+  factor_nosort_rcpp_worker(as.character(x), levels, na_rm = na.rm)
   #TODO SLOW - if re-factoring, there is a faster way
 }
 
@@ -108,4 +111,16 @@ factor_split_na <- function(x, levels, factor_fun = factor_nosort_rcpp) {
     f <- f[inc_mask]
   }
   list(factor = f, inc_mask = inc_mask)
+}
+
+#' Refactor by integer matching levels in C++
+#' @examples
+#' \donttest{
+#'
+#' }
+#' @keywords internal manip
+refactor <- function(x, levels, na.rm = FALSE, exclude_na = TRUE) {
+  checkmate::assert_factor(x)
+  checkmate::assert_character(levels)
+  refactor_worker(x, levels, na_rm = na.rm, exclude_na)
 }

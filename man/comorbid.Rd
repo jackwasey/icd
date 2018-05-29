@@ -31,7 +31,7 @@
 comorbid(x, map, visit_name = NULL, icd_name = NULL,
   short_code = guess_short(x, icd_name = icd_name),
   short_map = guess_short(map), return_df = FALSE, return_binary = FALSE,
-  ...)
+  categorize_fun = categorize_simple, ...)
 
 icd10_comorbid(x, map, visit_name = NULL, icd_name = NULL,
   short_code = NULL, short_map = guess_short(map), return_df = FALSE,
@@ -40,7 +40,9 @@ icd10_comorbid(x, map, visit_name = NULL, icd_name = NULL,
 icd9_comorbid(x, map, visit_name = NULL, icd_name = NULL,
   short_code = guess_short(x, icd_name = icd_name),
   short_map = guess_short(map), return_df = FALSE, return_binary = FALSE,
-  preclean = TRUE, visitId = NULL, icd9Field = NULL, ...)
+  preclean = TRUE, visitId = NULL, icd9Field = NULL,
+  categorize_fun = categorize_simple, comorbid_fun = comorbidMatMulMore,
+  ...)
 
 icd9_comorbid_ahrq(x, ..., abbrev_names = TRUE, hierarchy = TRUE)
 
@@ -140,12 +142,14 @@ conversion can also be done by the internal functions
 \code{icd:::logical_to_binary} and \code{icd:::binary_to_logical}, or using
 other tools, e.g. \code{apply(x, 2, as.integer)}}
 
+\item{categorize_fun}{Internal. Function used for the categorization problem.}
+
 \item{...}{arguments passed on to other functions}
 
-\item{icd10_comorbid_fun}{function Internal parameter, default will be fast
-and accurate. A function which calculates comorbidities for ICD-10 codes,
-in which the comorbidity map only specifies parent codes, not every
-possible child.}
+\item{icd10_comorbid_fun}{Internal function Default will be fast and
+accurate. A function which calculates comorbidities for ICD-10 codes, in
+which the comorbidity map only specifies parent codes, not every possible
+child.}
 
 \item{preclean}{single logical value, which, if \code{TRUE} causes ICD-9
 'short' code input to be padded to correct three (or four for E code)
@@ -158,6 +162,8 @@ set to \code{FALSE} to save time.}
 \item{visitId}{Deprecated. Use \code{visit_name} instead.}
 
 \item{icd9Field}{Deprecated. Use \code{icd_name} instead.}
+
+\item{comorbid_fun}{Internal. Function used inside categorization.}
 
 \item{abbrev_names}{single logical value that defaults to \code{TRUE}, in
 which case the shorter human-readable names stored in e.g.

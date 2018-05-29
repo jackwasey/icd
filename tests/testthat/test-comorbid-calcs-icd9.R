@@ -452,3 +452,9 @@ test_that("float visit IDs", {
   df_res <- comorbid_ahrq(d, return_df = TRUE, preserve_visit_id_type = TRUE)
   expect_identical(df_res$visit_id, d[1, "visit_id"])
 })
+
+test_that("matmul vs matmulmore", {
+  expect_identical(
+  icd9_comorbid_elix(simple_poa_pts, categorize_fun = categorize, comorbid_fun = comorbidMatMul),
+  icd9_comorbid_elix(simple_poa_pts, categorize_fun = categorize_simple, comorbid_fun = comorbidMatMulMore)
+})

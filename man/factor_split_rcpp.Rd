@@ -2,19 +2,55 @@
 % Please edit documentation in R/RcppExports.R
 \name{factor_split_rcpp}
 \alias{factor_split_rcpp}
-\title{Split a factor into two based on desired levels}
+\title{Split data based on codes}
 \usage{
-factor_split_rcpp(df, levels, visit_name, code_name)
+factor_split_rcpp(df, relevant, visit_name, code_name)
+}
+\arguments{
+\item{df}{A \code{data.frame}, with a visit column (name given by \code{visit_name}),
+and a code column (name given by \code{code_name} -- not \code{icd_name} in this
+function). The code column must be a \code{factor}.}
+
+\item{relevant}{A character vector containing the factor levels of interest.}
+
+\item{visit_name}{The name of the column in the data frame which contains the
+patient or visit identifier. Typically this is the visit identifier, since
+patients come leave and enter hospital with different ICD-9 codes. It is a
+character vector of length one. If left empty, or \code{NULL}, then an
+attempt is made to guess which field has the ID for the patient encounter
+(not a patient ID, although this can of course be specified directly). The
+guesses proceed until a single match is made. Data frames may be wide with
+many matching fields, so to avoid false positives, anything but a single
+match is rejected. If there are no successful guesses, and \code{visit_id}
+was not specified, then the first column of the data frame is used.}
+
+\item{code_name}{String with name of column containing the codes.}
+}
+\value{
+Returns a list with two components:
+\enumerate{
+\item A reduced data frame, with only those rows where are least one visit
+had a relevant code
+\item A character vector with all the visits where there were no matching
+codes.
+}
 }
 \description{
 Using C++ because I also want to quickly return the visits
-  corresponding to the NA or non-NA factor elements.
+corresponding to the NA or non-NA factor elements. This is half-way to
+implementing the core comorbidity calculation all in C++.
 }
 \examples{
-  v <- c("X", "Y")
   df <- data.frame(visit_id = factor(c("visit1", "visit2", "visit1")),
                    icd_code = factor(c("410", "0010", "E999")))
   icd:::factor_split_rcpp(df, "410", "visit_id", "icd_code")
+\dontrun{
+R -e "devtools::load_all();devtools::test(filter='github')"
+R -e "devtools::load_all();icd9_comorbid_ahrq(data.frame(a='vis', b='0010'))"
+}
+}
+\concept{
+comorbidity comorbidities
 }
 \keyword{internal}
 \keyword{manip}

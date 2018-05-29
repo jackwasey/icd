@@ -51,12 +51,8 @@
 #' j <- categorize(u, m, visit_name = "case", code_name = "icd10")
 #' @export
 #' @keywords internal
-categorize <- function(x,
-                       map,
-                       visit_name,
-                       code_name,
-                       return_df = FALSE,
-                       return_binary = FALSE,
+categorize <- function(x, map, visit_name, code_name,
+                       return_df = FALSE, return_binary = FALSE,
                        restore_visit_order = TRUE,
                        unique_ids = FALSE,
                        preserve_visit_id_type = FALSE,
@@ -94,14 +90,8 @@ categorize <- function(x,
   # unique.default re-factors the result, which takes a long time
   uniq_visits <- if (unique_ids)
     x[[visit_name]]
-  # else if (visit_was_factor)
-  #   unique(levels(x[[visit_name]])) # quicker, but in wrong order
   else
     unique(x[[visit_name]])
-
-  #if (!is.character(x[[visit_name]])) # might be quick to keep as factor or int!
-  #  x[[visit_name]] <- as_char_no_warn(x[[visit_name]])
-
   # start with a factor for the icd codes in x, recode (and drop superfluous)
   # icd codes in the mapping, then do very fast match on integer without need
   # for N, V or E distinction. Char to factor conversion in R is very fast.
@@ -150,6 +140,7 @@ categorize <- function(x,
     row_names <- switch(visit_class,
                         "integer" = as.integer(rownames(mat)),
                         "numeric" = as.numeric(rownames(mat)))
+    # TODO: don't convert uniq_visits to char, then convert back!
   } else
     row_names <- rownames(mat)
 
@@ -163,3 +154,62 @@ categorize <- function(x,
 
 comorbid_common <- function(..., icd_name)
   categorize(..., code_name = icd_name)
+
+categorize_simple <- function(x, map, visit_name, code_name,
+                       return_df = FALSE, return_binary = FALSE,
+                       restore_visit_order = TRUE,
+                       unique_ids = FALSE,
+                       preserve_visit_id_type = FALSE,
+                       comorbid_fun = comorbidMatMulMore,
+                       ...) {
+  assert_data_frame(x, min.cols = 2, col.names = "unique")
+  class(x) <- "data.frame"
+  assert_list(map, any.missing = FALSE, min.len = 1, names = "unique")
+  assert(check_string(visit_name), check_null(visit_name))
+  assert(check_string(code_name), check_null(code_name))
+  stopifnot(visit_name %in% names(x))
+  stopifnot(code_name %in% names(x))
+  map <- lapply(map, as_char_no_warn)
+  visit_was_factor <- is.factor(x[[visit_name]])
+  visit_class <- class(x[[visit_name]])
+  if (visit_was_factor) iv_levels <- levels(x[[visit_name]])
+  if (nrow(x) == 0) {
+    empty_mat_out <- matrix(nrow = 0,
+                            ncol = length(map),
+                            dimnames = list(character(0), names(map)))
+    if (!return_df) return(empty_mat_out)
+    if (visit_was_factor)
+      row_names <- factor_nosort(character(0), levels = iv_levels)
+    else
+      row_names <- character(0)
+    df_empty_out <- cbind(row_names, as.data.frame(empty_mat_out), stringsAsFactors = visit_was_factor)
+    names(df_empty_out)[1] <- visit_name
+    rownames(df_empty_out) <- NULL
+    return(df_empty_out)
+  }
+  # TODO: unique re-factors the result, which takes a long time: avoid w C++?
+  # for now - hard stop
+  stopifnot(is.character(x[[code_name]]))
+  mat <- comorbid_fun(icd9df = x,
+                      icd9Mapping = map,
+                      visitId = visit_name,
+                      icd9Field = code_name) #nolint
+  if (return_binary) mat <- logical_to_binary(mat)
+  if (!return_df)
+    return(mat)
+  if (visit_was_factor)
+    row_names <- factor_fun(x = rownames(mat), levels = iv_levels)
+  else if (preserve_visit_id_type) {
+    row_names <- switch(visit_class,
+                        "integer" = as.integer(rownames(mat)),
+                        "numeric" = as.numeric(rownames(mat)))
+    # TODO: don't convert uniq_visits to char, then convert back!
+  } else
+    row_names <- rownames(mat)
+  df_out <- cbind(row_names, as.data.frame(mat),
+                  stringsAsFactors = visit_was_factor,
+                  row.names = NULL)
+  names(df_out)[1] <- visit_name
+  rownames(df_out) <- NULL
+  df_out
+}

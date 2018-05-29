@@ -6,11 +6,11 @@
 \alias{factor_nosort_rcpp}
 \title{Fast Factor Generation}
 \usage{
-factor_nosort_rcpp_worker(x, levels)
+factor_nosort_rcpp_worker(x, levels, na_rm)
 
 factor_nosort(x, levels)
 
-factor_nosort_rcpp(x, levels)
+factor_nosort_rcpp(x, levels, na.rm = FALSE)
 }
 \arguments{
 \item{x}{An object of atomic type \code{integer}, \code{numeric},
@@ -19,6 +19,9 @@ factor_nosort_rcpp(x, levels)
 \item{levels}{An optional character vector of levels. Is coerced to the same
 type as \code{x}. By default, we compute the levels as
 \code{sort(unique.default(x))}.}
+
+\item{na.rm}{Logical, if \code{TRUE}, simple drop all NA values, i.e. values with
+no corresponding level.}
 
 \item{labels}{A set of labels used to rename the levels, if desired.}
 }

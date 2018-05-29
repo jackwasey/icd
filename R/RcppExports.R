@@ -73,6 +73,40 @@ attr_short_diag <- function(x, value = TRUE) {
     invisible(.Call(`_icd_setShortDiag`, x, value))
 }
 
+#' @title Split data based on codes
+#' @description Using C++ because I also want to quickly return the visits
+#'   corresponding to the NA or non-NA factor elements. This is half-way to
+#'   implementing the core comorbidity calculation all in C++.
+#' @examples
+#'   df <- data.frame(visit_id = factor(c("visit1", "visit2", "visit1")),
+#'                    icd_code = factor(c("410", "0010", "E999")))
+#'   icd:::factor_split_rcpp(df, "410", "visit_id", "icd_code")
+#' \dontrun{
+#' R -e "devtools::load_all();devtools::test(filter='github')"
+#' R -e "devtools::load_all();icd9_comorbid_ahrq(data.frame(a='vis', b='0010'))"
+#' }
+#' @md
+#' @param df A `data.frame`, with a visit column (name given by `visit_name`),
+#'   and a code column (name given by `code_name` -- not `icd_name` in this
+#'   function). The code column must be a `factor`.
+#' @param relevant A character vector containing the factor levels of interest.
+#' @template visit_name
+#' @param code_name String with name of column containing the codes.
+#' @return Returns a list with two components:
+#'   1. A reduced data frame, with only those rows where are least one visit
+#'       had a relevant code
+#'   2. A character vector with all the visits where there were no matching
+#'       codes.
+#' @keywords internal manip
+#' @concept comorbidity comorbidities
+factor_split_rcpp <- function(df, relevant, visit_name, code_name) {
+    .Call(`_icd_factorSplit`, df, relevant, visit_name, code_name)
+}
+
+categorize_rcpp <- function() {
+    .Call(`_icd_categorize_rcpp`)
+}
+
 icd10cm_children_defined_cpp <- function(x, icd10cm2016, nc) {
     .Call(`_icd_icd10cmChildrenDefined`, x, icd10cm2016, nc)
 }
@@ -126,6 +160,44 @@ icd10_comorbid_parent_search_cpp <- function(x, map, visit_name, icd_name) {
 #' @keywords internal
 simplify_map_lex <- function(pt_codes, map) {
     .Call(`_icd_simplifyMapLexicographic`, pt_codes, map)
+}
+
+remap <- function(map, relevant) {
+    .Call(`_icd_remap`, map, relevant)
+}
+
+getRelevant <- function(map, codes) {
+    .Call(`_icd_getRelevant`, map, codes)
+}
+
+#' @title Comorbidity calculation as a matrix multiplication
+#' @description
+#' The problem is that the matrices could be huge: the patient-icd matrix would
+#' be millions of patient rows, and ~15000 columns for all AHRQ comorbidities.
+#' @details
+#' Several ways of reducing the problem: firstly, as with existing code, we can
+#' drop any ICD codes from the map which are not in the patient data. With many
+#' patients, this will be less effective as the long tail becomes apparent.
+#' However, with the (small) Vermont data, we see ~15,000 codes being reduced to
+#' 339.
+#' @section Sparse matrices:
+#' Using sparse matrices is another solution. Building
+#' the initial matrix may become a significant part of the calculation, but once
+#' done, the solution could be a simple matrix multiplication, which is
+#' potentially highly optimized (Eigen, BLAS, GPU, etc.)
+#' @section Eigen:
+#' Eigen has parallel (non-GPU) optimized sparse row-major *
+#' dense matrix. Patients-ICD matrix must be the row-major sparse one, so the
+#' dense matrix is then the comorbidity map
+#' \url{https://eigen.tuxfamily.org/dox/TopicMultiThreading.html}
+#' @examples
+#' # show how many discrete ICD codes there are in the AHRQ map, before reducing
+#' # to the number which actually appear in a group of patient visitsben
+#' library(magrittr)
+#' sapply(icd::icd9_map_ahrq, length) %>% sum
+#' @keywords internal array algebra
+comorbidMatMulMore <- function(icd9df, icd9Mapping, visitId, icd9Field) {
+    .Call(`_icd_comorbidMatMulMore`, icd9df, icd9Mapping, visitId, icd9Field)
 }
 
 #' @title Comorbidity calculation as a matrix multiplication
@@ -485,8 +557,14 @@ icd9_order_cpp <- function(x) {
 #' @describeIn factor_nosort Rcpp implementation, requiring character vector
 #'   inputs only, no argument checking.
 #' @keywords internal manip
-factor_nosort_rcpp_worker <- function(x, levels) {
-    .Call(`_icd_factorNoSort`, x, levels)
+factor_nosort_rcpp_worker <- function(x, levels, na_rm) {
+    .Call(`_icd_factorNoSort`, x, levels, na_rm)
+}
+
+#' @title Re-generate a factor with new levels, without doing string matching
+#' @keywords internal manip
+refactor_worker <- function(x, new_levels, na_rm = FALSE, exclude_na = TRUE) {
+    .Call(`_icd_refactor`, x, new_levels, na_rm, exclude_na)
 }
 
 #' @title Faster match
@@ -503,19 +581,6 @@ match_rcpp <- function(x, table) {
 #' @keywords internal
 fin <- function(x, table) {
     .Call(`_icd_inFast`, x, table)
-}
-
-#' @title Split a factor into two based on desired levels
-#' @description Using C++ because I also want to quickly return the visits
-#'   corresponding to the NA or non-NA factor elements.
-#' @examples
-#'   v <- c("X", "Y")
-#'   df <- data.frame(visit_id = factor(c("visit1", "visit2", "visit1")),
-#'                    icd_code = factor(c("410", "0010", "E999")))
-#'   icd:::factor_split_rcpp(df, "410", "visit_id", "icd_code")
-#' @keywords internal manip
-factor_split_rcpp <- function(df, relevant, visit_name, code_name) {
-    .Call(`_icd_factorSplit`, df, relevant, visit_name, code_name)
 }
 
 # Register entry points for exported C++ functions

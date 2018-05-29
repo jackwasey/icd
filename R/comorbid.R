@@ -71,6 +71,8 @@ poa_choices <- c("yes", "no", "notYes", "notNo")
 #' @template return_df
 #' @template return_binary
 #' @template dotdotdot
+#' @param categorize_fun Internal. Function used for the categorization problem.
+#' @param comorbid_fun Internal. Function used inside categorization.
 #' @details The order of visits may change depending on the original sequence,
 #'   and the underlying algorithm used. Usually this would be the order of the
 #'   first occurence of each visit/patient identifier.
@@ -124,20 +126,19 @@ comorbid <- function(x, map,
                      icd_name = NULL,
                      short_code = guess_short(x, icd_name = icd_name),
                      short_map = guess_short(map),
-                     return_df = FALSE, return_binary = FALSE, ...)
-  switch_ver_cmb(x,
-                 funs = list(icd9 = icd9_comorbid, icd10 = icd10_comorbid),
-                 map = map,
-                 visit_name = visit_name,
-                 icd_name = icd_name,
-                 short_code = short_code,
-                 return_df = return_df, return_binary = return_binary, ...)
+                     return_df = FALSE, return_binary = FALSE,
+                     categorize_fun = categorize_simple,
+                     ...)
+  switch_ver_cmb(x, funs = list(icd9 = icd9_comorbid, icd10 = icd10_comorbid),
+                 map = map, visit_name = visit_name, icd_name = icd_name,
+                 short_code = short_code, return_df = return_df,
+                 return_binary = return_binary, ...)
 
 #' @describeIn comorbid ICD-10 comorbidities
-#' @param icd10_comorbid_fun function Internal parameter, default will be fast
-#'   and accurate. A function which calculates comorbidities for ICD-10 codes,
-#'   in which the comorbidity map only specifies parent codes, not every
-#'   possible child.
+#' @param icd10_comorbid_fun Internal function Default will be fast and
+#'   accurate. A function which calculates comorbidities for ICD-10 codes, in
+#'   which the comorbidity map only specifies parent codes, not every possible
+#'   child.
 #' @export
 icd10_comorbid <- function(x,
                            map,
@@ -163,7 +164,9 @@ icd10_comorbid <- function(x,
   icd10_comorbid_fun(x = x, map = map, visit_name = visit_name,
                      icd_name = icd_name, short_code = short_code,
                      short_map = short_map, return_df = return_df,
-                     return_binary = return_binary, ...)
+                     return_binary = return_binary,
+                     categorize_fun = categorize_simple,
+                     ...)
 }
 
 #' ICD-10 comorbidities by reducing problem size
@@ -174,15 +177,16 @@ icd10_comorbid <- function(x,
 #' @keywords internal
 icd10_comorbid_reduce <- function(x = x, map, visit_name, icd_name, short_code,
                                   short_map, return_df,
-                                  return_binary = FALSE, ...) {
+                                  return_binary = FALSE,
+                                  categorize_fun = categorize_simple, ...) {
   if (!short_code)
     x[[icd_name]] <- decimal_to_short.icd10(x[[icd_name]])
   # TODO: could  reduce list of input visits here, as we are scanning the codes
   x[[icd_name]] <- factor_nosort_rcpp(x[[icd_name]])
   reduced_map <- simplify_map_lex(levels(x[[icd_name]]), map)
-  categorize(x = x, map = reduced_map,
-             visit_name = visit_name, code_name = icd_name,
-             return_df = return_df, return_binary = return_binary, ...)
+  categorize_fun(x = x, map = reduced_map,
+                 visit_name = visit_name, code_name = icd_name,
+                 return_df = return_df, return_binary = return_binary, ...)
 }
 
 #' @describeIn comorbid Get comorbidities from \code{data.frame} of ICD-9
@@ -195,17 +199,14 @@ icd10_comorbid_reduce <- function(x = x, map, visit_name, icd_name, short_code,
 #'   already run \code{icd9_add_leading_zeroes}), then \code{preclean} can be
 #'   set to \code{FALSE} to save time.
 #' @export
-icd9_comorbid <- function(x,
-                          map,
-                          visit_name = NULL,
-                          icd_name = NULL,
+icd9_comorbid <- function(x, map, visit_name = NULL, icd_name = NULL,
                           short_code = guess_short(x, icd_name = icd_name),
                           short_map = guess_short(map),
-                          return_df = FALSE,
-                          return_binary = FALSE,
+                          return_df = FALSE, return_binary = FALSE,
                           preclean = TRUE,
-                          visitId = NULL, #nolint
-                          icd9Field = NULL, #nolint
+                          visitId = NULL, icd9Field = NULL, #nolint
+                          categorize_fun = categorize_simple,
+                          comorbid_fun = comorbidMatMulMore,
                           ...) {
   if (!missing(visitId)) { #nolint
     warning("Use visit_name instead of visit_id.")
@@ -237,9 +238,10 @@ icd9_comorbid <- function(x,
 
   if (!short_map)
     map <- lapply(map, decimal_to_short)
-  categorize(x = x, map = map, visit_name = visit_name,
-             code_name = icd_name, return_df = return_df,
-             return_binary = return_binary, ...)
+  categorize_fun(x = x, map = map, visit_name = visit_name,
+                 code_name = icd_name, return_df = return_df,
+                 return_binary = return_binary, comorbid_fun = comorbid_fun,
+                 ...)
 }
 
 #' @describeIn comorbid AHRQ comorbidities for ICD-9 codes

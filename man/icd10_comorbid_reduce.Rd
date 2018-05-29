@@ -5,7 +5,7 @@
 \title{ICD-10 comorbidities by reducing problem size}
 \usage{
 icd10_comorbid_reduce(x = x, map, visit_name, icd_name, short_code, short_map,
-  return_df, return_binary = FALSE, ...)
+  return_df, return_binary = FALSE, categorize_fun = categorize_simple, ...)
 }
 \description{
 Use method to reduce ICD-10 problem by initially finding only relevant codes

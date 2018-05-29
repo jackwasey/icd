@@ -38,10 +38,13 @@ using Rcpp::Vector;
 using Rcpp::LogicalVector;
 using Rcpp::IntegerVector;
 using Rcpp::CharacterVector;
+using Rcpp::DataFrame;
 using Rcpp::String;
 using Rcpp::Rcout;
 using Rcpp::as;
-using Rcpp::Named;
+using Rcpp::any;
+using Rcpp::is_na;
+using Rcpp::runif;
 
 // trim one string from right
 std::string trimRightCpp(std::string s) {
@@ -150,7 +153,7 @@ void debug_parallel() {
 // [[Rcpp::export]]
 Rcpp::NumericVector randomMajorCpp(int	n) {
   // This could just be a sprintf like the others.
-  Rcpp::NumericVector iv = Rcpp::floor(Rcpp::runif(n) * 999);
+  Rcpp::NumericVector iv = Rcpp::floor(runif(n) * 999);
   return iv;
 }
 
@@ -159,7 +162,7 @@ Rcpp::NumericVector randomMajorCpp(int	n) {
 // [[Rcpp::export]]
 VecStr icd9RandomShortN(VecStr::size_type n = 5) {
   VecStr out(n);
-  std::vector<double> randoms = Rcpp::as<std::vector<double> >(Rcpp::runif(n, 0, 99999));
+  std::vector<double> randoms = as<std::vector<double> >(runif(n, 0, 99999));
   char buffer[6];
   for (std::vector<double>::size_type i = 0; i != n; ++i) {
     sprintf(buffer, "%.0f", randoms[i]);
@@ -173,7 +176,7 @@ VecStr icd9RandomShortN(VecStr::size_type n = 5) {
 // [[Rcpp::export]]
 VecStr icd9RandomShortV(VecStr::size_type n = 5) {
   VecStr out(n);
-  std::vector<double> randoms = Rcpp::as<std::vector<double> >(Rcpp::runif(n, 0, 9999));
+  std::vector<double> randoms = as<std::vector<double> >(runif(n, 0, 9999));
   char buffer[6];
   for (std::vector<double>::size_type i = 0; i != n; ++i) {
     sprintf(buffer, "V%.0f", randoms[i]);
@@ -187,7 +190,7 @@ VecStr icd9RandomShortV(VecStr::size_type n = 5) {
 // [[Rcpp::export]]
 VecStr icd9RandomShortE(VecStr::size_type n = 5) {
   VecStr out(n);
-  std::vector<double> randoms = Rcpp::as<std::vector<double> >(Rcpp::runif(n, 0, 9999));
+  std::vector<double> randoms = as<std::vector<double> >(runif(n, 0, 9999));
   char buffer[6];
   for (std::vector<double>::size_type i = 0; i != n; ++i) {
     sprintf(buffer, "E%.0f", randoms[i]);
@@ -205,8 +208,8 @@ VecStr icd9RandomShortE(VecStr::size_type n = 5) {
 VecStr icd9RandomShort(VecStr::size_type n = 5) {
 
   VecStr out(n);
-  std::vector<double> randoms = Rcpp::as<std::vector<double> >(Rcpp::runif(n, 0, 99999));
-  std::vector<double> randoms2 = Rcpp::as<std::vector<double> >(Rcpp::runif(n, 0, 3));
+  std::vector<double> randoms = as<std::vector<double> >(runif(n, 0, 99999));
+  std::vector<double> randoms2 = as<std::vector<double> >(runif(n, 0, 3));
 
   char buffer[6];
   for (std::vector<char>::size_type i = 0; i != n; ++i) {
@@ -297,9 +300,8 @@ std::vector<std::size_t> icd9OrderCpp(VecStr x) {
   std::vector<std::size_t> out;
   out.reserve(x.size());
   vp.reserve(x.size());
-  for (std::size_t i = 0; i != x.size(); ++i) {
+  for (std::size_t i = 0; i != x.size(); ++i)
     vp.push_back(std::make_pair(x[i], i));
-  }
   std::sort(vp.begin(), vp.end(), icd9ComparePair);
   std::transform(vp.begin(), vp.end(), std::back_inserter(out), getSecondPlusOne);
   return out;
@@ -309,12 +311,111 @@ std::vector<std::size_t> icd9OrderCpp(VecStr x) {
 //'   inputs only, no argument checking.
 //' @keywords internal manip
 // [[Rcpp::export(factor_nosort_rcpp_worker)]]
-IntegerVector factorNoSort(const Vector<STRSXP>& x,
-                           const Vector<STRSXP>& levels) {
+IntegerVector factorNoSort(const CharacterVector& x,
+                           const CharacterVector& levels,
+                           const bool na_rm) {
   IntegerVector out = match(x, levels);
-  out.attr("levels") = as<CharacterVector>(levels);
+  out.attr("levels") = (CharacterVector) levels;
   out.attr("class") = "factor";
-  return out;
+  if (!na_rm)
+    return out;
+  return(out[!is_na(out)]);
+}
+
+//' @title Re-generate a factor with new levels, without doing string matching
+//' @keywords internal manip
+// [[Rcpp::export(refactor_worker)]]
+Rcpp::IntegerVector refactor(const IntegerVector x, const CV new_levels,
+                             bool na_rm = false, bool exclude_na = true) {
+  IntegerVector f(x.size());
+  CharacterVector lx = x.attr("levels");
+  DEBUG_VEC(x);
+  DEBUG_VEC(lx);
+  if (lx.isNULL()) Rcpp::stop("icd codes must be in a factor");
+  CV no_na_lx;
+  CV no_na_new_levels;
+  LogicalVector which_na_new_levels = is_na(new_levels); // may be redundant
+  if (na_rm || exclude_na) {
+    DEBUG("Found NA in input factor levels: dropping");
+    no_na_lx = lx[!is_na(lx)];
+  } else {
+    no_na_lx = lx;
+  }
+
+  if (na_rm || exclude_na) {
+    DEBUG("Found NA in input levels: requested to drop");
+    no_na_new_levels = new_levels[!which_na_new_levels];
+  } else {
+    no_na_new_levels = new_levels;
+  }
+  DEBUG_VEC(no_na_lx);
+  DEBUG_VEC(no_na_new_levels);
+  IntegerVector new_level_old_idx = Rcpp::match(no_na_lx, no_na_new_levels);
+  DEBUG_VEC(new_level_old_idx);
+  R_xlen_t fsz = x.size();
+  DEBUG("fsz = " << fsz);
+  LogicalVector matched_na_level(fsz, false);
+#pragma omp parallel for
+  for (R_xlen_t i = 0; i < fsz; ++i) {
+    TRACE("considering x[i] - 1: " << x[i] - 1 << " in new_level_old_idx");
+    if (IntegerVector::is_na(x[i])) {
+      TRACE("leaving NA at pos " << i << " due to input NA value");
+      f[i] = NA_INTEGER;
+      continue;
+    }
+    auto cur = new_level_old_idx[x[i] - 1]; // get new R index with R index in C vec
+    if (IntegerVector::is_na(cur)) {
+      if (na_rm || exclude_na) {
+        TRACE("leaving NA at pos " << i << " due to no match with new levels");
+        f[i] = NA_INTEGER;
+      } else {
+        TRACE("dropping pos " << i << " due to no match with new levels");
+        f[i] = NA_INTEGER; // in case user chooses to keep NA values
+        matched_na_level[i] = true;
+      }
+    } else {
+      TRACE("inserting " << cur << " at pos " << i);
+      assert(cur > 0);
+      assert(cur <= no_na_new_levels.size());
+      f[i] = cur;
+    }
+  }
+  DEBUG_VEC(f);
+  DEBUG_VEC(matched_na_level);
+  if (na_rm)
+    f = f[!matched_na_level];
+  else {
+    // if not removing NAs, and na levels are okay, then we need to also match
+    // the NAs in the integer vector to the NA level. Base factor will keep NA
+    // values when there was no match, but index the NA level if it exists.
+    if (!exclude_na) {
+      DEBUG("fixing NA values when there are NA levels");
+      DEBUG_VEC(which_na_new_levels);
+      R_xlen_t n = 0;
+      while (n < which_na_new_levels.size()) {
+        if (which_na_new_levels[n]) break;
+        ++n;
+      }
+      DEBUG("n = " << n);
+      if (n != which_na_new_levels.size()) {
+        DEBUG("NA level found");
+        f[is_na(x)] = (int)n + 1; // R index from C match. ?matched_na_level
+      }
+      else
+        DEBUG("No NA level found");
+    }
+  }
+  DEBUG_VEC(x);
+  DEBUG_VEC(f);
+  f.attr("levels") = no_na_new_levels;
+  f.attr("class") = "factor";
+  DEBUG("max(f) " << max(f));
+  DEBUG("f.size() " << f.size());
+  if (na_rm) {
+    // drop NA levels, too TODO
+    return(f[!is_na(f)]);
+  }
+  return(f);
 }
 
 template <int RTYPE>
@@ -353,92 +454,4 @@ SEXP inFast(SEXP x, SEXP table) {
   case STRSXP: return inFastTemplate<STRSXP>(x, table);
   }
   return R_NilValue;
-}
-
-//' @title Split a factor into two based on desired levels
-//' @description Using C++ because I also want to quickly return the visits
-//'   corresponding to the NA or non-NA factor elements.
-//' @examples
-//'   v <- c("X", "Y")
-//'   df <- data.frame(visit_id = factor(c("visit1", "visit2", "visit1")),
-//'                    icd_code = factor(c("410", "0010", "E999")))
-//'   icd:::factor_split_rcpp(df, "410", "visit_id", "icd_code")
-//' @keywords internal manip
-// [[Rcpp::export(factor_split_rcpp)]]
-List factorSplit(const List &df,
-                 const CharacterVector &relevant,
-                 const String &visit_name,
-                 const String &code_name) {
-  List out = List();
-  // need to template over this for character or integer/factor?
-  const CharacterVector visits = df[visit_name];
-  const IntegerVector &x = df[code_name];
-  VecStr no_na_lx_std;
-  VecInt f_std;
-  f_std.reserve(x.size());
-  LogicalVector inc_mask(x.size(), false);
-  CharacterVector lx = x.attr("levels");
-  no_na_lx_std.reserve(lx.size());
-  DEBUG_VEC(x);
-  DEBUG_VEC(lx);
-  if (lx.isNULL()) Rcpp::stop("icd codes must be in a factor");
-  for (auto l : lx) {
-    if (l == NA_STRING) { // can't use is_na on a String
-      DEBUG("Found NA in factor level");
-      continue;
-    }
-    no_na_lx_std.push_back(as<std::string>(l));
-  }
-  DEBUG_VEC(no_na_lx_std);
-  CV no_na_lx = Rcpp::wrap(no_na_lx_std);
-  DEBUG_VEC(no_na_lx);
-  DEBUG_VEC(relevant);
-  IntegerVector new_level_idx = Rcpp::match(no_na_lx, relevant);
-  DEBUG_VEC(new_level_idx);
-  R_xlen_t fsz = x.size();
-  DEBUG("fsz = " << fsz);
-//#pragma omp parallel for
-  for (R_xlen_t i = 0; i < fsz; ++i) {
-    TRACE("considering index x[i] - 1: " << x[i] - 1 << " from new_level_idx");
-    if (IntegerVector::is_na(x[i])) {
-      TRACE("leaving NA at pos " << i << "due to NA factor level in codes");
-      continue;
-    }
-    auto cur = new_level_idx[x[i] - 1]; // get new index from old using lookup.
-    if (IntegerVector::is_na(cur)) {
-      TRACE("leaving NA at pos " << i);
-    } else {
-      TRACE("inserting " << cur << " at pos " << i);
-      inc_mask[i] = true;
-      assert(cur > 0);
-      f_std.push_back(cur);
-    }
-  }
-  DEBUG_VEC(x);
-  DEBUG_VEC(f_std);
-  IntegerVector f = Rcpp::wrap(f_std);
-  f.attr("levels") = relevant;
-  f.attr("class") = "factor";
-  CharacterVector all_visits_comorbid = visits[inc_mask];
-  CharacterVector all_visits_no_comorbid =
-    visits[is_na(match(visits, all_visits_comorbid))];
-  assert((all(f > 0)).is_true()); // Rcpp::stop("index errors in code name");
-  DEBUG(max(f));
-  DEBUG(f.size());
-  assert(max(f) < f.size() + 1); // if relevant was correct, this should be =
-  List comorbid_df = List::create(Named(visit_name) = all_visits_comorbid,
-                                  Named(code_name) = f);
-  Rcpp::CharacterVector rownames(f.size());
-  char buffer[32];
-  for (R_xlen_t i = 0; i != f.size(); ++i) {
-    sprintf(buffer, "%lu", i);
-    rownames(i) = buffer;
-  }
-  comorbid_df.attr("row.names") = rownames;
-  comorbid_df.attr("names") = CharacterVector::create(visit_name, code_name);
-  comorbid_df.attr("class") = "data.frame";
-  out = List::create(
-    Named("comorbid_df") = comorbid_df,
-    Named("unique_no_comorbid") = unique(all_visits_no_comorbid));
-  return out;
 }

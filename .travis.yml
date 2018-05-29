@@ -21,9 +21,9 @@ r_packages:
   - knitr
   - roxygen2
   - rmarkdown
+  - covr
 
 r_github_packages:
-  - r-lib/covr
   - jimhester/lintr
   - jackwasey/icd.data
 
