@@ -54,6 +54,12 @@ extern "C" {
 #endif
 
 #ifdef ICD_DEBUG_TRACE
+#define TRACE_VEC(x) do { Rcpp::Rcout << #x << ": " << std::flush; printIt(x); } while (0);
+#else
+#define TRACE_VEC(x) ((void)0)
+#endif
+
+#ifdef ICD_DEBUG_TRACE
 #define TRACE(x) DEBUG(x)
 #else
 #define TRACE(x) ((void)0)
@@ -103,20 +109,27 @@ extern "C" {
 
 #if (defined ICD_DEBUG || defined ICD_DEBUG_SETUP)
 #include <iostream>
-// only include Rcpp::Rcout if debugging: R won't like cout so we should not do
-// this unless debugging. not so easy to get an iterator for any std container
-// (no common parent class), without Boost
-template<typename VT>
-void printIt(std::vector<VT> v) {
+template <typename C>
+inline void printIt(const C& c, int n = 10) {
   std::ostringstream o;
-  for (auto i: v) o << i << " ";
+  for (int i = 0; i != std::min(n, (int) c.size()); ++i)
+    o << c[i] << " ";
+  o << std::endl;
+  Rcpp::Rcout << o.str();
+  Rcpp::Rcout.flush();
+}
+/*
+template<typename VT>
+void printIt(std::vector<VT> v, int n = 10) {
+  std::ostringstream o;
+  for (int i = 0; i != std::min(n, (int) v.size()); ++i) o << v[i] << " ";
   o << std::endl;
   Rcpp::Rcout << o.str();
   Rcpp::Rcout.flush();
 }
 //overloads (no common STL container class)
 template <int VT>
-void printIt(Rcpp::Vector<VT> v) {
+void printIt(Rcpp::Vector<VT> v, int n = 10) {
   std::ostringstream o;
   for (auto i: v) o << i << " ";
   o << std::endl;
@@ -125,7 +138,7 @@ void printIt(Rcpp::Vector<VT> v) {
 }
 
 template<typename ST>
-void printIt(std::set<ST> v) {
+void printIt(std::set<ST> v, int n = 10) {
   std::ostringstream o;
   for (auto i: v) o << i << " ";
   o << std::endl;
@@ -134,13 +147,14 @@ void printIt(std::set<ST> v) {
 }
 
 template<typename MK, typename MV>
-void printIt(std::map<MK,MV> v) {
+void printIt(std::map<MK,MV> v, int n = 10) {
   std::ostringstream o;
   for (auto i: v) o << i << " ";
   o << std::endl;
   Rcpp::Rcout << o.str();
   Rcpp::Rcout.flush();
 }
+ */
 #endif // end (defined ICD_DEBUG || defined ICD_DEBUG_SETUP)
 #endif // LOCAL_H_
 

@@ -189,7 +189,7 @@ categorize_simple <- function(x, map, visit_name, code_name,
   }
   # TODO: unique re-factors the result, which takes a long time: avoid w C++?
   # for now - hard stop
-  stopifnot(is.character(x[[code_name]]))
+  stopifnot(is.factor(x[[code_name]]) || is.character(x[[code_name]]))
   mat <- comorbid_fun(icd9df = x,
                       icd9Mapping = map,
                       visitId = visit_name,

@@ -77,15 +77,6 @@ attr_short_diag <- function(x, value = TRUE) {
 #' @description Using C++ because I also want to quickly return the visits
 #'   corresponding to the NA or non-NA factor elements. This is half-way to
 #'   implementing the core comorbidity calculation all in C++.
-#' @examples
-#'   df <- data.frame(visit_id = factor(c("visit1", "visit2", "visit1")),
-#'                    icd_code = factor(c("410", "0010", "E999")))
-#'   icd:::factor_split_rcpp(df, "410", "visit_id", "icd_code")
-#' \dontrun{
-#' R -e "devtools::load_all();devtools::test(filter='github')"
-#' R -e "devtools::load_all();icd9_comorbid_ahrq(data.frame(a='vis', b='0010'))"
-#' }
-#' @md
 #' @param df A `data.frame`, with a visit column (name given by `visit_name`),
 #'   and a code column (name given by `code_name` -- not `icd_name` in this
 #'   function). The code column must be a `factor`.
@@ -97,8 +88,17 @@ attr_short_diag <- function(x, value = TRUE) {
 #'       had a relevant code
 #'   2. A character vector with all the visits where there were no matching
 #'       codes.
-#' @keywords internal manip
+#' @examples
+#'   df <- data.frame(visit_id = factor(c("visit1", "visit2", "visit1")),
+#'                    icd_code = factor(c("410", "0010", "E999")))
+#'   icd:::factor_split_rcpp(df, "410", "visit_id", "icd_code")
+#' \dontrun{
+#' R -e "devtools::load_all();devtools::test(filter='github')"
+#' R -e "devtools::load_all();icd9_comorbid_ahrq(data.frame(a='vis', b='0010'))"
+#' }
+#' @md
 #' @concept comorbidity comorbidities
+#' @keywords internal manip
 factor_split_rcpp <- function(df, relevant, visit_name, code_name) {
     .Call(`_icd_factorSplit`, df, relevant, visit_name, code_name)
 }

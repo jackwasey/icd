@@ -39,23 +39,30 @@ List remap(const List& map, IHS& relevantHash) {
       out[i] = refactor(this_map_cmb, relevantHash.keys(), true, true);
     } else { // most common case (re-use the hash!)
       CV this_map_cmb = map[i];
-      DEBUG(this_map_cmb.size());
+      // make factor, so R-indexed numbers.
       IntegerVector this_cmb = (IntegerVector) relevantHash.lookup(this_map_cmb);
-      DEBUG(this_cmb.size());
       this_cmb.attr("levels") = (CharacterVector) relevantHash.keys();
       this_cmb.attr("class") = "factor";
       this_cmb = this_cmb[!is_na(this_cmb)];
-      DEBUG_VEC(this_cmb);
+      TRACE_VEC(this_cmb);
       out[cmb_name] = this_cmb;
     }
   }
   return(out);
 }
 
-// [[Rcpp::export]]
-CV getRelevant(const List& map, const CV& codes) {
-  VecStr relevant;
-  relevant.reserve(100 * map.size());
+class Relevant : IHS {
+public:
+  Relevant(const List& map, const CV& codes);
+private:
+  CV relevant;
+  IHS* relevantHash;
+  CV relevantKeys;
+};
+
+Relevant::Relevant(const List& map, const CV& codes) {
+  VecStr r;
+  r.reserve(100 * map.size());
   IHS codeHash(codes);
   codeHash.fill();
   DEBUG_VEC(codes);
@@ -64,27 +71,44 @@ CV getRelevant(const List& map, const CV& codes) {
   for (CV cmb : map) {
     for (auto code : cmb) {
       if (codeHash.contains(code)) {
-        DEBUG("Pushing back " << code);
-        relevant.push_back(((String)code).get_cstring());
+        TRACE("Pushing back " << code);
+        r.push_back(((String)code).get_cstring());
       }
     }
   }
-  return wrap(relevant);
+  relevant = wrap(relevant); // or keep as STL container?
+
+#ifdef ICD_DEBUG
+  assert(relevant.size() == unique(relevant).size());
+#endif
+  //  VecStr rk_debug = as<VecStr>(relevant);
+  //  std::sort(rk_debug.begin(), rk_debug.end());
+  //  DEBUG("relevant:");
+  //  printIt(rk_debug, 120);
+  IHS rh(relevant);
+  rh.fill();
+  *relevantHash = rh;
+  relevantKeys = rh.keys();
 }
+
+// TODO: make exportable version // [[Rcpp::export]]
 
 void printCornerMap(DenseMap x) {
   DEBUG("Map matrix:");
   if (x.rows() >= 5 && x.cols() >= 5) {
     DenseMap block = x.block<5, 5>(0, 0);
     DEBUG(block);
-  }
-  else
+  } else if (x.rows() < 5 && x.cols() < 5) {
     DEBUG(x);
+  } else {
+    DEBUG(x(0, 0) << ", " << x(0, 1) <<
+      x(1, 0) << ", " << x(1, 1));
+  }
   DEBUG("Map matrix rows: " << x.rows() << ", and cols: " << x.cols());
 }
 
 void printCornerSparse(PtsSparse visMat) {
-  DEBUG("converting visMat to dense for debugging only (slow!):");
+  DEBUG("converting visMat to dense for debugging only:");
   Eigen::MatrixXi dense = Eigen::MatrixXi(visMat);
   DEBUG("visMat:");
   if (visMat.rows() >= 4 && visMat.cols() >= 4)
@@ -96,25 +120,13 @@ void printCornerSparse(PtsSparse visMat) {
 #ifdef ICD_DEBUG
 #define PRINTCORNERMAP(x) Rcpp::Rcout << #x << ": "; printCornerMap(x);
 #define PRINTCORNERSP(x) Rcpp::Rcout << #x << ": "; printCornerSparse(x);
-#define ICD_ASSIGN(row,col) mapMat(row, col) = true;
+#define ICD_ASSIGN(row,col) mapMat(row, col) = true; // bounds check
 #else
 #define PRINTCORNERMAP(x) ((void)0);
 #define PRINTCORNERSP(x) ((void)0);
 #define ICD_ASSIGN(row,col) mapMat.coeffRef(row, col) = true;
 #endif
-/*
-namespace icd {
-// a class that encapsulates the visit table transformation
-class Visits {
-public:
-  Visits(IHS relevantHash) : relevantHash(relevantHash);
-private:
-  SEXP visits;
-  SEXP codes;
-  IHS relevantHash;
-};
-}
-*/
+
 // This is a complicated function
 //
 // Goal is to avoid any string matching or even hash calculation at all.
@@ -135,6 +147,7 @@ void buildVisitCodesSparseSimple(SEXP visits,
                                  PtsSparse& visMat,
                                  VecStr& visitIds // get this from sparse matrix at end, but needed?
 ) {
+  assert(Rf_length(visits) == Rf_length(icds));
   const CV relevantKeys = relevantHash.keys();
   const R_xlen_t relevantSize = relevantKeys.size();
   int vlen = Rf_length(visits);
@@ -172,12 +185,9 @@ void buildVisitCodesSparseSimple(SEXP visits,
     CV codes_cv = icds;
     DEBUG_VEC(codes_cv);
     DEBUG_VEC(relevantKeys);
+    DEBUG(relevantHash.keys().size());
     cols = relevantHash.lookup(codes_cv); // C indexed
-    // REHASH!??? why?!
-    //cols = match(codes_cv, relevantKeys);
-    // not working!
   } else {
-    // if the codes are a factor, with _relevant_ levels, the cols are the values
     const CV code_levels_cv = (CV) code_levels;
     assert(Rf_length(code_levels) == relevantSize);
     assert(code_levels_cv[0] == relevantKeys[0]); // TODO better checks?
@@ -189,9 +199,7 @@ void buildVisitCodesSparseSimple(SEXP visits,
   if (visit_levels.isNULL()) {
     DEBUG("visits are not factors");
     DEBUG_VEC(visHashKeys);
-    //rows = visHash.lookup((CV) visits); // C index
-    rows = visHash.lookup(visHashKeys); // C index
-    //rows = visHashKeys;
+    rows = visHash.lookup((CV) visits); // C index
   } else {
     DEBUG("visits are factors");
     //  use the factor level as the row number (R vs C index)
@@ -206,7 +214,6 @@ void buildVisitCodesSparseSimple(SEXP visits,
     if (IntegerVector::is_na(cols[i])) continue;
     TRACE("inserting triplet at " << rows[i] << ", " << cols[i]);
     visTriplets.push_back(Triplet(rows[i] - 1, cols[i] - 1, true));
-    // TODO: what about no-match situations???
   }
   TRACE("visMat and visitIds are updated, setting visMat from triplets...");
   visMat.setFromTriplets(visTriplets.begin(), visTriplets.end());
@@ -314,10 +321,10 @@ void buildMapMat(const List& map, DenseMap& mapMat) {
   mapMat.setZero();
   for (auto li = map.begin(); li != map.end(); ++li) {
     auto col = std::distance(map.begin(), li);
-    TRACE("working on map item/col: " << col);
+    TRACE("working on comorbidity: " << col);
     IntegerVector v = *li;
     for (R_xlen_t vi = 0; vi != v.size(); ++vi) {
-      //TRACE("working on cmb item: " << vi);
+      TRACE("working on cmb item: " << vi << " -> " << v[vi]);
       if (!IntegerVector::is_na(v[vi])) {
         ICD_ASSIGN(v[vi] - 1, col); // R to C indexing: the factor index is row
       }
@@ -360,20 +367,10 @@ LogicalMatrix comorbidMatMulSimple(const DataFrame& icd9df,
   VecStr out_row_names; // size is reserved in buildVisitCodesVec
   SEXP visits = icd9df[visitId];
   SEXP codes = icd9df[icd9Field];
-  CV relevant = getRelevant(icd9Mapping, codes);
-  IHS relevantHash(relevant);
-  relevantHash.fill();
-  CV relevantKeys = relevantHash.keys();
-  DEBUG_VEC(relevant);
+  // make relevant object
   const List map = remap(icd9Mapping, relevantHash);
-  DEBUG("remap complete");
-  DEBUG("length new map " << map.size());
-  // debug only:
-  IntegerVector map_debug = map[1];
-  CV debug_one = map_debug.attr("levels");
-  DEBUG_VEC(map_debug);
-  DEBUG_VEC(debug_one);
-  DenseMap mapMat(relevant.length(), map.length());
+  DEBUG("length remapped map " << map.size());
+  DenseMap mapMat(relevant.size(), map.length());
   buildMapMat(map, mapMat);
   DEBUG("mapMat created");
   PtsSparse visMat; // reservation and sizing done within next function
@@ -391,7 +388,6 @@ LogicalMatrix comorbidMatMulSimple(const DataFrame& icd9df,
   mat_out_bool.attr("dimnames") = dimnames;
   return mat_out_bool;
 }
-
 
 //' @title Comorbidity calculation as a matrix multiplication
 //' @description
@@ -433,7 +429,6 @@ LogicalMatrix comorbidMatMul(const DataFrame& icd9df, const List& icd9Mapping,
     IntegerVector v = *li;
     map_rows += v.size();
   }
-
   // make an integer matrix for the map. not sparse. No boolean option, I don't
   // think. N.b. codes can appear in multiple categories, e.g. hypertension
   // secondary to kidney disease. For matrix multiple to work, it must be
@@ -510,10 +505,8 @@ LogicalMatrix comorbidMatMul(const DataFrame& icd9df, const List& icd9Mapping,
 #ifdef ICD_DEBUG_SETUP
   Rcpp::Rcout << "Built the sparse matrix, rows:" << visit_codes_sparse.rows() <<
     ", cols: " << visit_codes_sparse.cols() << std::endl;
-
 #ifdef ICD_DEBUG_SETUP_SLOW
   // just for debugging, convert to dense to show contents:
-{
   Rcpp::Rcout << "converting visit_codes_sparse to dense for debugging only (slow!):" << std::endl;
   Eigen::MatrixXi dense = Eigen::MatrixXi(visit_codes_sparse);
   Rcpp::Rcout << "visit_codes_sparse:" << std::endl;
@@ -521,57 +514,52 @@ LogicalMatrix comorbidMatMul(const DataFrame& icd9df, const List& icd9Mapping,
     Rcpp::Rcout << dense.block<4, 4>(0, 0) << std::endl;
   else
     Rcpp::Rcout << dense << std::endl;
-}
 #endif
 #endif
 
-if (visit_codes_sparse.cols() != map.rows())
-  Rcpp::stop("matrix multiplication won't work");
+  if (visit_codes_sparse.cols() != map.rows())
+    Rcpp::stop("matrix multiplication won't work");
 
-DenseMap result = visit_codes_sparse * map; // col major result
+  DenseMap result = visit_codes_sparse * map; // col major result
 
 #ifdef ICD_DEBUG_SETUP
-Rcpp::Rcout << " done matrix multiplication. Result has " <<
-  "rows: " << result.rows() <<
-    " and cols: " << result.cols() << std::endl;
-Rcpp::Rcout << "matrix result begins: " << std::endl;
-if (result.rows() >= 4 && result.cols() >= 4)
-  Rcpp::Rcout << result.block<4, 4>(0, 0) << std::endl;
-else
-  Rcpp::Rcout << result << std::endl;
+  Rcpp::Rcout << " done matrix multiplication. Result has " <<
+    "rows: " << result.rows() <<
+      " and cols: " << result.cols() << std::endl;
+  Rcpp::Rcout << "matrix result begins: " << std::endl;
+  if (result.rows() >= 4 && result.cols() >= 4)
+    Rcpp::Rcout << result.block<4, 4>(0, 0) << std::endl;
+  else
+    Rcpp::Rcout << result << std::endl;
 #endif
 #ifdef ICD_DEBUG_SETUP
-Eigen::Array<bool, Eigen::Dynamic, Eigen::Dynamic> result_bool = (result.array() != 0);
-Rcpp::Rcout << "Result boolean array has " <<
-  "rows: " << result_bool.rows() <<
-    " and cols: " << result_bool.cols() << std::endl;
-Rcpp::Rcout << "bool result begins: " << std::endl;
-if (result_bool.rows() >= 4 && result_bool.cols() >= 4)
-  Rcpp::Rcout << result_bool.block<4, 4>(0, 0) << std::endl;
-else
-  Rcpp::Rcout << result_bool << std::endl;
+  Eigen::Array<bool, Eigen::Dynamic, Eigen::Dynamic> result_bool = (result.array() != 0);
+  Rcpp::Rcout << "Result boolean array has " <<
+    "rows: " << result_bool.rows() <<
+      " and cols: " << result_bool.cols() << std::endl;
+  Rcpp::Rcout << "bool result begins: " << std::endl;
+  if (result_bool.rows() >= 4 && result_bool.cols() >= 4)
+    Rcpp::Rcout << result_bool.block<4, 4>(0, 0) << std::endl;
+  else
+    Rcpp::Rcout << result_bool << std::endl;
 #endif
-// Rcpp::LogicalMatrix mat_out_bool = Rcpp::wrap(result); // segfaults sometimes
-Rcpp::IntegerMatrix mat_out_int = Rcpp::wrap(result); // try to avoid the segfault
-Rcpp::LogicalMatrix mat_out_bool = Rcpp::wrap(mat_out_int);
-List dimnames = Rcpp::List::create(out_row_names, icd9Mapping.names());
-CharacterVector rownames = dimnames[0];
-CharacterVector colnames = dimnames[1];
+  // Rcpp::LogicalMatrix mat_out_bool = Rcpp::wrap(result); // segfaults sometimes
+  Rcpp::IntegerMatrix mat_out_int = Rcpp::wrap(result); // try to avoid the segfault
+  Rcpp::LogicalMatrix mat_out_bool = Rcpp::wrap(mat_out_int);
+  List dimnames = Rcpp::List::create(out_row_names, icd9Mapping.names());
+  CharacterVector rownames = dimnames[0];
+  CharacterVector colnames = dimnames[1];
 #ifdef ICD_DEBUG_SETUP
-Rcpp::Rcout << "mat_out rows = " << mat_out_bool.rows() << std::endl;
-Rcpp::Rcout << "mat_out cols = " << mat_out_bool.cols() << std::endl;
-Rcpp::Rcout << "Length of dimnames = " << dimnames.size() << std::endl;
-Rcpp::Rcout << "Length of rownames = " << rownames.size() << std::endl;
-Rcpp::Rcout << "Length of colnames = " << colnames.size() << std::endl;
+  Rcpp::Rcout << "mat_out rows = " << mat_out_bool.rows() << std::endl;
+  Rcpp::Rcout << "mat_out cols = " << mat_out_bool.cols() << std::endl;
+  Rcpp::Rcout << "Length of dimnames = " << dimnames.size() << std::endl;
+  Rcpp::Rcout << "Length of rownames = " << rownames.size() << std::endl;
+  Rcpp::Rcout << "Length of colnames = " << colnames.size() << std::endl;
 #endif
-mat_out_bool.attr("dimnames") = dimnames;
+  mat_out_bool.attr("dimnames") = dimnames;
 #ifdef ICD_DEBUG_SETUP
-Rcpp::Rcout << "dimension names set" << std::endl;
+  Rcpp::Rcout << "dimension names set" << std::endl;
 #endif
-// todo: boolean reduction to get flags instead of various integers
-// https://eigen.tuxfamily.org/dox/group__TutorialReductionsVisitorsBroadcasting.html
-//
-
-valgrindCallgrindStop();
-return mat_out_bool;
+  valgrindCallgrindStop();
+  return mat_out_bool;
 }

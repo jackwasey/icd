@@ -95,8 +95,7 @@ test_that("ahrq ccs icd 9 is performing correctly", {
       lvl4 = c(" ", " ", " ", " "),
       stringsAsFactors = FALSE
     )
-
-  res <- icd9_comorbid_ccs(test_df,  visit_name = "visit_id", icd_name = "icd9")
+  res <- icd9_comorbid_ccs(test_df)
   if (exists("comorbidMatMul") && exists("icd9ComorbidShortCpp")) {
     expect_identical(icd9_comorbid_ccs(test_df, comorbid_fun = icd:::comorbidMatMul),
                      icd9_comorbid_ccs(test_df, comorbid_fun = icd:::icd9ComorbidShortCpp))
@@ -147,8 +146,7 @@ test_that("ahrq css icd 10 is performing correctly", {
       lvl2 = c("13.2", "17.2", " ", "12.2"),
       stringsAsFactors = FALSE
     )
-  res <-
-    icd10_comorbid_ccs(test_df,  visit_name = "visit_id", icd_name = "icd10")
+  res <- icd10_comorbid_ccs(test_df)
   expect_true(all(mapply(
     function(x, y)
       res[x, y], test_df$visit_id, test_df$single

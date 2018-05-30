@@ -22,12 +22,10 @@ test_that("smaller test case based on random input", {
     visit_id = c("p1", "p2", "p1"),
     code = c("C", "B", "A")
   )
-
   small_ccs_map <- list(X = "C",
                         Y = "B",
                         Z = "A")
   # this simple map results in the map being the identity matrix
-
   expected_res <- matrix(byrow = TRUE,
                          data = c(TRUE, FALSE, TRUE,
                                   FALSE, TRUE, FALSE),
@@ -35,10 +33,9 @@ test_that("smaller test case based on random input", {
                          dimnames = list(c("p1", "p2"),
                                          c("X", "Y", "Z"))
   )
-
   res <- icd:::comorbid_common(small_ccs_df, map = small_ccs_map, visit_name = "visit_id", icd_name = "code")
   res2 <- icd:::comorbid_common(small_ccs_df, map = small_ccs_map, visit_name = "visit_id", icd_name = "code",
-                                comorbid_fun = icd:::icd9ComorbidShortCpp)
+                                categorize_fun = categorize, comorbid_fun = icd:::icd9ComorbidShortCpp)
   # compare all three ways, for development only
   expect_identical(res, expected_res)
   expect_identical(res2, expected_res)
