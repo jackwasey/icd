@@ -24,8 +24,7 @@ using namespace Rcpp;
 // codes using hashmap
 //
 // downside is that each list element has a copy of the same relevant levels.
-List remap(const List& map, const IHS& relevantHash) {
-  DEBUG_VEC(relevantHash.keys());
+List remap(const List& map, IHS& relevantHash) {
   List out = List::create();
   CharacterVector cmbs = map.names();
   for (R_xlen_t i = 0; i != map.size(); ++i) {
@@ -103,7 +102,19 @@ void printCornerSparse(PtsSparse visMat) {
 #define PRINTCORNERSP(x) ((void)0);
 #define ICD_ASSIGN(row,col) mapMat.coeffRef(row, col) = true;
 #endif
-
+/*
+namespace icd {
+// a class that encapsulates the visit table transformation
+class Visits {
+public:
+  Visits(IHS relevantHash) : relevantHash(relevantHash);
+private:
+  SEXP visits;
+  SEXP codes;
+  IHS relevantHash;
+};
+}
+*/
 // This is a complicated function
 //
 // Goal is to avoid any string matching or even hash calculation at all.
@@ -120,14 +131,13 @@ void printCornerSparse(PtsSparse visMat) {
 // internals for lookups, so can't use it directly here.
 void buildVisitCodesSparseSimple(SEXP visits,
                                  SEXP icds,
-                                 const IHS& relevantHash,
+                                 IHS& relevantHash,
                                  PtsSparse& visMat,
                                  VecStr& visitIds // get this from sparse matrix at end, but needed?
 ) {
-  const CV relevant = relevantHash.keys();
+  const CV relevantKeys = relevantHash.keys();
+  const R_xlen_t relevantSize = relevantKeys.size();
   int vlen = Rf_length(visits);
-  IHS visHash((CV) visits); // TODO need to let work for factors, too.
-  visHash.fill();
   RObject visit_levels = ((RObject) visits).attr("levels");
   RObject code_levels = ((RObject) icds).attr("levels");
   TRACE("got levels");
@@ -146,13 +156,13 @@ void buildVisitCodesSparseSimple(SEXP visits,
   default: {
     Rcpp::stop("cannot convert this type of visit ID yet: use character or factor");
   }}
-  DEBUG("n unique = " << relevant.size());
+  DEBUG("n unique = " << relevantSize);
   // R's global string cache R_StringHash does not provide an obvious mechanism
   // to lookup an index, just insertion and return of reference to found
   // CHARSXP. R_HashGetLoc is indexed by hashcode itself, no sequentially. Stick
   // with Rcpp hashing for now, which at least hashes based on integer address
   // of the string, not string itself.
-  visMat.resize(vlen, relevant.size()); // vlen is upper-bound, cols is correct
+  visMat.resize(vlen, relevantSize); // vlen is upper-bound, cols is correct
   visMat.reserve(vlen); // but memory commitment is known and limited to just vlen.
   std::vector<Triplet> visTriplets;
   visTriplets.reserve(vlen * 30);
@@ -161,20 +171,27 @@ void buildVisitCodesSparseSimple(SEXP visits,
     DEBUG("codes are character");
     CV codes_cv = icds;
     DEBUG_VEC(codes_cv);
-    DEBUG_VEC(relevantHash.keys());
+    DEBUG_VEC(relevantKeys);
     cols = relevantHash.lookup(codes_cv); // C indexed
+    // REHASH!??? why?!
+    //cols = match(codes_cv, relevantKeys);
+    // not working!
   } else {
     // if the codes are a factor, with _relevant_ levels, the cols are the values
-    CV code_levels_cv = (CV) code_levels;
-    assert(Rf_length(code_levels) == relevant.size());
-    assert(code_levels_cv[0] == relevantHash.keys()[0]); // TODO better checks?
+    const CV code_levels_cv = (CV) code_levels;
+    assert(Rf_length(code_levels) == relevantSize);
+    assert(code_levels_cv[0] == relevantKeys[0]); // TODO better checks?
     cols = ((IntegerVector) icds) - 1; // all -1 for R to C indexing.
   }
+  IHS visHash((CV) visits); // TODO need to let work for factors, too.
+  visHash.fill();
+  const CV visHashKeys = visHash.keys();
   if (visit_levels.isNULL()) {
-    DEBUG("self-matching");
-    const auto self_keys = visHash.keys();
-    DEBUG_VEC(self_keys);
-    rows = visHash.lookup(self_keys); // C index
+    DEBUG("visits are not factors");
+    DEBUG_VEC(visHashKeys);
+    //rows = visHash.lookup((CV) visits); // C index
+    rows = visHash.lookup(visHashKeys); // C index
+    //rows = visHashKeys;
   } else {
     DEBUG("visits are factors");
     //  use the factor level as the row number (R vs C index)
@@ -187,13 +204,14 @@ void buildVisitCodesSparseSimple(SEXP visits,
   // now we have rows and columns, just make the triplets and insert.
   for (R_xlen_t i = 0; i != rows.size(); ++i) {
     if (IntegerVector::is_na(cols[i])) continue;
-    visTriplets.push_back(Triplet(rows[i], cols[i], true));
+    TRACE("inserting triplet at " << rows[i] << ", " << cols[i]);
+    visTriplets.push_back(Triplet(rows[i] - 1, cols[i] - 1, true));
     // TODO: what about no-match situations???
   }
   TRACE("visMat and visitIds are updated, setting visMat from triplets...");
   visMat.setFromTriplets(visTriplets.begin(), visTriplets.end());
-  visitIds = as<VecStr>(visHash.keys()); // char vs factor
-  visMat.conservativeResize(visitIds.size(), relevant.size());
+  visitIds = as<VecStr>(visHashKeys); // disordered unique visit ids
+  visMat.conservativeResize(visitIds.size(), relevantSize);
   DEBUG("Built visMt, rows:" << visMat.rows() << ", cols: " << visMat.cols());
   PRINTCORNERSP(visMat);
 }
@@ -345,9 +363,8 @@ LogicalMatrix comorbidMatMulSimple(const DataFrame& icd9df,
   CV relevant = getRelevant(icd9Mapping, codes);
   IHS relevantHash(relevant);
   relevantHash.fill();
+  CV relevantKeys = relevantHash.keys();
   DEBUG_VEC(relevant);
-  CV r_tmp = relevantHash.keys();
-  DEBUG_VEC(r_tmp);
   const List map = remap(icd9Mapping, relevantHash);
   DEBUG("remap complete");
   DEBUG("length new map " << map.size());
@@ -360,7 +377,8 @@ LogicalMatrix comorbidMatMulSimple(const DataFrame& icd9df,
   buildMapMat(map, mapMat);
   DEBUG("mapMat created");
   PtsSparse visMat; // reservation and sizing done within next function
-  buildVisitCodesSparseSimple(visits, codes, relevantHash, visMat, out_row_names);
+  buildVisitCodesSparseSimple(visits, codes, relevantHash,
+                              visMat, out_row_names);
   DEBUG("built visit matrix");
   if (visMat.cols() != mapMat.rows())
     Rcpp::stop("matrix multiplication won't work");
