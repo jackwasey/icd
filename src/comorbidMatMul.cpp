@@ -18,91 +18,60 @@ extern "C" {
 #include "cutil.h"                              // for getRListOrDfElement
 }
 
+/*
+ MAKEFLAGS=-j16 R -e 'devtools::load_all(); icd9_comorbid_ahrq(ahrq_test_dat)'
+ MAKEFLAGS=-j16 R -e 'devtools::load_all(); test(reporter="Location")'
+ */
+
 using namespace Rcpp;
 
-// take a map of character vectors or factors and reduce it to only relevant
-// codes using hashmap
-//
-// downside is that each list element has a copy of the same relevant levels.
-List remap(const List& map, IHS& relevantHash) {
-  List out = List::create();
-  CharacterVector cmbs = map.names();
-  for (R_xlen_t i = 0; i != map.size(); ++i) {
-    String cmb_name = cmbs[i];
-    TRACE("remapping: " << cmb_name.get_cstring());
-    bool areFactors = (TYPEOF(map[0]) == INTSXP);
-    if (!areFactors && TYPEOF(map[0]) != STRSXP)
-      Rcpp::stop("remap expects a list of only character vectors or factors.");
-    if (areFactors) {
-      TRACE("factor in input map");
-      IntegerVector this_map_cmb = map[i];
-      out[i] = refactor(this_map_cmb, relevantHash.keys(), true, true);
-    } else { // most common case (re-use the hash!)
-      CV this_map_cmb = map[i];
-      // make factor, so R-indexed numbers.
-      IntegerVector this_cmb = (IntegerVector) relevantHash.lookup(this_map_cmb);
-      this_cmb.attr("levels") = (CharacterVector) relevantHash.keys();
-      this_cmb.attr("class") = "factor";
-      this_cmb = this_cmb[!is_na(this_cmb)];
-      TRACE_VEC(this_cmb);
-      out[cmb_name] = this_cmb;
-    }
-  }
-  return(out);
-}
-
-class Relevant : IHS {
+class Relevant {
 public:
-  Relevant(const List& map, const CV& codes);
-private:
-  CV relevant;
-  IHS* relevantHash;
-  CV relevantKeys;
-};
+  const List& src_map;
+  const CV relevant;
+  IHS hash;
+  CV keys;
+  Relevant(const List& map, const CV& codes) : src_map(map), relevant(findRelevant(codes)), hash(IHS(relevant).fill()), keys(hash.keys()) {}
 
-Relevant::Relevant(const List& map, const CV& codes) {
-  VecStr r;
-  r.reserve(100 * map.size());
-  IHS codeHash(codes);
-  codeHash.fill();
-  DEBUG_VEC(codes);
-  DEBUG_VEC(codeHash.keys());
-  // TODO codes may be factor, if so, return levels
-  for (CV cmb : map) {
-    for (auto code : cmb) {
-      if (codeHash.contains(code)) {
-        TRACE("Pushing back " << code);
-        r.push_back(((String)code).get_cstring());
+  CV findRelevant(const CV& codes) {
+    std::unordered_set<std::string> r;
+    r.reserve(100 * src_map.size());
+    IHS codeHash(codes);
+    codeHash.fill();
+    DEBUG_VEC(codes);
+    DEBUG_VEC(codeHash.keys());
+    // TODO codes may be factor, if so, return levels
+    for (CV cmb : src_map) {
+      for (auto code : cmb) {
+        if (codeHash.contains(code)) {
+          TRACE("Pushing back " << code);
+          //r.push_back(((String) code).get_cstring());
+          r.insert(((String) code).get_cstring());
+        }
       }
     }
+    return(wrap(r)); // or keep as STL container?
   }
-  relevant = wrap(relevant); // or keep as STL container?
 
-#ifdef ICD_DEBUG
-  assert(relevant.size() == unique(relevant).size());
-#endif
-  //  VecStr rk_debug = as<VecStr>(relevant);
-  //  std::sort(rk_debug.begin(), rk_debug.end());
-  //  DEBUG("relevant:");
-  //  printIt(rk_debug, 120);
-  IHS rh(relevant);
-  rh.fill();
-  *relevantHash = rh;
-  relevantKeys = rh.keys();
-}
+  R_xlen_t size() { return relevant.size(); }
+}; // Relevant
 
-// TODO: make exportable version // [[Rcpp::export]]
+// TODO: make exportable version of get relevant? // [[Rcpp::export]]
 
 void printCornerMap(DenseMap x) {
   DEBUG("Map matrix:");
-  if (x.rows() >= 5 && x.cols() >= 5) {
-    DenseMap block = x.block<5, 5>(0, 0);
+  if (x.rows() >= 5 && x.cols() >= 10) {
+    DenseMap block = x.block<5, 10>(0, 0);
     DEBUG(block);
-  } else if (x.rows() < 5 && x.cols() < 5) {
+  } else if (x.rows() < 5 && x.cols() < 10) {
     DEBUG(x);
-  } else {
-    DEBUG(x(0, 0) << ", " << x(0, 1) <<
+  } else if (x.rows() > 1 && x.cols() > 1) {
+    DEBUG(x(0, 0) << ", " << x(0, 1) << ", " <<
       x(1, 0) << ", " << x(1, 1));
+  } else if (x.rows() == 1 && x.cols() == 1) {
+    DEBUG(x(0, 0));
+  } else {
+    DEBUG("map mat empty");
   }
   DEBUG("Map matrix rows: " << x.rows() << ", and cols: " << x.cols());
 }
@@ -120,11 +89,11 @@ void printCornerSparse(PtsSparse visMat) {
 #ifdef ICD_DEBUG
 #define PRINTCORNERMAP(x) Rcpp::Rcout << #x << ": "; printCornerMap(x);
 #define PRINTCORNERSP(x) Rcpp::Rcout << #x << ": "; printCornerSparse(x);
-#define ICD_ASSIGN(row,col) mapMat(row, col) = true; // bounds check
+#define ICD_ASSIGN(row,col) mat(row, col) = true; // bounds check
 #else
 #define PRINTCORNERMAP(x) ((void)0);
 #define PRINTCORNERSP(x) ((void)0);
-#define ICD_ASSIGN(row,col) mapMat.coeffRef(row, col) = true;
+#define ICD_ASSIGN(row,col) mat.coeffRef(row, col) = true;
 #endif
 
 // This is a complicated function
@@ -143,13 +112,13 @@ void printCornerSparse(PtsSparse visMat) {
 // internals for lookups, so can't use it directly here.
 void buildVisitCodesSparseSimple(SEXP visits,
                                  SEXP icds,
-                                 IHS& relevantHash,
+                                 Relevant& rh,
                                  PtsSparse& visMat,
                                  VecStr& visitIds // get this from sparse matrix at end, but needed?
 ) {
   assert(Rf_length(visits) == Rf_length(icds));
-  const CV relevantKeys = relevantHash.keys();
-  const R_xlen_t relevantSize = relevantKeys.size();
+  const CV relevantKeys = rh.keys;
+  const R_xlen_t relevantSize = rh.size();
   int vlen = Rf_length(visits);
   RObject visit_levels = ((RObject) visits).attr("levels");
   RObject code_levels = ((RObject) icds).attr("levels");
@@ -185,13 +154,15 @@ void buildVisitCodesSparseSimple(SEXP visits,
     CV codes_cv = icds;
     DEBUG_VEC(codes_cv);
     DEBUG_VEC(relevantKeys);
-    DEBUG(relevantHash.keys().size());
-    cols = relevantHash.lookup(codes_cv); // C indexed
+    DEBUG(rh.keys.size());
+    cols = rh.hash.lookup(codes_cv); // C indexed
   } else {
-    const CV code_levels_cv = (CV) code_levels;
-    assert(Rf_length(code_levels) == relevantSize);
-    assert(code_levels_cv[0] == relevantKeys[0]); // TODO better checks?
-    cols = ((IntegerVector) icds) - 1; // all -1 for R to C indexing.
+    DEBUG("codes are factor");
+    const IntegerVector codes_relevant = refactor(icds, rh.relevant, false, true);
+    //const CV code_levels_cv = (CV) code_levels;
+    //assert(Rf_length(code_relevant.attr("levels")) == relevantSize);
+    //assert(code_levels_cv[0] == relevantKeys[0]); // TODO better checks?
+    cols = ((IntegerVector) codes_relevant) - 1; // all -1 for R to C indexing.
   }
   IHS visHash((CV) visits); // TODO need to let work for factors, too.
   visHash.fill();
@@ -203,7 +174,6 @@ void buildVisitCodesSparseSimple(SEXP visits,
   } else {
     DEBUG("visits are factors");
     //  use the factor level as the row number (R vs C index)
-    //rows = ((IntegerVector) visHash.keys()) - 1;
     rows = ((IntegerVector) visits - 1);  // R index
   }
   DEBUG_VEC(rows);
@@ -316,21 +286,67 @@ void buildVisitCodesSparse(const SEXP& icd9df,
   visitIds.resize(vcdb_max_idx + 1); // we over-sized (not just over-reserved) so now we trim.
 }
 
-// takes a map of factors produced by remap
-void buildMapMat(const List& map, DenseMap& mapMat) {
-  mapMat.setZero();
+class MapPlus {
+public:
+  MapPlus(const List& icd9Mapping, const Relevant& rh);
+  void buildMatrix();
+  List map;
+  DenseMap mat;
+  R_xlen_t rows() { return mat.rows(); }
+};
+// constructor
+MapPlus::MapPlus(const List& icd9Mapping, const Relevant& rh) {
+  // take a map of character vectors or factors and reduce it to only relevant
+  // codes using hashmap
+  //
+  // downside is that each list element has a copy of the same relevant levels.
+  //List remap(const List& map, IHS& relevantHash) {
+  CharacterVector cmbs = icd9Mapping.names();
+  for (R_xlen_t i = 0; i != icd9Mapping.size(); ++i) {
+    String cmb_name = cmbs[i];
+    TRACE("remapping: " << cmb_name.get_cstring());
+    bool areFactors = (TYPEOF(icd9Mapping[0]) == INTSXP);
+    if (!areFactors && TYPEOF(icd9Mapping[0]) != STRSXP)
+      Rcpp::stop("remap expects a list of only character vectors or factors.");
+    if (areFactors) {
+      TRACE("factor in input map");
+      IntegerVector this_map_cmb = icd9Mapping[i];
+      map[i] = refactor(this_map_cmb, rh.keys, true, true);
+    } else { // most common case (re-use the hash!)
+      CV this_map_cmb = icd9Mapping[i];
+      // make factor, so R-indexed numbers.
+      IntegerVector this_cmb = (IntegerVector) rh.hash.lookup(this_map_cmb);
+      this_cmb.attr("levels") = (CharacterVector) rh.keys;
+      this_cmb.attr("class") = "factor";
+      this_cmb = this_cmb[!is_na(this_cmb)];
+      TRACE_VEC(this_cmb);
+      map[cmb_name] = this_cmb;
+    }
+  }
+  DEBUG("Map reduced. Initializing the Eigen matrix");
+  mat = DenseMap(rh.keys.size(), icd9Mapping.size());
+  mat.setZero();
+  DEBUG("mat rows: " << mat.rows() << ", cols: " << mat.cols());
+  buildMatrix();
+  DEBUG("map matrix built");
+
+}
+
+// takes a map of _factors_ produced by remap. These already only contain
+// relevant codes, with factors indicies being relevant.
+void MapPlus::buildMatrix() {
   for (auto li = map.begin(); li != map.end(); ++li) {
     auto col = std::distance(map.begin(), li);
     TRACE("working on comorbidity: " << col);
     IntegerVector v = *li;
     for (R_xlen_t vi = 0; vi != v.size(); ++vi) {
-      TRACE("working on cmb item: " << vi << " -> " << v[vi]);
+      TRACE("cmb: vi=" << vi << " v[vi]=" << v[vi] << " col=" << col);
       if (!IntegerVector::is_na(v[vi])) {
         ICD_ASSIGN(v[vi] - 1, col); // R to C indexing: the factor index is row
       }
     }
   }
-  PRINTCORNERMAP(mapMat);
+  PRINTCORNERMAP(mat);
 }
 
 //' @title Comorbidity calculation as a matrix multiplication
@@ -367,24 +383,20 @@ LogicalMatrix comorbidMatMulSimple(const DataFrame& icd9df,
   VecStr out_row_names; // size is reserved in buildVisitCodesVec
   SEXP visits = icd9df[visitId];
   SEXP codes = icd9df[icd9Field];
-  // make relevant object
-  const List map = remap(icd9Mapping, relevantHash);
-  DEBUG("length remapped map " << map.size());
-  DenseMap mapMat(relevant.size(), map.length());
-  buildMapMat(map, mapMat);
-  DEBUG("mapMat created");
+  Relevant r(icd9Mapping, codes); // potential to template over codes type
+  MapPlus m(icd9Mapping, r);
   PtsSparse visMat; // reservation and sizing done within next function
-  buildVisitCodesSparseSimple(visits, codes, relevantHash,
-                              visMat, out_row_names);
+  DEBUG("building");
+  buildVisitCodesSparseSimple(visits, codes, r, visMat, out_row_names);
   DEBUG("built visit matrix");
-  if (visMat.cols() != mapMat.rows())
+  if (visMat.cols() != m.rows())
     Rcpp::stop("matrix multiplication won't work");
-  DenseMap result = visMat * mapMat; // col major result
+  DenseMap result = visMat * m.mat; // col major result
   DEBUG("Result rows: " << result.rows() << ", cols: " << result.cols());
   PRINTCORNERMAP(result);
   Rcpp::IntegerMatrix mat_out_int = Rcpp::wrap(result);
   Rcpp::LogicalMatrix mat_out_bool = Rcpp::wrap(mat_out_int);
-  List dimnames = Rcpp::List::create(out_row_names, map.names());
+  List dimnames = Rcpp::List::create(out_row_names, icd9Mapping.names());
   mat_out_bool.attr("dimnames") = dimnames;
   return mat_out_bool;
 }

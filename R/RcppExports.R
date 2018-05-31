@@ -162,10 +162,6 @@ simplify_map_lex <- function(pt_codes, map) {
     .Call(`_icd_simplifyMapLexicographic`, pt_codes, map)
 }
 
-getRelevant <- function(map, codes) {
-    .Call(`_icd_getRelevant`, map, codes)
-}
-
 #' @title Comorbidity calculation as a matrix multiplication
 #' @description
 #' The problem is that the matrices could be huge: the patient-icd matrix would

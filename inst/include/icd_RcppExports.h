@@ -250,25 +250,6 @@ namespace icd {
         return Rcpp::as<Rcpp::List >(rcpp_result_gen);
     }
 
-    inline CV getRelevant(const List& map, const CV& codes) {
-        typedef SEXP(*Ptr_getRelevant)(SEXP,SEXP);
-        static Ptr_getRelevant p_getRelevant = NULL;
-        if (p_getRelevant == NULL) {
-            validateSignature("CV(*getRelevant)(const List&,const CV&)");
-            p_getRelevant = (Ptr_getRelevant)R_GetCCallable("icd", "_icd_getRelevant");
-        }
-        RObject rcpp_result_gen;
-        {
-            RNGScope RCPP_rngScope_gen;
-            rcpp_result_gen = p_getRelevant(Shield<SEXP>(Rcpp::wrap(map)), Shield<SEXP>(Rcpp::wrap(codes)));
-        }
-        if (rcpp_result_gen.inherits("interrupted-error"))
-            throw Rcpp::internal::InterruptedException();
-        if (rcpp_result_gen.inherits("try-error"))
-            throw Rcpp::exception(Rcpp::as<std::string>(rcpp_result_gen).c_str());
-        return Rcpp::as<CV >(rcpp_result_gen);
-    }
-
     inline LogicalMatrix comorbidMatMulSimple(const DataFrame& icd9df, const List& icd9Mapping, const std::string visitId, const std::string icd9Field) {
         typedef SEXP(*Ptr_comorbidMatMulSimple)(SEXP,SEXP,SEXP,SEXP);
         static Ptr_comorbidMatMulSimple p_comorbidMatMulSimple = NULL;

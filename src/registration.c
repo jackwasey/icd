@@ -20,7 +20,6 @@ extern SEXP _icd_fastIntToStringRcpp(SEXP);
 extern SEXP _icd_getOmpCores();
 extern SEXP _icd_getOmpMaxThreads();
 extern SEXP _icd_getOmpThreads();
-extern SEXP _icd_getRelevant(SEXP, SEXP);
 extern SEXP _icd_guessShortCompleteCpp(SEXP, SEXP, SEXP, SEXP);
 extern SEXP _icd_guessShortPlusFactorCpp(SEXP, SEXP);
 extern SEXP _icd_icd10cmChildrenDefined(SEXP, SEXP, SEXP);
@@ -102,7 +101,6 @@ static const R_CallMethodDef CallEntries[] = {
     {"_icd_getOmpCores",                           (DL_FUNC) &_icd_getOmpCores,                           0},
     {"_icd_getOmpMaxThreads",                      (DL_FUNC) &_icd_getOmpMaxThreads,                      0},
     {"_icd_getOmpThreads",                         (DL_FUNC) &_icd_getOmpThreads,                         0},
-    {"_icd_getRelevant",                           (DL_FUNC) &_icd_getRelevant,                           2},
     {"_icd_guessShortCompleteCpp",                 (DL_FUNC) &_icd_guessShortCompleteCpp,                 4},
     {"_icd_guessShortPlusFactorCpp",               (DL_FUNC) &_icd_guessShortPlusFactorCpp,               2},
     {"_icd_icd10cmChildrenDefined",                (DL_FUNC) &_icd_icd10cmChildrenDefined,                3},
