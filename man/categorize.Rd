@@ -4,8 +4,8 @@
 \alias{categorize}
 \title{Categorize codes according to a mapping}
 \usage{
-categorize(x, map, visit_name, code_name, return_df = FALSE,
-  return_binary = FALSE, restore_visit_order = TRUE, unique_ids = FALSE,
+categorize(x, map, id_name, code_name, return_df = FALSE,
+  return_binary = FALSE, restore_id_order = TRUE, unique_ids = FALSE,
   preserve_visit_id_type = FALSE, comorbid_fun = comorbidMatMul,
   factor_fun = factor_nosort_rcpp, ...)
 }
@@ -20,16 +20,8 @@ comorbidities, contains \code{list(OBESE = c("2780", "27800", "27801",
 "V8538", "V8539", "V8541", "V8542", "V8543", "V8544", "V8545" ), DEPRESS =
 c("3004", "30112", "3090", "3091", "311"))} amongst other longer groups.}
 
-\item{visit_name}{The name of the column in the data frame which contains the
-patient or visit identifier. Typically this is the visit identifier, since
-patients come leave and enter hospital with different ICD-9 codes. It is a
-character vector of length one. If left empty, or \code{NULL}, then an
-attempt is made to guess which field has the ID for the patient encounter
-(not a patient ID, although this can of course be specified directly). The
-guesses proceed until a single match is made. Data frames may be wide with
-many matching fields, so to avoid false positives, anything but a single
-match is rejected. If there are no successful guesses, and \code{visit_id}
-was not specified, then the first column of the data frame is used.}
+\item{id_name}{The name of the \code{data.frame} field which is the unique
+identifier.}
 
 \item{code_name}{String with name of column containing the codes.}
 
@@ -40,14 +32,14 @@ input, this is preserved.}
 \item{return_binary}{Logical value, if \code{TRUE}, the output will be in 0s
 and 1s instead of TRUE and FALSE.}
 
-\item{restore_visit_order}{Logical value, if \code{TRUE}, the default, the
-order of the visit IDs will match the order of visit IDs first encountered
-in the input data. This takes a third of the time in calculations on data
-with tens of millions of rows, so, if the visit IDs will be discarded when
+\item{restore_id_order}{Logical value, if \code{TRUE}, the default, the order
+of the visit IDs will match the order of visit IDs first encountered in the
+input data. This takes a third of the time in calculations on data with
+tens of millions of rows, so, if the visit IDs will be discarded when
 summarizing data, this can be set to \code{FALSE} for a big speed-up.}
 
 \item{unique_ids}{Single logical value, if \code{TRUE} then the visit IDs in
-column given by \code{visit_name} are assumed to be unique. Otherwise, the
+column given by \code{id_name} are assumed to be unique. Otherwise, the
 default action is to ensure they are unique.}
 
 \item{preserve_visit_id_type}{Single logical value, if \code{TRUE}, the visit
@@ -70,6 +62,6 @@ and forms the core of the package, along with the C++ matrix code.
 u <- uranium_pathology
 m <- icd10_map_ahrq
 u$icd10 <- decimal_to_short(u$icd10)
-j <- categorize(u, m, visit_name = "case", code_name = "icd10")
+j <- categorize(u, m, id_name = "case", code_name = "icd10")
 }
 \keyword{internal}

@@ -4,7 +4,7 @@
 \alias{factor_split_rcpp}
 \title{Split data based on codes}
 \usage{
-factor_split_rcpp(df, relevant, visit_name, code_name)
+factor_split_rcpp(df, relevant, id_name, code_name)
 }
 \arguments{
 \item{df}{A \code{data.frame}, with a visit column (name given by \code{visit_name}),
@@ -12,6 +12,8 @@ and a code column (name given by \code{code_name} -- not \code{icd_name} in this
 function). The code column must be a \code{factor}.}
 
 \item{relevant}{A character vector containing the factor levels of interest.}
+
+\item{code_name}{String with name of column containing the codes.}
 
 \item{visit_name}{The name of the column in the data frame which contains the
 patient or visit identifier. Typically this is the visit identifier, since
@@ -23,8 +25,6 @@ guesses proceed until a single match is made. Data frames may be wide with
 many matching fields, so to avoid false positives, anything but a single
 match is rejected. If there are no successful guesses, and \code{visit_id}
 was not specified, then the first column of the data frame is used.}
-
-\item{code_name}{String with name of column containing the codes.}
 }
 \value{
 Returns a list with two components:

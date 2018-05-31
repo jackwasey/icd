@@ -15,7 +15,63 @@
 # You should have received a copy of the GNU General Public License
 # along with icd. If not, see <http:#www.gnu.org/licenses/>.
 
-context("Generic comorbidity calculation, using alternative algos")
+context("Generic comorbidity calculation")
+
+test_that("comorbid quick test", {
+  testres <- icd9_comorbid(two_pts, two_map, return_df = TRUE)
+  testres_cat <- categorize(two_pts, two_map, return_df = TRUE,
+                            id_name = "visit_id", code_name = "icd9")
+  testres_cat_simple <- categorize_simple(two_pts, two_map, return_df = TRUE,
+                                          id_name = "visit_id", code_name = "icd9")
+  trueres <- data.frame("visit_id" = c("v01", "v02"),
+                        "malady" = c(FALSE, TRUE),
+                        "ailment" = c(TRUE, FALSE),
+                        stringsAsFactors = FALSE)
+  expect_equal(testres, trueres)
+  expect_equal(testres_cat, trueres)
+  expect_equal(testres_cat_simple, trueres)
+  testmat <- icd9_comorbid(two_pts, two_map, return_df = FALSE)
+  truemat <- matrix(c(FALSE, TRUE, TRUE, FALSE), nrow = 2,
+                    dimnames = list(c("v01", "v02"), c("malady", "ailment")))
+  expect_equal(testmat, truemat)
+  testresfac <- icd9_comorbid(two_pts_fac, two_map_fac, return_df = TRUE)
+  trueresfac <- data.frame("visit_id" = c("v01", "v02"),
+                           "malady" = c(FALSE, TRUE),
+                           "ailment" = c(TRUE, FALSE),
+                           stringsAsFactors = TRUE)
+  expect_equal(testresfac, trueresfac)
+  expect_equal(icd9_comorbid(two_pts_fac, two_map_fac), truemat)
+})
+
+test_that("give factor instead of char to icd9ComorbidShortCpp", {
+  pts$visit_id <- factor(pts$visit_id)
+  expect_error(
+    icd9ComorbidShortCpp(pts, ac, visitId = "visit_id", icd9Field = "icd9Field"),
+    "character vector"
+  )
+})
+
+test_that("failing example", {
+  mydf <- data.frame(visit_id = c("a", "b", "c"),
+                     icd9 = c("441", "412.93", "042"))
+  cmb <- icd9_comorbid_quan_deyo(mydf, short_code = FALSE, hierarchy = TRUE)
+  expect_false("names" %in% names(attributes(cmb)))
+  charlson(mydf, isShort = FALSE)
+  expect_is(charlson(mydf, isShort = FALSE, return_df = TRUE), "data.frame")
+  charlson_from_comorbid(cmb)
+})
+
+test_that("disordered visit_ids works by default", {
+  set.seed(1441)
+  rnd_ord <- sample(seq_along(test_twenty$visit_id))
+  dat <- test_twenty[rnd_ord, ]
+  tres <- icd9_comorbid(dat, icd9_map_ahrq)
+  cres <- icd9_comorbid(test_twenty, icd9_map_ahrq)
+  expect_equal(dim(tres), dim(cres))
+  expect_equal(sum(tres), sum(cres))
+  expect_true(setequal(rownames(tres), rownames(cres)))
+  expect_equal(colnames(tres), colnames(cres))
+})
 
 test_that("smaller test case based on random input", {
   small_ccs_df <- data.frame(
@@ -33,9 +89,12 @@ test_that("smaller test case based on random input", {
                          dimnames = list(c("p1", "p2"),
                                          c("X", "Y", "Z"))
   )
-  res <- icd:::comorbid_common(small_ccs_df, map = small_ccs_map, visit_name = "visit_id", icd_name = "code")
-  res2 <- icd:::comorbid_common(small_ccs_df, map = small_ccs_map, visit_name = "visit_id", icd_name = "code",
-                                categorize_fun = categorize, comorbid_fun = icd:::icd9ComorbidShortCpp)
+  res <- comorbid_common(small_ccs_df, map = small_ccs_map,
+                         visit_name = "visit_id", icd_name = "code")
+  res2 <- comorbid_common(small_ccs_df, map = small_ccs_map,
+                          visit_name = "visit_id", icd_name = "code",
+                          categorize_fun = categorize,
+                          comorbid_fun = icd:::icd9ComorbidShortCpp)
   # compare all three ways, for development only
   expect_identical(res, expected_res)
   expect_identical(res2, expected_res)

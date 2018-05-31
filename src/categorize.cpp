@@ -122,11 +122,11 @@ List returnEmptyFrame(DataFrame df, String visit_name, String code_name) {
 // [[Rcpp::export(factor_split_rcpp)]]
 List factorSplit(const List &df,
                  const CharacterVector &relevant,
-                 const String &visit_name,
+                 const String &id_name,
                  const String &code_name) {
-  if (relevant.size() == 0) return returnEmptyFrame(df, visit_name, code_name);
+  if (relevant.size() == 0) return returnEmptyFrame(df, id_name, code_name);
   // TODO need to template over this for character/integer/factor visit ids?
-  const CharacterVector visits = df[visit_name];
+  const CharacterVector visits = df[id_name];
   const IntegerVector &x = df[code_name];
   VecStr no_na_lx_std;
   VecInt f_std;
@@ -182,7 +182,7 @@ List factorSplit(const List &df,
   DEBUG(max(f));
   DEBUG(f.size());
   assert(max(f) < no_na_lx.size() + 1); // if relevant was correct, this should be =
-  List comorbid_df = List::create(Named(visit_name) = all_visits_comorbid,
+  List comorbid_df = List::create(Named(id_name) = all_visits_comorbid,
                                   Named(code_name) = f);
   Rcpp::CharacterVector rownames(f.size());
   char buffer[32];
@@ -191,7 +191,7 @@ List factorSplit(const List &df,
     rownames(i) = buffer;
   }
   comorbid_df.attr("row.names") = rownames;
-  comorbid_df.attr("names") = CharacterVector::create(visit_name, code_name);
+  comorbid_df.attr("names") = CharacterVector::create(id_name, code_name);
   comorbid_df.attr("class") = "data.frame";
   List out = List::create(
     Named("comorbid_df") = comorbid_df,

@@ -73,13 +73,16 @@ poa_choices <- c("yes", "no", "notYes", "notNo")
 #' @template dotdotdot
 #' @param categorize_fun Internal. Function used for the categorization problem.
 #' @param comorbid_fun Internal. Function used inside categorization.
+#' @inheritParams categorize restore_id_order
 #' @details The order of visits may change depending on the original sequence,
 #'   and the underlying algorithm used. Usually this would be the order of the
-#'   first occurence of each visit/patient identifier.
+#'   first occurence of each visit/patient identifier, but this is not
+#'   guaranteed unless `restore_id_order` is set to `TRUE`.
 #'
 #'   The threading of the C++ can be controlled using e.g.
 #'   \code{option(icd.threads = 4)}. If it is not set, the number of cores in
 #'   the machine is used. 'OpenMP' environment variables also work.
+#' @md
 #' @examples
 #' vermont_dx[1:5, 1:10]
 #' vd <- wide_to_long(vermont_dx)
@@ -185,7 +188,7 @@ icd10_comorbid_reduce <- function(x = x, map, visit_name, icd_name, short_code,
   x[[icd_name]] <- factor_nosort_rcpp(x[[icd_name]])
   reduced_map <- simplify_map_lex(levels(x[[icd_name]]), map)
   categorize_fun(x = x, map = reduced_map,
-                 visit_name = visit_name, code_name = icd_name,
+                 id_name = visit_name, code_name = icd_name,
                  return_df = return_df, return_binary = return_binary, ...)
 }
 
@@ -232,13 +235,12 @@ icd9_comorbid <- function(x, map, visit_name = NULL, icd_name = NULL,
   # like 010 and 10 exists, then these get contracted by decimal_to_short,
   # making the results different if icd codes are short or not.
   if (!short_code)
-    x[[icd_name]] <- icd9(decimal_to_short.icd9(x[[icd_name]]))
+    x[[icd_name]] <- decimal_to_short.icd9(x[[icd_name]])
   else if (preclean)
-    x[[icd_name]] <- icd9(icd9_add_leading_zeroes(x[[icd_name]], short_code = TRUE))
-
+    x[[icd_name]] <- icd9_add_leading_zeroes(x[[icd_name]], short_code = TRUE)
   if (!short_map)
     map <- lapply(map, decimal_to_short)
-  categorize_fun(x = x, map = map, visit_name = visit_name,
+  categorize_fun(x = x, map = map, id_name = visit_name,
                  code_name = icd_name, return_df = return_df,
                  return_binary = return_binary, comorbid_fun = comorbid_fun,
                  ...)

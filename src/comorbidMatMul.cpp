@@ -44,7 +44,8 @@ public:
     // TODO codes may be factor, if so, return levels
     for (CV cmb : src_map) {
       for (auto code : cmb) {
-        if (codeHash.contains(code)) {
+        // IndexHash contains causes compiler warning, so compare directly:
+        if ((int) codeHash.get_index(code) != NA_INTEGER) {
           TRACE("Pushing back " << code);
           //r.push_back(((String) code).get_cstring());
           r.insert(((String) code).get_cstring());
@@ -120,7 +121,7 @@ void buildVisitCodesSparseSimple(SEXP visits,
   assert(Rf_length(visits) == Rf_length(icds));
   const CV relevantKeys = rh.keys;
   const R_xlen_t relevantSize = rh.size();
-  int vlen = Rf_length(visits);
+  R_xlen_t vlen = Rf_length(visits);
   RObject visit_levels = ((RObject) visits).attr("levels");
   RObject code_levels = ((RObject) icds).attr("levels");
   switch(TYPEOF(icds)) {
@@ -129,7 +130,7 @@ void buildVisitCodesSparseSimple(SEXP visits,
     break; }
   case INTSXP: {
     TRACE("got integers");
-    if (((RObject) icds).attr("levels") == R_NilValue) {
+    if (code_levels == R_NilValue) {
       TRACE("icds not a factor");
     } else {
       TRACE("icds is factor");
@@ -139,26 +140,26 @@ void buildVisitCodesSparseSimple(SEXP visits,
     Rcpp::stop("cannot convert this type of visit/patient/encounter ID yet: ",
                "use character or factor");
   }}
-  DEBUG("n unique = " << relevantSize);
+  DEBUG("relevantSize = " << relevantSize << ", vlen = " << vlen);
   // R's global string cache R_StringHash does not provide an obvious mechanism
   // to lookup an index, just insertion and return of reference to found
   // CHARSXP. R_HashGetLoc is indexed by hashcode itself, no sequentially. Stick
   // with Rcpp IndexHash for now, which at least hashes based on integer address
   // of the string, not string itself. I don't want to re-implement this!
   visMat.resize(vlen, relevantSize); // vlen is upper-bound, cols is correct
-  visMat.reserve(vlen); // but memory commitment is known and limited to just vlen.
+  visMat.reserve(vlen); // number of triplets is just vlen (for long data)
   std::vector<Triplet> visTriplets;
-  visTriplets.reserve(vlen * 30);
+  visTriplets.reserve(vlen);
   IntegerVector rows, cols;
   if (code_levels.isNULL()) {
-    DEBUG("codes are character");
+    DEBUG("codes are still character...");
     CV codes_cv = icds;
     DEBUG_VEC(codes_cv);
     DEBUG_VEC(relevantKeys);
-    DEBUG(rh.keys.size());
+    DEBUG("rh.keys.size() = " << rh.keys.size());
     cols = rh.hash.lookup(codes_cv); // C indexed
   } else {
-    DEBUG("codes are factor");
+    DEBUG("codes are still in a factor");
     const IntegerVector codes_relevant = refactor(icds, rh.relevant, false, true);
     //const CV code_levels_cv = (CV) code_levels;
     //assert(Rf_length(code_relevant.attr("levels")) == relevantSize);
@@ -166,12 +167,33 @@ void buildVisitCodesSparseSimple(SEXP visits,
     cols = ((IntegerVector) codes_relevant); // keep R indexing
   }
   if (visit_levels.isNULL()) {
-    IHS visHash((CV) visits); // TODO need to let work for factors, too.
-    visHash.fill();
-    const CV visHashKeys = visHash.keys();
+    const CV& v = visits;
     DEBUG("visits are not factors");
+    DEBUG_VEC(v);
+    IHS visHash(v); // TODO need to let work for factors, too.
+    // visHash.fill(); // this fills but lookup returns index of first match,
+    // not the index within the keys. I want some kind of fill_unique...
+    int unique_i = 1; // index from one
+    for (int i = 0; i != v.size(); ++i) {
+      auto val = visHash.src[i + 1];
+      unsigned int addr = visHash.get_addr(val) ;
+      while (visHash.data[addr] && visHash.not_equal(visHash.src[visHash.data[addr] - 1], val)) {
+        addr++;
+        if (addr == static_cast<unsigned int>(visHash.m)) {
+          addr = 0;
+        }
+      }
+      if (!visHash.data[addr]){
+        visHash.data[addr] = unique_i++;
+        visHash.size_++;
+      }
+    }
+    CV debug_cv = {"v01", "v02"};
+    IntegerVector debug_lookup = visHash.lookup(CV::create("v03"));
+    DEBUG(debug_lookup);
+    const CV visHashKeys = visHash.keys();
     DEBUG_VEC(visHashKeys);
-    rows = visHash.lookup((CV) visits); // R index is retrieved?
+    rows = visHash.lookup(v); // R index is retrieved?
     visitIds = as<VecStr>(visHashKeys); // disordered unique visit ids
   } else {
     DEBUG("visits are factors");
@@ -395,7 +417,7 @@ LogicalMatrix comorbidMatMulSimple(const DataFrame& icd9df,
   Relevant r(icd9Mapping, codes); // potential to template over codes type
   MapPlus m(icd9Mapping, r);
   PtsSparse visMat; // reservation and sizing done within next function
-  DEBUG("building");
+  DEBUG("building visMat");
   buildVisitCodesSparseSimple(visits, codes, r, visMat, out_row_names);
   DEBUG("built visit matrix");
   if (visMat.cols() != m.rows())

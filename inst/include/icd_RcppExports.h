@@ -137,7 +137,7 @@ namespace icd {
             throw Rcpp::exception(Rcpp::as<std::string>(rcpp_result_gen).c_str());
     }
 
-    inline List factor_split_rcpp(const List& df, const CharacterVector& relevant, const String& visit_name, const String& code_name) {
+    inline List factor_split_rcpp(const List& df, const CharacterVector& relevant, const String& id_name, const String& code_name) {
         typedef SEXP(*Ptr_factor_split_rcpp)(SEXP,SEXP,SEXP,SEXP);
         static Ptr_factor_split_rcpp p_factor_split_rcpp = NULL;
         if (p_factor_split_rcpp == NULL) {
@@ -147,7 +147,7 @@ namespace icd {
         RObject rcpp_result_gen;
         {
             RNGScope RCPP_rngScope_gen;
-            rcpp_result_gen = p_factor_split_rcpp(Shield<SEXP>(Rcpp::wrap(df)), Shield<SEXP>(Rcpp::wrap(relevant)), Shield<SEXP>(Rcpp::wrap(visit_name)), Shield<SEXP>(Rcpp::wrap(code_name)));
+            rcpp_result_gen = p_factor_split_rcpp(Shield<SEXP>(Rcpp::wrap(df)), Shield<SEXP>(Rcpp::wrap(relevant)), Shield<SEXP>(Rcpp::wrap(id_name)), Shield<SEXP>(Rcpp::wrap(code_name)));
         }
         if (rcpp_result_gen.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();

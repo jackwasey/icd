@@ -61,10 +61,10 @@ res <- lapply(
     tm <- system.time(
       if (do_icd9)
         icd9_comorbid_pccc_dx(dat_wide[c("id", x)], icd_name = x,
-                              restore_visit_order = FALSE, unique_ids = TRUE)
+                              restore_id_order = FALSE, unique_ids = TRUE)
       else
         icd10_comorbid_pccc_dx(dat_wide[c("id", x)], icd_name = x,
-                               restore_visit_order = FALSE, unique_ids = TRUE)
+                               restore_id_order = FALSE, unique_ids = TRUE)
     )
     print(tm)
     #gc(verbose = TRUE)
@@ -80,7 +80,7 @@ print(proc.time() - ptm)
 if (FALSE)
   profvis::profvis(icd9_comorbid_pccc_dx(dat_wide[c("id", "dx10")],
                                          icd_name = "dx10",
-                                         restore_visit_order = FALSE,
+                                         restore_id_order = FALSE,
                                          unique_ids = TRUE))
 # profiling shows that converting the ID column to string was a big time sink (repeated for each column!),
 # as was re-ordering the visit IDs, which could be skipped if we just want summary data.
