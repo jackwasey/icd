@@ -197,8 +197,9 @@ categorize_simple <- function(x, map, visit_name, code_name,
   if (return_binary) mat <- logical_to_binary(mat)
   if (!return_df)
     return(mat)
+  # TODO: next step better left to the pure C++ functions?
   if (visit_was_factor)
-    row_names <- factor_fun(x = rownames(mat), levels = iv_levels)
+    row_names <- factor_nosort_rcpp(x = rownames(mat), levels = iv_levels)
   else if (preserve_visit_id_type) {
     row_names <- switch(visit_class,
                         "integer" = as.integer(rownames(mat)),

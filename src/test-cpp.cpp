@@ -14,6 +14,8 @@
 #ifdef ICD_CATCH
 #include <testthat.h>
 
+using namespace Rcpp;
+
 context("internal 'is' functions") {
   test_that("is n") {
     VecStr v;
@@ -190,6 +192,81 @@ context("add leading zeroes to major") {
   }
   test_that("E code with three char major works") {
     expect_true(icd9AddLeadingZeroesMajorSingleStd("E01") == "E001");
+  }
+}
+
+context("refactor") {
+  test_that("factor self works") {
+    IntegerVector f = {1, 2};
+    CV new_levels = CV::create("a", "b");
+    f.attr("levels") = new_levels;
+    f.attr("class") = "factor";
+    IntegerVector res = refactor(f, new_levels);
+    expect_true(is_true(all(f == res)));
+    bool levels_equal = is_true(all(((CV)f.attr("levels")) == ((CV)res.attr("levels"))));
+    expect_true(levels_equal);
+  }
+  test_that("factor simple re-order") {
+    IntegerVector f = {1, 2};
+    f.attr("levels") = CV::create("a", "b");
+    f.attr("class") = "factor";
+    CV new_levels = CV::create("b", "a");
+    IntegerVector f2 = {2, 1};
+    f2.attr("levels") = new_levels;
+    f2.attr("class") = "factor";
+    IntegerVector res = refactor(f, new_levels);
+    expect_true(is_true(all(f2 == res)));
+    bool levels_equal = is_true(all(((CV)f2.attr("levels")) == ((CV)res.attr("levels"))));
+    expect_true(levels_equal);
+  }
+  test_that("factor complex re-order") {
+    IntegerVector f = {1, 3, 2};
+    f.attr("levels") = CV::create("a", "b", "c");
+    f.attr("class") = "factor";
+    IntegerVector f2 = {3, 1, 2};
+    CV new_levels = CV::create("c", "b", "a");
+    f2.attr("levels") = new_levels;
+    f2.attr("class") = "factor";
+    IntegerVector res = refactor(f, new_levels);
+    expect_true(is_true(all(f2 == res)));
+    bool levels_equal = is_true(all(((CV)f2.attr("levels")) == ((CV)res.attr("levels"))));
+    expect_true(levels_equal);
+  }
+  test_that("factor complex re-order w extra") {
+    IntegerVector f = {1, 3, 2};
+    f.attr("levels") = CV::create("a", "b", "c", "d");
+    f.attr("class") = "factor";
+    IntegerVector f2 = {3, 1, 2};
+    CV new_levels = CV::create("c", "b", "a");
+    f2.attr("levels") = new_levels;
+    f2.attr("class") = "factor";
+    IntegerVector res = refactor(f, new_levels);
+    expect_true(is_true(all(f2 == res)));
+    bool levels_equal = is_true(all(((CV)f2.attr("levels")) == ((CV)res.attr("levels"))));
+    expect_true(levels_equal);
+  }
+  test_that("factor complex re-order w extra and missing") {
+    IntegerVector f = {1, 3, 2};
+    f.attr("levels") = CV::create("a", "b", "c", "d");
+    f.attr("class") = "factor";
+    IntegerVector f2 = {NA_INTEGER, 1, 2};
+    CV new_levels = CV::create("c", "b", "e");
+    f2.attr("levels") = new_levels;
+    f2.attr("class") = "factor";
+    IntegerVector res = refactor(f, new_levels);
+    expect_true(res.size() == 3);
+    expect_true(res[0] == f2[0]);
+    expect_true(res[1] == f2[1]);
+    expect_true(res[2] == f2[2]);
+    expect_true(IntegerVector::is_na(res[0]));
+    expect_false(IntegerVector::is_na(res[1]));
+    expect_false(IntegerVector::is_na(res[2]));
+    bool levels_equal = is_true(all(((CV)f2.attr("levels")) == ((CV)res.attr("levels"))));
+    expect_true(levels_equal);
+    std::string cl = f2.attr("class");
+    std::string factor_str = "factor";
+    expect_true(cl == factor_str);
+    // expect_true(is_true(all(res == f2))); // doesn't work because NA = NA is NA, not true
   }
 }
 

@@ -360,7 +360,7 @@ Rcpp::IntegerVector refactor(const IntegerVector x, const CV new_levels,
   LogicalVector matched_na_level(fsz, false);
 #pragma omp parallel for
   for (R_xlen_t i = 0; i < fsz; ++i) {
-    TRACE("considering x[i] - 1: " << x[i] - 1 << " in new_level_old_idx");
+    TRACE("refactor considering i=" << i << ", x[i]: " << x[i]);
     if (IntegerVector::is_na(x[i])) {
       TRACE("leaving NA at pos " << i << " due to input NA value");
       f[i] = NA_INTEGER;

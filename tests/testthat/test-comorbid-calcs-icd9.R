@@ -326,7 +326,7 @@ test_that("ahrq, all cmb in one patient, abbrev, no hier", {
     all(as.logical(res[1, unlist(names_ahrq_htn_abbrev)])))
 })
 
-test_that("Charlson/Deyo comorbidities for a single patient", {
+test_that("Charlson/Deyo comorbidities for a single patient, one icd9", {
   expect_equal(
     icd9_comorbid_quan_deyo(one_pt_one_icd9, short_code = FALSE, return_df = TRUE),
     structure(
@@ -341,11 +341,16 @@ test_that("Charlson/Deyo comorbidities for a single patient", {
                  "Rheumatic", "PUD", "LiverMild", "DM", "DMcx", "Paralysis",
                  "Renal", "Cancer", "LiverSevere", "Mets", "HIV"),
       row.names = 1L,
-      class = "data.frame")
-  )
-  icd9_comorbid_quan_deyo(one_pt_two_icd9, short_code = FALSE, return_df = TRUE)
+      class = "data.frame"))
+})
+
+test_that("no error for deyo single pt w two identical (major) icd9 codes", {
+  expect_error(icd9_comorbid_quan_deyo(one_pt_two_icd9, short_code = FALSE, return_df = TRUE), NA)
+})
+
+test_that("no error for deyo single pt w two different decimal icd9 codes", {
   mydf <- data.frame(visit_id = c("a", "a"), icd9 = c("441", "412.93"))
-  icd9_comorbid_quan_deyo(mydf, short_code = FALSE, return_df = TRUE)
+  expect_error(icd9_comorbid_quan_deyo(mydf, short_code = FALSE, return_df = TRUE), NA)
 })
 
 test_that("dispatch from column class when specified", {
@@ -378,7 +383,10 @@ test_that("code appearing in two icd9 comorbidities", {
   expect_identical(res <- icd9_comorbid(dat, map),
                    matrix(c(TRUE, TRUE), nrow = 1, dimnames = list("1", c("a", "b")))
   )
-  expect_identical(res, icd9_comorbid(dat, map, comorbid_fun = icd:::icd9ComorbidShortCpp))
+  dat_clean <- data.frame(id = "1", icd9 = factor("123"), stringsAsFactors = FALSE)
+  expect_identical(res, icd9_comorbid(dat_clean, map,
+                                      comorbid_fun = icd:::icd9ComorbidShortCpp,
+                                      categorize_fun = categorize))
 })
 
 test_that("comorbid for icd9 gives binary values if asked for matrices", {
@@ -445,8 +453,12 @@ test_that("float visit IDs", {
 })
 
 test_that("matmul vs matmulmore", {
-  expect_identical(
-    icd9_comorbid_elix(simple_poa_pts, categorize_fun = categorize, comorbid_fun = comorbidMatMul),
-    icd9_comorbid_elix(simple_poa_pts, categorize_fun = categorize_simple, comorbid_fun = comorbidMatMulSimple)
+  # at least during development, the "simple" code path doesn't re-order visit
+  # IDs, and also jumbles them while hashing.
+  d <- simple_poa_pts # TODO: loop over list of any icd9 data we can throw.
+  expect_equivalent(
+    r1 <- icd9_comorbid_elix(d, categorize_fun = categorize, comorbid_fun = comorbidMatMul),
+    r2 <- icd9_comorbid_elix(d, categorize_fun = categorize_simple, comorbid_fun = comorbidMatMulSimple)
   )
+  expect_true(all(sort(rownames(r1)) == sort(rownames(r2))))
 })

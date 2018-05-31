@@ -21,6 +21,7 @@ extern "C" {
 /*
  MAKEFLAGS=-j16 R -e 'devtools::load_all(); icd9_comorbid_ahrq(ahrq_test_dat)'
  MAKEFLAGS=-j16 R -e 'devtools::load_all(); test(reporter="Location")'
+ MAKEFLAGS=-j16 R -e 'devtools::load_all(); data.frame(visit_id = c("a", "a"), icd9 = c("441", "412.93")); icd9_comorbid_quan_deyo(mydf)'
  */
 
 using namespace Rcpp;
@@ -122,7 +123,6 @@ void buildVisitCodesSparseSimple(SEXP visits,
   int vlen = Rf_length(visits);
   RObject visit_levels = ((RObject) visits).attr("levels");
   RObject code_levels = ((RObject) icds).attr("levels");
-  TRACE("got levels");
   switch(TYPEOF(icds)) {
   case STRSXP: {
     TRACE("icds is string");
@@ -136,14 +136,15 @@ void buildVisitCodesSparseSimple(SEXP visits,
     }
     break; }
   default: {
-    Rcpp::stop("cannot convert this type of visit ID yet: use character or factor");
+    Rcpp::stop("cannot convert this type of visit/patient/encounter ID yet: ",
+               "use character or factor");
   }}
   DEBUG("n unique = " << relevantSize);
   // R's global string cache R_StringHash does not provide an obvious mechanism
   // to lookup an index, just insertion and return of reference to found
   // CHARSXP. R_HashGetLoc is indexed by hashcode itself, no sequentially. Stick
-  // with Rcpp hashing for now, which at least hashes based on integer address
-  // of the string, not string itself.
+  // with Rcpp IndexHash for now, which at least hashes based on integer address
+  // of the string, not string itself. I don't want to re-implement this!
   visMat.resize(vlen, relevantSize); // vlen is upper-bound, cols is correct
   visMat.reserve(vlen); // but memory commitment is known and limited to just vlen.
   std::vector<Triplet> visTriplets;
@@ -162,32 +163,40 @@ void buildVisitCodesSparseSimple(SEXP visits,
     //const CV code_levels_cv = (CV) code_levels;
     //assert(Rf_length(code_relevant.attr("levels")) == relevantSize);
     //assert(code_levels_cv[0] == relevantKeys[0]); // TODO better checks?
-    cols = ((IntegerVector) codes_relevant) - 1; // all -1 for R to C indexing.
+    cols = ((IntegerVector) codes_relevant); // keep R indexing
   }
-  IHS visHash((CV) visits); // TODO need to let work for factors, too.
-  visHash.fill();
-  const CV visHashKeys = visHash.keys();
   if (visit_levels.isNULL()) {
+    IHS visHash((CV) visits); // TODO need to let work for factors, too.
+    visHash.fill();
+    const CV visHashKeys = visHash.keys();
     DEBUG("visits are not factors");
     DEBUG_VEC(visHashKeys);
-    rows = visHash.lookup((CV) visits); // C index
+    rows = visHash.lookup((CV) visits); // R index is retrieved?
+    visitIds = as<VecStr>(visHashKeys); // disordered unique visit ids
   } else {
     DEBUG("visits are factors");
     //  use the factor level as the row number (R vs C index)
-    rows = ((IntegerVector) visits - 1);  // R index
+    //rows = ((IntegerVector) visits - 1);
+    // keep R index
+    rows = visits; // can do this without copy using unique_ptr?
+    visitIds = as<VecStr>(((IntegerVector)visits).attr("levels"));
   }
   DEBUG_VEC(rows);
   DEBUG_VEC(cols);
   assert(rows.size() == cols.size());
   // now we have rows and columns, just make the triplets and insert.
   for (R_xlen_t i = 0; i != rows.size(); ++i) {
-    if (IntegerVector::is_na(cols[i])) continue;
-    TRACE("inserting triplet at " << rows[i] << ", " << cols[i]);
+    if (IntegerVector::is_na(cols[i])) {
+     TRACE("dropping NA col value");
+    continue;
+    }
+    TRACE("inserting triplet at " << rows[i] << " - 1, " << cols[i] <<" - 1");
     visTriplets.push_back(Triplet(rows[i] - 1, cols[i] - 1, true));
   }
-  TRACE("visMat and visitIds are updated, setting visMat from triplets...");
+  TRACE("visMat rows: " << visMat.rows() << ", cols: " << visMat.cols());
+  TRACE("visMat to be updated, setting visMat from triplets...");
+  TRACE("there are " << visTriplets.size() << " triplets");
   visMat.setFromTriplets(visTriplets.begin(), visTriplets.end());
-  visitIds = as<VecStr>(visHashKeys); // disordered unique visit ids
   visMat.conservativeResize(visitIds.size(), relevantSize);
   DEBUG("Built visMt, rows:" << visMat.rows() << ", cols: " << visMat.cols());
   PRINTCORNERSP(visMat);
