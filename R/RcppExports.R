@@ -424,6 +424,37 @@ icd9_add_leading_zeroes_cpp <- function(x, short_code) {
     .Call(`_icd_icd9AddLeadingZeroes`, x, short_code)
 }
 
+randomMajorCpp <- function(n) {
+    .Call(`_icd_randomMajorCpp`, n)
+}
+
+#' @rdname icd9RandomShort
+#' @keywords internal
+icd9RandomShortN <- function(n = 5L) {
+    .Call(`_icd_icd9RandomShortN`, n)
+}
+
+#' @rdname icd9RandomShort
+#' @keywords internal
+icd9RandomShortV <- function(n = 5L) {
+    .Call(`_icd_icd9RandomShortV`, n)
+}
+
+#' @rdname icd9RandomShort
+#' @keywords internal
+icd9RandomShortE <- function(n = 5L) {
+    .Call(`_icd_icd9RandomShortE`, n)
+}
+
+#' Generate random short-form ICD-9 codes
+#'
+#' Quick pseudo-random by picking numeric, 'V' or 'E' based on modulo three of
+#' the number
+#' @keywords internal
+icd9RandomShort <- function(n = 5L) {
+    .Call(`_icd_icd9RandomShort`, n)
+}
+
 #' Find child codes from vector of ICD-9 codes.
 #'
 #' Pure C++11 implementation using \code{unordered set} to find children of
@@ -497,37 +528,6 @@ debug_parallel_env <- function() {
 
 debug_parallel <- function() {
     invisible(.Call(`_icd_debug_parallel`))
-}
-
-randomMajorCpp <- function(n) {
-    .Call(`_icd_randomMajorCpp`, n)
-}
-
-#' @rdname icd9RandomShort
-#' @keywords internal
-icd9RandomShortN <- function(n = 5L) {
-    .Call(`_icd_icd9RandomShortN`, n)
-}
-
-#' @rdname icd9RandomShort
-#' @keywords internal
-icd9RandomShortV <- function(n = 5L) {
-    .Call(`_icd_icd9RandomShortV`, n)
-}
-
-#' @rdname icd9RandomShort
-#' @keywords internal
-icd9RandomShortE <- function(n = 5L) {
-    .Call(`_icd_icd9RandomShortE`, n)
-}
-
-#' Generate random short-form ICD-9 codes
-#'
-#' Quick pseudo-random by picking numeric, 'V' or 'E' based on modulo three of
-#' the number
-#' @keywords internal
-icd9RandomShort <- function(n = 5L) {
-    .Call(`_icd_icd9RandomShort`, n)
 }
 
 valgrindCallgrindStart <- function(zerostats = FALSE) {

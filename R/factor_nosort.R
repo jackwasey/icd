@@ -119,9 +119,15 @@ factor_split_na <- function(x, levels, factor_fun = factor_nosort_rcpp) {
 #' Slightly slower for small factors, three times faster for one hundred million
 #' elemeents with two million new levels. Three times faster for any `n > 1e6`.
 #' With NAs, margin is smaller, but still beats base `factor`.
+#' @param exclude_na Simpler equivalent to `base::factor` exclude. By default,
+#'   `refactor` will not count `NA` as a factor level if there are `NA` elements
+#'   in the input data.
 #' @examples
 #' \donttest{
-#'
+#'   f <- factor(c(1, 2, 3))
+#'   refactor(f, c(2, 3))
+#'   f <- factor(c(1, 2, NA))
+#'   refactor(f, c(2, 3, NA))
 #' }
 #' @md
 #' @keywords internal manip

@@ -12,6 +12,8 @@
 \alias{icd10_comorbid_quan_elix}
 \alias{icd9_comorbid_quan_deyo}
 \alias{icd10_comorbid_quan_deyo}
+\alias{icd9_comorbid_charlson}
+\alias{icd10_comorbid_charlson}
 \alias{comorbid_ccs}
 \alias{icd9_comorbid_ccs}
 \alias{icd10_comorbid_ccs}
@@ -59,6 +61,10 @@ icd10_comorbid_quan_elix(x, ..., abbrev_names = TRUE, hierarchy = TRUE)
 icd9_comorbid_quan_deyo(x, ..., abbrev_names = TRUE, hierarchy = TRUE)
 
 icd10_comorbid_quan_deyo(x, ..., abbrev_names = TRUE, hierarchy = TRUE)
+
+icd9_comorbid_charlson(...)
+
+icd10_comorbid_charlson(...)
 
 comorbid_ccs(x, icd_name = get_icd_name(x), ...)
 
@@ -231,6 +237,10 @@ codes
 \item \code{icd9_comorbid_quan_deyo}: Quan's Deyo (Charlson) comorbidities for ICD-9 codes
 
 \item \code{icd10_comorbid_quan_deyo}: Quan's Deyo (Charlson) comorbidities for ICD-10 codes
+
+\item \code{icd9_comorbid_charlson}: Currently synonym for \code{icd9_comorbid_quan_deyo}
+
+\item \code{icd10_comorbid_charlson}: Currently synonym for \code{icd10_comorbid_quan_deyo}
 
 \item \code{comorbid_ccs}: Use AHRQ CCS for comorbidity classification
 

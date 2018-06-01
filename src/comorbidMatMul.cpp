@@ -21,7 +21,7 @@ extern "C" {
 /*
  MAKEFLAGS=-j16 R -e 'devtools::load_all(); icd9_comorbid_ahrq(ahrq_test_dat)'
  MAKEFLAGS=-j16 R -e 'devtools::load_all(); test(reporter="Location")'
- MAKEFLAGS=-j16 R -e 'devtools::load_all(); data.frame(visit_id = c("a", "a"), icd9 = c("441", "412.93")); icd9_comorbid_quan_deyo(mydf)'
+ MAKEFLAGS=-j16 R -e 'devtools::load_all(); mydf <- data.frame(visit_id = c("a", "a"), icd9 = c("441", "412.93")); icd9_comorbid_quan_deyo(mydf)'
  */
 
 using namespace Rcpp;
@@ -62,10 +62,10 @@ public:
 
 void printCornerMap(DenseMap x) {
   DEBUG("Map matrix:");
-  if (x.rows() >= 5 && x.cols() >= 10) {
-    DenseMap block = x.block<5, 10>(0, 0);
+  if (x.rows() >= 8 && x.cols() >= 32) {
+    DenseMap block = x.block<8, 32>(0, 0);
     DEBUG(block);
-  } else if (x.rows() < 5 && x.cols() < 10) {
+  } else if (x.rows() < 5 && x.cols() < 32) {
     DEBUG(x);
   } else if (x.rows() > 1 && x.cols() > 1) {
     DEBUG(x(0, 0) << ", " << x(0, 1) << ", " <<
@@ -157,7 +157,7 @@ void buildVisitCodesSparseSimple(SEXP visits,
     cols = rh.hash.lookup(codes_cv); // C indexed
   } else {
     DEBUG("codes are still in a factor...");
-    const IntegerVector codes_relevant = refactor((IntegerVector)icds, rh.relevant, false, true);
+    const IntegerVector codes_relevant = refactor((IntegerVector)icds, rh.relevant, true, true);
     //const CV code_levels_cv = (CV) code_levels;
     //assert(Rf_length(code_relevant.attr("levels")) == relevantSize);
     //assert(code_levels_cv[0] == relevantKeys[0]); // TODO better checks?

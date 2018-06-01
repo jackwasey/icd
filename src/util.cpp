@@ -17,8 +17,8 @@
 
 // [[Rcpp::interfaces(r, cpp)]]
 // [[Rcpp::plugins(openmp)]]
-#include "local.h"                             // for ICD_OPENMP
-#include "config.h"                             // for ICD_VALGRIND
+#include "local.h"
+#include "config.h"
 #include "util.h"
 #include <stdlib.h>
 #include <math.h>                              // for floor
@@ -44,7 +44,6 @@ using Rcpp::Rcout;
 using Rcpp::as;
 using Rcpp::any;
 using Rcpp::is_na;
-using Rcpp::runif;
 
 // trim one string from right
 std::string trimRightCpp(std::string s) {
@@ -151,88 +150,6 @@ void debug_parallel() {
 // nocov end
 
 // [[Rcpp::export]]
-Rcpp::NumericVector randomMajorCpp(int	n) {
-  // This could just be a sprintf like the others.
-  Rcpp::NumericVector iv = Rcpp::floor(runif(n) * 999);
-  return iv;
-}
-
-//' @rdname icd9RandomShort
-//' @keywords internal
-// [[Rcpp::export]]
-VecStr icd9RandomShortN(VecStr::size_type n = 5) {
-  VecStr out(n);
-  std::vector<double> randoms = as<std::vector<double> >(runif(n, 0, 99999));
-  char buffer[6];
-  for (std::vector<double>::size_type i = 0; i != n; ++i) {
-    sprintf(buffer, "%.0f", randoms[i]);
-    out[i] = buffer;
-  }
-  return out;
-}
-
-//' @rdname icd9RandomShort
-//' @keywords internal
-// [[Rcpp::export]]
-VecStr icd9RandomShortV(VecStr::size_type n = 5) {
-  VecStr out(n);
-  std::vector<double> randoms = as<std::vector<double> >(runif(n, 0, 9999));
-  char buffer[6];
-  for (std::vector<double>::size_type i = 0; i != n; ++i) {
-    sprintf(buffer, "V%.0f", randoms[i]);
-    out[i] = buffer;
-  }
-  return out;
-}
-
-//' @rdname icd9RandomShort
-//' @keywords internal
-// [[Rcpp::export]]
-VecStr icd9RandomShortE(VecStr::size_type n = 5) {
-  VecStr out(n);
-  std::vector<double> randoms = as<std::vector<double> >(runif(n, 0, 9999));
-  char buffer[6];
-  for (std::vector<double>::size_type i = 0; i != n; ++i) {
-    sprintf(buffer, "E%.0f", randoms[i]);
-    out[i] = buffer;
-  }
-  return out;
-}
-
-//' Generate random short-form ICD-9 codes
-//'
-//' Quick pseudo-random by picking numeric, 'V' or 'E' based on modulo three of
-//' the number
-//' @keywords internal
-// [[Rcpp::export]]
-VecStr icd9RandomShort(VecStr::size_type n = 5) {
-
-  VecStr out(n);
-  std::vector<double> randoms = as<std::vector<double> >(runif(n, 0, 99999));
-  std::vector<double> randoms2 = as<std::vector<double> >(runif(n, 0, 3));
-
-  char buffer[6];
-  for (std::vector<char>::size_type i = 0; i != n; ++i) {
-    // N, V or E?
-    switch (((short) randoms2[i]) % 3) {
-    case 0:
-      sprintf(buffer, "%.0f", randoms[i]);
-      break;
-    case 1:
-      sprintf(buffer, "V%.0f", randoms[i] / 10);
-      break;
-    case 2:
-      sprintf(buffer, "E%.0f", randoms[i] / 10);
-      break;
-    default:
-      {} // never here
-    }
-    out[i] = buffer;
-  }
-  return out;
-}
-
-// [[Rcpp::export]]
 int valgrindCallgrindStart(bool zerostats = false) {
   if (zerostats) {}; // no-op
 #ifdef ICD_VALGRIND
@@ -330,25 +247,30 @@ IntegerVector factorNoSort(const CharacterVector& x,
 // [[Rcpp::export(refactor_worker)]]
 Rcpp::IntegerVector refactor(const IntegerVector& x, const CV& new_levels,
                              bool na_rm, bool exclude_na) {
+  TRACE("Refactoring");
   IntegerVector f(x.size());
   CharacterVector lx = x.attr("levels");
   DEBUG_UTIL_VEC(x);
   DEBUG_UTIL_VEC(lx);
+  DEBUG_UTIL_VEC(new_levels);
   if (lx.isNULL()) Rcpp::stop("icd codes must be in a factor");
   CV no_na_lx;
   CV no_na_new_levels;
-  LogicalVector which_na_new_levels = is_na(new_levels); // may be redundant
+  //bool any_na_lx = false;
+  LogicalVector which_na_new_levels = is_na(new_levels);
+  LogicalVector which_na_old_levels = is_na(lx);
   if (na_rm || exclude_na) {
-    DEBUG_UTIL("Found NA in input factor levels: dropping");
-    no_na_lx = lx[!is_na(lx)];
+    DEBUG_UTIL("Dropping NA in input factor levels");
+    no_na_lx = lx[!which_na_old_levels];
   } else {
+    DEBUG_UTIL("Not looking for NA in the input data levels");
     no_na_lx = lx;
   }
-
   if (na_rm || exclude_na) {
-    DEBUG_UTIL("Found NA in input levels: requested to drop");
+    DEBUG_UTIL("Dropping NA in input levels");
     no_na_new_levels = new_levels[!which_na_new_levels];
   } else {
+    DEBUG_UTIL("Not dropping NA in input levels");
     no_na_new_levels = new_levels;
   }
   DEBUG_UTIL_VEC(no_na_lx);
@@ -368,28 +290,40 @@ Rcpp::IntegerVector refactor(const IntegerVector& x, const CV& new_levels,
 #ifdef ICD_OPENMP
 #pragma omp parallel for
 #endif
-  for (R_xlen_t i = 0; i < fsz; ++i) {
+  R_xlen_t i, fi;
+  for (i = 0, fi = 0; i < fsz; ++i) {
     TRACE("refactor considering i=" << i << ", x[i]: " << x[i]);
     if (IntegerVector::is_na(x[i])) {
       TRACE("leaving NA at pos " << i << " due to input NA value");
-      f[i] = NA_INTEGER;
+      f[fi++] = NA_INTEGER;
       continue;
     }
+    if (which_na_old_levels[i]) {
+      DEBUG_UTIL("input data referenced an NA level");
+      if (na_rm) {
+        DEBUG_UTIL("continuing");
+        continue;
+      } else {
+        DEBUG_UTIL("TODO: insert reference to index of new NA level");
+      }
+    }
+    assert(x[i] > 0);
+    assert(x[i] <= new_level_old_idx.size()); // R index
     auto cur = new_level_old_idx[x[i] - 1]; // get new R index with R index in C vec
     if (IntegerVector::is_na(cur)) {
       if (na_rm || exclude_na) {
         TRACE("leaving NA at pos " << i << " due to no match with new levels");
-        f[i] = NA_INTEGER;
+        f[fi++] = NA_INTEGER;
       } else {
         TRACE("dropping pos " << i << " due to no match with new levels");
-        f[i] = NA_INTEGER; // in case user chooses to keep NA values
+        f[fi++] = NA_INTEGER; // in case user chooses to keep NA values
         matched_na_level[i] = true;
       }
     } else {
       TRACE("inserting " << cur << " at pos " << i);
       assert(cur > 0);
       assert(cur <= no_na_new_levels.size());
-      f[i] = cur;
+      f[fi++] = cur;
     }
   }
   DEBUG_UTIL_VEC(f);

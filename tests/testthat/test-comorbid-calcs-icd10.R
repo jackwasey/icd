@@ -156,6 +156,30 @@ test_that("NA icd10 code", {
   res <- icd10_comorbid_ahrq(d, visit_name = "visit", icd_name = "icd10")
 })
 
+test_that("integer visit IDs should error until implemented, TODO", {
+  d <- data.frame(visit = c(1L, 2L), icd10 = c("C8124", "C8125"))
+  expect_error(res <- icd10_comorbid_ahrq(d))
+})
+
+test_that("NA icd codes should be okay", {
+  d <- data.frame(visit = c(1L, 2L), icd10 = c("C8124", NA))
+  res <- icd10_comorbid_charlson(d)
+  d <- data.frame(visit = c(1L, 2L), icd10 = c(NA, "C8124"))
+  res <- icd10_comorbid_charlson(d)
+  d <- data.frame(visit = c(1L, 2L, 1L), icd10 = c(NA, "C8124", NA))
+  res <- icd10_comorbid_charlson(d)
+  d <- data.frame(visit = c(1L, 2L, 1L), icd10 = c("C8124", NA, NA))
+  res <- icd10_comorbid_charlson(d)
+})
+
+test_that("NA example which crashed during devel", {
+  d <- structure(list(CLAIMNO = c(8534023L, 8534023L),
+                      diag_field = c("ICD_DGNS_CD12", "ICD_DGNS_CD13"),
+                      icd10 = c("D638", NA)),
+                 row.names = 14:15, class = c("icd_long_data", "data.frame"))
+  res <- icd10_comorbid_ahrq(d)
+})
+
 test_that("ICD-10 comorbidities from uranium", {
   comorbid(uranium_pathology, icd10_map_quan_elix)
   comorbid(uranium_pathology, icd10_map_quan_deyo)

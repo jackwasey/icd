@@ -1259,6 +1259,156 @@ RcppExport SEXP _icd_icd9AddLeadingZeroes(SEXP xSEXP, SEXP short_codeSEXP) {
     UNPROTECT(1);
     return rcpp_result_gen;
 }
+// randomMajorCpp
+Rcpp::NumericVector randomMajorCpp(int n);
+static SEXP _icd_randomMajorCpp_try(SEXP nSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::traits::input_parameter< int >::type n(nSEXP);
+    rcpp_result_gen = Rcpp::wrap(randomMajorCpp(n));
+    return rcpp_result_gen;
+END_RCPP_RETURN_ERROR
+}
+RcppExport SEXP _icd_randomMajorCpp(SEXP nSEXP) {
+    SEXP rcpp_result_gen;
+    {
+        Rcpp::RNGScope rcpp_rngScope_gen;
+        rcpp_result_gen = PROTECT(_icd_randomMajorCpp_try(nSEXP));
+    }
+    Rboolean rcpp_isInterrupt_gen = Rf_inherits(rcpp_result_gen, "interrupted-error");
+    if (rcpp_isInterrupt_gen) {
+        UNPROTECT(1);
+        Rf_onintr();
+    }
+    Rboolean rcpp_isError_gen = Rf_inherits(rcpp_result_gen, "try-error");
+    if (rcpp_isError_gen) {
+        SEXP rcpp_msgSEXP_gen = Rf_asChar(rcpp_result_gen);
+        UNPROTECT(1);
+        Rf_error(CHAR(rcpp_msgSEXP_gen));
+    }
+    UNPROTECT(1);
+    return rcpp_result_gen;
+}
+// icd9RandomShortN
+VecStr icd9RandomShortN(VecStr::size_type n);
+static SEXP _icd_icd9RandomShortN_try(SEXP nSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::traits::input_parameter< VecStr::size_type >::type n(nSEXP);
+    rcpp_result_gen = Rcpp::wrap(icd9RandomShortN(n));
+    return rcpp_result_gen;
+END_RCPP_RETURN_ERROR
+}
+RcppExport SEXP _icd_icd9RandomShortN(SEXP nSEXP) {
+    SEXP rcpp_result_gen;
+    {
+        Rcpp::RNGScope rcpp_rngScope_gen;
+        rcpp_result_gen = PROTECT(_icd_icd9RandomShortN_try(nSEXP));
+    }
+    Rboolean rcpp_isInterrupt_gen = Rf_inherits(rcpp_result_gen, "interrupted-error");
+    if (rcpp_isInterrupt_gen) {
+        UNPROTECT(1);
+        Rf_onintr();
+    }
+    Rboolean rcpp_isError_gen = Rf_inherits(rcpp_result_gen, "try-error");
+    if (rcpp_isError_gen) {
+        SEXP rcpp_msgSEXP_gen = Rf_asChar(rcpp_result_gen);
+        UNPROTECT(1);
+        Rf_error(CHAR(rcpp_msgSEXP_gen));
+    }
+    UNPROTECT(1);
+    return rcpp_result_gen;
+}
+// icd9RandomShortV
+VecStr icd9RandomShortV(VecStr::size_type n);
+static SEXP _icd_icd9RandomShortV_try(SEXP nSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::traits::input_parameter< VecStr::size_type >::type n(nSEXP);
+    rcpp_result_gen = Rcpp::wrap(icd9RandomShortV(n));
+    return rcpp_result_gen;
+END_RCPP_RETURN_ERROR
+}
+RcppExport SEXP _icd_icd9RandomShortV(SEXP nSEXP) {
+    SEXP rcpp_result_gen;
+    {
+        Rcpp::RNGScope rcpp_rngScope_gen;
+        rcpp_result_gen = PROTECT(_icd_icd9RandomShortV_try(nSEXP));
+    }
+    Rboolean rcpp_isInterrupt_gen = Rf_inherits(rcpp_result_gen, "interrupted-error");
+    if (rcpp_isInterrupt_gen) {
+        UNPROTECT(1);
+        Rf_onintr();
+    }
+    Rboolean rcpp_isError_gen = Rf_inherits(rcpp_result_gen, "try-error");
+    if (rcpp_isError_gen) {
+        SEXP rcpp_msgSEXP_gen = Rf_asChar(rcpp_result_gen);
+        UNPROTECT(1);
+        Rf_error(CHAR(rcpp_msgSEXP_gen));
+    }
+    UNPROTECT(1);
+    return rcpp_result_gen;
+}
+// icd9RandomShortE
+VecStr icd9RandomShortE(VecStr::size_type n);
+static SEXP _icd_icd9RandomShortE_try(SEXP nSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::traits::input_parameter< VecStr::size_type >::type n(nSEXP);
+    rcpp_result_gen = Rcpp::wrap(icd9RandomShortE(n));
+    return rcpp_result_gen;
+END_RCPP_RETURN_ERROR
+}
+RcppExport SEXP _icd_icd9RandomShortE(SEXP nSEXP) {
+    SEXP rcpp_result_gen;
+    {
+        Rcpp::RNGScope rcpp_rngScope_gen;
+        rcpp_result_gen = PROTECT(_icd_icd9RandomShortE_try(nSEXP));
+    }
+    Rboolean rcpp_isInterrupt_gen = Rf_inherits(rcpp_result_gen, "interrupted-error");
+    if (rcpp_isInterrupt_gen) {
+        UNPROTECT(1);
+        Rf_onintr();
+    }
+    Rboolean rcpp_isError_gen = Rf_inherits(rcpp_result_gen, "try-error");
+    if (rcpp_isError_gen) {
+        SEXP rcpp_msgSEXP_gen = Rf_asChar(rcpp_result_gen);
+        UNPROTECT(1);
+        Rf_error(CHAR(rcpp_msgSEXP_gen));
+    }
+    UNPROTECT(1);
+    return rcpp_result_gen;
+}
+// icd9RandomShort
+VecStr icd9RandomShort(VecStr::size_type n);
+static SEXP _icd_icd9RandomShort_try(SEXP nSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::traits::input_parameter< VecStr::size_type >::type n(nSEXP);
+    rcpp_result_gen = Rcpp::wrap(icd9RandomShort(n));
+    return rcpp_result_gen;
+END_RCPP_RETURN_ERROR
+}
+RcppExport SEXP _icd_icd9RandomShort(SEXP nSEXP) {
+    SEXP rcpp_result_gen;
+    {
+        Rcpp::RNGScope rcpp_rngScope_gen;
+        rcpp_result_gen = PROTECT(_icd_icd9RandomShort_try(nSEXP));
+    }
+    Rboolean rcpp_isInterrupt_gen = Rf_inherits(rcpp_result_gen, "interrupted-error");
+    if (rcpp_isInterrupt_gen) {
+        UNPROTECT(1);
+        Rf_onintr();
+    }
+    Rboolean rcpp_isError_gen = Rf_inherits(rcpp_result_gen, "try-error");
+    if (rcpp_isError_gen) {
+        SEXP rcpp_msgSEXP_gen = Rf_asChar(rcpp_result_gen);
+        UNPROTECT(1);
+        Rf_error(CHAR(rcpp_msgSEXP_gen));
+    }
+    UNPROTECT(1);
+    return rcpp_result_gen;
+}
 // icd9ChildrenShort_alt_11
 CV icd9ChildrenShort_alt_11(CV icd9Short, bool onlyReal);
 RcppExport SEXP _icd_icd9ChildrenShort_alt_11(SEXP icd9ShortSEXP, SEXP onlyRealSEXP) {
@@ -1700,156 +1850,6 @@ RcppExport SEXP _icd_debug_parallel() {
     UNPROTECT(1);
     return rcpp_result_gen;
 }
-// randomMajorCpp
-Rcpp::NumericVector randomMajorCpp(int n);
-static SEXP _icd_randomMajorCpp_try(SEXP nSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::traits::input_parameter< int >::type n(nSEXP);
-    rcpp_result_gen = Rcpp::wrap(randomMajorCpp(n));
-    return rcpp_result_gen;
-END_RCPP_RETURN_ERROR
-}
-RcppExport SEXP _icd_randomMajorCpp(SEXP nSEXP) {
-    SEXP rcpp_result_gen;
-    {
-        Rcpp::RNGScope rcpp_rngScope_gen;
-        rcpp_result_gen = PROTECT(_icd_randomMajorCpp_try(nSEXP));
-    }
-    Rboolean rcpp_isInterrupt_gen = Rf_inherits(rcpp_result_gen, "interrupted-error");
-    if (rcpp_isInterrupt_gen) {
-        UNPROTECT(1);
-        Rf_onintr();
-    }
-    Rboolean rcpp_isError_gen = Rf_inherits(rcpp_result_gen, "try-error");
-    if (rcpp_isError_gen) {
-        SEXP rcpp_msgSEXP_gen = Rf_asChar(rcpp_result_gen);
-        UNPROTECT(1);
-        Rf_error(CHAR(rcpp_msgSEXP_gen));
-    }
-    UNPROTECT(1);
-    return rcpp_result_gen;
-}
-// icd9RandomShortN
-VecStr icd9RandomShortN(VecStr::size_type n);
-static SEXP _icd_icd9RandomShortN_try(SEXP nSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::traits::input_parameter< VecStr::size_type >::type n(nSEXP);
-    rcpp_result_gen = Rcpp::wrap(icd9RandomShortN(n));
-    return rcpp_result_gen;
-END_RCPP_RETURN_ERROR
-}
-RcppExport SEXP _icd_icd9RandomShortN(SEXP nSEXP) {
-    SEXP rcpp_result_gen;
-    {
-        Rcpp::RNGScope rcpp_rngScope_gen;
-        rcpp_result_gen = PROTECT(_icd_icd9RandomShortN_try(nSEXP));
-    }
-    Rboolean rcpp_isInterrupt_gen = Rf_inherits(rcpp_result_gen, "interrupted-error");
-    if (rcpp_isInterrupt_gen) {
-        UNPROTECT(1);
-        Rf_onintr();
-    }
-    Rboolean rcpp_isError_gen = Rf_inherits(rcpp_result_gen, "try-error");
-    if (rcpp_isError_gen) {
-        SEXP rcpp_msgSEXP_gen = Rf_asChar(rcpp_result_gen);
-        UNPROTECT(1);
-        Rf_error(CHAR(rcpp_msgSEXP_gen));
-    }
-    UNPROTECT(1);
-    return rcpp_result_gen;
-}
-// icd9RandomShortV
-VecStr icd9RandomShortV(VecStr::size_type n);
-static SEXP _icd_icd9RandomShortV_try(SEXP nSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::traits::input_parameter< VecStr::size_type >::type n(nSEXP);
-    rcpp_result_gen = Rcpp::wrap(icd9RandomShortV(n));
-    return rcpp_result_gen;
-END_RCPP_RETURN_ERROR
-}
-RcppExport SEXP _icd_icd9RandomShortV(SEXP nSEXP) {
-    SEXP rcpp_result_gen;
-    {
-        Rcpp::RNGScope rcpp_rngScope_gen;
-        rcpp_result_gen = PROTECT(_icd_icd9RandomShortV_try(nSEXP));
-    }
-    Rboolean rcpp_isInterrupt_gen = Rf_inherits(rcpp_result_gen, "interrupted-error");
-    if (rcpp_isInterrupt_gen) {
-        UNPROTECT(1);
-        Rf_onintr();
-    }
-    Rboolean rcpp_isError_gen = Rf_inherits(rcpp_result_gen, "try-error");
-    if (rcpp_isError_gen) {
-        SEXP rcpp_msgSEXP_gen = Rf_asChar(rcpp_result_gen);
-        UNPROTECT(1);
-        Rf_error(CHAR(rcpp_msgSEXP_gen));
-    }
-    UNPROTECT(1);
-    return rcpp_result_gen;
-}
-// icd9RandomShortE
-VecStr icd9RandomShortE(VecStr::size_type n);
-static SEXP _icd_icd9RandomShortE_try(SEXP nSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::traits::input_parameter< VecStr::size_type >::type n(nSEXP);
-    rcpp_result_gen = Rcpp::wrap(icd9RandomShortE(n));
-    return rcpp_result_gen;
-END_RCPP_RETURN_ERROR
-}
-RcppExport SEXP _icd_icd9RandomShortE(SEXP nSEXP) {
-    SEXP rcpp_result_gen;
-    {
-        Rcpp::RNGScope rcpp_rngScope_gen;
-        rcpp_result_gen = PROTECT(_icd_icd9RandomShortE_try(nSEXP));
-    }
-    Rboolean rcpp_isInterrupt_gen = Rf_inherits(rcpp_result_gen, "interrupted-error");
-    if (rcpp_isInterrupt_gen) {
-        UNPROTECT(1);
-        Rf_onintr();
-    }
-    Rboolean rcpp_isError_gen = Rf_inherits(rcpp_result_gen, "try-error");
-    if (rcpp_isError_gen) {
-        SEXP rcpp_msgSEXP_gen = Rf_asChar(rcpp_result_gen);
-        UNPROTECT(1);
-        Rf_error(CHAR(rcpp_msgSEXP_gen));
-    }
-    UNPROTECT(1);
-    return rcpp_result_gen;
-}
-// icd9RandomShort
-VecStr icd9RandomShort(VecStr::size_type n);
-static SEXP _icd_icd9RandomShort_try(SEXP nSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::traits::input_parameter< VecStr::size_type >::type n(nSEXP);
-    rcpp_result_gen = Rcpp::wrap(icd9RandomShort(n));
-    return rcpp_result_gen;
-END_RCPP_RETURN_ERROR
-}
-RcppExport SEXP _icd_icd9RandomShort(SEXP nSEXP) {
-    SEXP rcpp_result_gen;
-    {
-        Rcpp::RNGScope rcpp_rngScope_gen;
-        rcpp_result_gen = PROTECT(_icd_icd9RandomShort_try(nSEXP));
-    }
-    Rboolean rcpp_isInterrupt_gen = Rf_inherits(rcpp_result_gen, "interrupted-error");
-    if (rcpp_isInterrupt_gen) {
-        UNPROTECT(1);
-        Rf_onintr();
-    }
-    Rboolean rcpp_isError_gen = Rf_inherits(rcpp_result_gen, "try-error");
-    if (rcpp_isError_gen) {
-        SEXP rcpp_msgSEXP_gen = Rf_asChar(rcpp_result_gen);
-        UNPROTECT(1);
-        Rf_error(CHAR(rcpp_msgSEXP_gen));
-    }
-    UNPROTECT(1);
-    return rcpp_result_gen;
-}
 // valgrindCallgrindStart
 int valgrindCallgrindStart(bool zerostats);
 static SEXP _icd_valgrindCallgrindStart_try(SEXP zerostatsSEXP) {
@@ -2136,6 +2136,11 @@ static int _icd_RcppExport_validate(const char* sig) {
         signatures.insert("std::string(*icd9AddLeadingZeroesMajorSingleStd)(std::string)");
         signatures.insert("CV(*icd9_add_leading_zeroes_major)(CV)");
         signatures.insert("CV(*icd9_add_leading_zeroes_cpp)(CV,bool)");
+        signatures.insert("Rcpp::NumericVector(*randomMajorCpp)(int)");
+        signatures.insert("VecStr(*icd9RandomShortN)(VecStr::size_type)");
+        signatures.insert("VecStr(*icd9RandomShortV)(VecStr::size_type)");
+        signatures.insert("VecStr(*icd9RandomShortE)(VecStr::size_type)");
+        signatures.insert("VecStr(*icd9RandomShort)(VecStr::size_type)");
         signatures.insert("CV(*icd9_expand_minor_wrap)(const Str&,bool)");
         signatures.insert("CV(*icd9ChildrenShort)(CV,const VecStr&,bool)");
         signatures.insert("CV(*icd9ChildrenShortUnordered)(CV,const VecStr&,bool)");
@@ -2149,11 +2154,6 @@ static int _icd_RcppExport_validate(const char* sig) {
         signatures.insert("int(*get_omp_threads)()");
         signatures.insert("void(*debug_parallel_env)()");
         signatures.insert("void(*debug_parallel)()");
-        signatures.insert("Rcpp::NumericVector(*randomMajorCpp)(int)");
-        signatures.insert("VecStr(*icd9RandomShortN)(VecStr::size_type)");
-        signatures.insert("VecStr(*icd9RandomShortV)(VecStr::size_type)");
-        signatures.insert("VecStr(*icd9RandomShortE)(VecStr::size_type)");
-        signatures.insert("VecStr(*icd9RandomShort)(VecStr::size_type)");
         signatures.insert("int(*valgrindCallgrindStart)(bool)");
         signatures.insert("int(*valgrindCallgrindStop)()");
         signatures.insert("VecStr(*icd9_sort_cpp)(VecStr)");
@@ -2203,6 +2203,11 @@ RcppExport SEXP _icd_RcppExport_registerCCallable() {
     R_RegisterCCallable("icd", "_icd_icd9AddLeadingZeroesMajorSingleStd", (DL_FUNC)_icd_icd9AddLeadingZeroesMajorSingleStd_try);
     R_RegisterCCallable("icd", "_icd_icd9_add_leading_zeroes_major", (DL_FUNC)_icd_icd9AddLeadingZeroesMajor_try);
     R_RegisterCCallable("icd", "_icd_icd9_add_leading_zeroes_cpp", (DL_FUNC)_icd_icd9AddLeadingZeroes_try);
+    R_RegisterCCallable("icd", "_icd_randomMajorCpp", (DL_FUNC)_icd_randomMajorCpp_try);
+    R_RegisterCCallable("icd", "_icd_icd9RandomShortN", (DL_FUNC)_icd_icd9RandomShortN_try);
+    R_RegisterCCallable("icd", "_icd_icd9RandomShortV", (DL_FUNC)_icd_icd9RandomShortV_try);
+    R_RegisterCCallable("icd", "_icd_icd9RandomShortE", (DL_FUNC)_icd_icd9RandomShortE_try);
+    R_RegisterCCallable("icd", "_icd_icd9RandomShort", (DL_FUNC)_icd_icd9RandomShort_try);
     R_RegisterCCallable("icd", "_icd_icd9_expand_minor_wrap", (DL_FUNC)_icd_icd9ExpandMinor_try);
     R_RegisterCCallable("icd", "_icd_icd9ChildrenShort", (DL_FUNC)_icd_icd9ChildrenShort_try);
     R_RegisterCCallable("icd", "_icd_icd9ChildrenShortUnordered", (DL_FUNC)_icd_icd9ChildrenShortUnordered_try);
@@ -2216,11 +2221,6 @@ RcppExport SEXP _icd_RcppExport_registerCCallable() {
     R_RegisterCCallable("icd", "_icd_get_omp_threads", (DL_FUNC)_icd_getOmpThreads_try);
     R_RegisterCCallable("icd", "_icd_debug_parallel_env", (DL_FUNC)_icd_debug_parallel_env_try);
     R_RegisterCCallable("icd", "_icd_debug_parallel", (DL_FUNC)_icd_debug_parallel_try);
-    R_RegisterCCallable("icd", "_icd_randomMajorCpp", (DL_FUNC)_icd_randomMajorCpp_try);
-    R_RegisterCCallable("icd", "_icd_icd9RandomShortN", (DL_FUNC)_icd_icd9RandomShortN_try);
-    R_RegisterCCallable("icd", "_icd_icd9RandomShortV", (DL_FUNC)_icd_icd9RandomShortV_try);
-    R_RegisterCCallable("icd", "_icd_icd9RandomShortE", (DL_FUNC)_icd_icd9RandomShortE_try);
-    R_RegisterCCallable("icd", "_icd_icd9RandomShort", (DL_FUNC)_icd_icd9RandomShort_try);
     R_RegisterCCallable("icd", "_icd_valgrindCallgrindStart", (DL_FUNC)_icd_valgrindCallgrindStart_try);
     R_RegisterCCallable("icd", "_icd_valgrindCallgrindStop", (DL_FUNC)_icd_valgrindCallgrindStop_try);
     R_RegisterCCallable("icd", "_icd_icd9_sort_cpp", (DL_FUNC)_icd_icd9SortCpp_try);

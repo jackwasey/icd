@@ -309,6 +309,16 @@ icd10_comorbid_quan_deyo <- function(x, ..., abbrev_names = TRUE, hierarchy = TR
   apply_hier_quan_deyo(cbd, abbrev_names = abbrev_names, hierarchy = hierarchy)
 }
 
+#' @describeIn comorbid Currently synonym for \code{icd9_comorbid_quan_deyo}
+#' @export
+icd9_comorbid_charlson <- function(...)
+  icd9_comorbid_quan_deyo(...)
+
+#' @describeIn comorbid Currently synonym for \code{icd10_comorbid_quan_deyo}
+#' @export
+icd10_comorbid_charlson <- function(...)
+  icd10_comorbid_quan_deyo(...)
+
 #' @describeIn comorbid Use AHRQ CCS for comorbidity classification
 #' @seealso \link{icd9_map_single_ccs}
 #' @export

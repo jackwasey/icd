@@ -6,6 +6,7 @@
  * fixed 588 instead of 588.0 in Quan Elixhauser ICD-9 comorbidity map
  * fix regression where codes appearing in two comorbidities would only count once
  * default best-effort ordering of identifiers (e.g. Visit ID, Encounter, Patient ID) is done. There are many cases where this is not possible (disordered input data), or obvious (the IDs are given as a factor, where the factor level order does not resemble the order of appearance in the vector). For performance, this can be turned off using `restore_id_order = FALSE` in comorbidity calculations.
+ * added `icd9_comorbid_charlson` and `icd10_comorbid_charlson` as synonyms for the Quan/Deyo comorbidity calculations. `comorbid_charlson` will infer the ICD type.
  
 # Version 3.1.2
  * Documentation improved

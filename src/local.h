@@ -15,26 +15,21 @@
 // You should have received a copy of the GNU General Public License
 // along with icd. If not, see <http://www.gnu.org/licenses/>.
 
+// [[Rcpp::plugins(cpp11)]]
 #ifndef LOCAL_H_
 #define LOCAL_H_
-
-// [[Rcpp::plugins(cpp11)]]
-
 #include "config.h"
 #include "icd_types.h"
 #include <set>
 #include <unordered_map>
 #include <unordered_set>
-
 extern "C" {
 #include "cutil.h"
 #include <cstdlib>
 }
-
-// debugging:
 #define ICD_DEBUG
 #define ICD_DEBUG_TRACE
-// #define ICD_DEBUG_UTIL
+#define ICD_DEBUG_UTIL
 // #define ICD_DEBUG_SETUP
 // #define ICD_DEBUG_SETUP_SLOW
 // #define ICD_DEBUG_SETUP_TRACE
