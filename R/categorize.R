@@ -154,8 +154,8 @@ categorize <- function(x, map, id_name, code_name,
   df_out
 }
 
-comorbid_common <- function(..., icd_name)
-  categorize(..., code_name = icd_name)
+comorbid_common <- function(..., visit_name, icd_name)
+  categorize(..., id_name = visit_name, code_name = icd_name)
 
 categorize_simple <- function(x, map, id_name, code_name,
                        return_df = FALSE, return_binary = FALSE,

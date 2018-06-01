@@ -152,7 +152,9 @@ List factorSplit(const List &df,
   DEBUG_VEC(new_level_idx);
   R_xlen_t fsz = x.size();
   DEBUG("fsz = " << fsz);
-#pragma omp parallel for
+#ifdef ICD_OPENMP
+  #pragma omp parallel for
+#endif
   for (R_xlen_t i = 0; i < fsz; ++i) {
     TRACE("considering index x[i] - 1: " << x[i] - 1 << " from new_level_idx");
     if (IntegerVector::is_na(x[i])) {

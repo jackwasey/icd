@@ -196,6 +196,16 @@ context("add leading zeroes to major") {
 }
 
 context("refactor") {
+  test_that("empty factor levels") {
+    IntegerVector f = {1};
+    CV new_levels(0);
+    f.attr("levels") = new_levels;
+    f.attr("class") = "factor";
+    IntegerVector res = refactor(f, new_levels);
+    expect_true(IntegerVector::is_na(res[0]));
+    CV j = res.attr("levels");
+    expect_true(j.size() == 0);
+  }
   test_that("factor self works") {
     IntegerVector f = {1, 2};
     CV new_levels = CV::create("a", "b");

@@ -286,7 +286,9 @@ get_icd_name <- function(x, icd_name = NULL, valid_codes = TRUE, defined_codes =
   if (pc$icd9 < 10 && pc$icd10 < 10)
     stop("identified field with ICD codes as: '", icd_name,
          "' but fewer than 10% of codes are valid ICD-9 or ICD-10. ",
-         "If this really is a valid column, set the class using something like",
+         "If this really is a valid column, identify the field containing ",
+         "ICD codes in the input data using 'icd_name=\"my_icd_field\"' or ",
+         "set the class using something like",
          " x[[icd_name]] <- as.icd9[[x[[icd_name]]")
   icd_name
 }

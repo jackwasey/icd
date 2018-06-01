@@ -48,7 +48,7 @@ void lookupComorbid_alt_ByChunkForTaskloop(const VecVecInt& vcdb,
   // superfluous?
 
   // Requires OpenMP >4.5, so not available in current windows toolschain, thus makes a compiler warning.
-  // #pragma omp taskloop shared(Rcpp::Rcout, out) //grainsize (256)
+  // #ifdef ICD_OPENMP #pragma omp taskloop shared(Rcpp::Rcout, out) //grainsize (256)
 #endif
   for (vis_i = 0; vis_i < vcdb.size(); ++vis_i) {
     debug_parallel();

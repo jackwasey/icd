@@ -94,6 +94,9 @@ extern "C" {
 #undef ICD_OPENMP
 #endif
 
+// TODO: remove after debugging
+#undef ICD_OPENMP
+
 //#ifndef HAVE_RCPPEIGEN_H
 #define ICD_CATCH
 // #ifndef HAVE_TESTTHAT_H
@@ -118,43 +121,7 @@ inline void printIt(const C& c, int n = 10) {
   Rcpp::Rcout << o.str();
   Rcpp::Rcout.flush();
 }
-/*
-template<typename VT>
-void printIt(std::vector<VT> v, int n = 10) {
-  std::ostringstream o;
-  for (int i = 0; i != std::min(n, (int) v.size()); ++i) o << v[i] << " ";
-  o << std::endl;
-  Rcpp::Rcout << o.str();
-  Rcpp::Rcout.flush();
-}
-//overloads (no common STL container class)
-template <int VT>
-void printIt(Rcpp::Vector<VT> v, int n = 10) {
-  std::ostringstream o;
-  for (auto i: v) o << i << " ";
-  o << std::endl;
-  Rcpp::Rcout << o.str();
-  Rcpp::Rcout.flush();
-}
 
-template<typename ST>
-void printIt(std::set<ST> v, int n = 10) {
-  std::ostringstream o;
-  for (auto i: v) o << i << " ";
-  o << std::endl;
-  Rcpp::Rcout << o.str();
-  Rcpp::Rcout.flush();
-}
-
-template<typename MK, typename MV>
-void printIt(std::map<MK,MV> v, int n = 10) {
-  std::ostringstream o;
-  for (auto i: v) o << i << " ";
-  o << std::endl;
-  Rcpp::Rcout << o.str();
-  Rcpp::Rcout.flush();
-}
- */
 #endif // end (defined ICD_DEBUG || defined ICD_DEBUG_SETUP)
 #endif // LOCAL_H_
 

@@ -328,7 +328,7 @@ IntegerVector factorNoSort(const CharacterVector& x,
 //' @title Re-generate a factor with new levels, without doing string matching
 //' @keywords internal manip
 // [[Rcpp::export(refactor_worker)]]
-Rcpp::IntegerVector refactor(const IntegerVector x, const CV new_levels,
+Rcpp::IntegerVector refactor(const IntegerVector& x, const CV& new_levels,
                              bool na_rm, bool exclude_na) {
   IntegerVector f(x.size());
   CharacterVector lx = x.attr("levels");
@@ -353,12 +353,21 @@ Rcpp::IntegerVector refactor(const IntegerVector x, const CV new_levels,
   }
   DEBUG_UTIL_VEC(no_na_lx);
   DEBUG_UTIL_VEC(no_na_new_levels);
+  if (no_na_new_levels.size() == 0) {
+    DEBUG("no_na_new_levels is empty");
+    f = Rcpp::rep(NA_INTEGER, x.size());
+    f.attr("levels") = CV::create();
+    f.attr("class") = "factor";
+    return f;
+  }
   IntegerVector new_level_old_idx = Rcpp::match(no_na_lx, no_na_new_levels);
   DEBUG_UTIL_VEC(new_level_old_idx);
   R_xlen_t fsz = x.size();
   DEBUG_UTIL("fsz = " << fsz);
   LogicalVector matched_na_level(fsz, false);
+#ifdef ICD_OPENMP
 #pragma omp parallel for
+#endif
   for (R_xlen_t i = 0; i < fsz; ++i) {
     TRACE("refactor considering i=" << i << ", x[i]: " << x[i]);
     if (IntegerVector::is_na(x[i])) {

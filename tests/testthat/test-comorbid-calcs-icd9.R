@@ -40,15 +40,9 @@ test_that("comorbid quick test", {
                            "ailment" = c(TRUE, FALSE),
                            stringsAsFactors = TRUE)
   expect_equal(testresfac, trueresfac)
-  expect_equal(icd9_comorbid(two_pts_fac, two_map_fac), truemat)
-})
-
-test_that("give factor instead of char to icd9ComorbidShortCpp", {
-  pts$visit_id <- factor(pts$visit_id)
-  expect_error(
-    icd9ComorbidShortCpp(pts, ac, visitId = "visit_id", icd9Field = "icd9Field"),
-    "character vector"
-  )
+  expect_equal(icd9_comorbid(two_pts, two_map_fac, return_df = FALSE), truemat)
+  expect_equal(icd9_comorbid(two_pts_fac, two_map, return_df = FALSE), truemat)
+  expect_equal(icd9_comorbid(two_pts_fac, two_map_fac, return_df = FALSE), truemat)
 })
 
 test_that("failing example", {
@@ -409,6 +403,7 @@ test_that("no error for deyo single pt w two identical (major) icd9 codes", {
 
 test_that("no error for deyo single pt w two different decimal icd9 codes", {
   mydf <- data.frame(visit_id = c("a", "a"), icd9 = c("441", "412.93"))
+  expect_error(icd9_comorbid_quan_deyo(mydf), NA)
   expect_error(icd9_comorbid_quan_deyo(mydf, short_code = FALSE, return_df = TRUE), NA)
 })
 

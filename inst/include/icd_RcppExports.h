@@ -1122,11 +1122,11 @@ namespace icd {
         return Rcpp::as<IntegerVector >(rcpp_result_gen);
     }
 
-    inline Rcpp::IntegerVector refactor_worker(const IntegerVector x, const CV new_levels, bool na_rm, bool exclude_na) {
+    inline Rcpp::IntegerVector refactor_worker(const IntegerVector& x, const CV& new_levels, bool na_rm, bool exclude_na) {
         typedef SEXP(*Ptr_refactor_worker)(SEXP,SEXP,SEXP,SEXP);
         static Ptr_refactor_worker p_refactor_worker = NULL;
         if (p_refactor_worker == NULL) {
-            validateSignature("Rcpp::IntegerVector(*refactor_worker)(const IntegerVector,const CV,bool,bool)");
+            validateSignature("Rcpp::IntegerVector(*refactor_worker)(const IntegerVector&,const CV&,bool,bool)");
             p_refactor_worker = (Ptr_refactor_worker)R_GetCCallable("icd", "_icd_refactor_worker");
         }
         RObject rcpp_result_gen;

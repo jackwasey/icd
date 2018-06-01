@@ -150,7 +150,10 @@ test_that("NA icd10 code", {
   d <- data.frame(visit = c("visit 1", "visit 1"), icd10 = c(NA, "G809"))
   res <- icd10_comorbid_ahrq(d)
   d <- data.frame(visit = c("visit 1", "visit 1"), icd10 = c(NA, "sillycode"))
-  res <- icd10_comorbid_ahrq(d)
+  expect_error(res <- icd10_comorbid_ahrq(d), regex = "icd_name")
+  res <- icd10_comorbid_ahrq(d, icd_name = "icd10")
+  d <- data.frame(visit = c("visit 1", "visit 2"), icd10 = c("badcode", NA))
+  res <- icd10_comorbid_ahrq(d, visit_name = "visit", icd_name = "icd10")
 })
 
 test_that("ICD-10 comorbidities from uranium", {

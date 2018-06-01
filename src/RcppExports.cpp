@@ -2002,12 +2002,12 @@ RcppExport SEXP _icd_factorNoSort(SEXP xSEXP, SEXP levelsSEXP, SEXP na_rmSEXP) {
     return rcpp_result_gen;
 }
 // refactor
-Rcpp::IntegerVector refactor(const IntegerVector x, const CV new_levels, bool na_rm, bool exclude_na);
+Rcpp::IntegerVector refactor(const IntegerVector& x, const CV& new_levels, bool na_rm, bool exclude_na);
 static SEXP _icd_refactor_try(SEXP xSEXP, SEXP new_levelsSEXP, SEXP na_rmSEXP, SEXP exclude_naSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
-    Rcpp::traits::input_parameter< const IntegerVector >::type x(xSEXP);
-    Rcpp::traits::input_parameter< const CV >::type new_levels(new_levelsSEXP);
+    Rcpp::traits::input_parameter< const IntegerVector& >::type x(xSEXP);
+    Rcpp::traits::input_parameter< const CV& >::type new_levels(new_levelsSEXP);
     Rcpp::traits::input_parameter< bool >::type na_rm(na_rmSEXP);
     Rcpp::traits::input_parameter< bool >::type exclude_na(exclude_naSEXP);
     rcpp_result_gen = Rcpp::wrap(refactor(x, new_levels, na_rm, exclude_na));
@@ -2159,7 +2159,7 @@ static int _icd_RcppExport_validate(const char* sig) {
         signatures.insert("VecStr(*icd9_sort_cpp)(VecStr)");
         signatures.insert("std::vector<std::size_t>(*icd9_order_cpp)(VecStr)");
         signatures.insert("IntegerVector(*factor_nosort_rcpp_worker)(const CharacterVector&,const CharacterVector&,const bool)");
-        signatures.insert("Rcpp::IntegerVector(*refactor_worker)(const IntegerVector,const CV,bool,bool)");
+        signatures.insert("Rcpp::IntegerVector(*refactor_worker)(const IntegerVector&,const CV&,bool,bool)");
         signatures.insert("SEXP(*match_rcpp)(SEXP,SEXP)");
         signatures.insert("SEXP(*fin)(SEXP,SEXP)");
     }

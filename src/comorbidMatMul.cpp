@@ -78,11 +78,10 @@ void printCornerMap(DenseMap x) {
   DEBUG("Map matrix rows: " << x.rows() << ", and cols: " << x.cols());
 }
 
-void printCornerSparse(PtsSparse visMat) {
+void printCornerSparse(PtsSparse x) {
   DEBUG("converting visMat to dense for debugging only:");
-  Eigen::MatrixXi dense = Eigen::MatrixXi(visMat);
-  DEBUG("visMat:");
-  if (visMat.rows() >= 4 && visMat.cols() >= 4)
+  Eigen::MatrixXi dense = Eigen::MatrixXi(x);
+  if (x.rows() >= 4 && x.cols() >= 4)
     Rcpp::Rcout << dense.block<4, 4>(0, 0) << std::endl;
   else
     Rcpp::Rcout << dense << std::endl;
@@ -146,8 +145,6 @@ void buildVisitCodesSparseSimple(SEXP visits,
   // CHARSXP. R_HashGetLoc is indexed by hashcode itself, no sequentially. Stick
   // with Rcpp IndexHash for now, which at least hashes based on integer address
   // of the string, not string itself. I don't want to re-implement this!
-  visMat.resize(vlen, relevantSize); // vlen is upper-bound, cols is correct
-  visMat.reserve(vlen); // number of triplets is just vlen (for long data)
   std::vector<Triplet> visTriplets;
   visTriplets.reserve(vlen);
   IntegerVector rows, cols;
@@ -159,60 +156,56 @@ void buildVisitCodesSparseSimple(SEXP visits,
     DEBUG("rh.keys.size() = " << rh.keys.size());
     cols = rh.hash.lookup(codes_cv); // C indexed
   } else {
-    DEBUG("codes are still in a factor");
-    const IntegerVector codes_relevant = refactor(icds, rh.relevant, false, true);
+    DEBUG("codes are still in a factor...");
+    const IntegerVector codes_relevant = refactor((IntegerVector)icds, rh.relevant, false, true);
     //const CV code_levels_cv = (CV) code_levels;
     //assert(Rf_length(code_relevant.attr("levels")) == relevantSize);
     //assert(code_levels_cv[0] == relevantKeys[0]); // TODO better checks?
     cols = ((IntegerVector) codes_relevant); // keep R indexing
   }
   if (visit_levels.isNULL()) {
-    const CV& v = visits;
+    const CV& v = visits; // assume character for now
     DEBUG("visits are not factors");
     DEBUG_VEC(v);
-    IHS visHash(v); // TODO need to let work for factors, too.
-    // visHash.fill(); // this fills but lookup returns index of first match,
-    // not the index within the keys. I want some kind of fill_unique...
-    int unique_i = 1; // index from one
-    for (int i = 0; i != v.size(); ++i) {
-      auto val = visHash.src[i + 1];
-      unsigned int addr = visHash.get_addr(val) ;
-      while (visHash.data[addr] && visHash.not_equal(visHash.src[visHash.data[addr] - 1], val)) {
-        addr++;
-        if (addr == static_cast<unsigned int>(visHash.m)) {
-          addr = 0;
-        }
-      }
-      if (!visHash.data[addr]){
-        visHash.data[addr] = unique_i++;
-        visHash.size_++;
-      }
-    }
-    CV debug_cv = {"v01", "v02"};
-    IntegerVector debug_lookup = visHash.lookup(CV::create("v03"));
-    DEBUG(debug_lookup);
-    const CV visHashKeys = visHash.keys();
-    DEBUG_VEC(visHashKeys);
-    rows = visHash.lookup(v); // R index is retrieved?
-    visitIds = as<VecStr>(visHashKeys); // disordered unique visit ids
+    CV uv = unique(v);
+    DEBUG_VEC(uv);
+    // with current Rcpp (June 1, 2018), there is no way to avoid doing two
+    // hashes, one to get unique keys, and one to match them. Quick tests show
+    // this adds about 10% time. If the hash caching mechanism actually worked,
+    // it wouldn't be a problem.
+    visitIds = as<VecStr>(uv);
+    DEBUG_VEC(visitIds);
+    // cannot do this:
+    // IHS visHash = IHS(uv);
+    //rows = visHash.lookup(uv.get_ref()); // it should work by
+    // using pointer to global string cache (another hash!), but it appears not
+    // to do this.
+    rows = match(v, uv);
+
+    // matrix row names are character. TODO: consider option not to
+    // name the rows, e.g. for people who just summarize the data: will save a
+    // lot of character processing
   } else {
     DEBUG("visits are factors");
     //  use the factor level as the row number (R vs C index)
     //rows = ((IntegerVector) visits - 1);
     // keep R index
     rows = visits; // can do this without copy using unique_ptr?
-    visitIds = as<VecStr>(((IntegerVector)visits).attr("levels"));
+    visitIds = as<VecStr>(rows.attr("levels"));
   }
   DEBUG_VEC(rows);
   DEBUG_VEC(cols);
   assert(rows.size() == cols.size());
+  visMat.resize(visitIds.size(), relevantSize); // unique ids
+  visMat.reserve(vlen); // number of triplets is just vlen (for long data)
+
   // now we have rows and columns, just make the triplets and insert.
   for (R_xlen_t i = 0; i != rows.size(); ++i) {
     if (IntegerVector::is_na(cols[i])) {
      TRACE("dropping NA col value");
     continue;
     }
-    TRACE("inserting triplet at " << rows[i] << " - 1, " << cols[i] <<" - 1");
+    TRACE("adding triplet at R idx:" << rows[i] << ", " << cols[i]);
     visTriplets.push_back(Triplet(rows[i] - 1, cols[i] - 1, true));
   }
   TRACE("visMat rows: " << visMat.rows() << ", cols: " << visMat.cols());

@@ -55,8 +55,8 @@ Rcpp::LogicalVector icd9ComorbidShortCpp(const SEXP& icd9df, const Rcpp::List& i
   const SEXP vsexp = PROTECT(getRListOrDfElement(icd9df, visitId.c_str()));
   DEBUG("type of vsexp = " << TYPEOF(vsexp));
   if (TYPEOF(vsexp) != STRSXP) {
-    Rcpp::stop("expecting visit ID in input data frame to be character vector");
     UNPROTECT(1); // vsexp
+    Rcpp::stop("expecting visit ID in input data frame to be character vector");
   }
   UNPROTECT(1); // vsexp not used further
   // build structure of patient data
