@@ -51,12 +51,15 @@ factor_nosort <- function(x, levels) {
 #' @md
 #' @keywords internal
 factor_nosort_rcpp <- function(x, levels, na.rm = FALSE) {
+  # TODO: if re-factoring, use my refactor code
   if (missing(levels)) {
     if (is.factor(x))
       return(x)
     else
       levels <- unique.default(x)
   }
+  if (na.rm)
+    levels <- levels[!is.na(levels)]
   factor_nosort_rcpp_worker(as.character(x), levels, na_rm = na.rm)
   #TODO SLOW - if re-factoring, there is a faster way
 }

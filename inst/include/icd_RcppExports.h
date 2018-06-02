@@ -1122,17 +1122,36 @@ namespace icd {
         return Rcpp::as<IntegerVector >(rcpp_result_gen);
     }
 
-    inline Rcpp::IntegerVector refactor_worker(const IntegerVector& x, const CV& new_levels, bool na_rm, bool exclude_na) {
-        typedef SEXP(*Ptr_refactor_worker)(SEXP,SEXP,SEXP,SEXP);
+    inline Rcpp::IntegerVector refactor_worker(const IntegerVector& x, const CV& new_levels, bool exclude_na) {
+        typedef SEXP(*Ptr_refactor_worker)(SEXP,SEXP,SEXP);
         static Ptr_refactor_worker p_refactor_worker = NULL;
         if (p_refactor_worker == NULL) {
-            validateSignature("Rcpp::IntegerVector(*refactor_worker)(const IntegerVector&,const CV&,bool,bool)");
+            validateSignature("Rcpp::IntegerVector(*refactor_worker)(const IntegerVector&,const CV&,bool)");
             p_refactor_worker = (Ptr_refactor_worker)R_GetCCallable("icd", "_icd_refactor_worker");
         }
         RObject rcpp_result_gen;
         {
             RNGScope RCPP_rngScope_gen;
-            rcpp_result_gen = p_refactor_worker(Shield<SEXP>(Rcpp::wrap(x)), Shield<SEXP>(Rcpp::wrap(new_levels)), Shield<SEXP>(Rcpp::wrap(na_rm)), Shield<SEXP>(Rcpp::wrap(exclude_na)));
+            rcpp_result_gen = p_refactor_worker(Shield<SEXP>(Rcpp::wrap(x)), Shield<SEXP>(Rcpp::wrap(new_levels)), Shield<SEXP>(Rcpp::wrap(exclude_na)));
+        }
+        if (rcpp_result_gen.inherits("interrupted-error"))
+            throw Rcpp::internal::InterruptedException();
+        if (rcpp_result_gen.inherits("try-error"))
+            throw Rcpp::exception(Rcpp::as<std::string>(rcpp_result_gen).c_str());
+        return Rcpp::as<Rcpp::IntegerVector >(rcpp_result_gen);
+    }
+
+    inline Rcpp::IntegerVector refactor_narm_worker(const IntegerVector& x, const CV& new_levels) {
+        typedef SEXP(*Ptr_refactor_narm_worker)(SEXP,SEXP);
+        static Ptr_refactor_narm_worker p_refactor_narm_worker = NULL;
+        if (p_refactor_narm_worker == NULL) {
+            validateSignature("Rcpp::IntegerVector(*refactor_narm_worker)(const IntegerVector&,const CV&)");
+            p_refactor_narm_worker = (Ptr_refactor_narm_worker)R_GetCCallable("icd", "_icd_refactor_narm_worker");
+        }
+        RObject rcpp_result_gen;
+        {
+            RNGScope RCPP_rngScope_gen;
+            rcpp_result_gen = p_refactor_narm_worker(Shield<SEXP>(Rcpp::wrap(x)), Shield<SEXP>(Rcpp::wrap(new_levels)));
         }
         if (rcpp_result_gen.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();

@@ -6,6 +6,11 @@
 \usage{
 refactor(x, levels, na.rm = FALSE, exclude_na = TRUE)
 }
+\arguments{
+\item{exclude_na}{Simpler equivalent to \code{base::factor} exclude. By default,
+\code{refactor} will not count \code{NA} as a factor level if there are \code{NA} elements
+in the input data.}
+}
 \description{
 Slightly slower for small factors, three times faster for one hundred million
 elemeents with two million new levels. Three times faster for any \code{n > 1e6}.
@@ -13,7 +18,10 @@ With NAs, margin is smaller, but still beats base \code{factor}.
 }
 \examples{
 \donttest{
-
+  f <- factor(c(1, 2, 3))
+  refactor(f, c(2, 3))
+  f <- factor(c(1, 2, NA))
+  refactor(f, c(2, 3, NA))
 }
 }
 \keyword{internal}

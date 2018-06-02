@@ -51,7 +51,8 @@ Rcpp::IntegerVector factorNoSort(const Rcpp::CharacterVector& x,
                            const Rcpp::CharacterVector& levels,
                            const bool na_rm = false);
 Rcpp::IntegerVector refactor(const Rcpp::IntegerVector& x, const CV& new_levels,
-                             bool na_rm = false, bool exclude_na = true);
+                             bool exclude_na = true);
+Rcpp::IntegerVector refactor_narm(const Rcpp::IntegerVector& x, const CV& new_levels);
 
 // concatenate a vector of vectors
 template <class COCiter, class Oiter>

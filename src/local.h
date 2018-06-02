@@ -62,9 +62,11 @@ extern "C" {
 
 #ifdef ICD_DEBUG_UTIL
 #define DEBUG_UTIL(x) DEBUG(x)
+#define TRACE_UTIL(x) TRACE(x)
 #define DEBUG_UTIL_VEC(x) DEBUG_VEC(x)
 #else
 #define DEBUG_UTIL(x) ((void)0)
+#define TRACE_UTIL(x) ((void)0)
 #define DEBUG_UTIL_VEC(x) ((void)0)
 #endif
 

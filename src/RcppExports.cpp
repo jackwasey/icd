@@ -2002,23 +2002,53 @@ RcppExport SEXP _icd_factorNoSort(SEXP xSEXP, SEXP levelsSEXP, SEXP na_rmSEXP) {
     return rcpp_result_gen;
 }
 // refactor
-Rcpp::IntegerVector refactor(const IntegerVector& x, const CV& new_levels, bool na_rm, bool exclude_na);
-static SEXP _icd_refactor_try(SEXP xSEXP, SEXP new_levelsSEXP, SEXP na_rmSEXP, SEXP exclude_naSEXP) {
+Rcpp::IntegerVector refactor(const IntegerVector& x, const CV& new_levels, bool exclude_na);
+static SEXP _icd_refactor_try(SEXP xSEXP, SEXP new_levelsSEXP, SEXP exclude_naSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::traits::input_parameter< const IntegerVector& >::type x(xSEXP);
     Rcpp::traits::input_parameter< const CV& >::type new_levels(new_levelsSEXP);
-    Rcpp::traits::input_parameter< bool >::type na_rm(na_rmSEXP);
     Rcpp::traits::input_parameter< bool >::type exclude_na(exclude_naSEXP);
-    rcpp_result_gen = Rcpp::wrap(refactor(x, new_levels, na_rm, exclude_na));
+    rcpp_result_gen = Rcpp::wrap(refactor(x, new_levels, exclude_na));
     return rcpp_result_gen;
 END_RCPP_RETURN_ERROR
 }
-RcppExport SEXP _icd_refactor(SEXP xSEXP, SEXP new_levelsSEXP, SEXP na_rmSEXP, SEXP exclude_naSEXP) {
+RcppExport SEXP _icd_refactor(SEXP xSEXP, SEXP new_levelsSEXP, SEXP exclude_naSEXP) {
     SEXP rcpp_result_gen;
     {
         Rcpp::RNGScope rcpp_rngScope_gen;
-        rcpp_result_gen = PROTECT(_icd_refactor_try(xSEXP, new_levelsSEXP, na_rmSEXP, exclude_naSEXP));
+        rcpp_result_gen = PROTECT(_icd_refactor_try(xSEXP, new_levelsSEXP, exclude_naSEXP));
+    }
+    Rboolean rcpp_isInterrupt_gen = Rf_inherits(rcpp_result_gen, "interrupted-error");
+    if (rcpp_isInterrupt_gen) {
+        UNPROTECT(1);
+        Rf_onintr();
+    }
+    Rboolean rcpp_isError_gen = Rf_inherits(rcpp_result_gen, "try-error");
+    if (rcpp_isError_gen) {
+        SEXP rcpp_msgSEXP_gen = Rf_asChar(rcpp_result_gen);
+        UNPROTECT(1);
+        Rf_error(CHAR(rcpp_msgSEXP_gen));
+    }
+    UNPROTECT(1);
+    return rcpp_result_gen;
+}
+// refactor_narm
+Rcpp::IntegerVector refactor_narm(const IntegerVector& x, const CV& new_levels);
+static SEXP _icd_refactor_narm_try(SEXP xSEXP, SEXP new_levelsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::traits::input_parameter< const IntegerVector& >::type x(xSEXP);
+    Rcpp::traits::input_parameter< const CV& >::type new_levels(new_levelsSEXP);
+    rcpp_result_gen = Rcpp::wrap(refactor_narm(x, new_levels));
+    return rcpp_result_gen;
+END_RCPP_RETURN_ERROR
+}
+RcppExport SEXP _icd_refactor_narm(SEXP xSEXP, SEXP new_levelsSEXP) {
+    SEXP rcpp_result_gen;
+    {
+        Rcpp::RNGScope rcpp_rngScope_gen;
+        rcpp_result_gen = PROTECT(_icd_refactor_narm_try(xSEXP, new_levelsSEXP));
     }
     Rboolean rcpp_isInterrupt_gen = Rf_inherits(rcpp_result_gen, "interrupted-error");
     if (rcpp_isInterrupt_gen) {
@@ -2159,7 +2189,8 @@ static int _icd_RcppExport_validate(const char* sig) {
         signatures.insert("VecStr(*icd9_sort_cpp)(VecStr)");
         signatures.insert("std::vector<std::size_t>(*icd9_order_cpp)(VecStr)");
         signatures.insert("IntegerVector(*factor_nosort_rcpp_worker)(const CharacterVector&,const CharacterVector&,const bool)");
-        signatures.insert("Rcpp::IntegerVector(*refactor_worker)(const IntegerVector&,const CV&,bool,bool)");
+        signatures.insert("Rcpp::IntegerVector(*refactor_worker)(const IntegerVector&,const CV&,bool)");
+        signatures.insert("Rcpp::IntegerVector(*refactor_narm_worker)(const IntegerVector&,const CV&)");
         signatures.insert("SEXP(*match_rcpp)(SEXP,SEXP)");
         signatures.insert("SEXP(*fin)(SEXP,SEXP)");
     }
@@ -2227,6 +2258,7 @@ RcppExport SEXP _icd_RcppExport_registerCCallable() {
     R_RegisterCCallable("icd", "_icd_icd9_order_cpp", (DL_FUNC)_icd_icd9OrderCpp_try);
     R_RegisterCCallable("icd", "_icd_factor_nosort_rcpp_worker", (DL_FUNC)_icd_factorNoSort_try);
     R_RegisterCCallable("icd", "_icd_refactor_worker", (DL_FUNC)_icd_refactor_try);
+    R_RegisterCCallable("icd", "_icd_refactor_narm_worker", (DL_FUNC)_icd_refactor_narm_try);
     R_RegisterCCallable("icd", "_icd_match_rcpp", (DL_FUNC)_icd_matchFast_try);
     R_RegisterCCallable("icd", "_icd_fin", (DL_FUNC)_icd_inFast_try);
     R_RegisterCCallable("icd", "_icd_RcppExport_validate", (DL_FUNC)_icd_RcppExport_validate);

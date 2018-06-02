@@ -555,8 +555,12 @@ factor_nosort_rcpp_worker <- function(x, levels, na_rm) {
 
 #' @title Re-generate a factor with new levels, without doing string matching
 #' @keywords internal manip
-refactor_worker <- function(x, new_levels, na_rm, exclude_na) {
-    .Call(`_icd_refactor`, x, new_levels, na_rm, exclude_na)
+refactor_worker <- function(x, new_levels, exclude_na) {
+    .Call(`_icd_refactor`, x, new_levels, exclude_na)
+}
+
+refactor_narm_worker <- function(x, new_levels) {
+    .Call(`_icd_refactor_narm`, x, new_levels)
 }
 
 #' @title Faster match

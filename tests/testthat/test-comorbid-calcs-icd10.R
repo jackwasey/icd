@@ -16,9 +16,36 @@
 # along with icd. If not, see <http:#www.gnu.org/licenses/>.
 
 context("ICD-10 comorbidity calculations")
-# since most of the code is common to ICD-9 and ICD-10, this doesn't need to be
-# very extensive.
-
+test_that("simplest test case for a NA/factor interaction - factor", {
+  d <- data.frame(visit = c("1", "1"), icd10 = c("not_in_map", "D638"),
+                  stringsAsFactors = TRUE)
+  icd10_comorbid_ahrq(d)
+  expect_true(res$Anemia)
+})
+test_that("simplest test case for a NA/factor interaction - str", {
+  d <- data.frame(visit = c("1", "1"), icd10 = c("not_in_map", "D638"),
+                  stringsAsFactors = FALSE)
+  icd10_comorbid_ahrq(d)
+  expect_true(res$Anemia)
+})
+test_that("simplest test case for a NA/factor interaction - real", {
+  d <- data.frame(visit = c(1, 1), icd10 = c("not_in_map", "D638"),
+                  stringsAsFactors = FALSE)
+  icd10_comorbid_ahrq(d)
+  expect_true(res$Anemia)
+})
+test_that("simplest test case for a NA/factor interaction - int", {
+  d <- data.frame(visit = c(1L, 1L), icd10 = c("not_in_map", "D638"),
+                  stringsAsFactors = FALSE)
+  icd10_comorbid_ahrq(d)
+  expect_true(res$Anemia)
+})
+test_that("simplest test case for a NA in codes with matching code", {
+  d <- data.frame(visit = c(1L, 1L), icd10 = c("D638", NA),
+                  stringsAsFactors = FALSE)
+  res <- icd10_comorbid_ahrq(d, return_df = TRUE)
+  expect_true(res$Anemia)
+})
 test_that("ahrq comorbidities found for test data", {
   # test_two are all invalid codes
   test_two <- icd10_all_ahrq_one_pt

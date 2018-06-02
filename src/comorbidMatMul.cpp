@@ -157,7 +157,8 @@ void buildVisitCodesSparseSimple(SEXP visits,
     cols = rh.hash.lookup(codes_cv); // C indexed
   } else {
     DEBUG("codes are still in a factor...");
-    const IntegerVector codes_relevant = refactor((IntegerVector)icds, rh.relevant, true, true);
+    const IntegerVector codes_relevant =
+      refactor((IntegerVector)icds, rh.relevant, true); // no NA in output levels, please
     //const CV code_levels_cv = (CV) code_levels;
     //assert(Rf_length(code_relevant.attr("levels")) == relevantSize);
     //assert(code_levels_cv[0] == relevantKeys[0]); // TODO better checks?
@@ -165,7 +166,10 @@ void buildVisitCodesSparseSimple(SEXP visits,
   }
   if (visit_levels.isNULL()) {
     const CV& v = visits; // assume character for now
-    DEBUG("visits are not factors");
+    DEBUG("visits are not factors, they are: "
+            << TYPEOF(visits)
+            << " but converting/assuming character. "
+            << "See https://cran.r-project.org/doc/manuals/r-release/R-ints.html#SEXPs");
     DEBUG_VEC(v);
     CV uv = unique(v);
     DEBUG_VEC(uv);
@@ -195,6 +199,7 @@ void buildVisitCodesSparseSimple(SEXP visits,
   }
   DEBUG_VEC(rows);
   DEBUG_VEC(cols);
+  DEBUG("n rows: " << rows.size() << ", n cols: " << cols.size());
   assert(rows.size() == cols.size());
   visMat.resize(visitIds.size(), relevantSize); // unique ids
   visMat.reserve(vlen); // number of triplets is just vlen (for long data)
@@ -335,7 +340,7 @@ MapPlus::MapPlus(const List& icd9Mapping, const Relevant& rh) {
     if (areFactors) {
       TRACE("factor in input map");
       IntegerVector this_map_cmb = icd9Mapping[i];
-      map[i] = refactor(this_map_cmb, rh.keys, true, true);
+      map[i] = refactor_narm(this_map_cmb, rh.keys);
     } else { // most common case (re-use the hash!)
       CV this_map_cmb = icd9Mapping[i];
       // make factor, so R-indexed numbers.
@@ -410,7 +415,7 @@ LogicalMatrix comorbidMatMulSimple(const DataFrame& icd9df,
   Relevant r(icd9Mapping, codes); // potential to template over codes type
   MapPlus m(icd9Mapping, r);
   PtsSparse visMat; // reservation and sizing done within next function
-  DEBUG("building visMat");
+  DEBUG("*** building visMat ***");
   buildVisitCodesSparseSimple(visits, codes, r, visMat, out_row_names);
   DEBUG("built visit matrix");
   if (visMat.cols() != m.rows())
