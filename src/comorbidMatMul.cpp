@@ -111,8 +111,8 @@ void printCornerSparse(PtsSparse x) {
 // If the icd codes are character, we can construct the indexhash, then return a
 // new factor. This is basically what factorNosort does, but I need the hash
 // internals for lookups, so can't use it directly here.
-void buildVisitCodesSparseSimple(SEXP visits,
-                                 SEXP icds,
+void buildVisitCodesSparseSimple(RObject visits,
+                                 CV icds, // todo handle factor in parent function
                                  Relevant& rh,
                                  PtsSparse& visMat,
                                  VecStr& visitIds // get this from sparse matrix at end, but needed?
@@ -121,15 +121,15 @@ void buildVisitCodesSparseSimple(SEXP visits,
   const CV relevantKeys = rh.keys;
   const R_xlen_t relevantSize = rh.size();
   R_xlen_t vlen = Rf_length(visits);
-  RObject visit_levels = ((RObject) visits).attr("levels");
-  RObject code_levels = ((RObject) icds).attr("levels");
+  CV visit_levels = ((RObject) visits).attr("levels");
+  CV code_levels = ((RObject) icds).attr("levels");
   switch(TYPEOF(icds)) {
   case STRSXP: {
     TRACE("icds is string");
     break; }
   case INTSXP: {
     TRACE("got integers");
-    if (code_levels == R_NilValue) {
+    if (code_levels.isNULL()) {
       TRACE("icds not a factor");
     } else {
       TRACE("icds is factor");
@@ -150,7 +150,7 @@ void buildVisitCodesSparseSimple(SEXP visits,
   IntegerVector rows, cols;
   if (code_levels.isNULL()) {
     DEBUG("codes are still character...");
-    CV codes_cv = icds;
+    const CV& codes_cv = icds;
     DEBUG_VEC(codes_cv);
     DEBUG_VEC(relevantKeys);
     DEBUG("rh.keys.size() = " << rh.keys.size());
@@ -409,14 +409,17 @@ LogicalMatrix comorbidMatMulSimple(const DataFrame& icd9df,
                                    const List& icd9Mapping,
                                    const std::string visitId,
                                    const std::string icd9Field) {
+  valgrindCallgrindStart(false);
   VecStr out_row_names; // size is reserved in buildVisitCodesVec
-  SEXP visits = icd9df[visitId];
-  SEXP codes = icd9df[icd9Field];
+  RObject visits = icd9df[visitId]; // does this copy??? RObject instead?
+  CV codes = icd9df[icd9Field];
+  //TODO: Relevant requires CV right now, not factor
   Relevant r(icd9Mapping, codes); // potential to template over codes type
   MapPlus m(icd9Mapping, r);
   PtsSparse visMat; // reservation and sizing done within next function
   DEBUG("*** building visMat ***");
   buildVisitCodesSparseSimple(visits, codes, r, visMat, out_row_names);
+  UNPROTECT(2); // visits and codes
   DEBUG("built visit matrix");
   if (visMat.cols() != m.rows())
     Rcpp::stop("matrix multiplication won't work");
@@ -427,6 +430,7 @@ LogicalMatrix comorbidMatMulSimple(const DataFrame& icd9df,
   Rcpp::LogicalMatrix mat_out_bool = Rcpp::wrap(mat_out_int);
   List dimnames = Rcpp::List::create(out_row_names, icd9Mapping.names());
   mat_out_bool.attr("dimnames") = dimnames;
+  valgrindCallgrindStop();
   return mat_out_bool;
 }
 
