@@ -2,18 +2,12 @@
 % Please edit documentation in R/RcppExports.R
 \name{fastIntToStringRcpp}
 \alias{fastIntToStringRcpp}
-\alias{fastIntToString_alt_Std}
 \title{Convert integers to strings as quickly as possible}
 \usage{
 fastIntToStringRcpp(x)
-
-fastIntToString_alt_Std(x)
 }
 \arguments{
 \item{x}{Vector of integers}
-
-\item{bufferSize}{int if any input strings are longer than this number
-(default 16) there will be memory errors. No checks done for speed.}
 }
 \value{
 Vector of characters
