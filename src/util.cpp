@@ -363,7 +363,7 @@ Rcpp::IntegerVector refactor_narm(const IntegerVector& x, const CV& new_levels) 
   DEBUG_UTIL_VEC(x);
   DEBUG_UTIL_VEC(lx);
   DEBUG_UTIL_VEC(new_levels);
-  if (Rf_isFactor(x)) Rcpp::stop("input must be a factor");
+  if (!Rf_isFactor(x)) Rcpp::stop("input must be a factor");
   CV no_na_lx;
   CV no_na_new_levels;
   //bool any_na_lx = false;
