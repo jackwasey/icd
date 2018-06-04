@@ -93,7 +93,7 @@ compare_versus_others <- function() {
 
   pt_39_codes <- bad_pts[bad_pts$visit_id == "39", "code"]
   # look for where chronic lung disease might be hiding
-  explain(icd:::icd_get_major.icd9(pt_39_codes, short_code = TRUE), warn = FALSE)
+  explain_code(icd:::icd_get_major.icd9(pt_39_codes, short_code = TRUE), warn = FALSE)
 }
 
 # j <- bench_versus_others(start = 1, end = 1)

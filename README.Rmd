@@ -120,7 +120,7 @@ Look at the help files for details and examples of almost every function in this
 ```{r how to get further examples, echo = TRUE, eval = FALSE}
 ?comorbid
 ?comorbid_hcc
-?explain
+?explain_code
 ?is_valid
 ```
 

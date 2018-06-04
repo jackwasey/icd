@@ -99,13 +99,13 @@ diff_comorbid.list <- function(x, y, all_names = NULL, x_names = NULL,
       if (length(only.x) > 0) {
         cat(sprintf("\n%s has %d codes not in %s. First few are: ",
                     x.title, length(only.x), y.title))
-        lapply(explain(only.x, condense = TRUE, brief = TRUE, warn = FALSE)[1:5],
+        lapply(explain_code(only.x, condense = TRUE, brief = TRUE, warn = FALSE)[1:5],
                function(s) if (!is.na(s)) cat(sprintf("'%s' ", s)))
       }
       if (length(only.y) > 0) {
         cat(sprintf("\n%s has %d codes not in %s. First few are: ",
                     y.title, length(only.y), x.title))
-        lapply(explain(only.y, condense = TRUE, brief = TRUE, warn = FALSE)[1:5],
+        lapply(explain_code(only.y, condense = TRUE, brief = TRUE, warn = FALSE)[1:5],
                function(s) if (!is.na(s)) cat(sprintf("'%s' ", s)))
       }
       cat("\n")

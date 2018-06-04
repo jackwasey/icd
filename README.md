@@ -30,8 +30,8 @@ icd
 [![CRAN RStudio mirror
 downloads](https://cranlogs.r-pkg.org/badges/icd "RStudio Mirror Downloads")](https://cran.r-project.org/package=icd)
 
-ICD-9 and ICD-10 comorbidities, manipulation and validation
-===========================================================
+Comorbidities from ICD-9 and ICD-10 codes, manipulation and validation
+======================================================================
 
 Features
 --------
@@ -42,6 +42,7 @@ Features
         included (Quan, Deyo, Elixhauser, AHRQ)
     -   very fast assignment of ICD codes to comorbidities (using matrix
         multiplication with C and C++ internally)
+-   summarizing groups of ICD codes in natural language
 -   Charlson and Van Walraven score calculations
 -   Hierarchical Condition Codes (HCC) from CMS
 -   Clinical Classifcations Software (CCS) comorbidities from AHRQ
@@ -49,8 +50,6 @@ Features
 -   AHRQ ICD-10 procedure code classification
 -   validation of ICD codes from different annual revisions of ICD-9-CM
     and ICD-10-CM
--   summarizing ICD codes into groups, and to human-readable
-    descriptions
 -   correct conversion between different representations of ICD codes,
     with and without a decimal points, leading and trailing characters
     (this is not trivial for ICD-9-CM). ICD-9 to ICD-10 cross-walk is
@@ -186,7 +185,7 @@ in this package.
 ``` r
 ?comorbid
 ?comorbid_hcc
-?explain
+?explain_code
 ?is_valid
 ```
 

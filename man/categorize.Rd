@@ -59,9 +59,11 @@ This is the function which optimizes the input data for the categorization,
 and forms the core of the package, along with the C++ matrix code.
 }
 \examples{
+\dontrun{
 u <- uranium_pathology
 m <- icd10_map_ahrq
 u$icd10 <- decimal_to_short(u$icd10)
 j <- categorize(u, m, id_name = "case", code_name = "icd10")
+}
 }
 \keyword{internal}

@@ -124,7 +124,7 @@ test_that("mix of four and five digit with non-billable mid-level four digit cod
 
 test_that("condense short range", {
 
-  expect_equal(explain.icd9(othersalmonella), "Other salmonella infections")
+  expect_equal(explain_code.icd9(othersalmonella), "Other salmonella infections")
 
   expect_equal(condense.icd9(short_code = TRUE, othersalmonella, defined = TRUE), "003")
   expect_warning(res <- condense.icd9(short_code = TRUE, othersalmonella, defined = FALSE), regexp = NA)
@@ -221,9 +221,9 @@ test_that("condense single major and its children", {
   expect_equal(condense.icd9(short_code = TRUE, "003"), "003")
 
   rheum_fever <- "Rheumatic fever with heart involvement"
-  expect_equal(explain.icd9("391"), rheum_fever)
-  expect_equal(explain.icd9(children.icd9("391", short_code = TRUE)), rheum_fever)
-  expect_equal(explain.icd9(children.icd9("391", short_code = TRUE, defined = TRUE)), rheum_fever)
+  expect_equal(explain_code.icd9("391"), rheum_fever)
+  expect_equal(explain_code.icd9(children.icd9("391", short_code = TRUE)), rheum_fever)
+  expect_equal(explain_code.icd9(children.icd9("391", short_code = TRUE, defined = TRUE)), rheum_fever)
 })
 
 vermont_dx %>%

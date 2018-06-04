@@ -140,7 +140,7 @@ factor_split_na <- function(x, levels, factor_fun = factor_nosort_rcpp) {
 refactor <- function(x, levels, na.rm = FALSE, exclude_na = TRUE) {
   checkmate::assert_factor(x)
   checkmate::assert_character(levels)
-  if (!na.rm)
+  if (na.rm)
     refactor_narm_worker(x, levels)
   else
     refactor_worker(x, levels, exclude_na)

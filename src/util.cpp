@@ -288,12 +288,12 @@ Rcpp::IntegerVector refactor(const IntegerVector& x, const CV& new_levels, bool 
   R_xlen_t fsz = x.size();
   DEBUG_UTIL("fsz = " << fsz);
   LogicalVector matched_na_level(fsz, false);
-#ifdef ICD_OPENMP
-#pragma omp parallel for
-#endif
   R_xlen_t fi = 0;
   R_xlen_t i;
-  for (i = 0, fi = 0; i < fsz; ++i) {
+#ifdef ICD_OPENMP
+#pragma omp parallel for shared(fi)
+#endif
+  for (i = 0; i < fsz; ++i) {
     TRACE_UTIL("refactor considering i: " << i << ", x[i]: " << x[i] << ", "
                                           << "fi: " << fi);
     if (IntegerVector::is_na(x[i])) {
@@ -302,7 +302,9 @@ Rcpp::IntegerVector refactor(const IntegerVector& x, const CV& new_levels, bool 
         f[fi++] = NA_INTEGER;
       continue;
     }
-    if (which_na_old_levels[i]) {
+    assert(x[i] > 0);
+    assert(x[i] <= which_na_old_levels.size()); // R index (to be used in C)
+    if (which_na_old_levels[x[i] - 1]) {
       DEBUG_UTIL("inserting NA because vec previously referenced NA level. pos " << i << " with fi=" << fi);
       if (!exclude_na)
         Rcpp::stop("TODO: lookup index of NA in new levels, if it exists");
@@ -387,12 +389,12 @@ Rcpp::IntegerVector refactor_narm(const IntegerVector& x, const CV& new_levels) 
   DEBUG_UTIL_VEC(new_level_old_idx);
   R_xlen_t fsz = x.size();
   DEBUG_UTIL("fsz = " << fsz);
-#ifdef ICD_OPENMP
-#pragma omp parallel for
-#endif
   R_xlen_t fi = 0;
   R_xlen_t i;
-  for (i = 0, fi = 0; i < fsz; ++i) {
+#ifdef ICD_OPENMP
+#pragma omp parallel for shared(fi)
+#endif
+  for (i = 0; i < fsz; ++i) {
     TRACE_UTIL("refactor considering i: " << i << ", x[i]: " << x[i] << ", "
                                           << "fi: " << fi);
     if (IntegerVector::is_na(x[i])) {
@@ -400,10 +402,12 @@ Rcpp::IntegerVector refactor_narm(const IntegerVector& x, const CV& new_levels) 
         ") due to input NA value");
       continue;
     }
-    assert(i < which_na_old_levels.size());
-    if (which_na_old_levels[i]) {
-      DEBUG_UTIL("input data referenced an NA level");
-      TRACE_UTIL("continuing without inserting from pos " << i << " with fi=" << fi);
+    assert(x[i] > 0);
+    assert(x[i] <= which_na_old_levels.size()); // R index (to be used in C)
+    if (which_na_old_levels[x[i] - 1]) { // was an NA old level referenced?
+      DEBUG_UTIL("input data referenced an NA level"
+                   << "continuing without inserting from pos "
+                   << i << " with fi=" << fi);
       continue;
     }
     assert(x[i] > 0);

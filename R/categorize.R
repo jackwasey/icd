@@ -46,10 +46,12 @@
 #' @param factor_fun function symbol to call to generate factors. Default is a
 #'   very simple \code{Rcpp} implementation \code{factor_nosort_rcpp}.
 #' @examples
+#' \dontrun{
 #' u <- uranium_pathology
 #' m <- icd10_map_ahrq
 #' u$icd10 <- decimal_to_short(u$icd10)
 #' j <- categorize(u, m, id_name = "case", code_name = "icd10")
+#' }
 #' @md
 #' @export
 #' @keywords internal

@@ -91,9 +91,6 @@ extern "C" {
 #undef ICD_OPENMP
 #endif
 
-// TODO: remove after debugging
-#undef ICD_OPENMP
-
 //#ifndef HAVE_RCPPEIGEN_H
 #define ICD_CATCH
 // #ifndef HAVE_TESTTHAT_H

@@ -111,7 +111,7 @@ children("0032")
 # empty because 102.01 is not meaningful
 children("10201", short_code = TRUE, defined = TRUE)
 children("003", short_code = TRUE, defined = TRUE) \%>\%
-  explain(condense = FALSE, short_code = TRUE)
+  explain_code(condense = FALSE, short_code = TRUE)
 
 children(short_code = FALSE, "100.0")
 children(short_code = FALSE, "100.00")

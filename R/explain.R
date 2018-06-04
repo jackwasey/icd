@@ -36,54 +36,53 @@
 #' @examples
 #' # by default, just show parent code and ignore children (428.0 not shown
 #' # because 428 is present):
-#' explain(icd9_map_ahrq$CHF[1:3])
+#' explain_code(icd9_map_ahrq$CHF[1:3])
 #' # same without condensing the list. In this case, 428.0 is shown:
-#' explain(icd9_map_ahrq$CHF[1:3], brief = TRUE)
+#' explain_code(icd9_map_ahrq$CHF[1:3], brief = TRUE)
 #' # The first three in the ICD-10 equivalent are a little different:
-#' explain(icd10_map_ahrq$CHF[1:3], brief = TRUE)
+#' explain_code(icd10_map_ahrq$CHF[1:3], brief = TRUE)
 #' # nice to have magrittr, but not essential
 #' library(magrittr, warn.conflicts = FALSE, quietly = TRUE)
-#' explain(icd9_map_ahrq$CHF[1:3] %>% condense)
+#' explain_code(icd9_map_ahrq$CHF[1:3] %>% condense)
 #' @return data frame, or list of data frames, with fields for ICD-9 code, name
 #'   and description. There is no guarantee on the order of the returned
 #'   descriptions. \code{explain_table} is designed to provide results in a
 #'   reliable order (when not condensing codes, at least).
 #' @export
-explain <- function(...)
-  UseMethod("explain")
+explain_code <- function(...)
+  UseMethod("explain_code")
 
-#' @rdname explain
-#' @details \code{explain_icd} is a synonym for \code{\link{explain}} to avoid
-#'   conflict with \code{dplyr::explain}. Alternative is to use
-#'   \code{icd::explain}.
+#' @rdname explain_code
+#' @details \code{explain_icd} is a synonym for \code{\link{explain_code}}.
 #' @keywords internal
-explain_icd <- function(...) explain(...)
+explain_icd <- function(...) explain_code(...)
 
-#' @describeIn explain Explain ICD codes from a character vector, guessing
+#' @describeIn explain_code Explain ICD codes from a character vector, guessing
 #'   ICD version
 #' @export
-explain.default <- function(x, short_code = guess_short(x), condense = TRUE, brief = FALSE, warn = TRUE, ...) {
+explain_code.default <- function(x, short_code = guess_short(x), condense = TRUE, brief = FALSE, warn = TRUE, ...) {
   switch(
     guess_version.character(as_char_no_warn(x), short_code = short_code),
-    "icd9" = explain.icd9(x, short_code = short_code, condense = condense, brief = brief, warn = warn, ...),
-    "icd10" = explain.icd10(x, short_code = short_code, brief = brief, ...),
+    "icd9" = explain_code.icd9(x, short_code = short_code, condense = condense,
+                               brief = brief, warn = warn, ...),
+    "icd10" = explain_code.icd10(x, short_code = short_code, brief = brief, ...),
     stop("Unknown ICD version.")
   )
 }
 
-#' @describeIn explain Explain all ICD-9 codes in a list of vectors
+#' @describeIn explain_code Explain all ICD-9 codes in a list of vectors
 #' @export
-explain.list <- function(x, ...)
+explain_code.list <- function(x, ...)
   lapply(x, explain, ...)
 
-#' @describeIn explain explain character vector of ICD-9 codes.
+#' @describeIn explain_code explain character vector of ICD-9 codes.
 #' @export
-explain.icd9 <- function(...)
-  explain.icd9cm(...)
+explain_code.icd9 <- function(...)
+  explain_code.icd9cm(...)
 
-#' @describeIn explain explain character vector of ICD-9-CM codes
+#' @describeIn explain_code explain character vector of ICD-9-CM codes
 #' @export
-explain.icd9cm <- function(x, short_code = guess_short(x),
+explain_code.icd9cm <- function(x, short_code = guess_short(x),
                            condense = TRUE, brief = FALSE, warn = TRUE, ...) {
   assert(check_factor(x), check_character(x))
   assert_flag(short_code)
@@ -120,9 +119,9 @@ explain.icd9cm <- function(x, short_code = guess_short(x),
     NA_character_
 }
 
-#' @describeIn explain ICD-10-CM explanation, current a minimal implementation
+#' @describeIn explain_code ICD-10-CM explanation, current a minimal implementation
 #' @export
-explain.icd10cm <- function(x, short_code = guess_short(x),
+explain_code.icd10cm <- function(x, short_code = guess_short(x),
                             condense = TRUE, brief = FALSE, warn = TRUE, ...) {
   assert_vector(x)
   assert_flag(short_code)
@@ -141,13 +140,13 @@ explain.icd10cm <- function(x, short_code = guess_short(x),
               ifelse(brief, "short_desc", "long_desc")]
 }
 
-#' @describeIn explain ICD-10 explanation, falls back on ICD-10-CM until
+#' @describeIn explain_code ICD-10 explanation, falls back on ICD-10-CM until
 #'   ICD-10 WHO copyright workaround is available
 #' @export
-explain.icd10 <- function(x, short_code = guess_short(x),
+explain_code.icd10 <- function(x, short_code = guess_short(x),
                           condense = TRUE, brief = FALSE, warn = TRUE, ...) {
   # don't pass on condense and warn until they are implemented
-  explain.icd10cm(x = x, short_code = short_code, brief = brief, ...)
+  explain_code.icd10cm(x = x, short_code = short_code, brief = brief, ...)
 }
 
 #' get ICD-9 Chapters from vector of ICD-9 codes

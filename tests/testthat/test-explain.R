@@ -19,7 +19,7 @@ context("explain ICD-9: code to human-readable")
 
 test_that("explain a large set of ICD-9 codes succinctly", {
   expect_identical(
-    explain(children.icd9("391", defined = FALSE, short_code = TRUE),
+    explain_code(children.icd9("391", defined = FALSE, short_code = TRUE),
                 condense = FALSE, short_code = TRUE),
     c("Rheumatic fever with heart involvement", "Acute rheumatic pericarditis",
       "Acute rheumatic endocarditis", "Acute rheumatic myocarditis",
@@ -28,14 +28,14 @@ test_that("explain a large set of ICD-9 codes succinctly", {
   )
 
   expect_identical(
-    explain.icd9(children.icd9(as.short_diag("391")), condense = TRUE, short_code = TRUE),
+    explain_code.icd9(children.icd9(as.short_diag("391")), condense = TRUE, short_code = TRUE),
     "Rheumatic fever with heart involvement"
   )
 })
 
 test_that("explain a large set of ICD-9 codes succinctly, using factors", {
   expect_identical(
-    explain(factor(children.icd9("391", defined = FALSE, short_code = TRUE)),
+    explain_code(factor(children.icd9("391", defined = FALSE, short_code = TRUE)),
                 condense = FALSE, short_code = TRUE),
     c("Rheumatic fever with heart involvement", "Acute rheumatic pericarditis",
       "Acute rheumatic endocarditis", "Acute rheumatic myocarditis",
@@ -44,65 +44,65 @@ test_that("explain a large set of ICD-9 codes succinctly, using factors", {
   )
 
   expect_identical(
-    explain.icd9(factor(children.icd9(as.short_diag("391"))), condense = TRUE, short_code = TRUE),
+    explain_code.icd9(factor(children.icd9(as.short_diag("391"))), condense = TRUE, short_code = TRUE),
     "Rheumatic fever with heart involvement"
   )
 })
 
 test_that("github issue #41", {
   expect_equal(
-    explain.icd9(get_defined.icd9(icd9_map_quan_deyo[["Dementia"]]), condense = TRUE),
-    explain.icd9(icd9_map_quan_deyo[["Dementia"]], condense = TRUE, warn = FALSE)
+    explain_code.icd9(get_defined.icd9(icd9_map_quan_deyo[["Dementia"]]), condense = TRUE),
+    explain_code.icd9(icd9_map_quan_deyo[["Dementia"]], condense = TRUE, warn = FALSE)
   )
   expect_equal(
-    explain.icd9(get_defined(icd9_map_quan_deyo[["Dementia"]]), condense = FALSE),
-    explain.icd9(icd9_map_quan_deyo[["Dementia"]], condense = FALSE)
+    explain_code.icd9(get_defined(icd9_map_quan_deyo[["Dementia"]]), condense = FALSE),
+    explain_code.icd9(icd9_map_quan_deyo[["Dementia"]], condense = FALSE)
   )
 })
 
 test_that("explain S3 dispatch", {
-  expect_equal(explain.icd9("003.21", short_code = FALSE), "Salmonella meningitis")
-  expect_equal(explain("003.21", short_code = FALSE),
-               explain.icd9("003.21", short_code = FALSE))
-  expect_equal(explain.list(list(a = "003.21"), short_code = FALSE),
-               list(a = explain.icd9("00321", short_code = TRUE)))
-  expect_equal(explain.list(list(a = "003.21", b = "390"), short_code = FALSE),
-               list(a = explain.icd9cm("00321", short_code = TRUE),
+  expect_equal(explain_code.icd9("003.21", short_code = FALSE), "Salmonella meningitis")
+  expect_equal(explain_code("003.21", short_code = FALSE),
+               explain_code.icd9("003.21", short_code = FALSE))
+  expect_equal(explain_code.list(list(a = "003.21"), short_code = FALSE),
+               list(a = explain_code.icd9("00321", short_code = TRUE)))
+  expect_equal(explain_code.list(list(a = "003.21", b = "390"), short_code = FALSE),
+               list(a = explain_code.icd9cm("00321", short_code = TRUE),
                     b = "Rheumatic fever without mention of heart involvement"))
-  expect_warning(res <- explain.icd9(c(a = "not", b = "icd9code"), short_code = TRUE))
+  expect_warning(res <- explain_code.icd9(c(a = "not", b = "icd9code"), short_code = TRUE))
   expect_equal(res, NA_character_)
-  expect_warning(res <- explain(list(a = icd9("not"), b = icd9("icd9code")), short_code = FALSE))
+  expect_warning(res <- explain_code(list(a = icd9("not"), b = icd9("icd9code")), short_code = FALSE))
   expect_equal(res, list(a = NA_character_, b = NA_character_))
 
-  expect_equal(explain.icd9("00321", short_code = TRUE), "Salmonella meningitis")
+  expect_equal(explain_code.icd9("00321", short_code = TRUE), "Salmonella meningitis")
 
 })
 
 test_that("explain single top level code which is billable, has no children", {
   # the code "390" is a billable major: good test case.
-  expect_identical(explain.icd9("390"),
+  expect_identical(explain_code.icd9("390"),
                    "Rheumatic fever without mention of heart involvement")
 })
 
 test_that("expalin a single top level code without a top level explanation", {
-  expect_identical(explain("391"),
+  expect_identical(explain_code("391"),
                    "Rheumatic fever with heart involvement")
 })
 
 
 test_that("explain a single leaf node", {
-  expect_equal(explain.icd9("27800", condense = FALSE), "Obesity, unspecified")
-  expect_equal(explain.icd9("27800", condense = TRUE), "Obesity, unspecified")
-  expect_equal(explain.icd9("00329"), "Other localized salmonella infections")
+  expect_equal(explain_code.icd9("27800", condense = FALSE), "Obesity, unspecified")
+  expect_equal(explain_code.icd9("27800", condense = TRUE), "Obesity, unspecified")
+  expect_equal(explain_code.icd9("00329"), "Other localized salmonella infections")
 })
 
 test_that("explain handles mix of valid and invalid", {
-  expect_equal(explain.icd9(c("radishes", "123"), warn = FALSE), "Other cestode infection")
-  expect_warning(explain.icd9(c("radishes", "123")))
+  expect_equal(explain_code.icd9(c("radishes", "123"), warn = FALSE), "Other cestode infection")
+  expect_warning(explain_code.icd9(c("radishes", "123")))
 })
 
 test_that("explain works when none ICD-9 codes are even valid", {
-  expect_equal(explain.icd9(c("radishes", "123123", NA), warn = FALSE), NA_character_)
+  expect_equal(explain_code.icd9(c("radishes", "123123", NA), warn = FALSE), NA_character_)
 })
 
 
@@ -252,11 +252,11 @@ test_that("explain icd9GetChapters simple input", {
 })
 
 test_that("working with named lists of codes, decimal is guessed", {
-  expect_warning(explain(
+  expect_warning(explain_code(
     list(a = c("001"), b = c("001.1", "001.9")), short_code = FALSE), regexp = NA)
-  expect_warning(explain(list(a = c("001"), b = c("001.1", "001.9"))), regexp = NA)
+  expect_warning(explain_code(list(a = c("001"), b = c("001.1", "001.9"))), regexp = NA)
 })
 
 test_that("github #113 for ICD-9 code 038.1", {
-  expect_equal(explain("0381"), "Staphylococcal septicemia")
+  expect_equal(explain_code("0381"), "Staphylococcal septicemia")
 })

@@ -89,32 +89,32 @@ icd_expand_range.icd9 <- function(...) { very_soft_deprecate("expand_range.icd9"
 #' @export
 icd_expand_range_major.icd9 <- function(...) { very_soft_deprecate("expand_range_major.icd9"); expand_range_major.icd9(...) }
 
-#' @rdname explain
+#' @rdname explain_code
 #' @template deprecated-icd3
 #' @export
 icd_explain <- function(...) { very_soft_deprecate("explain"); explain(...) }
 
-#' @rdname explain
+#' @rdname explain_code
 #' @export
 icd_explain.default <- function(...) { very_soft_deprecate("explain.default"); explain.default(...) }
 
-#' @rdname explain
+#' @rdname explain_code
 #' @export
 icd_explain.icd10 <- function(...) { very_soft_deprecate("explain.icd10"); explain.icd10(...) }
 
-#' @rdname explain
+#' @rdname explain_code
 #' @export
 icd_explain.icd10cm <- function(...) { very_soft_deprecate("explain.icd10cm"); explain.icd10cm(...) }
 
-#' @rdname explain
+#' @rdname explain_code
 #' @export
 icd_explain.icd9 <- function(...) { very_soft_deprecate("explain.icd9"); explain.icd9(...) }
 
-#' @rdname explain
+#' @rdname explain_code
 #' @export
 icd_explain.icd9cm <- function(...) { very_soft_deprecate("explain.icd9cm"); explain.icd9cm(...) }
 
-#' @rdname explain
+#' @rdname explain_code
 #' @export
 icd_explain.list <- function(...) { very_soft_deprecate("explain.list"); explain.list(...) }
 
@@ -404,7 +404,7 @@ icd_diff_comorbid <- function(...) { very_soft_deprecate("diff_comorbid"); diff_
 #' @export
 icd_expand_range <- function(...) { very_soft_deprecate("expand_range"); expand_range(...) }
 
-#' @rdname explain
+#' @rdname explain_code
 #' @export
 icd_explain <- function(...) { very_soft_deprecate("explain"); explain(...) }
 

@@ -107,7 +107,7 @@ expect_icd10_sub_chap_equal <- function(x, start, end, ...) {
 }
 
 expect_explain_equal <- function(x, desc, ...) {
-  eval(bquote(expect_equal(explain(.(x)), .(desc), ...)))
+  eval(bquote(expect_equal(explain_code(.(x)), .(desc), ...)))
 }
 
 
