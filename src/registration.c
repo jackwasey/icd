@@ -77,7 +77,7 @@ extern SEXP _icd_lookupComorbidByChunkFor(SEXP, SEXP, SEXP, SEXP, SEXP);
 extern SEXP _icd_matchFast(SEXP, SEXP);
 extern SEXP _icd_randomMajorCpp(SEXP);
 extern SEXP _icd_RcppExport_registerCCallable();
-extern SEXP _icd_refactor(SEXP, SEXP, SEXP, SEXP);
+extern SEXP _icd_refactor(SEXP, SEXP, SEXP);
 extern SEXP _icd_refactor_narm(SEXP, SEXP);
 extern SEXP _icd_setDecimalDiag(SEXP, SEXP);
 extern SEXP _icd_setShortDiag(SEXP, SEXP);
@@ -159,7 +159,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_icd_matchFast",                             (DL_FUNC) &_icd_matchFast,                             2},
     {"_icd_randomMajorCpp",                        (DL_FUNC) &_icd_randomMajorCpp,                        1},
     {"_icd_RcppExport_registerCCallable",          (DL_FUNC) &_icd_RcppExport_registerCCallable,          0},
-    {"_icd_refactor",                              (DL_FUNC) &_icd_refactor,                              4},
+    {"_icd_refactor",                              (DL_FUNC) &_icd_refactor,                              3},
     {"_icd_refactor_narm",                         (DL_FUNC) &_icd_refactor_narm,                         2},
     {"_icd_setDecimalDiag",                        (DL_FUNC) &_icd_setDecimalDiag,                        2},
     {"_icd_setShortDiag",                          (DL_FUNC) &_icd_setShortDiag,                          2},

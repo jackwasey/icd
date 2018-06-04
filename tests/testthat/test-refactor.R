@@ -48,6 +48,7 @@ test_that("basic refactoring", {
     n <- test_cases[tc, 2][[1]]
     p <- unique(test_cases[tc, 3][[1]])
     if (FALSE) print(paste("x: ", paste(unlist(m), collapse = " "),
+                           "old levels: ", paste(unlist(p), collapse = " "),
                            "new levels: ", paste(unlist(n), collapse = " ")))
     expect_identical(
       refactor(factor(m, levels = p), n),
@@ -55,6 +56,7 @@ test_that("basic refactoring", {
       info = paste("m = c('", paste(unlist(test_cases[tc, 1]), collapse = "', '"), "')\n",
                    "n = c('", paste(unlist(test_cases[tc, 2]), collapse = "', '"), "')", sep = "")
     )
+    skip("for as yet unimplemented code path")
     expect_identical(
       refactor(factor(m, levels = p), n, na.rm = FALSE, exclude_na = FALSE),
       factor(factor(m, levels = p), levels = n, exclude = NULL),

@@ -357,13 +357,13 @@ Rcpp::IntegerVector refactor(const IntegerVector& x, const CV& new_levels, bool 
 
 // [[Rcpp::export(refactor_narm_worker)]]
 Rcpp::IntegerVector refactor_narm(const IntegerVector& x, const CV& new_levels) {
-  TRACE_UTIL("Refactoring");
+  TRACE_UTIL("Refactoring, dropping NA");
   IntegerVector f(x.size()); // too many if we are dropping NA values.
   CharacterVector lx = x.attr("levels");
   DEBUG_UTIL_VEC(x);
   DEBUG_UTIL_VEC(lx);
   DEBUG_UTIL_VEC(new_levels);
-  if (lx.isNULL()) Rcpp::stop("icd codes must be in a factor");
+  if (Rf_isFactor(x)) Rcpp::stop("input must be a factor");
   CV no_na_lx;
   CV no_na_new_levels;
   //bool any_na_lx = false;
@@ -387,7 +387,6 @@ Rcpp::IntegerVector refactor_narm(const IntegerVector& x, const CV& new_levels) 
   DEBUG_UTIL_VEC(new_level_old_idx);
   R_xlen_t fsz = x.size();
   DEBUG_UTIL("fsz = " << fsz);
-  LogicalVector matched_na_level(fsz, false);
 #ifdef ICD_OPENMP
 #pragma omp parallel for
 #endif
@@ -401,6 +400,7 @@ Rcpp::IntegerVector refactor_narm(const IntegerVector& x, const CV& new_levels) 
         ") due to input NA value");
       continue;
     }
+    assert(i < which_na_old_levels.size());
     if (which_na_old_levels[i]) {
       DEBUG_UTIL("input data referenced an NA level");
       TRACE_UTIL("continuing without inserting from pos " << i << " with fi=" << fi);
@@ -418,10 +418,6 @@ Rcpp::IntegerVector refactor_narm(const IntegerVector& x, const CV& new_levels) 
       f[fi++] = cur;
     }
   }
-  DEBUG_UTIL_VEC(f);
-  DEBUG_UTIL_VEC(matched_na_level);
-  f = f[!matched_na_level];
-  DEBUG_UTIL_VEC(x);
   DEBUG_UTIL_VEC(f);
   f.attr("levels") = no_na_new_levels;
   f.attr("class") = "factor";

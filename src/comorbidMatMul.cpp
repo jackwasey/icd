@@ -111,61 +111,41 @@ void printCornerSparse(PtsSparse x) {
 // If the icd codes are character, we can construct the indexhash, then return a
 // new factor. This is basically what factorNosort does, but I need the hash
 // internals for lookups, so can't use it directly here.
-void buildVisitCodesSparseSimple(RObject visits,
-                                 CV icds, // todo handle factor in parent function
+void buildVisitCodesSparseSimple(const RObject& visits,
+                                 const RObject& codes, // todo handle factor in parent function
                                  Relevant& rh,
                                  PtsSparse& visMat,
                                  VecStr& visitIds // get this from sparse matrix at end, but needed?
 ) {
-  assert(Rf_length(visits) == Rf_length(icds));
+  TRACE("Starting build of visit matrix");
+  assert(Rf_length(visits) == Rf_length(codes));
   const CV relevantKeys = rh.keys;
   const R_xlen_t relevantSize = rh.size();
   R_xlen_t vlen = Rf_length(visits);
-  CV visit_levels = ((RObject) visits).attr("levels");
-  CV code_levels = ((RObject) icds).attr("levels");
-  switch(TYPEOF(icds)) {
-  case STRSXP: {
-    TRACE("icds is string");
-    break; }
-  case INTSXP: {
-    TRACE("got integers");
-    if (code_levels.isNULL()) {
-      TRACE("icds not a factor");
-    } else {
-      TRACE("icds is factor");
-    }
-    break; }
-  default: {
-    Rcpp::stop("cannot convert this type of visit/patient/encounter ID yet: ",
-               "use character or factor");
-  }}
+  DEBUG("Setting levels");
   DEBUG("relevantSize = " << relevantSize << ", vlen = " << vlen);
-  // R's global string cache R_StringHash does not provide an obvious mechanism
-  // to lookup an index, just insertion and return of reference to found
-  // CHARSXP. R_HashGetLoc is indexed by hashcode itself, no sequentially. Stick
-  // with Rcpp IndexHash for now, which at least hashes based on integer address
-  // of the string, not string itself. I don't want to re-implement this!
   std::vector<Triplet> visTriplets;
   visTriplets.reserve(vlen);
   IntegerVector rows, cols;
-  if (code_levels.isNULL()) {
+  if (!Rf_isFactor(codes)) {
     DEBUG("codes are still character...");
-    const CV& codes_cv = icds;
+    const CV& codes_cv = (CV) codes;
     DEBUG_VEC(codes_cv);
     DEBUG_VEC(relevantKeys);
     DEBUG("rh.keys.size() = " << rh.keys.size());
     cols = rh.hash.lookup(codes_cv); // C indexed
   } else {
     DEBUG("codes are still in a factor...");
+    CV code_levels = wrap(codes.attr("levels"));
     const IntegerVector codes_relevant =
-      refactor((IntegerVector)icds, rh.relevant, true); // no NA in output levels, please
+      refactor((IntegerVector) codes, rh.relevant, true); // no NA in output levels, please
     //const CV code_levels_cv = (CV) code_levels;
     //assert(Rf_length(code_relevant.attr("levels")) == relevantSize);
     //assert(code_levels_cv[0] == relevantKeys[0]); // TODO better checks?
     cols = ((IntegerVector) codes_relevant); // keep R indexing
   }
-  if (visit_levels.isNULL()) {
-    const CV& v = visits; // assume character for now
+  if (!Rf_isFactor(visits)) {
+    CV v = (CV) visits; // assume character for now
     DEBUG("visits are not factors, they are: "
             << TYPEOF(visits)
             << " but converting/assuming character. "
@@ -185,12 +165,12 @@ void buildVisitCodesSparseSimple(RObject visits,
     // using pointer to global string cache (another hash!), but it appears not
     // to do this.
     rows = match(v, uv);
-
     // matrix row names are character. TODO: consider option not to
     // name the rows, e.g. for people who just summarize the data: will save a
     // lot of character processing
   } else {
     DEBUG("visits are factors");
+    // CV visit_levels = wrap(visits.attr("levels"));
     //  use the factor level as the row number (R vs C index)
     //rows = ((IntegerVector) visits - 1);
     // keep R index
@@ -419,7 +399,6 @@ LogicalMatrix comorbidMatMulSimple(const DataFrame& icd9df,
   PtsSparse visMat; // reservation and sizing done within next function
   DEBUG("*** building visMat ***");
   buildVisitCodesSparseSimple(visits, codes, r, visMat, out_row_names);
-  UNPROTECT(2); // visits and codes
   DEBUG("built visit matrix");
   if (visMat.cols() != m.rows())
     Rcpp::stop("matrix multiplication won't work");

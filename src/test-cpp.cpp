@@ -243,6 +243,7 @@ context("refactor") {
     DEBUG_VEC(j);
     expect_true(CV::is_na(j[1]));
   }
+  /* // skipping because not implemented or needed yet.
   test_that("don't drop NA values and levels") {
     f = { NA_INTEGER, 1, 3, NA_INTEGER };
     new_levels = CV::create("a", "c", "NA_STRING");
@@ -260,7 +261,7 @@ context("refactor") {
     j = res.attr("levels");
     DEBUG_VEC(j);
     expect_true(CV::is_na(j[1]));
-  }
+  } */
   test_that("do drop NA values and levels") {
     f = { NA_INTEGER, 1, 3, NA_INTEGER };
     CV old_levels = CV::create("a", "c", "NA_STRING");
@@ -369,7 +370,7 @@ context("refactor") {
     new_levels = CV::create("c", "b", "e");
     f2.attr("levels") = new_levels;
     f2.attr("class") = "factor";
-    res = refactor(f, new_levels, true);
+    res = refactor_narm(f, new_levels);
     DEBUG_VEC(res);
     expect_false(IntegerVector::is_na(res[0]));
     expect_true(res[0] == 2);

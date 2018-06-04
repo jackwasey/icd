@@ -1,25 +1,22 @@
 context("github #133")
-pts10 <- icd_long_data(
-  visit = c("a"),
-  icd = as.icd10(NA_character_),
-  date = as.Date(c("2011-01-01")))
-test_that("github #133 is NA also okay?", {
+test_that("github #133 one pt, no NA okay?", {
   # just run to check it doesn't segfault
-  res <- icd::icd10_comorbid(pts10, map = icd::icd10_map_ahrq)
-  expect_true(all(!res))
+  res <- icd::icd10_comorbid(one_icd10_pt, map = icd::icd10_map_ahrq)
+  expect_true(sum(res) == 1)
 })
 test_that("github #133 with NA", {
-  pts10[["icd"]] <- NA
-  res <- icd::icd10_comorbid(pts10, map = icd::icd10_map_ahrq)
+  one_icd10_pt_na <- one_icd10_pt
+  one_icd10_pt_na["icd"] <- as.icd10(NA_character_)
+  res <- icd::icd10_comorbid(one_icd10_pt_na, map = icd::icd10_map_ahrq)
   expect_true(all(!res))
 })
 test_that("github #133 minimal example of bug", {
-  pts10 <- icd_long_data(
+  one_icd10_pt <- icd_long_data(
     visit = c("a"),
     icd = as.icd10(""),
     date = as.Date(c("2011-01-01")),
     stringsAsFactors = FALSE)
-  res <- icd::icd10_comorbid(pts10, map = icd10_map_ahrq)
+  res <- icd::icd10_comorbid(one_icd10_pt, map = icd10_map_ahrq)
   expect_equal(dim(res), c(1L, 30L))
   expect_equal(sum(res), 0)
 })
@@ -35,7 +32,7 @@ test_that("github #133 doesn't crash R", {
   devnull <- icd10_comorbid(x[13:14, ], icd10_map_ahrq)
   devnull <- icd10_comorbid(x[14:15, ], icd10_map_ahrq)
   devnull <- icd10_comorbid(x[13:15, ], icd10_map_ahrq)
-  devnull <- icd10_comorbid(x[15:16, ], icd10_map_ahrq)
+  devnull <- icd10_comorbid(x[15:16, ], icd_name = "icd10", icd10_map_ahrq)
   devnull <- icd10_comorbid(x[1:13, ], icd10_map_ahrq)
   devnull <- icd10_comorbid(x[1:14, ], icd10_map_ahrq)
   devnull <- icd10_comorbid(x[1:15, ], icd10_map_ahrq)

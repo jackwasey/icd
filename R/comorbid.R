@@ -186,7 +186,7 @@ icd10_comorbid_reduce <- function(x = x, map, visit_name, icd_name, short_code,
     x[[icd_name]] <- decimal_to_short.icd10(x[[icd_name]])
   # TODO: could  reduce list of input visits here, as we are scanning the codes
   # TODO: must we factor here?
-  x[[icd_name]] <- factor_nosort_rcpp(x[[icd_name]], na.rm = TRUE)
+  x[icd_name] <- factor_nosort_rcpp(x[[icd_name]], na.rm = FALSE)
   reduced_map <- simplify_map_lex(levels(x[[icd_name]]), map)
   categorize_fun(x = x, map = reduced_map,
                  id_name = visit_name, code_name = icd_name,

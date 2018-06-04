@@ -51,7 +51,7 @@ stopifnot(simple_map$PVD == "I26019")
 
 umap <- icd:::simplify_map_lex(uranium_pathology$icd10, icd10_map_ahrq)
 head(icd:::categorize(uranium_pathology, icd10_map_ahrq,
-                           visit_name = "case", code_name = "icd10",
+                           id_name = "case", code_name = "icd10",
                            comorbid_fun = icd:::comorbidMatMul))
 
 }

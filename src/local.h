@@ -27,9 +27,9 @@ extern "C" {
 #include "cutil.h"
 #include <cstdlib>
 }
-#define ICD_DEBUG
-#define ICD_DEBUG_TRACE
-#define ICD_DEBUG_UTIL
+// #define ICD_DEBUG
+// #define ICD_DEBUG_TRACE
+// #define ICD_DEBUG_UTIL
 // #define ICD_DEBUG_SETUP
 // #define ICD_DEBUG_SETUP_SLOW
 // #define ICD_DEBUG_SETUP_TRACE

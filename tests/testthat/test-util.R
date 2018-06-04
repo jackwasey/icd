@@ -226,26 +226,3 @@ test_that("get_icd_name: icd field not present at all", {
   x[[2]] <- as.icd9(x[[2]])
   expect_error(get_icd_name(x), regexp = NA)
 })
-
-test_that("factor split works with NA values in various places", {
-  "1001" %in% unlist(unname(icd9_map_ahrq))
-  codes <- c("40111", "1001", NA_character_)
-  visits <- c("vis1", "vis2", "vis1")
-  icd9_comorbid_ahrq(data.frame(visits, codes))
-  icd9_comorbid_ahrq(data.frame(visits, factor(codes)))
-  icd9_comorbid_ahrq(data.frame(visits, factor(codes, exclude = NULL)))
-  # TODO: no common codes: error, or empty data frame
-  expect_error(icd9_comorbid_ahrq(data.frame(visits, factor(codes, levels = "1001"))))
-  icd9_comorbid_ahrq(data.frame(visits, factor(codes, levels = "40111")))
-  # TODO: no common codes: error, or empty data frame
-  expect_error(icd9_comorbid_ahrq(icd_name = "codes",
-                     data.frame(visits,
-                                codes = factor(codes, levels = NA, exclude = NULL))))
-  icd9_comorbid_ahrq(icd_name = "codes",
-                     data.frame(visits,
-                                codes = factor(codes, levels = c(NA, "40111"), exclude = NULL)))
-  # TODO: no common codes: error, or empty data frame
-  expect_error(icd9_comorbid_ahrq(icd_name = "codes",
-                     data.frame(visits,
-                                codes = factor(codes, levels = c(NA, "1001"), exclude = NULL))))
-})

@@ -66,6 +66,9 @@ factor_nosort_rcpp <- function(x, levels, na.rm = FALSE) {
 
 #' (re-)factor and split into matched and unmatched elements
 #'
+#' I think this is now obsolete, now I have better integer-based re-factoring in
+#' C++.
+#'
 #' Critically, this function does not convert factor to character vector and
 #' back to factor in order to modify factor levels, resulting in huge speed
 #' improvements for long vectors.
@@ -97,7 +100,7 @@ factor_nosort_rcpp <- function(x, levels, na.rm = FALSE) {
 #' @keywords internal manip
 factor_split_na <- function(x, levels, factor_fun = factor_nosort_rcpp) {
   # input may have no levels!
-  stop("use refactor C++")
+  message("use refactor C++ instead")
   if (is.factor(x)) {
     xi <- as.integer(x)
     lx <- levels(x)
@@ -128,14 +131,17 @@ factor_split_na <- function(x, levels, factor_fun = factor_nosort_rcpp) {
 #' @examples
 #' \donttest{
 #'   f <- factor(c(1, 2, 3))
-#'   refactor(f, c(2, 3))
+#'   icd:::refactor(f, c("2", "3"))
 #'   f <- factor(c(1, 2, NA))
-#'   refactor(f, c(2, 3, NA))
+#'   icd:::refactor(f, c("2", "3", NA))
 #' }
 #' @md
 #' @keywords internal manip
 refactor <- function(x, levels, na.rm = FALSE, exclude_na = TRUE) {
   checkmate::assert_factor(x)
   checkmate::assert_character(levels)
-  refactor_worker(x, levels, exclude_na)
+  if (!na.rm)
+    refactor_narm_worker(x, levels)
+  else
+    refactor_worker(x, levels, exclude_na)
 }

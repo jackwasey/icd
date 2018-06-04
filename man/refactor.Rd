@@ -19,9 +19,9 @@ With NAs, margin is smaller, but still beats base \code{factor}.
 \examples{
 \donttest{
   f <- factor(c(1, 2, 3))
-  refactor(f, c(2, 3))
+  icd:::refactor(f, c("2", "3"))
   f <- factor(c(1, 2, NA))
-  refactor(f, c(2, 3, NA))
+  icd:::refactor(f, c("2", "3", NA))
 }
 }
 \keyword{internal}

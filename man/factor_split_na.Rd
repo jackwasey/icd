@@ -7,6 +7,10 @@
 factor_split_na(x, levels, factor_fun = factor_nosort_rcpp)
 }
 \description{
+I think this is now obsolete, now I have better integer-based re-factoring in
+C++.
+}
+\details{
 Critically, this function does not convert factor to character vector and
 back to factor in order to modify factor levels, resulting in huge speed
 improvements for long vectors.

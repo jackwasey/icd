@@ -19,32 +19,32 @@ context("ICD-10 comorbidity calculations")
 test_that("simplest test case for a NA/factor interaction - factor", {
   d <- data.frame(visit = c("1", "1"), icd10 = c("not_in_map", "D638"),
                   stringsAsFactors = TRUE)
-  icd10_comorbid_ahrq(d)
-  expect_true(res$Anemia)
+  res <- icd10_comorbid_ahrq(d)
+  expect_true(res[, "Anemia"])
 })
 test_that("simplest test case for a NA/factor interaction - str", {
   d <- data.frame(visit = c("1", "1"), icd10 = c("not_in_map", "D638"),
                   stringsAsFactors = FALSE)
-  icd10_comorbid_ahrq(d)
-  expect_true(res$Anemia)
+  res <- icd10_comorbid_ahrq(d)
+  expect_true(res[, "Anemia"])
 })
 test_that("simplest test case for a NA/factor interaction - real", {
   d <- data.frame(visit = c(1, 1), icd10 = c("not_in_map", "D638"),
                   stringsAsFactors = FALSE)
-  icd10_comorbid_ahrq(d)
-  expect_true(res$Anemia)
+  res <- icd10_comorbid_ahrq(d)
+  expect_true(res[, "Anemia"])
 })
 test_that("simplest test case for a NA/factor interaction - int", {
   d <- data.frame(visit = c(1L, 1L), icd10 = c("not_in_map", "D638"),
                   stringsAsFactors = FALSE)
-  icd10_comorbid_ahrq(d)
-  expect_true(res$Anemia)
+  res <- icd10_comorbid_ahrq(d)
+  expect_true(res[, "Anemia"])
 })
 test_that("simplest test case for a NA in codes with matching code", {
   d <- data.frame(visit = c(1L, 1L), icd10 = c("D638", NA),
                   stringsAsFactors = FALSE)
   res <- icd10_comorbid_ahrq(d, return_df = TRUE)
-  expect_true(res$Anemia)
+  expect_true(res[, "Anemia"])
 })
 test_that("ahrq comorbidities found for test data", {
   # test_two are all invalid codes
@@ -182,12 +182,6 @@ test_that("NA icd10 code", {
   d <- data.frame(visit = c("visit 1", "visit 2"), icd10 = c("badcode", NA))
   res <- icd10_comorbid_ahrq(d, visit_name = "visit", icd_name = "icd10")
 })
-
-test_that("integer visit IDs should error until implemented, TODO", {
-  d <- data.frame(visit = c(1L, 2L), icd10 = c("C8124", "C8125"))
-  expect_error(res <- icd10_comorbid_ahrq(d))
-})
-
 test_that("NA icd codes should be okay", {
   d <- data.frame(visit = c(1L, 2L), icd10 = c("C8124", NA))
   res <- icd10_comorbid_charlson(d)
