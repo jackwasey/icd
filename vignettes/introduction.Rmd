@@ -181,7 +181,7 @@ explain_code(c("43410", "43491"), short_code = TRUE)
 "391" %>% children %>% explain_code(condense = FALSE) # prevent condense
 ```
 Arbitrary named list(s) of codes:
-```{r explain arbitrary}
+```{r explainarbitrary}
 explain_code(list(somecodes = as.icd9(c("001", "391")),
                  morecodes = as.icd9cm(c("001.1", "001.9"))))
 ```

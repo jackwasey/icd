@@ -73,7 +73,7 @@ explain_code.default <- function(x, short_code = guess_short(x), condense = TRUE
 #' @describeIn explain_code Explain all ICD-9 codes in a list of vectors
 #' @export
 explain_code.list <- function(x, ...)
-  lapply(x, explain, ...)
+  lapply(x, explain_code, ...)
 
 #' @describeIn explain_code explain character vector of ICD-9 codes.
 #' @export
@@ -91,7 +91,6 @@ explain_code.icd9cm <- function(x, short_code = guess_short(x),
   assert_flag(warn)
   if (!short_code)
     x <- decimal_to_short.icd9(x)
-
   # if there are only defined codes, we should condense with this in mind:
   if (condense) {
     if (warn && !all(is_defined.icd9(x, short_code = TRUE))) {

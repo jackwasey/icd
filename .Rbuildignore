@@ -70,5 +70,6 @@ scrape_icd10_who
 ^vignettes\/.*_latexmk$
 ^vignettes\/.*\.dvi$
 ^vignettes\/.*\.fls$
+^vignettes\/.*\.R$
 ^.*\.xcworkspace$
 
