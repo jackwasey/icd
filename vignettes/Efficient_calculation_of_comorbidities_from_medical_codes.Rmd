@@ -152,7 +152,7 @@ Medical coding has a complicated history beginning with epidemiology, and snowba
 
 ```{r suckedintoengine}
 library(icd)
-explain("V97.33XD")
+explain_code("V97.33XD")
 ```
 
 Because the WHO ICD is a subset of ICD Clinical Modification, \pkg{icd} is driven by ICD-9-CM and ICD-10-CM, both of which are available in the public domain, allowing analysis of WHO codes and more detailed USA or other national sets of codes. Unfortunately, the WHO exercises copyright over the international ICD-10 scheme, so it cannot be included. This does not affect comorbidity computations.
@@ -163,12 +163,12 @@ ICD-9 codes are primarily numeric, have fewer codes defined, and have a more var
 
 This is a breakdown of an ICD-10-CM code, chosen to illustrate the hierarchical nature of the codes, and difference betwen WHO ICD-10 and ICD-10-CM. The following two codes are shared by the WHO definitions and ICD-10-CM.[^libraryicd]
 ```{r exampleicdcodewho}
-explain(c("S62", "S62.6"))
+explain_code(c("S62", "S62.6"))
 ```
 \pagebreak
 These three are refinements offered only by ICD-10-CM:
 ```{r exampleicdcodecm}
-explain(c("S62.60", "S62.607", "S62.607S"))
+explain_code(c("S62.60", "S62.607", "S62.607S"))
 ```
 These codes are all contained in the following sub-chapter, and chapter: 
 ```{r examplecodechap}
@@ -176,7 +176,7 @@ icd10_sub_chapters$`Injuries To The Wrist, Hand And Fingers`
 icd10_chapters$`Injury, poisoning and certain other consequences of external causes`
 ```
 
-[^libraryicd]: Here the \pkg{icd} function `explain` is used. More detail on this can be found in Section \ref{other-functionality}.
+[^libraryicd]: Here the \pkg{icd} function `explain_code` is used. More detail on this can be found in Section \ref{other-functionality}.
 
 ### Quirks of ICD codes
 
@@ -691,7 +691,7 @@ icd9_sub_chapters[sc]
 497 is not a valid code itself. It could be a typo for any of the other combinations, of which three are valid:
 
 ```{r permute497}
-explain(c("947", "749", "794", "479"), warn = FALSE)
+explain_code(c("947", "749", "794", "479"), warn = FALSE)
 ```
 
 Given the wide range of disease processes, and no guarantee at all that the coder made a mistake only in the last digit, \pkg{icd} discards the code to avoid giving a false positive comorbidity flag.
@@ -745,13 +745,13 @@ Functions are provided to navigate the ICD-9 and ICD-10 hierarchies. This exampl
 ```{r hierarchy441}
 children("441")
 ```
-Several five-digit codes begin with _4410_. `explain` condenses all these children to their common parent, before interpreting the ICD code:
+Several five-digit codes begin with _4410_. `explain_code` condenses all these children to their common parent, before interpreting the ICD code:
 ```{r explain4410}
-explain(children("4410"))
+explain_code(children("4410"))
 ```
 What does each one mean?
 ```{r explaineach4410}
-explain(children("4410"), condense = FALSE)
+explain_code(children("4410"), condense = FALSE)
 ```
 
 ## Software libraries

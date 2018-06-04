@@ -9,7 +9,7 @@ R CMD build ~/icd
 # for all environment variable options see here:
 # https://cran.r-project.org/doc/manuals/r-release/R-ints.html#Tools
 # R_MAKEVARS_USER="$HOME/.R/Makevars.mac.quick" \
-MAKEFLAGS="-j8" \
+MAKEFLAGS="-j16" \
   ICD_TEST_SLOW=true \
   ICD_TEST_BUILD_DATA=true \
   ICD_TEST_DEPRECATED=true \
