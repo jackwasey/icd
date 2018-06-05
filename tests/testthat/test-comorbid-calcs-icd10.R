@@ -184,13 +184,15 @@ test_that("NA icd10 code", {
 })
 test_that("NA icd codes should be okay", {
   d <- data.frame(visit = c(1L, 2L), icd10 = c("C8124", NA))
-  res <- icd10_comorbid_charlson(d)
-  d <- data.frame(visit = c(1L, 2L), icd10 = c(NA, "C8124"))
-  res <- icd10_comorbid_charlson(d)
+  res1 <- icd10_comorbid_charlson(d)
+  d <- data.frame(visit = c(2L, 1L), icd10 = c(NA, "C8124"))
+  res2 <- icd10_comorbid_charlson(d)
+  expect_identical(res1[c(2,1), ], res2)
   d <- data.frame(visit = c(1L, 2L, 1L), icd10 = c(NA, "C8124", NA))
-  res <- icd10_comorbid_charlson(d)
+  res3 <- icd10_comorbid_charlson(d)
   d <- data.frame(visit = c(1L, 2L, 1L), icd10 = c("C8124", NA, NA))
-  res <- icd10_comorbid_charlson(d)
+  res4 <- icd10_comorbid_charlson(d)
+  expect_equivalent(res3[c(2,1), ], res4)
 })
 
 test_that("NA example which crashed during devel", {
@@ -199,11 +201,13 @@ test_that("NA example which crashed during devel", {
                       icd10 = c("D638", NA)),
                  row.names = 14:15, class = c("icd_long_data", "data.frame"))
   res <- icd10_comorbid_ahrq(d)
+  expect_equal(sum(res), 1L)
+  expect_true(res[, "Anemia"])
 })
 
 test_that("ICD-10 comorbidities from uranium", {
-  comorbid(uranium_pathology, icd10_map_quan_elix)
-  comorbid(uranium_pathology, icd10_map_quan_deyo)
-  comorbid(uranium_pathology, icd10_map_elix)
-  comorbid(uranium_pathology, icd10_map_ahrq)
+  expect_error(regex = NA, comorbid(uranium_pathology, icd10_map_quan_elix))
+  expect_error(regex = NA, comorbid(uranium_pathology, icd10_map_quan_deyo))
+  expect_error(regex = NA, comorbid(uranium_pathology, icd10_map_elix))
+  expect_error(regex = NA, comorbid(uranium_pathology, icd10_map_ahrq))
 })

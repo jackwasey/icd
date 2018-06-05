@@ -1,9 +1,15 @@
 #!/bin/bash
-
 set -euo pipefail
 IFS=$'\n\t'
-pushd /tmp
-R CMD build --no-build-vignettes --no-manual --resave-data=no ~/icd
+tmpd=$(mktemp -d /tmp/icdquickcheck.XXXXXXXXXXX)
+function finish {
+#	  rm -rf "$tmpd"
+  echo "Finished with $tmpd"
+}
+trap finish EXIT
+cp -r "${ICD_HOME:-$HOME/rprojects/icd}" "$tmpd"
+pushd "$tmpd"
+R CMD build --no-build-vignettes --no-manual --resave-data=no icd
 
 # try to unset debug flag, so ccache caches the results regardless of original path,
 # or configure ccache to do this

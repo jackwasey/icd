@@ -244,6 +244,9 @@ IntegerVector factorNoSort(const CharacterVector& x,
 // instead of making a new hash table to do the integer matching?
 
 //' @title Re-generate a factor with new levels, without doing string matching
+//' @description This is called by an R wrapper. There is an `na.rm` version,
+//' too.
+//' @md
 //' @keywords internal manip
 // [[Rcpp::export(refactor_worker)]]
 Rcpp::IntegerVector refactor(const IntegerVector& x, const CV& new_levels, bool exclude_na) {
@@ -290,9 +293,9 @@ Rcpp::IntegerVector refactor(const IntegerVector& x, const CV& new_levels, bool 
   LogicalVector matched_na_level(fsz, false);
   R_xlen_t fi = 0;
   R_xlen_t i;
-#ifdef ICD_OPENMP
-#pragma omp parallel for shared(fi)
-#endif
+//#ifdef ICD_OPENMP
+//#pragma omp parallel for shared(fi)
+//#endif
   for (i = 0; i < fsz; ++i) {
     TRACE_UTIL("refactor considering i: " << i << ", x[i]: " << x[i] << ", "
                                           << "fi: " << fi);
@@ -391,9 +394,9 @@ Rcpp::IntegerVector refactor_narm(const IntegerVector& x, const CV& new_levels) 
   DEBUG_UTIL("fsz = " << fsz);
   R_xlen_t fi = 0;
   R_xlen_t i;
-#ifdef ICD_OPENMP
-#pragma omp parallel for shared(fi)
-#endif
+//#ifdef ICD_OPENMP
+//#pragma omp parallel for shared(fi)
+//#endif
   for (i = 0; i < fsz; ++i) {
     TRACE_UTIL("refactor considering i: " << i << ", x[i]: " << x[i] << ", "
                                           << "fi: " << fi);

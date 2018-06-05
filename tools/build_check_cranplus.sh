@@ -1,15 +1,20 @@
 #!/bin/bash
 set -euo pipefail
 IFS=$'\n\t'
-pushd /tmp
-
-#Rscript -e 'devtools::install_github("jackwasey/jwutil")'
-R CMD build ~/icd
+tmpd=$(mktemp -d /tmp/icdquickcheck.XXXXXXXXXXX)
+function finish {
+#	  rm -rf "$tmpd"
+  echo "Finished with $tmpd"
+}
+trap finish EXIT
+cp -r "${ICD_HOME:-$HOME/rprojects/icd}" "$tmpd"
+pushd "$tmpd"
+R CMD build icd
 
 # for all environment variable options see here:
 # https://cran.r-project.org/doc/manuals/r-release/R-ints.html#Tools
 R_MAKEVARS_USER="$HOME/.R/Makevars.clang" \
-MAKEFLAGS="-j16" \
+  MAKEFLAGS="-j16" \
   ICD_TEST_SLOW=true \
   ICD_TEST_BUILD_DATA=true \
   ICD_TEST_DEPRECATED=true \

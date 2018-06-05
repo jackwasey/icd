@@ -7,9 +7,9 @@ function finish {
 }
 trap finish EXIT
 
-cp -r "${ICD_HOME:-/home/jack/rprojects/icd}" "$tmpd"
+cp -r "${ICD_HOME:-$HOME/rprojects/icd}" "$tmpd"
 pushd "$tmpd"
-R CMD build --no-build-vignettes icd
+R CMD build --no-build-vignettes --no-manual --resave-data=no icd
 # --use-valgrind needs a .valgrindrc or VALGRIND_OPTS for options. If just running R with valgrind,
 # this is not necessary, can just specify options in the R -d "valgrind ..." command.
 

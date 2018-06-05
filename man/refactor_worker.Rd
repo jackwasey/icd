@@ -6,5 +6,9 @@
 \usage{
 refactor_worker(x, new_levels, exclude_na)
 }
+\description{
+This is called by an R wrapper. There is an \code{na.rm} version,
+too.
+}
 \keyword{internal}
 \keyword{manip}
