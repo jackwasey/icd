@@ -272,7 +272,7 @@ context("refactor") {
     new_levels[1] = NA_STRING;
     res = refactor_narm(f, new_levels);
     expect_false(IntegerVector::is_na(res[0]));
-    IntegerVector expected_vec = IntegerVector::create(1);
+    IntegerVector expected_vec = { 1 };
     DEBUG_VEC(res);
     expect_true(is_true(all(res == expected_vec)));
     j = res.attr("levels");
@@ -363,10 +363,10 @@ context("refactor") {
     // expect_true(is_true(all(res == f2))); // doesn't work because NA = NA is NA, not true
   }
   test_that("dropping NAs makes vector shorter") {
-    f = {1, 2};
+    f = { 1, 2 };
     f.attr("levels") = CV::create("a", "b", "c", "d");
     f.attr("class") = "factor";
-    f2 = {1};
+    f2 = { 1 };
     new_levels = CV::create("c", "b", "e");
     f2.attr("levels") = new_levels;
     f2.attr("class") = "factor";

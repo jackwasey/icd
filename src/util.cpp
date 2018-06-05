@@ -231,7 +231,7 @@ std::vector<std::size_t> icd9OrderCpp(VecStr x) {
 IntegerVector factorNoSort(const CharacterVector& x,
                            const CharacterVector& levels,
                            const bool na_rm) {
- // TODO: use new factor code? but this is fine.
+  // TODO: use new factor code? but this is fine.
   IntegerVector out = match(x, levels);
   out.attr("levels") = (CharacterVector) levels;
   out.attr("class") = "factor";
@@ -293,16 +293,16 @@ Rcpp::IntegerVector refactor(const IntegerVector& x, const CV& new_levels, bool 
   LogicalVector matched_na_level(fsz, false);
   R_xlen_t fi = 0;
   R_xlen_t i;
-//#ifdef ICD_OPENMP
-//#pragma omp parallel for shared(fi)
-//#endif
+  //#ifdef ICD_OPENMP
+  //#pragma omp parallel for shared(fi)
+  //#endif
   for (i = 0; i < fsz; ++i) {
     TRACE_UTIL("refactor considering i: " << i << ", x[i]: " << x[i] << ", "
                                           << "fi: " << fi);
     if (IntegerVector::is_na(x[i])) {
-        TRACE_UTIL("fi++, leaving NA from pos " << i << " at fi " << fi <<
-          " due to input NA value");
-        f[fi++] = NA_INTEGER;
+      TRACE_UTIL("fi++, leaving NA from pos " << i << " at fi " << fi <<
+        " due to input NA value");
+      f[fi++] = NA_INTEGER;
       continue;
     }
     assert(x[i] > 0);
@@ -313,16 +313,16 @@ Rcpp::IntegerVector refactor(const IntegerVector& x, const CV& new_levels, bool 
         Rcpp::stop("TODO: lookup index of NA in new levels, if it exists");
       else
         DEBUG("fi++ no NA levels in target factor, so inserting NA value in vector.");
-        f[fi++] = NA_INTEGER;
+      f[fi++] = NA_INTEGER;
     }
     assert(x[i] > 0);
     DEBUG("x[i]  = " << x[i] << ", " << new_level_old_idx.size());
     assert(x[i] <= new_level_old_idx.size()); // R index
     auto cur = new_level_old_idx[x[i] - 1]; // get new R index with R index in C vec
     if (IntegerVector::is_na(cur)) {
-        TRACE_UTIL("fi++, leaving NA from " << i << " at pos " << fi << " due to no match with new levels");
-        f[fi++] = NA_INTEGER; // in case user chooses to keep NA values
-        matched_na_level[i] = true;
+      TRACE_UTIL("fi++, leaving NA from " << i << " at pos " << fi << " due to no match with new levels");
+      f[fi++] = NA_INTEGER; // in case user chooses to keep NA values
+      matched_na_level[i] = true;
     } else {
       TRACE_UTIL("fi++, inserting " << cur << " from pos " << i << " at "<< fi);
       assert(cur > 0);
@@ -332,25 +332,25 @@ Rcpp::IntegerVector refactor(const IntegerVector& x, const CV& new_levels, bool 
   }
   DEBUG_UTIL_VEC(f);
   DEBUG_UTIL_VEC(matched_na_level);
-    // if not removing NAs, and na levels are okay, then we need to also match
-    // the NAs in the integer vector to the NA level. Base factor will keep NA
-    // values when there was no match, but index the NA level if it exists.
-    if (!exclude_na) {
-      DEBUG_UTIL("fixing NA values when there are NA levels");
-      DEBUG_UTIL_VEC(which_na_new_levels);
-      R_xlen_t n = 0;
-      while (n < which_na_new_levels.size()) {
-        if (which_na_new_levels[n]) break;
-        ++n;
-      }
-      DEBUG_UTIL("n = " << n);
-      if (n != which_na_new_levels.size()) {
-        DEBUG_UTIL("NA level found");
-        f[is_na(x)] = (int)n + 1; // R index from C match. ?matched_na_level
-      }
-      else
-        DEBUG_UTIL("No NA level found");
+  // if not removing NAs, and na levels are okay, then we need to also match
+  // the NAs in the integer vector to the NA level. Base factor will keep NA
+  // values when there was no match, but index the NA level if it exists.
+  if (!exclude_na) {
+    DEBUG_UTIL("fixing NA values when there are NA levels");
+    DEBUG_UTIL_VEC(which_na_new_levels);
+    R_xlen_t n = 0;
+    while (n < which_na_new_levels.size()) {
+      if (which_na_new_levels[n]) break;
+      ++n;
     }
+    DEBUG_UTIL("n = " << n);
+    if (n != which_na_new_levels.size()) {
+      DEBUG_UTIL("NA level found");
+      f[is_na(x)] = (int)n + 1; // R index from C match. ?matched_na_level
+    }
+    else
+      DEBUG_UTIL("No NA level found");
+  }
   DEBUG_UTIL_VEC(x);
   DEBUG_UTIL_VEC(f);
   f.attr("levels") = no_na_new_levels;
@@ -364,10 +364,14 @@ Rcpp::IntegerVector refactor(const IntegerVector& x, const CV& new_levels, bool 
 Rcpp::IntegerVector refactor_narm(const IntegerVector& x, const CV& new_levels) {
   TRACE_UTIL("Refactoring, dropping NA");
   IntegerVector f(x.size()); // too many if we are dropping NA values.
+  f.attr("class") = "factor";
   CharacterVector lx = x.attr("levels");
   DEBUG_UTIL_VEC(x);
+  DEBUG_UTIL("x size: " << x.size());
   DEBUG_UTIL_VEC(lx);
+  DEBUG_UTIL("lx size: " << lx.size());
   DEBUG_UTIL_VEC(new_levels);
+  DEBUG_UTIL("new_levels size: " << new_levels.size());
   if (!Rf_isFactor(x)) Rcpp::stop("input must be a factor");
   CV no_na_lx;
   CV no_na_new_levels;
@@ -376,17 +380,26 @@ Rcpp::IntegerVector refactor_narm(const IntegerVector& x, const CV& new_levels) 
   // TODO: get the position of the NA in new_levels for insertion later if needed.
   LogicalVector which_na_old_levels = is_na(lx);
   DEBUG_UTIL("Dropping NA in input factor levels");
+  DEBUG_UTIL_VEC(which_na_old_levels);
+  DEBUG_UTIL("Any old NA levels? " << Rcpp::is_true(any(which_na_old_levels)));
   no_na_lx = lx[!which_na_old_levels];
   DEBUG_UTIL("Dropping NA in input levels");
   no_na_new_levels = new_levels[!which_na_new_levels];
+  DEBUG_UTIL("Any new NA levels? " << Rcpp::is_true(any(which_na_new_levels)));
+  DEBUG_UTIL_VEC(which_na_new_levels);
   DEBUG_UTIL_VEC(no_na_lx);
   DEBUG_UTIL_VEC(no_na_new_levels);
   if (no_na_new_levels.size() == 0) {
-    DEBUG("no_na_new_levels is empty");
+    DEBUG_UTIL("no_na_new_levels is empty, so whole result must be empty");
     f = Rcpp::rep(NA_INTEGER, x.size());
     f.attr("levels") = CV::create();
     f.attr("class") = "factor";
-    return f;
+    return(f);
+  }
+  if (x.size() == 0) {
+    DEBUG_UTIL("x size is 0, so returning empty vector with no-NA levels.");
+    f.attr("levels") = no_na_new_levels;
+    return(f);
   }
   IntegerVector new_level_old_idx = Rcpp::match(no_na_lx, no_na_new_levels);
   DEBUG_UTIL_VEC(new_level_old_idx);
@@ -394,9 +407,9 @@ Rcpp::IntegerVector refactor_narm(const IntegerVector& x, const CV& new_levels) 
   DEBUG_UTIL("fsz = " << fsz);
   R_xlen_t fi = 0;
   R_xlen_t i;
-//#ifdef ICD_OPENMP
-//#pragma omp parallel for shared(fi)
-//#endif
+  //#ifdef ICD_OPENMP
+  //#pragma omp parallel for shared(fi)
+  //#endif
   for (i = 0; i < fsz; ++i) {
     TRACE_UTIL("refactor considering i: " << i << ", x[i]: " << x[i] << ", "
                                           << "fi: " << fi);
@@ -415,26 +428,28 @@ Rcpp::IntegerVector refactor_narm(const IntegerVector& x, const CV& new_levels) 
     }
     assert(x[i] > 0);
     assert(x[i] <= new_level_old_idx.size()); // R index
-    auto cur = new_level_old_idx[x[i] - 1]; // get new R index with R index in C vec
-    if (IntegerVector::is_na(cur)) {
+    // get new R index from C vec or R indices. Must keep as IntegerVector
+    // length one, so NA is preserved.
+    if (IntegerVector::is_na(new_level_old_idx[x[i] - 1])) {
       TRACE_UTIL("dropping NA from " << i << " at pos " << fi << " due to no match with new levels");
     } else {
-      TRACE_UTIL("fi++, inserting " << cur << " from pos " << i << " at "<< fi);
-      assert(cur > 0);
-      assert(cur <= no_na_new_levels.size());
-      f[fi++] = cur;
+      int cur_i = new_level_old_idx[x[i] - 1];
+      TRACE_UTIL("fi++, inserting " << cur_i << " from pos i = " << i << " at fi = "<< fi);
+      assert(cur_i > 0);
+      assert(cur_i <= no_na_new_levels.size());
+      f[fi++] = cur_i;
     }
-  }
+  } // for i
   DEBUG_UTIL_VEC(f);
   f.attr("levels") = no_na_new_levels;
   f.attr("class") = "factor";
   DEBUG_UTIL("max(f) " << max(f));
   DEBUG_UTIL("f.size() " << f.size());
-  DEBUG_UTIL("copying f to shorten since NAs were dropped");
-  auto end_it = f.begin() + fi;
   DEBUG_UTIL("final fi = " << fi);
   DEBUG_UTIL_VEC(f);
-  IntegerVector f_no_na(f.begin(), end_it);
+  if (fi == fsz) return(f);
+  DEBUG_UTIL("copying f to shorten since NAs may have been dropped");
+  IntegerVector f_no_na(f.begin(), f.begin() + fi);
   f_no_na.attr("levels") = no_na_new_levels;
   f_no_na.attr("class") = "factor";
   DEBUG_UTIL_VEC(f_no_na);

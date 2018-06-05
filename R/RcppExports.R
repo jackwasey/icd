@@ -156,7 +156,12 @@ icd10_comorbid_parent_search_cpp <- function(x, map, visit_name, icd_name) {
 #' head(icd:::categorize(uranium_pathology, icd10_map_ahrq,
 #'                            id_name = "case", code_name = "icd10",
 #'                            comorbid_fun = icd:::comorbidMatMul))
-#'
+#' head(icd:::categorize(uranium_pathology, icd10_map_ahrq,
+#'                            id_name = "case", code_name = "icd10",
+#'                            comorbid_fun = icd:::comorbidMatMul))
+#' head(icd:::categorize(uranium_pathology, umap,
+#'                            id_name = "case", code_name = "icd10",
+#'                            comorbid_fun = icd:::comorbidMatMulSimple))
 #' @keywords internal
 simplify_map_lex <- function(pt_codes, map) {
     .Call(`_icd_simplifyMapLexicographic`, pt_codes, map)

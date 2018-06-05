@@ -53,15 +53,16 @@ test_that("basic refactoring", {
     expect_identical(
       refactor(factor(m, levels = p), n),
       factor(factor(m, levels = p), levels = n), # exclude NA by default, as factor does
-      info = paste("m = c('", paste(unlist(test_cases[tc, 1]), collapse = "', '"), "')\n",
-                   "n = c('", paste(unlist(test_cases[tc, 2]), collapse = "', '"), "')", sep = "")
+      info = paste("m = c('", paste(unlist(m), collapse = "', '"), "')\n",
+                   "n = c('", paste(unlist(n), collapse = "', '"), "')",
+                   "p: ", paste(unlist(p), collapse = " "), sep = "")
     )
-    skip("for as yet unimplemented code path")
     expect_identical(
       refactor(factor(m, levels = p), n, na.rm = FALSE, exclude_na = FALSE),
       factor(factor(m, levels = p), levels = n, exclude = NULL),
-      info = paste("m = c('", paste(unlist(test_cases[tc, 1]), collapse = "', '"), "')\n",
-                   "n = c('", paste(unlist(test_cases[tc, 2]), collapse = "', '"), "')", sep = "")
+      info = paste("m = c('", paste(unlist(m), collapse = "', '"), "')\n",
+                   "n = c('", paste(unlist(n), collapse = "', '"), "')",
+                   "p: ", paste(unlist(p), collapse = " "), sep = "")
     )
   }
 })

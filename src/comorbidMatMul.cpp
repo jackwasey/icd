@@ -299,55 +299,57 @@ class MapPlus {
 public:
   MapPlus(const List& icd9Mapping, const Relevant& rh);
   void buildMatrix();
-  List map;
+  List map; // consider ListOf<IntegerVector>
   DenseMap mat;
   R_xlen_t rows() { return mat.rows(); }
 };
 // constructor
-MapPlus::MapPlus(const List& icd9Mapping, const Relevant& rh) {
+MapPlus::MapPlus(const List& mapList, const Relevant& rh) {
   // take a map of character vectors or factors and reduce it to only relevant
   // codes using hashmap
   //
   // downside is that each list element has a copy of the same relevant levels.
   //List remap(const List& map, IHS& relevantHash) {
-  CharacterVector cmbs = icd9Mapping.names();
-  for (R_xlen_t i = 0; i != icd9Mapping.size(); ++i) {
+  CharacterVector cmbs = mapList.names();
+  bool areFactors = Rf_isFactor(mapList[0]);
+  for (R_xlen_t i = 0; i != mapList.size(); ++i) {
     String cmb_name = cmbs[i];
     TRACE("remapping: " << cmb_name.get_cstring());
-    bool areFactors = (TYPEOF(icd9Mapping[0]) == INTSXP);
-    if (!areFactors && TYPEOF(icd9Mapping[0]) != STRSXP)
+    if (!areFactors && TYPEOF(mapList[0]) != STRSXP)
       Rcpp::stop("remap expects a list of only character vectors or factors.");
     if (areFactors) {
       TRACE("factor in input map");
-      IntegerVector this_map_cmb = icd9Mapping[i];
-      map[i] = refactor_narm(this_map_cmb, rh.keys);
+      IntegerVector this_map_cmb = mapList[i];
+      map[cmb_name] = refactor_narm(this_map_cmb, rh.keys);
     } else { // most common case (re-use the hash!)
-      CV this_map_cmb = icd9Mapping[i];
-      // make factor, so R-indexed numbers.
+      TRACE("character vector in input map");
+      CV this_map_cmb = mapList[i];
+      // make factor using existing hash, so R-indexed numbers.
       IntegerVector this_cmb = (IntegerVector) rh.hash.lookup(this_map_cmb);
       this_cmb.attr("levels") = (CharacterVector) rh.keys;
       this_cmb.attr("class") = "factor";
       this_cmb = this_cmb[!is_na(this_cmb)];
       TRACE_VEC(this_cmb);
       map[cmb_name] = this_cmb;
-    }
-  }
+    } // factor or not
+  } // for
   DEBUG("Map reduced. Initializing the Eigen matrix");
-  mat = DenseMap(rh.keys.size(), icd9Mapping.size());
+  mat = DenseMap(rh.keys.size(), mapList.size());
   mat.setZero();
   DEBUG("mat rows: " << mat.rows() << ", cols: " << mat.cols());
   buildMatrix();
   DEBUG("map matrix built");
-
 }
 
 // takes a map of _factors_ produced by remap. These already only contain
 // relevant codes, with factors indicies being relevant.
 void MapPlus::buildMatrix() {
+  TRACE("map SEXP type is: " << TYPEOF(map[0]));
+  assert(Rf_isFactor(map[0]));
   for (auto li = map.begin(); li != map.end(); ++li) {
     auto col = std::distance(map.begin(), li);
     TRACE("working on comorbidity: " << col);
-    IntegerVector v = *li;
+    IntegerVector v(*li);
     for (R_xlen_t vi = 0; vi != v.size(); ++vi) {
       TRACE("cmb: vi=" << vi << " v[vi]=" << v[vi] << " col=" << col);
       if (!IntegerVector::is_na(v[vi])) {

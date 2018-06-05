@@ -211,3 +211,22 @@ test_that("ICD-10 comorbidities from uranium", {
   expect_error(regex = NA, comorbid(uranium_pathology, icd10_map_elix))
   expect_error(regex = NA, comorbid(uranium_pathology, icd10_map_ahrq))
 })
+
+test_that("mix and match comorbidity functions", {
+  umap <- icd:::simplify_map_lex(uranium_pathology$icd10, icd10_map_ahrq)
+  expect_error(regex = NA,
+  icd:::categorize(uranium_pathology, icd10_map_ahrq,
+                        id_name = "case", code_name = "icd10",
+                        comorbid_fun = icd:::comorbidMatMul)
+  )
+  expect_error(regex = NA,
+  icd:::categorize(uranium_pathology, icd10_map_ahrq,
+                        id_name = "case", code_name = "icd10",
+                        comorbid_fun = icd:::comorbidMatMul)
+  )
+  expect_error(regex = NA,
+  icd:::categorize(uranium_pathology, umap,
+                        id_name = "case", code_name = "icd10",
+                        comorbid_fun = icd:::comorbidMatMulSimple)
+  )
+})
