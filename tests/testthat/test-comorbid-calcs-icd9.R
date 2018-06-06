@@ -506,9 +506,7 @@ test_that("float visit IDs", {
   expect_identical(df_res$visit_id, d[1, "visit_id"])
 })
 
-test_that("matmul vs matmulmore", {
-  # at least during development, the "simple" code path doesn't re-order visit
-  # IDs, and also jumbles them while hashing.
+test_that("matmul vs matmul simple, explicitly choosing fn names", {
   d <- simple_poa_pts # TODO: loop over list of any icd9 data we can throw.
   expect_equivalent(
     r1 <- icd9_comorbid_elix(d, categorize_fun = categorize, comorbid_fun = comorbidMatMul),

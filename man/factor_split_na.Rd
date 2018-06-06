@@ -19,10 +19,7 @@ improvements for long vectors.
 icd:::factor_nosort_rcpp(c("1", NA)) # NA becomes a level
 icd:::factor_nosort_rcpp(c("1", "2"), "1") # NA not a level, just dropped!
 icd:::factor_nosort_rcpp(c("1", "2"), c("1", NA)) # NA IS a level
-suppressWarnings(
-  print(icd:::factor_nosort_rcpp(c("1", "2"), c("1", NA, NA)))
-) # Two NA levels
-
+\dontrun{
 x <- c("A", "B", "C", "d", "A", "C")
 levels <- c("A", "B")
 stopifnot(
@@ -40,6 +37,7 @@ stopifnot(
   identical(icd:::factor_split_na(y, "A"),
             icd:::factor_split_na(yf_na, "A"))
 )
+}
 }
 \keyword{internal}
 \keyword{manip}

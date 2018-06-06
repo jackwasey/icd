@@ -7,7 +7,7 @@ R CMD build --no-build-vignettes --no-manual --resave-data=no ~/icd
 
 # for all environment variable options see here:
 # https://cran.r-project.org/doc/manuals/r-release/R-ints.html#Tools
-MAKEFLAGS="-j8" \
+MAKEFLAGS=-j$(getconf _NPROCESSORS_ONLN) \
   ICD_TEST_ALL=false \
   ICD_TEST_SLOW=true \
   ICD_TEST_BUILD_DATA=true \

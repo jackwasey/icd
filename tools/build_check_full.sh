@@ -1,7 +1,7 @@
 #!/bin/bash
 set -euo pipefail
 IFS=$'\n\t'
-tmpd=$(mktemp -d /tmp/icdquickcheck.XXXXXXXXXXX)
+tmpd=$(mktemp -d /tmp/icdcheckfull.XXXXXXXXXXX)
 function finish {
 #	  rm -rf "$tmpd"
   echo "Finished with $tmpd"
@@ -10,11 +10,10 @@ trap finish EXIT
 cp -r "${ICD_HOME:-$HOME/rprojects/icd}" "$tmpd"
 pushd "$tmpd"
 R CMD build icd
-
 # for all environment variable options see here:
 # https://cran.r-project.org/doc/manuals/r-release/R-ints.html#Tools
 # R_MAKEVARS_USER="$HOME/.R/Makevars.mac.quick" \
-MAKEFLAGS="-j8" \
+MAKEFLAGS=-j$(getconf _NPROCESSORS_ONLN) \
   ICD_TEST_SLOW=true \
   ICD_TEST_BUILD_DATA=true \
   ICD_TEST_DEPRECATED=true \
@@ -31,5 +30,5 @@ MAKEFLAGS="-j8" \
   _R_CHECK_TESTS_NLINES_=0 \
   _R_CHECK_USE_INSTALL_LOG_=FALSE \
   _R_CHECK_VIGNETTES_NLINES_=0 \
- R CMD check "$(ls -t /tmp/icd*.tar.gz | head -1)"
+ R CMD check "$(ls -t $tmpd/icd*.tar.gz | head -1)"
 popd

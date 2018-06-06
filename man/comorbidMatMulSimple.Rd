@@ -33,12 +33,6 @@ dense matrix is then the comorbidity map
 \url{https://eigen.tuxfamily.org/dox/TopicMultiThreading.html}
 }
 
-\examples{
-# show how many unique ICD codes there are in the AHRQ map, before reducing
-# to the number which actually appear in a group of patient visitsben
-library(magrittr)
-sapply(icd::icd9_map_ahrq, length) \%>\% sum
-}
 \keyword{algebra}
 \keyword{array}
 \keyword{internal}

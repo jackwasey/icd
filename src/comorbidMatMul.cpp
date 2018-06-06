@@ -380,11 +380,6 @@ void MapPlus::buildMatrix() {
 //' dense matrix. Patients-ICD matrix must be the row-major sparse one, so the
 //' dense matrix is then the comorbidity map
 //' \url{https://eigen.tuxfamily.org/dox/TopicMultiThreading.html}
-//' @examples
-//' # show how many unique ICD codes there are in the AHRQ map, before reducing
-//' # to the number which actually appear in a group of patient visitsben
-//' library(magrittr)
-//' sapply(icd::icd9_map_ahrq, length) %>% sum
 //' @keywords internal array algebra
 // [[Rcpp::export]]
 LogicalMatrix comorbidMatMulSimple(const DataFrame& icd9df,
@@ -435,11 +430,6 @@ LogicalMatrix comorbidMatMulSimple(const DataFrame& icd9df,
 //' dense matrix. Patients-ICD matrix must be the row-major sparse one, so the
 //' dense matrix is then the comorbidity map
 //' \url{https://eigen.tuxfamily.org/dox/TopicMultiThreading.html}
-//' @examples
-//' # show how many discrete ICD codes there are in the AHRQ map, before reducing
-//' # to the number which actually appear in a group of patient visitsben
-//' library(magrittr)
-//' sapply(icd::icd9_map_ahrq, length) %>% sum
 //' @keywords internal array algebra
 // [[Rcpp::export]]
 LogicalMatrix comorbidMatMul(const DataFrame& icd9df, const List& icd9Mapping,
