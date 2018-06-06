@@ -16,8 +16,7 @@
 // along with icd. If not, see <http://www.gnu.org/licenses/>.
 
 // [[Rcpp::interfaces(r, cpp)]]
-// [[Rcpp::plugins(openmp)]]
-#include "local.h"                             // for ICD_OPENMP
+#include "local.h"
 #include "config.h"                             // for ICD_VALGRIND
 #include "util.h"
 #include <stdlib.h>
@@ -152,9 +151,10 @@ List factorSplit(const List &df,
   DEBUG_VEC(new_level_idx);
   R_xlen_t fsz = x.size();
   DEBUG("fsz = " << fsz);
-#ifdef ICD_OPENMP
-  #pragma omp parallel for
-#endif
+// Simply setting the loop parallel causes memory errors.
+//#ifdef ICD_OPENMP
+//  #pragma omp parallel for
+//#endif
   for (R_xlen_t i = 0; i < fsz; ++i) {
     TRACE("considering index x[i] - 1: " << x[i] - 1 << " from new_level_idx");
     if (IntegerVector::is_na(x[i])) {

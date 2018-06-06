@@ -505,12 +505,3 @@ test_that("float visit IDs", {
   df_res <- comorbid_ahrq(d, return_df = TRUE, preserve_visit_id_type = TRUE)
   expect_identical(df_res$visit_id, d[1, "visit_id"])
 })
-
-test_that("matmul vs matmul simple, explicitly choosing fn names", {
-  d <- simple_poa_pts # TODO: loop over list of any icd9 data we can throw.
-  expect_equivalent(
-    r1 <- icd9_comorbid_elix(d, categorize_fun = categorize, comorbid_fun = comorbidMatMul),
-    r2 <- icd9_comorbid_elix(d, categorize_fun = categorize_simple, comorbid_fun = comorbidMatMulSimple)
-  )
-  expect_true(all(sort(rownames(r1)) == sort(rownames(r2))))
-})
