@@ -129,4 +129,4 @@ res_pccc <- pccc::ccc(dat_wide_str,
                       dx_cols = seq(2, ncol(dat_wide_str)),
                       icdv = 9)
 print(proc.time() - pccctm)
-
+identical(colSums(res), colSums(res_pccc[2:13]))
