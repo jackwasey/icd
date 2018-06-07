@@ -11,11 +11,10 @@ With more users of this package, a bug was revealed which could affect accuracy 
 
 There is one note:
 
-* checking installed package size ... NOTE.
-  installed size is  9.3Mb
+* checking installed package size ... NOTE
+  installed size is 23.7Mb
   sub-directories of 1Mb or more:
-    R      1.6Mb
-    data   2.0Mb
-    doc    3.8Mb
-    libs   1.3Mb
+    R     14.5Mb
+    data   1.7Mb
+    doc    5.8Mb
 
