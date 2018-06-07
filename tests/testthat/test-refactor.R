@@ -35,10 +35,10 @@ test_that("simple cases", {
 })
 
 test_that("basic refactoring", {
-  u = c("a", "b", "c")
-  v = c("c", "d")
-  w = c(NA_character_, "a")
-  x = c("X", NA_character_)
+  u <- c("a", "b", "c")
+  v <- c("c", "d")
+  w <- c(NA_character_, "a")
+  x <- c("X", NA_character_)
   test_cases <- expand.grid(
     list(u, v, w, x),
     list(u, v, w, x),

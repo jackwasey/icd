@@ -1,7 +1,7 @@
 context("refactor bigger factors")
 test_that("longer factor to touch openmp", {
-  n = 1e6
-  nl = 1e5
+  n <- 1e6
+  nl <- 1e5
   set.seed(1441)
   expect_error(regexp = NA, v1 <- icd:::icd9RandomShort(n))
   v2 <- v1
@@ -21,7 +21,7 @@ test_that("longer factor to touch openmp", {
     m <- test_cases[tc, 1][[1]]
     nl <- unique(test_cases[tc, 2][[1]])
     pl <- unique(test_cases[tc, 3][[1]])
-    inf = paste(
+    inf <- paste(
       "tc = ", tc, "\n",
       "m = c('", paste(unlist(head(m)), collapse = "', '"), "')\n",
       "nl = c('", paste(unlist(head(nl)), collapse = "', '"), "')\n",

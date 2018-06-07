@@ -187,12 +187,12 @@ test_that("NA icd codes should be okay", {
   res1 <- icd10_comorbid_charlson(d)
   d <- data.frame(visit = c(2L, 1L), icd10 = c(NA, "C8124"))
   res2 <- icd10_comorbid_charlson(d)
-  expect_identical(res1[c(2,1), ], res2)
+  expect_identical(res1[c(2, 1), ], res2)
   d <- data.frame(visit = c(1L, 2L, 1L), icd10 = c(NA, "C8124", NA))
   res3 <- icd10_comorbid_charlson(d)
   d <- data.frame(visit = c(1L, 2L, 1L), icd10 = c("C8124", NA, NA))
   res4 <- icd10_comorbid_charlson(d)
-  expect_equivalent(res3[c(2,1), ], res4)
+  expect_equivalent(res3[c(2, 1), ], res4)
 })
 
 test_that("NA example which crashed during devel", {
@@ -227,7 +227,7 @@ test_that("mix and match comorbidity functions", {
   for (map_name in names(maps)) {
     for (cat_fun_name in cat_fun_names) {
       for (cmb_fun_name in cmb_fun_names) {
-        inf = paste(map_name, cat_fun_name, cmb_fun_name, sep = "_")
+        inf <- paste(map_name, cat_fun_name, cmb_fun_name, sep = "_")
         args <- list(
           x = uranium_pathology,
           map = maps[[map_name]],
