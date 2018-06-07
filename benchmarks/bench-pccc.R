@@ -11,7 +11,8 @@ library(pccc)
 do_icd9 <- TRUE
 # simulating NEDS (icd-9) db for size (also need to simulate width, which is 15+4 columns!)
 n <- 28584301L
-n <- n / 10
+divisor <- as.integer(readline(prompt = "Enter a divisor: "))
+n <- n / divisor
 codes <- if (do_icd9) {
   unclass(icd:::as_char_no_warn(icd.data::icd9cm_hierarchy$code))
 } else {
