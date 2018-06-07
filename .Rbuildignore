@@ -27,7 +27,9 @@ cran-comments\.md$
 ^data\/icd10_who.*$
 ^data-raw\/.*$
 ^inst\/extdata\/.*$
-^inst/doc$
+^inst/doc/.*\.pdf$
+^inst/doc/.*\.Rmd$
+^inst/doc/.*\.html$
 ^inst/doc/benchresults\.ods$
 ^docs$
 ^Efficient.*\.md$

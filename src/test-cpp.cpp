@@ -145,7 +145,7 @@ context("random data") {
     expect_true(e[0].size() <= 5);
   }
   test_that("random any code") {
-    VecStr c = icd9RandomShort(1);
+    auto c = icd9RandomShort(1);
     expect_true(c.size() == 1);
     expect_true(c[0].size() >= 3);
     expect_true(c[0].size() <= 5);
