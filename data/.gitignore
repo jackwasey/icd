@@ -2,3 +2,8 @@ icd10_who_leaves.RData
 icd10_who_majors.RData
 icd10_who_sub_chapters.RData
 icd10_pcs_201*.RData
+icd10_pcs.RData
+icd10cm2016.RData
+icd9cm_billable.Rdata
+icd9cm_hierarchy.RData
+icd10_sub_chapters.RData
