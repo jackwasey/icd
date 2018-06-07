@@ -25,7 +25,6 @@ r_packages:
 
 r_github_packages:
   - jimhester/lintr
-  - jackwasey/icd.data
 
 r:
   - devel

@@ -24,7 +24,6 @@ before_build:
   - rm .Rinstignore  # do install everything for testing
   - sed -i'' -e '/.*[Dd]ata.*/d' .Rbuildignore # do include data for testing, some data not in github though
   - Rscript -e "install.packages(c('devtools', 'Rcpp'), repos = 'https://cloud.r-project.org/'); Rcpp::compileAttributes()" # make sure Rcpp generated code is made, if not checked in to repo
-  - Rscript -e "devtools::install_github('jackwasey/icd.data')"
 
 build_script:
   - travis-tool.sh install_deps
