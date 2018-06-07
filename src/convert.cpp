@@ -16,7 +16,6 @@
 // along with icd. If not, see <http://www.gnu.org/licenses/>.
 
 // [[Rcpp::interfaces(r, cpp)]]
-#include <Rcpp.h>
 #include "icd_types.h"
 #include "convert.h"
 extern "C" {

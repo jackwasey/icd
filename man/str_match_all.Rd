@@ -7,7 +7,7 @@
 str_match_all(string, pattern, ...)
 }
 \description{
-\code{perl} is taken out if not supported, allows compatibility with older
-versions of R. TODO: check for newer \code{stringr} function to do this.
+return all matches for regular expression
 }
 \keyword{internal}
+\keyword{manip}

@@ -18,7 +18,8 @@ code. The goal is for this to be faster, but must be correct! Example in
 \section{Functions}{
 \itemize{
 \item \code{icd9_add_leading_zeroes_alt_cpp}: Directly apply
-icd9AddLeadingZeroesShortSingle to each code without separating into parts
+\code{icd9AddLeadingZeroesShortSingle} to each code without separating into
+parts
 }}
 
 \keyword{internal}

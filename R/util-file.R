@@ -55,7 +55,7 @@ fetch_icd10cm_year <- function(year = "2018", dx = TRUE,
   url <- paste0(s$base_url, s$dx_zip)
   file_name <- s$dx_flat
   if (!dx) {
-    if (("pcs_zip" %nin% names(s) || is.na(s$pcs_zip))) {
+    if ("pcs_zip" %nin% names(s) || is.na(s$pcs_zip)) {
       if (verbose) message("No PCS flat file zip name.")
       return()
     }
@@ -76,9 +76,8 @@ fetch_icd10cm_year <- function(year = "2018", dx = TRUE,
 
 #' Get the raw data directory
 #'
-#' Following Hadley Wickham recommendations
-#' in R Packages, should be in inst/extdata. devtools overrides
-#' \code{system.file}.
+#' Following Hadley Wickham recommendations in R Packages, this should be in
+#' \code{inst/extdata}. \pkg{devtools} overrides \code{system.file}.
 #' @keywords internal
 get_raw_data_dir <- function()
   system.file("extdata", package = "icd")

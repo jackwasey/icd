@@ -89,12 +89,11 @@ expect_equal_no_class_order <- function(object, expected, ...) {
 #' @param end ICD code
 #' @param ver_chaps list with each member being a start-end pair, and names
 #'   being the chapter names
-#' @param ... arguments passed to \code{expect_true} in 'testthat' package
+#' @param ... arguments passed to \code{expect_true} in \pkg{testthat} package
 #' @keywords internal debugging
 expect_chap_equal <- function(x, start, end, ver_chaps, ...) {
   x <- tolower(x)
   res <- eval(bquote(testthat::expect_true(.(x) %in% tolower(names(ver_chaps)), ...)))
-  # new testthat doesn't return a result object, but TRUE
   if (!isTRUE(res) || (is.list(res) && !res$passed))
     return(res)
   eval(bquote(testthat::expect_equal(.(ver_chaps[[which(tolower(names(ver_chaps)) == x)]]),
@@ -107,7 +106,7 @@ expect_icd10_sub_chap_equal <- function(x, start, end, ...) {
 }
 
 expect_explain_equal <- function(x, desc, ...) {
-  eval(bquote(expect_equal(explain(.(x)), .(desc), ...)))
+  eval(bquote(expect_equal(explain_code(.(x)), .(desc), ...)))
 }
 
 
@@ -251,7 +250,7 @@ generate_random_short_icd9 <- function(n = 50000) {
 #' @template short_code
 #' @keywords internal debugging datagen
 generate_random_short_icd10cm_bill <- function(n = 10, short_code = TRUE) {
-  x <- sample(unlist(icd::icd10cm2016[icd::icd10cm2016$billable == 1, "code"]), replace = TRUE, size = n)
+  x <- sample(unlist(icd10cm2016[icd10cm2016$billable == 1, "code"]), replace = TRUE, size = n)
   if (short_code)
     x
   else

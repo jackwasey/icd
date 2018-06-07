@@ -22,7 +22,7 @@ expect_icd9_sub_chap_equal(x, start, end, ...)
 \item{ver_chaps}{list with each member being a start-end pair, and names
 being the chapter names}
 
-\item{...}{arguments passed to \code{expect_true} in 'testthat' package}
+\item{...}{arguments passed to \code{expect_true} in \pkg{testthat} package}
 }
 \description{
 First checks that the given name is indeed in \code{ver_chaps},

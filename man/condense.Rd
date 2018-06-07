@@ -75,9 +75,9 @@ from input data
  Future versions of \pkg{icd} will drop
   the \code{icd_} prefix. For example, \code{charlson} should be used in
   favor of \code{icd_charlson}. To distinguish \pkg{icd} function calls,
-  consider using the namespace prefix \code{icd::} instead, e.g.,
-  \code{icd::charlson}. Functions which specifically operate on either ICD-9
-  or ICD-10 codes or their subtypes will retain the prefix. E.g.
+  consider using the prefix \code{icd::} instead, e.g., \code{icd::charlson}.
+  Functions which specifically operate on either ICD-9 or ICD-10 codes or
+  their sub-types will retain the prefix. E.g.
   \code{\link{icd9_comorbid_ahrq}}. \pkg{icd} specific classes also retain
   the prefix, e.g., \code{\link{icd_wide_data}}.
 }
@@ -100,7 +100,7 @@ condense(c(kids, "41100"), warn = FALSE)
 icd9_map_elix$CHF
 condense(icd9_map_elix$CHF, warn = FALSE)
 # explaining big groups of codes takes advantage of this:
-explain(icd9_map_elix$CHF, condense = TRUE, warn = FALSE)
+explain_code(icd9_map_elix$CHF, condense = TRUE, warn = FALSE)
 }
 \seealso{
 Other ICD-9 ranges: \code{\link{children}},

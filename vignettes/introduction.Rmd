@@ -166,46 +166,46 @@ is_valid(c("1", "001", "100", "123456", "003.21"), short_code = TRUE)
 ## Decoding ICD-9 codes to descriptions
 There are various ways of extracting the description of the condition described by an ICD-9 code. the explain group of functions return a data frame with a column for the ICD-9 code, a column for the full length Diagnosis, and a column for the short Description.
 ```{r explain simple}
-explain("1.0") # 'decimal' format code inferred
-explain("0019") # 'short' format code inferred
+explain_code("1.0") # 'decimal' format code inferred
+explain_code("0019") # 'short' format code inferred
 ```
 
 ```{r explain complex}
 # we can be explicit about short vs decimal
-explain("434.00", short_code = FALSE)
-explain(c("43410", "43491"), short_code = TRUE)
+explain_code("434.00", short_code = FALSE)
+explain_code(c("43410", "43491"), short_code = TRUE)
 #explain top level code with children
-"391" %>% explain # single three-digit code
+"391" %>% explain_code # single three-digit code
 "391" %>% children # let's see the child codes
-"391" %>% children %>% explain # children condensed to parent code
-"391" %>% children %>% explain(condense = FALSE) # prevent condense
+"391" %>% children %>% explain_code # children condensed to parent code
+"391" %>% children %>% explain_code(condense = FALSE) # prevent condense
 ```
 Arbitrary named list(s) of codes:
-```{r explain arbitrary}
-explain(list(somecodes = as.icd9(c("001", "391")),
+```{r explainarbitrary}
+explain_code(list(somecodes = as.icd9(c("001", "391")),
                  morecodes = as.icd9cm(c("001.1", "001.9"))))
 ```
 `001` (Cholera) isn't itself a diagnostic code, i.e. leaf node in the hierarchy, but `390` (Rheumatic fever without heart involvement) is. Both are explained correctly:
 ```{r cholera}
-explain(list(cholera = "001", rheumatic_heart = "390"))
+explain_code(list(cholera = "001", rheumatic_heart = "390"))
 ```
 Now try to explain on a non-existent (but 'valid') ICD-9 code:
 ```{r noexplain, eval = FALSE}
-s <- explain("001.5") # gives warning
+s <- explain_code("001.5") # gives warning
 ```
-As we have just seen, *explain* can convert lists of ICD-9 or ICD-10 codes to a human-readable format. Let's apply the `explain` to a list of comorbidity ICD-9 codes in one of the commonly-used mappings. This makes comprehending a complicated list much easier. Taking the list for dementia:
+As we have just seen, `explain_code` can convert lists of ICD-9 or ICD-10 codes to a human-readable format. Let's apply the `explain_code` to a list of comorbidity ICD-9 codes in one of the commonly-used mappings. This makes comprehending a complicated list much easier. Taking the list for dementia:
 ```{r Example Dementia}
 length(icd9_map_quan_deyo[["Dementia"]]) # 133 possible ICD-9 codes
 length(icd10_map_quan_deyo[["Dementia"]]) # the ICD-10 map is different
-# explain summarizes these to just two groups:
-icd9_map_quan_deyo[["Dementia"]] %>% explain(warn = FALSE)
+# explain_code summarizes these to just two groups:
+icd9_map_quan_deyo[["Dementia"]] %>% explain_code(warn = FALSE)
 # contrast with:
-icd9_map_quan_deyo[["Dementia"]] %>% explain(condense = TRUE, warn = FALSE)
+icd9_map_quan_deyo[["Dementia"]] %>% explain_code(condense = TRUE, warn = FALSE)
 ```
 Use a range with more than two hundred ICD-9 codes (most of them not real):
 ```{r Show Range Operator}
 length("390" %i9da% "392.1")
-"390" %i9da% "392.1" %>% explain(warn = FALSE)
+"390" %i9da% "392.1" %>% explain_code(warn = FALSE)
 ```
 The warnings here are irrelevant because we know that `%i9da% produces codes which do not correspond to diagnoses. However, in other usage, the user would typically expect the ICD-9 codes he or she is using to be diagnostic, hence the default to warn.
 
@@ -280,9 +280,9 @@ str(difference)
 ```
 Which pulmonary hypertension codes are only in Quan's version?
 ```{r quanonlyphtn}
-difference$PHTN$only.y %>% get_defined %>% explain
+difference$PHTN$only.y %>% get_defined %>% explain_code
 ```
-(Passing through `get_defined` stops `explain` complaining that some of the input codes don't exist. This is because the comorbidity mappings have every possible numerical ICD-9 code, not just the official ones. Could also use `warn = FALSE` option in `explain`)
+(Passing through `get_defined` stops `explain_code` complaining that some of the input codes don't exist. This is because the comorbidity mappings have every possible numerical ICD-9 code, not just the official ones. Could also use `warn = FALSE` option in `explain_code`)
 
 ### Find cardiac ICD-9 codes
 ```{r cardiacgrep}
@@ -294,7 +294,7 @@ icd9cm_hierarchy[
 ```
 then explain the list, just showing the first ten:
 ```{r cardiac Chain Explain Example}
-as.icd9(cardiac) %>% explain(warn = FALSE) %>% head(10)
+as.icd9(cardiac) %>% explain_code(warn = FALSE) %>% head(10)
 ```
 
 ### Find comorbidities for a large number of patients
@@ -347,9 +347,9 @@ lost_since_27 %<>% as.icd9cm
 lost_since_27 %<>% as.icd9cm
 
 # these are a few which were gained since v27
-data.frame(code = new_since_27, desc = new_since_27 %>% explain)
+data.frame(code = new_since_27, desc = new_since_27 %>% explain_code)
 # these are a few which were lost since v27
-data.frame(code = lost_since_27, desc = lost_since_27 %>% explain)
+data.frame(code = lost_since_27, desc = lost_since_27 %>% explain_code)
 ```
 
 ## Conclusion

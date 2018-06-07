@@ -12,15 +12,37 @@ extern "C" {
 #include "cutil.h"                              // for getRListOrDfElement
 }
 
-using namespace Rcpp;
 
-void buildVisitCodesVecSparse(const SEXP& icd9df,
-                              const std::string& visitId,
-                              const std::string& icd9Field,
-                              PtsSparse& sparse_db,
-                              VecStr& visitIds);
+/*
+ *
+ *  Add header guard if this is reactivated.
+ */
 
-LogicalMatrix comorbidMatMul(const Rcpp::DataFrame& icd9df, const Rcpp::List& icd9Mapping,
-                             const std::string visitId, const std::string icd9Field,
+/*
+using std::string;
+
+void buildVisitCodesSparseSimple(const SEXP& icd9df,
+                                 const string& visitId,
+                                 const string& icd9Field,
+                                 const CV relevant,
+                                 PtsSparse& visMat,
+                                 VecStr& visitIds);
+
+void buildVisitCodesSparse(const SEXP& icd9df,
+                           const string& visitId,
+                           const string& icd9Field,
+                           PtsSparse& sparse_db,
+                           VecStr& visitIds);
+
+Rcpp::LogicalMatrix comorbidMatMulSimple(const Rcpp::DataFrame& icd9df,
+                                 const Rcpp::List& map,
+                                 const string visitId,
+                                 const string icd9Field);
+
+Rcpp::LogicalMatrix comorbidMatMul(const Rcpp::DataFrame& icd9df,
+                             const Rcpp::List& map,
+                             const string visitId,
+                             const string icd9Field,
                              const int threads = 8, const int chunk_size = 256,
                              const int omp_chunk_size = 1);
+*/

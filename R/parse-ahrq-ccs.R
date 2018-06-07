@@ -17,7 +17,7 @@
 
 # nocov start
 
-#' Download ahrq-ccs-icd9 definition
+#' Download AHRQ CCS ICD-9 definitions
 #' @template ccs-single
 #' @template offline
 #' @keywords internal
@@ -36,7 +36,7 @@ icd9_fetch_ahrq_ccs <- function(single = TRUE, offline) {
       offline = offline)
 }
 
-#' Download ahrq-css-icd10 definition
+#' Download AHRQ CCS ICD-10 definitions
 #' @template offline
 #' @keywords internal
 icd10_fetch_ahrq_ccs <- function(version = "2018.1", offline) {
@@ -73,16 +73,13 @@ icd9_parse_ahrq_ccs <- function(single = TRUE, save_data = FALSE, offline = TRUE
   assert_flag(single)
   assert_flag(save_data)
   assert_flag(offline)
-
   ahrq_ccs <- icd9_fetch_ahrq_ccs(single = single, offline = offline)
-
   clean_icd9 <- function(x){
     x %>%
       trimws() %>%
       as.icd9() %>%
       as.short_diag()
   }
-
   resort_lvls <- function(x) {
     # Function to reorder numbers of CCS
     lvls_names <- names(x)
@@ -94,36 +91,29 @@ icd9_parse_ahrq_ccs <- function(single = TRUE, save_data = FALSE, offline = TRUE
       unlist %>%
       as.numeric %>%
       matrix(ncol = number_splits, byrow = TRUE, dimnames  = list(rownames = lvls_names[lvls_names != " "]))
-
     # complicated call needed or order using all columns of matrix
     lvls <- lvls[do.call(order, as.data.frame(lvls)), ]
     if (is.null(dim(lvls)))
       lvls <- names(lvls) # if only looking at lvl1, then this becomes a vector, not a matrix
     else
       lvls <- rownames(lvls)
-
     if (lvls_has_empty) lvls <- c(lvls, " ")
     x[lvls]
   }
-
   if (!single) {
     ahrq_df <- read.csv(ahrq_ccs$file_path, quote = "'\"", colClasses = "character")
     lvl1 <- tapply(ahrq_df[["ICD.9.CM.CODE"]], ahrq_df[["CCS.LVL.1"]], clean_icd9) %>%
       resort_lvls %>%
       comorbidity_map
-
     lvl2 <- tapply(ahrq_df[["ICD.9.CM.CODE"]], ahrq_df[["CCS.LVL.2"]], clean_icd9) %>%
       resort_lvls %>%
       comorbidity_map
-
     lvl3 <- tapply(ahrq_df[["ICD.9.CM.CODE"]], ahrq_df[["CCS.LVL.3"]], clean_icd9) %>%
       resort_lvls %>%
       comorbidity_map
-
     lvl4 <- tapply(ahrq_df[["ICD.9.CM.CODE"]], ahrq_df[["CCS.LVL.4"]], clean_icd9) %>%
       resort_lvls %>%
       comorbidity_map
-
     icd9_map_multi_ccs <- list(lvl1 = lvl1, lvl2 = lvl2, lvl3 = lvl3, lvl4 = lvl4)
 
     if (save_data)
@@ -135,7 +125,6 @@ icd9_parse_ahrq_ccs <- function(single = TRUE, save_data = FALSE, offline = TRUE
       tapply(ahrq_df[["ICD.9.CM.CODE"]], trimws(ahrq_df$CCS.CATEGORY), clean_icd9) %>%
       resort_lvls %>%
       comorbidity_map
-
     if (save_data)
       save_in_data_dir("icd9_map_single_ccs")
     out <- icd9_map_single_ccs
@@ -147,7 +136,7 @@ icd9_parse_ahrq_ccs <- function(single = TRUE, save_data = FALSE, offline = TRUE
 #' parse AHRQ CCS for mapping - ICD10
 #'
 #' Data is downloaded from AHRQ website. ICD10 codes are continually being
-#' updated so a paramter for \code{version} is provided. This parameter should
+#' updated so a parameter for \code{version} is provided. This parameter should
 #' mimic those found in
 #' \url{https://www.hcup-us.ahrq.gov/toolssoftware/ccs10/ccs10.jsp#archive}.
 #' These are in the format of \code{YYYY.1}, \code{YYYY.2} etc.
@@ -177,13 +166,11 @@ icd10_parse_ahrq_ccs <- function(version = "2018.1",
   ahrq_df <- read.csv(ahrq_ccs$file_path,
                       quote = "'\"",
                       colClasses = "character")
-
   clean_icd10 <- function(x) {
     x %>%
       trimws() %>%
       as.icd10()
   }
-
   resort_lvls <- function(x) {
     # Function to reorder numbers of CCS
     lvls_names <- names(x)
@@ -210,13 +197,11 @@ icd10_parse_ahrq_ccs <- function(version = "2018.1",
       lvls <- c(lvls, " ")
     x[lvls]
   }
-
   ccs_lvl_map <- function(col_name) {
     tapply(ahrq_df[["ICD.10.CM.CODE"]], ahrq_df[[col_name]], clean_icd10) %>%
       resort_lvls %>%
       comorbidity_map
   }
-
   #list to define which columns match to which definition
   icd10_map_def <- list(single = "CCS.CATEGORY",
                         lvl1 = "MULTI.CCS.LVL.1",

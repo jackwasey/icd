@@ -454,8 +454,7 @@ test_that("built-in icd9 to comorbidity mappings are all valid", {
 test_that("disordered visit ids", {
   pts <- data.frame(visit_id = c("2", "1", "2", "3", "3"),
                     icd9 = c("39891", "40110", "09322", "41514", "39891"))
-  res <- icd9_comorbid(pts, icd9_map_ahrq, short_code = TRUE)
-  # not guaranteed, but this seems logical?
+  res <- icd9_comorbid_ahrq(pts, restore_visit_order = TRUE)
   expect_equal(rownames(res), c("2", "1", "3"))
 })
 
@@ -492,116 +491,10 @@ test_that("diff comorbid works", {
     ), regexp = NA)
 })
 
-two_pts_fac <- data.frame(visit_id = c("v01", "v01", "v02", "v02"),
-                          icd9 = c("040", "000", "100", "000"),
-                          stringsAsFactors = TRUE)
-two_map_fac <- as.list(data.frame("malady" = c("100", "2000"),
-                                  "ailment" = c("003", "040"),
-                                  stringsAsFactors = TRUE))
-
-test_that("comorbid quick test", {
-  testres <- icd9_comorbid(two_pts, two_map, return_df = TRUE)
-  trueres <- data.frame("visit_id" = c("v01", "v02"),
-                        "malady" = c(FALSE, TRUE),
-                        "ailment" = c(TRUE, FALSE),
-                        stringsAsFactors = FALSE)
-  expect_equal(testres, trueres)
-
-  testmat <- icd9_comorbid(two_pts, two_map, return_df = FALSE)
-  truemat <- matrix(c(FALSE, TRUE, TRUE, FALSE), nrow = 2,
-                    dimnames = list(c("v01", "v02"), c("malady", "ailment")))
-  expect_equal(testmat, truemat)
-
-  testresfac <- icd9_comorbid(two_pts_fac, two_map_fac, return_df = TRUE)
-  trueresfac <- data.frame("visit_id" = c("v01", "v02"),
-                           "malady" = c(FALSE, TRUE),
-                           "ailment" = c(TRUE, FALSE),
-                           stringsAsFactors = TRUE)
-  expect_equal(testresfac, trueresfac)
-  expect_equal(icd9_comorbid(two_pts_fac, two_map_fac), truemat)
-
-})
-
 pts <- generate_random_pts(101, 13)
 ac <-  lapply(icd9_map_ahrq, function(x) {
   f <- factor(x, levels(pts[["code"]]))
   f[!is.na(f)]
-})
-
-test_that("give factor instead of char to icd9ComorbidShortCpp", {
-  pts$visit_id <- factor(pts$visit_id)
-  expect_error(
-    icd9ComorbidShortCpp(pts, ac, visitId = "visit_id", icd9Field = "icd9Field"),
-    "character vector"
-  )
-})
-
-test_that("control params don't affect result of comorbid calc", {
-  pts$visit_id <- as_char_no_warn(pts$visit_id)
-  pts$code %<>% as.factor
-  upts <- length(unique(pts$visit_id))
-  expect_identical(
-    icd9ComorbidShortCpp(pts, ac, visitId = "visit_id", icd9Field = "icd9Field", threads = 1, chunk_size = 32),
-    icd9ComorbidShortCpp(pts, ac, visitId = "visit_id", icd9Field = "icd9Field", threads = 3, chunk_size = 32)
-  )
-  expect_identical(
-    icd9ComorbidShortCpp(pts, ac, visitId = "visit_id", icd9Field = "icd9Field", threads = 2, chunk_size = 32),
-    icd9ComorbidShortCpp(pts, ac, visitId = "visit_id", icd9Field = "icd9Field", threads = 5, chunk_size = 32)
-  )
-  expect_identical(
-    icd9ComorbidShortCpp(pts, ac, visitId = "visit_id", icd9Field = "icd9Field", threads = 3, chunk_size = 1),
-    icd9ComorbidShortCpp(pts, ac, visitId = "visit_id", icd9Field = "icd9Field", threads = 3, chunk_size = 32)
-  )
-  expect_identical(
-    icd9ComorbidShortCpp(pts, ac, visitId = "visit_id", icd9Field = "icd9Field", threads = 4, chunk_size = upts - 1),
-    icd9ComorbidShortCpp(pts, ac, visitId = "visit_id", icd9Field = "icd9Field", threads = 4, chunk_size = upts)
-  )
-  expect_identical(
-    icd9ComorbidShortCpp(pts, ac, visitId = "visit_id", icd9Field = "icd9Field", threads = 4, chunk_size = upts - 1),
-    icd9ComorbidShortCpp(pts, ac, visitId = "visit_id", icd9Field = "icd9Field", threads = 4, chunk_size = upts + 1)
-  )
-  expect_identical(
-    icd9ComorbidShortCpp(pts, ac, visitId = "visit_id", icd9Field = "icd9Field", threads = 4, chunk_size = upts + 1),
-    icd9ComorbidShortCpp(pts, ac, visitId = "visit_id", icd9Field = "icd9Field", threads = 4, chunk_size = upts)
-  )
-  expect_identical(
-    icd9ComorbidShortCpp(pts, ac, visitId = "visit_id", icd9Field = "icd9Field", threads = 3, chunk_size = upts - 2, omp_chunk_size = 1), # nolint
-    icd9ComorbidShortCpp(pts, ac, visitId = "visit_id", icd9Field = "icd9Field", threads = 3, chunk_size = upts + 2, omp_chunk_size = 1) # nolint
-  )
-  expect_identical(
-    icd9ComorbidShortCpp(pts, ac, visitId = "visit_id", icd9Field = "icd9Field", threads = 3, chunk_size = upts - 2, omp_chunk_size = 11), # nolint
-    icd9ComorbidShortCpp(pts, ac, visitId = "visit_id", icd9Field = "icd9Field", threads = 3, chunk_size = upts + 2, omp_chunk_size = 11) # nolint
-  )
-  expect_identical(
-    icd9ComorbidShortCpp(pts, ac, visitId = "visit_id", icd9Field = "icd9Field", threads = 3, chunk_size = upts, omp_chunk_size = 1), # nolint
-    icd9ComorbidShortCpp(pts, ac, visitId = "visit_id", icd9Field = "icd9Field", threads = 3, chunk_size = upts, omp_chunk_size = 11) # nolint
-  )
-  expect_identical(
-    icd9ComorbidShortCpp(pts, ac, visitId = "visit_id", icd9Field = "icd9Field"),
-    icd9ComorbidShortCpp(pts, ac, visitId = "visit_id", icd9Field = "icd9Field", threads = 3, chunk_size = 3, omp_chunk_size = 5) # nolint
-  )
-})
-
-test_that("failing example", {
-  mydf <- data.frame(visit_id = c("a", "b", "c"),
-                     icd9 = c("441", "412.93", "042"))
-  cmb <- icd9_comorbid_quan_deyo(mydf, short_code = FALSE, hierarchy = TRUE)
-  expect_false("names" %in% names(attributes(cmb)))
-  charlson(mydf, isShort = FALSE)
-  expect_is(charlson(mydf, isShort = FALSE, return_df = TRUE), "data.frame")
-  charlson_from_comorbid(cmb)
-})
-
-test_that("disordered visit_ids works by default", {
-  set.seed(1441)
-  rnd_ord <- sample(seq_along(test_twenty$visit_id))
-  dat <- test_twenty[rnd_ord, ]
-  tres <- icd9_comorbid(dat, icd9_map_ahrq, icd_name = "icd9Code")
-  cres <- icd9_comorbid(test_twenty, icd9_map_ahrq, icd_name = "icd9Code")
-  expect_equal(dim(tres), dim(cres))
-  expect_equal(sum(tres), sum(cres))
-  expect_true(setequal(rownames(tres), rownames(cres)))
-  expect_equal(colnames(tres), colnames(cres))
 })
 
 test_that("comorbidities created from source data frame coded as factors", {

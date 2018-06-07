@@ -19,7 +19,6 @@
 #include "local.h"                          // for icd_set
 #include "ranges.h"
 #include "icd_types.h"                      // for CV, VecStr, Str
-#include <Rcpp.h>
 #include <algorithm>                        // for set_intersection
 #include <iterator>                         // for insert_iterator, inserter
 #include <set>                              // for _Rb_tree_const_iterator, set

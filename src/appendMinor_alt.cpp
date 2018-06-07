@@ -17,7 +17,6 @@
 
 #include "icd_types.h"                       // for VecStr, CV, Str
 #include "appendMinor.h"
-#include <Rcpp.h>
 #include <string.h>                          // for strlen
 #include <algorithm>                         // for fill
 #include <iterator>                          // for distance
@@ -25,10 +24,11 @@
 #include <vector>                            // for vector, vector<>::iterator
 #include "is.h"                              // for icd9IsASingleVE
 
-//' @describeIn icd9MajMinToCode Same as \code{icd9MajMinToCode} but assume
-//' codes are already trimmed and correctly padded with zeros, e.g. E001, V09,
-//' 001. This version does handle NA values correctly. ' @keywords internal
-//[[Rcpp::export]]
+//Same as \code{icd9MajMinToCode} but assume codes are already trimmed and
+//correctly padded with zeros, e.g. E001, V09, 001. This version does handle NA
+//values correctly. ' @keywords internal
+
+// [[Rcpp::export]]
 CV icd9MajMinToCode_alt_PrePadded(const CV mjr,
                                   const CV mnr,
                                   bool isShort) {

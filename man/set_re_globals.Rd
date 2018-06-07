@@ -2,7 +2,7 @@
 % Please edit documentation in R/valid.R
 \name{set_re_globals}
 \alias{set_re_globals}
-\title{Put ICD validation regexes in the icd::: namespace only}
+\title{Put ICD validation regular expressions in the \code{icd:::} name space}
 \usage{
 set_re_globals(env = parent.frame())
 }
@@ -10,7 +10,7 @@ set_re_globals(env = parent.frame())
 \item{env}{target environment to save the data}
 }
 \description{
-Put ICD validation regexes in the icd::: namespace only
+Put ICD validation regular expressions in the \code{icd:::} name space
 }
 \keyword{data}
 \keyword{internal}

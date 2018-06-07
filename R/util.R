@@ -44,9 +44,18 @@ trim <- function(x) {
   x
 }
 
-"%nin%" <- function(x, table) {
+"%nin%" <- function(x, table)
   match(x, table, nomatch = 0) == 0
-}
+
+#' @describeIn match_rcpp Use faster matching for %in%
+#' @keywords internal
+"%fin%" <- function(x, table)
+  fin(x, table)
+
+#' @describeIn match_rcpp Use faster matching for %nin%
+#' @keywords internal
+"%fnin%" <- function(x, table)
+  !fin(x, table)
 
 #' Strip character(s) from character vector
 #'
@@ -126,20 +135,6 @@ binary_to_logical <- function(x) {
   x
 }
 
-
-#' \code{regexec} which accepts \code{perl} argument even in older R
-#'
-#' TODO: deprecate this as we won't support ancient R versions indefinitely.
-#' @keywords internal
-regexec32 <- function(pattern, text, ...) {
-  dots <- list(...)
-  dots[["pattern"]] <- pattern
-  dots[["text"]] <- text
-  if (!.have_regexec_perl)
-    dots[["perl"]] <- NULL
-  do.call(regexec, dots)
-}
-
 #' Match pairs of strings to get named vector
 #'
 #' Match a character vector against a regular expression with at least two
@@ -165,7 +160,7 @@ str_pair_match <- function(string, pattern, pos, swap = FALSE, ...) {
 
   res <- lapply(string,
                 function(x) unlist(
-                  regmatches(x = x, m = regexec32(pattern = pattern, text = x, ...))
+                  regmatches(x = x, m = regexec(pattern = pattern, text = x, ...))
                 )[-1]
   )
 
@@ -198,23 +193,20 @@ get_visit_name <- function(x, visit_name = NULL) {
   UseMethod("get_visit_name")
 }
 
-.visit_name_guesses <- c("visit.?Id", "patcom", "encounter.?id", "enc.?id",
-                         "in.*enc", "out.*enc", "encounter", "visit", "enc")
-
 #' @keywords internal
 #' @export
 get_visit_name.data.frame <- function(x, visit_name = NULL) {
   assert_data_frame(x, min.cols = 1, col.names = "named")
-
+  visit_name_guesses <- c("visit.?Id", "patcom", "encounter.?id", "enc.?id",
+                          "in.*enc", "out.*enc", "encounter", "visit", "enc")
   if (is.null(visit_name)) {
-    for (guess in .visit_name_guesses) {
+    for (guess in visit_name_guesses) {
       guess_matched <- grep(guess, names(x), ignore.case = TRUE, value = TRUE)
       if (length(guess_matched) == 1) {
         visit_name <- guess_matched
         break
       }
     }
-    # if still null, then guess the name of the first column
     if (is.null(visit_name))
       visit_name <- names(x)[1]
   }
@@ -225,18 +217,19 @@ get_visit_name.data.frame <- function(x, visit_name = NULL) {
 
 #' @keywords internal
 #' @export
-get_visit_name.matrix <- function(x, visit_name = NULL) {
-  stop("matrices of comorbidity data are expected to be of logical type, and have row names corresponding to the visit or patient.")
-}
+get_visit_name.matrix <- function(x, visit_name = NULL)
+  stop("matrices of comorbidity data are expected to be of logical type, ",
+       "and have row names corresponding to the visit or patient.")
 
 #' get the name of a \code{data.frame} column which is most likely to contain
 #' the ICD codes
 #'
 #' guess which field contains the (only) ICD code, in order of preference, the
-#' column name has an icd code class, case-insensitive regexes of commonly used
-#' names for ICD code fields, a single column has more than 10% valid ICD codes.
-#' If the result is not specified by class, or exactly with \code{icd_name}
-#' being given, we confirm there are at least some valid ICD codes in there
+#' column name has an icd code class, case-insensitive regular expressions of
+#' commonly used names for ICD code fields, a single column has more than 10%
+#' valid ICD codes. If the result is not specified by class, or exactly with
+#' \code{icd_name} being given, we confirm there are at least some valid ICD
+#' codes in there
 #' @param x data frame
 #' @param icd_name usually \code{NULL} but if specified, will be checked it is
 #'   valid (i.e. a character vector of length one, which is indeed a name of one
@@ -249,7 +242,6 @@ get_icd_name <- function(x, icd_name = NULL, valid_codes = TRUE, defined_codes =
          "using 'wide_to_long'. ",
          "If the data is indeed 'long' format, remove the class 'icd_wide_data' and ",
          "use 'as.icd_long_data' to set the correct class. See '?icd_long_data' for help.")
-
   if (!is.null(icd_name)) {
     assert_string(icd_name)
     stopifnot(icd_name %in% names(x))
@@ -293,10 +285,12 @@ get_icd_name <- function(x, icd_name = NULL, valid_codes = TRUE, defined_codes =
   else
     get_icd_valid_percent(x[[icd_name]])
   if (pc$icd9 < 10 && pc$icd10 < 10)
-    stop(paste("identified field with ICD codes as: '", icd_name,
-               "' but fewer than 10% of codes are valid ICD-9 or ICD-10.",
-               "If this really is a valid column, set the class using something like",
-               "x[[icd_name]] <- as.icd9[[x[[icd_name]]"))
+    stop("identified field with ICD codes as: '", icd_name,
+         "' but fewer than 10% of codes are valid ICD-9 or ICD-10. ",
+         "If this really is a valid column, identify the field containing ",
+         "ICD codes in the input data using 'icd_name=\"my_icd_field\"' or ",
+         "set the class using something like",
+         " x[[icd_name]] <- as.icd9[[x[[icd_name]]")
   icd_name
 }
 
@@ -419,19 +413,16 @@ dir.exists <- function(paths) {
 }
 
 #' return all matches for regular expression
-#'
-#' \code{perl} is taken out if not supported, allows compatibility with older
-#' versions of R. TODO: check for newer \code{stringr} function to do this.
-#' @keywords internal
+#' @keywords internal manip
 str_match_all <- function(string, pattern, ...) {
   string <- as.character(string)
-  regmatches(x = string, m = regexec32(pattern = pattern, text = string, ...))
+  regmatches(x = string, m = regexec(pattern = pattern, text = string, ...))
 }
 
 #' \code{stringr} does this, but here we have a small amount of base R code
 #' @keywords internal
 str_extract <- function(string, pattern, ...) {
-  vapply(regmatches(x = string, m = regexec32(pattern = pattern, text = string, ...)),
+  vapply(regmatches(x = string, m = regexec(pattern = pattern, text = string, ...)),
          FUN = `[[`, 1, FUN.VALUE = character(1L))
 }
 

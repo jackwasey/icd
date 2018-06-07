@@ -486,13 +486,3 @@ test_that("icd9 and icd10 get valid gives same type as input", {
   expect_equal(icd_get_valid(c("invalid", "A01")), "A01")
   expect_equal(icd_get_valid(as.icd10(c("invalid", "A01"))), as.icd10("A01"))
 })
-
-test_that("regexes are made and set in package", {
-  re_env <- set_re_globals()
-  for (re in ls(envir = re_env, pattern = "re_.+")) {
-    expect_identical(
-      get(re, envir = re_env),
-      get(re)
-    )
-  }
-})

@@ -4,7 +4,7 @@
 \alias{icd9_is_n}
 \alias{icd9_is_v}
 \alias{icd9_is_e}
-\title{do ICD-9 codes belong to numeric, V or E sub-types?}
+\title{Do ICD-9 codes belong to numeric, V or E sub-types?}
 \usage{
 icd9_is_n(x)
 
@@ -29,3 +29,4 @@ For each code, return \code{TRUE} if numeric or \code{FALSE} if a
 \item \code{icd9_is_e}: are the given codes E type?
 }}
 
+\keyword{internal}

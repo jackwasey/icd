@@ -25,9 +25,9 @@ test_that("explain_table, with and without condense returns correct structure", 
                c("condensed_codes", "condensed_num"))
 })
 
-test_that("explain_table reproduces explain.list (element-by-element) with mixed major and minor codes", {
+test_that("explain_table reproduces explain_code.list,  mixed major and minor", {
   codes <- c("362.5", "413.9", "010.02", "584.9", "357.2", "588.81", "010")
-  method1 <- unlist(icd:::explain.list(codes))
+  method1 <- unlist(explain_code.list(codes))
   method2 <- explain_table(codes, condense = FALSE)[["long_desc"]]
   expect_identical(method1, method2)
 })

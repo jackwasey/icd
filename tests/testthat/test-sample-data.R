@@ -58,6 +58,6 @@ test_that("vermont data looks okay", {
 
   expect_true(
     all(
-      wide_to_long(vermont_dx)$icd_code %in% icd::icd9cm_hierarchy$code))
+      wide_to_long(vermont_dx)$icd_code %in% icd9cm_hierarchy$code))
 
 })

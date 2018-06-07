@@ -21,9 +21,9 @@ r_packages:
   - knitr
   - roxygen2
   - rmarkdown
+  - covr
 
 r_github_packages:
-  - r-lib/covr
   - jimhester/lintr
 
 r:
@@ -40,15 +40,17 @@ env:
     - R_CHECK_CRAN_INCOMING_=FALSE _R_CHECK_FORCE_SUGGESTS_=FALSE
     - LINTR_COMMENT_BOT=false
     - ICD_COVERAGE=false
-  matrix:
-    - OMP_NUM_THREADS=1 CFLAGS="-Og -Werror -Wall -Wextra -pedantic" CXXFLAGS="-Og -Werror -Wall -Wextra -pedantic"
-    - OMP_NUM_THREADS=2 CFLAGS="-O3 -march=native" CXXFLAGS="-O3 -march=native"
+    - OMP_NUM_THREADS=2
+    - CFLAGS="-Og -Werror -Wall -Wextra -pedantic"
+    - CXXFLAGS="-Og -Werror -Wall -Wextra -pedantic"
 
 matrix:
   fast_finish: true
   include:
   - env: LINTR_COMMENT_BOT=true
   - env: ICD_COVERAGE=true ICD_TEST_DEPRECATED=true ICD_TEST_BUILD_DATA=true ICD_TEST_SLOW=true
+  - env: ICD_TEST_ALL=false ICD_TEST_DEPRECATED=true ICD_TEST_BUILD_DATA=true ICD_TEST_SLOW=true
+    r: release
   allow_failures:
   - env: ICD_COVERAGE=true ICD_TEST_DEPRECATED=true ICD_TEST_BUILD_DATA=true ICD_TEST_SLOW=true
   - r: oldrel

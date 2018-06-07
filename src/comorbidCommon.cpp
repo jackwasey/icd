@@ -17,14 +17,13 @@
 
 // [[Rcpp::interfaces(r, cpp)]]
 // [[Rcpp::plugins(openmp)]]
-#include "comorbidCommon.h"
-#include <Rcpp.h>
-#include <algorithm>                   // for binary_search, copy
-#include <vector>                      // for vector, vector<>::const_iterator
-#include "Rcpp/iostream/Rstreambuf.h"  // for Rcout
 #include "icd_types.h"                 // for ComorbidOut, VecVecInt, VecVec...
 #include "local.h"                     // for ICD_OPENMP
 #include "config.h"                     // for valgrind, CXX11 etc
+#include "comorbidCommon.h"
+#include <algorithm>                   // for binary_search, copy
+#include <vector>                      // for vector, vector<>::const_iterator
+#include "Rcpp/iostream/Rstreambuf.h"  // for Rcout
 #include "util.h"                     // for debug_parallel
 
 //' core search for ICD code in a map

@@ -1,9 +1,9 @@
 #' Fast Factor Generation
 #'
 #' This function generates factors more quickly, without leveraging
-#' \code{fastmatch}. The speed increase with \code{fastmatch} for ICD-9 codes
+#' \pkg{fastmatch}. The speed increase with \pkg{fastmatch} for ICD-9 codes
 #' was about 33% reduction for 10 million codes. SOMEDAY could be faster still
-#' using \code{Rcpp}, and a hashed matching algorithm.
+#' using \pkg{Rcpp}, and a hashed matching algorithm.
 #'
 #' \code{NaN}s are converted to \code{NA} when used on numeric values. Extracted
 #' from https://github.com/kevinushey/Kmisc.git
@@ -34,14 +34,112 @@
 #'   sorted in advance, especially not for ICD-9 codes where a simple
 #'   alphanumeric sorting will likely be completely wrong.
 #' @keywords internal
-factor_nosort <- function(x, levels, labels = levels, exclude = NA) {
+factor_nosort <- function(x, levels) {
   if (missing(levels)) {
-    levels <- unique.default(x)
+    if (is.factor(x)) return(x) else levels <- unique.default(x)
   }
-  # drop levels with no values
-  levels <- levels[is.na(match(levels, exclude))]
   suppressWarnings(f <- match(x, levels))
-  levels(f) <- as.character(labels)
+  levels(f) <- as.character(levels)
   class(f) <- "factor"
   f
+}
+
+#' @describeIn factor_nosort R wrapper to the \pkg{Rcpp} function. Will
+#'   re-factor a factor with new levels without converting to string vector.
+#' @param na.rm Logical, if `TRUE`, simple drop all NA values, i.e., values with
+#'   no corresponding level.
+#' @md
+#' @keywords internal
+factor_nosort_rcpp <- function(x, levels, na.rm = FALSE) {
+  # TODO: if re-factoring, use my refactor code
+  if (missing(levels)) {
+    if (is.factor(x))
+      return(x)
+    else
+      levels <- unique.default(x)
+  }
+  if (na.rm)
+    levels <- levels[!is.na(levels)]
+  factor_nosort_rcpp_worker(as.character(x), levels, na_rm = na.rm)
+  #TODO SLOW - if re-factoring, there is a faster way
+}
+
+#' (re-)factor and split into matched and unmatched elements
+#'
+#' I think this is now obsolete, now I have better integer-based re-factoring in
+#' C++.
+#'
+#' Critically, this function does not convert factor to character vector and
+#' back to factor in order to modify factor levels, resulting in huge speed
+#' improvements for long vectors.
+#' @examples
+#' icd:::factor_nosort_rcpp(c("1", NA)) # NA becomes a level
+#' icd:::factor_nosort_rcpp(c("1", "2"), "1") # NA not a level, just dropped!
+#' icd:::factor_nosort_rcpp(c("1", "2"), c("1", NA)) # NA IS a level
+#' \dontrun{
+#' x <- c("A", "B", "C", "d", "A", "C")
+#' levels <- c("A", "B")
+#' stopifnot(
+#'   identical(icd:::factor_split_na(factor(x), levels),
+#'             icd:::factor_split_na(x, levels))
+#' )
+#' y <- c("A", NA, "B", "A", NA)
+#' yf <- factor(y)
+#' yf_na <- factor(y, levels = c("A", NA, "B"), exclude = NULL)
+#' stopifnot(
+#'   identical(icd:::factor_split_na(y, "A"),
+#'             icd:::factor_split_na(yf, "A"))
+#' )
+#' stopifnot(
+#'   identical(icd:::factor_split_na(y, "A"),
+#'             icd:::factor_split_na(yf_na, "A"))
+#' )
+#' }
+#' @keywords internal manip
+factor_split_na <- function(x, levels, factor_fun = factor_nosort_rcpp) {
+  # input may have no levels!
+  message("use refactor C++ instead")
+  if (is.factor(x)) {
+    xi <- as.integer(x)
+    lx <- levels(x)
+    any_na_xlevels <- anyNA(lx)
+    no_na_xlevels <- if (any_na_xlevels) lx[!is.na(lx)] else lx
+    new_level_idx <- match(no_na_xlevels, levels)
+    f <- new_level_idx[xi]
+    inc_mask <- !is.na(f)
+    f <- f[inc_mask]
+    attr(f, "levels") <- levels
+    class(f) <- "factor"
+  } else {
+    f <- factor_fun(x, levels)
+    inc_mask <- !is.na(f)
+    f <- f[inc_mask]
+  }
+  list(factor = f, inc_mask = inc_mask)
+}
+
+#' Refactor by integer matching levels in C++
+#'
+#' Slightly slower for small factors, three times faster for one hundred million
+#' elements with two million new levels. Three times faster for any `n > 1e6`.
+#' With `NA` values, margin is smaller, but still beats base `factor`.
+#' @param exclude_na Simpler equivalent to `base::factor` exclude. By default,
+#'   `refactor` will not count `NA` as a factor level if there are `NA` elements
+#'   in the input data.
+#' @examples
+#' \dontrun{
+#'   f <- factor(c(1, 2, 3))
+#'   icd:::refactor(f, c("2", "3"))
+#'   f <- factor(c(1, 2, NA))
+#'   icd:::refactor(f, c("2", "3", NA))
+#' }
+#' @md
+#' @keywords internal manip
+refactor <- function(x, levels, na.rm = FALSE, exclude_na = TRUE) {
+  checkmate::assert_factor(x)
+  checkmate::assert_character(levels)
+  if (na.rm)
+    refactor_narm_worker(x, levels)
+  else
+    refactor_worker(x, levels, exclude_na)
 }

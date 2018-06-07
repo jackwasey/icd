@@ -4,26 +4,14 @@
 \name{icd9cm_hierarchy}
 \alias{icd9cm_hierarchy}
 \title{Latest ICD-9-CM diagnosis codes, in flat \code{data.frame} format}
-\format{data frame}
-\source{
-\url{http://wonder.cdc.gov/wonder/sci_data/codes/icd9/type_txt/icd9cm.asp}
-
-Rich text descriptions here:
-  \url{http://www.cdc.gov/nchs/icd/icd9cm.htm}
-  \url{http://www.cms.gov/Medicare/Coding/ICD9ProviderDiagnosticCodes/codes.html}
-   This page has versions 23 to 32 (2005 to 2014). At present, only the 2014
-  data is included in this package.
-
-\url{http://wonder.cdc.gov/wonder/sci_data/codes/icd9/type_txt/icd9abb.asp}
-
-\url{http://wonder.cdc.gov/wonder/sci_data/codes/icd9/type_txt/icd9cm.asp}
-
-\url{http://wonder.cdc.gov/wonder/sci_data/codes/icd9/type_txt/icdcm.asp}
-
-\url{http://wonder.cdc.gov/wonder/sci_data/codes/icd9/type_txt/icd9abb.asp}
-}
 \description{
 Short-form ICD-9 codes with short and long descriptions, and description of
 each hierarchy level containing each code.
+}
+\details{
+Format:  data frame
+}
+\seealso{
+\code{\link[icd.data]{ls_icd_data}}
 }
 \keyword{datasets}

@@ -79,7 +79,7 @@ versus decimal format
 
 \item \code{icd9cm}: Get children of ICD-9-CM codes
 
-\item \code{icd9}: Get children of ICD-9 codes, based on the superset
+\item \code{icd9}: Get children of ICD-9 codes, based on the super-set
 ICD-9-CM at present
 
 \item \code{icd10}: Get children of ICD-10 codes (warns because this
@@ -92,9 +92,9 @@ only applies to ICD-10-CM for now).
  Future versions of \pkg{icd} will drop
   the \code{icd_} prefix. For example, \code{charlson} should be used in
   favor of \code{icd_charlson}. To distinguish \pkg{icd} function calls,
-  consider using the namespace prefix \code{icd::} instead, e.g.,
-  \code{icd::charlson}. Functions which specifically operate on either ICD-9
-  or ICD-10 codes or their subtypes will retain the prefix. E.g.
+  consider using the prefix \code{icd::} instead, e.g., \code{icd::charlson}.
+  Functions which specifically operate on either ICD-9 or ICD-10 codes or
+  their sub-types will retain the prefix. E.g.
   \code{\link{icd9_comorbid_ahrq}}. \pkg{icd} specific classes also retain
   the prefix, e.g., \code{\link{icd_wide_data}}.
 }
@@ -111,7 +111,7 @@ children("0032")
 # empty because 102.01 is not meaningful
 children("10201", short_code = TRUE, defined = TRUE)
 children("003", short_code = TRUE, defined = TRUE) \%>\%
-  explain(condense = FALSE, short_code = TRUE)
+  explain_code(condense = FALSE, short_code = TRUE)
 
 children(short_code = FALSE, "100.0")
 children(short_code = FALSE, "100.00")

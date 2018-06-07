@@ -8,6 +8,6 @@ pushd "$ICD_HOME"
 
 INSTR_ATSTART="no"
 VALGRIND_CMD="valgrind --tool=callgrind --simulate-cache=yes --instr-atstart=$INSTR_ATSTART --separate-threads=no"
-R --vanilla -d "$VALGRIND_CMD" $@
+R --vanilla -d "$VALGRIND_CMD" "$@"
 popd
 

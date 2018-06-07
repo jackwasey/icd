@@ -16,6 +16,9 @@
 // along with icd. If not, see <http://www.gnu.org/licenses/>.
 
 // [[Rcpp::interfaces(r, cpp)]]
+// [[Rcpp::plugins(openmp)]]
+#include "local.h"
+#include "config.h"
 #include "util.h"
 #include <stdlib.h>
 #include <math.h>                              // for floor
@@ -26,12 +29,21 @@
 #include <ostream>                             // for size_t, operator<<
 #include <string>                              // for string, basic_string
 #include <vector>                              // for vector, vector<>::size...
-#include "local.h"                             // for ICD_OPENMP
-#include "config.h"                             // for ICD_VALGRIND
-
 #ifdef ICD_OPENMP
 #include <omp.h>
 #endif
+
+using Rcpp::List;
+using Rcpp::Vector;
+using Rcpp::LogicalVector;
+using Rcpp::IntegerVector;
+using Rcpp::CharacterVector;
+using Rcpp::DataFrame;
+using Rcpp::String;
+using Rcpp::Rcout;
+using Rcpp::as;
+using Rcpp::any;
+using Rcpp::is_na;
 
 // trim one string from right
 std::string trimRightCpp(std::string s) {
@@ -67,17 +79,6 @@ VecStr trimCpp(VecStr sv) {
   return sv;
 }
 
-#ifdef ICD_DEBUG
-void printCharVec(CV cv) {
-  for (CV::iterator i=cv.begin(); i!=cv.end(); ++i) {
-    Rcpp::String s = *i;
-    Rcpp::Rcout << s.get_cstring() << " ";
-  }
-  Rcpp::Rcout << "\n";
-  return;
-}
-#endif
-
 // [[Rcpp::export(get_omp_cores)]]
 int getOmpCores() {
   int cores = 0;
@@ -112,20 +113,20 @@ int getOmpThreads() {
 // [[Rcpp::export]]
 void debug_parallel_env() {
 #ifdef ICD_DEBUG_PARALLEL
-  Rcpp::Rcout << "checking OpenMP flags...\n";
+  Rcout << "checking OpenMP flags...\n";
 #ifdef HAVE_R_OPENMP
-  Rcpp::Rcout << "HAVE_R_OPENMP is defined.\n";
+  Rcout << "HAVE_R_OPENMP is defined.\n";
 #endif
 #ifdef _OPENMP
-  Rcpp::Rcout << "_OPENMP is defined.\n";
+  Rcout << "_OPENMP is defined.\n";
 #else
-  Rcpp::Rcout << "_OPENMP is not defined.\n";
+  Rcout << "_OPENMP is not defined.\n";
 #endif
 
 #ifdef ICD_OPENMP
-  Rcpp::Rcout << "ICD_OPENMP is defined.\n";
+  Rcout << "ICD_OPENMP is defined.\n";
 #else
-  Rcpp::Rcout << "ICD_OPENMP is not defined.\n";
+  Rcout << "ICD_OPENMP is not defined.\n";
 #endif
 #endif
 }
@@ -149,114 +150,28 @@ void debug_parallel() {
 // nocov end
 
 // [[Rcpp::export]]
-Rcpp::NumericVector randomMajorCpp(int	n) {
-  // This could just be a sprintf like the others.
-  Rcpp::NumericVector iv = Rcpp::floor(Rcpp::runif(n) * 999);
-  return iv;
-}
-
-//' @rdname icd9RandomShort
-//' @keywords internal
-// [[Rcpp::export]]
-VecStr icd9RandomShortN(VecStr::size_type n = 5) {
-  VecStr out(n);
-  std::vector<double> randoms = Rcpp::as<std::vector<double> >(Rcpp::runif(n, 0, 99999));
-  char buffer[6];
-  for (std::vector<double>::size_type i = 0; i != n; ++i) {
-    sprintf(buffer, "%.0f", randoms[i]);
-    out[i] = buffer;
-  }
-  return out;
-}
-
-//' @rdname icd9RandomShort
-//' @keywords internal
-// [[Rcpp::export]]
-VecStr icd9RandomShortV(VecStr::size_type n = 5) {
-  VecStr out(n);
-  std::vector<double> randoms = Rcpp::as<std::vector<double> >(Rcpp::runif(n, 0, 9999));
-  char buffer[6];
-  for (std::vector<double>::size_type i = 0; i != n; ++i) {
-    sprintf(buffer, "V%.0f", randoms[i]);
-    out[i] = buffer;
-  }
-  return out;
-}
-
-//' @rdname icd9RandomShort
-//' @keywords internal
-// [[Rcpp::export]]
-VecStr icd9RandomShortE(VecStr::size_type n = 5) {
-  VecStr out(n);
-  std::vector<double> randoms = Rcpp::as<std::vector<double> >(Rcpp::runif(n, 0, 9999));
-  char buffer[6];
-  for (std::vector<double>::size_type i = 0; i != n; ++i) {
-    sprintf(buffer, "E%.0f", randoms[i]);
-    out[i] = buffer;
-  }
-  return out;
-}
-
-//' Generate random short-form ICD-9 codes
-//'
-//' Quick pseudo-random by picking numeric, 'V' or 'E' based on modulo three of
-//' the number
-//' @keywords internal
-// [[Rcpp::export]]
-VecStr icd9RandomShort(VecStr::size_type n = 5) {
-
-  VecStr out(n);
-  std::vector<double> randoms = Rcpp::as<std::vector<double> >(Rcpp::runif(n, 0, 99999));
-  std::vector<double> randoms2 = Rcpp::as<std::vector<double> >(Rcpp::runif(n, 0, 3));
-
-  char buffer[6];
-  for (std::vector<char>::size_type i = 0; i != n; ++i) {
-    // N, V or E?
-    switch (((short) randoms2[i]) % 3) {
-    case 0:
-      sprintf(buffer, "%.0f", randoms[i]);
-      break;
-    case 1:
-      sprintf(buffer, "V%.0f", randoms[i] / 10);
-      break;
-    case 2:
-      sprintf(buffer, "E%.0f", randoms[i] / 10);
-      break;
-    default:
-      {} // never here
-    }
-    out[i] = buffer;
-  }
-  return out;
-}
-
-// [[Rcpp::export]]
 int valgrindCallgrindStart(bool zerostats = false) {
+  if (zerostats) {}; // no-op
 #ifdef ICD_VALGRIND
-#ifdef ICD_DEBUG
-  Rcpp::Rcout << "Starting callgrind instrumentation...\n";
-#endif
+  Rcout << "Starting callgrind instrumentation..." << std::endl;
   CALLGRIND_START_INSTRUMENTATION;
   if (zerostats) {
-    Rcpp::Rcout << "Zeroing callgrind stats.\n";
+    Rcout << "Zeroing callgrind stats." << std::endl;
     CALLGRIND_ZERO_STATS;
   }
 #else
-#ifdef ICD_DEBUG
-  Rcpp::Rcout << "NOT starting valgrind instrumentation.\n";
-#endif
+  DEBUG("NOT starting Valgrind callgrind instrumentation, not linked");
 #endif
   return 0;
 }
 
-
 // [[Rcpp::export]]
 int valgrindCallgrindStop() {
 #ifdef ICD_VALGRIND
-#ifdef ICD_DEBUG
-  Rcpp::Rcout << "Stopping callgrind instrumentation...\n";
-#endif
+  Rcout << "Stopping Valgrind callgrind instrumentation..." << std::endl;
   CALLGRIND_STOP_INSTRUMENTATION;
+#else
+  DEBUG("NOT stopping Valgrind callgrind instrumentation, not linked.");
 #endif
   return 0;
 }
@@ -282,7 +197,6 @@ bool icd9CompareStrings(std::string a, std::string b) {
 bool icd9ComparePair(pas a, pas b) {
   std::string af = a.first;
   std::string bf = b.first;
-  //return icd9Comp(af, bf);
   return icd9CompareStrings(af, bf);
 }
 
@@ -293,31 +207,289 @@ VecStr icd9SortCpp(VecStr x) {
 }
 
 // add one because R indexes from 1, not 0
-inline std::size_t getSecondPlusOne(const std::pair<std::string, std::size_t>& p) { return p.second + 1; }
+inline std::size_t getSecondPlusOne(const std::pair<std::string, std::size_t>& p) {
+  return p.second + 1;
+}
 
 // [[Rcpp::export(icd9_order_cpp)]]
 std::vector<std::size_t> icd9OrderCpp(VecStr x) {
-
   std::vector<std::pair<std::string, std::size_t> > vp;
   std::vector<std::size_t> out;
   out.reserve(x.size());
   vp.reserve(x.size());
-  for (std::size_t i = 0; i != x.size(); ++i) {
+  for (std::size_t i = 0; i != x.size(); ++i)
     vp.push_back(std::make_pair(x[i], i));
-  }
   std::sort(vp.begin(), vp.end(), icd9ComparePair);
   std::transform(vp.begin(), vp.end(), std::back_inserter(out), getSecondPlusOne);
   return out;
 }
 
-//' fast factor generation WIP
+//' @describeIn factor_nosort \pkg{Rcpp} implementation, requiring character
+//' vector inputs only, no argument checking.
 //' @keywords internal manip
-// [[Rcpp::export]]
-SEXP factor_fast( SEXP x ) {
+// [[Rcpp::export(factor_nosort_rcpp_worker)]]
+IntegerVector factorNoSort(const CharacterVector& x,
+                           const CharacterVector& levels,
+                           const bool na_rm) {
+  // TODO: use new factor code? but this is fine.
+  IntegerVector out = match(x, levels);
+  out.attr("levels") = (CharacterVector) levels;
+  out.attr("class") = "factor";
+  if (!na_rm)
+    return out;
+  return(out[!is_na(out)]);
+}
+
+// TODO someday: can the following be done using the R_StringHash global cache
+// instead of making a new hash table to do the integer matching?
+
+//' @title Re-generate a factor with new levels, without doing string matching
+//' @description This is called by an R wrapper. There is an `na.rm` version,
+//' too.
+//' @md
+//' @keywords internal manip
+// [[Rcpp::export(refactor_worker)]]
+Rcpp::IntegerVector refactor(const IntegerVector& x, const CV& new_levels, bool exclude_na) {
+  TRACE_UTIL("Refactoring");
+  IntegerVector f(x.size()); // too many if we are dropping NA values.
+  CharacterVector lx = x.attr("levels");
+  DEBUG_UTIL_VEC(x);
+  DEBUG_UTIL_VEC(lx);
+  DEBUG_UTIL_VEC(new_levels);
+  if (lx.isNULL()) Rcpp::stop("icd codes must be in a factor");
+  CV no_na_lx;
+  CV no_na_new_levels;
+  //bool any_na_lx = false;
+  LogicalVector which_na_new_levels = is_na(new_levels);
+  // TODO: get the position of the NA in new_levels for insertion later if needed.
+  LogicalVector which_na_old_levels = is_na(lx);
+  if (exclude_na) {
+    DEBUG_UTIL("Dropping NA in input factor levels");
+    no_na_lx = lx[!which_na_old_levels];
+  } else {
+    DEBUG_UTIL("Not looking for NA in the input data levels");
+    no_na_lx = lx;
+  }
+  if (exclude_na) {
+    DEBUG_UTIL("Dropping NA in input levels");
+    no_na_new_levels = new_levels[!which_na_new_levels];
+  } else {
+    DEBUG_UTIL("Not dropping NA in input levels");
+    no_na_new_levels = new_levels;
+  }
+  DEBUG_UTIL_VEC(no_na_lx);
+  DEBUG_UTIL_VEC(no_na_new_levels);
+  if (no_na_new_levels.size() == 0) {
+    DEBUG("no_na_new_levels is empty");
+    f = Rcpp::rep(NA_INTEGER, x.size());
+    f.attr("levels") = CV::create();
+    f.attr("class") = "factor";
+    return f;
+  }
+  IntegerVector new_level_old_idx = Rcpp::match(no_na_lx, no_na_new_levels);
+  DEBUG_UTIL_VEC(new_level_old_idx);
+  R_xlen_t fsz = x.size();
+  DEBUG_UTIL("fsz = " << fsz);
+  LogicalVector matched_na_level(fsz, false);
+  R_xlen_t fi = 0;
+  R_xlen_t i;
+  //#ifdef ICD_OPENMP
+  //#pragma omp parallel for shared(fi)
+  //#endif
+  for (i = 0; i < fsz; ++i) {
+    TRACE_UTIL("refactor considering i: " << i << ", x[i]: " << x[i] << ", "
+                                          << "fi: " << fi);
+    if (IntegerVector::is_na(x[i])) {
+      TRACE_UTIL("fi++, leaving NA from pos " << i << " at fi " << fi <<
+        " due to input NA value");
+      f[fi++] = NA_INTEGER;
+      continue;
+    }
+    assert(x[i] > 0);
+    assert(x[i] <= which_na_old_levels.size()); // R index (to be used in C)
+    if (which_na_old_levels[x[i] - 1]) {
+      DEBUG_UTIL("inserting NA because vec previously referenced NA level. pos " << i << " with fi=" << fi);
+      if (!exclude_na)
+        Rcpp::stop("TODO: lookup index of NA in new levels, if it exists");
+      else
+        DEBUG("fi++ no NA levels in target factor, so inserting NA value in vector.");
+      f[fi++] = NA_INTEGER;
+    }
+    assert(x[i] > 0);
+    DEBUG("x[i]  = " << x[i] << ", " << new_level_old_idx.size());
+    assert(x[i] <= new_level_old_idx.size()); // R index
+    auto cur = new_level_old_idx[x[i] - 1]; // get new R index with R index in C vec
+    if (IntegerVector::is_na(cur)) {
+      TRACE_UTIL("fi++, leaving NA from " << i << " at pos " << fi << " due to no match with new levels");
+      f[fi++] = NA_INTEGER; // in case user chooses to keep NA values
+      matched_na_level[i] = true;
+    } else {
+      TRACE_UTIL("fi++, inserting " << cur << " from pos " << i << " at "<< fi);
+      assert(cur > 0);
+      assert(cur <= no_na_new_levels.size());
+      f[fi++] = cur;
+    }
+  }
+  DEBUG_UTIL_VEC(f);
+  DEBUG_UTIL_VEC(matched_na_level);
+  // if not removing NAs, and na levels are okay, then we need to also match
+  // the NAs in the integer vector to the NA level. Base factor will keep NA
+  // values when there was no match, but index the NA level if it exists.
+  if (!exclude_na) {
+    DEBUG_UTIL("fixing NA values when there are NA levels");
+    DEBUG_UTIL_VEC(which_na_new_levels);
+    R_xlen_t n = 0;
+    while (n < which_na_new_levels.size()) {
+      if (which_na_new_levels[n]) break;
+      ++n;
+    }
+    DEBUG_UTIL("n = " << n);
+    if (n != which_na_new_levels.size()) {
+      DEBUG_UTIL("NA level found");
+      f[is_na(x)] = (int)n + 1; // R index from C match. ?matched_na_level
+    }
+    else
+      DEBUG_UTIL("No NA level found");
+  }
+  DEBUG_UTIL_VEC(x);
+  DEBUG_UTIL_VEC(f);
+  f.attr("levels") = no_na_new_levels;
+  f.attr("class") = "factor";
+  DEBUG_UTIL("max(f) " << max(f));
+  DEBUG_UTIL("f.size() " << f.size());
+  return(f);
+}
+
+// [[Rcpp::export(refactor_narm_worker)]]
+Rcpp::IntegerVector refactor_narm(const IntegerVector& x, const CV& new_levels) {
+  TRACE_UTIL("Refactoring, dropping NA");
+  IntegerVector f(x.size()); // too many if we are dropping NA values.
+  f.attr("class") = "factor";
+  CharacterVector lx = x.attr("levels");
+  DEBUG_UTIL_VEC(x);
+  DEBUG_UTIL("x size: " << x.size());
+  DEBUG_UTIL_VEC(lx);
+  DEBUG_UTIL("lx size: " << lx.size());
+  DEBUG_UTIL_VEC(new_levels);
+  DEBUG_UTIL("new_levels size: " << new_levels.size());
+  if (!Rf_isFactor(x)) Rcpp::stop("input must be a factor");
+  CV no_na_lx;
+  CV no_na_new_levels;
+  //bool any_na_lx = false;
+  LogicalVector which_na_new_levels = is_na(new_levels);
+  // TODO: get the position of the NA in new_levels for insertion later if needed.
+  LogicalVector which_na_old_levels = is_na(lx);
+  DEBUG_UTIL("Dropping NA in input factor levels");
+  DEBUG_UTIL_VEC(which_na_old_levels);
+  DEBUG_UTIL("Any old NA levels? " << Rcpp::is_true(any(which_na_old_levels)));
+  no_na_lx = lx[!which_na_old_levels];
+  DEBUG_UTIL("Dropping NA in input levels");
+  no_na_new_levels = new_levels[!which_na_new_levels];
+  DEBUG_UTIL("Any new NA levels? " << Rcpp::is_true(any(which_na_new_levels)));
+  DEBUG_UTIL_VEC(which_na_new_levels);
+  DEBUG_UTIL_VEC(no_na_lx);
+  DEBUG_UTIL_VEC(no_na_new_levels);
+  if (no_na_new_levels.size() == 0) {
+    DEBUG_UTIL("no_na_new_levels is empty, so whole result must be empty");
+    f = Rcpp::rep(NA_INTEGER, x.size());
+    f.attr("levels") = CV::create();
+    f.attr("class") = "factor";
+    return(f);
+  }
+  if (x.size() == 0) {
+    DEBUG_UTIL("x size is 0, so returning empty vector with no-NA levels.");
+    f.attr("levels") = no_na_new_levels;
+    return(f);
+  }
+  IntegerVector new_level_old_idx = Rcpp::match(no_na_lx, no_na_new_levels);
+  DEBUG_UTIL_VEC(new_level_old_idx);
+  R_xlen_t fsz = x.size();
+  DEBUG_UTIL("fsz = " << fsz);
+  R_xlen_t fi = 0;
+  R_xlen_t i;
+  //#ifdef ICD_OPENMP
+  //#pragma omp parallel for shared(fi)
+  //#endif
+  for (i = 0; i < fsz; ++i) {
+    TRACE_UTIL("refactor considering i: " << i << ", x[i]: " << x[i] << ", "
+                                          << "fi: " << fi);
+    if (IntegerVector::is_na(x[i])) {
+      TRACE_UTIL("dropping NA fom pos " << i << " (fi = " << fi <<
+        ") due to input NA value");
+      continue;
+    }
+    assert(x[i] > 0);
+    assert(x[i] <= which_na_old_levels.size()); // R index (to be used in C)
+    if (which_na_old_levels[x[i] - 1]) { // was an NA old level referenced?
+      DEBUG_UTIL("input data referenced an NA level"
+                   << "continuing without inserting from pos "
+                   << i << " with fi=" << fi);
+      continue;
+    }
+    assert(x[i] > 0);
+    assert(x[i] <= new_level_old_idx.size()); // R index
+    // get new R index from C vec or R indices. Must keep as IntegerVector
+    // length one, so NA is preserved.
+    if (IntegerVector::is_na(new_level_old_idx[x[i] - 1])) {
+      TRACE_UTIL("dropping NA from " << i << " at pos " << fi << " due to no match with new levels");
+    } else {
+      int cur_i = new_level_old_idx[x[i] - 1];
+      TRACE_UTIL("fi++, inserting " << cur_i << " from pos i = " << i << " at fi = "<< fi);
+      assert(cur_i > 0);
+      assert(cur_i <= no_na_new_levels.size());
+      f[fi++] = cur_i;
+    }
+  } // for i
+  DEBUG_UTIL_VEC(f);
+  f.attr("levels") = no_na_new_levels;
+  f.attr("class") = "factor";
+  DEBUG_UTIL("max(f) " << max(f));
+  DEBUG_UTIL("f.size() " << f.size());
+  DEBUG_UTIL("final fi = " << fi);
+  DEBUG_UTIL_VEC(f);
+  if (fi == fsz) return(f);
+  DEBUG_UTIL("copying f to shorten since NAs may have been dropped");
+  IntegerVector f_no_na(f.begin(), f.begin() + fi);
+  f_no_na.attr("levels") = no_na_new_levels;
+  f_no_na.attr("class") = "factor";
+  DEBUG_UTIL_VEC(f_no_na);
+  return(f_no_na);
+}
+
+template <int RTYPE>
+IntegerVector matchFastTemplate(const Vector<RTYPE>& x, const Vector<RTYPE>& table) {
+  return(match(x, table));
+}
+
+//' @title Faster match
+//' @name match_rcpp
+//' @description Try \pkg{Rcpp} hashing (and simpler logic) compared to
+//' internal \R \code{do_match} and \code{match5} morass. Lose the ability to use
+//' \code{incomparables}.
+//' @keywords internal
+// [[Rcpp::export(match_rcpp)]]
+SEXP matchFast(SEXP x, SEXP table) {
   switch( TYPEOF(x) ) {
-  case INTSXP: return fast_factor_template<INTSXP>(x);
-  case REALSXP: return fast_factor_template<REALSXP>(x);
-  case STRSXP: return fast_factor_template<STRSXP>(x);
+  case INTSXP: return matchFastTemplate<INTSXP>(x, table);
+  case REALSXP: return matchFastTemplate<REALSXP>(x, table);
+  case STRSXP: return matchFastTemplate<STRSXP>(x, table);
+  }
+  return R_NilValue;
+}
+
+template <int RTYPE>
+LogicalVector inFastTemplate(const Vector<RTYPE>& x, const Vector<RTYPE>& table) {
+  return(!is_na(match(x, table)));
+}
+
+//' @describeIn match_rcpp Use faster matching for %in% equivalent.
+//' @keywords internal
+// [[Rcpp::export(fin)]]
+SEXP inFast(SEXP x, SEXP table) {
+  switch( TYPEOF(x) ) {
+  case INTSXP: return inFastTemplate<INTSXP>(x, table);
+  case REALSXP: return inFastTemplate<REALSXP>(x, table);
+  case STRSXP: return inFastTemplate<STRSXP>(x, table);
   }
   return R_NilValue;
 }

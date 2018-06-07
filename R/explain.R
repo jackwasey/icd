@@ -36,54 +36,53 @@
 #' @examples
 #' # by default, just show parent code and ignore children (428.0 not shown
 #' # because 428 is present):
-#' explain(icd9_map_ahrq$CHF[1:3])
+#' explain_code(icd9_map_ahrq$CHF[1:3])
 #' # same without condensing the list. In this case, 428.0 is shown:
-#' explain(icd9_map_ahrq$CHF[1:3], brief = TRUE)
+#' explain_code(icd9_map_ahrq$CHF[1:3], brief = TRUE)
 #' # The first three in the ICD-10 equivalent are a little different:
-#' explain(icd10_map_ahrq$CHF[1:3], brief = TRUE)
+#' explain_code(icd10_map_ahrq$CHF[1:3], brief = TRUE)
 #' # nice to have magrittr, but not essential
 #' library(magrittr, warn.conflicts = FALSE, quietly = TRUE)
-#' explain(icd9_map_ahrq$CHF[1:3] %>% condense)
+#' explain_code(icd9_map_ahrq$CHF[1:3] %>% condense)
 #' @return data frame, or list of data frames, with fields for ICD-9 code, name
 #'   and description. There is no guarantee on the order of the returned
 #'   descriptions. \code{explain_table} is designed to provide results in a
 #'   reliable order (when not condensing codes, at least).
 #' @export
-explain <- function(...)
-  UseMethod("explain")
+explain_code <- function(...)
+  UseMethod("explain_code")
 
-#' @rdname explain
-#' @details \code{explain_icd} is a synonym for \code{\link{explain}} to avoid
-#'   conflict with \code{dplyr::explain}. Alternative is to use
-#'   \code{icd::explain}.
+#' @rdname explain_code
+#' @details \code{explain_icd} is a synonym for \code{\link{explain_code}}.
 #' @keywords internal
-explain_icd <- function(...) explain(...)
+explain_icd <- function(...) explain_code(...)
 
-#' @describeIn explain Explain ICD codes from a character vector, guessing
+#' @describeIn explain_code Explain ICD codes from a character vector, guessing
 #'   ICD version
 #' @export
-explain.default <- function(x, short_code = guess_short(x), condense = TRUE, brief = FALSE, warn = TRUE, ...) {
+explain_code.default <- function(x, short_code = guess_short(x), condense = TRUE, brief = FALSE, warn = TRUE, ...) {
   switch(
     guess_version.character(as_char_no_warn(x), short_code = short_code),
-    "icd9" = explain.icd9(x, short_code = short_code, condense = condense, brief = brief, warn = warn, ...),
-    "icd10" = explain.icd10(x, short_code = short_code, brief = brief, ...),
+    "icd9" = explain_code.icd9(x, short_code = short_code, condense = condense,
+                               brief = brief, warn = warn, ...),
+    "icd10" = explain_code.icd10(x, short_code = short_code, brief = brief, ...),
     stop("Unknown ICD version.")
   )
 }
 
-#' @describeIn explain Explain all ICD-9 codes in a list of vectors
+#' @describeIn explain_code Explain all ICD-9 codes in a list of vectors
 #' @export
-explain.list <- function(x, ...)
-  lapply(x, explain, ...)
+explain_code.list <- function(x, ...)
+  lapply(x, explain_code, ...)
 
-#' @describeIn explain explain character vector of ICD-9 codes.
+#' @describeIn explain_code explain character vector of ICD-9 codes.
 #' @export
-explain.icd9 <- function(...)
-  explain.icd9cm(...)
+explain_code.icd9 <- function(...)
+  explain_code.icd9cm(...)
 
-#' @describeIn explain explain character vector of ICD-9-CM codes
+#' @describeIn explain_code explain character vector of ICD-9-CM codes
 #' @export
-explain.icd9cm <- function(x, short_code = guess_short(x),
+explain_code.icd9cm <- function(x, short_code = guess_short(x),
                            condense = TRUE, brief = FALSE, warn = TRUE, ...) {
   assert(check_factor(x), check_character(x))
   assert_flag(short_code)
@@ -92,7 +91,6 @@ explain.icd9cm <- function(x, short_code = guess_short(x),
   assert_flag(warn)
   if (!short_code)
     x <- decimal_to_short.icd9(x)
-
   # if there are only defined codes, we should condense with this in mind:
   if (condense) {
     if (warn && !all(is_defined.icd9(x, short_code = TRUE))) {
@@ -107,12 +105,12 @@ explain.icd9cm <- function(x, short_code = guess_short(x),
   }
   mj <- unique(get_major.icd9(x, short_code = TRUE))
 
-  mjexplain <- names(icd::icd9_majors)[icd::icd9_majors %in% mj[mj %in% x]]
+  mjexplain <- names(icd.data::icd9_majors)[icd.data::icd9_majors %in% mj[mj %in% x]]
   # don't double count when major is also billable
   x <- x[x %nin% mj]
   desc_field <- ifelse(brief, "short_desc", "long_desc")
   res <- c(mjexplain,
-           icd::icd9cm_hierarchy[icd::icd9cm_hierarchy[["code"]] %in% x, desc_field]
+           icd.data::icd9cm_hierarchy[icd.data::icd9cm_hierarchy[["code"]] %in% x, desc_field]
   )
   if (length(res) != 0)
     res
@@ -120,9 +118,9 @@ explain.icd9cm <- function(x, short_code = guess_short(x),
     NA_character_
 }
 
-#' @describeIn explain ICD-10-CM explanation, current a minimal implementation
+#' @describeIn explain_code ICD-10-CM explanation, current a minimal implementation
 #' @export
-explain.icd10cm <- function(x, short_code = guess_short(x),
+explain_code.icd10cm <- function(x, short_code = guess_short(x),
                             condense = TRUE, brief = FALSE, warn = TRUE, ...) {
   assert_vector(x)
   assert_flag(short_code)
@@ -137,17 +135,17 @@ explain.icd10cm <- function(x, short_code = guess_short(x),
     x <- decimal_to_short.icd10(x)
 
   # this is a linear lookup, but usually only "explaining" one or a few codes at a time.
-  icd::icd10cm2016[icd::icd10cm2016[["code"]] %in% unique(as_char_no_warn(x)),
+  icd.data::icd10cm2016[icd.data::icd10cm2016[["code"]] %in% unique(as_char_no_warn(x)),
               ifelse(brief, "short_desc", "long_desc")]
 }
 
-#' @describeIn explain ICD-10 explanation, falls back on ICD-10-CM until
+#' @describeIn explain_code ICD-10 explanation, falls back on ICD-10-CM until
 #'   ICD-10 WHO copyright workaround is available
 #' @export
-explain.icd10 <- function(x, short_code = guess_short(x),
+explain_code.icd10 <- function(x, short_code = guess_short(x),
                           condense = TRUE, brief = FALSE, warn = TRUE, ...) {
   # don't pass on condense and warn until they are implemented
-  explain.icd10cm(x = x, short_code = short_code, brief = brief, ...)
+  explain_code.icd10cm(x = x, short_code = short_code, brief = brief, ...)
 }
 
 #' get ICD-9 Chapters from vector of ICD-9 codes
@@ -173,19 +171,19 @@ icd9_get_chapters <- function(x, short_code = guess_short(x), verbose = FALSE) {
 
   # could consider faster factor generation
   out <- data.frame(
-    three_digit = factor(rep(NA, lenm), levels = c(icd::icd9_majors, NA)),
-    major = factor(rep(NA, lenm), levels = c(names(icd::icd9_majors), NA)),
-    sub_chapter = factor(rep(NA, lenm), levels = c(names(icd::icd9_sub_chapters), NA)),
-    chapter = factor(rep(NA, lenm), levels = c(names(icd::icd9_chapters), NA))
+    three_digit = factor(rep(NA, lenm), levels = c(icd9_majors, NA)),
+    major = factor(rep(NA, lenm), levels = c(names(icd9_majors), NA)),
+    sub_chapter = factor(rep(NA, lenm), levels = c(names(icd9_sub_chapters), NA)),
+    chapter = factor(rep(NA, lenm), levels = c(names(icd9_chapters), NA))
   )
 
-  chap_lookup <- lapply(icd::icd9_chapters, function(y)
+  chap_lookup <- lapply(icd9_chapters, function(y)
     vec_to_env_true(
       expand_range_major.icd9(y[["start"]], y[["end"]], defined = FALSE)
     )
   )
 
-  subchap_lookup <- lapply(icd::icd9_sub_chapters, function(y)
+  subchap_lookup <- lapply(icd9_sub_chapters, function(y)
     vec_to_env_true(
       expand_range_major.icd9(y[["start"]], y[["end"]], defined = FALSE)
     )
@@ -194,22 +192,22 @@ icd9_get_chapters <- function(x, short_code = guess_short(x), verbose = FALSE) {
   for (i in seq_along(majors)) {
     if (verbose)
       message("icd9_get_chapters: working on major ", majors[i], ", row ", i)
-    for (chap_num in seq_along(icd::icd9_chapters)) {
+    for (chap_num in seq_along(icd9_chapters)) {
       if (majors[i] %ine% chap_lookup[[chap_num]]) {
-        out[i, "chapter"] <- names(icd::icd9_chapters)[chap_num]
+        out[i, "chapter"] <- names(icd9_chapters)[chap_num]
         break
       }
     }
-    for (subchap_num in seq_along(icd::icd9_sub_chapters)) {
+    for (subchap_num in seq_along(icd9_sub_chapters)) {
       if (majors[i] %ine% subchap_lookup[[subchap_num]]) {
-        out[i, "sub_chapter"] <- names(icd::icd9_sub_chapters)[subchap_num]
+        out[i, "sub_chapter"] <- names(icd9_sub_chapters)[subchap_num]
         break
       }
     }
   }
-  whch <- match(majors, icd::icd9_majors, nomatch = NA)
-  out$major[] <- names(icd::icd9_majors)[whch]
-  out$three_digit[] <- unlist(icd::icd9_majors)[whch]
+  whch <- match(majors, icd9_majors, nomatch = NA)
+  out$major[] <- names(icd9_majors)[whch]
+  out$three_digit[] <- unlist(icd9_majors)[whch]
   # out is based on unique majors of the input codes. Now merge with original
   # inputs to give output
   out <- merge(y = data.frame(three_digit = all_majors, stringsAsFactors = TRUE),
@@ -223,14 +221,14 @@ icd9_get_chapters <- function(x, short_code = guess_short(x), verbose = FALSE) {
 
 icd9_expand_chapter_majors <- function(chap) {
   expand_range_major.icd9(
-    icd::icd9_chapters[[chap]]["start"],
-    icd::icd9_chapters[[chap]]["end"],
+    icd9_chapters[[chap]]["start"],
+    icd9_chapters[[chap]]["end"],
     defined = FALSE)
 }
 
 icd9_expand_sub_chapter_majors <- function(subchap) {
   expand_range_major.icd9(
-    icd::icd9_sub_chapters[[subchap]]["start"],
-    icd::icd9_sub_chapters[[subchap]]["end"],
+    icd9_sub_chapters[[subchap]]["start"],
+    icd9_sub_chapters[[subchap]]["end"],
     defined = FALSE)
 }

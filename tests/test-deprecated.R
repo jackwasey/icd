@@ -16,6 +16,7 @@
 # along with icd. If not, see <http:#www.gnu.org/licenses/>.
 
 library("icd")
+library("icd.data")
 library("testthat", warn.conflicts = FALSE, quietly = TRUE)
 library("magrittr", warn.conflicts = FALSE, quietly = TRUE)
 library("checkmate", warn.conflicts = FALSE, quietly = TRUE)

@@ -41,7 +41,8 @@ Given vector of short_code or decimal ICD-9 codes, return (in the
 
 \item \code{icd9}: Get valid ICD-9 codes
 
-\item \code{icd10}: Get valid ICD-10 codes
+\item \code{icd10}: Get valid ICD-10 codes, currently based on ICD-10-CM
+structure, which is a super-set of WHO ICD-10
 
 \item \code{icd10cm}: Get valid ICD-10-CM codes
 }}
@@ -50,9 +51,9 @@ Given vector of short_code or decimal ICD-9 codes, return (in the
  Future versions of \pkg{icd} will drop
   the \code{icd_} prefix. For example, \code{charlson} should be used in
   favor of \code{icd_charlson}. To distinguish \pkg{icd} function calls,
-  consider using the namespace prefix \code{icd::} instead, e.g.,
-  \code{icd::charlson}. Functions which specifically operate on either ICD-9
-  or ICD-10 codes or their subtypes will retain the prefix. E.g.
+  consider using the prefix \code{icd::} instead, e.g., \code{icd::charlson}.
+  Functions which specifically operate on either ICD-9 or ICD-10 codes or
+  their sub-types will retain the prefix. E.g.
   \code{\link{icd9_comorbid_ahrq}}. \pkg{icd} specific classes also retain
   the prefix, e.g., \code{\link{icd_wide_data}}.
 }

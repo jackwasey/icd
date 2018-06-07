@@ -4432,7 +4432,7 @@ if ac_fn_c_try_link "$LINENO"; then :
   ac_cv_prog_c_openmp='none needed'
 else
   ac_cv_prog_c_openmp='unsupported'
-	  	  	  	  	            	  	            	  	  	  	                                	  	  	  	  	  	  	  for ac_option in -xopenmp -fopenmp -qopenmp \
+	  	  	  	  	            	  	            	  	  	  	                                	  	  	  	  	  	  	  	  for ac_option in -xopenmp -fopenmp -qopenmp \
                            -openmp -mp -omp -qsmp=omp -homp \
 			   -fopenmp=libomp \
                            -Popenmp --openmp; do
@@ -4689,30 +4689,8 @@ echo "Rcpp include dir is $RCPP_INCLUDE_DIR"
 echo "RcppEigen include dir is $RCPPEIGEN_INCLUDE_DIR"
 
 CPPFLAGS="$CPPFLAGS -I$R_INCLUDE_DIR -I$TESTTHAT_INCLUDE_DIR -I$RCPPEIGEN_INCLUDE_DIR -I$RCPP_INCLUDE_DIR"
-for ac_header in testthat.h
-do :
-  ac_fn_cxx_check_header_mongrel "$LINENO" "testthat.h" "ac_cv_header_testthat_h" "$ac_includes_default"
-if test "x$ac_cv_header_testthat_h" = xyes; then :
-  cat >>confdefs.h <<_ACEOF
-#define HAVE_TESTTHAT_H 1
-_ACEOF
-
-fi
-
-done
-
-for ac_header in RcppEigen.h
-do :
-  ac_fn_cxx_check_header_mongrel "$LINENO" "RcppEigen.h" "ac_cv_header_RcppEigen_h" "$ac_includes_default"
-if test "x$ac_cv_header_RcppEigen_h" = xyes; then :
-  cat >>confdefs.h <<_ACEOF
-#define HAVE_RCPPEIGEN_H 1
-_ACEOF
-
-fi
-
-done
-
+#AC_CHECK_HEADERS([testthat.h])
+#AC_CHECK_HEADERS([RcppEigen.h])
 
 #NO_CLANG_PRAGMA_WARNING=''
 #if test "x$ac_cv_header_RcppEigen_h" = xyes; then :

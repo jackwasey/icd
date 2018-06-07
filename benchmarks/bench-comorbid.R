@@ -126,3 +126,8 @@ identical(res1, res2)
 #' # substr is fastest by a good margin
 #' }
 
+
+# is RLE faster than unique?
+v <- as.character(1:1e6)
+microbenchmark::microbenchmark(rle(v)$values, unique(v), times = 100)
+#RLE much slower

@@ -111,5 +111,5 @@ test_that("sub-chapter parsing for ICD-10 went okay", {
 
 # github issue #116
 test_that("W02 is correctly parsed", {
-  expect_equal_no_icd(explain.icd10cm("W02"), character(0))
+  expect_equal_no_icd(explain_code.icd10cm("W02"), character(0))
 })

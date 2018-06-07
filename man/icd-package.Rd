@@ -68,11 +68,10 @@ ambiguities and code formats are handled.
   \code{\link{charlson}} calculates Charlson scores (Charlson Comorbidity
   Indices) directly from your patient data. If you already calculated the
   Charlson comorbidities, it is more efficient to use
-  \code{\link{charlson_from_comorbid}}. Analagously,
-  \code{\link{van_walraven}} calculates Van Walraven scores (based on the
-  Elixhauser comorbidities, instead of Charlson), and
-  \code{\link{van_walraven_from_comorbid}} if you already calculated
-  Elixhauser comorbidities}
+  \code{\link{charlson_from_comorbid}}. Similarly, \code{\link{van_walraven}}
+  calculates Van Walraven scores (based on the Elixhauser comorbidities,
+  instead of Charlson), and \code{\link{van_walraven_from_comorbid}} if you
+  already calculated Elixhauser comorbidities}
 
   \item{Validation}{
 
@@ -100,22 +99,19 @@ ambiguities and code formats are handled.
   \code{\link{wide_to_long}} and \code{\link{long_to_wide}} convert the two
   most common data structures containing patient disease data. This is more
   sophisticated and tailored to the problem than base reshaping or packages
-  like \pkg{dplyr}, although these could no doubt be used.}
+  like \CRANpkg{dplyr}, although these could no doubt be used.}
 
   \item{Explanation and decoding}{
 
-  Use \code{\link{explain}} to convert a list of codes into human-readable
-  descriptions. This function can optionally reduce the codes to a their
-  top-level groups if all the child members of a group are present.
-  \code{\link{diff_comorbid}} allows summary of the differences between
-  comorbidity mappings, e.g. to find what has changed from year-to-year or
-  between revisions by different authors. \code{\link{icd9cm_hierarchy}} is a
-  \code{data.frame} containing the full ICD-9 classification for each
-  diagnosis. \code{\link{icd9_chapters}} contains definitions of chapters,
-  sub-chapters and three-digit groups.} }
-}
-\references{
-\url{http://www.hcup-us.ahrq.gov/toolssoftware/comorbidity/comorbidity.jsp}
+  Use \code{\link{explain_code}} to convert a list of codes into
+  human-readable descriptions. This function can optionally reduce the codes
+  to a their top-level groups if all the child members of a group are
+  present. \code{\link{diff_comorbid}} allows summary of the differences
+  between comorbidity mappings, e.g. to find what has changed from
+  year-to-year or between revisions by different authors.
+  \code{\link{icd9cm_hierarchy}} is a \code{data.frame} containing the full
+  ICD-9 classification for each diagnosis. \code{\link{icd9_chapters}}
+  contains definitions of chapters, sub-chapters and three-digit groups.} }
 }
 \seealso{
 Useful links:

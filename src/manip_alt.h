@@ -18,8 +18,6 @@
 #ifndef MANIP_ALT_H_
 #define MANIP_ALT_H_
 
-#include <Rcpp.h>
-#include "Rcpp/String.h"  // for String
 #include "icd_types.h"    // for CV
 
 Rcpp::String icd9AddLeadingZeroes_alt_ShortSingle(Rcpp::String x);

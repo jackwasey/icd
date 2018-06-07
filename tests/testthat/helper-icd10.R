@@ -1,4 +1,8 @@
 message("loading helper-icd10.R")
+one_icd10_pt <- icd_long_data(
+  visit = c("a"),
+  icd = as.icd10("I2609"),
+  date = as.Date(c("2011-01-01")))
 icd10_each_quan_elix_cmb <- icd:::icd10cm(c(
   "I42.6",
   "I44.39",

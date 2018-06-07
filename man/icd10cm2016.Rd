@@ -4,11 +4,6 @@
 \name{icd10cm2016}
 \alias{icd10cm2016}
 \title{ICD-10-CM}
-\format{data frame, with columns for code, leaf status (0 or 1), short and
-  long descriptions.}
-\source{
-\url{http://www.cdc.gov/nchs/icd/icd10cm.htm}
-}
 \description{
 The public domain modified ICD-10 classification as published in the public
 domain by the US CDC. Currently this has a slightly different structure to
@@ -19,5 +14,11 @@ a code higher in the hierarchy which nevertheless will have a description.
 \details{
 There are annual revisions to this data. Currently, the 2016 edition is
 included.
+
+Format:  data frame, with columns for code, leaf status (0 or 1), short and
+  long descriptions.
+}
+\seealso{
+\code{\link[icd.data]{ls_icd_data}}
 }
 \keyword{datasets}

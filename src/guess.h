@@ -20,7 +20,6 @@
 
 #include "config.h"
 #include "icd_types.h"
-#include <Rcpp.h>
 #include <vector>
 #include <string>
 

@@ -42,12 +42,10 @@ test_that("ahrq icd9 map recreated", {
   # skip this test if the file is not already in data-raw
   if (is.null(icd9_fetch_ahrq_sas(offline = TRUE)))
     skip("data-raw/comformat2012-2013.txt must be downloaded with icd9_fetch_ahrq_sas")
-
   # same but from source data. Should be absolutely identical.
   expect_identical(result <- icd9_parse_ahrq_sas(save_data = FALSE), icd9_map_ahrq)
   checkmate::expect_list(result, len = 30)
   expect_equivalent(get_invalid.comorbidity_map(icd9_map_ahrq), list())
-
 })
 
 test_that("Quan Charlson icd9 map generated = saved", {
@@ -60,7 +58,6 @@ test_that("Quan Charlson icd9 map generated = saved", {
 })
 
 test_that("Quan Elix icd9 map generated = saved", {
-
   expect_equivalent(icd9_map_quan_elix, icd9_generate_map_quan_elix(save_data = FALSE))
   expect_equivalent(
     get_invalid.comorbidity_map(icd9_map_quan_elix, short_code = TRUE),
@@ -68,7 +65,6 @@ test_that("Quan Elix icd9 map generated = saved", {
 })
 
 test_that("Elixhauser icd9 map generated = saved", {
-
   expect_equivalent(icd9_map_elix, icd9_generate_map_elix(save_data = FALSE))
   expect_equivalent(get_invalid.comorbidity_map(icd9_map_elix, short_code = TRUE), list())
 })
@@ -88,5 +84,5 @@ test_that("icd9cm_hierarchy as saved in data can be recreated as expected", {
                     "major", "sub_chapter", "chapter")
   cmh <- icd9cm_generate_chapters_hierarchy(save_data = FALSE, verbose = FALSE, offline = TRUE)
   for (h in cmh_headings)
-    expect_equal(cmh[[h]], icd::icd9cm_hierarchy[[h]], info = paste("working on :", h))
+    expect_equal(cmh[[h]], icd9cm_hierarchy[[h]], info = paste("working on :", h))
 })

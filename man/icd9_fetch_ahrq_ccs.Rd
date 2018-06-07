@@ -2,7 +2,7 @@
 % Please edit documentation in R/parse-ahrq-ccs.R
 \name{icd9_fetch_ahrq_ccs}
 \alias{icd9_fetch_ahrq_ccs}
-\title{Download ahrq-ccs-icd9 definition}
+\title{Download AHRQ CCS ICD-9 definitions}
 \usage{
 icd9_fetch_ahrq_ccs(single = TRUE, offline)
 }
@@ -15,6 +15,6 @@ internet, only return path and file name if the file already exists in the
 raw data directory. This is helpful for testing without using the internet.}
 }
 \description{
-Download ahrq-ccs-icd9 definition
+Download AHRQ CCS ICD-9 definitions
 }
 \keyword{internal}

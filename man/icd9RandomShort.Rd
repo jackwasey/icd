@@ -17,6 +17,6 @@ icd9RandomShort(n = 5L)
 }
 \description{
 Quick pseudo-random by picking numeric, 'V' or 'E' based on modulo three of
-the number
+the number, with predominance of purely numeric codes.
 }
 \keyword{internal}

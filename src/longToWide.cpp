@@ -16,22 +16,11 @@
 // along with icd. If not, see <http://www.gnu.org/licenses/>.
 
 // [[Rcpp::interfaces(r, cpp)]]
-#include <Rcpp.h>
-#include <Rcpp/r/headers.h>             // for STRING_ELT, SEXP, PROTECT
+#include "icd_types.h"                  // for VecStr, VecVecStr, CV
 #include <string.h>                     // for strcmp
 #include <algorithm>                    // for find, fill
 #include <string>                       // for string, operator==
 #include <vector>                       // for vector
-#include "Rcpp.h"                       // for wrap
-#include "Rcpp/Dimension.h"             // for Dimension
-#include "Rcpp/api/meat/Dimension.h"    // for Dimension::operator SEXPREC *
-#include "Rcpp/api/meat/proxy.h"        // for AttributeProxyPolicy::Attribu...
-#include "Rcpp/exceptions.h"            // for stop
-#include "Rcpp/proxy/AttributeProxy.h"  // for AttributeProxyPolicy<>::Attri...
-#include "Rcpp/vector/DimNameProxy.h"   // for DimNameProxy
-#include "Rcpp/vector/Matrix.h"         // for rownames
-#include "Rcpp/vector/Vector.h"         // for Vector<>::Proxy
-#include "icd_types.h"                  // for VecStr, VecVecStr, CV
 
 #ifdef ICD_VALGRIND
 #include <valgrind/callgrind.h>

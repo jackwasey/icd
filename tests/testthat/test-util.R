@@ -217,7 +217,7 @@ test_that("icd9 field guessed from data if name fails, any order", {
   })
 })
 
-test_that("icd field not present at all", {
+test_that("get_icd_name: icd field not present at all", {
   x <- simple_pts
   x[2] <- NULL
   expect_error(get_icd_name(x))

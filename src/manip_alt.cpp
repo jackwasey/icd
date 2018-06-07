@@ -15,8 +15,8 @@
 // You should have received a copy of the GNU General Public License
 // along with icd. If not, see <http://www.gnu.org/licenses/>.
 
+#include "icd_types.h"
 #include "manip_alt.h"
-#include <Rcpp.h>               // for NA_STRING, Rf_install
 #include <string.h>                       // for strlen
 #include <string>                         // for string, operator+
 #include "convert.h"                      // for icd9DecimalToShort
@@ -65,7 +65,8 @@ Rcpp::String icd9AddLeadingZeroes_alt_ShortSingle(Rcpp::String x) {
 }
 
 //' @describeIn icd9AddLeadingZeroes_alt_ShortSingle Directly apply
-//' icd9AddLeadingZeroesShortSingle to each code without separating into parts
+//' \code{icd9AddLeadingZeroesShortSingle} to each code without separating into
+//' parts
 //' @keywords internal manip
 // [[Rcpp::export(icd9_add_leading_zeroes_alt_cpp)]]
 CV icd9AddLeadingZeroes_alt_Direct(CV x, bool short_code) {

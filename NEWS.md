@@ -1,9 +1,12 @@
 # Version 3.2
- * fixed 588 instead of 588.0 in Quan Elixhauser ICD-9 comorbidity map
- * fix regression where codes appearing in two comorbidities would only count once.
  * added Pediatric Complex Chronic Condition comorbidity classification
- * added ICD-10 procedure code data, and AHRQ procedure code classification. See ICD-10 vignette.
+ * added ICD-10 procedure code data, and AHRQ procedure code classification -- see [ICD-10 vignette](https://jackwasey.github.io/icd/articles/icd-10.html)
  * added ICD-10-CM data from US CMS for 2015 to 2018
+ * fixed 588 instead of 588.0 in Quan Elixhauser ICD-9 comorbidity map
+ * fix regression where codes appearing in two comorbidities would only count once
+ * default best-effort ordering of identifiers (e.g. Visit ID, Encounter, Patient ID) is done. There are many cases where this is not possible (disordered input data), or obvious (the IDs are given as a factor, where the factor level order does not resemble the order of appearance in the vector). For performance, this can be turned off using `restore_id_order = FALSE` in comorbidity calculations.
+ * added `icd9_comorbid_charlson` and `icd10_comorbid_charlson` as synonyms for the Quan/Deyo comorbidity calculations. `comorbid_charlson` will infer the ICD type.
+ * depend on new package [icd.data](https://github.com/jackwasey/icd.data) for large, rarely modified data files
  
 # Version 3.1.2
  * Documentation improved
@@ -42,7 +45,7 @@
  * stopped changing an attribute by reference, thanks to Tomas Kalibera for highlighting.
  
 # Version 2.1
- * Many thanks to @anobel for providing parsing and lookup of Heirarchical Condition Codes.
+ * Many thanks to @anobel for providing parsing and lookup of Hierarchical Condition Codes.
  * Many thanks to @edlee123 for contributing `explain_table` which tabulates results of looking up various information about a list of ICD codes. This is a new feature which may be changed as it is used in the real world, and more tests are developed.
  * removed `stringr` family of dependencies: it was often slower on benchmarking than built-ins, and no clear benefits other than internally consistent syntax, and stringr updates caused CRAN warnings due to a documentation change.
  * Fixes #86, thanks to @anobel

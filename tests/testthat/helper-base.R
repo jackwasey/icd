@@ -45,6 +45,12 @@ simple_pts <- data.frame(
   icd9 = few_icd9_codes,
   poa = factor(c("Y", "N", "Y", "N", "Y", "N"))
 )
+two_pts_fac <- data.frame(visit_id = c("v01", "v01", "v02", "v02"),
+                          icd9 = c("040", "000", "100", "000"),
+                          stringsAsFactors = TRUE)
+two_map_fac <- as.list(data.frame("malady" = c("100", "2000"),
+                                  "ailment" = c("003", "040"),
+                                  stringsAsFactors = TRUE))
 simple_poa_pts <- data.frame(
   visit_id = c("v1", "v2", "v3", "v4"),
   code = c("39891", "39790", "41791", "4401"),

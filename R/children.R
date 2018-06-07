@@ -40,7 +40,7 @@
 #' # empty because 102.01 is not meaningful
 #' children("10201", short_code = TRUE, defined = TRUE)
 #' children("003", short_code = TRUE, defined = TRUE) %>%
-#'   explain(condense = FALSE, short_code = TRUE)
+#'   explain_code(condense = FALSE, short_code = TRUE)
 #'
 #' children(short_code = FALSE, "100.0")
 #' children(short_code = FALSE, "100.00")
@@ -74,16 +74,15 @@ children.icd9cm <- function(x, short_code = guess_short(x),
   assert_flag(short_code)
   assert_flag(defined)
   assert_flag(billable)
-  # TODO order/unorder consistently for decimal and short
   res <- if (short_code)
     .Call("_icd_icd9ChildrenShortUnordered",
           icd9Decimal = toupper(x),
-          icd9cmReal = icd::icd9cm_hierarchy$code,
+          icd9cmReal = icd9cm_hierarchy$code,
           onlyReal = defined)
   else
     .Call("_icd_icd9ChildrenDecimalCpp",
           icd9Decimal = toupper(x),
-          icd9cmReal = icd::icd9cm_hierarchy$code,
+          icd9cmReal = icd9cm_hierarchy$code,
           onlyReal = defined)
   res <- sort_icd.icd9(res)
   res <- if (billable)
@@ -95,7 +94,7 @@ children.icd9cm <- function(x, short_code = guess_short(x),
   res
 }
 
-#' @describeIn children Get children of ICD-9 codes, based on the superset
+#' @describeIn children Get children of ICD-9 codes, based on the super-set
 #'   ICD-9-CM at present
 #' @export
 children.icd9 <- function(x, short_code = guess_short(x),
@@ -153,6 +152,6 @@ children_defined.icd10cm <- function(x, short_code = guess_short(x), warn = FALS
   x <- toupper(x)
   if (!short_code)
     x <- decimal_to_short.icd10cm(x)
-  kids <- icd10cm_children_defined_cpp(x, icd::icd10cm2016, .nc)
+  kids <- icd10cm_children_defined_cpp(x, icd10cm2016, .nc)
   as.icd10cm(kids, short_code)
 }

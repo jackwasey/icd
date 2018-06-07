@@ -12,7 +12,7 @@ icd9_chapters_to_map(x, defined = FALSE)
 
 \item{defined}{Single logical value, if \code{TRUE}, the default, only
 officially defined ICD-9 (currently ICD-9-CM) codes will be used in the
-expansion, not any lexically possible ICD-9 code.}
+expansion, not any syntactically possible ICD-9 code.}
 }
 \description{
 the chapter headings can be converted into the full set of their children,

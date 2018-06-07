@@ -25,6 +25,22 @@ cran-comments\.md$
 .*\.gcov$
 ^\.git/.*
 ^data\/icd10_who.*$
+^data\/icd10_chapters\.RData
+^data\/icd10_pcs_2015\.RData
+^data\/icd10_pcs_2018\.RData
+^data\/icd9_chapters\.RData
+^data\/icd9_majors\.RData
+^data\/vermont_dx\.RData
+^data\/icd10cm2016\.RData
+^data\/icd10_pcs_2016\.RData
+^data\/icd10_pcs\.RData
+^data\/icd9cm_billable\.RData
+^data\/icd9_sub_chapters\.RData
+^data\/icd10_pcs_2014\.RData
+^data\/icd10_pcs_2017\.RData
+^data\/icd10_sub_chapters\.RData
+^data\/icd9cm_hierarchy\.RData
+^data\/uranium_pathology\.RData
 ^data-raw\/.*$
 ^inst\/extdata\/.*$
 ^inst/doc/benchresults\.ods$
@@ -69,5 +85,6 @@ scrape_icd10_who
 ^vignettes\/.*_latexmk$
 ^vignettes\/.*\.dvi$
 ^vignettes\/.*\.fls$
+^vignettes\/.*\.R$
 ^.*\.xcworkspace$
 

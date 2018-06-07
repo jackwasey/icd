@@ -20,7 +20,7 @@ raw data directory. This is helpful for testing without using the internet.}
 }
 \description{
 Data is downloaded from AHRQ website. ICD10 codes are continually being
-updated so a paramter for \code{version} is provided. This parameter should
+updated so a parameter for \code{version} is provided. This parameter should
 mimic those found in
 \url{https://www.hcup-us.ahrq.gov/toolssoftware/ccs10/ccs10.jsp#archive}.
 These are in the format of \code{YYYY.1}, \code{YYYY.2} etc.

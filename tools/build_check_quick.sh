@@ -1,9 +1,15 @@
 #!/bin/bash
-
 set -euo pipefail
 IFS=$'\n\t'
-pushd /tmp
-R CMD build --no-build-vignettes --no-manual --resave-data=no ~/icd
+tmpd=$(mktemp -d /tmp/icdquickcheck.XXXXXXXXXXX)
+function finish {
+#	  rm -rf "$tmpd"
+  echo "Finished with $tmpd"
+}
+trap finish EXIT
+cp -r "${ICD_HOME:-$HOME/rprojects/icd}" "$tmpd"
+pushd "$tmpd"
+R CMD build --no-build-vignettes --no-manual --resave-data=no icd
 
 # try to unset debug flag, so ccache caches the results regardless of original path,
 # or configure ccache to do this
@@ -11,7 +17,8 @@ R CMD build --no-build-vignettes --no-manual --resave-data=no ~/icd
 # for all environment variable options see here:
 # https://cran.r-project.org/doc/manuals/r-release/R-ints.html#Tools
 # R_MAKEVARS_USER="$HOME/.R/Makevars.mac.quick" \
-MAKEFLAGS="-j8" \
+R_MAKEVARS_USER=${HOME}/.R/Makevars.quick \
+  MAKEFLAGS="-j16" \
   ICD_TEST_SLOW=false \
   ICD_TEST_BUILD_DATA=false \
   ICD_TEST_DEPRECATED=false \
@@ -27,5 +34,5 @@ MAKEFLAGS="-j8" \
   _R_CHECK_TESTS_NLINES_=0 \
   _R_CHECK_USE_INSTALL_LOG_=FALSE \
   _R_CHECK_VIGNETTES_NLINES_=0 \
- R CMD check --no-build-vignettes "$(ls -t /tmp/icd*.tar.gz | head -1)"
+  R CMD check --no-build-vignettes "$(ls -t $tmpd/icd*.tar.gz | head -1)"
 popd

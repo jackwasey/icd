@@ -23,16 +23,25 @@ before_build:
   - ls -aR
   - rm .Rinstignore  # do install everything for testing
   - sed -i'' -e '/.*[Dd]ata.*/d' .Rbuildignore # do include data for testing, some data not in github though
-  - Rscript -e "install.packages('Rcpp', repos = 'https://cloud.r-project.org/'); Rcpp::compileAttributes()" # make sure Rcpp generated code is made, if not checked in to repo
+  - Rscript -e "install.packages(c('devtools', 'Rcpp'), repos = 'https://cloud.r-project.org/'); Rcpp::compileAttributes()" # make sure Rcpp generated code is made, if not checked in to repo
 
 build_script:
   - travis-tool.sh install_deps
 
 environment:
   WARNINGS_ARE_ERRORS: 1
+  USE_RTOOLS: true
+  R_BUILD_ARGS: ""
+  NOT_CRAN: true
   matrix:
     - R_VERSION: release
+      ICD_TEST_DEPRECATED: true
+      ICD_TEST_BUILD_DATA: true
+      ICD_TEST_SLOW: true
     - R_VERSION: devel
+      ICD_TEST_DEPRECATED: true
+      ICD_TEST_BUILD_DATA: true
+      ICD_TEST_SLOW: true
 
 test_script:
   - travis-tool.sh run_tests

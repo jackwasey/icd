@@ -143,7 +143,7 @@ if (rtf_year_ok(test_year)) {
   })
 
   test_that("all defined codes from csv are in rtf extract", {
-    missing_from_rtf <- setdiff(short_to_decimal.icd9(icd::icd9cm_hierarchy[["code"]]), nrtf)
+    missing_from_rtf <- setdiff(short_to_decimal.icd9(icd9cm_hierarchy[["code"]]), nrtf)
     expect_equal(length(missing_from_rtf), 0,
                  info = paste("missing codes are:", paste(missing_from_rtf, collapse = ", ")))
   })

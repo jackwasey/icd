@@ -25,17 +25,14 @@
 #include <string>                       // for string
 #include <utility>                      // for pair
 #include <vector>                       // for vector
-#include <Rcpp.h> // IWYU pragma: keep
 
 #ifdef ICD_OPENMP
 #include <omp.h>
 #endif
 
 typedef std::pair<std::string, std::size_t> pas;
-
 std::string trimLeftCpp(std::string s);
 std::string strimCpp(std::string s);
-
 int getOmpCores();
 int getOmpThreads();
 int getOmpMaxThreads();
@@ -45,13 +42,17 @@ Rcpp::NumericVector randomMajorCpp(int n);
 VecStr icd9RandomShortN(VecStr::size_type n);
 VecStr icd9RandomShortV(VecStr::size_type n);
 VecStr icd9RandomShortE(VecStr::size_type n);
-VecStr icd9RandomShort(VecStr::size_type n);
-
+CV icd9RandomShort(unsigned int n);
 int valgrindCallgrindStart(bool zerostats);
 int valgrindCallgrindStop();
-
 bool icd9CompareStrings(std::string a, std::string b);
 std::vector<std::size_t> icd9OrderCpp(VecStr x);
+Rcpp::IntegerVector factorNoSort(const Rcpp::CharacterVector& x,
+                           const Rcpp::CharacterVector& levels,
+                           const bool na_rm = false);
+Rcpp::IntegerVector refactor(const Rcpp::IntegerVector& x, const CV& new_levels,
+                             bool exclude_na = true);
+Rcpp::IntegerVector refactor_narm(const Rcpp::IntegerVector& x, const CV& new_levels);
 
 // concatenate a vector of vectors
 template <class COCiter, class Oiter>
@@ -61,15 +62,4 @@ void my_concat (COCiter start, COCiter end, Oiter dest) {
     ++start;
   }
 }
-
-// template for factors of different S types
-template <int RTYPE>
-Rcpp::IntegerVector fast_factor_template( const Rcpp::Vector<RTYPE>& x ) {
-  Rcpp::Vector<RTYPE> levs = unique(x); // or sort_unique
-  Rcpp::IntegerVector out = match(x, levs);
-  out.attr("levels") = Rcpp::as<Rcpp::CharacterVector>(levs);
-  out.attr("class") = "factor";
-  return out;
-}
-
 #endif /* UTIL_H_ */

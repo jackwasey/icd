@@ -20,7 +20,6 @@
 
 #include <stddef.h>     // for size_t
 #include "icd_types.h"
-#include <Rcpp.h>
 #include "range-const.h"                    // for v_empty_std, v0, v0_std, v1
 
 CV icd9ChildrenShort(CV icd9Short, const VecStr& icd9cmReal, bool onlyReal = true);

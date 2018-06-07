@@ -15,8 +15,8 @@
 // You should have received a copy of the GNU General Public License
 // along with icd. If not, see <http://www.gnu.org/licenses/>.
 
+#include "icd_types.h"
 #include "convert_alt.h"
-#include <Rcpp.h>       // for NA_STRING, Rf_install
 #include <string.h>               // for strlen
 #include "is.h"                   // for icd9IsASingleVE, icd9IsASingleE
 #include "util.h"                 // for strimCpp
