@@ -58,7 +58,7 @@ patient_data <- data.frame(
 ## Features
 
  * find comorbidities of patients based on admission or discharge ICD-9 or ICD-10 codes, e.g. Cancer, Heart Disease
-     + several standard mappings of ICD codes to comorbidities are included (Quan, Deyo, Elixhauser, AHRQ)
+     + several standard mappings of ICD codes to comorbidities are included (Quan, Deyo, Elixhauser, AHRQ, PCCC)
      + very fast assignment of ICD codes to comorbidities (using matrix multiplication with C and C++ internally)
  * summarizing groups of ICD codes in natural language
  * Charlson and Van Walraven score calculations
