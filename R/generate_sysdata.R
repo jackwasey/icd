@@ -74,7 +74,7 @@ generate_sysdata <- function(save_data = TRUE) {
   # because these are probably not of interest to a user and would clutter an
   # already busy namespace.
   if (save_data)
-    save(list = sysdata_names, file = path)
+    save(list = sysdata_names, file = path, compress = "xz")
   invisible(mget(sysdata_names))
 }
 
