@@ -17,7 +17,7 @@ elemeents with two million new levels. Three times faster for any \code{n > 1e6}
 With NAs, margin is smaller, but still beats base \code{factor}.
 }
 \examples{
-\donttest{
+\dontrun{
   f <- factor(c(1, 2, 3))
   icd:::refactor(f, c("2", "3"))
   f <- factor(c(1, 2, NA))

@@ -127,7 +127,7 @@ factor_split_na <- function(x, levels, factor_fun = factor_nosort_rcpp) {
 #'   `refactor` will not count `NA` as a factor level if there are `NA` elements
 #'   in the input data.
 #' @examples
-#' \donttest{
+#' \dontrun{
 #'   f <- factor(c(1, 2, 3))
 #'   icd:::refactor(f, c("2", "3"))
 #'   f <- factor(c(1, 2, NA))
