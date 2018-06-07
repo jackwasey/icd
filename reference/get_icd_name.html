@@ -22,9 +22,11 @@ the ICD codes — get_icd_name • icd</title>
 <!-- clipboard.js -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha384-cV+rhyOuRHc9Ub/91rihWcGmMmCXDeksTtCihMupQHSsi8GIIRDG0ThDc3HGQFJ3" crossorigin="anonymous"></script>
 
+<!-- sticky kit -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script>
+
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
-<script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
 
 
@@ -33,11 +35,13 @@ the ICD codes — get_icd_name • icd</title>
 the ICD codes — get_icd_name" />
 
 <meta property="og:description" content="guess which field contains the (only) ICD code, in order of preference, the
-column name has an icd code class, case-insensitive regexes of commonly used
-names for ICD code fields, a single column has more than 10
-If the result is not specified by class, or exactly with icd_name
-being given, we confirm there are at least some valid ICD codes in there" />
+column name has an icd code class, case-insensitive regular expressions of
+commonly used names for ICD code fields, a single column has more than 10
+valid ICD codes. If the result is not specified by class, or exactly with
+icd_name being given, we confirm there are at least some valid ICD
+codes in there" />
 <meta name="twitter:card" content="summary" />
+
 
 
 <!-- mathjax -->
@@ -140,10 +144,11 @@ the ICD codes</h1>
     <div class="ref-description">
     
     <p>guess which field contains the (only) ICD code, in order of preference, the
-column name has an icd code class, case-insensitive regexes of commonly used
-names for ICD code fields, a single column has more than 10<!-- % valid ICD codes. -->
-If the result is not specified by class, or exactly with <code>icd_name</code>
-being given, we confirm there are at least some valid ICD codes in there</p>
+column name has an icd code class, case-insensitive regular expressions of
+commonly used names for ICD code fields, a single column has more than 10<!-- % -->
+valid ICD codes. If the result is not specified by class, or exactly with
+<code>icd_name</code> being given, we confirm there are at least some valid ICD
+codes in there</p>
     
     </div>
 

@@ -22,9 +22,11 @@ Finding Comorbidities — icd-package • icd</title>
 <!-- clipboard.js -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha384-cV+rhyOuRHc9Ub/91rihWcGmMmCXDeksTtCihMupQHSsi8GIIRDG0ThDc3HGQFJ3" crossorigin="anonymous"></script>
 
+<!-- sticky kit -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script>
+
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
-<script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
 
 
@@ -40,6 +42,7 @@ comorbidities. ICD-9 and ICD-10 comorbidity mappings from Quan (Deyo
 and Elixhauser versions), Elixhauser and AHRQ included.  Common
 ambiguities and code formats are handled." />
 <meta name="twitter:card" content="summary" />
+
 
 
 <!-- mathjax -->
@@ -190,11 +193,10 @@ ambiguities and code formats are handled.</p>
     <dt>Risk scoring systems</dt><dd><p><code><a href='charlson.html'>charlson</a></code> calculates Charlson scores (Charlson Comorbidity
   Indices) directly from your patient data. If you already calculated the
   Charlson comorbidities, it is more efficient to use
-  <code><a href='charlson_from_comorbid.html'>charlson_from_comorbid</a></code>. Analagously,
-  <code><a href='van_walraven.html'>van_walraven</a></code> calculates Van Walraven scores (based on the
-  Elixhauser comorbidities, instead of Charlson), and
-  <code><a href='van_walraven.html'>van_walraven_from_comorbid</a></code> if you already calculated
-  Elixhauser comorbidities</p></dd>
+  <code><a href='charlson_from_comorbid.html'>charlson_from_comorbid</a></code>. Similarly, <code><a href='van_walraven.html'>van_walraven</a></code>
+  calculates Van Walraven scores (based on the Elixhauser comorbidities,
+  instead of Charlson), and <code><a href='van_walraven.html'>van_walraven_from_comorbid</a></code> if you
+  already calculated Elixhauser comorbidities</p></dd>
     <dt>Validation</dt><dd><p><code><a href='is_valid.html'>is_valid</a></code> checks whether ICD-9 codes are syntactically valid
   (although not necessarily genuine ICD-9 diagnoses). In contrast,
   <code><a href='is_defined.html'>is_defined</a></code> checks whether ICD-9 codes correspond to diagnoses

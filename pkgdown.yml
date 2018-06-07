@@ -1,6 +1,6 @@
 pandoc: 1.19.2.4
-pkgdown: 1.0.0.9000
-pkgdown_sha: d7c658122bfbd143552cd28585f867dd344302ad
+pkgdown: 1.1.0
+pkgdown_sha: ~
 articles:
   Charlson_and_other_scores: Charlson_and_other_scores.html
   Comparing_Comorbidity_Mappings_Vignette: Comparing_Comorbidity_Mappings_Vignette.html

@@ -21,9 +21,11 @@
 <!-- clipboard.js -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha384-cV+rhyOuRHc9Ub/91rihWcGmMmCXDeksTtCihMupQHSsi8GIIRDG0ThDc3HGQFJ3" crossorigin="anonymous"></script>
 
+<!-- sticky kit -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script>
+
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
-<script src="../jquery.sticky-kit.min.js"></script>
 <script src="../pkgdown.js"></script>
 
 
@@ -35,6 +37,7 @@ fastmatch. The speed increase with fastmatch for ICD-9 codes
 was about 33
 using Rcpp, and a hashed matching algorithm." />
 <meta name="twitter:card" content="summary" />
+
 
 
 <!-- mathjax -->
@@ -136,9 +139,9 @@ using Rcpp, and a hashed matching algorithm." />
     <div class="ref-description">
     
     <p>This function generates factors more quickly, without leveraging
-<code>fastmatch</code>. The speed increase with <code>fastmatch</code> for ICD-9 codes
+<span class="pkg">fastmatch</span>. The speed increase with <span class="pkg">fastmatch</span> for ICD-9 codes
 was about 33<!-- % reduction for 10 million codes. SOMEDAY could be faster still -->
-using <code>Rcpp</code>, and a hashed matching algorithm.</p>
+using <span class="pkg">Rcpp</span>, and a hashed matching algorithm.</p>
     
     </div>
 
@@ -164,7 +167,7 @@ type as <code>x</code>. By default, we compute the levels as
     </tr>
     <tr>
       <th>na.rm</th>
-      <td><p>Logical, if <code>TRUE</code>, simple drop all NA values, i.e. values with
+      <td><p>Logical, if <code>TRUE</code>, simple drop all NA values, i.e., values with
 no corresponding level.</p></td>
     </tr>
     <tr>
@@ -186,10 +189,10 @@ is.ordered(x), nmax = NA</code></p>
     <h2 class="hasAnchor" id="functions"><a class="anchor" href="#functions"></a>Functions</h2>
 
     <ul>
-<li><p><code>factor_nosort_rcpp_worker</code>: Rcpp implementation, requiring character vector
-inputs only, no argument checking.</p></li>
-<li><p><code>factor_nosort_rcpp</code>: R wrapper to the Rcpp function. Will re-factor a
-factor with new levels without converting to string vector.</p></li>
+<li><p><code>factor_nosort_rcpp_worker</code>: <span class="pkg">Rcpp</span> implementation, requiring character
+vector inputs only, no argument checking.</p></li>
+<li><p><code>factor_nosort_rcpp</code>: R wrapper to the <span class="pkg">Rcpp</span> function. Will
+re-factor a factor with new levels without converting to string vector.</p></li>
 </ul>
     
 
