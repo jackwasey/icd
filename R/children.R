@@ -94,7 +94,7 @@ children.icd9cm <- function(x, short_code = guess_short(x),
   res
 }
 
-#' @describeIn children Get children of ICD-9 codes, based on the superset
+#' @describeIn children Get children of ICD-9 codes, based on the super-set
 #'   ICD-9-CM at present
 #' @export
 children.icd9 <- function(x, short_code = guess_short(x),

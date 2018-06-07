@@ -20,16 +20,16 @@ factor_nosort_rcpp(x, levels, na.rm = FALSE)
 type as \code{x}. By default, we compute the levels as
 \code{sort(unique.default(x))}.}
 
-\item{na.rm}{Logical, if \code{TRUE}, simple drop all NA values, i.e. values with
+\item{na.rm}{Logical, if \code{TRUE}, simple drop all NA values, i.e., values with
 no corresponding level.}
 
 \item{labels}{A set of labels used to rename the levels, if desired.}
 }
 \description{
 This function generates factors more quickly, without leveraging
-\code{fastmatch}. The speed increase with \code{fastmatch} for ICD-9 codes
+\pkg{fastmatch}. The speed increase with \pkg{fastmatch} for ICD-9 codes
 was about 33% reduction for 10 million codes. SOMEDAY could be faster still
-using \code{Rcpp}, and a hashed matching algorithm.
+using \pkg{Rcpp}, and a hashed matching algorithm.
 }
 \details{
 \code{NaN}s are converted to \code{NA} when used on numeric values. Extracted
@@ -44,11 +44,11 @@ I don't think there is any requirement for factor levels to be
 }
 \section{Functions}{
 \itemize{
-\item \code{factor_nosort_rcpp_worker}: Rcpp implementation, requiring character vector
-inputs only, no argument checking.
+\item \code{factor_nosort_rcpp_worker}: \pkg{Rcpp} implementation, requiring character
+vector inputs only, no argument checking.
 
-\item \code{factor_nosort_rcpp}: R wrapper to the Rcpp function. Will re-factor a
-factor with new levels without converting to string vector.
+\item \code{factor_nosort_rcpp}: R wrapper to the \pkg{Rcpp} function. Will
+re-factor a factor with new levels without converting to string vector.
 }}
 
 \examples{

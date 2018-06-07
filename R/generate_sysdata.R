@@ -263,7 +263,7 @@ generate_icd10_sources <- function(save_data = TRUE) {
 }
 
 #' Generate ICD-9 and ICD-10 Chapter names and number ranges, transcribed from
-#' the official definitons from WHO and extended by US CMS.
+#' the official definitions from WHO and extended by US CMS.
 #' @template save_data
 #' @keywords internal datasets
 generate_icd_chapters <- function(save_data = TRUE) {

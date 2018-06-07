@@ -18,10 +18,4 @@
 
 #ifndef COMORBID_ALT_H_
 #define COMORBID_ALT_H_
-
-#include "icd_types.h"                 // for ComorbidOut, VecVecInt, VecVec...
-void lookupComorbid_alt_ByChunkForTaskloop(const VecVecInt& vcdb,
-                                           const VecVecInt& map,
-                                           NewOut& out);
-
 #endif /* COMORBID_ALT_H_ */

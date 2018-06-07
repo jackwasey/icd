@@ -216,35 +216,6 @@ comorbidMatMul <- function(icd9df, icd9Mapping, visitId, icd9Field, threads = 8L
     .Call(`_icd_comorbidMatMul`, icd9df, icd9Mapping, visitId, icd9Field, threads, chunk_size, omp_chunk_size)
 }
 
-#' alternate comorbidity search
-#'
-#' alternate version using much simplified with Openmp taskloop, only in OMP4.5
-#'
-#' @keywords internal
-lookupComorbid_alt_ByChunkForTaskloop <- function(vcdb, map, out) {
-    invisible(.Call(`_icd_lookupComorbid_alt_ByChunkForTaskloop`, vcdb, map, out))
-}
-
-#' Simpler comorbidity assignment
-#'
-#' Re-written without OpenMP initially, but structured more simply, with the motivation of
-#' using modern compiler features and OpenMP 4.5 with 'taskloop' construct.
-#' \url{https://developers.redhat.com/blog/2016/03/22/what-is-new-in-openmp-4-5-3/}
-#'
-#' # basic test
-#' # use tests/testthat/helper-base.R for two_pts and two_map
-#' comorbid(two_pts, two_map, comorbid_fun = icd:::icd9Comorbid_alt_Taskloop)
-#' @keywords internal
-icd9Comorbid_alt_Taskloop <- function(icd9df, icd9Mapping, visitId, icd9Field, threads = 8L, chunk_size = 256L, omp_chunk_size = 1L) {
-    .Call(`_icd_icd9Comorbid_alt_Taskloop`, icd9df, icd9Mapping, visitId, icd9Field, threads, chunk_size, omp_chunk_size)
-}
-
-#' @describeIn icd9Comorbid_alt_Taskloop Taskloop but finish with R transpose
-#' @keywords internal
-icd9Comorbid_alt_Taskloop2 <- function(icd9df, icd9Mapping, visitId, icd9Field, threads = 8L, chunk_size = 256L, omp_chunk_size = 1L) {
-    .Call(`_icd_icd9Comorbid_alt_Taskloop2`, icd9df, icd9Mapping, visitId, icd9Field, threads, chunk_size, omp_chunk_size)
-}
-
 icd9MajMinToCode_alt_Old <- function(mjr, mnr, isShort) {
     .Call(`_icd_icd9MajMinToCode_alt_Old`, mjr, mnr, isShort)
 }
@@ -307,9 +278,11 @@ fastIntToString_alt_Std <- function(x) {
 }
 
 #' @title Convert integers to strings as quickly as possible
-#' @description Have tried R, sprintf with Rcpp and C++ standard library.
+#' @description Have tried R, `sprintf` with \pkg{Rcpp} and C++ standard
+#' library. Doesn't do bounds checking, but limited by length of integers.
 #' @param x Vector of integers
 #' @return Vector of characters
+#' @md
 #' @keywords internal manip
 fastIntToStringRcpp <- function(x) {
     .Call(`_icd_fastIntToStringRcpp`, x)
@@ -382,7 +355,8 @@ icd9AddLeadingZeroes_alt_ShortSingle <- function(x) {
 }
 
 #' @describeIn icd9AddLeadingZeroes_alt_ShortSingle Directly apply
-#' icd9AddLeadingZeroesShortSingle to each code without separating into parts
+#' \code{icd9AddLeadingZeroesShortSingle} to each code without separating into
+#' parts
 #' @keywords internal manip
 icd9_add_leading_zeroes_alt_cpp <- function(x, short_code) {
     .Call(`_icd_icd9AddLeadingZeroes_alt_Direct`, x, short_code)
@@ -536,8 +510,8 @@ icd9_order_cpp <- function(x) {
     .Call(`_icd_icd9OrderCpp`, x)
 }
 
-#' @describeIn factor_nosort Rcpp implementation, requiring character vector
-#'   inputs only, no argument checking.
+#' @describeIn factor_nosort \pkg{Rcpp} implementation, requiring character
+#' vector inputs only, no argument checking.
 #' @keywords internal manip
 factor_nosort_rcpp_worker <- function(x, levels, na_rm) {
     .Call(`_icd_factorNoSort`, x, levels, na_rm)
@@ -558,15 +532,15 @@ refactor_narm_worker <- function(x, new_levels) {
 
 #' @title Faster match
 #' @name match_rcpp
-#' @description Try Rcpp hashing (and simpler logic) compared to R's internal
-#'   do_match and match5 morass. Lose the ability to use \code{incomparables}
-#'   in initial implementation.
+#' @description Try \pkg{Rcpp} hashing (and simpler logic) compared to
+#' internal \R \code{do_match} and \code{match5} morass. Lose the ability to use
+#' \code{incomparables}.
 #' @keywords internal
 match_rcpp <- function(x, table) {
     .Call(`_icd_matchFast`, x, table)
 }
 
-#' @describeIn match_rcpp Use faster Rcpp matching for %in%
+#' @describeIn match_rcpp Use faster matching for %in% equivalent.
 #' @keywords internal
 fin <- function(x, table) {
     .Call(`_icd_inFast`, x, table)

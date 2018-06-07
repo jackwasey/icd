@@ -522,52 +522,6 @@ RcppExport SEXP _icd_comorbidMatMul(SEXP icd9dfSEXP, SEXP icd9MappingSEXP, SEXP 
     UNPROTECT(1);
     return rcpp_result_gen;
 }
-// lookupComorbid_alt_ByChunkForTaskloop
-void lookupComorbid_alt_ByChunkForTaskloop(const VecVecInt& vcdb, const VecVecInt& map, NewOut& out);
-RcppExport SEXP _icd_lookupComorbid_alt_ByChunkForTaskloop(SEXP vcdbSEXP, SEXP mapSEXP, SEXP outSEXP) {
-BEGIN_RCPP
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const VecVecInt& >::type vcdb(vcdbSEXP);
-    Rcpp::traits::input_parameter< const VecVecInt& >::type map(mapSEXP);
-    Rcpp::traits::input_parameter< NewOut& >::type out(outSEXP);
-    lookupComorbid_alt_ByChunkForTaskloop(vcdb, map, out);
-    return R_NilValue;
-END_RCPP
-}
-// icd9Comorbid_alt_Taskloop
-SEXP icd9Comorbid_alt_Taskloop(const SEXP& icd9df, const Rcpp::List& icd9Mapping, const std::string visitId, const std::string icd9Field, const int threads, const int chunk_size, const int omp_chunk_size);
-RcppExport SEXP _icd_icd9Comorbid_alt_Taskloop(SEXP icd9dfSEXP, SEXP icd9MappingSEXP, SEXP visitIdSEXP, SEXP icd9FieldSEXP, SEXP threadsSEXP, SEXP chunk_sizeSEXP, SEXP omp_chunk_sizeSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const SEXP& >::type icd9df(icd9dfSEXP);
-    Rcpp::traits::input_parameter< const Rcpp::List& >::type icd9Mapping(icd9MappingSEXP);
-    Rcpp::traits::input_parameter< const std::string >::type visitId(visitIdSEXP);
-    Rcpp::traits::input_parameter< const std::string >::type icd9Field(icd9FieldSEXP);
-    Rcpp::traits::input_parameter< const int >::type threads(threadsSEXP);
-    Rcpp::traits::input_parameter< const int >::type chunk_size(chunk_sizeSEXP);
-    Rcpp::traits::input_parameter< const int >::type omp_chunk_size(omp_chunk_sizeSEXP);
-    rcpp_result_gen = Rcpp::wrap(icd9Comorbid_alt_Taskloop(icd9df, icd9Mapping, visitId, icd9Field, threads, chunk_size, omp_chunk_size));
-    return rcpp_result_gen;
-END_RCPP
-}
-// icd9Comorbid_alt_Taskloop2
-SEXP icd9Comorbid_alt_Taskloop2(const SEXP& icd9df, const Rcpp::List& icd9Mapping, const std::string visitId, const std::string icd9Field, const int threads, const int chunk_size, const int omp_chunk_size);
-RcppExport SEXP _icd_icd9Comorbid_alt_Taskloop2(SEXP icd9dfSEXP, SEXP icd9MappingSEXP, SEXP visitIdSEXP, SEXP icd9FieldSEXP, SEXP threadsSEXP, SEXP chunk_sizeSEXP, SEXP omp_chunk_sizeSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const SEXP& >::type icd9df(icd9dfSEXP);
-    Rcpp::traits::input_parameter< const Rcpp::List& >::type icd9Mapping(icd9MappingSEXP);
-    Rcpp::traits::input_parameter< const std::string >::type visitId(visitIdSEXP);
-    Rcpp::traits::input_parameter< const std::string >::type icd9Field(icd9FieldSEXP);
-    Rcpp::traits::input_parameter< const int >::type threads(threadsSEXP);
-    Rcpp::traits::input_parameter< const int >::type chunk_size(chunk_sizeSEXP);
-    Rcpp::traits::input_parameter< const int >::type omp_chunk_size(omp_chunk_sizeSEXP);
-    rcpp_result_gen = Rcpp::wrap(icd9Comorbid_alt_Taskloop2(icd9df, icd9Mapping, visitId, icd9Field, threads, chunk_size, omp_chunk_size));
-    return rcpp_result_gen;
-END_RCPP
-}
 // icd9MajMinToCode_alt_Old
 CV icd9MajMinToCode_alt_Old(CV mjr, CV mnr, bool isShort);
 RcppExport SEXP _icd_icd9MajMinToCode_alt_Old(SEXP mjrSEXP, SEXP mnrSEXP, SEXP isShortSEXP) {

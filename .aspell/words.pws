@@ -1,4 +1,4 @@
-personal_ws-1.1 en 64 UTF-8
+personal_ws-1.1 en 74 UTF-8
 arrythmia
 Musculoskeletal
 Myocardial
@@ -19,6 +19,8 @@ Wasey
 Wercker
 Wickham
 wmurphyrd
+Hadley
+Eigen
 Charlson's
 Deyo's
 Elixhauser's
@@ -32,10 +34,13 @@ Wasey's
 Wercker's
 Wickham's
 wmurphyrd's
+Hadley's
+Eigen's
 AHRQ
 BISHCA
 CC
 CCs
+CCS
 CRAN
 CDC
 CMS
@@ -47,11 +52,15 @@ ICD
 HCC
 HCCs
 icd
+JAMA
 RTF
 SAS
 VAHHS
 NSO
 WSU
+PCCC
+HCUP
+BLAS
 comorbidity
 comorbidities
 comorbid
@@ -62,4 +71,5 @@ TODO
 MERCHANTABILITY
 prepend
 prepends
+precomputed
 Adjustors

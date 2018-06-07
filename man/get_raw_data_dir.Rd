@@ -7,8 +7,7 @@
 get_raw_data_dir()
 }
 \description{
-Following Hadley Wickham recommendations
-in R Packages, should be in inst/extdata. devtools overrides
-\code{system.file}.
+Following Hadley Wickham recommendations in R Packages, this should be in
+\code{inst/extdata}. \pkg{devtools} overrides \code{system.file}.
 }
 \keyword{internal}

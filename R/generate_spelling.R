@@ -11,14 +11,15 @@ generate_spelling <- function(out = ".aspell/words.pws", save_data = TRUE) {
                "Puerperium", "laterality", "Infarction", "healthcare")
   proper_nouns <- c("Charlson", "Deyo", "Elixhauser", "Mansour", "OpenMP", "Quan",
                     "Sharabiani", "Travis", "Walraven", "Wasey", "Wercker", "Wickham",
-                    "wmurphyrd")
+                    "wmurphyrd", "Hadley", "Eigen")
   proper_nouns <- c(proper_nouns, paste(proper_nouns, "'s", sep = ""))
-  acronyms <- c("AHRQ", "BISHCA", "CC", "CCs", "CRAN", "CDC", "CMS", "CSV", "DRG",
-                "POA", "HTN", "ICD", "HCC", "HCCs", "icd",
-                "RTF", "SAS", "VAHHS", "NSO", "WSU")
+  acronyms <- c("AHRQ", "BISHCA", "CC", "CCs", "CCS", "CRAN", "CDC", "CMS",
+                "CSV", "DRG", "POA", "HTN", "ICD", "HCC", "HCCs", "icd", "JAMA",
+                "RTF", "SAS", "VAHHS", "NSO", "WSU", "PCCC", "HCUP", "BLAS")
   other <- c("comorbidity", "comorbidities", "comorbid",
              "unclassifiable", "requestor", "Transuranium", "TODO",
-             "MERCHANTABILITY", "prepend", "prepends", "Adjustors")
+             "MERCHANTABILITY", "prepend", "prepends", "precomputed",
+             "Adjustors")
   # "requestor" in Vermont data licence
   words <- c(medical, proper_nouns, acronyms, other)
   if (save_data)

@@ -17,9 +17,10 @@ of \code{x}'s columns) and returned unchanged}
 }
 \description{
 guess which field contains the (only) ICD code, in order of preference, the
-column name has an icd code class, case-insensitive regexes of commonly used
-names for ICD code fields, a single column has more than 10% valid ICD codes.
-If the result is not specified by class, or exactly with \code{icd_name}
-being given, we confirm there are at least some valid ICD codes in there
+column name has an icd code class, case-insensitive regular expressions of
+commonly used names for ICD code fields, a single column has more than 10%
+valid ICD codes. If the result is not specified by class, or exactly with
+\code{icd_name} being given, we confirm there are at least some valid ICD
+codes in there
 }
 \keyword{internal}

@@ -13,7 +13,8 @@ fastIntToStringRcpp(x)
 Vector of characters
 }
 \description{
-Have tried R, sprintf with Rcpp and C++ standard library.
+Have tried R, \code{sprintf} with \pkg{Rcpp} and C++ standard
+library. Doesn't do bounds checking, but limited by length of integers.
 }
 \keyword{internal}
 \keyword{manip}

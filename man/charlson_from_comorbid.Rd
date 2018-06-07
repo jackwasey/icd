@@ -3,7 +3,7 @@
 \name{charlson_from_comorbid}
 \alias{charlson_from_comorbid}
 \alias{icd_charlson_from_comorbid}
-\title{Calculate Charlson scores from pre-computed Charlson comorbidities}
+\title{Calculate Charlson scores from precomputed Charlson comorbidities}
 \usage{
 charlson_from_comorbid(x, visit_name = NULL, hierarchy = FALSE,
   scoring_system = c("original", "charlson", "quan"))
@@ -11,7 +11,7 @@ charlson_from_comorbid(x, visit_name = NULL, hierarchy = FALSE,
 icd_charlson_from_comorbid(...)
 }
 \arguments{
-\item{x}{data.frame or matrix, typically the output of a comorbordity
+\item{x}{data.frame or matrix, typically the output of a comorbidity
 calculation which uses the Charlson categories, e.g.
 \code{comorbid_quan_deyo}}
 
@@ -36,7 +36,7 @@ comorbidity, whereas \code{quan} uses the updated weights from Quan 2011.}
 \item{...}{arguments passed on to other functions}
 }
 \description{
-Calculate Charlson scores from pre-computed Charlson comorbidities, instead
+Calculate Charlson scores from precomputed Charlson comorbidities, instead
 of directly from the ICD codes. This is useful if the comorbidity calculation
 is time consuming. Commonly, both the Charlson comorbidities and the Charlson
 scores will be calculated, and this function provides just that second step.
@@ -45,9 +45,9 @@ scores will be calculated, and this function provides just that second step.
  Future versions of \pkg{icd} will drop
   the \code{icd_} prefix. For example, \code{charlson} should be used in
   favor of \code{icd_charlson}. To distinguish \pkg{icd} function calls,
-  consider using the namespace prefix \code{icd::} instead, e.g.,
-  \code{icd::charlson}. Functions which specifically operate on either ICD-9
-  or ICD-10 codes or their subtypes will retain the prefix. E.g.
+  consider using the prefix \code{icd::} instead, e.g., \code{icd::charlson}.
+  Functions which specifically operate on either ICD-9 or ICD-10 codes or
+  their sub-types will retain the prefix. E.g.
   \code{\link{icd9_comorbid_ahrq}}. \pkg{icd} specific classes also retain
   the prefix, e.g., \code{\link{icd_wide_data}}.
 }

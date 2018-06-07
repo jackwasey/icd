@@ -224,8 +224,8 @@ std::vector<std::size_t> icd9OrderCpp(VecStr x) {
   return out;
 }
 
-//' @describeIn factor_nosort Rcpp implementation, requiring character vector
-//'   inputs only, no argument checking.
+//' @describeIn factor_nosort \pkg{Rcpp} implementation, requiring character
+//' vector inputs only, no argument checking.
 //' @keywords internal manip
 // [[Rcpp::export(factor_nosort_rcpp_worker)]]
 IntegerVector factorNoSort(const CharacterVector& x,
@@ -463,9 +463,9 @@ IntegerVector matchFastTemplate(const Vector<RTYPE>& x, const Vector<RTYPE>& tab
 
 //' @title Faster match
 //' @name match_rcpp
-//' @description Try Rcpp hashing (and simpler logic) compared to R's internal
-//'   do_match and match5 morass. Lose the ability to use \code{incomparables}
-//'   in initial implementation.
+//' @description Try \pkg{Rcpp} hashing (and simpler logic) compared to
+//' internal \R \code{do_match} and \code{match5} morass. Lose the ability to use
+//' \code{incomparables}.
 //' @keywords internal
 // [[Rcpp::export(match_rcpp)]]
 SEXP matchFast(SEXP x, SEXP table) {
@@ -482,7 +482,7 @@ LogicalVector inFastTemplate(const Vector<RTYPE>& x, const Vector<RTYPE>& table)
   return(!is_na(match(x, table)));
 }
 
-//' @describeIn match_rcpp Use faster Rcpp matching for %in%
+//' @describeIn match_rcpp Use faster matching for %in% equivalent.
 //' @keywords internal
 // [[Rcpp::export(fin)]]
 SEXP inFast(SEXP x, SEXP table) {

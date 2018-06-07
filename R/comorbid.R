@@ -42,7 +42,7 @@ poa_choices <- c("yes", "no", "notYes", "notNo")
 #' 'hypertension' and 'hypertension with complications' are present. These rules
 #' are applied by default; if the exact fields from the original mappings are
 #' needed, use \code{hierarchy = FALSE}. For comorbidity counting, Charlson or
-#' VanWalraven scores the default should be used to apply the rules. For more
+#' Van Walraven scores the default should be used to apply the rules. For more
 #' about computing Hierarchical Condition Codes (HCC), see
 #' \code{\link{comorbid_hcc}} For more about comorbidities following the
 #' Clinical Classification Software (CCS) rules from AHRQ, see
@@ -76,7 +76,7 @@ poa_choices <- c("yes", "no", "notYes", "notNo")
 #' @inheritParams categorize restore_id_order
 #' @details The order of visits may change depending on the original sequence,
 #'   and the underlying algorithm used. Usually this would be the order of the
-#'   first occurence of each visit/patient identifier, but this is not
+#'   first occurrence of each visit/patient identifier, but this is not
 #'   guaranteed unless `restore_id_order` is set to `TRUE`.
 #'
 #'   The threading of the C++ can be controlled using e.g.

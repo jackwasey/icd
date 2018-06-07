@@ -20,10 +20,8 @@
 .onAttach <- function(libname, pkgname) {
   packageStartupMessage(
     "Welcome to the 'icd' package for finding comorbidities and interpretation of ICD-9 and ICD-10 codes.\n",
-    "?icd to get started, then see the vignettes and help for details and examples.\n\n",
-    "Suggestions and contributions are welcome at https://github.com/jackwasey/icd . ",
+    "?icd or visit https://jackwasey.github.io/icd to get started.\n",
     "Please cite this package if you find it useful in your published work citation(package = \"icd\")")
-
   if (system.file(package = "icd9") != "")
     packageStartupMessage(
       "The 'icd9' package is now deprecated, and should be removed to avoid conflicts with 'icd'.
@@ -40,10 +38,8 @@ The 'icd' package up to version 2.1 contains tested versions of all the deprecat
 release_questions <- function() {
   c(
     # commands:
-    "update_everything()",
-    "Have you run tools::checkRdaFiles('data') to check everything is saved as xz?",
-    "rmarkdown::render('README.Rmd')",
-    "Is spelling correct everywhere? E.g. aspell_package_Rd_files('.')",
+    "update_everything(), then copy data to icd.data package",
+    "aspell_package_Rd_files('.')",
     "tools/package-registration.r",
     "autoreconf",
     "tools/publish.sh to run pkgdown::build_site() then push to gh-pages",
@@ -53,8 +49,6 @@ release_questions <- function() {
     "Have all the fixed github issues been closed",
     "Is NEWS.md updated and contributors credited?",
     "Does every file have correct licence information?",
-    "Are github pages site refreshed by running pkgdown::build_site() in the
-    main branch, then commiting the contents of docs/ to the gh-pages branch?",
     # code quality:
     "Consider results of 'goodpractice' package.",
     "Are you happy with the _core_ code coverage?",

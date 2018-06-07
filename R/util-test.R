@@ -89,12 +89,11 @@ expect_equal_no_class_order <- function(object, expected, ...) {
 #' @param end ICD code
 #' @param ver_chaps list with each member being a start-end pair, and names
 #'   being the chapter names
-#' @param ... arguments passed to \code{expect_true} in 'testthat' package
+#' @param ... arguments passed to \code{expect_true} in \pkg{testthat} package
 #' @keywords internal debugging
 expect_chap_equal <- function(x, start, end, ver_chaps, ...) {
   x <- tolower(x)
   res <- eval(bquote(testthat::expect_true(.(x) %in% tolower(names(ver_chaps)), ...)))
-  # new testthat doesn't return a result object, but TRUE
   if (!isTRUE(res) || (is.list(res) && !res$passed))
     return(res)
   eval(bquote(testthat::expect_equal(.(ver_chaps[[which(tolower(names(ver_chaps)) == x)]]),

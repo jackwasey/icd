@@ -5,7 +5,7 @@
 \alias{icd9_map_single_ccs}
 \alias{icd9_map_multi_ccs}
 \alias{icd10_map_ccs}
-\title{Clinical Classifactions Software (CCS) for ICD9/10-CM}
+\title{Clinical Classifications Software (CCS) for ICD9/10-CM}
 \format{list of character vectors, each numbered by co-morbidity}
 \description{
 The Clinical Classifications Software (CCS) for ICD-9/10-CM is one in a
@@ -23,7 +23,7 @@ Mental Health and Substance Abuse. More information on the ICD-9-CM data set
 can be found \url{https://www.hcup-us.ahrq.gov/toolssoftware/ccs/ccs.jsp}.
 
 The file \code{icd10_map_ccs} contains the 2018.1 ICD10 Version of the
-mapping. Mor information on the ICD10 code set can be found at
+mapping. More information on the ICD10 code set can be found at
 \url{https://www.hcup-us.ahrq.gov/toolssoftware/ccs10/ccs10.jsp}
 }
 \keyword{datasets}

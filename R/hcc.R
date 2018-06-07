@@ -15,7 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with icd. If not, see <http:#www.gnu.org/licenses/>.
 
-#' Get Heirarchical Condition Codes (HCC)
+#' Get Hierarchical Condition Codes (HCC)
 #'
 #' Applying CMS Hierarchical Condition Categories \code{comorbid_hcc} works
 #' differently from the rest of the comorbidity assignment functions. This is

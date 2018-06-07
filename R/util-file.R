@@ -77,9 +77,8 @@ fetch_icd10cm_year <- function(year = "2018", dx = TRUE,
 
 #' Get the raw data directory
 #'
-#' Following Hadley Wickham recommendations
-#' in R Packages, should be in inst/extdata. devtools overrides
-#' \code{system.file}.
+#' Following Hadley Wickham recommendations in R Packages, this should be in
+#' \code{inst/extdata}. \pkg{devtools} overrides \code{system.file}.
 #' @keywords internal
 get_raw_data_dir <- function()
   system.file("extdata", package = "icd")

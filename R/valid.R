@@ -60,7 +60,7 @@ utils::globalVariables(
 
 # nolint start
 
-#' Put ICD validation regexes in the icd::: namespace only
+#' Put ICD validation regular expressions in the \code{icd:::} name space
 #' @param env target environment to save the data
 #' @keywords internal sysdata data
 set_re_globals <- function(env = parent.frame()) {
@@ -368,7 +368,7 @@ get_valid.icd9 <- function(x, short_code = guess_short(x))
   x[is_valid.icd9(x, short_code = short_code)]
 
 #' @describeIn get_valid Get valid ICD-10 codes, currently based on ICD-10-CM
-#'   structure, which is a superset of WHO ICD-10
+#'   structure, which is a super-set of WHO ICD-10
 #' @export
 #' @keywords internal
 get_valid.icd10 <- function(x, short_code = guess_short(x)) {

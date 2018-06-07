@@ -92,13 +92,13 @@ charlson.data.frame <- function(x, visit_name = NULL,
   out
 }
 
-#' Calculate Charlson scores from pre-computed Charlson comorbidities
+#' Calculate Charlson scores from precomputed Charlson comorbidities
 #'
-#' Calculate Charlson scores from pre-computed Charlson comorbidities, instead
+#' Calculate Charlson scores from precomputed Charlson comorbidities, instead
 #' of directly from the ICD codes. This is useful if the comorbidity calculation
 #' is time consuming. Commonly, both the Charlson comorbidities and the Charlson
 #' scores will be calculated, and this function provides just that second step.
-#' @param x data.frame or matrix, typically the output of a comorbordity
+#' @param x data.frame or matrix, typically the output of a comorbidity
 #'   calculation which uses the Charlson categories, e.g.
 #'   \code{comorbid_quan_deyo}
 #' @template visit_name

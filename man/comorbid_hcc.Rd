@@ -4,7 +4,7 @@
 \alias{comorbid_hcc}
 \alias{icd9_comorbid_hcc}
 \alias{icd10_comorbid_hcc}
-\title{Get Heirarchical Condition Codes (HCC)}
+\title{Get Hierarchical Condition Codes (HCC)}
 \usage{
 comorbid_hcc(x, date_name = "date", visit_name = get_visit_name(x),
   icd_name = get_icd_name(x))

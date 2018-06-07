@@ -1,9 +1,9 @@
 #' Fast Factor Generation
 #'
 #' This function generates factors more quickly, without leveraging
-#' \code{fastmatch}. The speed increase with \code{fastmatch} for ICD-9 codes
+#' \pkg{fastmatch}. The speed increase with \pkg{fastmatch} for ICD-9 codes
 #' was about 33% reduction for 10 million codes. SOMEDAY could be faster still
-#' using \code{Rcpp}, and a hashed matching algorithm.
+#' using \pkg{Rcpp}, and a hashed matching algorithm.
 #'
 #' \code{NaN}s are converted to \code{NA} when used on numeric values. Extracted
 #' from https://github.com/kevinushey/Kmisc.git
@@ -44,9 +44,9 @@ factor_nosort <- function(x, levels) {
   f
 }
 
-#' @describeIn factor_nosort R wrapper to the Rcpp function. Will re-factor a
-#'   factor with new levels without converting to string vector.
-#' @param na.rm Logical, if `TRUE`, simple drop all NA values, i.e. values with
+#' @describeIn factor_nosort R wrapper to the \pkg{Rcpp} function. Will
+#'   re-factor a factor with new levels without converting to string vector.
+#' @param na.rm Logical, if `TRUE`, simple drop all NA values, i.e., values with
 #'   no corresponding level.
 #' @md
 #' @keywords internal
@@ -121,8 +121,8 @@ factor_split_na <- function(x, levels, factor_fun = factor_nosort_rcpp) {
 #' Refactor by integer matching levels in C++
 #'
 #' Slightly slower for small factors, three times faster for one hundred million
-#' elemeents with two million new levels. Three times faster for any `n > 1e6`.
-#' With NAs, margin is smaller, but still beats base `factor`.
+#' elements with two million new levels. Three times faster for any `n > 1e6`.
+#' With `NA` values, margin is smaller, but still beats base `factor`.
 #' @param exclude_na Simpler equivalent to `base::factor` exclude. By default,
 #'   `refactor` will not count `NA` as a factor level if there are `NA` elements
 #'   in the input data.

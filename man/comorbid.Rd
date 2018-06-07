@@ -191,7 +191,7 @@ codes. Some comorbidity schemes have rules, for example, what to do when both
 'hypertension' and 'hypertension with complications' are present. These rules
 are applied by default; if the exact fields from the original mappings are
 needed, use \code{hierarchy = FALSE}. For comorbidity counting, Charlson or
-VanWalraven scores the default should be used to apply the rules. For more
+Van Walraven scores the default should be used to apply the rules. For more
 about computing Hierarchical Condition Codes (HCC), see
 \code{\link{comorbid_hcc}} For more about comorbidities following the
 Clinical Classification Software (CCS) rules from AHRQ, see
@@ -200,7 +200,7 @@ Clinical Classification Software (CCS) rules from AHRQ, see
 \details{
 The order of visits may change depending on the original sequence,
 and the underlying algorithm used. Usually this would be the order of the
-first occurence of each visit/patient identifier, but this is not
+first occurrence of each visit/patient identifier, but this is not
 guaranteed unless \code{restore_id_order} is set to \code{TRUE}.
 
 The threading of the C++ can be controlled using e.g.
@@ -271,9 +271,9 @@ according to Quan/Deyo ICD categories. Synonymous with
  Future versions of \pkg{icd} will drop
   the \code{icd_} prefix. For example, \code{charlson} should be used in
   favor of \code{icd_charlson}. To distinguish \pkg{icd} function calls,
-  consider using the namespace prefix \code{icd::} instead, e.g.,
-  \code{icd::charlson}. Functions which specifically operate on either ICD-9
-  or ICD-10 codes or their subtypes will retain the prefix. E.g.
+  consider using the prefix \code{icd::} instead, e.g., \code{icd::charlson}.
+  Functions which specifically operate on either ICD-9 or ICD-10 codes or
+  their sub-types will retain the prefix. E.g.
   \code{\link{icd9_comorbid_ahrq}}. \pkg{icd} specific classes also retain
   the prefix, e.g., \code{\link{icd_wide_data}}.
 }

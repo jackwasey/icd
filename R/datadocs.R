@@ -126,7 +126,7 @@ NULL
 #' @aliases icd9_map_cc icd10_map_cc icd_map_cc_hcc
 NULL
 
-#' Clinical Classifactions Software (CCS) for ICD9/10-CM
+#' Clinical Classifications Software (CCS) for ICD9/10-CM
 #'
 #' The Clinical Classifications Software (CCS) for ICD-9/10-CM is one in a
 #' family of databases and software tools developed as part of the Healthcare
@@ -142,7 +142,7 @@ NULL
 #' can be found \url{https://www.hcup-us.ahrq.gov/toolssoftware/ccs/ccs.jsp}.
 #'
 #' The file \code{icd10_map_ccs} contains the 2018.1 ICD10 Version of the
-#' mapping. Mor information on the ICD10 code set can be found at
+#' mapping. More information on the ICD10 code set can be found at
 #' \url{https://www.hcup-us.ahrq.gov/toolssoftware/ccs10/ccs10.jsp}
 #'
 #' @docType data

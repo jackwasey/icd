@@ -16,17 +16,17 @@ x \%fin\% table
 x \%fnin\% table
 }
 \description{
-Try Rcpp hashing (and simpler logic) compared to R's internal
-  do_match and match5 morass. Lose the ability to use \code{incomparables}
-  in initial implementation.
+Try \pkg{Rcpp} hashing (and simpler logic) compared to
+internal \R \code{do_match} and \code{match5} morass. Lose the ability to use
+\code{incomparables}.
 }
 \section{Functions}{
 \itemize{
-\item \code{fin}: Use faster Rcpp matching for %in%
+\item \code{fin}: Use faster matching for %in% equivalent.
 
-\item \code{\%fin\%}: Use faster Rcpp matching for %in%
+\item \code{\%fin\%}: Use faster matching for %in%
 
-\item \code{\%fnin\%}: Use faster Rcpp matching for %nin%
+\item \code{\%fnin\%}: Use faster matching for %nin%
 }}
 
 \keyword{internal}

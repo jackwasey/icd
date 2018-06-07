@@ -28,7 +28,7 @@ is.icd_wide_data(x)
 \item{...}{arguments passed on to create a \code{data.frame}}
 }
 \description{
-Long and Wide Formats: As is common with many datasets, key
+Long and Wide Formats: As is common with many data sets, key
   variables can be concentrated in one column or spread over several. Tools
   format of clinical and administrative hospital data, we can perform the
   conversion efficiently and accurately, while keeping some metadata about

@@ -16,7 +16,7 @@
 # along with icd. If not, see <http:#www.gnu.org/licenses/>.
 
 #' @title Convert between and identify 'long' and 'wide' patient data formats
-#' @description Long and Wide Formats: As is common with many datasets, key
+#' @description Long and Wide Formats: As is common with many data sets, key
 #'   variables can be concentrated in one column or spread over several. Tools
 #'   format of clinical and administrative hospital data, we can perform the
 #'   conversion efficiently and accurately, while keeping some metadata about
@@ -64,7 +64,7 @@ NULL
 #'   \code{icd9_sub_chapters}
 #' @param defined Single logical value, if \code{TRUE}, the default, only
 #'   officially defined ICD-9 (currently ICD-9-CM) codes will be used in the
-#'   expansion, not any lexically possible ICD-9 code.
+#'   expansion, not any syntactically possible ICD-9 code.
 #' @keywords internal manip
 icd9_chapters_to_map <- function(x, defined = FALSE) {
   if (is.character(x) && exists(x))

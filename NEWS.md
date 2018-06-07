@@ -45,7 +45,7 @@
  * stopped changing an attribute by reference, thanks to Tomas Kalibera for highlighting.
  
 # Version 2.1
- * Many thanks to @anobel for providing parsing and lookup of Heirarchical Condition Codes.
+ * Many thanks to @anobel for providing parsing and lookup of Hierarchical Condition Codes.
  * Many thanks to @edlee123 for contributing `explain_table` which tabulates results of looking up various information about a list of ICD codes. This is a new feature which may be changed as it is used in the real world, and more tests are developed.
  * removed `stringr` family of dependencies: it was often slower on benchmarking than built-ins, and no clear benefits other than internally consistent syntax, and stringr updates caused CRAN warnings due to a documentation change.
  * Fixes #86, thanks to @anobel

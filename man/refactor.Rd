@@ -13,8 +13,8 @@ in the input data.}
 }
 \description{
 Slightly slower for small factors, three times faster for one hundred million
-elemeents with two million new levels. Three times faster for any \code{n > 1e6}.
-With NAs, margin is smaller, but still beats base \code{factor}.
+elements with two million new levels. Three times faster for any \code{n > 1e6}.
+With \code{NA} values, margin is smaller, but still beats base \code{factor}.
 }
 \examples{
 \dontrun{

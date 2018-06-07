@@ -47,12 +47,12 @@ trim <- function(x) {
 "%nin%" <- function(x, table)
   match(x, table, nomatch = 0) == 0
 
-#' @describeIn match_rcpp Use faster Rcpp matching for %in%
+#' @describeIn match_rcpp Use faster matching for %in%
 #' @keywords internal
 "%fin%" <- function(x, table)
   fin(x, table)
 
-#' @describeIn match_rcpp Use faster Rcpp matching for %nin%
+#' @describeIn match_rcpp Use faster matching for %nin%
 #' @keywords internal
 "%fnin%" <- function(x, table)
   !fin(x, table)
@@ -225,10 +225,11 @@ get_visit_name.matrix <- function(x, visit_name = NULL)
 #' the ICD codes
 #'
 #' guess which field contains the (only) ICD code, in order of preference, the
-#' column name has an icd code class, case-insensitive regexes of commonly used
-#' names for ICD code fields, a single column has more than 10% valid ICD codes.
-#' If the result is not specified by class, or exactly with \code{icd_name}
-#' being given, we confirm there are at least some valid ICD codes in there
+#' column name has an icd code class, case-insensitive regular expressions of
+#' commonly used names for ICD code fields, a single column has more than 10%
+#' valid ICD codes. If the result is not specified by class, or exactly with
+#' \code{icd_name} being given, we confirm there are at least some valid ICD
+#' codes in there
 #' @param x data frame
 #' @param icd_name usually \code{NULL} but if specified, will be checked it is
 #'   valid (i.e. a character vector of length one, which is indeed a name of one

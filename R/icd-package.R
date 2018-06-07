@@ -61,11 +61,10 @@
 #'   \code{\link{charlson}} calculates Charlson scores (Charlson Comorbidity
 #'   Indices) directly from your patient data. If you already calculated the
 #'   Charlson comorbidities, it is more efficient to use
-#'   \code{\link{charlson_from_comorbid}}. Analagously,
-#'   \code{\link{van_walraven}} calculates Van Walraven scores (based on the
-#'   Elixhauser comorbidities, instead of Charlson), and
-#'   \code{\link{van_walraven_from_comorbid}} if you already calculated
-#'   Elixhauser comorbidities}
+#'   \code{\link{charlson_from_comorbid}}. Similarly, \code{\link{van_walraven}}
+#'   calculates Van Walraven scores (based on the Elixhauser comorbidities,
+#'   instead of Charlson), and \code{\link{van_walraven_from_comorbid}} if you
+#'   already calculated Elixhauser comorbidities}
 #'
 #'   \item{Validation}{
 #'

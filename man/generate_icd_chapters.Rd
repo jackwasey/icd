@@ -3,7 +3,7 @@
 \name{generate_icd_chapters}
 \alias{generate_icd_chapters}
 \title{Generate ICD-9 and ICD-10 Chapter names and number ranges, transcribed from
-the official definitons from WHO and extended by US CMS.}
+the official definitions from WHO and extended by US CMS.}
 \usage{
 generate_icd_chapters(save_data = TRUE)
 }
@@ -13,7 +13,7 @@ data}
 }
 \description{
 Generate ICD-9 and ICD-10 Chapter names and number ranges, transcribed from
-the official definitons from WHO and extended by US CMS.
+the official definitions from WHO and extended by US CMS.
 }
 \keyword{datasets}
 \keyword{internal}
