@@ -138,8 +138,9 @@ and forms the core of the package, along with the C++ matrix code.</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>categorize</span>(<span class='no'>x</span>, <span class='no'>map</span>, <span class='no'>visit_name</span>, <span class='no'>code_name</span>, <span class='kw'>return_df</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>return_binary</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>comorbid_fun</span> <span class='kw'>=</span> <span class='no'>comorbidMatMul</span>,
+    <pre class="usage"><span class='fu'>categorize</span>(<span class='no'>x</span>, <span class='no'>map</span>, <span class='no'>id_name</span>, <span class='no'>code_name</span>, <span class='kw'>return_df</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>return_binary</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>restore_id_order</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>unique_ids</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>preserve_visit_id_type</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>comorbid_fun</span> <span class='kw'>=</span> <span class='no'>comorbidMatMul</span>,
   <span class='kw'>factor_fun</span> <span class='kw'>=</span> <span class='no'>factor_nosort_rcpp</span>, <span class='no'>...</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -160,17 +161,9 @@ comorbidities, contains <code>list(OBESE = c("2780", "27800", "27801",
 c("3004", "30112", "3090", "3091", "311"))</code> amongst other longer groups.</p></td>
     </tr>
     <tr>
-      <th>visit_name</th>
-      <td><p>The name of the column in the data frame which contains the
-patient or visit identifier. Typically this is the visit identifier, since
-patients come leave and enter hospital with different ICD-9 codes. It is a
-character vector of length one. If left empty, or <code>NULL</code>, then an
-attempt is made to guess which field has the ID for the patient encounter
-(not a patient ID, although this can of course be specified directly). The
-guesses proceed until a single match is made. Data frames may be wide with
-many matching fields, so to avoid false positives, anything but a single
-match is rejected. If there are no successful guesses, and <code>visit_id</code>
-was not specified, then the first column of the data frame is used.</p></td>
+      <th>id_name</th>
+      <td><p>The name of the <code>data.frame</code> field which is the unique
+identifier.</p></td>
     </tr>
     <tr>
       <th>code_name</th>
@@ -188,6 +181,28 @@ input, this is preserved.</p></td>
 and 1s instead of TRUE and FALSE.</p></td>
     </tr>
     <tr>
+      <th>restore_id_order</th>
+      <td><p>Logical value, if <code>TRUE</code>, the default, the order
+of the visit IDs will match the order of visit IDs first encountered in the
+input data. This takes a third of the time in calculations on data with
+tens of millions of rows, so, if the visit IDs will be discarded when
+summarizing data, this can be set to <code>FALSE</code> for a big speed-up.</p></td>
+    </tr>
+    <tr>
+      <th>unique_ids</th>
+      <td><p>Single logical value, if <code>TRUE</code> then the visit IDs in
+column given by <code>id_name</code> are assumed to be unique. Otherwise, the
+default action is to ensure they are unique.</p></td>
+    </tr>
+    <tr>
+      <th>preserve_visit_id_type</th>
+      <td><p>Single logical value, if <code>TRUE</code>, the visit
+ID column will be converted back to its original type. The default of
+<code>FALSE</code> means only <code>factors</code> and <code>character</code> types are
+restored in the returned data frame. For matrices, the row names are
+necessarily stored as character vectors.</p></td>
+    </tr>
+    <tr>
       <th>comorbid_fun</th>
       <td><p>function i.e. the function symbol (not character string)
 to be called to do the comorbidity calculation</p></td>
@@ -201,10 +216,12 @@ very simple <code>Rcpp</code> implementation <code>factor_nosort_rcpp</code>.</p
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>u</span> <span class='kw'>&lt;-</span> <span class='no'>uranium_pathology</span>
+    <pre class="examples"><span class='co'># NOT RUN {</span>
+<span class='no'>u</span> <span class='kw'>&lt;-</span> <span class='no'>uranium_pathology</span>
 <span class='no'>m</span> <span class='kw'>&lt;-</span> <span class='no'>icd10_map_ahrq</span>
 <span class='no'>u</span>$<span class='no'>icd10</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='decimal_to_short.html'>decimal_to_short</a></span>(<span class='no'>u</span>$<span class='no'>icd10</span>)
-<span class='no'>j</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>icd</span><span class='kw ns'>:::</span><span class='fu'><a href='http://www.rdocumentation.org/packages/icd/topics/categorize'>categorize</a></span>(<span class='no'>u</span>, <span class='no'>m</span>, <span class='kw'>visit_name</span> <span class='kw'>=</span> <span class='st'>"case"</span>, <span class='kw'>code_name</span> <span class='kw'>=</span> <span class='st'>"icd10"</span>)</div></pre>
+<span class='no'>j</span> <span class='kw'>&lt;-</span> <span class='fu'>categorize</span>(<span class='no'>u</span>, <span class='no'>m</span>, <span class='kw'>id_name</span> <span class='kw'>=</span> <span class='st'>"case"</span>, <span class='kw'>code_name</span> <span class='kw'>=</span> <span class='st'>"icd10"</span>)
+<span class='co'># }</span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

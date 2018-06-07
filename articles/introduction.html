@@ -336,18 +336,18 @@ codes &lt;-<span class="st"> </span><span class="kw"><a href="../reference/set_i
 <h2 class="hasAnchor">
 <a href="#decoding-icd-9-codes-to-descriptions" class="anchor"></a>Decoding ICD-9 codes to descriptions</h2>
 <p>There are various ways of extracting the description of the condition described by an ICD-9 code. the explain group of functions return a data frame with a column for the ICD-9 code, a column for the full length Diagnosis, and a column for the short Description.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/explain.html">explain</a></span>(<span class="st">"1.0"</span>) <span class="co"># 'decimal' format code inferred</span>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/explain_code.html">explain_code</a></span>(<span class="st">"1.0"</span>) <span class="co"># 'decimal' format code inferred</span>
 <span class="co">#&gt; [1] "Cholera due to vibrio cholerae"</span>
-<span class="kw"><a href="../reference/explain.html">explain</a></span>(<span class="st">"0019"</span>) <span class="co"># 'short' format code inferred</span>
+<span class="kw"><a href="../reference/explain_code.html">explain_code</a></span>(<span class="st">"0019"</span>) <span class="co"># 'short' format code inferred</span>
 <span class="co">#&gt; [1] "Cholera, unspecified"</span></code></pre></div>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># we can be explicit about short vs decimal</span>
-<span class="kw"><a href="../reference/explain.html">explain</a></span>(<span class="st">"434.00"</span>, <span class="dt">short_code =</span> <span class="ot">FALSE</span>)
+<span class="kw"><a href="../reference/explain_code.html">explain_code</a></span>(<span class="st">"434.00"</span>, <span class="dt">short_code =</span> <span class="ot">FALSE</span>)
 <span class="co">#&gt; [1] "Cerebral thrombosis without mention of cerebral infarction"</span>
-<span class="kw"><a href="../reference/explain.html">explain</a></span>(<span class="kw">c</span>(<span class="st">"43410"</span>, <span class="st">"43491"</span>), <span class="dt">short_code =</span> <span class="ot">TRUE</span>)
+<span class="kw"><a href="../reference/explain_code.html">explain_code</a></span>(<span class="kw">c</span>(<span class="st">"43410"</span>, <span class="st">"43491"</span>), <span class="dt">short_code =</span> <span class="ot">TRUE</span>)
 <span class="co">#&gt; [1] "Cerebral embolism without mention of cerebral infarction"       </span>
 <span class="co">#&gt; [2] "Cerebral artery occlusion, unspecified with cerebral infarction"</span>
 <span class="co">#explain top level code with children</span>
-<span class="st">"391"</span> <span class="op">%&gt;%</span><span class="st"> </span>explain <span class="co"># single three-digit code</span>
+<span class="st">"391"</span> <span class="op">%&gt;%</span><span class="st"> </span>explain_code <span class="co"># single three-digit code</span>
 <span class="co">#&gt; [1] "Rheumatic fever with heart involvement"</span>
 <span class="st">"391"</span> <span class="op">%&gt;%</span><span class="st"> </span>children <span class="co"># let's see the child codes</span>
 <span class="co">#&gt; [1] "391"  "3910" "3911" "3912" "3918" "3919"</span>
@@ -355,9 +355,9 @@ codes &lt;-<span class="st"> </span><span class="kw"><a href="../reference/set_i
 <span class="co">#&gt; [1] TRUE</span>
 <span class="co">#&gt; attr(,"class")</span>
 <span class="co">#&gt; [1] "icd9"      "character"</span>
-<span class="st">"391"</span> <span class="op">%&gt;%</span><span class="st"> </span>children <span class="op">%&gt;%</span><span class="st"> </span>explain <span class="co"># children condensed to parent code</span>
+<span class="st">"391"</span> <span class="op">%&gt;%</span><span class="st"> </span>children <span class="op">%&gt;%</span><span class="st"> </span>explain_code <span class="co"># children condensed to parent code</span>
 <span class="co">#&gt; [1] "Rheumatic fever with heart involvement"</span>
-<span class="st">"391"</span> <span class="op">%&gt;%</span><span class="st"> </span>children <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="../reference/explain.html">explain</a></span>(<span class="dt">condense =</span> <span class="ot">FALSE</span>) <span class="co"># prevent condense</span>
+<span class="st">"391"</span> <span class="op">%&gt;%</span><span class="st"> </span>children <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="../reference/explain_code.html">explain_code</a></span>(<span class="dt">condense =</span> <span class="ot">FALSE</span>) <span class="co"># prevent condense</span>
 <span class="co">#&gt; [1] "Rheumatic fever with heart involvement"    </span>
 <span class="co">#&gt; [2] "Acute rheumatic pericarditis"              </span>
 <span class="co">#&gt; [3] "Acute rheumatic endocarditis"              </span>
@@ -365,7 +365,7 @@ codes &lt;-<span class="st"> </span><span class="kw"><a href="../reference/set_i
 <span class="co">#&gt; [5] "Other acute rheumatic heart disease"       </span>
 <span class="co">#&gt; [6] "Acute rheumatic heart disease, unspecified"</span></code></pre></div>
 <p>Arbitrary named list(s) of codes:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/explain.html">explain</a></span>(<span class="kw">list</span>(<span class="dt">somecodes =</span> <span class="kw"><a href="../reference/set_icd_class.html">as.icd9</a></span>(<span class="kw">c</span>(<span class="st">"001"</span>, <span class="st">"391"</span>)),
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/explain_code.html">explain_code</a></span>(<span class="kw">list</span>(<span class="dt">somecodes =</span> <span class="kw"><a href="../reference/set_icd_class.html">as.icd9</a></span>(<span class="kw">c</span>(<span class="st">"001"</span>, <span class="st">"391"</span>)),
                  <span class="dt">morecodes =</span> <span class="kw"><a href="../reference/set_icd_class.html">as.icd9cm</a></span>(<span class="kw">c</span>(<span class="st">"001.1"</span>, <span class="st">"001.9"</span>))))
 <span class="co">#&gt; $somecodes</span>
 <span class="co">#&gt; [1] "Cholera"                               </span>
@@ -375,33 +375,33 @@ codes &lt;-<span class="st"> </span><span class="kw"><a href="../reference/set_i
 <span class="co">#&gt; [1] "Cholera due to vibrio cholerae el tor"</span>
 <span class="co">#&gt; [2] "Cholera, unspecified"</span></code></pre></div>
 <p><code>001</code> (Cholera) isn’t itself a diagnostic code, i.e. leaf node in the hierarchy, but <code>390</code> (Rheumatic fever without heart involvement) is. Both are explained correctly:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/explain.html">explain</a></span>(<span class="kw">list</span>(<span class="dt">cholera =</span> <span class="st">"001"</span>, <span class="dt">rheumatic_heart =</span> <span class="st">"390"</span>))
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/explain_code.html">explain_code</a></span>(<span class="kw">list</span>(<span class="dt">cholera =</span> <span class="st">"001"</span>, <span class="dt">rheumatic_heart =</span> <span class="st">"390"</span>))
 <span class="co">#&gt; $cholera</span>
 <span class="co">#&gt; [1] "Cholera"</span>
 <span class="co">#&gt; </span>
 <span class="co">#&gt; $rheumatic_heart</span>
 <span class="co">#&gt; [1] "Rheumatic fever without mention of heart involvement"</span></code></pre></div>
 <p>Now try to explain on a non-existent (but ‘valid’) ICD-9 code:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">s &lt;-<span class="st"> </span><span class="kw"><a href="../reference/explain.html">explain</a></span>(<span class="st">"001.5"</span>) <span class="co"># gives warning</span></code></pre></div>
-<p>As we have just seen, <em>explain</em> can convert lists of ICD-9 or ICD-10 codes to a human-readable format. Let’s apply the <code>explain</code> to a list of comorbidity ICD-9 codes in one of the commonly-used mappings. This makes comprehending a complicated list much easier. Taking the list for dementia:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">s &lt;-<span class="st"> </span><span class="kw"><a href="../reference/explain_code.html">explain_code</a></span>(<span class="st">"001.5"</span>) <span class="co"># gives warning</span></code></pre></div>
+<p>As we have just seen, <code>explain_code</code> can convert lists of ICD-9 or ICD-10 codes to a human-readable format. Let’s apply the <code>explain_code</code> to a list of comorbidity ICD-9 codes in one of the commonly-used mappings. This makes comprehending a complicated list much easier. Taking the list for dementia:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">length</span>(icd9_map_quan_deyo[[<span class="st">"Dementia"</span>]]) <span class="co"># 133 possible ICD-9 codes</span>
 <span class="co">#&gt; [1] 133</span>
 <span class="kw">length</span>(icd10_map_quan_deyo[[<span class="st">"Dementia"</span>]]) <span class="co"># the ICD-10 map is different</span>
 <span class="co">#&gt; [1] 20</span>
-<span class="co"># explain summarizes these to just two groups:</span>
-icd9_map_quan_deyo[[<span class="st">"Dementia"</span>]] <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="../reference/explain.html">explain</a></span>(<span class="dt">warn =</span> <span class="ot">FALSE</span>)
+<span class="co"># explain_code summarizes these to just two groups:</span>
+icd9_map_quan_deyo[[<span class="st">"Dementia"</span>]] <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="../reference/explain_code.html">explain_code</a></span>(<span class="dt">warn =</span> <span class="ot">FALSE</span>)
 <span class="co">#&gt; [1] "Dementias"                                  </span>
 <span class="co">#&gt; [2] "Dementia in conditions classified elsewhere"</span>
 <span class="co">#&gt; [3] "Senile degeneration of brain"</span>
 <span class="co"># contrast with:</span>
-icd9_map_quan_deyo[[<span class="st">"Dementia"</span>]] <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="../reference/explain.html">explain</a></span>(<span class="dt">condense =</span> <span class="ot">TRUE</span>, <span class="dt">warn =</span> <span class="ot">FALSE</span>)
+icd9_map_quan_deyo[[<span class="st">"Dementia"</span>]] <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="../reference/explain_code.html">explain_code</a></span>(<span class="dt">condense =</span> <span class="ot">TRUE</span>, <span class="dt">warn =</span> <span class="ot">FALSE</span>)
 <span class="co">#&gt; [1] "Dementias"                                  </span>
 <span class="co">#&gt; [2] "Dementia in conditions classified elsewhere"</span>
 <span class="co">#&gt; [3] "Senile degeneration of brain"</span></code></pre></div>
 <p>Use a range with more than two hundred ICD-9 codes (most of them not real):</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">length</span>(<span class="st">"390"</span> <span class="op">%i9da%</span><span class="st"> "392.1"</span>)
 <span class="co">#&gt; [1] 244</span>
-<span class="st">"390"</span> <span class="op">%i9da%</span><span class="st"> "392.1"</span> <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="../reference/explain.html">explain</a></span>(<span class="dt">warn =</span> <span class="ot">FALSE</span>)
+<span class="st">"390"</span> <span class="op">%i9da%</span><span class="st"> "392.1"</span> <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="../reference/explain_code.html">explain_code</a></span>(<span class="dt">warn =</span> <span class="ot">FALSE</span>)
 <span class="co">#&gt; [1] "Rheumatic fever without mention of heart involvement"</span>
 <span class="co">#&gt; [2] "Rheumatic fever with heart involvement"              </span>
 <span class="co">#&gt; [3] "Rheumatic chorea with heart involvement"</span></code></pre></div>
@@ -593,12 +593,12 @@ icd10_map_elix<span class="op">$</span>HTNcx
 <span class="co">#&gt;   ..$ only.x: chr(0) </span>
 <span class="co">#&gt;   ..$ only.y: chr [1:106] "0932" "09325" "09326" "09327" ...</span></code></pre></div>
 <p>Which pulmonary hypertension codes are only in Quan’s version?</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">difference<span class="op">$</span>PHTN<span class="op">$</span>only.y <span class="op">%&gt;%</span><span class="st"> </span>get_defined <span class="op">%&gt;%</span><span class="st"> </span>explain
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">difference<span class="op">$</span>PHTN<span class="op">$</span>only.y <span class="op">%&gt;%</span><span class="st"> </span>get_defined <span class="op">%&gt;%</span><span class="st"> </span>explain_code
 <span class="co">#&gt; [1] "Acute pulmonary heart disease"                    </span>
 <span class="co">#&gt; [2] "Chronic pulmonary heart disease"                  </span>
 <span class="co">#&gt; [3] "Arteriovenous fistula of pulmonary vessels"       </span>
 <span class="co">#&gt; [4] "Other specified diseases of pulmonary circulation"</span></code></pre></div>
-<p>(Passing through <code>get_defined</code> stops <code>explain</code> complaining that some of the input codes don’t exist. This is because the comorbidity mappings have every possible numerical ICD-9 code, not just the official ones. Could also use <code>warn = FALSE</code> option in <code>explain</code>)</p>
+<p>(Passing through <code>get_defined</code> stops <code>explain_code</code> complaining that some of the input codes don’t exist. This is because the comorbidity mappings have every possible numerical ICD-9 code, not just the official ones. Could also use <code>warn = FALSE</code> option in <code>explain_code</code>)</p>
 </div>
 <div id="find-cardiac-icd-9-codes" class="section level3">
 <h3 class="hasAnchor">
@@ -609,7 +609,7 @@ icd10_map_elix<span class="op">$</span>HTNcx
         <span class="dt">ignore.case =</span> <span class="ot">TRUE</span>),
   <span class="st">"code"</span>] <span class="op">%&gt;%</span><span class="st"> </span>unique -&gt;<span class="st"> </span>cardiac</code></pre></div>
 <p>then explain the list, just showing the first ten:</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/set_icd_class.html">as.icd9</a></span>(cardiac) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="../reference/explain.html">explain</a></span>(<span class="dt">warn =</span> <span class="ot">FALSE</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">head</span>(<span class="dv">10</span>)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/set_icd_class.html">as.icd9</a></span>(cardiac) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="../reference/explain_code.html">explain_code</a></span>(<span class="dt">warn =</span> <span class="ot">FALSE</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">head</span>(<span class="dv">10</span>)
 <span class="co">#&gt;  [1] "Malignant neoplasm of thymus, heart, and mediastinum"    </span>
 <span class="co">#&gt;  [2] "Rheumatic fever without mention of heart involvement"    </span>
 <span class="co">#&gt;  [3] "Rheumatic fever with heart involvement"                  </span>
@@ -699,7 +699,7 @@ lost_since_<span class="dv">27</span> <span class="op">%&lt;&gt;%</span><span cl
 lost_since_<span class="dv">27</span> <span class="op">%&lt;&gt;%</span><span class="st"> </span>as.icd9cm
 
 <span class="co"># these are a few which were gained since v27</span>
-<span class="kw">data.frame</span>(<span class="dt">code =</span> new_since_<span class="dv">27</span>, <span class="dt">desc =</span> new_since_<span class="dv">27</span> <span class="op">%&gt;%</span><span class="st"> </span>explain)
+<span class="kw">data.frame</span>(<span class="dt">code =</span> new_since_<span class="dv">27</span>, <span class="dt">desc =</span> new_since_<span class="dv">27</span> <span class="op">%&gt;%</span><span class="st"> </span>explain_code)
 <span class="co">#&gt;    code                                          desc</span>
 <span class="co">#&gt; 1 04141                     Escherichia coli [E.coli]</span>
 <span class="co">#&gt; 2 04142 Unspecified malignant neoplasm of skin of lip</span>
@@ -708,7 +708,7 @@ lost_since_<span class="dv">27</span> <span class="op">%&lt;&gt;%</span><span cl
 <span class="co">#&gt; 5 17300 Unspecified malignant neoplasm of skin of lip</span>
 <span class="co">#&gt; 6 17301           Basal cell carcinoma of skin of lip</span>
 <span class="co"># these are a few which were lost since v27</span>
-<span class="kw">data.frame</span>(<span class="dt">code =</span> lost_since_<span class="dv">27</span>, <span class="dt">desc =</span> lost_since_<span class="dv">27</span> <span class="op">%&gt;%</span><span class="st"> </span>explain)
+<span class="kw">data.frame</span>(<span class="dt">code =</span> lost_since_<span class="dv">27</span>, <span class="dt">desc =</span> lost_since_<span class="dv">27</span> <span class="op">%&gt;%</span><span class="st"> </span>explain_code)
 <span class="co">#&gt;   code</span>
 <span class="co">#&gt; 1 V122</span>
 <span class="co">#&gt; 2 V138</span>

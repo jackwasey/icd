@@ -142,11 +142,11 @@ using <code>Rcpp</code>, and a hashed matching algorithm.</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>factor_nosort_rcpp_worker</span>(<span class='no'>x</span>, <span class='no'>levels</span>)
+    <pre class="usage"><span class='fu'>factor_nosort_rcpp_worker</span>(<span class='no'>x</span>, <span class='no'>levels</span>, <span class='no'>na_rm</span>)
 
 <span class='fu'>factor_nosort</span>(<span class='no'>x</span>, <span class='no'>levels</span>)
 
-<span class='fu'>factor_nosort_rcpp</span>(<span class='no'>x</span>, <span class='no'>levels</span>)</pre>
+<span class='fu'>factor_nosort_rcpp</span>(<span class='no'>x</span>, <span class='no'>levels</span>, <span class='kw'>na.rm</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -161,6 +161,11 @@ using <code>Rcpp</code>, and a hashed matching algorithm.</p>
       <td><p>An optional character vector of levels. Is coerced to the same
 type as <code>x</code>. By default, we compute the levels as
 <code>sort(unique.default(x))</code>.</p></td>
+    </tr>
+    <tr>
+      <th>na.rm</th>
+      <td><p>Logical, if <code>TRUE</code>, simple drop all NA values, i.e. values with
+no corresponding level.</p></td>
     </tr>
     <tr>
       <th>labels</th>

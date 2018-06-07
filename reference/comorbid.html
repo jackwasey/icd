@@ -157,7 +157,7 @@ Clinical Classification Software (CCS) rules from AHRQ, see
     <pre class="usage"><span class='fu'>comorbid</span>(<span class='no'>x</span>, <span class='no'>map</span>, <span class='kw'>visit_name</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>icd_name</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>short_code</span> <span class='kw'>=</span> <span class='fu'><a href='guess_short.html'>guess_short</a></span>(<span class='no'>x</span>, <span class='kw'>icd_name</span> <span class='kw'>=</span> <span class='no'>icd_name</span>),
   <span class='kw'>short_map</span> <span class='kw'>=</span> <span class='fu'><a href='guess_short.html'>guess_short</a></span>(<span class='no'>map</span>), <span class='kw'>return_df</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>return_binary</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='no'>...</span>)
+  <span class='kw'>categorize_fun</span> <span class='kw'>=</span> <span class='no'>categorize_simple</span>, <span class='no'>...</span>)
 
 <span class='fu'>icd10_comorbid</span>(<span class='no'>x</span>, <span class='no'>map</span>, <span class='kw'>visit_name</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>icd_name</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>short_code</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>short_map</span> <span class='kw'>=</span> <span class='fu'><a href='guess_short.html'>guess_short</a></span>(<span class='no'>map</span>), <span class='kw'>return_df</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
@@ -166,7 +166,9 @@ Clinical Classification Software (CCS) rules from AHRQ, see
 <span class='fu'>icd9_comorbid</span>(<span class='no'>x</span>, <span class='no'>map</span>, <span class='kw'>visit_name</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>icd_name</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>short_code</span> <span class='kw'>=</span> <span class='fu'><a href='guess_short.html'>guess_short</a></span>(<span class='no'>x</span>, <span class='kw'>icd_name</span> <span class='kw'>=</span> <span class='no'>icd_name</span>),
   <span class='kw'>short_map</span> <span class='kw'>=</span> <span class='fu'><a href='guess_short.html'>guess_short</a></span>(<span class='no'>map</span>), <span class='kw'>return_df</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>return_binary</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>preclean</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>visitId</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>icd9Field</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>...</span>)
+  <span class='kw'>preclean</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>visitId</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>icd9Field</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>categorize_fun</span> <span class='kw'>=</span> <span class='no'>categorize_simple</span>, <span class='kw'>comorbid_fun</span> <span class='kw'>=</span> <span class='no'>comorbidMatMulSimple</span>,
+  <span class='no'>...</span>)
 
 <span class='fu'>icd9_comorbid_ahrq</span>(<span class='no'>x</span>, <span class='no'>...</span>, <span class='kw'>abbrev_names</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>hierarchy</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
 
@@ -183,6 +185,10 @@ Clinical Classification Software (CCS) rules from AHRQ, see
 <span class='fu'>icd9_comorbid_quan_deyo</span>(<span class='no'>x</span>, <span class='no'>...</span>, <span class='kw'>abbrev_names</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>hierarchy</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
 
 <span class='fu'>icd10_comorbid_quan_deyo</span>(<span class='no'>x</span>, <span class='no'>...</span>, <span class='kw'>abbrev_names</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>hierarchy</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
+
+<span class='fu'>icd9_comorbid_charlson</span>(<span class='no'>...</span>)
+
+<span class='fu'>icd10_comorbid_charlson</span>(<span class='no'>...</span>)
 
 <span class='fu'>comorbid_ccs</span>(<span class='no'>x</span>, <span class='kw'>icd_name</span> <span class='kw'>=</span> <span class='fu'><a href='get_icd_name.html'>get_icd_name</a></span>(<span class='no'>x</span>), <span class='no'>...</span>)
 
@@ -285,15 +291,19 @@ conversion can also be done by the internal functions
 other tools, e.g. <code>apply(x, 2, as.integer)</code></p></td>
     </tr>
     <tr>
+      <th>categorize_fun</th>
+      <td><p>Internal. Function used for the categorization problem.</p></td>
+    </tr>
+    <tr>
       <th>...</th>
       <td><p>arguments passed on to other functions</p></td>
     </tr>
     <tr>
       <th>icd10_comorbid_fun</th>
-      <td><p>function Internal parameter, default will be fast
-and accurate. A function which calculates comorbidities for ICD-10 codes,
-in which the comorbidity map only specifies parent codes, not every
-possible child.</p></td>
+      <td><p>Internal function Default will be fast and
+accurate. A function which calculates comorbidities for ICD-10 codes, in
+which the comorbidity map only specifies parent codes, not every possible
+child.</p></td>
     </tr>
     <tr>
       <th>preclean</th>
@@ -312,6 +322,10 @@ set to <code>FALSE</code> to save time.</p></td>
     <tr>
       <th>icd9Field</th>
       <td><p>Deprecated. Use <code>icd_name</code> instead.</p></td>
+    </tr>
+    <tr>
+      <th>comorbid_fun</th>
+      <td><p>Internal. Function used inside categorization.</p></td>
     </tr>
     <tr>
       <th>abbrev_names</th>
@@ -340,11 +354,12 @@ between one and four.</p></td>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>The order of visits may change depending on the original sequence,
-  and the underlying algorithm used. Usually this would be the order of the
-  first occurence of each visit/patient identifier.</p>
+and the underlying algorithm used. Usually this would be the order of the
+first occurence of each visit/patient identifier, but this is not
+guaranteed unless <code>restore_id_order</code> is set to <code>TRUE</code>.</p>
 <p>The threading of the C++ can be controlled using e.g.
-  <code>option(icd.threads = 4)</code>. If it is not set, the number of cores in
-  the machine is used. 'OpenMP' environment variables also work.</p>
+<code>option(icd.threads = 4)</code>. If it is not set, the number of cores in
+the machine is used. 'OpenMP' environment variables also work.</p>
 <p><code>data.frame</code>s of patient data may have columns within them
   which are of class <code>icd9</code>, <code>icd10</code> etc., but do not themselves
   have a class: therefore, the S3 mechanism for dispatch is not suitable. I
@@ -367,6 +382,8 @@ codes</p></li>
 <li><p><code>icd10_comorbid_quan_elix</code>: Quan's Elixhauser comorbidities for ICD-10 codes</p></li>
 <li><p><code>icd9_comorbid_quan_deyo</code>: Quan's Deyo (Charlson) comorbidities for ICD-9 codes</p></li>
 <li><p><code>icd10_comorbid_quan_deyo</code>: Quan's Deyo (Charlson) comorbidities for ICD-10 codes</p></li>
+<li><p><code>icd9_comorbid_charlson</code>: Currently synonym for <code>icd9_comorbid_quan_deyo</code></p></li>
+<li><p><code>icd10_comorbid_charlson</code>: Currently synonym for <code>icd10_comorbid_quan_deyo</code></p></li>
 <li><p><code>comorbid_ccs</code>: Use AHRQ CCS for comorbidity classification</p></li>
 <li><p><code>icd9_comorbid_ccs</code>: Compute AHRQ Clinical Classifications Software (CCS)
 scores from ICD-9 codes</p></li>

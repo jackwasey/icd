@@ -131,11 +131,15 @@
 <a href="#version-3-2" class="anchor"></a>Version 3.2<small> Unreleased </small>
 </h1>
 <ul>
-<li>fixed 588 instead of 588.0 in Quan Elixhauser ICD-9 comorbidity map</li>
-<li>fix regression where codes appearing in two comorbidities would only count once.</li>
 <li>added Pediatric Complex Chronic Condition comorbidity classification</li>
-<li>added ICD-10 procedure code data, and AHRQ procedure code classification. See ICD-10 vignette.</li>
+<li>added ICD-10 procedure code data, and AHRQ procedure code classification – see <a href="https://jackwasey.github.io/icd/articles/icd-10.html">ICD-10 vignette</a>
+</li>
 <li>added ICD-10-CM data from US CMS for 2015 to 2018</li>
+<li>fixed 588 instead of 588.0 in Quan Elixhauser ICD-9 comorbidity map</li>
+<li>fix regression where codes appearing in two comorbidities would only count once</li>
+<li>default best-effort ordering of identifiers (e.g. Visit ID, Encounter, Patient ID) is done. There are many cases where this is not possible (disordered input data), or obvious (the IDs are given as a factor, where the factor level order does not resemble the order of appearance in the vector). For performance, this can be turned off using <code>restore_id_order = FALSE</code> in comorbidity calculations.</li>
+<li>added <code>icd9_comorbid_charlson</code> and <code>icd10_comorbid_charlson</code> as synonyms for the Quan/Deyo comorbidity calculations. <code>comorbid_charlson</code> will infer the ICD type.</li>
+<li>depend on new package <a href="https://github.com/jackwasey/icd.data">icd.data</a> for large, rarely modified data files</li>
 </ul>
 </div>
     <div id="version-3-1-2" class="section level1">
@@ -169,7 +173,7 @@
 <li>added ‘charlson’ synonyms for ‘quan_deyo’, e.g. Charlson comorbidities can now be found using <code><a href="../reference/comorbid.html">comorbid_charlson(patient_data)</a></code>
 </li>
 <li>Added AHRQ clinical condition software (CCS) classification for ICD-9 and ICD-10, thanks to Vitaly Druker, fixes #127</li>
-<li>function names have lost the ‘icd_’ prefix, old names kept for compatiblity, but easier now to write <code><a href="../reference/comorbid.html">comorbid(patient_data)</a></code>, and <code><a href="../reference/comorbid.html">icd::comorbid</a></code> may also be used, and which many consider good practice. <code>explain_icd</code> synonym avoids name conflict with the popular <code>dplyr</code> package, but <code><a href="../reference/explain.html">icd::explain</a></code> also a nice option.</li>
+<li>function names have lost the ‘icd_’ prefix, old names kept for compatiblity, but easier now to write <code><a href="../reference/comorbid.html">comorbid(patient_data)</a></code>, and <code><a href="../reference/comorbid.html">icd::comorbid</a></code> may also be used, and which many consider good practice. <code>explain_icd</code> synonym avoids name conflict with the popular <code>dplyr</code> package, but <code>icd::explain</code> also a nice option.</li>
 <li>Assume C++11, which is now four years old, enabling code simplification</li>
 <li>rename all functions to remove the icd_, people can use the concise icd:: if library(icd) was not callled</li>
 <li>deprecated rarely or unused code, including %i9in%</li>
