@@ -32,8 +32,8 @@ dat_wide_factors <- R.cache::loadCache(key_factors)
 dat_wide_str <- R.cache::loadCache(key_str)
 if (is.null(dat_wide_factors) || nrow(dat_wide_factors) != n) {
   dat_wide_factors <- data.frame(id = dat$id,
-                         dx01 = dat$icd_code,
-                         stringsAsFactors = TRUE)
+                                 dx01 = dat$icd_code,
+                                 stringsAsFactors = TRUE)
   for (dx in seq(2L, 20L)) {
     dx_str <- sprintf("%02i", dx)
     message("building column:", dx_str)
@@ -50,76 +50,82 @@ if (is.null(dat_wide_factors) || nrow(dat_wide_factors) != n) {
     dat_wide_str[names(dat_wide_factors)[i]] <-
       as.character(dat_wide_factors[[i]])
   }
+  R.cache::saveCache(dat_wide_str, key_str)
 }
+
+if (FALSE) { # rest is testing
+
+  # NEDS simulated data result: 14 mins on Mac (4 core, just 2.5Ghz 16G RAM) after
+  # some simple optimization, with GC each step, 5m40s (vs 18 mins in JAMA letter)
+  # without garbage collection, 10 seconds per col, more with more occupancy:
+  # Down to 4m40s, which is similar on xeon and mac
+  if (FALSE)
+    profvis::profvis(icd9_comorbid_pccc_dx(dat_wide_factors[c("id", "dx10")],
+                                           icd_name = "dx10",
+                                           restore_id_order = FALSE,
+                                           unique_ids = TRUE))
+  m_tens <- 10^c(seq_len(log10(n)))
+  pccc_timings <- list()
+  for (m in unique(c(m_tens, n))) {
+    message("working on pccc:ccc_mat_rcpp with ", m, " rows")
+    st <- system.time(
+      devnull <- pccc:::ccc_mat_rcpp(as.matrix(dat_wide[seq_len(m), -1]),
+                                     matrix("", nrow = m), 9)
+    )
+    pccc_timings[as.character(m)] <- as.list(st)$elapsed
+    message(" - took ", as.list(st)$elapsed, " seconds")
+  }
+  # full simulated NEDS 21 mins on xeon 4 core, (likely similar on Mac) vs twice
+  # the time for PCCC compared to icd on 72-core server (busy server)
+  if (FALSE)
+    pccc::ccc(head(dat_wide_str),
+              "id",
+              dx_cols = seq(2, ncol(dat_wide_str)),
+              #dx_cols = tidyselect::vars_select(names(dat_wide), tidyselect::starts_with("dx")),
+              # pc_cols,
+              icdv = 9)
+
+  # finding unique values is slowest step: consider
+  # https://github.com/jl2922/omp_hash_map or
+  # https://github.com/efficient/libcuckoo or
+  # https://github.com/preshing/junction
+
+  # repeat with character instead of factor
+}
+
 if (FALSE)
   system.time(dat_long <- icd::wide_to_long(dat_wide))
-2# ugh - very slow - 10 or 20 seconds on Mac on 1% of data instead, can we just
+# ugh - wide to long is very slow - 10 or 20 seconds on Mac on 1% of data instead, can we just
 # calculate comorbidities for each column, then OR? But icd has to work on the
 # generated ID column each time, which is a big time sink
+
+# TODO: try dplyr wide to long
+
 ptm <- proc.time()
-res <- lapply(
-  rev(names(dat_wide_factors)[-1]),
-  function(x) {
-    message("working on column ", x);
-    tm <- system.time(
-      if (do_icd9)
-        icd9_comorbid_pccc_dx(dat_wide_factors[c("id", x)], icd_name = x,
-                              restore_id_order = FALSE, unique_ids = TRUE)
-      else
-        icd10_comorbid_pccc_dx(dat_wide_factors[c("id", x)], icd_name = x,
-                               restore_id_order = FALSE, unique_ids = TRUE)
-    )
-    print(tm)
-    #gc(verbose = TRUE) # there is gc time between each column
-  }
-)
+res <- matrix(0L, nrow = n, ncol = 12L)
+for (x in rev(names(dat_wide_factors)[-1])) {
+  message("working on column ", x);
+  #tm <- system.time(
+    if (do_icd9)
+      res <- res | icd9_comorbid_pccc_dx( # copies big matrix each update
+        dat_wide_factors[c("id", x)], icd_name = x,
+        restore_id_order = FALSE, unique_ids = TRUE)
+    else
+      res <- res | icd10_comorbid_pccc_dx(
+        dat_wide_factors[c("id", x)], icd_name = x,
+        restore_id_order = FALSE, unique_ids = TRUE)
+  #); print(tm)
+  #gc(verbose = TRUE) # there is gc time between each column
+}
 print(proc.time() - ptm)
 
 ########
 # pccc #
 ########
-ptm <- proc.time()
-pccc::ccc(dat_wide_str,
-          "id",
-          dx_cols = seq(2, ncol(dat_wide_str)),
-          icdv = 9)
-print(proc.time() - ptm)
+pccctm <- proc.time()
+res_pccc <- pccc::ccc(dat_wide_str,
+                      "id",
+                      dx_cols = seq(2, ncol(dat_wide_str)),
+                      icdv = 9)
+print(proc.time() - pccctm)
 
-stop()
-
-# NEDS simulated data result: 14 mins on Mac (4 core, just 2.5Ghz 16G RAM) after
-# some simple optimization, with GC each step, 5m40s (vs 18 mins in JAMA letter)
-# without garbage collection, 10 seconds per col, more with more occupancy:
-# Down to 4m40s, which is similar on xeon and mac
-if (FALSE)
-  profvis::profvis(icd9_comorbid_pccc_dx(dat_wide_factors[c("id", "dx10")],
-                                         icd_name = "dx10",
-                                         restore_id_order = FALSE,
-                                         unique_ids = TRUE))
-m_tens <- 10^c(seq_len(log10(n)))
-pccc_timings <- list()
-for (m in unique(c(m_tens, n))) {
-  message("working on pccc:ccc_mat_rcpp with ", m, " rows")
-  st <- system.time(
-    pccc:::ccc_mat_rcpp(as.matrix(dat_wide[seq_len(m), -1]),
-                        matrix("", nrow = m), 9) # gave up after about 10 minutes on first run.
-  )
-  pccc_timings[as.character(m)] <- as.list(st)$elapsed
-  message(" - took ", as.list(st)$elapsed, " seconds")
-}
-# full simulated NEDS 21 mins on xeon 4 core, (likely similar on Mac) vs twice
-# the time for PCCC compared to icd on 72-core server (busy server)
-if (FALSE)
-  pccc::ccc(head(dat_wide_str),
-            "id",
-            dx_cols = seq(2, ncol(dat_wide_str)),
-            #dx_cols = tidyselect::vars_select(names(dat_wide), tidyselect::starts_with("dx")),
-            # pc_cols,
-            icdv = 9)
-
-# finding unique values is slowest step: consider
-# https://github.com/jl2922/omp_hash_map or
-# https://github.com/efficient/libcuckoo or
-# https://github.com/preshing/junction
-
-# repeat with character instead of factor
