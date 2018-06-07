@@ -42,7 +42,7 @@ Rcpp::NumericVector randomMajorCpp(int n);
 VecStr icd9RandomShortN(VecStr::size_type n);
 VecStr icd9RandomShortV(VecStr::size_type n);
 VecStr icd9RandomShortE(VecStr::size_type n);
-VecStr icd9RandomShort(VecStr::size_type n);
+CV icd9RandomShort(unsigned int n);
 int valgrindCallgrindStart(bool zerostats);
 int valgrindCallgrindStop();
 bool icd9CompareStrings(std::string a, std::string b);

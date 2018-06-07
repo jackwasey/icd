@@ -1380,11 +1380,11 @@ RcppExport SEXP _icd_icd9RandomShortE(SEXP nSEXP) {
     return rcpp_result_gen;
 }
 // icd9RandomShort
-VecStr icd9RandomShort(VecStr::size_type n);
+CV icd9RandomShort(unsigned int n);
 static SEXP _icd_icd9RandomShort_try(SEXP nSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
-    Rcpp::traits::input_parameter< VecStr::size_type >::type n(nSEXP);
+    Rcpp::traits::input_parameter< unsigned int >::type n(nSEXP);
     rcpp_result_gen = Rcpp::wrap(icd9RandomShort(n));
     return rcpp_result_gen;
 END_RCPP_RETURN_ERROR
@@ -2170,7 +2170,7 @@ static int _icd_RcppExport_validate(const char* sig) {
         signatures.insert("VecStr(*icd9RandomShortN)(VecStr::size_type)");
         signatures.insert("VecStr(*icd9RandomShortV)(VecStr::size_type)");
         signatures.insert("VecStr(*icd9RandomShortE)(VecStr::size_type)");
-        signatures.insert("VecStr(*icd9RandomShort)(VecStr::size_type)");
+        signatures.insert("CV(*icd9RandomShort)(unsigned int)");
         signatures.insert("CV(*icd9_expand_minor_wrap)(const Str&,bool)");
         signatures.insert("CV(*icd9ChildrenShort)(CV,const VecStr&,bool)");
         signatures.insert("CV(*icd9ChildrenShortUnordered)(CV,const VecStr&,bool)");

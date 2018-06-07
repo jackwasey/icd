@@ -59,27 +59,29 @@ VecStr icd9RandomShortE(VecStr::size_type n = 5) {
 //' Generate random short-form ICD-9 codes
 //'
 //' Quick pseudo-random by picking numeric, 'V' or 'E' based on modulo three of
-//' the number
+//' the number, with predominance of purely numeric codes.
 //' @keywords internal
 // [[Rcpp::export]]
-VecStr icd9RandomShort(VecStr::size_type n = 5) {
-  VecStr out(n);
-  VD randoms = as<VD>(runif(n, 0, 99999));
-  VD randoms2 = as<VD>(runif(n, 0, 3));
-  char buffer[6];
-  for (std::vector<char>::size_type i = 0; i != n; ++i) {
-    switch (((short) randoms2[i]) % 3) {
+CV icd9RandomShort(unsigned int n = 5) {
+  CV out(n);
+  char buffer[7]; // 5+1 for null should be okay...
+  uint_fast32_t r; // need 32 bits for 99999
+  uint_fast8_t t;
+  for (auto i = 0; i != n; ++i) {
+    r = R::runif(0.1, 99998.9); // force to unsigned integer type
+    t = R::rnorm(2.49, 0.5); // force to unsigned char type
+    switch (t % 3) {
+    case 2:
+      sprintf(buffer, "%u", r);
+      break;
     case 0:
-      sprintf(buffer, "%.0f", randoms[i]);
+      sprintf(buffer, "V%u", r / 10);
       break;
     case 1:
-      sprintf(buffer, "V%.0f", randoms[i] / 10);
-      break;
-    case 2:
-      sprintf(buffer, "E%.0f", randoms[i] / 10);
+      sprintf(buffer, "E%u", r / 10);
       break;
     default:
-      {} // never here
+      {}
     }
     out[i] = buffer;
   }

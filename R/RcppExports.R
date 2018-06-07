@@ -439,7 +439,7 @@ icd9RandomShortE <- function(n = 5L) {
 #' Generate random short-form ICD-9 codes
 #'
 #' Quick pseudo-random by picking numeric, 'V' or 'E' based on modulo three of
-#' the number
+#' the number, with predominance of purely numeric codes.
 #' @keywords internal
 icd9RandomShort <- function(n = 5L) {
     .Call(`_icd_icd9RandomShort`, n)

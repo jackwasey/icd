@@ -763,11 +763,11 @@ namespace icd {
         return Rcpp::as<VecStr >(rcpp_result_gen);
     }
 
-    inline VecStr icd9RandomShort(VecStr::size_type n = 5) {
+    inline CV icd9RandomShort(unsigned int n = 5) {
         typedef SEXP(*Ptr_icd9RandomShort)(SEXP);
         static Ptr_icd9RandomShort p_icd9RandomShort = NULL;
         if (p_icd9RandomShort == NULL) {
-            validateSignature("VecStr(*icd9RandomShort)(VecStr::size_type)");
+            validateSignature("CV(*icd9RandomShort)(unsigned int)");
             p_icd9RandomShort = (Ptr_icd9RandomShort)R_GetCCallable("icd", "_icd_icd9RandomShort");
         }
         RObject rcpp_result_gen;
@@ -779,7 +779,7 @@ namespace icd {
             throw Rcpp::internal::InterruptedException();
         if (rcpp_result_gen.inherits("try-error"))
             throw Rcpp::exception(Rcpp::as<std::string>(rcpp_result_gen).c_str());
-        return Rcpp::as<VecStr >(rcpp_result_gen);
+        return Rcpp::as<CV >(rcpp_result_gen);
     }
 
     inline CV icd9_expand_minor_wrap(const Str& mnr, bool isE) {
