@@ -50,6 +50,7 @@ release_questions <- function() {
     "Is NEWS.md updated and contributors credited?",
     "Does every file have correct licence information?",
     # code quality:
+    "foghorn::summary_cran_details(pkg = 'icd')",
     "Consider results of 'goodpractice' package.",
     "Are you happy with the _core_ code coverage?",
     "Is every SEXP PROTECT()ed and UNPROTECT()ed, when appropriate?",
