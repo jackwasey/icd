@@ -14,4 +14,5 @@ rtf_fetch_year(year, offline = TRUE)
 \description{
 Will return NULL if offline and not available
 }
+\keyword{datagen}
 \keyword{internal}

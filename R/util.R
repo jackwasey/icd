@@ -89,19 +89,15 @@ strip <- function(x, pattern = " ", use_bytes = TRUE)
 #' @keywords internal manip logical
 logical_to_binary <- function(x) {
   stopifnot(is.data.frame(x) || is.matrix(x))
-
   if (is.matrix(x)) {
     assert_matrix(x, min.rows = 1, min.cols = 1)
     mode(x) <- "integer"
     return(x)
   }
-
   assert_data_frame(x, min.rows = 1, min.cols = 1)
-
   logical_fields <- names(x)[vapply(x, is.logical, logical(1))]
   if (is.na(logical_fields) || length(logical_fields) == 0)
     return(x)
-
   # update just the logical fields with integers
   x[, logical_fields] <-
     vapply(
@@ -157,25 +153,20 @@ str_pair_match <- function(string, pattern, pos, swap = FALSE, ...) {
     pos <- c(1L, 2L)
   else
     assert_integerish(pos, len = 2L, lower = 1L, any.missing = FALSE)
-
   res <- lapply(string,
                 function(x) unlist(
                   regmatches(x = x, m = regexec(pattern = pattern, text = x, ...))
                 )[-1]
   )
-
   res <- res[vapply(res, function(x) length(x) != 0, logical(1))]
   res <- do.call(rbind, res)
-
   if (pos_missing && ncol(res) > max(pos))
     stop("the pair matching has three or more ress but needed two.
           Use (?: to have a non-grouping regular expression parenthesis")
-
   out_names <- res[, ifelse(swap, 2L, 1L)]
   if (any(is.na(out_names)))
     stop("didn't match some rows:", string[is.na(out_names)],
          call. = FALSE)
-
   out <- res[, ifelse(swap, 1L, 2L)]
   stopifnot(all(!is.na(out)))
   setNames(out, out_names)

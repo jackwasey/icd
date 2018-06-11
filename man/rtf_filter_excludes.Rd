@@ -10,4 +10,5 @@ rtf_filter_excludes(filtered, ...)
 Ignore excluded codes, and fix some odd-balls so they don't get dropped
 "707.02Upper back", "066.40West Nile fever, unspecified", etc
 }
+\keyword{datagen}
 \keyword{internal}

@@ -21,4 +21,5 @@ chapter Neoplasms (\code{C00-D49}). A way of determining whether there are
 extra levels would be to check the XML tree depth for a member of each
 putative sub-chapter.
 }
+\keyword{datagen}
 \keyword{internal}

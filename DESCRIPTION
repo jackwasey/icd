@@ -63,7 +63,7 @@ Suggests:
     tinytex,
     xml2
 LinkingTo:
-    Rcpp,
+    Rcpp (>= 0.12.3),
     RcppEigen,
     testthat
 VignetteBuilder: 

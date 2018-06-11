@@ -13,5 +13,5 @@ split over lines... This needs care in Windows, or course. Maybe Mac, too?
 \details{
 First: c cedilla, e grave, e acute Then:  n tilde, o umlaut
 }
+\keyword{datagen}
 \keyword{internal}
-\keyword{manip}

@@ -16,5 +16,5 @@ space and eradicate all other RTF symbols
 \details{
 just for \\tab, replace with space, otherwise, drop RTF tags entirely
 }
+\keyword{datagen}
 \keyword{internal}
-\keyword{manip}

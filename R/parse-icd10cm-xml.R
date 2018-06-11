@@ -28,7 +28,7 @@
 #' extra levels would be to check the XML tree depth for a member of each
 #' putative sub-chapter.
 #' @template save_data
-#' @keywords internal
+#' @keywords internal datagen
 icd10cm_extract_sub_chapters <- function(save_data = FALSE, offline = TRUE) {
   assert_flag(save_data)
   f_info <- icd10cm_get_xml_file(offline = offline)
@@ -39,21 +39,21 @@ icd10cm_extract_sub_chapters <- function(save_data = FALSE, offline = TRUE) {
   # \code{icd-package.R} for what is imported. No harm in being explicit, since
   # :: will do an implicit requireNamespace.
   xml2::xml_children(j) %>%
-    xml2::xml_name() %>%
+    xml2::xml_name %>%
     magrittr::equals("chapter") -> chapter_indices
   # could do xpath, but harder to loop
   xml2::xml_children(j) %>%
     magrittr::extract(chapter_indices) -> chaps
   icd10_sub_chapters <- list()
   for (chap in chaps) {
-    c_kids <- chap %>% xml2::xml_children()
+    c_kids <- chap %>% xml2::xml_children
     subchap_indices <- xml2::xml_name(c_kids) == "section"
     subchaps <- c_kids[subchap_indices]
     for (subchap in subchaps) {
       subchap  %>%
-        xml2::xml_children()  %>%
+        xml2::xml_children  %>%
         magrittr::extract(1) %>%
-        xml2::xml_text() %>%
+        xml2::xml_text %>%
         chapter_to_desc_range.icd10 -> new_sub_chap_range
       # should only match one at a time
       stopifnot(length(new_sub_chap_range) == 1)
@@ -68,7 +68,6 @@ icd10cm_extract_sub_chapters <- function(save_data = FALSE, offline = TRUE) {
       # incorrectly specified (in 2016 version of XML, at least)
       if (new_sub_chap_range[[1]]["end"] == "Y08")
         new_sub_chap_range[[1]]["end"] <- "Y09"
-
       icd10_sub_chapters <- append(icd10_sub_chapters, new_sub_chap_range)
     } #subchaps
   } #chapters

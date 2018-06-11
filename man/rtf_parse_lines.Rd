@@ -23,4 +23,5 @@ parse a character vector containing RTF strings
 \details{
 \code{...} might include: \code{perl = TRUE, useBytes = TRUE}
 }
+\keyword{datagen}
 \keyword{internal}

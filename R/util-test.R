@@ -17,9 +17,8 @@
 
 #nocov start
 
-rtf_year_ok <- function(year) {
+rtf_year_ok <- function(year)
   !is.null(rtf_fetch_year(year, offline = TRUE))
-}
 
 skip_on_no_rtf <- function(test_year) {
   if (!rtf_year_ok(test_year))
@@ -34,29 +33,24 @@ skip_flat_icd9_avail <- function(ver = "31") {
   fn_orig <- dat$short_filename
   if (is.na(fn_orig))
     fn_orig <- dat$other_filename
-
   # don't try to download the file, just check it is there:
   f_info_short <- unzip_to_data_raw(dat$url,
                                     file_name = fn_orig,
                                     offline = TRUE)
-  if (is.null(f_info_short))
-    testthat::skip(msg)
+  if (is.null(f_info_short)) testthat::skip(msg)
 }
 
-skip_flat_icd9_all_avail <- function() {
-  for (v in icd9_sources$version)
-    skip_flat_icd9_avail(v)
-}
+skip_flat_icd9_all_avail <- function()
+  for (v in icd9_sources$version) skip_flat_icd9_avail(v)
 
-skip_icd10cm_flat_avail <- function(msg = "skipping test because flat file ICD-10-CM source not available") {
+skip_icd10cm_flat_avail <- function(
+  msg = "skipping test because flat file ICD-10-CM source not available")
   if (is.null(icd10cm_get_flat_file(offline = TRUE)))
     testthat::skip(msg)
-}
 
-skip_icd10cm_xml_avail <- function(msg = "skipping test because XML file ICD-10-CM source not available") {
-  if (is.null(icd10cm_get_xml_file(offline = TRUE)))
-    testthat::skip(msg)
-}
+skip_icd10cm_xml_avail <- function(
+  msg = "skipping test because XML file ICD-10-CM source not available")
+  if (is.null(icd10cm_get_xml_file(offline = TRUE))) testthat::skip(msg)
 
 skip_flat_icd9_avail_all <- function() {
   for (v in icd9_sources$version)
@@ -101,14 +95,11 @@ expect_chap_equal <- function(x, start, end, ver_chaps, ...) {
 }
 
 #' @rdname expect_chap_equal
-expect_icd10_sub_chap_equal <- function(x, start, end, ...) {
+expect_icd10_sub_chap_equal <- function(x, start, end, ...)
   eval(bquote(expect_chap_equal(.(x), .(start), .(end), ver_chaps = icd10_sub_chapters, ...)))
-}
 
-expect_explain_equal <- function(x, desc, ...) {
+expect_explain_equal <- function(x, desc, ...)
   eval(bquote(expect_equal(explain_code(.(x)), .(desc), ...)))
-}
-
 
 #' @rdname expect_chap_equal
 expect_icd9_sub_chap_equal <- function(x, start, end, ...) {
@@ -143,26 +134,21 @@ chap_present <- function(x, ver_chaps, ...) {
   x %in% lnames
 }
 
-expect_chap_missing <- function(x, ver_chaps, info = NULL, label = NULL, ...) {
+expect_chap_missing <- function(x, ver_chaps, info = NULL, label = NULL, ...)
   eval(bquote(expect_true(.(chap_missing(x, ver_chaps)),
                           info = info, label = label, ...)))
-}
 
-expect_icd9_sub_chap_missing <- function(x, ...) {
+expect_icd9_sub_chap_missing <- function(x, ...)
   eval(bquote(expect_chap_missing(.(x), ver_chaps = icd9_sub_chapters, ...)))
-}
 
-expect_icd9_chap_missing <- function(x, ...) {
+expect_icd9_chap_missing <- function(x, ...)
   eval(bquote(expect_chap_missing(.(x), ver_chaps = icd9_chapters, ...)))
-}
 
-expect_icd10_sub_chap_missing <- function(x, ...) {
+expect_icd10_sub_chap_missing <- function(x, ...)
   eval(bquote(expect_chap_missing(.(x), ver_chaps = icd10_sub_chapters, ...)))
-}
 
-expect_icd10_chap_missing <- function(x, ...) {
+expect_icd10_chap_missing <- function(x, ...)
   eval(bquote(expect_chap_missing(.(x), ver_chaps = icd10_chapters, ...)))
-}
 
 #' expect that a chapter with given title exists, case-insensitive
 #' @keywords internal debugging
@@ -226,22 +212,19 @@ expect_icd10_only_sub_chap <- function(x, ...) {
     eval(bquote(expect_icd10_chap_missing(.(x), ...)))
   else
     res
-
 }
 
 #' @describeIn classes_ordered \code{testthat} \code{expect} function
 #'   for ICD classes to be in correct order.
 #' @keywords internal debugging
-expect_classes_ordered <- function(x) {
+expect_classes_ordered <- function(x)
   eval(bquote(testthat::expect_true(classes_ordered(.(x)))))
-}
 
 #' generate random ICD-9 codes
 #'
 #' @keywords internal debugging datagen
-generate_random_short_icd9 <- function(n = 50000) {
+generate_random_short_icd9 <- function(n = 50000)
   as.character(floor(stats::runif(min = 1, max = 99999, n = n)))
-}
 
 #' generate random ICD-9 codes
 #'
@@ -250,11 +233,9 @@ generate_random_short_icd9 <- function(n = 50000) {
 #' @template short_code
 #' @keywords internal debugging datagen
 generate_random_short_icd10cm_bill <- function(n = 10, short_code = TRUE) {
-  x <- sample(unlist(icd10cm2016[icd10cm2016$billable == 1, "code"]), replace = TRUE, size = n)
-  if (short_code)
-    x
-  else
-    short_to_decimal(x)
+  x <- sample(unlist(icd10cm2016[icd10cm2016$billable == 1, "code"]),
+              replace = TRUE, size = n)
+  if (short_code) x else short_to_decimal(x)
 }
 
 #' @rdname generate_random_short_icd9
@@ -268,9 +249,8 @@ generate_random_decimal_icd9 <- function(n = 50000)
 
 #' @rdname generate_random_short_icd9
 #' @keywords internal debugging datagen
-generate_random_pts <- function(...) {
+generate_random_pts <- function(...)
   generate_random_ordered_pts(...)
-}
 
 #' @rdname generate_random_short_icd9
 #' @keywords internal debugging datagen
@@ -298,9 +278,8 @@ generate_random_unordered_pts <- function(num_patients = 50000, dz_per_patient =
 
 #' @rdname generate_random_short_icd9
 #' @keywords internal debugging datagen
-generate_random_short_ahrq_icd9 <- function(n = 50000) {
+generate_random_short_ahrq_icd9 <- function(n = 50000)
   sample(unname(unlist(icd::icd9_map_ahrq)), size = n, replace = TRUE)
-}
 
 #' generate random strings
 #'

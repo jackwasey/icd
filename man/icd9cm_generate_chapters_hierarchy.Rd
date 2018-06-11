@@ -2,7 +2,7 @@
 % Please edit documentation in R/parse.R
 \name{icd9cm_generate_chapters_hierarchy}
 \alias{icd9cm_generate_chapters_hierarchy}
-\title{generate ICD-9-CM hierarchy}
+\title{Generate ICD-9-CM hierarchy}
 \usage{
 icd9cm_generate_chapters_hierarchy(save_data = FALSE, verbose = FALSE,
   offline = TRUE, perl = TRUE, use_bytes = TRUE)
@@ -23,8 +23,5 @@ description, and short and long descriptions. Currently this is specifically
 for the 2011 ICD-9-CM after which there have been minimal changes.
 Thankfully, ICD-10-CM has machine readable data available.
 }
-\details{
-TODO Someday add 'billable' column, and make consistent ICD-9 and ICD-10 lookup
-tables
-}
+\keyword{datagen}
 \keyword{internal}

@@ -14,4 +14,5 @@ named character vector, names are the ICD codes, values are the
 \code{lookup_fourth} will contain vector of suffices, with names being the
 codes they augment
 }
+\keyword{datagen}
 \keyword{internal}

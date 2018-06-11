@@ -34,4 +34,5 @@ higher-level codes, just the specific diagnostic 'child' codes.
 The file can be pulled from the zip files on the CMS web site or from within
 the package.
 }
+\keyword{datagen}
 \keyword{internal}

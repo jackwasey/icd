@@ -14,4 +14,5 @@ raw data directory. This is helpful for testing without using the internet.}
 \description{
 These have a quirk which needs a different approach
 }
+\keyword{datagen}
 \keyword{internal}

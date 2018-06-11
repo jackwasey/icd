@@ -10,4 +10,5 @@ rtf_fix_duplicates(out, verbose)
 clean up duplicates (about 350 in 2015 data), mostly one very brief
 description and a correct longer one; or, identical descriptions
 }
+\keyword{datagen}
 \keyword{internal}

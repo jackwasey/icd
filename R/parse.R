@@ -23,7 +23,7 @@
 #' the 'billable' codes. Also parses the AHRQ, Quan/Deyo, and CMS HCC comorbidity mappings
 #' from the source SAS data. Elixhauser and Quan/Elixhauser mappings are
 #' generated from transcribed codes.
-#' @keywords internal
+#' @keywords internal datagen
 update_everything <- function() {
   # this is not strictly a parsing step, but is quite slow. It relies on picking
   # up already saved files from previous steps. It can take hours to complete,
@@ -98,7 +98,7 @@ icd9cm_hierarchy_sanity <- function(x) {
 #'   }
 #' @source
 #' http://www.cms.gov/Medicare/Coding/ICD9ProviderDiagnosticCodes/codes.html
-#' @keywords internal
+#' @keywords internal datagen
 parse_leaf_descriptions_all <- function(save_data = TRUE, offline = TRUE) {
   assert_flag(save_data)
   assert_flag(offline)
@@ -134,7 +134,7 @@ parse_leaf_descriptions_all <- function(save_data = TRUE, offline = TRUE) {
 #' @param path Absolute path in which to save parsed data
 #' @template offline
 #' @return invisibly return the result
-#' @keywords internal
+#' @keywords internal datagen
 icd9_parse_leaf_desc_ver <- function(version = icd9cm_latest_edition(),
                                      save_data = TRUE,
                                      offline = TRUE) {
@@ -215,7 +215,7 @@ icd9_parse_leaf_desc_ver <- function(version = icd9cm_latest_edition(),
 #'
 #' These have a quirk which needs a different approach
 #' @template offline
-#' @keywords internal
+#' @keywords internal datagen
 parse_leaf_desc_icd9cm_v27 <- function(offline = TRUE) {
   message("working on version 27 quirk")
   assert_flag(offline)
@@ -234,22 +234,21 @@ parse_leaf_desc_icd9cm_v27 <- function(offline = TRUE) {
   invisible(icd9cm_billable27[reorder, ])
 }
 
-#' generate ICD-9-CM hierarchy
+#' Generate ICD-9-CM hierarchy
 #'
 #' For each row of billing code, give the chapter, sub-chapter, major code and
 #' description, and short and long descriptions. Currently this is specifically
 #' for the 2011 ICD-9-CM after which there have been minimal changes.
 #' Thankfully, ICD-10-CM has machine readable data available.
-#'
-#' TODO Someday add 'billable' column, and make consistent ICD-9 and ICD-10 lookup
-#' tables
 #' @template save_data
 #' @template verbose
 #' @template offline
-#' @keywords internal
+#' @keywords internal datagen
 icd9cm_generate_chapters_hierarchy <- function(save_data = FALSE,
                                                verbose = FALSE, offline = TRUE,
                                                perl = TRUE, use_bytes = TRUE) {
+# TODO: Someday add 'billable' column, and make consistent ICD-9 and ICD-10
+# lookup tables
   assert_flag(save_data)
   assert_flag(verbose)
   assert_flag(offline)
@@ -301,7 +300,7 @@ icd9cm_generate_chapters_hierarchy <- function(save_data = FALSE,
 #' Fix NA sub-chapters in RTF parsing
 #'
 #' Fixes a couple of corner cases in parsing the 2011 ICD-9-CM RTF
-#' @keywords internal
+#' @keywords internal datagen
 fixSubchapterNa <- function(x, start, end) {
   # 740 CONGENITAL ANOMALIES is a chapter with no sub-chapters defined. For
   # consistency, assign the same name to sub-chapters

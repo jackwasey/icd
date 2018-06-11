@@ -9,4 +9,5 @@ rtf_lookup_fourth(out, lookup_fourth, verbose = FALSE)
 \description{
 use the lookup table of fourth digit
 }
+\keyword{datagen}
 \keyword{internal}

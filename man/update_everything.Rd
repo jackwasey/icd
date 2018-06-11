@@ -12,4 +12,5 @@ the 'billable' codes. Also parses the AHRQ, Quan/Deyo, and CMS HCC comorbidity m
 from the source SAS data. Elixhauser and Quan/Elixhauser mappings are
 generated from transcribed codes.
 }
+\keyword{datagen}
 \keyword{internal}

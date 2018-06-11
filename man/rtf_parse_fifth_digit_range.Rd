@@ -15,4 +15,5 @@ returns all the possible 5 digit codes encompassed by the given
   definition. This needs to be whittled down to just those matching fifth
   digits, but we haven't parsed them yet.
 }
+\keyword{datagen}
 \keyword{internal}
