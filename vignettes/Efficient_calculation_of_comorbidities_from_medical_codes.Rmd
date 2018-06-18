@@ -56,10 +56,14 @@ pkgdown:
   as_is: true
   extension: pdf
 ---
-
-```{r setup, echo=FALSE, warning=FALSE, cache=FALSE}
+```{r comments, purl=FALSE, eval=FALSE, echo=FALSE}
 # https://www.jstatsoft.org/pages/view/authors
 # https://www.jstatsoft.org/pages/view/style
+# generate replication code:
+# knitr::purl("Efficient_calculation_of_comorbidities_from_medical_codes.Rmd")
+```
+
+```{r setup, echo=FALSE, warning=FALSE, cache=FALSE}
 suppressPackageStartupMessages({
   requireNamespace("knitr")
   library(icd.data, warn.conflicts = FALSE)
@@ -86,15 +90,13 @@ kable_caption_bottom <- function(x) {
 my_kable <- function(x, col.names, caption, ...)
   kable_caption_bottom(
     knitr::kable(x, 
-                 col.names = sprintf("\\textbf{%s}", col.names),
+                 col.names = sprintf("%s", col.names),
                  escape = FALSE,
                  format = "latex",
                  longtable = TRUE,
                  caption = caption, 
                  ...))
 ```
-
-**This is the draft submitted to the [Journal of Statistical Software](www.jstatsoft.org) on May 5th, 2018.**
 
 # Introduction
 ICD diagnostic codes are used to define tens of thousands of disease. Originally from the World Health Organization (WHO), their purpose was to allow epidemiologists to study global health. In the USA, and elsewhere, the WHO ICD codes have been extended for administrative purposes, notably for billing. All over the world, ICD codes are the primary method by which diseases are recorded, often using national variants. This makes ICD codes important in many kinds of medical research. \pkg{icd} was made to meet the need for ICD code interpretation in \proglang{R}, and, in particular, it is designed to compute comorbidities quickly, enabling a reproducible workflow when used with big or small data.
@@ -106,9 +108,21 @@ For example, a diabetic patient presents to hospital with a stroke: diabetes is 
 
 ```{r longtail, eval=TRUE, echo=FALSE, fig.cap="Frequency distribution of ICD codes in 5,000 pediatric hospital inpatients showing nearly 4,000 unique ICD codes; 1,401 appear only once, making them and the many other low-frequency codes of low or negative value in inter-group comparisons."}
 h <- inverse.rle(structure(list(
-  lengths = c(1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 2, 2, 1, 1, 1, 2, 1, 1, 1, 1, 1, 3, 1, 2, 1, 1, 1, 4, 2, 1, 1, 2, 2, 4, 4, 2, 1, 1, 2, 1, 1, 1, 3, 1, 2, 1, 4, 1, 2, 4, 4, 3, 2, 3, 7, 5, 2, 10, 4, 4, 4, 5, 6, 6, 1, 8, 13, 9, 11, 10, 13, 13, 14, 10, 16, 23, 18, 24, 27, 32, 39, 45, 33, 51, 87, 86, 76, 126, 166, 240, 365, 632, 1401),
-  values = c(525, 405, 296, 283, 281, 268, 227, 209, 193, 180, 168, 166, 156, 146, 144, 135, 134, 131, 120, 116, 115, 113, 110, 106, 103, 90, 88, 86, 85, 82, 81, 80, 78, 77, 76, 75, 73, 72, 71, 70, 69, 68, 67, 64, 63, 62, 61, 56, 55, 54, 53, 51, 50, 49, 48, 46, 45, 44, 43, 41, 40, 39, 38, 37, 36, 35, 34, 33, 32, 31, 30, 29, 28, 27, 26, 25, 24, 23, 22, 21, 20, 19, 18, 17, 16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1)
-), class = "rle"))
+  lengths = c(
+    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 2, 2, 1, 1, 1,
+    2, 1, 1, 1, 1, 1, 3, 1, 2, 1, 1, 1, 4, 2, 1, 1, 2, 2, 4, 4, 2, 1,
+    1, 2, 1, 1, 1, 3, 1, 2, 1, 4, 1, 2, 4, 4, 3, 2, 3, 7, 5, 2, 10, 4,
+    4, 4, 5, 6, 6, 1, 8, 13, 9, 11, 10, 13, 13, 14, 10, 16, 23, 18, 
+    24, 27, 32, 39, 45, 33, 51, 87, 86, 76, 126, 166, 240, 365, 632,
+    1401),
+  values = c(
+    525, 405, 296, 283, 281, 268, 227, 209, 193, 180, 168, 166, 156, 
+    146, 144, 135, 134, 131, 120, 116, 115, 113, 110, 106, 103, 90, 88,
+    86, 85, 82, 81, 80, 78, 77, 76, 75, 73, 72, 71, 70, 69, 68, 67, 64,
+    63, 62, 61, 56, 55, 54, 53, 51, 50, 49, 48, 46, 45, 44, 43, 41, 40, 
+    39, 38, 37, 36, 35, 34, 33, 32, 31, 30, 29, 28, 27, 26, 25, 24, 23,
+    22, 21, 20, 19, 18, 17, 16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5,
+    4, 3, 2, 1)), class = "rle"))
   plot(h, type = "h", 
        xlab = "ICD code, by descending frequency", 
        ylab = "count", 
@@ -117,12 +131,18 @@ h <- inverse.rle(structure(list(
 ```
 
 ```{r terminology, echo=FALSE, eval=TRUE, results='asis'}
-termdf <- as.data.frame(matrix(byrow = TRUE, ncol = 2,
-                      data = c(
-                        "\\textit{comorbidity}", "broad category of disease, \\textit{e.g.}, Cancer",
-                        "\\textit{comorbidity map}", "set of comorbidities, each defined by diagnostic codes",
-                        "\\textit{patient-visit}", "record identifier, unique for each encounter with a patient, but could represent a patient at one moment, or a summation of all conditions a patient has ever had"
-                      )))
+termdf <- as.data.frame(
+  matrix(byrow = TRUE, ncol = 2,
+         data = c(
+           "comorbidity", "broad category of disease, e.g., Cancer",
+           "comorbidity map", 
+           "set of comorbidities, each defined by diagnostic codes",
+           "patient-visit",
+           paste("record identifier, unique for each", 
+                 "encounter with a patient, but could",
+                 "represent a patient at one moment, or a",
+                 "summation of all conditions a patient has",
+                 "ever had"))))
 my_kable(termdf, col.names = c("Term", "Description"),
          align = c("l", "p{10 cm}"),
          caption = "Terminology")
@@ -136,7 +156,7 @@ my_kable(termdf, col.names = c("Term", "Description"),
 Almost every report of a medical investigation includes a table showing the characteristics of the groups comprising a study population. One purpose of this table is to show any differences between the groups under investigation. Things like age and weight can be compared numerically, whereas the tens of thousands of distinct diagnostic codes may only be compared by grouping into comorbidities. It is of central importance to retrospective studies that confounding is minimized by understanding differences in comorbidities between groups, then by risk adjustment. In randomized studies, this is achieved by recruiting enough patients and randomly assigning them to treatment: comorbidities of interest are still needed to demonstrate that recruitment was free from bias and that the sample size large enough.
 
 ### Risk adjustment
-Identifying differences between groups in retrospective medical data is not hard: they almost always exist. The eternal challenge of retrospective research is to account for those differences to make causal inferences. A common, somewhat historic strategy is to use scoring systems to encapsulate the severity of the comorbidities in one number, for example the Charlson Score [@charlson_new_1987]. Another approach is to use propensity scores or propensity matching: the inputs to propensity models include comorbidity information, which is a simple score like the Charlson Score, or a binary representation of the presence or absence of comorbidities for each patient or _patient-visit_ (See [Terminology](#terminology)). More sophisticated matching also relies on comorbidities for better risk adjustment, \citep[\textit{e.g.},][]{diamond_genetic_2012}.
+Identifying differences between groups in retrospective medical data is not hard: they almost always exist. The eternal challenge of retrospective research is to account for those differences to make causal inferences. A common, somewhat historic strategy is to use scoring systems to encapsulate the severity of the comorbidities in one number, for example the Charlson Score [@charlson_new_1987]. Another approach is to use propensity scores or propensity matching: the inputs to propensity models include comorbidity information, which is a simple score like the Charlson Score, or a binary representation of the presence or absence of comorbidities for each patient or _patient-visit_ (See [Terminology](#terminology)). More sophisticated matching also relies on comorbidities for better risk adjustment, \citep[e.g.,][]{diamond_genetic_2012}.
 
 ## Mapping ICD codes onto comorbidities
 The ubiquity of ICD codes means there is a long history of grouping them to form comorbidities, and these standardized groups have been used for decades as the basis for medical studies. As revisions of the ICD codes have appeared, and various diseases have waxed and waned in significance, people have worked to categorize them into these standardized comorbidity groups. The two main groups were developed by Charlson [@charlson_new_1987], and Elixhauser [@elixhauser_comorbidity_1998]. Such mappings between comorbidity categories and sets of diagnostic codes will henceforth be called, _comorbidity maps_. The benefits of using existing comorbidity maps are:
@@ -145,13 +165,13 @@ The ubiquity of ICD codes means there is a long history of grouping them to form
  - they are well validated
  - researchers can avoid the effort and errors involved in developing new comorbidity schemes.
 
-Charlson did not initially use ICD codes to define the comorbidities, but various authors \citep[\textit{e.g.},][]{quan_coding_2005} have since classified  ICD codes into those 17 comorbidity categories. Elixhauser [-@elixhauser_comorbidity_1998] developed ICD-based comorbidities for 31 diseases, and the US-based Agency for Healthcare Research and Quality (AHRQ) used this as a foundation for its own comorbidity groups [@AgencyforHealthcareResearchandQuality_ElixhauserComorbiditySoftware_2018]. Elixhauser and Charlson comorbidities have undergone refinement over the years, especially by \citet{quan_updating_2011} whose meticulous work on ICD-9 and ICD-10 codes has been included in \pkg{icd}, alongside the AHRQ mappings.
+Charlson did not initially use ICD codes to define the comorbidities, but various authors \citep[e.g.,][]{quan_coding_2005} have since classified  ICD codes into those 17 comorbidity categories. Elixhauser [-@elixhauser_comorbidity_1998] developed ICD-based comorbidities for 31 diseases, and the US-based Agency for Healthcare Research and Quality (AHRQ) used this as a foundation for its own comorbidity groups [@AgencyforHealthcareResearchandQuality_ElixhauserComorbiditySoftware_2018]. Elixhauser and Charlson comorbidities have undergone refinement over the years, especially by \citet{quan_updating_2011} whose meticulous work on ICD-9 and ICD-10 codes has been included in \pkg{icd}, alongside the AHRQ mappings.
 
 ## Medical codes
 Medical coding has a complicated history beginning with epidemiology, and snowballing to include medical billing and research. There are several major coding schemes, including the WHO ICD family, various national modifacations and extensions of the WHO ICD codes, the extensive USA ICD-CM (Clinical Modification), and several unrelated schemes with similar goals. There are codes for diagnoses, procedures, medical equipment, and causes and circumstances of disease or injury. Codes sometimes have detail beyond what seems useful for routine clinical care, for example:
 
 ```{r suckedintoengine}
-library(icd)
+library("icd")
 explain_code("V97.33XD")
 ```
 
@@ -173,7 +193,7 @@ explain_code(c("S62.60", "S62.607", "S62.607S"))
 These codes are all contained in the following sub-chapter, and chapter: 
 ```{r examplecodechap}
 icd10_sub_chapters$`Injuries To The Wrist, Hand And Fingers`
-icd10_chapters$`Injury, poisoning and certain other consequences of external causes`
+icd10_chapters$Injury
 ```
 
 [^libraryicd]: Here the \pkg{icd} function `explain_code` is used. More detail on this can be found in Section \ref{other-functionality}.
@@ -400,8 +420,8 @@ cmbimage <- function(map, xlab, ...) {
   mtext(text = xlab, side = 1, line = 1.5, outer = FALSE)
 }
 {
-  par(mfcol = c(1, 3), cex = 1, mar = c(2, 2, 2, 1) + 0.1, oma = rep(0.5, 4))
-  # defaults: c(5, 4, 4, 2) + 0.1, oma = c(0, 0, 0, 0))
+  par(mfcol = c(1, 3), cex = 1, 
+      mar = c(2, 2, 2, 1) + 0.1, oma = rep(0.5, 4))
   cmbimage(icd9_map_ahrq, xlab = "ICD-9 AHRQ\ncomorbidities")
   mtext(text = "ICD codes", side = 2, line = 0.5, outer = FALSE)
   cmbimage(icd10_map_ahrq, xlab = "ICD-10 AHRQ\ncomorbidities")
@@ -459,16 +479,18 @@ list(
 ```
 
 ```{r workedexinput, echo=FALSE, results="asis"}
-workedexinput <- matrix(ncol = 4,
-                        data = c(
-                          paste("Encounter", c("one", "two", "three", "four")),
-                          "K401", "I0981", "M352", "I110",
-                          "", "C450", "I10", "H40001",
-                          "", "", "", "I10"))
-my_kable(workedexinput, 
-         col.names = c("Patient-Visit", sprintf("Code %i", 1:3)),
-         #align = c("l", "p{10 cm}"),
-         caption = "Four patient-visits with some ICD-10 codes in `wide' format for worked example")
+workedexinput <- matrix(
+  ncol = 4,
+  data = c(
+    paste("Encounter", c("one", "two", "three", "four")),
+    "K401", "I0981", "M352", "I110",
+    "", "C450", "I10", "H40001",
+    "", "", "", "I10"))
+my_kable(
+  workedexinput, 
+  col.names = c("Patient-Visit", sprintf("Code %i", 1:3)),
+  caption = paste("Four patient-visits with some ICD-10 codes in",
+                  "`wide' format for worked example"))
 ```
 
 There are several things to note, which represent common features in real health care data:
@@ -519,16 +541,20 @@ $$(\boldsymbol{C} \neq 0) =
 Table \ref{tab:cmbresult} shows how this can be represented to the user.
 
 ```{r cmbresult, echo=FALSE, results="asis"}
-workedexinput <- matrix(ncol = 4,
-                        data = c(
-                          paste("Encounter", c("one", "two", "three", "four")),
-                          "", "yes", "", "",
-                          "", "", "yes", "yes",
-                          "", "", "", "yes"
-                          ))
-my_kable(workedexinput, 
-         col.names = c("Patient-Visit", "Rheum", "HTN", "CHF"),
-         caption = "Output of the worked example using ICD-10 codes. `Rheum' is Rheumatic Disease, `HTN' is hypertension, `CHF' is Congestive Heart Failure.")
+workedexinput <- matrix(
+  ncol = 4,
+  data = c(
+    paste("Encounter", c("one", "two", "three", "four")),
+    "", "yes", "", "",
+    "", "", "yes", "yes",
+    "", "", "", "yes"
+  ))
+my_kable(
+  workedexinput, 
+  col.names = c("Patient-Visit", "Rheum", "HTN", "CHF"),
+  caption = paste("Output of the worked example using ICD-10 codes.",
+                  "`Rheum' is Rheumatic Disease, `HTN' is",
+                  "hypertension, `CHF' is Congestive Heart Failure."))
 ```
 
 ## Worked example with anonymous patient data
@@ -557,11 +583,8 @@ print(head(v_cmb), row.names = FALSE)
 ```{r vermontimage, echo=FALSE, fig.cap="This visualization of the result of the comorbidity calculation shows a black cell for each positive comorbidity in one thousand patients from Vermont, USA."}
 comorbid_matrix <- comorbid_ahrq(v)
 {
-#  par(mar = par("mar") + 0)
-  image(comorbid_matrix, 
-        col = c("#FFFFFF", "#000000"),
-        xaxt = 'n', yaxt = 'n')
-        #useRaster = TRUE)
+  image(comorbid_matrix, col = c("#FFFFFF", "#000000"),
+        xaxt = 'n', yaxt = 'n', useRaster = FALSE)
   mtext(text = "Comorbidity", side = 2, line = 1)
   mtext(text = "Patient-visit", side = 1, line = 1)
 }
@@ -590,8 +613,6 @@ res <- data.frame(
   medicalrisk = fac * c(
     3.965962, 3.752622, 11.69087, 77.603945,
     734.2927, 8355.8409, 83382.279, 1935343))
-# fit a line to the last four of 'icd' column and predict duration for one
-# hundred million patient-visits with twenty comorbidities per patient
 fit_res <- log10(res[5:8, ])
 icd_model <- lm(icd ~ datarows, data = fit_res)
 cmb_model <- lm(comorbidity ~ datarows, data = fit_res)
@@ -607,9 +628,10 @@ logxaxis <- sapply(paste("expression(10^", xseq, ")", sep = ""),
                    function(x) eval(parse(text = x)))
 logyaxis <- sapply(paste("expression(10^", yseq, ")", sep = ""),
                    function(x) eval(parse(text = x)))
-colours <- c(comorbidity = 'darkred', icd = 'black', medicalrisk = 'darkblue')
-# https://stackoverflow.com/questions/40938561/plot-new-has-not-been-called-yet-error-in-rmarkdown-rstudio-1-0-44#41947860
-resratio <- data.frame(datarows = res$datarows,
+colours <- c(comorbidity = 'darkred',
+             icd = 'black',
+             medicalrisk = 'darkblue')
+rr <- data.frame(datarows = res$datarows,
                        icd = 1,
                        comorbidity = res$comorbidity / res$icd,
                        medicalrisk = res$medicalrisk / res$icd)
@@ -627,13 +649,13 @@ resratio <- data.frame(datarows = res$datarows,
   )  
   axis(1, 10^xseq, logxaxis)
   axis(2, 10^yseq, logyaxis)
-  lines(x = res$datarows, y = res$comorbidity, col = colours["comorbidity"])
-  lines(x = res$datarows, y = res$icd, col = colours["icd"])
-  lines(x = res$datarows, y = res$medicalrisk, col = colours["medicalrisk"])
+  lines(res$datarows, res$comorbidity, col = colours["comorbidity"])
+  lines(res$datarows, res$icd, col = colours["icd"])
+  lines(res$datarows, res$medicalrisk, col = colours["medicalrisk"])
   abline(icd_model, col = colours["icd"], lty = 3)
   abline(cmb_model, col = colours["comorbidity"], lty = 3)
   abline(mdr_model, col = colours["medicalrisk"], lty = 3)
-  legend(1, 1000, legend = names(res[-1]), fill = colours[names(res[-1])])
+  legend(1, 1000, names(res[-1]), fill = colours[names(res[-1])])
 }
 ```
 ```{r speedup, echo=FALSE, fig.width=6, fig.height=3.7, fig.cap="Relative speed-up using icd compared to the alternatives, using the same numbers of patient-visits and comorbidities in Figure \\ref{fig:versus}."}
@@ -642,15 +664,15 @@ resratio <- data.frame(datarows = res$datarows,
        type = "l", col = 'darkred',
        xlab = "rows of data",
        ylab = "time / time using 'icd'",
-       xlim = c(1, max(resratio$datarows)),
-       ylim = c(1, max(c(resratio$medicalrisk, resratio$comorbidity))),
+       xlim = c(1, max(rr$datarows)),
+       ylim = c(1, max(c(rr$medicalrisk, rr$comorbidity))),
        xaxt = "n"
   )
   axis(1, 10^xseq, logxaxis)
-  lines(x = resratio$datarows, y = resratio$icd, col = colours["icd"])
-  lines(x = resratio$datarows, y = resratio$comorbidity, col = colours["comorbidity"])
-  lines(x = resratio$datarows, y = resratio$medicalrisk, col = colours["medicalrisk"])
-  legend(1, 170, legend = names(resratio[-1]), fill = colours[names(resratio[-1])])
+  lines(rr$datarows, rr$icd, col = colours["icd"])
+  lines(rr$datarows, rr$comorbidity, col = colours["comorbidity"])
+  lines(rr$datarows, rr$medicalrisk, col = colours["medicalrisk"])
+  legend(1, 170, legend = names(rr[-1]), fill = colours[names(rr[-1])])
 }
 ```
 ```{r bigdata, echo=FALSE, fig.cap="Predicted duration of computation for one hundred-million patient-visits, with twenty patients per patient"}
@@ -658,7 +680,7 @@ resratio <- data.frame(datarows = res$datarows,
   barplot(preds,
           col = colours[c("icd", "comorbidity", "medicalrisk")],
           ylab = "hours", log = "y", ylim = c(1, 5000))
-  legend(x = 0.2, y = 2500, legend = names(preds), fill = colours[names(preds)])
+  legend(0.2, 2500, names(preds), fill = colours[names(preds)])
 }
 
 ```
@@ -720,7 +742,6 @@ For some mappings, no source code was available, but the comorbidities are descr
 
 ```{r elixrange}
 head("243" %i9da% "244.2")
-
 "244" %in% ("243" %i9da% "244.2")
 ```
 Note that _244_ is too broad to fit the original Elixhauser description, because it implies all its children, which would go beyond _244.2_.
