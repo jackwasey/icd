@@ -30,9 +30,8 @@ along with icd. If not, see <http:#www.gnu.org/licenses/>.
 -->
 
 ```{r, include=FALSE}
-library(icd)
+library("icd")
 ```
-
 
 When deciding which comorbidity mapping to use in research, it might be useful to compare mapping schemes. For instance, it would be useful to know which comorbidities a pair of mapping schemes share, and which comorbidities only exist in only one mapping scheme. For comorbidites that exist in both mapping schemes, how many ICD codes assigned to those comorbidities overlap? In other words, how similar are the mapping schemes structurally?
 

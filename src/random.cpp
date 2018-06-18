@@ -67,7 +67,7 @@ CV icd9RandomShort(unsigned int n = 5) {
   char buffer[7]; // 5+1 for null should be okay...
   uint_fast32_t r; // need 32 bits for 99999
   uint_fast8_t t;
-  for (auto i = 0; i != n; ++i) {
+  for (unsigned int i = 0; i != n; ++i) {
     r = R::runif(0.1, 99998.9); // force to unsigned integer type
     t = R::rnorm(2.49, 0.5); // force to unsigned char type
     switch (t % 3) {

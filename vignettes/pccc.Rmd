@@ -10,7 +10,7 @@ vignette: >
 ---
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
-library(icd)
+library("icd")
 n <- 10000
 set.seed(1441)
 dat <- data.frame(id = n + seq(n),
