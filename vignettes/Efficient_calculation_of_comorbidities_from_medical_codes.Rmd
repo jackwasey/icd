@@ -43,7 +43,9 @@ preamble: |
   \author{Jack O. Wasey\\Children's Hospital\\of Philadelphia \And Steven M. Frank\\Johns Hopkins Medical\\Institutions \And Mohamed A. Rehman\\Johns Hopkins All\\Children's Hospital}
 # graphicx, color, hyperref, ae, fancyverb and natbib are included by jss.cls
 biblio-style: jss
-output: rticles::jss_article
+output: 
+  rticles::jss_article:
+    keep_tex: true
 bibliography:
   - all.bib
 vignette: >
@@ -98,10 +100,10 @@ my_kable <- function(x, col.names, caption, ...)
 ```
 
 # Introduction
-ICD diagnostic codes are used to define tens of thousands of disease. Originally from the World Health Organization (WHO), their purpose was to allow epidemiologists to study global health. In the USA, and elsewhere, the WHO ICD codes have been extended for administrative purposes, notably for billing. All over the world, ICD codes are the primary method by which diseases are recorded, often using national variants. This makes ICD codes important in many kinds of medical research. \pkg{icd} was made to meet the need for ICD code interpretation in \proglang{R}, and, in particular, it is designed to compute comorbidities quickly, enabling a reproducible workflow when used with big or small data.
+ICD diagnostic codes are used to define tens of thousands of diseases. Originally from the World Health Organization (WHO), their purpose was to allow epidemiologists to study global health [@_WHOInternationalClassification_2018]. In the USA, and elsewhere, the WHO ICD codes have been extended for administrative purposes, notably for billing [@Medicare_CMSICD10Frequently_2017]. All over the world, ICD codes are the primary method by which diseases are recorded, often using national variants. This makes ICD codes important in many kinds of medical research. \pkg{icd} was made to meet the need for ICD code interpretation in \proglang{R}, and, in particular, it is designed to compute comorbidities quickly, enabling a reproducible workflow when used with big or small data.
 
 ## What is a comorbidity?
-Given there are tens of thousands of diagnostic codes, it is extremely difficult to use them directly in most statistical models: there are a few relatively common ICD codes, but there is a long tail to the frequency distribution (see Figure \ref{fig:longtail} for an example) since even common diagnoses can be finely sub-divded. The almost universal solution is to group these codes in a standardized way, and to use the presence and absence of any disease code in the comorbidity groups as covariates in models. The term comorbidity describes a disease which is present alongside the primary problem.
+Given there are tens of thousands of diagnostic codes, it is extremely difficult to use them directly in most statistical models: there are a few relatively common ICD codes, but there is a long tail to the frequency distribution (see Figure \ref{fig:longtail} for an example) since even common diagnoses can be finely sub-divded. The almost universal solution is to group these codes in a standardized way [e.g., @quan_coding_2005; @elixhauser_comorbidity_1998], and to use the presence and absence of any disease code in the comorbidity groups as covariates in models. The term comorbidity describes a disease which is present alongside a primary medical problem.
 
 For example, a diabetic patient presents to hospital with a stroke: diabetes is the comorbidity and stroke is the presenting complaint. During or after an hospital admission, medical coders review the records and assign specific ICD (and other) codes. In this example, the patient might get the ICD-10 code E11.2 meaning 'Type 2 diabetes mellitus with renal complications,' and I63.0 meaning 'Cerebral infarction due to thrombosis of precerebral arteries.' In this case, the comorbidities might be regarded as: 'Diabetes' and 'Renal'. The term comorbidity generally refers to classes of diseases, not specific diagnoses, and that is how the term is used in the rest of this paper.
 
@@ -147,12 +149,10 @@ my_kable(termdf, col.names = c("Term", "Description"),
          caption = "Terminology")
 ```
 
-\pagebreak
-
 ## Uses of comorbidities
 
 ### Comparing groups
-Almost every report of a medical investigation includes a table showing the characteristics of the groups comprising a study population. One purpose of this table is to show any differences between the groups under investigation. Things like age and weight can be compared numerically, whereas the tens of thousands of distinct diagnostic codes may only be compared by grouping into comorbidities. It is of central importance to retrospective studies that confounding is minimized by understanding differences in comorbidities between groups, then by risk adjustment. In randomized studies, this is achieved by recruiting enough patients and randomly assigning them to treatment: comorbidities of interest are still needed to demonstrate that recruitment was free from bias and that the sample size large enough.
+Almost every report of a medical investigation includes a table showing the characteristics of the groups comprising a study population. (For example, see table 2 in @frank_risk-adjusted_2014.) One purpose of this table is to show any differences between the groups under investigation. Things like age and weight can be compared numerically, whereas the tens of thousands of distinct diagnostic codes may only be compared by grouping into comorbidities. It is of central importance to retrospective studies that confounding is minimized by understanding differences in comorbidities between groups, then by risk adjustment. In randomized studies, this is achieved by recruiting enough patients and randomly assigning them to treatment: comorbidities of interest are still needed to demonstrate that recruitment was free from bias and that the sample size large enough. It is helpful if different studies use the same criteria, and ideally the same methods, for establishing these comorbidities. One main purpose of \pkg{icd} is to enable standardized calculations in \proglang{R} using extremely well validated definitions of comorbidities, e.g., @quan_updating_2011 and @AgencyforHealthcareResearchandQuality_ElixhauserComorbiditySoftware_2018 only offer \proglang{SAS} code for this task].
 
 ### Risk adjustment
 Identifying differences between groups in retrospective medical data is not hard: they almost always exist. The eternal challenge of retrospective research is to account for those differences to make causal inferences. A common, somewhat historic strategy is to use scoring systems to encapsulate the severity of the comorbidities in one number, for example the Charlson Score [@charlson_new_1987]. Another approach is to use propensity scores or propensity matching: the inputs to propensity models include comorbidity information, which is a simple score like the Charlson Score, or a binary representation of the presence or absence of comorbidities for each patient or patient-visit (See [Terminology](#terminology)). More sophisticated matching also relies on comorbidities for better risk adjustment, \citep[e.g.,][]{diamond_genetic_2012}.
@@ -184,16 +184,13 @@ This is a breakdown of an ICD-10-CM code, chosen to illustrate the hierarchical 
 ```{r exampleicdcodewho}
 explain_code(c("S62", "S62.6"))
 ```
-\pagebreak
+
 These three are refinements offered only by ICD-10-CM:
+
 ```{r exampleicdcodecm}
 explain_code(c("S62.60", "S62.607", "S62.607S"))
 ```
-These codes are all contained in the following sub-chapter, and chapter: 
-```{r examplecodechap}
-icd10_sub_chapters$`Injuries To The Wrist, Hand And Fingers`
-icd10_chapters$Injury
-```
+These codes are all contained in the sub-chapter, `Injuries To The Wrist, Hand And Fingers,' (S60 to S69) and the chapter `Injury, poisoning and certain other consequences of external causes.' (S00 to T88). 
 
 [^libraryicd]: Here the \pkg{icd} function `explain_code` is used. More detail on this can be found in Section \ref{other-functionality}.
 
@@ -235,8 +232,6 @@ The central computational problem is one of using string matching to map ICD cod
 @. Inexact comorbidity definitions
 
 The comorbidity definitions in published literature do not precisely specify each individual code. This is partly a function of the various annual and international revisions of ICD codes, and also the need for brevity in publications, so ranges of codes are specified. For example, in the Valvular Heart Disease comorbidity in the ICD-9 Elixhauser scheme, we see it contains the range 394.0 -- 397.1 . In the ICD-10 version of the Elixhauser map, there are many top-level codes, such as I34, I35 and I36, which themselves are never or rarely used for diagnostic coding. Therefore, there are few or no exact matches between candidate ICD codes and the codes or ranges in the comorbidities, so some kind of string matching must be done, or a determination of whether a code falls in a specified range. This is dealt with in detail in Section \ref{derivation-of-the-comorbidity-maps}.
-
-\pagebreak
 
 @. Big data
 
@@ -391,7 +386,7 @@ The comorbidity matrix is more sparse than the patient-visit matrix, but is impl
 
 [^wordagain]: Again the calculation is done using a 32-bit word for each flag.
 
-There is a detailed example below in Section \ref{workedex}, but a better idea of the bulk structure of this matrix can be seen here for a fictious comorbidity map with five categories, and in Figure \ref{fig:comorbidmatrix}. Note that the code represented by the last row appears in the first and third comorbidities, whereas the others are all unique to one comorbidity.
+There is a detailed example below in Section \ref{workedex}, but a better idea of the bulk structure of this matrix can be seen below for a fictious comorbidity map with five categories, and also in Figure \ref{fig:comorbidmatrix}. Note that the code represented by the last row appears in the first and third comorbidities, whereas the others are all unique to one comorbidity.
 $$ B_{p,q} =
 \begin{matrix}
 1 & 0 & 0 & 0 & 0 \\
@@ -405,7 +400,7 @@ $$ B_{p,q} =
 0 & 0 & 1 & 0 & 0 \\
 1 & 0 & 1 & 0 & 0 \\
 \vdots & \vdots & \vdots & \vdots & \vdots
-\end{matrix}$$
+\end{matrix}$$\label{eq:bulk}
 
 ```{r comorbidmatrix, echo=FALSE, fig.cap="These are visualizations of some complete maps, black representing the appearance of a particular ICD code in a comorbidity column"}
 cmbimage <- function(map, xlab, ...) {
@@ -438,7 +433,7 @@ a_{1,1} & a_{1,2} & \cdots & a_{1,n} \\
 a_{2,1} & a_{2,2} & \cdots & a_{2,n} \\
 \vdots  & \vdots  & \ddots & \vdots  \\
 a_{m,1} & a_{m,2} & \cdots & a_{m,n}
-\end{pmatrix}$$
+\end{pmatrix}$$\label{eq:A}
 
 Let matrix B be the comorbidity map, where each row, $p$, represents a different code, and each column, $q$, represents a comorbidity.
 
@@ -448,7 +443,7 @@ b_{1,1} & b_{1,2} & \cdots & b_{1,q} \\
 b_{2,1} & b_{2,2} & \cdots & b_{2,q} \\
 \vdots  & \vdots  & \ddots & \vdots  \\
 b_{p,1} & b_{p,2} & \cdots & b_{p,q}
-\end{pmatrix}$$
+\end{pmatrix}$$\label{eq:B}
 
 Given there are tens or hundreds of thousands of possible ICD-9 or ICD-10 codes, the possible width of $\boldsymbol{A}$ is large ($n$ columns). There are also many ICD codes for each comorbidity, so the height of $\boldsymbol{B}$ is large ($p$ rows), although typical comorbidity maps only cover a subset of possible codes. Many data sets have tens of millions of patient-visits, each with typically up to 30 diagnostic codes, the mean being around five to ten, depending on the dataset, so the memory requirement using lower estimates, using four bytes per flag,[^word] is $10^7 \times 10^4 \times 4 = 4 \times 10^{11}$, which is 400 gigabytes simply to represent the patient-visit to disease relationships.
 
@@ -463,7 +458,7 @@ c_{1,1} & c_{1,2} & \cdots & c_{1,q} \\
 c_{2,1} & c_{2,2} & \cdots & c_{2,q} \\
 \vdots  & \vdots  & \ddots & \vdots  \\
 c_{m,1} & c_{m,2} & \cdots & c_{m,q}
-\end{pmatrix}$$
+\end{pmatrix}$$\label{eq:C}
 
 ## Worked example using ICD-10 codes {#workedex}
 
@@ -524,7 +519,7 @@ $$\boldsymbol{A} =
 1 & 0 & 0 \\
 0 & 1 & 0 \\
 0 & 2 & 1
-\end{pmatrix}$$
+\end{pmatrix}$$\label{eq:ABC}
 
 Note that cell $\boldsymbol{C}_{4,2} = 2$, because the condition I110 is in two comorbidities, so the final result can be given as a logical matrix $\boldsymbol{C} \neq 0$
 Thus, the final result is:
@@ -535,7 +530,7 @@ $$(\boldsymbol{C} \neq 0) =
 1 & 0 & 0 \\
 0 & 1 & 0 \\
 0 & 1 & 1
-\end{pmatrix}$$
+\end{pmatrix}$$\label{eq:Clogical}
 
 Table \ref{tab:cmbresult} shows how this can be represented to the user.
 
@@ -797,8 +792,6 @@ The synthetic data used for benchmarking contained real and invalid codes. More 
 # Conclusions
 
 \pkg{icd} gives \proglang{R} the ability to do a common medical research task by doing fast and accurate conversion of ICD-9 and ICD-10 into comorbidities. The key innovations are: the reduction of the problem to an equivalent smaller task; and the use of sparse matrix multiplication to compute comorbidities. This solution offers an efficient and elegant method that reduces time and memory complexity. The benchmarks show that this technique scales to the biggest health care data sets, and answers the goal of making this possible with modest computing power in a reproducible workflow.
-
-\pagebreak
 
 \section*{Acknowledgments}
 
