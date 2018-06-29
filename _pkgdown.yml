@@ -1,0 +1,7 @@
+url: https://jackwasey.github.io/icd/
+
+template:
+  params:
+    docsearch:
+      api_key: 797795ae271734faa8bc9b1f4aaae82b
+        index_name: icd
