@@ -1,4 +1,4 @@
-pandoc: 1.19.2.4
+pandoc: 2.2.1
 pkgdown: 1.1.0
 pkgdown_sha: ~
 articles:
@@ -10,4 +10,7 @@ articles:
   icd-10: icd-10.html
   introduction: introduction.html
   pccc: pccc.html
+urls:
+  reference: https://jackwasey.github.io/icd//reference
+  article: https://jackwasey.github.io/icd//articles
 

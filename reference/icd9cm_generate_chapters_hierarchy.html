@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>generate ICD-9-CM hierarchy — icd9cm_generate_chapters_hierarchy • icd</title>
+<title>Generate ICD-9-CM hierarchy — icd9cm_generate_chapters_hierarchy • icd</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -29,8 +29,14 @@
 <script src="../pkgdown.js"></script>
 
 
+<!-- docsearch -->
+<script src="../docsearch.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.css" />
+<link href="../docsearch.css" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/jquery.mark.min.js" integrity="sha256-4HLtjeVgH0eIB3aZ9mLYF6E8oU5chNdjU6p6rrXpl9U=" crossorigin="anonymous"></script>
 
-<meta property="og:title" content="generate ICD-9-CM hierarchy — icd9cm_generate_chapters_hierarchy" />
+
+<meta property="og:title" content="Generate ICD-9-CM hierarchy — icd9cm_generate_chapters_hierarchy" />
 
 <meta property="og:description" content="For each row of billing code, give the chapter, sub-chapter, major code and
 description, and short and long descriptions. Currently this is specifically
@@ -121,6 +127,12 @@ Thankfully, ICD-10-CM has machine readable data available." />
         
       </ul>
       
+      <form class="navbar-form navbar-right" role="search">
+        <div class="form-group">
+          <input type="search" class="form-control" name="search-input" id="search-input" placeholder="Search..." aria-label="Search for..." autocomplete="off">
+        </div>
+      </form>
+      
     </div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
@@ -131,7 +143,7 @@ Thankfully, ICD-10-CM has machine readable data available." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>generate ICD-9-CM hierarchy</h1>
+    <h1>Generate ICD-9-CM hierarchy</h1>
     
     <div class="hidden name"><code>icd9cm_generate_chapters_hierarchy.Rd</code></div>
     </div>
@@ -168,20 +180,13 @@ raw data directory. This is helpful for testing without using the internet.</p><
     </tr>
     </table>
     
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
-
-    <p>TODO Someday add 'billable' column, and make consistent ICD-9 and ICD-10 lookup
-tables</p>
-    
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
-      
-      <li><a href="#details">Details</a></li>
-          </ul>
+                </ul>
 
   </div>
 </div>
@@ -199,6 +204,23 @@ tables</p>
    </div>
 
   
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/docsearch.js@2/dist/cdn/docsearch.min.js"></script>
+<script>
+  docsearch({
+    
+    
+    apiKey: '797795ae271734faa8bc9b1f4aaae82b',
+    indexName: 'icd',
+    inputSelector: 'input#search-input.form-control',
+    transformData: function(hits) {
+      return hits.map(function (hit) {
+        hit.url = updateHitURL(hit);
+        return hit;
+      });
+    }
+  });
+</script>
+
 
   </body>
 </html>
