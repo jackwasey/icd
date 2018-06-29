@@ -133,81 +133,81 @@ along with icd. If not, see <http:#www.gnu.org/licenses/>.
 -->
 <p>This package now includes ICD-10 support, with some sample ICD-10-CM data, and comorbidity mappings from ICD-10 codes to comorbidities. There are also 2018 ICD-10-CM procedure codes, and a mapping to categorize these from AHRQ. The sample data are from <a href="https://ustur.wsu.edu/about-us/" class="uri">https://ustur.wsu.edu/about-us/</a> where de-identified diagnoses are given for a few hundred pathology cases relating to uranium exposure.</p>
 <p>The sample data is in the ‘long’ format, i.e., multiple rows per case</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1">uranium_pathology[<span class="dv">1</span><span class="op">:</span><span class="dv">10</span>, ]</a>
-<a class="sourceLine" id="cb1-2" data-line-number="2"><span class="co">#&gt;    case icd10</span></a>
-<a class="sourceLine" id="cb1-3" data-line-number="3"><span class="co">#&gt; 1     1 F17.9</span></a>
-<a class="sourceLine" id="cb1-4" data-line-number="4"><span class="co">#&gt; 2     1 I21.9</span></a>
-<a class="sourceLine" id="cb1-5" data-line-number="5"><span class="co">#&gt; 3     1 K75.9</span></a>
-<a class="sourceLine" id="cb1-6" data-line-number="6"><span class="co">#&gt; 4     1   R55</span></a>
-<a class="sourceLine" id="cb1-7" data-line-number="7"><span class="co">#&gt; 5     2 I25.1</span></a>
-<a class="sourceLine" id="cb1-8" data-line-number="8"><span class="co">#&gt; 6     2 I35.8</span></a>
-<a class="sourceLine" id="cb1-9" data-line-number="9"><span class="co">#&gt; 7     2 I63.9</span></a>
-<a class="sourceLine" id="cb1-10" data-line-number="10"><span class="co">#&gt; 8     2   I64</span></a>
-<a class="sourceLine" id="cb1-11" data-line-number="11"><span class="co">#&gt; 9     2 J43.9</span></a>
-<a class="sourceLine" id="cb1-12" data-line-number="12"><span class="co">#&gt; 10    2 J84.1</span></a></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">uranium_pathology[<span class="dv">1</span><span class="op">:</span><span class="dv">10</span>, ]
+<span class="co">#&gt;    case icd10</span>
+<span class="co">#&gt; 1     1 F17.9</span>
+<span class="co">#&gt; 2     1 I21.9</span>
+<span class="co">#&gt; 3     1 K75.9</span>
+<span class="co">#&gt; 4     1   R55</span>
+<span class="co">#&gt; 5     2 I25.1</span>
+<span class="co">#&gt; 6     2 I35.8</span>
+<span class="co">#&gt; 7     2 I63.9</span>
+<span class="co">#&gt; 8     2   I64</span>
+<span class="co">#&gt; 9     2 J43.9</span>
+<span class="co">#&gt; 10    2 J84.1</span></code></pre></div>
 <p>We can convert the date from long to wide format easily. This is done quickly in C++, and gives reliable output with factors). It also has other features which make it work well with other functions in this package. However, you may be happier using  and friends for this manipulation.</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1">uranium_pathology <span class="op">%&gt;%</span><span class="st"> </span>long_to_wide <span class="op">%&gt;%</span><span class="st"> </span>head</a>
-<a class="sourceLine" id="cb2-2" data-line-number="2"><span class="co">#&gt;   [,1]    [,2]    [,3]    [,4]    [,5]    [,6]    [,7]    [,8]   </span></a>
-<a class="sourceLine" id="cb2-3" data-line-number="3"><span class="co">#&gt; 1 "F17.9" "I21.9" "K75.9" "R55"   NA      NA      NA      NA     </span></a>
-<a class="sourceLine" id="cb2-4" data-line-number="4"><span class="co">#&gt; 2 "I25.1" "I35.8" "I63.9" "I64"   "J43.9" "J84.1" "K57.9" "N39.0"</span></a>
-<a class="sourceLine" id="cb2-5" data-line-number="5"><span class="co">#&gt; 3 "I21.9" "I25.1" NA      NA      NA      NA      NA      NA     </span></a>
-<a class="sourceLine" id="cb2-6" data-line-number="6"><span class="co">#&gt; 4 "T14.1" "X74"   NA      NA      NA      NA      NA      NA     </span></a>
-<a class="sourceLine" id="cb2-7" data-line-number="7"><span class="co">#&gt; 5 "C34.9" "C77.1" "C77.2" "C78.0" "C78.7" "C79.7" "I51.7" "K57.9"</span></a>
-<a class="sourceLine" id="cb2-8" data-line-number="8"><span class="co">#&gt; 6 "A16.9" "I12.9" "I21.9" "I25.1" "I25.9" "I70.0" "J45.9" "N26"</span></a></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">uranium_pathology <span class="op">%&gt;%</span><span class="st"> </span>long_to_wide <span class="op">%&gt;%</span><span class="st"> </span>head
+<span class="co">#&gt;   [,1]    [,2]    [,3]    [,4]    [,5]    [,6]    [,7]    [,8]   </span>
+<span class="co">#&gt; 1 "F17.9" "I21.9" "K75.9" "R55"   NA      NA      NA      NA     </span>
+<span class="co">#&gt; 2 "I25.1" "I35.8" "I63.9" "I64"   "J43.9" "J84.1" "K57.9" "N39.0"</span>
+<span class="co">#&gt; 3 "I21.9" "I25.1" NA      NA      NA      NA      NA      NA     </span>
+<span class="co">#&gt; 4 "T14.1" "X74"   NA      NA      NA      NA      NA      NA     </span>
+<span class="co">#&gt; 5 "C34.9" "C77.1" "C77.2" "C78.0" "C78.7" "C79.7" "I51.7" "K57.9"</span>
+<span class="co">#&gt; 6 "A16.9" "I12.9" "I21.9" "I25.1" "I25.9" "I70.0" "J45.9" "N26"</span></code></pre></div>
 <p>Now map these diagnoses to disease groups as defined by Quan et al:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1">quan_comorbidities &lt;-<span class="st"> </span><span class="kw"><a href="../reference/comorbid.html">comorbid</a></span>(uranium_pathology, icd10_map_quan_elix)</a>
-<a class="sourceLine" id="cb3-2" data-line-number="2"><span class="co"># see the first few rows and columns:</span></a>
-<a class="sourceLine" id="cb3-3" data-line-number="3">quan_comorbidities[<span class="dv">1</span><span class="op">:</span><span class="dv">6</span>, <span class="dv">3</span><span class="op">:</span><span class="dv">10</span>]</a>
-<a class="sourceLine" id="cb3-4" data-line-number="4"><span class="co">#&gt;   Valvular  PHTN   PVD   HTN HTNcx Paralysis NeuroOther Pulmonary</span></a>
-<a class="sourceLine" id="cb3-5" data-line-number="5"><span class="co">#&gt; 1    FALSE FALSE FALSE FALSE FALSE     FALSE      FALSE     FALSE</span></a>
-<a class="sourceLine" id="cb3-6" data-line-number="6"><span class="co">#&gt; 2     TRUE FALSE FALSE FALSE FALSE     FALSE      FALSE      TRUE</span></a>
-<a class="sourceLine" id="cb3-7" data-line-number="7"><span class="co">#&gt; 3    FALSE FALSE FALSE FALSE FALSE     FALSE      FALSE     FALSE</span></a>
-<a class="sourceLine" id="cb3-8" data-line-number="8"><span class="co">#&gt; 4    FALSE FALSE FALSE FALSE FALSE     FALSE      FALSE     FALSE</span></a>
-<a class="sourceLine" id="cb3-9" data-line-number="9"><span class="co">#&gt; 5    FALSE FALSE FALSE FALSE FALSE     FALSE      FALSE     FALSE</span></a>
-<a class="sourceLine" id="cb3-10" data-line-number="10"><span class="co">#&gt; 6    FALSE FALSE  TRUE FALSE  TRUE     FALSE      FALSE      TRUE</span></a></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">quan_comorbidities &lt;-<span class="st"> </span><span class="kw"><a href="../reference/comorbid.html">comorbid</a></span>(uranium_pathology, icd10_map_quan_elix)
+<span class="co"># see the first few rows and columns:</span>
+quan_comorbidities[<span class="dv">1</span><span class="op">:</span><span class="dv">6</span>, <span class="dv">3</span><span class="op">:</span><span class="dv">10</span>]
+<span class="co">#&gt;   Valvular  PHTN   PVD   HTN HTNcx Paralysis NeuroOther Pulmonary</span>
+<span class="co">#&gt; 1    FALSE FALSE FALSE FALSE FALSE     FALSE      FALSE     FALSE</span>
+<span class="co">#&gt; 2     TRUE FALSE FALSE FALSE FALSE     FALSE      FALSE      TRUE</span>
+<span class="co">#&gt; 3    FALSE FALSE FALSE FALSE FALSE     FALSE      FALSE     FALSE</span>
+<span class="co">#&gt; 4    FALSE FALSE FALSE FALSE FALSE     FALSE      FALSE     FALSE</span>
+<span class="co">#&gt; 5    FALSE FALSE FALSE FALSE FALSE     FALSE      FALSE     FALSE</span>
+<span class="co">#&gt; 6    FALSE FALSE  TRUE FALSE  TRUE     FALSE      FALSE      TRUE</span></code></pre></div>
 <p>The ICD-10-CM mappings are recorded a bit differently from the ICD-9-CM mappings in this package. The ICD-9 mappings included all possible permutations of child codes. Since ICD-10 codes contain letters, and are seven characters long, this became impractical. Therefore, the current mappings include only codes for the most recent update of ICD-10-CM. The code which assigns comorbidities for ICD-10 therefore doesn’t rely on all the possible codes being listed in the mappings, so it will (more slowly) search for each possible parent of the given code, up to the three digit ‘major’ (e.g. if Cholera was in the comorbidity mapping, then A0034212647 would eventually match A00)</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1"><span class="co"># create trivial comorbidity map:</span></a>
-<a class="sourceLine" id="cb4-2" data-line-number="2">cholera_typhoid_map &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">cholera =</span> <span class="st">"A00"</span>, <span class="dt">typhoid =</span> <span class="st">"A01"</span>)</a>
-<a class="sourceLine" id="cb4-3" data-line-number="3">patients &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">patient =</span> <span class="kw">c</span>(<span class="st">"0001"</span>, <span class="st">"0001"</span>, <span class="st">"0002"</span>), <span class="dt">code =</span> <span class="kw">c</span>(<span class="st">"A001234567"</span>, <span class="st">"A01"</span>, <span class="st">"A019"</span>))</a>
-<a class="sourceLine" id="cb4-4" data-line-number="4"><span class="kw"><a href="../reference/comorbid.html">comorbid</a></span>(patients , <span class="dt">map =</span> cholera_typhoid_map)</a>
-<a class="sourceLine" id="cb4-5" data-line-number="5"><span class="co">#&gt;      cholera typhoid</span></a>
-<a class="sourceLine" id="cb4-6" data-line-number="6"><span class="co">#&gt; 0001    TRUE    TRUE</span></a>
-<a class="sourceLine" id="cb4-7" data-line-number="7"><span class="co">#&gt; 0002   FALSE    TRUE</span></a></code></pre></div>
-<p>Here are the codes for hypertension with complications from Quan et al. Note that the vector has class <code>icd10</code> and has the attribute <code>icd_short_diag</code> indicating there are no decimal point delimiters in the codes.</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1">icd10_map_quan_elix<span class="op">$</span>HTNcx</a>
-<a class="sourceLine" id="cb5-2" data-line-number="2"><span class="co">#&gt;  [1] "I11"   "I110"  "I119"  "I12"   "I120"  "I129"  "I13"   "I130" </span></a>
-<a class="sourceLine" id="cb5-3" data-line-number="3"><span class="co">#&gt;  [9] "I131"  "I1310" "I1311" "I132"  "I15"   "I150"  "I151"  "I152" </span></a>
-<a class="sourceLine" id="cb5-4" data-line-number="4"><span class="co">#&gt; [17] "I158"  "I159" </span></a>
-<a class="sourceLine" id="cb5-5" data-line-number="5"><span class="co">#&gt; attr(,"icd_short_diag")</span></a>
-<a class="sourceLine" id="cb5-6" data-line-number="6"><span class="co">#&gt; [1] TRUE</span></a>
-<a class="sourceLine" id="cb5-7" data-line-number="7"><span class="co">#&gt; attr(,"class")</span></a>
-<a class="sourceLine" id="cb5-8" data-line-number="8"><span class="co">#&gt; [1] "icd10"     "character"</span></a></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># create trivial comorbidity map:</span>
+cholera_typhoid_map &lt;-<span class="st"> </span><span class="kw">list</span>(<span class="dt">cholera =</span> <span class="st">"A00"</span>, <span class="dt">typhoid =</span> <span class="st">"A01"</span>)
+patients &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">patient =</span> <span class="kw">c</span>(<span class="st">"0001"</span>, <span class="st">"0001"</span>, <span class="st">"0002"</span>), <span class="dt">code =</span> <span class="kw">c</span>(<span class="st">"A001234567"</span>, <span class="st">"A01"</span>, <span class="st">"A019"</span>))
+<span class="kw"><a href="../reference/comorbid.html">comorbid</a></span>(patients , <span class="dt">map =</span> cholera_typhoid_map)
+<span class="co">#&gt;      cholera typhoid</span>
+<span class="co">#&gt; 0001    TRUE    TRUE</span>
+<span class="co">#&gt; 0002   FALSE    TRUE</span></code></pre></div>
+<p>Here are the codes for hypertension with complications from Quan et al. Note that the vector has class <code>icd10</code> and has the attribute <code>icd_short_diag</code> indicating there are no decimal point delimiters in the codes.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">icd10_map_quan_elix<span class="op">$</span>HTNcx
+<span class="co">#&gt;  [1] "I11"   "I110"  "I119"  "I12"   "I120"  "I129"  "I13"   "I130" </span>
+<span class="co">#&gt;  [9] "I131"  "I1310" "I1311" "I132"  "I15"   "I150"  "I151"  "I152" </span>
+<span class="co">#&gt; [17] "I158"  "I159" </span>
+<span class="co">#&gt; attr(,"icd_short_diag")</span>
+<span class="co">#&gt; [1] TRUE</span>
+<span class="co">#&gt; attr(,"class")</span>
+<span class="co">#&gt; [1] "icd10"     "character"</span></code></pre></div>
 <div id="procedure-codes" class="section level2">
 <h2 class="hasAnchor">
 <a href="#procedure-codes" class="anchor"></a>Procedure codes</h2>
 <p>The AHRQ publishes an annually updated categorization of ICD-10-CM procedure codes into four classes, representing diagnostic and therapeutic procedures, each being either minor or major.</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1"><span class="kw">set.seed</span>(<span class="dv">1441</span>)</a>
-<a class="sourceLine" id="cb6-2" data-line-number="2">pts &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">id =</span> <span class="kw">sample</span>(LETTERS, <span class="dv">10</span>),</a>
-<a class="sourceLine" id="cb6-3" data-line-number="3">                  <span class="dt">pc =</span> <span class="kw">sample</span>(icd10_pcs[[<span class="st">"2018"</span>]]<span class="op">$</span>code, <span class="dv">10</span>))</a>
-<a class="sourceLine" id="cb6-4" data-line-number="4">res &lt;-<span class="st"> </span><span class="kw"><a href="../reference/comorbid.html">icd10_comorbid</a></span>(pts,</a>
-<a class="sourceLine" id="cb6-5" data-line-number="5">                      <span class="dt">map =</span> icd10_map_ahrq_pcs, </a>
-<a class="sourceLine" id="cb6-6" data-line-number="6">                      <span class="dt">icd_name =</span> <span class="st">"pc"</span>,</a>
-<a class="sourceLine" id="cb6-7" data-line-number="7">                      <span class="dt">return_binary =</span> <span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb6-8" data-line-number="8"><span class="kw">print</span>(res)</a>
-<a class="sourceLine" id="cb6-9" data-line-number="9"><span class="co">#&gt;   Minor Diagnostic Minor Therapeutic Major Diagnostic Major Therapeutic</span></a>
-<a class="sourceLine" id="cb6-10" data-line-number="10"><span class="co">#&gt; J                0                 0                0                 1</span></a>
-<a class="sourceLine" id="cb6-11" data-line-number="11"><span class="co">#&gt; A                0                 0                0                 1</span></a>
-<a class="sourceLine" id="cb6-12" data-line-number="12"><span class="co">#&gt; Z                1                 0                0                 0</span></a>
-<a class="sourceLine" id="cb6-13" data-line-number="13"><span class="co">#&gt; L                0                 1                0                 0</span></a>
-<a class="sourceLine" id="cb6-14" data-line-number="14"><span class="co">#&gt; H                0                 0                0                 1</span></a>
-<a class="sourceLine" id="cb6-15" data-line-number="15"><span class="co">#&gt; D                0                 1                0                 0</span></a>
-<a class="sourceLine" id="cb6-16" data-line-number="16"><span class="co">#&gt; E                0                 1                0                 0</span></a>
-<a class="sourceLine" id="cb6-17" data-line-number="17"><span class="co">#&gt; C                0                 0                0                 1</span></a>
-<a class="sourceLine" id="cb6-18" data-line-number="18"><span class="co">#&gt; W                0                 0                0                 1</span></a>
-<a class="sourceLine" id="cb6-19" data-line-number="19"><span class="co">#&gt; T                1                 0                0                 0</span></a>
-<a class="sourceLine" id="cb6-20" data-line-number="20"><span class="kw">colSums</span>(res)</a>
-<a class="sourceLine" id="cb6-21" data-line-number="21"><span class="co">#&gt;  Minor Diagnostic Minor Therapeutic  Major Diagnostic Major Therapeutic </span></a>
-<a class="sourceLine" id="cb6-22" data-line-number="22"><span class="co">#&gt;                 2                 3                 0                 5</span></a></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">set.seed</span>(<span class="dv">1441</span>)
+pts &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">id =</span> <span class="kw">sample</span>(LETTERS, <span class="dv">10</span>),
+                  <span class="dt">pc =</span> <span class="kw">sample</span>(icd10_pcs[[<span class="st">"2018"</span>]]<span class="op">$</span>code, <span class="dv">10</span>))
+res &lt;-<span class="st"> </span><span class="kw"><a href="../reference/comorbid.html">icd10_comorbid</a></span>(pts,
+                      <span class="dt">map =</span> icd10_map_ahrq_pcs, 
+                      <span class="dt">icd_name =</span> <span class="st">"pc"</span>,
+                      <span class="dt">return_binary =</span> <span class="ot">TRUE</span>)
+<span class="kw">print</span>(res)
+<span class="co">#&gt;   Minor Diagnostic Minor Therapeutic Major Diagnostic Major Therapeutic</span>
+<span class="co">#&gt; J                0                 0                0                 1</span>
+<span class="co">#&gt; A                0                 0                0                 1</span>
+<span class="co">#&gt; Z                1                 0                0                 0</span>
+<span class="co">#&gt; L                0                 1                0                 0</span>
+<span class="co">#&gt; H                0                 0                0                 1</span>
+<span class="co">#&gt; D                0                 1                0                 0</span>
+<span class="co">#&gt; E                0                 1                0                 0</span>
+<span class="co">#&gt; C                0                 0                0                 1</span>
+<span class="co">#&gt; W                0                 0                0                 1</span>
+<span class="co">#&gt; T                1                 0                0                 0</span>
+<span class="kw">colSums</span>(res)
+<span class="co">#&gt;  Minor Diagnostic Minor Therapeutic  Major Diagnostic Major Therapeutic </span>
+<span class="co">#&gt;                 2                 3                 0                 5</span></code></pre></div>
 <p>For more information on working with ICD-10 codes, see the introduction vignette, and function examples. E.g.</p>
 <pre><code><a href="../reference/comorbid.html">?comorbid
 ?explain</a></code></pre>

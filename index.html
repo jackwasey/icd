@@ -166,7 +166,7 @@ rmarkdown::render("README.Rmd")
 <div id="install" class="section level2">
 <h2 class="hasAnchor">
 <a href="#install" class="anchor"></a>Install</h2>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw">install.packages</span>(<span class="st">"icd"</span>)</a></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">install.packages</span>(<span class="st">"icd"</span>)</code></pre></div>
 </div>
 <div id="introduction" class="section level2">
 <h2 class="hasAnchor">
@@ -197,51 +197,51 @@ rmarkdown::render("README.Rmd")
 <h2 class="hasAnchor">
 <a href="#examples" class="anchor"></a>Examples</h2>
 <p>See also the vignettes and examples embedded in the help for each function for more. Here’s a taste:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1">patient_data</a>
-<a class="sourceLine" id="cb2-2" data-line-number="2"><span class="co">#&gt;   visit_id  icd9  poa</span></a>
-<a class="sourceLine" id="cb2-3" data-line-number="3"><span class="co">#&gt; 1     1000 40201    Y</span></a>
-<a class="sourceLine" id="cb2-4" data-line-number="4"><span class="co">#&gt; 2     1000  2258 &lt;NA&gt;</span></a>
-<a class="sourceLine" id="cb2-5" data-line-number="5"><span class="co">#&gt; 3     1000  7208    N</span></a>
-<a class="sourceLine" id="cb2-6" data-line-number="6"><span class="co">#&gt; 4     1000 25001    Y</span></a>
-<a class="sourceLine" id="cb2-7" data-line-number="7"><span class="co">#&gt; 5     1001 34400    X</span></a>
-<a class="sourceLine" id="cb2-8" data-line-number="8"><span class="co">#&gt; 6     1001  4011    Y</span></a>
-<a class="sourceLine" id="cb2-9" data-line-number="9"><span class="co">#&gt; 7     1002  4011    E</span></a>
-<a class="sourceLine" id="cb2-10" data-line-number="10"></a>
-<a class="sourceLine" id="cb2-11" data-line-number="11"><span class="co"># get comorbidities using Quan's application of Deyo's Charlson comorbidity groups</span></a>
-<a class="sourceLine" id="cb2-12" data-line-number="12"><span class="kw"><a href="reference/comorbid.html">comorbid_charlson</a></span>(patient_data)</a>
-<a class="sourceLine" id="cb2-13" data-line-number="13"><span class="co">#&gt;         MI   CHF   PVD Stroke Dementia Pulmonary Rheumatic   PUD LiverMild</span></a>
-<a class="sourceLine" id="cb2-14" data-line-number="14"><span class="co">#&gt; 1000 FALSE  TRUE FALSE  FALSE    FALSE     FALSE     FALSE FALSE     FALSE</span></a>
-<a class="sourceLine" id="cb2-15" data-line-number="15"><span class="co">#&gt; 1001 FALSE FALSE FALSE  FALSE    FALSE     FALSE     FALSE FALSE     FALSE</span></a>
-<a class="sourceLine" id="cb2-16" data-line-number="16"><span class="co">#&gt; 1002 FALSE FALSE FALSE  FALSE    FALSE     FALSE     FALSE FALSE     FALSE</span></a>
-<a class="sourceLine" id="cb2-17" data-line-number="17"><span class="co">#&gt;         DM  DMcx Paralysis Renal Cancer LiverSevere  Mets   HIV</span></a>
-<a class="sourceLine" id="cb2-18" data-line-number="18"><span class="co">#&gt; 1000  TRUE FALSE     FALSE FALSE  FALSE       FALSE FALSE FALSE</span></a>
-<a class="sourceLine" id="cb2-19" data-line-number="19"><span class="co">#&gt; 1001 FALSE FALSE      TRUE FALSE  FALSE       FALSE FALSE FALSE</span></a>
-<a class="sourceLine" id="cb2-20" data-line-number="20"><span class="co">#&gt; 1002 FALSE FALSE     FALSE FALSE  FALSE       FALSE FALSE FALSE</span></a>
-<a class="sourceLine" id="cb2-21" data-line-number="21"></a>
-<a class="sourceLine" id="cb2-22" data-line-number="22"><span class="co"># or go straight to the Charlson scores:</span></a>
-<a class="sourceLine" id="cb2-23" data-line-number="23"><span class="kw"><a href="reference/charlson.html">charlson</a></span>(patient_data)</a>
-<a class="sourceLine" id="cb2-24" data-line-number="24"><span class="co">#&gt; 1000 1001 1002 </span></a>
-<a class="sourceLine" id="cb2-25" data-line-number="25"><span class="co">#&gt;    2    2    0</span></a>
-<a class="sourceLine" id="cb2-26" data-line-number="26"></a>
-<a class="sourceLine" id="cb2-27" data-line-number="27"><span class="co"># get comorbidities based on present-on-arrival diagnoses, use magrittr to flow the data</span></a>
-<a class="sourceLine" id="cb2-28" data-line-number="28">patient_data <span class="op">%&gt;%</span><span class="st"> </span>filter_poa <span class="op">%&gt;%</span><span class="st"> </span>comorbid_elix</a>
-<a class="sourceLine" id="cb2-29" data-line-number="29"><span class="co">#&gt;        CHF Arrhythmia Valvular  PHTN   PVD   HTN Paralysis NeuroOther</span></a>
-<a class="sourceLine" id="cb2-30" data-line-number="30"><span class="co">#&gt; 1000 FALSE      FALSE    FALSE FALSE FALSE FALSE     FALSE      FALSE</span></a>
-<a class="sourceLine" id="cb2-31" data-line-number="31"><span class="co">#&gt; 1001 FALSE      FALSE    FALSE FALSE FALSE  TRUE     FALSE      FALSE</span></a>
-<a class="sourceLine" id="cb2-32" data-line-number="32"><span class="co">#&gt;      Pulmonary    DM  DMcx Hypothyroid Renal Liver   PUD   HIV Lymphoma</span></a>
-<a class="sourceLine" id="cb2-33" data-line-number="33"><span class="co">#&gt; 1000     FALSE  TRUE FALSE       FALSE FALSE FALSE FALSE FALSE    FALSE</span></a>
-<a class="sourceLine" id="cb2-34" data-line-number="34"><span class="co">#&gt; 1001     FALSE FALSE FALSE       FALSE FALSE FALSE FALSE FALSE    FALSE</span></a>
-<a class="sourceLine" id="cb2-35" data-line-number="35"><span class="co">#&gt;       Mets Tumor Rheumatic Coagulopathy Obesity WeightLoss FluidsLytes</span></a>
-<a class="sourceLine" id="cb2-36" data-line-number="36"><span class="co">#&gt; 1000 FALSE FALSE     FALSE        FALSE   FALSE      FALSE       FALSE</span></a>
-<a class="sourceLine" id="cb2-37" data-line-number="37"><span class="co">#&gt; 1001 FALSE FALSE     FALSE        FALSE   FALSE      FALSE       FALSE</span></a>
-<a class="sourceLine" id="cb2-38" data-line-number="38"><span class="co">#&gt;      BloodLoss Anemia Alcohol Drugs Psychoses Depression</span></a>
-<a class="sourceLine" id="cb2-39" data-line-number="39"><span class="co">#&gt; 1000     FALSE  FALSE   FALSE FALSE     FALSE      FALSE</span></a>
-<a class="sourceLine" id="cb2-40" data-line-number="40"><span class="co">#&gt; 1001     FALSE  FALSE   FALSE FALSE     FALSE      FALSE</span></a></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">patient_data
+<span class="co">#&gt;   visit_id  icd9  poa</span>
+<span class="co">#&gt; 1     1000 40201    Y</span>
+<span class="co">#&gt; 2     1000  2258 &lt;NA&gt;</span>
+<span class="co">#&gt; 3     1000  7208    N</span>
+<span class="co">#&gt; 4     1000 25001    Y</span>
+<span class="co">#&gt; 5     1001 34400    X</span>
+<span class="co">#&gt; 6     1001  4011    Y</span>
+<span class="co">#&gt; 7     1002  4011    E</span>
+
+<span class="co"># get comorbidities using Quan's application of Deyo's Charlson comorbidity groups</span>
+<span class="kw"><a href="reference/comorbid.html">comorbid_charlson</a></span>(patient_data)
+<span class="co">#&gt;         MI   CHF   PVD Stroke Dementia Pulmonary Rheumatic   PUD LiverMild</span>
+<span class="co">#&gt; 1000 FALSE  TRUE FALSE  FALSE    FALSE     FALSE     FALSE FALSE     FALSE</span>
+<span class="co">#&gt; 1001 FALSE FALSE FALSE  FALSE    FALSE     FALSE     FALSE FALSE     FALSE</span>
+<span class="co">#&gt; 1002 FALSE FALSE FALSE  FALSE    FALSE     FALSE     FALSE FALSE     FALSE</span>
+<span class="co">#&gt;         DM  DMcx Paralysis Renal Cancer LiverSevere  Mets   HIV</span>
+<span class="co">#&gt; 1000  TRUE FALSE     FALSE FALSE  FALSE       FALSE FALSE FALSE</span>
+<span class="co">#&gt; 1001 FALSE FALSE      TRUE FALSE  FALSE       FALSE FALSE FALSE</span>
+<span class="co">#&gt; 1002 FALSE FALSE     FALSE FALSE  FALSE       FALSE FALSE FALSE</span>
+
+<span class="co"># or go straight to the Charlson scores:</span>
+<span class="kw"><a href="reference/charlson.html">charlson</a></span>(patient_data)
+<span class="co">#&gt; 1000 1001 1002 </span>
+<span class="co">#&gt;    2    2    0</span>
+
+<span class="co"># get comorbidities based on present-on-arrival diagnoses, use magrittr to flow the data</span>
+patient_data <span class="op">%&gt;%</span><span class="st"> </span>filter_poa <span class="op">%&gt;%</span><span class="st"> </span>comorbid_elix
+<span class="co">#&gt;        CHF Arrhythmia Valvular  PHTN   PVD   HTN Paralysis NeuroOther</span>
+<span class="co">#&gt; 1000 FALSE      FALSE    FALSE FALSE FALSE FALSE     FALSE      FALSE</span>
+<span class="co">#&gt; 1001 FALSE      FALSE    FALSE FALSE FALSE  TRUE     FALSE      FALSE</span>
+<span class="co">#&gt;      Pulmonary    DM  DMcx Hypothyroid Renal Liver   PUD   HIV Lymphoma</span>
+<span class="co">#&gt; 1000     FALSE  TRUE FALSE       FALSE FALSE FALSE FALSE FALSE    FALSE</span>
+<span class="co">#&gt; 1001     FALSE FALSE FALSE       FALSE FALSE FALSE FALSE FALSE    FALSE</span>
+<span class="co">#&gt;       Mets Tumor Rheumatic Coagulopathy Obesity WeightLoss FluidsLytes</span>
+<span class="co">#&gt; 1000 FALSE FALSE     FALSE        FALSE   FALSE      FALSE       FALSE</span>
+<span class="co">#&gt; 1001 FALSE FALSE     FALSE        FALSE   FALSE      FALSE       FALSE</span>
+<span class="co">#&gt;      BloodLoss Anemia Alcohol Drugs Psychoses Depression</span>
+<span class="co">#&gt; 1000     FALSE  FALSE   FALSE FALSE     FALSE      FALSE</span>
+<span class="co">#&gt; 1001     FALSE  FALSE   FALSE FALSE     FALSE      FALSE</span></code></pre></div>
 <p>Look at the help files for details and examples of almost every function in this package.</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1">?comorbid</a>
-<a class="sourceLine" id="cb3-2" data-line-number="2">?comorbid_hcc</a>
-<a class="sourceLine" id="cb3-3" data-line-number="3">?explain_code</a>
-<a class="sourceLine" id="cb3-4" data-line-number="4">?is_valid</a></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><a href="reference/comorbid.html">?comorbid
+?comorbid_hcc
+?explain_code
+?is_valid</a></code></pre></div>
 <p>Note that reformatting from wide to long and back is not as straightforward as using the various Hadley Wickham tools for doing this: knowing the more detailed structure of the data let’s us do this better for the case of dealing with ICD codes.</p>
 </div>
 <div id="advanced" class="section level2">
@@ -256,8 +256,8 @@ rmarkdown::render("README.Rmd")
 <h3 class="hasAnchor">
 <a href="#development-version" class="anchor"></a>Development version</h3>
 <p>The latest version is available in <a href="https://github.com/jackwasey/icd">github icd</a>, and can be installed with:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1">    <span class="kw">install.packages</span>(<span class="st">"devtools"</span>)</a>
-<a class="sourceLine" id="cb4-2" data-line-number="2">    devtools<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/devtools/topics/install_github">install_github</a></span>(<span class="st">"jackwasey/icd"</span>)</a></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">    <span class="kw">install.packages</span>(<span class="st">"devtools"</span>)
+    devtools<span class="op">::</span><span class="kw"><a href="http://www.rdocumentation.org/packages/devtools/topics/install_github">install_github</a></span>(<span class="st">"jackwasey/icd"</span>)</code></pre></div>
 <p>The <em>master</em> branch at github should always build and pass all tests and R CMD check, and will be similar or identical to the most recent CRAN release. The CRAN releases are stable milestones. Contributions and bug reports are encouraged and essential for this package to remain current and useful to the many people who have installed it.</p>
 </div>
 <div id="contributing-and-building" class="section level3">

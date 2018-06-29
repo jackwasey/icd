@@ -208,7 +208,7 @@ Clinical Classification Software (CCS) rules from AHRQ, see
 <span class='fu'>comorbid_ccs</span>(<span class='no'>x</span>, <span class='kw'>icd_name</span> <span class='kw'>=</span> <span class='fu'><a href='get_icd_name.html'>get_icd_name</a></span>(<span class='no'>x</span>), <span class='no'>...</span>)
 
 <span class='fu'>icd9_comorbid_ccs</span>(<span class='no'>x</span>, <span class='no'>...</span>, <span class='kw'>single</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>lvl</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>map</span> <span class='kw'>=</span> <span class='kw pkg'>icd</span><span class='kw ns'>::</span><span class='no'><a href='http://www.rdocumentation.org/packages/icd/topics/icd9_map_single_ccs'>icd9_map_single_ccs</a></span>, <span class='kw'>short_map</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
+  <span class='kw'>map</span> <span class='kw'>=</span> <span class='kw pkg'>icd</span><span class='kw ns'>::</span><span class='no'><a href='https://jackwasey.github.io/icd//reference/icd9_map_single_ccs.html'>icd9_map_single_ccs</a></span>, <span class='kw'>short_map</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
 
 <span class='fu'>icd10_comorbid_ccs</span>(<span class='no'>x</span>, <span class='no'>...</span>, <span class='kw'>single</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>lvl</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)
 
@@ -550,7 +550,7 @@ according to Quan/Deyo ICD categories. Synonymous with
 #&gt; c     FALSE      FALSE
 #&gt; d     FALSE      FALSE
 #&gt; e     FALSE      FALSE</div><div class='input'><span class='co'># or if library(icd) hasn't been called first:</span>
-<span class='kw pkg'>icd</span><span class='kw ns'>::</span><span class='fu'><a href='http://www.rdocumentation.org/packages/icd/topics/comorbid'>icd10_comorbid</a></span>(<span class='no'>pts10</span>, <span class='kw'>map</span> <span class='kw'>=</span> <span class='kw pkg'>icd</span><span class='kw ns'>::</span><span class='no'><a href='http://www.rdocumentation.org/packages/icd/topics/icd9_map_ahrq'>icd10_map_ahrq</a></span>)</div><div class='output co'>#&gt;     CHF Valvular  PHTN   PVD   HTN HTNcx Paralysis NeuroOther Pulmonary    DM
+<span class='kw pkg'>icd</span><span class='kw ns'>::</span><span class='fu'><a href='https://jackwasey.github.io/icd//reference/comorbid.html'>icd10_comorbid</a></span>(<span class='no'>pts10</span>, <span class='kw'>map</span> <span class='kw'>=</span> <span class='kw pkg'>icd</span><span class='kw ns'>::</span><span class='no'><a href='https://jackwasey.github.io/icd//reference/icd9_map_ahrq.html'>icd10_map_ahrq</a></span>)</div><div class='output co'>#&gt;     CHF Valvular  PHTN   PVD   HTN HTNcx Paralysis NeuroOther Pulmonary    DM
 #&gt; a FALSE     TRUE FALSE FALSE FALSE FALSE     FALSE      FALSE     FALSE FALSE
 #&gt; b FALSE    FALSE FALSE FALSE FALSE FALSE     FALSE      FALSE     FALSE FALSE
 #&gt; c FALSE    FALSE  TRUE FALSE FALSE FALSE     FALSE      FALSE     FALSE FALSE
@@ -574,7 +574,7 @@ according to Quan/Deyo ICD categories. Synonymous with
 #&gt; c     FALSE      FALSE
 #&gt; d     FALSE      FALSE
 #&gt; e     FALSE      FALSE</div><div class='input'><span class='co'># or most simply:</span>
-<span class='kw pkg'>icd</span><span class='kw ns'>::</span><span class='fu'><a href='http://www.rdocumentation.org/packages/icd/topics/comorbid'>icd10_comorbid_ahrq</a></span>(<span class='no'>pts10</span>)</div><div class='output co'>#&gt;     CHF Valvular  PHTN   PVD   HTN Paralysis NeuroOther Pulmonary    DM  DMcx
+<span class='kw pkg'>icd</span><span class='kw ns'>::</span><span class='fu'><a href='https://jackwasey.github.io/icd//reference/comorbid.html'>icd10_comorbid_ahrq</a></span>(<span class='no'>pts10</span>)</div><div class='output co'>#&gt;     CHF Valvular  PHTN   PVD   HTN Paralysis NeuroOther Pulmonary    DM  DMcx
 #&gt; a FALSE     TRUE FALSE FALSE FALSE     FALSE      FALSE     FALSE FALSE FALSE
 #&gt; b FALSE    FALSE FALSE FALSE FALSE     FALSE      FALSE     FALSE FALSE FALSE
 #&gt; c FALSE    FALSE  TRUE FALSE FALSE     FALSE      FALSE     FALSE FALSE FALSE

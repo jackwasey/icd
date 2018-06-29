@@ -125,7 +125,7 @@
 <h2 class="hasAnchor">
 <a href="#calculating-pccc-comorbidities-" class="anchor"></a>Calculating PCCC comorbidities.</h2>
 <p>The PCCC comorbidities may be derived from both diagnostic and procedure codes. The following simulated data has both:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw">head</span>(dat)</a></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">head</span>(dat)</code></pre></div>
 <pre><code>##      id icd_dx1 icd_dx2 icd_pcs1 icd_pcs2
 ## 1 10001 S32010B T422X3D  0SWJ37Z  00QS4ZZ
 ## 2 10002    D686     A42  0D124JB  03QB4ZZ
@@ -134,9 +134,9 @@
 ## 5 10005    S054 S90222A  06104ZP  B41D1ZZ
 ## 6 10006  M12232 V9209XS  0XRL07P  0PUM0JZ</code></pre>
 <p>The data is in ‘wide’ format. Currently <code>icd</code> requires it be in ‘long’ format, which can be achieved as follows:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1">dx &lt;-<span class="st"> </span><span class="kw"><a href="../reference/wide_to_long.html">wide_to_long</a></span>(dat[<span class="dv">1</span><span class="op">:</span><span class="dv">3</span>])</a>
-<a class="sourceLine" id="cb3-2" data-line-number="2">pcs &lt;-<span class="st"> </span><span class="kw"><a href="../reference/wide_to_long.html">wide_to_long</a></span>(dat[<span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">4</span><span class="op">:</span><span class="dv">5</span>)], <span class="dt">icd_name =</span> <span class="st">"pcs"</span>, <span class="dt">icd_regex =</span> <span class="st">"icd_pcs"</span>)</a>
-<a class="sourceLine" id="cb3-3" data-line-number="3"><span class="kw">head</span>(dx)</a></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">dx &lt;-<span class="st"> </span><span class="kw"><a href="../reference/wide_to_long.html">wide_to_long</a></span>(dat[<span class="dv">1</span><span class="op">:</span><span class="dv">3</span>])
+pcs &lt;-<span class="st"> </span><span class="kw"><a href="../reference/wide_to_long.html">wide_to_long</a></span>(dat[<span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">4</span><span class="op">:</span><span class="dv">5</span>)], <span class="dt">icd_name =</span> <span class="st">"pcs"</span>, <span class="dt">icd_regex =</span> <span class="st">"icd_pcs"</span>)
+<span class="kw">head</span>(dx)</code></pre></div>
 <pre><code>##      id icd_code
 ## 1 10001  S32010B
 ## 2 10001  T422X3D
@@ -144,7 +144,7 @@
 ## 4 10002      A42
 ## 5 10003  S32021G
 ## 6 10003    M4806</code></pre>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1"><span class="kw">head</span>(pcs)</a></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">head</span>(pcs)</code></pre></div>
 <pre><code>##      id      pcs
 ## 1 10001  0SWJ37Z
 ## 2 10001  00QS4ZZ
@@ -153,10 +153,10 @@
 ## 5 10003  2W03X6Z
 ## 6 10003  D91497Z</code></pre>
 <p>Now the PCCC comorbidity classes can be computed and summarized in a plot:</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1">pccc_dx &lt;-<span class="st"> </span><span class="kw"><a href="../reference/comorbid_pccc_dx.html">comorbid_pccc_dx</a></span>(dx)</a>
-<a class="sourceLine" id="cb7-2" data-line-number="2">pccc_pcs &lt;-<span class="st"> </span><span class="kw"><a href="../reference/comorbid_pccc_dx.html">icd10_comorbid_pccc_pcs</a></span>(pcs, <span class="dt">map =</span> icd10_map_pccc_pcs, </a>
-<a class="sourceLine" id="cb7-3" data-line-number="3">                                    <span class="dt">visit_name =</span> <span class="st">"id"</span>, <span class="dt">icd_name =</span> <span class="st">"pcs"</span>)</a>
-<a class="sourceLine" id="cb7-4" data-line-number="4">res &lt;-<span class="st"> </span>pccc_dx <span class="op">|</span><span class="st"> </span>pccc_pcs</a></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">pccc_dx &lt;-<span class="st"> </span><span class="kw"><a href="../reference/comorbid_pccc_dx.html">comorbid_pccc_dx</a></span>(dx)
+pccc_pcs &lt;-<span class="st"> </span><span class="kw"><a href="../reference/comorbid_pccc_dx.html">icd10_comorbid_pccc_pcs</a></span>(pcs, <span class="dt">map =</span> icd10_map_pccc_pcs, 
+                                    <span class="dt">visit_name =</span> <span class="st">"id"</span>, <span class="dt">icd_name =</span> <span class="st">"pcs"</span>)
+res &lt;-<span class="st"> </span>pccc_dx <span class="op">|</span><span class="st"> </span>pccc_pcs</code></pre></div>
 <p><img src="pccc_files/figure-html/pcccbarplot-1.png" width="700"></p>
 </div>
 </div>
