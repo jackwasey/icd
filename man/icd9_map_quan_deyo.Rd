@@ -9,22 +9,31 @@
 \title{Quan adaptation of Deyo/Charlson comorbidities}
 \format{list of character vectors, each named by co-morbidity}
 \description{
-Derived automatically from the SAS code used in the original publication.
-According to the referenced study, this provides the best predictor of
-in-patient to <30d mortality. Of note, Deyo drops the distinction between
-leukemia, lymphoma and non-metastatic cancer. As far as I have looked into
-this, in the rare cases where someone had two or three of leukemia, lymphoma
-and non-metastatic cancer, the Quan adaptation would give a lower Charlson
-score than the original scheme. The original Deyo Charlson to ICD-9-CM groups
-does include distinct categories for these things.
+Derived automatically from the SAS code used in the original
+publication. According to the referenced study, this provides the
+best predictor of in-patient to <30d mortality. Of note, Deyo drops
+the distinction between leukemia, lymphoma and non-metastatic cancer.
+As far as I have looked into this, in the rare cases where someone
+had two or three of leukemia, lymphoma and non-metastatic cancer, the
+Quan adaptation would give a lower Charlson score than the original
+scheme. The original Deyo Charlson to ICD-9-CM groups does include
+distinct categories for these things.
 }
 \references{
-Quan, Hude, Vijaya Sundararajan, Patricia Halfon, Andrew Fong,
-  Bernard Burnand, Jean-Christophe Luthi, L. Duncan Saunders, Cynthia A.
-  Beck, Thomas E. Feasby, and William A. Ghali. "Coding Algorithms for
-  Defining Comorbidities in ICD-9-CM and ICD-10 Administrative Data." Medical
-  Care 43, no. 11 (November 1, 2005): 1130-39.
-  \url{http://www.ncbi.nlm.nih.gov/pubmed/16224307}
+Quan, Hude, Vijaya Sundararajan, Patricia Halfon, Andrew
+  Fong, Bernard Burnand, Jean-Christophe Luthi, L. Duncan Saunders,
+  Cynthia A. Beck, Thomas E. Feasby, and William A. Ghali. "Coding
+  Algorithms for Defining Comorbidities in ICD-9-CM and ICD-10
+  Administrative Data." Medical Care 43, no. 11 (November 1, 2005):
+  1130-39. \url{http://www.ncbi.nlm.nih.gov/pubmed/16224307}
   \url{http://web.archive.org/web/20110225042437/http://www.chaps.ucalgary.ca/sas}
+}
+\seealso{
+\code{\link{comorbid_quan_deyo}}
+  \code{\link{icd9_comorbid_quan_deyo}}
+  \code{\link{icd10_comorbid_quan_deyo}}
+}
+\concept{
+comorbidity map comorbidities
 }
 \keyword{datasets}

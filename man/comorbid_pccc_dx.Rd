@@ -2,6 +2,7 @@
 % Please edit documentation in R/comorbid_pccc.R
 \name{comorbid_pccc_dx}
 \alias{comorbid_pccc_dx}
+\alias{comorbid_pccc_pcs}
 \alias{icd9_comorbid_pccc_dx}
 \alias{icd10_comorbid_pccc_dx}
 \alias{icd9_comorbid_pccc_pcs}
@@ -12,6 +13,9 @@ comorbid_pccc_dx(x, visit_name = get_visit_name(x),
   icd_name = get_icd_name(x), short_code = guess_short(x, icd_name =
   icd_name), return_df = FALSE, return_binary = FALSE, ...)
 
+comorbid_pccc_pcs(x, visit_name = get_visit_name(x), icd_name,
+  return_df = FALSE, return_binary = FALSE, ...)
+
 icd9_comorbid_pccc_dx(x, visit_name = NULL, icd_name = NULL,
   short_code = guess_short(x, icd_name = icd_name), return_df = FALSE,
   return_binary = FALSE, ...)
@@ -20,11 +24,11 @@ icd10_comorbid_pccc_dx(x, visit_name = NULL, icd_name = NULL,
   short_code = guess_short(x, icd_name = icd_name), return_df = FALSE,
   return_binary = FALSE, ...)
 
-icd9_comorbid_pccc_pcs(x, map, visit_name, icd_name, return_df = FALSE,
-  return_binary = FALSE)
+icd9_comorbid_pccc_pcs(x, visit_name = get_visit_name(x), icd_name,
+  return_df = FALSE, return_binary = FALSE, ...)
 
-icd10_comorbid_pccc_pcs(x, map, visit_name, icd_name, return_df = FALSE,
-  return_binary = FALSE)
+icd10_comorbid_pccc_pcs(x, visit_name = get_visit_name(x), icd_name,
+  return_df = FALSE, return_binary = FALSE, ...)
 }
 \arguments{
 \item{x}{\code{data.frame} containing a column of patient-visit identifiers
@@ -67,21 +71,31 @@ conversion can also be done by the internal functions
 other tools, e.g. \code{apply(x, 2, as.integer)}}
 
 \item{...}{arguments passed on to other functions}
-
-\item{map}{list of the comorbidities with each list item containing a vector
-of decimal ICD-9 codes. This is in the form of a list, with the names of
-the items corresponding to the comorbidities (e.g. \sQuote{HTN}, or
-\sQuote{diabetes}) and the contents of each list item being a character
-vector of short-form (no decimal place, zero left-padded) ICD codes. There
-is no default: the user should use the family of functions, e.g.
-\code{comorbid_ahrq}, since these also name the fields correctly, apply any
-hierarchical rules (see \code{hierarchy} below)}
 }
 \description{
-Calculate pediatric complex chronic conditions (PCCC) comorbidities
+Unlike with ICD-9 and ICD-10 diagnostic codes, 'icd' doesn't
+currently have a method for guessing which fields are procedure
+codes, so \code{icd_name} must be specified for the \code{_pcs}
+functions.
 }
 \section{Functions}{
 \itemize{
+\item \code{comorbid_pccc_pcs}: Calculate the PCCC comorbidities based
+  on procedure codes,
+  @examples
+# Six random codes from each PCCC procedure code map. 'icd' will use
+# an heuristic to guess whether ICD-9 or ICD-10:
+pts <- data.frame(encounters = c(10, 11, 12),
+                  icd9_pcs = c("0152", "304", "0050"),
+                  icd10_pcs = c("0B110Z4", "02YA0Z2", "031209D"))
+comorbid_pccc_pcs(pts, icd_name = "icd9_pcs", return_binary = TRUE)
+comorbid_pccc_pcs(pts, icd_name = "icd10_pcs", return_binary = TRUE)
+
+# All ICD-9 procedure codes are numeric, some ICD-10 procedure codes
+# are numeric, so best to call functions directly:
+pts <- data.frame(encounters = c(100), icd10_pcs = c("0016070"))
+icd10_comorbid_pccc_pcs(pts, icd_name = "icd10_pcs")
+
 \item \code{icd9_comorbid_pccc_dx}: Calculate PCCC comorbidities from ICD-9
 diagnosis codes
 

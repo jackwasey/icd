@@ -5,13 +5,28 @@
 \alias{icd10_map_ahrq_pcs}
 \title{AHRQ ICD-10-PCS categories}
 \description{
-The AHRQ has categorized each of the ICD-10-PCS (Procedure Codes) into one of
-four groups: minor diagnostic, minor therapeutic, major diagnostic or major
-therapeutic. This mapping can be used to get the type(s) of procedure(s)
-performed on a patient from a \code{data.frame} of patients and associated
-procedure codes in 'long' format. See the ICD-10 vignette for an example.
+The AHRQ has categorized each of the ICD-10-PCS (Procedure Codes)
+into one of four groups: minor diagnostic, minor therapeutic, major
+diagnostic or major therapeutic. This mapping can be used to get the
+type(s) of procedure(s) performed on a patient from a
+\code{data.frame} of patients and associated procedure codes in
+'long' format. See the ICD-10 vignette for an example.
+}
+\details{
+Currently there is no specific comorbidity function to use this data,
+so the generic \code{\link{comorbid}} \code{\link{icd9_comorbid}}
+\code{\link{icd10_comorbid}} should be used, and this data specified
+as the \code{map}.
+}
+\examples{
+  str(icd10_map_ahrq_pcs)
 }
 \seealso{
-\url{https://www.hcup-us.ahrq.gov/toolssoftware/procedureicd10/procedure_icd10.jsp}
+\code{\link{comorbid}} \code{\link{icd9_comorbid}}
+  \code{\link{icd10_comorbid}}
+  \url{https://www.hcup-us.ahrq.gov/toolssoftware/procedureicd10/procedure_icd10.jsp}
+}
+\concept{
+comorbidity map comorbidities
 }
 \keyword{datasets}

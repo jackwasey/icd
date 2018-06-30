@@ -8,22 +8,31 @@
 \title{Clinical Classifications Software (CCS) for ICD9/10-CM}
 \format{list of character vectors, each numbered by co-morbidity}
 \description{
-The Clinical Classifications Software (CCS) for ICD-9/10-CM is one in a
-family of databases and software tools developed as part of the Healthcare
-Cost and Utilization Project (HCUP),a Federal-State-Industry partnership
-sponsored by the Agency for Healthcare Research and Quality. HCUP databases,
-tools, and software inform decision making at the national, State, and
-community levels. The software contains two different mappings. One is a
-single level mapping and one is a multi level classification. This data set
+The Clinical Classifications Software (CCS) for ICD-9/10-CM is one in
+a family of databases and software tools developed as part of the
+Healthcare Cost and Utilization Project (HCUP),a
+Federal-State-Industry partnership sponsored by the Agency for
+Healthcare Research and Quality. HCUP databases, tools, and software
+inform decision making at the national, State, and community levels.
+The software contains two different mappings. One is a single level
+mapping and one is a multi level classification. This data set
 contains the numeric representations of all of the codes.
 }
 \details{
-This file contains the updated ICD9 version that includes categories for
-Mental Health and Substance Abuse. More information on the ICD-9-CM data set
-can be found \url{https://www.hcup-us.ahrq.gov/toolssoftware/ccs/ccs.jsp}.
+This file contains the updated ICD9 version that includes categories
+for Mental Health and Substance Abuse. More information on the
+ICD-9-CM data set can be found
+\url{https://www.hcup-us.ahrq.gov/toolssoftware/ccs/ccs.jsp}.
 
-The file \code{icd10_map_ccs} contains the 2018.1 ICD10 Version of the
-mapping. More information on the ICD10 code set can be found at
+The file \code{icd10_map_ccs} contains the 2018.1 ICD10 Version of
+the mapping. More information on the ICD10 code set can be found at
 \url{https://www.hcup-us.ahrq.gov/toolssoftware/ccs10/ccs10.jsp}
+}
+\seealso{
+\code{\link{comorbid_ccs}} \code{\link{icd9_comorbid_ccs}}
+  \code{\link{icd10_comorbid_ccs}}
+}
+\concept{
+comorbidity map comorbidities
 }
 \keyword{datasets}

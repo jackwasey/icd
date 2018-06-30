@@ -12,8 +12,16 @@
 \url{http://www.hcup-us.ahrq.gov/toolssoftware/comorbidityicd10/comorbidity_icd10.jsp}
 }
 \description{
-This mapping of comorbidities to ICD-9 codes is derived directly from SAS
-code provided by AHRQ, and translated into this R data structure. This is a
-revision of the Elixhauser system, notably excluding cardiac arrythmia.
+This mapping of comorbidities to ICD-9 codes is derived directly from
+SAS code provided by AHRQ, and translated into this R data structure.
+This is a revision of the Elixhauser system, notably excluding
+cardiac arrythmia.
+}
+\seealso{
+\code{\link{comorbid_ahrq}} \code{\link{icd9_comorbid_ahrq}}
+  \code{\link{icd10_comorbid_ahrq}}
+}
+\concept{
+comorbidity map comorbidities
 }
 \keyword{datasets}
