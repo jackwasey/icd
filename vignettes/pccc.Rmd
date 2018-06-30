@@ -44,7 +44,7 @@ head(pcs)
 Now the PCCC comorbidity classes can be computed and summarized in a plot:
 ```{r calc}
 pccc_dx <- comorbid_pccc_dx(dx)
-pccc_pcs <- icd10_comorbid_pccc_pcs(pcs, map = icd10_map_pccc_pcs, 
+pccc_pcs <- icd10_comorbid_pccc_pcs(pcs, 
                                     visit_name = "id", icd_name = "pcs")
 res <- pccc_dx | pccc_pcs
 ```

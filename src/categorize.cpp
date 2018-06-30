@@ -116,7 +116,6 @@ List returnEmptyFrame(DataFrame df, String visit_name, String code_name) {
 //' R -e "devtools::load_all();icd9_comorbid_ahrq(data.frame(a='vis', b='0010'))"
 //' }
 //' @md
-//' @concept comorbidity comorbidities
 //' @keywords internal manip
 // [[Rcpp::export(factor_split_rcpp)]]
 List factorSplit(const List &df,

@@ -57,3 +57,15 @@ annually) are applied to create the HCCs.
 \item \code{icd10_comorbid_hcc}: Get HCCs from a data frame of ICD-10 codes
 }}
 
+\seealso{
+Other comorbidity computations: \code{\link{comorbid_pccc_dx}},
+  \code{\link{comorbid}}
+
+Other comorbidities: \code{\link{comorbid_pccc_dx}},
+  \code{\link{comorbid}}, \code{\link{icd10_map_ahrq_pcs}},
+  \code{\link{icd9_map_ahrq}}, \code{\link{icd9_map_elix}},
+  \code{\link{icd9_map_hcc}}, \code{\link{icd9_map_pccc}},
+  \code{\link{icd9_map_quan_deyo}},
+  \code{\link{icd9_map_quan_elix}},
+  \code{\link{icd9_map_single_ccs}}
+}

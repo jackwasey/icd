@@ -325,4 +325,16 @@ comorbid(two_pts, map = my_map)
 Consider using \code{\link{comorbid_ahrq}} instead of
   \code{\link{comorbid_elix}} for more recently updated mappings based on the
   Elixhauser scheme.
+
+Other comorbidity computations: \code{\link{comorbid_hcc}},
+  \code{\link{comorbid_pccc_dx}}
+
+Other comorbidities: \code{\link{comorbid_hcc}},
+  \code{\link{comorbid_pccc_dx}},
+  \code{\link{icd10_map_ahrq_pcs}},
+  \code{\link{icd9_map_ahrq}}, \code{\link{icd9_map_elix}},
+  \code{\link{icd9_map_hcc}}, \code{\link{icd9_map_pccc}},
+  \code{\link{icd9_map_quan_deyo}},
+  \code{\link{icd9_map_quan_elix}},
+  \code{\link{icd9_map_single_ccs}}
 }

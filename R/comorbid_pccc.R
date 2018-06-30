@@ -54,6 +54,8 @@ comorbid_pccc_dx <- function(x, visit_name = get_visit_name(x),
 #' # are numeric, so best to call functions directly:
 #' pts <- data.frame(encounters = c(100), icd10_pcs = c("0016070"))
 #' icd10_comorbid_pccc_pcs(pts, icd_name = "icd10_pcs")
+#' @family comorbidity computations
+#' @family comorbidities
 #' @export
 comorbid_pccc_pcs <- function(x, visit_name = get_visit_name(x),
                               icd_name,
@@ -134,8 +136,8 @@ icd9_comorbid_pccc_pcs <- function(x, visit_name = get_visit_name(x), icd_name,
 #' @describeIn comorbid_pccc_dx Calculate PCCC comorbidities from ICD-10
 #'   procedure codes
 #' @export
-icd10_comorbid_pccc_pcs <- function(x, visit_name = get_visit_name(x), icd_name,
-                                    return_df = FALSE,
+icd10_comorbid_pccc_pcs <- function(x, visit_name = get_visit_name(x),
+                                    icd_name, return_df = FALSE,
                                     return_binary = FALSE, ...)
   categorize_simple(x = x,
                     map = icd10_map_pccc_pcs,

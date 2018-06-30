@@ -31,6 +31,8 @@
 #'   Default value is 'date'.
 #' @template visit_name
 #' @template icd_name
+#' @family comorbidity computations
+#' @family comorbidities
 #' @export
 comorbid_hcc <- function(x, date_name = "date",
                          visit_name = get_visit_name(x),

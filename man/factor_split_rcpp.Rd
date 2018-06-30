@@ -49,8 +49,5 @@ R -e "devtools::load_all();devtools::test(filter='github')"
 R -e "devtools::load_all();icd9_comorbid_ahrq(data.frame(a='vis', b='0010'))"
 }
 }
-\concept{
-comorbidity comorbidities
-}
 \keyword{internal}
 \keyword{manip}

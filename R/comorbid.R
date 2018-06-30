@@ -83,6 +83,8 @@ poa_choices <- c("yes", "no", "notYes", "notNo")
 #'   \code{option(icd.threads = 4)}. If it is not set, the number of cores in
 #'   the machine is used. 'OpenMP' environment variables also work.
 #' @md
+#' @family comorbidity computations
+#' @family comorbidities
 #' @examples
 #' vermont_dx[1:5, 1:10]
 #' vd <- wide_to_long(vermont_dx)

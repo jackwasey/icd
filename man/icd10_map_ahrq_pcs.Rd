@@ -25,8 +25,20 @@ as the \code{map}.
 \code{\link{comorbid}} \code{\link{icd9_comorbid}}
   \code{\link{icd10_comorbid}}
   \url{https://www.hcup-us.ahrq.gov/toolssoftware/procedureicd10/procedure_icd10.jsp}
-}
-\concept{
-comorbidity map comorbidities
+
+Other comorbidity maps: \code{\link{icd9_map_ahrq}},
+  \code{\link{icd9_map_elix}}, \code{\link{icd9_map_hcc}},
+  \code{\link{icd9_map_pccc}},
+  \code{\link{icd9_map_quan_deyo}},
+  \code{\link{icd9_map_quan_elix}},
+  \code{\link{icd9_map_single_ccs}}
+
+Other comorbidities: \code{\link{comorbid_hcc}},
+  \code{\link{comorbid_pccc_dx}}, \code{\link{comorbid}},
+  \code{\link{icd9_map_ahrq}}, \code{\link{icd9_map_elix}},
+  \code{\link{icd9_map_hcc}}, \code{\link{icd9_map_pccc}},
+  \code{\link{icd9_map_quan_deyo}},
+  \code{\link{icd9_map_quan_elix}},
+  \code{\link{icd9_map_single_ccs}}
 }
 \keyword{datasets}

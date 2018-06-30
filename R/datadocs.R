@@ -21,7 +21,8 @@
 #' SAS code provided by AHRQ, and translated into this R data structure.
 #' This is a revision of the Elixhauser system, notably excluding
 #' cardiac arrythmia.
-#' @concept comorbidity map comorbidities
+#' @family comorbidity maps
+#' @family comorbidities
 #' @seealso \code{\link{comorbid_ahrq}} \code{\link{icd9_comorbid_ahrq}}
 #'   \code{\link{icd10_comorbid_ahrq}}
 #' @docType data
@@ -45,7 +46,8 @@ NULL
 #' Quan adaptation would give a lower Charlson score than the original
 #' scheme. The original Deyo Charlson to ICD-9-CM groups does include
 #' distinct categories for these things.
-#' @concept comorbidity map comorbidities
+#' @family comorbidity maps
+#' @family comorbidities
 #' @seealso \code{\link{comorbid_quan_deyo}}
 #'   \code{\link{icd9_comorbid_quan_deyo}}
 #'   \code{\link{icd10_comorbid_quan_deyo}}
@@ -68,7 +70,8 @@ NULL
 #' Quan adaptation of Elixhauser comorbidities
 #'
 #' These were transcribed directly from the Quan paper referenced.
-#' @concept comorbidity map comorbidities
+#' @family comorbidity maps
+#' @family comorbidities
 #' @seealso \code{\link{comorbid_quan_elix}}
 #'   \code{\link{icd9_comorbid_quan_elix}}
 #'   \code{\link{icd10_comorbid_quan_elix}}
@@ -96,7 +99,8 @@ NULL
 #' are that it is based on slightly out-dated ICD-9 codes. I have not
 #' yet verified what changes to the ICD-9-CM specification between 1998
 #' and now would impact this mapping.
-#' @concept comorbidity map comorbidities
+#' @family comorbidity maps
+#' @family comorbidities
 #' @seealso \code{\link{comorbid_elix}} \code{\link{icd9_comorbid_elix}}
 #'   \code{\link{icd10_comorbid_elix}}
 #' @docType data
@@ -129,7 +133,8 @@ NULL
 #' Once the hierarchy rules are applied, the codes are referred to as
 #' HCCs. This mapping can change over time. It remained the same from
 #' 2007-10
-#' @concept comorbidity map comorbidities
+#' @family comorbidity maps
+#' @family comorbidities
 #' @seealso \code{\link{comorbid_hcc}} \code{\link{icd9_comorbid_hcc}}
 #'   \code{\link{icd10_comorbid_hcc}}
 #' @docType data
@@ -167,7 +172,8 @@ NULL
 #' The file \code{icd10_map_ccs} contains the 2018.1 ICD10 Version of
 #' the mapping. More information on the ICD10 code set can be found at
 #' \url{https://www.hcup-us.ahrq.gov/toolssoftware/ccs10/ccs10.jsp}
-#' @concept comorbidity map comorbidities
+#' @family comorbidity maps
+#' @family comorbidities
 #' @seealso \code{\link{comorbid_ccs}} \code{\link{icd9_comorbid_ccs}}
 #'   \code{\link{icd10_comorbid_ccs}}
 #' @docType data
@@ -238,7 +244,8 @@ NULL
 #'   transplantation. BMC Pediatr. 2014 Aug8;14:199. doi:
 #'   10.1186/1471-2431-14-199.
 #'   \url{https://www.ncbi.nlm.nih.gov/pubmed/25102958}
-#' @concept comorbidity map comorbidities
+#' @family comorbidity maps
+#' @family comorbidities
 #' @seealso \code{\link{comorbid_pccc_dx}}
 #'   \code{\link{icd9_comorbid_pccc_dx}}
 #'   \code{\link{icd10_comorbid_pccc_dx}}
@@ -266,7 +273,8 @@ NULL
 #' so the generic \code{\link{comorbid}} \code{\link{icd9_comorbid}}
 #' \code{\link{icd10_comorbid}} should be used, and this data specified
 #' as the \code{map}.
-#' @concept comorbidity map comorbidities
+#' @family comorbidity maps
+#' @family comorbidities
 #' @seealso \code{\link{comorbid}} \code{\link{icd9_comorbid}}
 #'   \code{\link{icd10_comorbid}}
 #'   \url{https://www.hcup-us.ahrq.gov/toolssoftware/procedureicd10/procedure_icd10.jsp}

@@ -113,3 +113,15 @@ procedure codes
 # not pediatric data, but let's look for this example
 head(icd9_comorbid_pccc_dx(wide_to_long(vermont_dx)))
 }
+\seealso{
+Other comorbidity computations: \code{\link{comorbid_hcc}},
+  \code{\link{comorbid}}
+
+Other comorbidities: \code{\link{comorbid_hcc}},
+  \code{\link{comorbid}}, \code{\link{icd10_map_ahrq_pcs}},
+  \code{\link{icd9_map_ahrq}}, \code{\link{icd9_map_elix}},
+  \code{\link{icd9_map_hcc}}, \code{\link{icd9_map_pccc}},
+  \code{\link{icd9_map_quan_deyo}},
+  \code{\link{icd9_map_quan_elix}},
+  \code{\link{icd9_map_single_ccs}}
+}
