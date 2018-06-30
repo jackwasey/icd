@@ -39,15 +39,17 @@
 <meta property="og:title" content="Medicare Hierarchical Condition Categories — icd9_map_hcc" />
 
 <meta property="og:description" content="Medicare HCC model was developed to use current year diagnoses and
-demographics predict current year healthcare expenditure. This classification
-has been used for additional risk adjustment models. ICD codes are first
-assigned to numeric Condition Categories ('CCs'). A hierarchy rule is then
-applied so that each patient is coded for only the most severe of the
-Condition Categories in a group. For example, if a patient has metastatic
-lung cancer, they will only be assigned the 'CC' for &quot;Metastatic Cancer and
-Acute Leukemia&quot;, and will not be assigned the 'CC' for &quot;Lung and other Severe
-Cancers&quot;. Once the hierarchy rules are applied, the codes are referred to as
-HCCs. This mapping can change over time. It remained the same from 2007-10" />
+demographics predict current year healthcare expenditure. This
+classification has been used for additional risk adjustment models.
+ICD codes are first assigned to numeric Condition Categories ('CCs').
+A hierarchy rule is then applied so that each patient is coded for
+only the most severe of the Condition Categories in a group. For
+example, if a patient has metastatic lung cancer, they will only be
+assigned the 'CC' for &quot;Metastatic Cancer and Acute Leukemia&quot;, and
+will not be assigned the 'CC' for &quot;Lung and other Severe Cancers&quot;.
+Once the hierarchy rules are applied, the codes are referred to as
+HCCs. This mapping can change over time. It remained the same from
+2007-10" />
 <meta name="twitter:card" content="summary" />
 
 
@@ -157,32 +159,53 @@ HCCs. This mapping can change over time. It remained the same from 2007-10" />
     <div class="ref-description">
     
     <p>Medicare HCC model was developed to use current year diagnoses and
-demographics predict current year healthcare expenditure. This classification
-has been used for additional risk adjustment models. ICD codes are first
-assigned to numeric Condition Categories ('CCs'). A hierarchy rule is then
-applied so that each patient is coded for only the most severe of the
-Condition Categories in a group. For example, if a patient has metastatic
-lung cancer, they will only be assigned the 'CC' for "Metastatic Cancer and
-Acute Leukemia", and will not be assigned the 'CC' for "Lung and other Severe
-Cancers". Once the hierarchy rules are applied, the codes are referred to as
-HCCs. This mapping can change over time. It remained the same from 2007-10</p>
+demographics predict current year healthcare expenditure. This
+classification has been used for additional risk adjustment models.
+ICD codes are first assigned to numeric Condition Categories ('CCs').
+A hierarchy rule is then applied so that each patient is coded for
+only the most severe of the Condition Categories in a group. For
+example, if a patient has metastatic lung cancer, they will only be
+assigned the 'CC' for "Metastatic Cancer and Acute Leukemia", and
+will not be assigned the 'CC' for "Lung and other Severe Cancers".
+Once the hierarchy rules are applied, the codes are referred to as
+HCCs. This mapping can change over time. It remained the same from
+2007-10</p>
     
     </div>
 
         
     <h2 class="hasAnchor" id="format"><a class="anchor" href="#format"></a>Format</h2>
 
-    <p><code>dataframe</code> with 3 columns (<code>icd_code</code>, <code>cc</code>, and
-  <code>year</code>)</p>
+    <p><code>dataframe</code> with 3 columns (<code>icd_code</code>, <code>cc</code>,
+  and <code>year</code>)</p>
     
     <h2 class="hasAnchor" id="references"><a class="anchor" href="#references"></a>References</h2>
 
-    <p>Pope, Gregory C., et al. "Diagnostic cost group hierarchical
-  condition category models for Medicare risk adjustment." Health Economics
-  Research, Inc. Waltham, MA (2000).
+    <p>Pope, Gregory C., et al. "Diagnostic cost group
+  hierarchical condition category models for Medicare risk
+  adjustment." Health Economics Research, Inc. Waltham, MA (2000).
   <a href='https://www.cms.gov/Research-Statistics-Data-and-Systems/Statistics-Trends-and-Reports/Reports/Downloads/Pope_2000_2.pdf'>https://www.cms.gov/Research-Statistics-Data-and-Systems/Statistics-Trends-and-Reports/Reports/Downloads/Pope_2000_2.pdf</a></p>
-    <p>Risk Adjustment, Centers for Medicare and Medicaid Services
+<p>Risk Adjustment, Centers for Medicare and Medicaid Services
   <a href='https://www.cms.gov/Medicare/Health-Plans/MedicareAdvtgSpecRateStats/Risk-Adjustors.html'>https://www.cms.gov/Medicare/Health-Plans/MedicareAdvtgSpecRateStats/Risk-Adjustors.html</a></p>
+    
+    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
+
+    <div class='dont-index'><p><code><a href='comorbid_hcc.html'>comorbid_hcc</a></code> <code><a href='comorbid_hcc.html'>icd9_comorbid_hcc</a></code>
+  <code><a href='comorbid_hcc.html'>icd10_comorbid_hcc</a></code></p>
+<p>Other comorbidity maps: <code><a href='icd10_map_ahrq_pcs.html'>icd10_map_ahrq_pcs</a></code>,
+  <code><a href='icd9_map_ahrq.html'>icd9_map_ahrq</a></code>, <code><a href='icd9_map_elix.html'>icd9_map_elix</a></code>,
+  <code><a href='icd9_map_pccc.html'>icd9_map_pccc</a></code>,
+  <code><a href='icd9_map_quan_deyo.html'>icd9_map_quan_deyo</a></code>,
+  <code><a href='icd9_map_quan_elix.html'>icd9_map_quan_elix</a></code>,
+  <code><a href='icd9_map_single_ccs.html'>icd9_map_single_ccs</a></code></p>
+<p>Other comorbidities: <code><a href='comorbid_hcc.html'>comorbid_hcc</a></code>,
+  <code><a href='comorbid_pccc_dx.html'>comorbid_pccc_dx</a></code>, <code><a href='comorbid.html'>comorbid</a></code>,
+  <code><a href='icd10_map_ahrq_pcs.html'>icd10_map_ahrq_pcs</a></code>,
+  <code><a href='icd9_map_ahrq.html'>icd9_map_ahrq</a></code>, <code><a href='icd9_map_elix.html'>icd9_map_elix</a></code>,
+  <code><a href='icd9_map_pccc.html'>icd9_map_pccc</a></code>,
+  <code><a href='icd9_map_quan_deyo.html'>icd9_map_quan_deyo</a></code>,
+  <code><a href='icd9_map_quan_elix.html'>icd9_map_quan_elix</a></code>,
+  <code><a href='icd9_map_single_ccs.html'>icd9_map_single_ccs</a></code></p></div>
     
 
   </div>
@@ -193,6 +216,8 @@ HCCs. This mapping can change over time. It remained the same from 2007-10</p>
       <li><a href="#format">Format</a></li>
 
       <li><a href="#references">References</a></li>
+
+      <li><a href="#see-also">See also</a></li>
           </ul>
 
   </div>

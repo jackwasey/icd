@@ -38,11 +38,12 @@
 
 <meta property="og:title" content="AHRQ ICD-10-PCS categories — icd10_map_ahrq_pcs" />
 
-<meta property="og:description" content="The AHRQ has categorized each of the ICD-10-PCS (Procedure Codes) into one of
-four groups: minor diagnostic, minor therapeutic, major diagnostic or major
-therapeutic. This mapping can be used to get the type(s) of procedure(s)
-performed on a patient from a data.frame of patients and associated
-procedure codes in 'long' format. See the ICD-10 vignette for an example." />
+<meta property="og:description" content="The AHRQ has categorized each of the ICD-10-PCS (Procedure Codes)
+into one of four groups: minor diagnostic, minor therapeutic, major
+diagnostic or major therapeutic. This mapping can be used to get the
+type(s) of procedure(s) performed on a patient from a
+data.frame of patients and associated procedure codes in
+'long' format. See the ICD-10 vignette for an example." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -151,27 +152,60 @@ procedure codes in 'long' format. See the ICD-10 vignette for an example." />
 
     <div class="ref-description">
     
-    <p>The AHRQ has categorized each of the ICD-10-PCS (Procedure Codes) into one of
-four groups: minor diagnostic, minor therapeutic, major diagnostic or major
-therapeutic. This mapping can be used to get the type(s) of procedure(s)
-performed on a patient from a <code>data.frame</code> of patients and associated
-procedure codes in 'long' format. See the ICD-10 vignette for an example.</p>
+    <p>The AHRQ has categorized each of the ICD-10-PCS (Procedure Codes)
+into one of four groups: minor diagnostic, minor therapeutic, major
+diagnostic or major therapeutic. This mapping can be used to get the
+type(s) of procedure(s) performed on a patient from a
+<code>data.frame</code> of patients and associated procedure codes in
+'long' format. See the ICD-10 vignette for an example.</p>
     
     </div>
 
         
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p>Currently there is no specific comorbidity function to use this data,
+so the generic <code><a href='comorbid.html'>comorbid</a></code> <code><a href='comorbid.html'>icd9_comorbid</a></code>
+<code><a href='comorbid.html'>icd10_comorbid</a></code> should be used, and this data specified
+as the <code>map</code>.</p>
+    
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p><a href='https://www.hcup-us.ahrq.gov/toolssoftware/procedureicd10/procedure_icd10.jsp'>https://www.hcup-us.ahrq.gov/toolssoftware/procedureicd10/procedure_icd10.jsp</a></p></div>
+    <div class='dont-index'><p><code><a href='comorbid.html'>comorbid</a></code> <code><a href='comorbid.html'>icd9_comorbid</a></code>
+  <code><a href='comorbid.html'>icd10_comorbid</a></code>
+  <a href='https://www.hcup-us.ahrq.gov/toolssoftware/procedureicd10/procedure_icd10.jsp'>https://www.hcup-us.ahrq.gov/toolssoftware/procedureicd10/procedure_icd10.jsp</a></p>
+<p>Other comorbidity maps: <code><a href='icd9_map_ahrq.html'>icd9_map_ahrq</a></code>,
+  <code><a href='icd9_map_elix.html'>icd9_map_elix</a></code>, <code><a href='icd9_map_hcc.html'>icd9_map_hcc</a></code>,
+  <code><a href='icd9_map_pccc.html'>icd9_map_pccc</a></code>,
+  <code><a href='icd9_map_quan_deyo.html'>icd9_map_quan_deyo</a></code>,
+  <code><a href='icd9_map_quan_elix.html'>icd9_map_quan_elix</a></code>,
+  <code><a href='icd9_map_single_ccs.html'>icd9_map_single_ccs</a></code></p>
+<p>Other comorbidities: <code><a href='comorbid_hcc.html'>comorbid_hcc</a></code>,
+  <code><a href='comorbid_pccc_dx.html'>comorbid_pccc_dx</a></code>, <code><a href='comorbid.html'>comorbid</a></code>,
+  <code><a href='icd9_map_ahrq.html'>icd9_map_ahrq</a></code>, <code><a href='icd9_map_elix.html'>icd9_map_elix</a></code>,
+  <code><a href='icd9_map_hcc.html'>icd9_map_hcc</a></code>, <code><a href='icd9_map_pccc.html'>icd9_map_pccc</a></code>,
+  <code><a href='icd9_map_quan_deyo.html'>icd9_map_quan_deyo</a></code>,
+  <code><a href='icd9_map_quan_elix.html'>icd9_map_quan_elix</a></code>,
+  <code><a href='icd9_map_single_ccs.html'>icd9_map_single_ccs</a></code></p></div>
     
 
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'>  <span class='fu'>str</span>(<span class='no'>icd10_map_ahrq_pcs</span>)</div><div class='output co'>#&gt; List of 4
+#&gt;  $ Minor Diagnostic : chr [1:7361] "00903ZX" "00904ZX" "00913ZX" "00914ZX" ...
+#&gt;  $ Minor Therapeutic: chr [1:16991] "0020X0Z" "0020XYZ" "002EX0Z" "002EXYZ" ...
+#&gt;  $ Major Diagnostic : chr [1:2935] "00900ZX" "00910ZX" "00920ZX" "00930ZX" ...
+#&gt;  $ Major Therapeutic: chr [1:52079] "0016070" "0016071" "0016072" "0016073" ...</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       
+      <li><a href="#details">Details</a></li>
+
       <li><a href="#see-also">See also</a></li>
-          </ul>
+      
+      <li><a href="#examples">Examples</a></li>
+    </ul>
 
   </div>
 </div>

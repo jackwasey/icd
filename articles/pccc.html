@@ -154,7 +154,7 @@ pcs &lt;-<span class="st"> </span><span class="kw"><a href="../reference/wide_to
 ## 6 10003  D91497Z</code></pre>
 <p>Now the PCCC comorbidity classes can be computed and summarized in a plot:</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">pccc_dx &lt;-<span class="st"> </span><span class="kw"><a href="../reference/comorbid_pccc_dx.html">comorbid_pccc_dx</a></span>(dx)
-pccc_pcs &lt;-<span class="st"> </span><span class="kw"><a href="../reference/comorbid_pccc_dx.html">icd10_comorbid_pccc_pcs</a></span>(pcs, <span class="dt">map =</span> icd10_map_pccc_pcs, 
+pccc_pcs &lt;-<span class="st"> </span><span class="kw"><a href="../reference/comorbid_pccc_dx.html">icd10_comorbid_pccc_pcs</a></span>(pcs, 
                                     <span class="dt">visit_name =</span> <span class="st">"id"</span>, <span class="dt">icd_name =</span> <span class="st">"pcs"</span>)
 res &lt;-<span class="st"> </span>pccc_dx <span class="op">|</span><span class="st"> </span>pccc_pcs</code></pre></div>
 <p><img src="pccc_files/figure-html/pcccbarplot-1.png" width="700"></p>

@@ -38,7 +38,10 @@
 
 <meta property="og:title" content="Calculate pediatric complex chronic conditions (PCCC) comorbidities — comorbid_pccc_dx" />
 
-<meta property="og:description" content="Calculate pediatric complex chronic conditions (PCCC) comorbidities" />
+<meta property="og:description" content="Unlike with ICD-9 and ICD-10 diagnostic codes, 'icd' doesn't
+currently have a method for guessing which fields are procedure
+codes, so icd_name must be specified for the _pcs
+functions." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -147,13 +150,19 @@
 
     <div class="ref-description">
     
-    <p>Calculate pediatric complex chronic conditions (PCCC) comorbidities</p>
+    <p>Unlike with ICD-9 and ICD-10 diagnostic codes, 'icd' doesn't
+currently have a method for guessing which fields are procedure
+codes, so <code>icd_name</code> must be specified for the <code>_pcs</code>
+functions.</p>
     
     </div>
 
     <pre class="usage"><span class='fu'>comorbid_pccc_dx</span>(<span class='no'>x</span>, <span class='kw'>visit_name</span> <span class='kw'>=</span> <span class='fu'><a href='get_visit_name.html'>get_visit_name</a></span>(<span class='no'>x</span>),
   <span class='kw'>icd_name</span> <span class='kw'>=</span> <span class='fu'><a href='get_icd_name.html'>get_icd_name</a></span>(<span class='no'>x</span>), <span class='kw'>short_code</span> <span class='kw'>=</span> <span class='fu'><a href='guess_short.html'>guess_short</a></span>(<span class='no'>x</span>, <span class='kw'>icd_name</span> <span class='kw'>=</span>
   <span class='no'>icd_name</span>), <span class='kw'>return_df</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>return_binary</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='no'>...</span>)
+
+<span class='fu'>comorbid_pccc_pcs</span>(<span class='no'>x</span>, <span class='kw'>visit_name</span> <span class='kw'>=</span> <span class='fu'><a href='get_visit_name.html'>get_visit_name</a></span>(<span class='no'>x</span>), <span class='no'>icd_name</span>,
+  <span class='kw'>return_df</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>return_binary</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='no'>...</span>)
 
 <span class='fu'>icd9_comorbid_pccc_dx</span>(<span class='no'>x</span>, <span class='kw'>visit_name</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>icd_name</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>short_code</span> <span class='kw'>=</span> <span class='fu'><a href='guess_short.html'>guess_short</a></span>(<span class='no'>x</span>, <span class='kw'>icd_name</span> <span class='kw'>=</span> <span class='no'>icd_name</span>), <span class='kw'>return_df</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
@@ -163,11 +172,11 @@
   <span class='kw'>short_code</span> <span class='kw'>=</span> <span class='fu'><a href='guess_short.html'>guess_short</a></span>(<span class='no'>x</span>, <span class='kw'>icd_name</span> <span class='kw'>=</span> <span class='no'>icd_name</span>), <span class='kw'>return_df</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
   <span class='kw'>return_binary</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='no'>...</span>)
 
-<span class='fu'>icd9_comorbid_pccc_pcs</span>(<span class='no'>x</span>, <span class='no'>map</span>, <span class='no'>visit_name</span>, <span class='no'>icd_name</span>, <span class='kw'>return_df</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>return_binary</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
+<span class='fu'>icd9_comorbid_pccc_pcs</span>(<span class='no'>x</span>, <span class='kw'>visit_name</span> <span class='kw'>=</span> <span class='fu'><a href='get_visit_name.html'>get_visit_name</a></span>(<span class='no'>x</span>), <span class='no'>icd_name</span>,
+  <span class='kw'>return_df</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>return_binary</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='no'>...</span>)
 
-<span class='fu'>icd10_comorbid_pccc_pcs</span>(<span class='no'>x</span>, <span class='no'>map</span>, <span class='no'>visit_name</span>, <span class='no'>icd_name</span>, <span class='kw'>return_df</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>return_binary</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
+<span class='fu'>icd10_comorbid_pccc_pcs</span>(<span class='no'>x</span>, <span class='kw'>visit_name</span> <span class='kw'>=</span> <span class='fu'><a href='get_visit_name.html'>get_visit_name</a></span>(<span class='no'>x</span>), <span class='no'>icd_name</span>,
+  <span class='kw'>return_df</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>return_binary</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='no'>...</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -227,22 +236,25 @@ other tools, e.g. <code>apply(x, 2, as.integer)</code></p></td>
       <th>...</th>
       <td><p>arguments passed on to other functions</p></td>
     </tr>
-    <tr>
-      <th>map</th>
-      <td><p>list of the comorbidities with each list item containing a vector
-of decimal ICD-9 codes. This is in the form of a list, with the names of
-the items corresponding to the comorbidities (e.g. &#8216;HTN&#8217;, or
-&#8216;diabetes&#8217;) and the contents of each list item being a character
-vector of short-form (no decimal place, zero left-padded) ICD codes. There
-is no default: the user should use the family of functions, e.g.
-<code>comorbid_ahrq</code>, since these also name the fields correctly, apply any
-hierarchical rules (see <code>hierarchy</code> below)</p></td>
-    </tr>
     </table>
     
     <h2 class="hasAnchor" id="functions"><a class="anchor" href="#functions"></a>Functions</h2>
 
     <ul>
+<li><p><code>comorbid_pccc_pcs</code>: Calculate the PCCC comorbidities based
+  on procedure codes,
+  @examples
+# Six random codes from each PCCC procedure code map. 'icd' will use
+# an heuristic to guess whether ICD-9 or ICD-10:
+pts &lt;- data.frame(encounters = c(10, 11, 12),
+                  icd9_pcs = c("0152", "304", "0050"),
+                  icd10_pcs = c("0B110Z4", "02YA0Z2", "031209D"))
+comorbid_pccc_pcs(pts, icd_name = "icd9_pcs", return_binary = TRUE)
+comorbid_pccc_pcs(pts, icd_name = "icd10_pcs", return_binary = TRUE)</p>
+<p># All ICD-9 procedure codes are numeric, some ICD-10 procedure codes
+# are numeric, so best to call functions directly:
+pts &lt;- data.frame(encounters = c(100), icd10_pcs = c("0016070"))
+icd10_comorbid_pccc_pcs(pts, icd_name = "icd10_pcs")</p></li>
 <li><p><code>icd9_comorbid_pccc_dx</code>: Calculate PCCC comorbidities from ICD-9
 diagnosis codes</p></li>
 <li><p><code>icd10_comorbid_pccc_dx</code>: Calculate PCCC comorbidities from ICD-10
@@ -252,6 +264,18 @@ procedure codes</p></li>
 <li><p><code>icd10_comorbid_pccc_pcs</code>: Calculate PCCC comorbidities from ICD-10
 procedure codes</p></li>
 </ul>
+    
+    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
+
+    <div class='dont-index'><p>Other comorbidity computations: <code><a href='comorbid_hcc.html'>comorbid_hcc</a></code>,
+  <code><a href='comorbid.html'>comorbid</a></code></p>
+<p>Other comorbidities: <code><a href='comorbid_hcc.html'>comorbid_hcc</a></code>,
+  <code><a href='comorbid.html'>comorbid</a></code>, <code><a href='icd10_map_ahrq_pcs.html'>icd10_map_ahrq_pcs</a></code>,
+  <code><a href='icd9_map_ahrq.html'>icd9_map_ahrq</a></code>, <code><a href='icd9_map_elix.html'>icd9_map_elix</a></code>,
+  <code><a href='icd9_map_hcc.html'>icd9_map_hcc</a></code>, <code><a href='icd9_map_pccc.html'>icd9_map_pccc</a></code>,
+  <code><a href='icd9_map_quan_deyo.html'>icd9_map_quan_deyo</a></code>,
+  <code><a href='icd9_map_quan_elix.html'>icd9_map_quan_elix</a></code>,
+  <code><a href='icd9_map_single_ccs.html'>icd9_map_single_ccs</a></code></p></div>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
@@ -277,6 +301,8 @@ procedure codes</p></li>
       <li><a href="#arguments">Arguments</a></li>
       
       <li><a href="#functions">Functions</a></li>
+
+      <li><a href="#see-also">See also</a></li>
       
       <li><a href="#examples">Examples</a></li>
     </ul>
