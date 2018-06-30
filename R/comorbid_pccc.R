@@ -16,7 +16,7 @@
 # along with icd. If not, see <http:#www.gnu.org/licenses/>.
 
 globalVariables(c("code_name", "icd10_map_pccc_dx", "icd9_map_pccc_dx",
-                  "icd9_map_pccc_pcs"))
+                  "icd9_map_pccc_pcs", "icd10_map_pccc_pcs"))
 
 #' Calculate pediatric complex chronic conditions (PCCC) comorbidities
 #'

@@ -1,4 +1,5 @@
 ^_config\.yml$
+^pkgdown\.yml$
 aclocal\.m4$
 IGNORE.*_alt.*\.[Rr]$
 IGNORE.*_alt.*\.cpp$
