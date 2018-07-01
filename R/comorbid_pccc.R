@@ -64,11 +64,11 @@ comorbid_pccc_pcs <- function(x, visit_name = get_visit_name(x),
   stopifnot(visit_name %in% names(x), icd_name %in% names(x))
   n <- min(n, length(x[[icd_name]]))
   test_some <- x[seq_len(n), icd_name]
-  nines_tens <- grepl('.*[A-Za-z].*', as.character(test_some), ignore.case = TRUE)
-  is_icd9 = TRUE
-  threshold = 0.7
+  nines_tens <- grepl(".*[A-Za-z].*", as.character(test_some), ignore.case = TRUE)
+  is_icd9 <- TRUE
+  threshold <- 0.7
   if (sum(nines_tens) / n > threshold)
-    is_icd9 = FALSE
+    is_icd9 <- FALSE
   else if (sum(nines_tens) / n > (1 - threshold))
     warning("many invalid ICD-9 procedure codes, but not enough to ",
             "determine that all the codes were ICD-10 codes. Please",
