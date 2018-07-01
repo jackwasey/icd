@@ -74,7 +74,8 @@ test_that("groups of SAS assignments can be extracted", {
 test_that("read LET string declarations from SAS code", {
 
   res_list <- sas_extract_let_strings("\t%LET DC16=%STR('196','197','198','199');      ")
-  checkmate::expect_list(res_list, any.missing = FALSE, types = "character", min.len = 1, unique = TRUE, names = "unique")
+  checkmate::expect_list(res_list, any.missing = FALSE, types = "character",
+                         min.len = 1, unique = TRUE, names = "unique")
   expect_true(names(res_list) == "DC16")
   expect_equal(res_list[[1]], c("196", "197", "198", "199"))
 

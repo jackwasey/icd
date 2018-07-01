@@ -1,5 +1,5 @@
 ^_config\.yml$
-^pkgdown\.yml$
+^_pkgdown\.yml$
 aclocal\.m4$
 IGNORE.*_alt.*\.[Rr]$
 IGNORE.*_alt.*\.cpp$
@@ -56,7 +56,7 @@ icd9cm_billable[[:digit:]]+\.RData$
 icd.*\.Rnw$
 icd.*tar\.gz
 ^include-dependencies(\.d)?$
-standalone\/.*
+inst\/standalone\/.*
 \.lintr$
 .*\.log$
 ^src\/Makevars$

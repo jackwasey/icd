@@ -4,7 +4,8 @@
 \alias{rtf_parse_year}
 \title{parse RTF description of entire ICD-9-CM for a specific year}
 \source{
-http://ftp.cdc.gov/pub/Health_Statistics/NCHS/Publications/ICD9-CM/2011/Dtab12.zip
+\url{http://ftp.cdc.gov/pub/Health_Statistics/
+NCHS/Publications/ICD9-CM/2011/Dtab12.zip}
 and similar files run from 1996 to 2011.
 }
 \usage{

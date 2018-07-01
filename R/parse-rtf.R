@@ -54,10 +54,12 @@ rtf_fetch_year <- function(year, offline = TRUE) {
 #' @template save_data
 #' @template verbose
 #' @source
-#' http://ftp.cdc.gov/pub/Health_Statistics/NCHS/Publications/ICD9-CM/2011/Dtab12.zip
+#' \url{http://ftp.cdc.gov/pub/Health_Statistics/
+#' NCHS/Publications/ICD9-CM/2011/Dtab12.zip}
 #' and similar files run from 1996 to 2011.
 #' @keywords internal datagen
-rtf_parse_year <- function(year = "2011", ..., save_data = FALSE, verbose = FALSE, offline = TRUE) {
+rtf_parse_year <- function(year = "2011", ..., save_data = FALSE,
+                           verbose = FALSE, offline = TRUE) {
   assert_string(year)
   assert_flag(save_data)
   assert_flag(verbose)
@@ -113,7 +115,8 @@ rtf_pre_filter <- function(filtered, ...) {
 #'   the other way around, but the tests are now wired for this layout. 'Tidy'
 #'   data would favour having an unnamed two-column data frame.
 #' @keywords internal datagen
-rtf_parse_lines <- function(rtf_lines, verbose = FALSE, save_extras = FALSE, ...) {
+rtf_parse_lines <- function(rtf_lines, verbose = FALSE,
+                            save_extras = FALSE, ...) {
   assert_character(rtf_lines)
   assert_flag(verbose)
   assert_flag(save_extras)
@@ -232,9 +235,16 @@ rtf_make_sub_chapters <- function(filtered, ..., save = FALSE) {
     grep(re_subchap_either, filtered,
          value = TRUE, ...)
   )
-  # The entire "E" block is incorrectly identified here, so make sure it is gone:
-  icd9_sub_chapters["Supplementary Classification Of Factors Influencing Health Status And Contact With Health Services"] <- NULL
-  icd9_sub_chapters["Supplementary Classification Of External Causes Of Injury And Poisoning"] <- NULL
+  # The entire "E" block is incorrectly identified here, so make sure it is gone
+  pref <- "Supplementary Classification Of"
+  s <- paste(
+    pref,
+    "Factors Influencing Health Status And Contact With Health Services")
+  t <- paste(
+    pref,
+    "Supplementary Classification Of External Causes Of Injury And Poisoning")
+  icd9_sub_chapters[s] <- NULL
+  icd9_sub_chapters[t] <- NULL
   if (save) save_in_data_dir(icd9_sub_chapters)
   invisible(icd9_sub_chapters)
 }
@@ -605,12 +615,12 @@ rtf_parse_qualifier_subset <- function(qual) {
 rtf_strip <- function(x, ...) {
   #nolint start
   x <- gsub("\\\\tab ", " ", x, ...)
-  x <- gsub("\\\\[[:punct:]]", "", x, ...) # control symbols only, not control words
+  x <- gsub("\\\\[[:punct:]]", "", x, ...) # control symbols, not control words
   x <- gsub("\\\\lsdlocked[ [:alnum:]]*;", "", x, ...) # special case
   x <- gsub("\\{\\\\bkmk(start|end).*?\\}", "", x, ...)
   # no backslash in this next list, others removed from
   # http://www.regular-expressions.info/posixbrackets.html
-  # punct is defined as:       [!"\#$%&'()*+,\-./:;<=>?@\[\\\]^_`{|}~], not quite the same
+  # punct not quite the same: [!"\#$%&'()*+,\-./:;<=>?@\[\\\]^_`{|}~]
   x <- gsub("\\\\[-[:alnum:]]*[ !\"#$%&'()*+,-./:;<=>?@^_`{|}~]?", "", x, ...)
   x <- gsub(" *(\\}|\\{)", "", x, ...)
   trim(x)

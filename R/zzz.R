@@ -23,12 +23,12 @@
     "?icd or visit https://jackwasey.github.io/icd to get started.\n",
     "Please cite this package if you find it useful in your published work citation(package = \"icd\")")
   if (system.file(package = "icd9") != "")
-    packageStartupMessage(
-      "The 'icd9' package is now deprecated, and should be removed to avoid conflicts with 'icd'.
-The 'icd' package up to version 2.1 contains tested versions of all the deprecated function names which overlap with those in the old
-'icd9' package, e.g. 'icd9ComorbidAhrq'. It is strongly recommended to run the command:
-
-            remove.packages(\"icd9\")")
+    packageStartupMessage(paste(
+      "The 'icd9' package is now deprecated, and should be removed to avoid conflicts",
+      "with 'icd'. The 'icd' package up to version 2.1 contains tested versions",
+      "of all the deprecated function names which overlap with those in the old",
+      "'icd9' package, e.g. 'icd9ComorbidAhrq'. It is strongly recommended to run the command:",
+      "remove.packages(\"icd9\")"))
 }
 
 .onUnload <- function(libpath) {

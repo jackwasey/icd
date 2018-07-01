@@ -61,15 +61,23 @@ test_that("condense big lists of comorbidities", {
   # reverse)
   for (defined_codes in c(TRUE, FALSE)) {
     if (defined_codes) {
-      expect_warning(ahrq <- lapply(icd9_map_ahrq[c(1, 30)], condense.icd9, short_code = TRUE, defined = defined_codes))
-      expect_warning(qd <- lapply(icd9_map_quan_deyo[c(1, 17)], condense.icd9, short_code = TRUE, defined = defined_codes))
-      expect_warning(qe <- lapply(icd9_map_quan_elix[c(1, 31)], condense.icd9, short_code = TRUE, defined = defined_codes))
-      expect_warning(elix <- lapply(icd9_map_elix[c(1, 31)], condense.icd9, defined = defined_codes))
+      expect_warning(ahrq <- lapply(icd9_map_ahrq[c(1, 30)],
+                                    condense.icd9, short_code = TRUE, defined = defined_codes))
+      expect_warning(qd <- lapply(icd9_map_quan_deyo[c(1, 17)],
+                                  condense.icd9, short_code = TRUE, defined = defined_codes))
+      expect_warning(qe <- lapply(icd9_map_quan_elix[c(1, 31)],
+                                  condense.icd9, short_code = TRUE, defined = defined_codes))
+      expect_warning(elix <- lapply(icd9_map_elix[c(1, 31)],
+                                    condense.icd9, defined = defined_codes))
     } else {
-      expect_warning(ahrq <- lapply(icd9_map_ahrq[c(1, 30)], condense.icd9, short_code = TRUE, defined = defined_codes), regexp = NA)
-      expect_warning(qd <- lapply(icd9_map_quan_deyo[c(1, 17)], condense.icd9, short_code = TRUE, defined = defined_codes), regexp = NA)
-      expect_warning(qe <- lapply(icd9_map_quan_elix[c(1, 30)], condense.icd9, short_code = TRUE, defined = defined_codes), regexp = NA)
-      expect_warning(elix <- lapply(icd9_map_elix[c(1, 30)], condense.icd9, short_code = TRUE, defined = defined_codes), regexp = NA)
+      expect_warning(ahrq <- lapply(icd9_map_ahrq[c(1, 30)],
+                                    condense.icd9, short_code = TRUE, defined = defined_codes), regexp = NA)
+      expect_warning(qd <- lapply(icd9_map_quan_deyo[c(1, 17)],
+                                  condense.icd9, short_code = TRUE, defined = defined_codes), regexp = NA)
+      expect_warning(qe <- lapply(icd9_map_quan_elix[c(1, 30)],
+                                  condense.icd9, short_code = TRUE, defined = defined_codes), regexp = NA)
+      expect_warning(elix <- lapply(icd9_map_elix[c(1, 30)],
+                                    condense.icd9, short_code = TRUE, defined = defined_codes), regexp = NA)
     }
     expect_is(ahrq, class = "list")
     expect_is(elix, class = "list")
@@ -138,8 +146,9 @@ test_that("ICD-9 codes from SAS source AHRQ exist", {
   #   "34540"-"34591",
   #   "34700"-"34701",
   #   "34710"-"34711",
-  expect_true("3337" %in% icd9_map_ahrq[["NeuroOther"]]) # single value
-  expect_true("33371" %in% icd9_map_ahrq[["NeuroOther"]]) # single value sub-code - zero not defined in 2015
+  expect_true("3337" %in% icd9_map_ahrq[["NeuroOther"]])
+  # single value sub-code - zero not defined in 2015
+  expect_true("33371" %in% icd9_map_ahrq[["NeuroOther"]])
   expect_true("494" %in% icd9_map_ahrq$Pulmonary) # top-level at start of range
   expect_true("4940" %in% icd9_map_ahrq$Pulmonary) # value within range
   expect_true("49400" %in% icd9_map_ahrq$Pulmonary) # sub-value within range
@@ -205,8 +214,8 @@ test_that("ICD-9 codes from SAS source AHRQ exist", {
   #   "243  "-"2442 ",
   #   "2448 ",
   #   "2449 "         = "HYPOTHY"   /* Hypothyroidism */
-  expect_false("244" %in% icd9_map_ahrq$Hypothyroid) # some children are not included
-  expect_false("2443" %in% icd9_map_ahrq$Hypothyroid) # explicitly excluded by Quan
+  expect_false("244" %in% icd9_map_ahrq$Hypothyroid) # some kids not included
+  expect_false("2443" %in% icd9_map_ahrq$Hypothyroid) # excluded by Quan
   expect_false("24430" %in% icd9_map_ahrq$Hypothyroid) # implied exclusion
   expect_true("2442" %in% icd9_map_ahrq$Hypothyroid)
   expect_true("243" %in% icd9_map_ahrq$Hypothyroid) # top level billable code
@@ -244,7 +253,7 @@ test_that("ICD-9 codes from SAS source AHRQ exist", {
   expect_true("20259" %in% icd9_map_ahrq$Lymphoma)
   expect_true("20298" %in% icd9_map_ahrq$Lymphoma)
   expect_true("20299" %in% icd9_map_ahrq$Lymphoma)
-  # 2030 and 203 are parents: problem because this range is split for some reason
+  # 2030 and 203 are parents: problem because this range is split
   expect_true("2031" %in% icd9_map_ahrq$Lymphoma)
   expect_true("20310" %in% icd9_map_ahrq$Lymphoma)
   expect_true("20300" %in% icd9_map_ahrq$Lymphoma)
@@ -313,8 +322,10 @@ test_that("ICD-9 codes from SAS source AHRQ exist", {
   #   "2871 ",
   #   "2873 "-"2875 ", # coag
   expect_true("2871" %in% icd9_map_ahrq$Coagulopathy)
-  expect_true("28710" %in% icd9_map_ahrq$Coagulopathy) # doesn't exist but really should work simply
-  expect_true("28719" %in% icd9_map_ahrq$Coagulopathy) # doesn't exist but really should work simply
+  # doesn't exist but really should work simply
+  expect_true("28710" %in% icd9_map_ahrq$Coagulopathy)
+  # doesn't exist but really should work simply
+  expect_true("28719" %in% icd9_map_ahrq$Coagulopathy)
   expect_false("287" %in% icd9_map_ahrq$Coagulopathy)
   expect_false("2872" %in% icd9_map_ahrq$Coagulopathy)
   expect_false("28720" %in% icd9_map_ahrq$Coagulopathy)
@@ -401,7 +412,7 @@ test_that("ICD-9 codes from SAS source for Quan Deyo Charlson exist", {
 # data, but the numbers were transcribed manually. This is therefore testing a
 # little of the transcription, and also the elobration of codes definied in
 # ranges
-test_that("sample of ICD-9 codes from manually specified Quan Elix mapping exist", {
+test_that("ICD-9 codes from manually specified Quan Elix mapping exist", {
   expect_true("2500" %in% icd9_map_quan_elix$DM)
   expect_true("2501" %in% icd9_map_quan_elix$DM)
   expect_true("25011" %in% icd9_map_quan_elix$DM)
@@ -412,7 +423,7 @@ test_that("sample of ICD-9 codes from manually specified Quan Elix mapping exist
   expect_false("710" %in% icd9_map_quan_elix[["FluidsLytes"]])
 })
 
-test_that("sample of ICD-9 codes from manually specified Elixhauser mapping exist", {
+test_that("ICD-9 codes from manually specified Elixhauser mapping exist", {
   expect_true("09320" %in% icd9_map_elix$Valvular)
   expect_true("3971" %in% icd9_map_elix$Valvular)
   expect_true("V560" %in% icd9_map_elix$Renal)
@@ -509,7 +520,7 @@ test_that("comorbidities created from source data frame coded as factors", {
   expect_identical(res, res_nofactor)
 })
 
-test_that("all AHRQ ICD-9 comorbidities are also in the ICD-10 maps, in same order", {
+test_that("AHRQ ICD-9 comorbidities are in the ICD-10 maps, in same order", {
   expect_equal_no_icd(names(icd9_map_ahrq), names(icd10_map_ahrq))
   expect_equal_no_icd(names(icd9_map_elix), names(icd10_map_elix))
   expect_equal_no_icd(names(icd9_map_quan_elix), names(icd10_map_quan_elix))
@@ -523,5 +534,6 @@ test_that("Charlson synonyms are present", {
 
 test_that("Quan Elix should only have children of 588.0, not 588", {
   expect_true(all(c("5880", "58809") %in% icd9_map_quan_elix$Renal))
-  expect_false(any(c("5890", "5881", "58819", "58899") %in% icd9_map_quan_elix$Renal))
+  expect_false(
+    any(c("5890", "5881", "58819", "58899") %in% icd9_map_quan_elix$Renal))
 })
