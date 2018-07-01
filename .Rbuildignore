@@ -42,7 +42,9 @@ cran-comments\.md$
 ^data\/icd10_sub_chapters\.RData
 ^data\/icd9cm_hierarchy\.RData
 ^data\/uranium_pathology\.RData
+^data-raw$
 ^data-raw\/.*$
+^inst\/extdata$
 ^inst\/extdata\/.*$
 ^inst/doc/benchresults\.ods$
 ^docs$
