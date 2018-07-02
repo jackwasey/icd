@@ -1,4 +1,13 @@
 
+@Misc{		  _whointernationalclassification_2018,
+  title		= {{{WHO}} | {{International Classification}} of
+		  {{Diseases}}, 11th {{Revision}} ({{ICD}}-11)},
+  howpublished	= {http://www.who.int/classifications/icd/en/},
+  journal	= {WHO},
+  month		= jun,
+  year		= {2018}
+}
+
 @Misc{		  agencyforhealthcareresearchandquality_clinicalclassificationssoftware_2012,
   type		= {Text},
   title		= {Clinical {{Classifications Software}} for {{ICD}}-10
@@ -187,13 +196,90 @@
   pages		= {8-27}
 }
 
-@Article{	  evans_evaluationcmshccrisk_2011,
+@TechReport{	  evans_evaluationcmshccrisk_2011,
   title		= {Evaluation of the {{CMS}}-{{HCC Risk Adjustment Model}}},
   language	= {en},
+  institution	= {{Center for Medicaid and Medicare Services}},
   author	= {Evans, Melissa A.},
   month		= mar,
   year		= {2011},
   pages		= {127}
+}
+
+@Article{	  feinstein_packagepediatriccomplex_2018,
+  title		= {R {{Package}} for {{Pediatric Complex Chronic Condition
+		  Classification}}},
+  issn		= {2168-6211},
+  doi		= {10.1001/jamapediatrics.2018.0256},
+  language	= {eng},
+  journal	= {JAMA pediatrics},
+  author	= {Feinstein, James A. and Russell, Seth and DeWitt, Peter E.
+		  and Feudtner, Chris and Dai, Dingwei and Bennett, Tellen
+		  D.},
+  month		= apr,
+  year		= {2018},
+  pmid		= {29710063},
+  pmcid		= {PMC5933455}
+}
+
+@Article{	  frank_risk-adjusted_2014,
+  title		= {Risk-Adjusted Clinical Outcomes in Patients Enrolled in a
+		  Bloodless Program},
+  volume	= {54},
+  copyright	= {\textcopyright{} 2014 AABB},
+  issn		= {1537-2995},
+  doi		= {10.1111/trf.12752},
+  abstract	= {Background
+		  
+		  Although clinical outcomes have been reported for patients
+		  who do not accept allogeneic blood transfusion (ABT), many
+		  previous studies lack a control group, fail to use risk
+		  adjustment, and focus exclusively on cardiac surgery.
+		  
+		  Study Design and Methods
+		  
+		  We report a risk-adjusted, propensity
+		  score\textendash{}matched, retrospective case-control study
+		  of clinical outcomes for inpatients who did not accept ABT
+		  (bloodless, n\,=\,294) and those who did accept ABT
+		  (control, n\,=\,1157). Multidisciplinary specialized care
+		  was rendered to the bloodless patients to conserve blood
+		  and optimize clinical outcomes. Differences in hemoglobin
+		  (Hb), mortality, five morbid outcomes, and hospital charges
+		  and costs were compared. Subgroups of medical and surgical
+		  patients were analyzed, and independent predictors of
+		  outcome were determined by multivariate analysis.
+		  
+		  Results
+		  
+		  Overall, mortality was lower in the bloodless group (0.7\%)
+		  than in the control group (2.7\%; p\,=\,0.046), primarily
+		  attributed to the surgical subgroup. After risk adjustment,
+		  bloodless care was not an independent predictor of the
+		  composite adverse outcome (death or any morbid event;
+		  p\,=\,0.91; odds ratio, 1.02; 95\% confidence interval,
+		  0.68-1.53). Discharge Hb concentrations were similar in the
+		  bloodless (10.8\,$\pm$\,2.7\,g/dL) and control
+		  (10.9\,$\pm$\,2.3\,g/dL) groups (p\,=\,0.42). Total and
+		  direct hospital costs were 12\% (p\,=\,0.02) and 18\%
+		  (p\,=\,0.02) less, respectively, in the bloodless patients,
+		  a difference attributed to the surgical subgroup.
+		  
+		  Conclusions
+		  
+		  Using appropriate blood conservation measures for patients
+		  who do not accept ABT results in similar or better outcomes
+		  and is associated with equivalent or lower costs. This
+		  specialized care may be beneficial even for those patients who accept ABT.},
+  language	= {en},
+  number	= {10pt2},
+  journal	= {Transfusion},
+  author	= {Frank, Steven M. and Wick, Elizabeth C. and Dezern, Amy E.
+		  and Ness, Paul M. and Wasey, Jack O. and Pippa, Andrew C.
+		  and Dackiw, Elizabeth and Resar, Linda M.S.},
+  month		= oct,
+  year		= {2014},
+  pages		= {2668-2677}
 }
 
 @Misc{		  gplv3,
@@ -248,7 +334,7 @@
   year		= {2017}
 }
 
-@InProceedings{	  jarvi_algorithm_2006,
+@InProceedings{	  jarvi_algorithmspecializationgeneric_2006,
   address	= {New York, NY, USA},
   series	= {PLDI '06},
   title		= {Algorithm {{Specialization}} in {{Generic Programming}}:
@@ -295,6 +381,16 @@
   year		= {2016},
   note		= {R package version 12},
   url		= {https://CRAN.R-project.org/package=medicalrisk}
+}
+
+@Misc{		  medicare_cmsicd10frequently_2017,
+  title		= {{{CMS ICD}}-10 {{Frequently Asked Questions}}},
+  abstract	= {ICD-10CM/PCS Frequently Asked Questions},
+  language	= {en-us},
+  howpublished	= {https://www.cms.gov/Medicare/Coding/ICD10/Frequently-Asked-Questions.html},
+  author	= {for Medicare, Centers and Baltimore, Medicaid Services
+		  7500 Security Boulevard and Usa, Md21244},
+  year		= {10/24/2017 2:00 PM}
 }
 
 @Article{	  pope_riskadjustmentmedicare_2004,
@@ -416,8 +512,8 @@
 		  Januel, Jean-Marie and Sundararajan, Vijaya},
   month		= mar,
   year		= {2011},
-  keywords	= {Comorbidity,International Classification of
-		  Diseases,mortality,Quality of Health Care,risk adjustment},
+  keywords	= {mortality,Comorbidity,risk adjustment,International
+		  Classification of Diseases,Quality of Health Care},
   pages		= {676-682},
   pmid		= {21330339}
 }
@@ -467,7 +563,7 @@
   pmid		= {25627395}
 }
 
-@Article{	  vanwalraven_modification_2009,
+@Article{	  vanwalraven_modificationelixhausercomorbidity_2009,
   title		= {A Modification of the {{Elixhauser}} Comorbidity Measures
 		  into a Point System for Hospital Death Using Administrative
 		  Data},
@@ -515,11 +611,10 @@
 		  Alison and Quan, Hude and Forster, Alan J.},
   month		= jun,
   year		= {2009},
-  keywords	= {Cohort Studies,Comorbidity,Health Services
-		  Research,Hospital Administration,Hospital
-		  Mortality,Hospitals; Teaching,Humans,International
-		  Classification of Diseases,Models; Statistical,Risk
-		  Adjustment},
+  keywords	= {Cohort Studies,Humans,Hospital
+		  Mortality,Comorbidity,Health Services Research,Hospitals;
+		  Teaching,International Classification of Diseases,Models;
+		  Statistical,Hospital Administration,Risk Adjustment},
   pages		= {626-633},
   pmid		= {19433995}
 }
