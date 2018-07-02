@@ -19,7 +19,8 @@ context("ICD-10 codes are valid, defined, billable")
 
 test_that("icd10 codes that are billable and do exist", {
   test_codes <- list("A000", "A001", "A009", "A09", "R197", "B0059",
-                     "C7A024", "C7B1", "D4989", "O9A119", "O9A519", "O9A53", "O99845", "P969",
+                     "C7A024", "C7B1", "D4989", "O9A119",
+                     "O9A519", "O9A53", "O99845", "P969",
                      "V99XXXS", "V99XXXD", "V99XXXA", "V988XXS",
                      "W009XXA", "Y95", "Y999",
                      "Z0000")
@@ -47,11 +48,10 @@ test_that("icd10 codes that are billable and do exist", {
 })
 
 test_that("icd10 codes that are not billable but do exist", {
-  test_codes <- list("A00", "A01", "R19", "B005",
-                     "C7A02", "C7B", "D498", "O9A11", "O9A51", "O9A5", "O9984", "P96",
-                     # SOMEDAY might consider stripping trailing X, but doubt this occur in real life:
-                     # "V99XXX", "V988XX", "W009XX",
-                     "Y99", "Z000")
+  test_codes <-
+    list("A00", "A01", "R19", "B005",
+         "C7A02", "C7B", "D498", "O9A11", "O9A51", "O9A5", "O9984", "P96",
+         "Y99", "Z000")
   test_codes <- append(test_codes, lapply(test_codes, icd10cm))
   for (x in test_codes) {
     expect_true(is_valid(x), info = x)

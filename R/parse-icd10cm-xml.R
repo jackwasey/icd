@@ -38,23 +38,24 @@ icd10cm_extract_sub_chapters <- function(save_data = FALSE, offline = TRUE) {
   # using magrittr::equals and extract because I don't want to import them. See
   # \code{icd-package.R} for what is imported. No harm in being explicit, since
   # :: will do an implicit requireNamespace.
-  xml2::xml_children(j) %>%
-    xml2::xml_name %>%
-    magrittr::equals("chapter") -> chapter_indices
+  xml2::xml_name(xml2::xml_children(j)) == "chapter" -> chapter_indices
   # could do xpath, but harder to loop
   xml2::xml_children(j) %>%
     magrittr::extract(chapter_indices) -> chaps
   icd10_sub_chapters <- list()
   for (chap in chaps) {
-    c_kids <- chap %>% xml2::xml_children
+    c_kids <- xml2::xml_children(chap)
     subchap_indices <- xml2::xml_name(c_kids) == "section"
     subchaps <- c_kids[subchap_indices]
     for (subchap in subchaps) {
-      subchap  %>%
-        xml2::xml_children  %>%
-        magrittr::extract(1) %>%
-        xml2::xml_text %>%
-        chapter_to_desc_range.icd10 -> new_sub_chap_range
+      new_sub_chap_range <-
+        chapter_to_desc_range.icd10(
+          xml2::xml_text(
+            xml2::xml_children(
+              subchap
+            )[1]
+          )
+        )
       # should only match one at a time
       stopifnot(length(new_sub_chap_range) == 1)
       # check that this is a real sub-chapter, not an extra range defined in the

@@ -18,11 +18,13 @@
 context("content of icd-10 to comorbidity maps")
 
 test_that("the icd-10 quan elix comorbidity map is reproduced", {
-  expect_equivalent(icd10_map_quan_elix, icd10_generate_map_quan_elix(save_data = FALSE))
+  expect_equivalent(
+    icd10_map_quan_elix, icd10_generate_map_quan_elix(save_data = FALSE))
 })
 
 test_that("the icd-10 quan deyo comorbidity map is reproduced", {
-  expect_equivalent(icd10_map_quan_deyo, icd10_generate_map_quan_deyo(save_data = FALSE))
+  expect_equivalent(
+    icd10_map_quan_deyo, icd10_generate_map_quan_deyo(save_data = FALSE))
 })
 
 test_that("the icd-10 elix comorbidity map is reproduced", {
@@ -36,10 +38,13 @@ test_that("icd-10 ahrq map is reproduced", {
 })
 
 test_that("the classes of the ICD-10 maps are correct", {
-  maps <- named_list(icd10_map_ahrq, icd10_map_elix, icd10_map_quan_deyo, icd10_map_quan_elix)
+  maps <- named_list(icd10_map_ahrq, icd10_map_elix,
+                     icd10_map_quan_deyo, icd10_map_quan_elix)
   for (m in names(maps)) {
-    # for each map, verify it has class map, and that all it's elements are ICD-10 short diag format
-    expect_identical(class(maps[[m]]), c("comorbidity_map", "list"), info = paste("map: ", m))
+    # for each map, verify it has class map, and that all
+    # it's elements are ICD-10 short diag format
+    expect_identical(
+      class(maps[[m]]), c("comorbidity_map", "list"), info = paste("map: ", m))
     for (cbd in names(maps[[m]])) {
       y <- maps[[m]][[cbd]]
       expect_true(is.icd10(y), info = paste("map: ", m, " cbd = ", cbd))
@@ -51,7 +56,8 @@ test_that("the classes of the ICD-10 maps are correct", {
 test_that("the class of each element of the quan elix map is correct", {
   for (i in names(icd10_map_quan_elix)) {
     expect_is(icd10_map_quan_elix[[i]], class = c("icd10", "character"), info = i)
-    # although we derive the map from ICD-10-CM, it need not be so, and it may be more broad in the future:
+    # although we derive the map from ICD-10-CM, it need not be so, and it may
+    # be more broad in the future:
     expect_false(inherits(icd10_map_quan_elix[[i]], "icd10cm"), info = i)
     # not a list, it is a character vector
     expect_false(inherits(icd10_map_quan_elix[[i]], "list"), info = i)
@@ -62,20 +68,28 @@ test_that("the class of each element of the quan elix map is correct", {
 
 test_that("independently created list of Quan Elixhauser codes all appear", {
   quan_elix_independent <- list(
-    chf = c("I099", "I110", "I130", "I132", "I255", "I420", "I425", "I426", "I427", "I428", "I429", "I43", "I50", "P290"),
-    arrhythmia = c("I441", "I442", "I443", "I456", "I459", "I47", "I48", "I49", "R000", "R001", "R008", "T821", "Z450", "Z950"),
-    valvular = c("A520", "I05", "I06", "I07", "I08", "I091", "I098", "I34", "I35",
-                 "I36", "I37", "I38", "I39", "Q230", "Q231", "Q232", "Q233", "Z952", "Z953", "Z954"),
+    chf = c("I099", "I110", "I130", "I132", "I255", "I420", "I425", "I426",
+            "I427", "I428", "I429", "I43", "I50", "P290"),
+    arrhythmia = c("I441", "I442", "I443", "I456", "I459", "I47", "I48", "I49",
+                   "R000", "R001", "R008", "T821", "Z450", "Z950"),
+    valvular = c(
+      "A520", "I05", "I06", "I07", "I08", "I091", "I098", "I34", "I35",
+      "I36", "I37", "I38", "I39", "Q230", "Q231", "Q232",
+      "Q233", "Z952", "Z953", "Z954"),
     pulmonary_circ = c("I26", "I27", "I280", "I288", "I289"),
-    pvd = c("I70", "I71", "I731", "I738", "I739", "I771", "I790", "I792", "K551", "K558", "K559", "Z958", "Z959"),
+    pvd = c("I70", "I71", "I731", "I738", "I739", "I771", "I790", "I792",
+            "K551", "K558", "K559", "Z958", "Z959"),
     htn = c("I10"),
     htncx = c("I11", "I12", "I13", "I15"),
-    paralysis = c("G041", "G114", "G801", "G802", "G81", "G82", "G830", "G831", "G832", "G833", "G834", "G839"),
-    neuro = c("G10", "G11", "G12", "G13", "G20", "G21", "G22", "G254", "G255", "G312", "G318",
-              "G319", "G32", "G35", "G36", "G37", "G40", "G41", "G931", "G934", "R470", "R56"),
+    paralysis = c("G041", "G114", "G801", "G802", "G81", "G82", "G830", "G831",
+                  "G832", "G833", "G834", "G839"),
+    neuro = c("G10", "G11", "G12", "G13", "G20", "G21", "G22",
+              "G254", "G255", "G312", "G318", "G319", "G32", "G35", "G36",
+              "G37", "G40", "G41", "G931", "G934", "R470", "R56"),
     copd =
-      c("I278", "I279", "J40", "J41", "J42", "J43", "J44", "J45", "J46", "J47", "J60",
-        "J61", "J62", "J63", "J64", "J65", "J66", "J67", "J684", "J701", "J703"),
+      c("I278", "I279", "J40", "J41", "J42", "J43", "J44", "J45", "J46", "J47",
+        "J60", "J61", "J62", "J63", "J64", "J65", "J66", "J67", "J684",
+        "J701", "J703"),
     dm_s = c("E100", "E101", "E109", "E110", "E111", "E119", "E120", "E121",
              "E129", "E130", "E131", "E139", "E140", "E141", "E149"),
     dm_cx = c("E102", "E103", "E104", "E105", "E106", "E107", "E108", "E112",
@@ -104,19 +118,25 @@ test_that("independently created list of Quan Elixhauser codes all appear", {
               "C56", "C57", "C58", "C60", "C61", "C62", "C63", "C64", "C65",
               "C66", "C67", "C68", "C69", "C70", "C71", "C72", "C73",
               "C74", "C75", "C76", "C97"),
-    arthritis = c("L940", "L941", "L943", "M05", "M06", "M08", "M120", "M123", "M30", "M310",
-                  "M311", "M312", "M313", "M32", "M33", "M34", "M35", "M45", "M461", "M468", "M469"),
-    coag = c("D65", "D66", "D67", "D68", "D691", "D693", "D694", "D695", "D696"),
+    arthritis = c("L940", "L941", "L943", "M05", "M06", "M08", "M120", "M123",
+                  "M30", "M310", "M311", "M312", "M313", "M32", "M33", "M34",
+                  "M35", "M45", "M461", "M468", "M469"),
+    coag =
+      c("D65", "D66", "D67", "D68", "D691", "D693", "D694", "D695", "D696"),
     obesity = c("E66"),
-    weight_loss = c("E40", "E41", "E42", "E43", "E44", "E45", "E46", "R634", "R64"),
+    weight_loss =
+      c("E40", "E41", "E42", "E43", "E44", "E45", "E46", "R634", "R64"),
     fluid = c("E222", "E86", "E87"),
     blood_loss = c("D500"),
     anemia = c("D508", "D509", "D51", "D52", "D53"),
-    etoh = c("F10", "E52", "G621", "I426", "K292", "K700", "K703", "K709", "T51", "Z502", "Z714", "Z721"),
-    drugs = c("F11", "F12", "F13", "F14", "F15", "F16", "F18", "F19", "Z715", "Z722"),
-    psych = c("F20", "F22", "F23", "F24", "F25", "F28", "F29", "F302", "F312", "F315"),
-    depression = c("F204", "F313", "F314", "F315", "F32", "F33", "F341", "F412", "F432"))
-
+    etoh = c("F10", "E52", "G621", "I426", "K292", "K700", "K703", "K709",
+             "T51", "Z502", "Z714", "Z721"),
+    drugs = c("F11", "F12", "F13", "F14", "F15",
+              "F16", "F18", "F19", "Z715", "Z722"),
+    psych = c("F20", "F22", "F23", "F24", "F25",
+              "F28", "F29", "F302", "F312", "F315"),
+    depression = c("F204", "F313", "F314", "F315",
+                   "F32", "F33", "F341", "F412", "F432"))
   # just parent codes. But I store, for ICD-10, the icd-10-cm children also.
   for (i in 1:30) {
     indep <- quan_elix_independent[[i]]

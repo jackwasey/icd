@@ -86,7 +86,8 @@ categorize <- function(x, map, id_name, code_name,
       row_names <- factor_nosort(character(0), levels = iv_levels)
     else
       row_names <- character(0)
-    df_empty_out <- cbind(row_names, as.data.frame(empty_mat_out), stringsAsFactors = visit_was_factor)
+    df_empty_out <- cbind(row_names, as.data.frame(empty_mat_out),
+                          stringsAsFactors = visit_was_factor)
     names(df_empty_out)[1] <- id_name
     rownames(df_empty_out) <- NULL
     return(df_empty_out)
@@ -187,7 +188,8 @@ categorize_simple <- function(x, map, id_name, code_name,
       row_names <- factor_nosort(character(0), levels = iv_levels)
     else
       row_names <- character(0)
-    df_empty_out <- cbind(row_names, as.data.frame(empty_mat_out), stringsAsFactors = visit_was_factor)
+    df_empty_out <- cbind(row_names, as.data.frame(empty_mat_out),
+                          stringsAsFactors = visit_was_factor)
     names(df_empty_out)[1] <- id_name
     rownames(df_empty_out) <- NULL
     return(df_empty_out)

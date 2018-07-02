@@ -45,7 +45,9 @@ icd10_fetch_ahrq_ccs <- function(version = "2018.1", offline) {
   version <- gsub(".", "_", version, fixed = TRUE)
   # all information in one file, no need for single vs multi
   unzip_to_data_raw(
-    url = paste0("https://www.hcup-us.ahrq.gov/toolssoftware/ccs10/ccs_dx_icd10cm_", version, ".zip"),
+    url = paste0(
+      "https://www.hcup-us.ahrq.gov/toolssoftware/ccs10/ccs_dx_icd10cm_",
+      version, ".zip"),
     file_name = paste0("ccs_dx_icd10cm_", version, ".csv"),
     offline = offline)
 }
@@ -90,7 +92,8 @@ icd9_parse_ahrq_ccs <- function(single = TRUE, save_data = FALSE, offline = TRUE
     lvls <- lvls %>%
       unlist %>%
       as.numeric %>%
-      matrix(ncol = number_splits, byrow = TRUE, dimnames  = list(rownames = lvls_names[lvls_names != " "]))
+      matrix(ncol = number_splits, byrow = TRUE,
+             dimnames  = list(rownames = lvls_names[lvls_names != " "]))
     # complicated call needed or order using all columns of matrix
     lvls <- lvls[do.call(order, as.data.frame(lvls)), ]
     if (is.null(dim(lvls)))

@@ -26,20 +26,21 @@
 #' This meant a lot of time debugging a problem when white space was ignored for
 #' sorting on some platforms, but not others (e.g. Travis and Wercker).
 #' @source
-#'   \url{http://www.cdc.gov/nchs/data/icd/icd10cm/2016/ICD10CM_FY2016_code_descriptions.zip}.
-#'
+#'   \url{http://www.cdc.gov/nchs/data/icd/icd10cm/2016/
+#'   ICD10CM_FY2016_code_descriptions.zip}.
 #' @references
 #'   https://www.cms.gov/Medicare/Coding/ICD10/downloads/icd-10quickrefer.pdf
 #' @keywords internal
 icd10cm_get_all_defined <- function(save_data = FALSE, offline = TRUE) {
   f_info <- icd10cm_get_flat_file(offline = offline)
   stopifnot(!is.null(f_info))
-  # readLines may muck up encoding, resulting in weird factor order generation later?
+  # readLines may muck up encoding, resulting in weird factor order generation
+  # later?
   x <- readLines(con = f_info$file_path, encoding = "ASCII")
   stopifnot(all(Encoding(x) == "unknown"))
-  # Beware: stringr::str_trim may do some encoding tricks which result in different
-  # factor order on different platforms. Seems to affect "major" which comes
-  # from "short_desc"
+  # Beware: stringr::str_trim may do some encoding tricks which result in
+  # different factor order on different platforms. Seems to affect "major" which
+  # comes from "short_desc"
   icd10cm2016 <- data.frame(
     #id = substr(x, 1, 5),
     code = trim(substr(x, 7, 13)),
@@ -62,11 +63,13 @@ icd10cm_get_all_defined <- function(save_data = FALSE, offline = TRUE) {
   # the output of this function (and it can't just do numeric ranges because
   # there are some non-numeric characters scattered around)
   sc_lookup <- icd10_generate_subchap_lookup()
-  icd10cm2016[["sub_chapter"]] <- merge(x = icd10cm2016["three_digit"], y = sc_lookup,
-                                        by.x = "three_digit", by.y = "sc_major", all.x = TRUE)[["sc_desc"]]
+  icd10cm2016[["sub_chapter"]] <-
+    merge(x = icd10cm2016["three_digit"], y = sc_lookup,
+          by.x = "three_digit", by.y = "sc_major", all.x = TRUE)[["sc_desc"]]
   chap_lookup <- icd10_generate_chap_lookup()
-  icd10cm2016[["chapter"]] <- merge(icd10cm2016["three_digit"], chap_lookup,
-                                    by.x = "three_digit", by.y = "chap_major", all.x = TRUE)[["chap_desc"]]
+  icd10cm2016[["chapter"]] <-
+    merge(icd10cm2016["three_digit"], chap_lookup,
+          by.x = "three_digit", by.y = "chap_major", all.x = TRUE)[["chap_desc"]]
   if (save_data)
     save_in_data_dir(icd10cm2016)
   invisible(icd10cm2016)

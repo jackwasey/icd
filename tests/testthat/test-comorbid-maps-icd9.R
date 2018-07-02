@@ -133,7 +133,8 @@ test_that("ICD-9 codes from SAS source AHRQ exist", {
   expect_true("43850" %in% icd9_map_ahrq$Paralysis)
   expect_true("43852" %in% icd9_map_ahrq$Paralysis)
   expect_true("43853" %in% icd9_map_ahrq$Paralysis)
-  # although 4385 implies an overly broad range, all its children are in the requested range, so it should appear.
+  # although 4385 implies an overly broad range, all its children are in the
+  # requested range, so it should appear.
   expect_true("4383" %in% icd9_map_ahrq$Paralysis)
   expect_true("4384" %in% icd9_map_ahrq$Paralysis)
   expect_true("4385" %in% icd9_map_ahrq$Paralysis)

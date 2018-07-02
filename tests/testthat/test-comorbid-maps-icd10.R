@@ -35,14 +35,18 @@ test_that("the classes of the ICD-10 maps are correct", {
 
 test_that("the class of each element of the quan elix map is correct", {
   for (i in names(icd10_map_quan_elix)) {
-    expect_is(icd10_map_quan_elix[[i]], class = c("icd10", "character"), info = i)
+    expect_is(
+      icd10_map_quan_elix[[i]], class = c("icd10", "character"), info = i)
     # although we derive the map from ICD-10-CM, it need not be so,
     # and it may be more broad in the future:
-    expect_false(inherits(icd10_map_quan_elix[[i]], "icd10cm"), info = i)
+    expect_false(
+      inherits(icd10_map_quan_elix[[i]], "icd10cm"), info = i)
     # not a list, it is a character vector
-    expect_false(inherits(icd10_map_quan_elix[[i]], "list"), info = i)
+    expect_false(
+      inherits(icd10_map_quan_elix[[i]], "list"), info = i)
     # this is the parent class, not the class of the elements
-    expect_false(inherits(icd10_map_quan_elix[[i]], "comorbidity_map"), info = i)
+    expect_false(
+      inherits(icd10_map_quan_elix[[i]], "comorbidity_map"), info = i)
   }
 })
 
@@ -106,24 +110,32 @@ test_that("independently created list of Quan Elixhauser codes all appear", {
     coag = c("D65", "D66", "D67", "D68", "D691", "D693", "D694", "D695",
              "D696"),
     obesity = c("E66"),
-    weight_loss = c("E40", "E41", "E42", "E43", "E44", "E45", "E46", "R634", "R64"),
+    weight_loss =
+      c("E40", "E41", "E42", "E43", "E44", "E45", "E46", "R634", "R64"),
     fluid = c("E222", "E86", "E87"),
     blood_loss = c("D500"),
     anemia = c("D508", "D509", "D51", "D52", "D53"),
-    etoh = c("F10", "E52", "G621", "I426", "K292", "K700", "K703", "K709", "T51", "Z502", "Z714", "Z721"),
-    drugs = c("F11", "F12", "F13", "F14", "F15", "F16", "F18", "F19", "Z715", "Z722"),
-    psych = c("F20", "F22", "F23", "F24", "F25", "F28", "F29", "F302", "F312", "F315"),
-    depression = c("F204", "F313", "F314", "F315", "F32", "F33", "F341", "F412", "F432"))
+    etoh = c("F10", "E52", "G621", "I426", "K292", "K700", "K703", "K709",
+             "T51", "Z502", "Z714", "Z721"),
+    drugs =
+      c("F11", "F12", "F13", "F14", "F15", "F16", "F18", "F19", "Z715", "Z722"),
+    psych = c("F20", "F22", "F23", "F24", "F25",
+        "F28", "F29", "F302", "F312", "F315"),
+    depression =
+      c("F204", "F313", "F314", "F315", "F32", "F33", "F341", "F412", "F432"))
 
-  # this list is just parent codes, whereas I store, for ICD-10, the icd-10-cm children also.
+  # this list is just parent codes, whereas I store,
+  # for ICD-10, the icd-10-cm children also.
   for (i in 1:30) {
     indep <- quan_elix_independent[[i]]
     indep_kids <- quan_elix_independent[[i]] %>% children_defined.icd10cm
     canon <- icd10_map_quan_elix[[i]]
     expect_equal(setdiff(indep, canon), character(),
-                 info = paste("checking quan elix canonical in indep: ", i, " - ", names(quan_elix_independent)[i]))
+                 info = paste("checking quan elix canonical in indep: ",
+                              i, " - ", names(quan_elix_independent)[i]))
     expect_equal(setdiff(indep_kids, canon), character(),
-                 info = paste("checking quan elix canonical in indep_kids: ", i, " - ", names(quan_elix_independent)[i]))
+                 info = paste("checking quan elix canonical in indep_kids: ",
+                              i, " - ", names(quan_elix_independent)[i]))
     # yes, there are non-ICD-10-CM codes which are not in the ICD-10-CM children
     # (without including the codes themselves)
   }

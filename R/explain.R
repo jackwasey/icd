@@ -60,12 +60,15 @@ explain_icd <- function(...) explain_code(...)
 #' @describeIn explain_code Explain ICD codes from a character vector, guessing
 #'   ICD version
 #' @export
-explain_code.default <- function(x, short_code = guess_short(x), condense = TRUE, brief = FALSE, warn = TRUE, ...) {
+explain_code.default <- function(x, short_code = guess_short(x),
+                                 condense = TRUE, brief = FALSE,
+                                 warn = TRUE, ...) {
   switch(
     guess_version.character(as_char_no_warn(x), short_code = short_code),
     "icd9" = explain_code.icd9(x, short_code = short_code, condense = condense,
                                brief = brief, warn = warn, ...),
-    "icd10" = explain_code.icd10(x, short_code = short_code, brief = brief, ...),
+    "icd10" = explain_code.icd10(x, short_code = short_code,
+                                 brief = brief, ...),
     stop("Unknown ICD version.")
   )
 }
@@ -83,7 +86,8 @@ explain_code.icd9 <- function(...)
 #' @describeIn explain_code explain character vector of ICD-9-CM codes
 #' @export
 explain_code.icd9cm <- function(x, short_code = guess_short(x),
-                           condense = TRUE, brief = FALSE, warn = TRUE, ...) {
+                                condense = TRUE, brief = FALSE,
+                                warn = TRUE, ...) {
   assert(check_factor(x), check_character(x))
   assert_flag(short_code)
   assert_flag(condense)
@@ -95,22 +99,26 @@ explain_code.icd9cm <- function(x, short_code = guess_short(x),
   if (condense) {
     if (warn && !all(is_defined.icd9(x, short_code = TRUE))) {
       undefined <- x[!is_defined.icd9(x, short_code = TRUE)]
-      warning("Some ICD codes are not 'defined' when trying to condense when explaining codes. ",
+      warning("Some ICD codes are not 'defined' when trying",
+              " to condense when explaining codes. ",
               "Consider using warn = FALSE or condense = FALSE. ",
               "Will drop these and continue. Examples: ",
               paste(undefined[seq(from = 1, to = min(5, length(undefined)))],
                     collapse = " "), call. = FALSE)
     }
-    x <- condense.icd9(get_defined.icd9(x, short_code = TRUE), defined = TRUE, short_code = TRUE)
+    x <- condense.icd9(
+      get_defined.icd9(x, short_code = TRUE),
+      defined = TRUE, short_code = TRUE)
   }
   mj <- unique(get_major.icd9(x, short_code = TRUE))
-
-  mjexplain <- names(icd.data::icd9_majors)[icd.data::icd9_majors %in% mj[mj %in% x]]
+  mjexplain <-
+    names(icd.data::icd9_majors)[icd.data::icd9_majors %in% mj[mj %in% x]]
   # don't double count when major is also billable
   x <- x[x %nin% mj]
   desc_field <- ifelse(brief, "short_desc", "long_desc")
   res <- c(mjexplain,
-           icd.data::icd9cm_hierarchy[icd.data::icd9cm_hierarchy[["code"]] %in% x, desc_field]
+           icd.data::icd9cm_hierarchy[
+             icd.data::icd9cm_hierarchy[["code"]] %in% x, desc_field]
   )
   if (length(res) != 0)
     res
@@ -118,32 +126,35 @@ explain_code.icd9cm <- function(x, short_code = guess_short(x),
     NA_character_
 }
 
-#' @describeIn explain_code ICD-10-CM explanation, current a minimal implementation
+#' @describeIn explain_code ICD-10-CM explanation, current a minimal
+#'   implementation
 #' @export
 explain_code.icd10cm <- function(x, short_code = guess_short(x),
-                            condense = TRUE, brief = FALSE, warn = TRUE, ...) {
+                                 condense = TRUE, brief = FALSE,
+                                 warn = TRUE, ...) {
   assert_vector(x)
   assert_flag(short_code)
   assert_flag(brief)
-
   if (!missing(condense))
     .NotYetUsed("condense", error = FALSE)
   if (!missing(warn))
     .NotYetUsed("warn", error = FALSE)
-
   if (!short_code)
     x <- decimal_to_short.icd10(x)
-
-  # this is a linear lookup, but usually only "explaining" one or a few codes at a time.
-  icd.data::icd10cm2016[icd.data::icd10cm2016[["code"]] %in% unique(as_char_no_warn(x)),
-              ifelse(brief, "short_desc", "long_desc")]
+  # this is a linear lookup, but usually only
+  # "explaining" one or a few codes at a time.
+  icd.data::icd10cm2016[
+    icd.data::icd10cm2016[["code"]] %in% unique(as_char_no_warn(x)),
+    ifelse(brief, "short_desc", "long_desc")
+    ]
 }
 
 #' @describeIn explain_code ICD-10 explanation, falls back on ICD-10-CM until
 #'   ICD-10 WHO copyright workaround is available
 #' @export
 explain_code.icd10 <- function(x, short_code = guess_short(x),
-                          condense = TRUE, brief = FALSE, warn = TRUE, ...) {
+                               condense = TRUE, brief = FALSE,
+                               warn = TRUE, ...) {
   # don't pass on condense and warn until they are implemented
   explain_code.icd10cm(x = x, short_code = short_code, brief = brief, ...)
 }
@@ -168,27 +179,23 @@ icd9_get_chapters <- function(x, short_code = guess_short(x), verbose = FALSE) {
   all_majors <- get_major.icd9(x, short_code)
   majors <- unique(all_majors)
   lenm <- length(majors)
-
-  # could consider faster factor generation
   out <- data.frame(
     three_digit = factor(rep(NA, lenm), levels = c(icd9_majors, NA)),
     major = factor(rep(NA, lenm), levels = c(names(icd9_majors), NA)),
-    sub_chapter = factor(rep(NA, lenm), levels = c(names(icd9_sub_chapters), NA)),
+    sub_chapter =
+      factor(rep(NA, lenm), levels = c(names(icd9_sub_chapters), NA)),
     chapter = factor(rep(NA, lenm), levels = c(names(icd9_chapters), NA))
   )
-
   chap_lookup <- lapply(icd9_chapters, function(y)
     vec_to_env_true(
       expand_range_major.icd9(y[["start"]], y[["end"]], defined = FALSE)
     )
   )
-
   subchap_lookup <- lapply(icd9_sub_chapters, function(y)
     vec_to_env_true(
       expand_range_major.icd9(y[["start"]], y[["end"]], defined = FALSE)
     )
   )
-
   for (i in seq_along(majors)) {
     if (verbose)
       message("icd9_get_chapters: working on major ", majors[i], ", row ", i)

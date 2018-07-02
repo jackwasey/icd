@@ -18,13 +18,14 @@
 context("ahrq ccs calculations")
 
 test_that("icd9 CCS map is valid", {
-  skip("on hold until it is clarified whether the empty first element is somehow needed")
+  skip("is the empty first element somehow needed?")
   expect_true(is_valid(icd9_map_single_ccs, short_code = TRUE))
 })
 
 test_that("one code from each single level", {
   first_from_each <-
-    vapply(icd9_map_single_ccs, function(y) as.character(y[[1]]), character(1), USE.NAMES = FALSE)
+    vapply(icd9_map_single_ccs, FUN = function(y) as.character(y[[1]]),
+           FUN.VALUE = character(1), USE.NAMES = FALSE)
   # drop the (maybe unnecessary empty first group)
   first_from_each <- first_from_each[first_from_each != ""]
   test_all_ccs_df <- data.frame(
@@ -61,7 +62,8 @@ test_that("one code from each single level", {
 
 test_that("one code from each single level backwards", {
   first_from_each <- rev(
-    vapply(icd9_map_single_ccs, function(y) as.character(y[[1]]), character(1), USE.NAMES = FALSE))
+    vapply(icd9_map_single_ccs, FUN = function(y) as.character(y[[1]]),
+           FUN.VALUE = character(1), USE.NAMES = FALSE))
   # drop the (maybe unnecessary empty first group)
   first_from_each <- first_from_each[first_from_each != ""]
   test_all_ccs_df <- data.frame(
@@ -79,12 +81,14 @@ test_that("one code from each single level backwards", {
 
 test_that("one code from each single level backwards with disordered visits", {
   first_from_each <- rev(
-    vapply(icd9_map_single_ccs, function(y) as.character(y[[1]]), character(1), USE.NAMES = FALSE))
+    vapply(icd9_map_single_ccs, FUN = function(y) as.character(y[[1]]),
+           FUN.VALUE = character(1), USE.NAMES = FALSE))
   # drop the (maybe unnecessary empty first group)
   first_from_each <- first_from_each[first_from_each != ""]
   set.seed(1441)
   rnd_ccs_df <- data.frame(
-    visit_id = sample(c("j", "b", "k"), size = length(first_from_each), replace = TRUE),
+    visit_id = sample(c("j", "b", "k"),
+                      size = length(first_from_each), replace = TRUE),
     icd9 = first_from_each
   )
   res <- icd9_comorbid_ccs(rnd_ccs_df)
@@ -110,10 +114,11 @@ test_that("ahrq ccs icd 9 is performing correctly", {
     )
   res <- icd9_comorbid_ccs(test_df)
   if (exists("comorbidMatMul") && exists("icd9ComorbidShortCpp")) {
-    expect_identical(icd9_comorbid_ccs(test_df, categorize_fun = categorize,
-                                       comorbid_fun = icd:::comorbidMatMul),
-                     icd9_comorbid_ccs(test_df, categorize_fun = categorize,
-                                       comorbid_fun = icd:::icd9ComorbidShortCpp))
+    expect_identical(
+      icd9_comorbid_ccs(test_df, categorize_fun = categorize,
+                        comorbid_fun = icd:::comorbidMatMul),
+      icd9_comorbid_ccs(test_df, categorize_fun = categorize,
+                        comorbid_fun = icd:::icd9ComorbidShortCpp))
   }
 
   a_res <- which(sapply(icd9_map_single_ccs, function(y) "01012" %in% y))
@@ -128,26 +133,37 @@ test_that("ahrq ccs icd 9 is performing correctly", {
   manual_res[2, b_res2] <- TRUE
   manual_res[3, c_res] <- TRUE
   expect_equivalent(manual_res, res)
-  expect_true(all(mapply(function(x, y) res[x, y], test_df$visit_id, test_df$single)))
+  expect_true(
+    all(mapply(function(x, y) res[x, y], test_df$visit_id, test_df$single)))
   expect_equal(dim(res), c(3, 284))
 
-  expect_error(icd9_comorbid_ccs(test_df, visit_name = "visit_id", icd_name = "icd9", single = FALSE))
-  expect_error(icd9_comorbid_ccs(test_df, visit_name = "visit_id", icd_name = "icd9", single = FALSE, lvl = "a"))
+  expect_error(icd9_comorbid_ccs(test_df, visit_name = "visit_id",
+                                 icd_name = "icd9", single = FALSE))
+  expect_error(icd9_comorbid_ccs(test_df, visit_name = "visit_id",
+                                 icd_name = "icd9", single = FALSE, lvl = "a"))
 
-  res <- icd9_comorbid_ccs(test_df, visit_name = "visit_id", icd_name = "icd9", single = FALSE, lvl = 1)
-  expect_true(all(mapply(function(x, y) res[x, y], test_df$visit_id, test_df$lvl1)))
+  res <- icd9_comorbid_ccs(test_df, visit_name = "visit_id",
+                           icd_name = "icd9", single = FALSE, lvl = 1)
+  expect_true(
+    all(mapply(function(x, y) res[x, y], test_df$visit_id, test_df$lvl1)))
   expect_equal(dim(res), c(3, 18))
 
-  res <- icd9_comorbid_ccs(test_df, visit_name = "visit_id", icd_name = "icd9", single = FALSE, lvl = 2)
-  expect_true(all(mapply(function(x, y) res[x, y], test_df$visit_id, test_df$lvl2)))
+  res <- icd9_comorbid_ccs(test_df, visit_name = "visit_id",
+                           icd_name = "icd9", single = FALSE, lvl = 2)
+  expect_true(
+    all(mapply(function(x, y) res[x, y], test_df$visit_id, test_df$lvl2)))
   expect_equal(dim(res), c(3, 136))
 
-  res <- icd9_comorbid_ccs(test_df, visit_name = "visit_id", icd_name = "icd9",  single = FALSE,  lvl = 3)
-  expect_true(all(mapply(function(x, y) res[x, y], test_df$visit_id, test_df$lvl3)))
+  res <- icd9_comorbid_ccs(test_df, visit_name = "visit_id",
+                           icd_name = "icd9",  single = FALSE,  lvl = 3)
+  expect_true(
+    all(mapply(function(x, y) res[x, y], test_df$visit_id, test_df$lvl3)))
   expect_equal(dim(res), c(3, 367))
 
-  res <- icd9_comorbid_ccs(test_df, visit_name = "visit_id", icd_name = "icd9", single = FALSE, lvl = 4)
-  expect_true(all(mapply(function(x, y) res[x, y], test_df$visit_id, test_df$lvl4)))
+  res <- icd9_comorbid_ccs(test_df, visit_name = "visit_id",
+                           icd_name = "icd9", single = FALSE, lvl = 4)
+  expect_true(
+    all(mapply(function(x, y) res[x, y], test_df$visit_id, test_df$lvl4)))
   expect_equal(dim(res), c(3, 209))
 })
 

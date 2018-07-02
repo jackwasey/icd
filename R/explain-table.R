@@ -47,19 +47,23 @@
 explain_table <- function(...)
   UseMethod("explain_table")
 
-#' @describeIn explain_table explaining ICD codes from a character vector, guessing ICD version
+#' @describeIn explain_table explaining ICD codes from a character vector,
+#'   guessing ICD version
 #' @details If the input x is of mixed type it will choose to convert by
 #' @export
 #' @keywords internal
-explain_table.default <- function(x, short_code = guess_short(x), condense = FALSE,
-                                  brief = TRUE, warn = TRUE, ...) {
+explain_table.default <- function(x, short_code = guess_short(x),
+                                  condense = FALSE, brief = TRUE,
+                                  warn = TRUE, ...) {
   ver <- guess_version(x, short_code = short_code)
   if (ver %in% icd9_classes)
-    return(explain_table.icd9cm(x, short_code = short_code, condense = condense,
-                                brief = brief, warn = warn, ...))
+    return(
+      explain_table.icd9cm(x, short_code = short_code, condense = condense,
+                           brief = brief, warn = warn, ...))
   if (ver %in% icd10_classes)
-    return(explain_table.icd10cm(x, short_code = short_code, condense = condense,
-                                 brief = brief, warn = warn, ...))
+    return(
+      explain_table.icd10cm(x, short_code = short_code, condense = condense,
+                            brief = brief, warn = warn, ...))
   stop("Unknown ICD version in explain_table.default.
        Check the class of the input data, or call either
        explain_table.icd9 or explain_table.icd10 directly.")
@@ -105,7 +109,8 @@ explain_table_worker <- function(x, hierarchy, short_code, condense,
   assert_flag(warn)
   x <- as_char_no_warn(x)
   xs <- if (!short_code) decimal_to_short.icd9(x) else x
-  exptable <- merge(data.frame(code = xs, stringsAsFactors = FALSE), hierarchy, all.x = TRUE)
+  exptable <- merge(data.frame(code = xs, stringsAsFactors = FALSE),
+                    hierarchy, all.x = TRUE)
   # merge has reordered...
   exptable[["is_major"]] <- exptable[["three_digit"]] == exptable[["code"]]
   exptable[["valid_icd9"]] <- is_valid.icd9(xs, short_code = TRUE)
@@ -121,7 +126,8 @@ explain_table_worker <- function(x, hierarchy, short_code, condense,
 #' @export
 #' @keywords internal
 explain_table.icd9cm <- function(x, short_code = guess_short(x),
-                                 condense = FALSE, brief = TRUE, warn = TRUE, ...)
+                                 condense = FALSE, brief = TRUE,
+                                 warn = TRUE, ...)
   explain_table_worker(x = x, hierarchy = icd9cm_hierarchy,
                        short_code = short_code, condense = condense,
                        brief = brief, warn = warn, ...)
@@ -131,7 +137,8 @@ explain_table.icd9cm <- function(x, short_code = guess_short(x),
 #' @export
 #' @keywords internal
 explain_table.icd10cm <- function(x, short_code = guess_short(x),
-                                  condense = FALSE, brief = TRUE, warn = TRUE, ...)
+                                  condense = FALSE, brief = TRUE,
+                                  warn = TRUE, ...)
   explain_table_worker(x = x, hierarchy = icd10cm2016,
                        short_code = short_code, condense = condense,
                        brief = brief, warn = warn, ...)
@@ -157,9 +164,13 @@ condense_explain_table <- function(x) {
   # drop rows where major is present in the input
   x <- x[x[["three_digit"]] %nin% x[["code"]] | x$is_major, ]
   # add condensed merge existing major rows
-  out <- merge(x, condensed_majors, by.x = "code", by.y = "three_digit", all.x = TRUE)
+  out <- merge(x, condensed_majors,
+               by.x = "code",
+               by.y = "three_digit",
+               all.x = TRUE)
   # NA values are un-condensed, so just fill out:
-  out[is.na(out$condensed_codes), "condensed_codes"] <- out[is.na(out$condensed_codes), "code"]
+  out[is.na(out$condensed_codes), "condensed_codes"] <-
+    out[is.na(out$condensed_codes), "code"]
   out[is.na(out$condensed_num), "condensed_num"] <- 1L
   out
 }
@@ -172,9 +183,12 @@ condense_explain_table_worker <- function(x) {
   # we can only condense when we have three_digit major
   x <- x[!is.na(x[["three_digit"]]), ]
   if (nrow(x) == 0) return(data.frame())
-  condensed <- aggregate(x["code"], by = list(x[["three_digit"]]), paste, sep = ", ", collapse = ", ")
+  condensed <- aggregate(x["code"],
+                         by = list(x[["three_digit"]]),
+                         paste, sep = ", ", collapse = ", ")
   # code column in result is now a factor, by default
   names(condensed) <- c("three_digit", "condensed_codes")
-  condensed[["condensed_num"]] <- aggregate(x["code"], by = list(x[["three_digit"]]), length)[[2]]
+  condensed[["condensed_num"]] <-
+    aggregate(x["code"], by = list(x[["three_digit"]]), length)[[2]]
   condensed[condensed[["condensed_num"]] != 1L, ]
 }
