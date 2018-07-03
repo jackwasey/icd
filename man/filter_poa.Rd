@@ -53,8 +53,8 @@ same as "not no."}
 Present On Arrival (POA) is not a simple flag, since many codes are exempt,
 unspecified, or unknown. Therefore, two options are given: get all the
 comorbidities where the POA flag was definitely negative, coded as 'N' or
-definitely positive and coded as 'Y'. Negating one set won't give the other set
-unless all codes were either Y or N.
+definitely positive and coded as 'Y'. Negating one set won't give the other
+set unless all codes were either Y or N.
 }
 \section{Functions}{
 \itemize{
@@ -98,7 +98,8 @@ myData <- data.frame(
 myData \%>\% filter_poa_not_no() \%>\% comorbid_ahrq()
 # can fill out named fields also:
 myData \%>\% filter_poa_yes(poa_name="poa") \%>\%
-  comorbid_ahrq(icd_name = "diag", visit_name = "visit_id", short_code = TRUE)
+  comorbid_ahrq(icd_name = "diag", visit_name = "visit_id",
+  short_code = TRUE)
 # can call the core comorbid() function with an arbitrary mapping
 myData \%>\%
   filter_poa_yes \%>\%

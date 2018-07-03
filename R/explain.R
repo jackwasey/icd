@@ -88,6 +88,10 @@ explain_code.icd9 <- function(...)
 explain_code.icd9cm <- function(x, short_code = guess_short(x),
                                 condense = TRUE, brief = FALSE,
                                 warn = TRUE, ...) {
+  if (is.numeric(x))
+    warning("data is in numeric format. This can easily lead to errors in ",
+            "short or decimal codes, e.g. short_code code 1000: is it 10.00 ",
+            "or 100.0; or decimal codes, e.g. 10.1 was supposed to be 10.10 .")
   assert(check_factor(x), check_character(x))
   assert_flag(short_code)
   assert_flag(condense)

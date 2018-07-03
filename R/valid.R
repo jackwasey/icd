@@ -15,33 +15,6 @@
 # You should have received a copy of the GNU General Public License
 # along with icd. If not, see <http:#www.gnu.org/licenses/>.
 
-#' Limit a regular expression to just what is given
-#'
-#' update regular expression to limit by start and end, with or without white
-#' space
-#' @param x single string containing a regular expression
-#' @template whitespace_ok
-#' @keywords internal
-re_just <- function(x, whitespace_ok = FALSE) {
-  assert_string(x)
-  assert_flag(whitespace_ok)
-  if (whitespace_ok)
-    paste0("^[[:space:]]*", x, "[[:space:]]*$")
-  else
-    paste0("^", x, "$")
-}
-
-#' @describeIn re_just allow white space
-#' @keywords internal
-re_just_ws <- function(x)
-  re_just(x, whitespace_ok = TRUE)
-
-#' @describeIn re_just contain any \code{|} options within a regular expression,
-#'   e.g. ICD-9 codes without \code{^} or \code{$}.
-#' @keywords internal
-re_wrap_or <- function(x)
-  paste0("(?:", x, ")")
-
 utils::globalVariables(
   c("re_icd10_any", "re_icd10_decimal", "re_icd10_short",
     "re_icd10cm_any", "re_icd10cm_decimal", "re_icd10cm_short", "re_icd10_major",
@@ -64,7 +37,28 @@ utils::globalVariables(
 #' @param env target environment to save the data
 #' @keywords internal sysdata data
 set_re_globals <- function(env = parent.frame()) {
-  re_icd9_major_n <- "[[:digit:]]{1,3}"
+
+  # Update regular expression to limit by start and end, with or without white
+  # space
+  re_just <- function(x, whitespace_ok = FALSE) {
+    assert_string(x)
+    assert_flag(whitespace_ok)
+    if (whitespace_ok)
+      paste0("^[[:space:]]*", x, "[[:space:]]*$")
+    else
+      paste0("^", x, "$")
+  }
+
+  # Allow white space
+  re_just_ws <- function(x)
+    re_just(x, whitespace_ok = TRUE)
+
+  # contain any | options within a regular expression, applies to ICD codes
+  # without ^ and $
+  re_wrap_or <- function(x)
+    paste0("(?:", x, ")")
+
+    re_icd9_major_n <- "[[:digit:]]{1,3}"
   re_icd9_major_n_strict <- "[[:digit:]]{3}"
   re_icd9_major_v <- "[Vv](?:0[1-9]|[1-9][[:digit:]]?)"
   re_icd9_major_v_strict <- "V(?:0[1-9]|[1-9][[:digit:]])"
@@ -510,9 +504,3 @@ icd9_is_v <- function(x)
 #' @keywords internal
 icd9_is_e <- function(x)
   icd9_is_e_cpp(as_char_no_warn(x))
-
-warn_numeric_code <- function()
-  warning("input data is in numeric format. This can easily lead to errors in ",
-          "short_code or decimal codes, e.g. short_code code 1000: is it 10.00 ",
-          "or 100.0; or decimal codes, e.g. 10.1 was supposed to be 10.10 .",
-          call. = FALSE)

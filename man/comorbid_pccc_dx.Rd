@@ -9,9 +9,9 @@
 \alias{icd10_comorbid_pccc_pcs}
 \title{Calculate pediatric complex chronic conditions (PCCC) comorbidities}
 \usage{
-comorbid_pccc_dx(x, visit_name = get_visit_name(x),
-  icd_name = get_icd_name(x), short_code = guess_short(x, icd_name =
-  icd_name), return_df = FALSE, return_binary = FALSE, ...)
+comorbid_pccc_dx(x, visit_name = get_visit_name(x), icd_name = NULL,
+  short_code = guess_short(x, icd_name = icd_name), return_df = FALSE,
+  return_binary = FALSE, ...)
 
 comorbid_pccc_pcs(x, visit_name = get_visit_name(x), icd_name,
   return_df = FALSE, return_binary = FALSE, ...)

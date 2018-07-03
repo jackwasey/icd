@@ -88,7 +88,8 @@ If the input x is of mixed type it will choose to convert by
 }
 \section{Methods (by class)}{
 \itemize{
-\item \code{default}: explaining ICD codes from a character vector, guessing ICD version
+\item \code{default}: explaining ICD codes from a character vector,
+guessing ICD version
 
 \item \code{icd9}: from vector of ICD-9 codes.
 

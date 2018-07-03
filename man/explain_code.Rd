@@ -102,7 +102,8 @@ ICD version
 
 \item \code{icd9cm}: explain character vector of ICD-9-CM codes
 
-\item \code{icd10cm}: ICD-10-CM explanation, current a minimal implementation
+\item \code{icd10cm}: ICD-10-CM explanation, current a minimal
+implementation
 
 \item \code{icd10}: ICD-10 explanation, falls back on ICD-10-CM until
 ICD-10 WHO copyright workaround is available

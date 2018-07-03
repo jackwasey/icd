@@ -58,8 +58,9 @@ Filters a data.frame of patients for valid or invalid ICD-9
 }
 \section{Functions}{
 \itemize{
-\item \code{filter_invalid}: Filter invalid rows from data frame of patients with ICD codes.
-This can also be achieved with \code{filter_valid} and \code{invert = TRUE}
+\item \code{filter_invalid}: Filter invalid rows from data frame of patients with
+ICD codes. This can also be achieved with \code{filter_valid} and
+\code{invert = TRUE}
 
 \item \code{icd9_filter_valid}: Filter data frame for valid ICD codes
 }}

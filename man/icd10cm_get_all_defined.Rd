@@ -4,7 +4,8 @@
 \alias{icd10cm_get_all_defined}
 \title{get all ICD-10-CM codes}
 \source{
-\url{http://www.cdc.gov/nchs/data/icd/icd10cm/2016/ICD10CM_FY2016_code_descriptions.zip}.
+\url{http://www.cdc.gov/nchs/data/icd/icd10cm/2016/
+  ICD10CM_FY2016_code_descriptions.zip}.
 }
 \usage{
 icd10cm_get_all_defined(save_data = FALSE, offline = TRUE)
