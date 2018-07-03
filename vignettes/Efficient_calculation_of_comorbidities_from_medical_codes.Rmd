@@ -38,7 +38,7 @@ preamble: |
   \usepackage{booktabs}
   \usepackage{thumbpdf}
   \raggedbottom
-  \shortcites{quan_coding_2005, quan_updating_2011,Pope_RiskadjustmentMedicare_2004}
+  \shortcites{quan_coding_2005,quan_updating_2011, Pope_RiskadjustmentMedicare_2004,Lee_PredictingMortalityPatients_2003,frank_risk-adjusted_2014}
   \author{Jack O. Wasey\\Children's Hospital\\of Philadelphia \And Steven M. Frank\\Johns Hopkins Medical\\Institutions \And Mohamed A. Rehman\\Johns Hopkins All\\Children's Hospital}
 # graphicx, color, hyperref, ae, fancyverb and natbib are included by jss.cls
 biblio-style: jss
@@ -97,7 +97,7 @@ my_kable <- function(x, col.names, caption, ...)
 ```
 
 # Introduction
-ICD diagnostic codes are used to define tens of thousands of diseases. Originally from the World Health Organization (WHO), their purpose was to allow epidemiologists to study global health [@worldhealthorganization_whointernationalclassification_2018]. In the USA, and elsewhere, the WHO ICD codes have been extended for administrative purposes, notably for billing [@centerformedicaidandmedicareservices_cmsicd10frequently_2017]. All over the world, ICD codes are the primary method by which diseases are recorded, often using national variants. This makes ICD codes important in many kinds of medical research. \pkg{icd} was made to meet the need for ICD code interpretation in \proglang{R}, and, in particular, it is designed to compute comorbidities quickly, enabling a reproducible workflow when used with big or small data.
+ICD diagnostic codes are used to define tens of thousands of diseases. Originally from the World Health Organization (WHO), their purpose was to allow epidemiologists to study global health [@WHO_whointernationalclassification_2018]. In the USA, and elsewhere, the WHO ICD codes have been extended for administrative purposes, notably for billing [@centerformedicaidandmedicareservices_cmsicd10frequently_2017]. All over the world, ICD codes are the primary method by which diseases are recorded, often using national variants. This makes ICD codes important in many kinds of medical research, e.g., for defining national health metrics [@Lee_PredictingMortalityPatients_2003], and in many of clinical studies, especially those in which groups of patients are compared [e.g., @frank_risk-adjusted_2014]. \pkg{icd} was made to meet the need for ICD code interpretation in \proglang{R}, and, in particular, it is designed to compute comorbidities quickly, enabling a reproducible workflow when used with big or small data.
 
 ## What is a comorbidity?
 Given there are tens of thousands of diagnostic codes, it is extremely difficult to use them directly in most statistical models: there are a few relatively common ICD codes, but there is a long tail to the frequency distribution (see Figure \ref{fig:longtail} for an example) since even common diagnoses can be finely sub-divded. The almost universal solution is to group these codes in a standardized way [e.g., @quan_coding_2005; @elixhauser_comorbidity_1998], and to use the presence and absence of any disease code in the comorbidity groups as covariates in models. The term comorbidity describes a disease which is present alongside a primary medical problem.
