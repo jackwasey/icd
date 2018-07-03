@@ -466,17 +466,6 @@ test_that("comorbid for icd9 gives binary values if asked for data.frames", {
   expect_identical(res_log, binary_to_logical(res_bin))
 })
 
-test_that("binary output for PCCC", {
-  res_bin <- comorbid_pccc_dx(random_test_patients,
-                              return_binary = TRUE, return_df = TRUE)
-  res_log <- comorbid_pccc_dx(random_test_patients,
-                              return_binary = FALSE, return_df = TRUE)
-  expect_true(all(vapply(res_bin[-1], is.integer, logical(1))))
-  expect_true(all(vapply(res_log[-1], is.logical, logical(1))))
-  expect_identical(res_bin, logical_to_binary(res_log))
-  expect_identical(res_log, binary_to_logical(res_bin))
-})
-
 test_that("binary output for CCS", {
   res_bin <- comorbid_ccs(random_test_patients,
                           return_binary = TRUE, return_df = TRUE)

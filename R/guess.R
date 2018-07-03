@@ -185,7 +185,7 @@ guess_pair_version <- function(start, end, short_code = NULL) {
 #' @keywords internal
 switch_ver_cmb <- function(x, funs, ...) {
   dots <- list(...)
-  icd_name <- if ("icd_name" %in% names(list)) dots[["icd_name"]]
+  icd_name <- if ("icd_name" %in% names(dots)) dots[["icd_name"]]
   n <- names(funs)
   stopifnot(all(c("icd9", "icd10") %in% n))
   ver <- guess_version.data.frame(x, icd_name = icd_name)

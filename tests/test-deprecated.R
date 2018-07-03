@@ -20,7 +20,7 @@ library("icd.data")
 library("testthat", warn.conflicts = FALSE, quietly = TRUE)
 library("magrittr", warn.conflicts = FALSE, quietly = TRUE)
 library("checkmate", warn.conflicts = FALSE, quietly = TRUE)
-if (tolower(Sys.getenv("ICD_TEST_DEPRECATED")) %in% c("yes", "true"))
+if (tolower(Sys.getenv("ICD_TEST_DEPRECATED")) %in% c("yes", "true", "1"))
   testthat::test_dir("tests-deprecated",
                      env = icd:::test_env(),
                      reporter = testthat::CheckReporter)

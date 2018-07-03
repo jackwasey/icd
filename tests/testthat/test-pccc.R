@@ -58,20 +58,56 @@ test_that("PCCC dx works", {
 })
 
 test_that("colnames same for both dx and procedure codes", {
-  res9d <- comorbid_pccc_dx(pccc_pts, icd_name = "icd9_dx")
-  res0d <- comorbid_pccc_dx(pccc_pts, icd_name = "icd10_dx")
-  res9p <- comorbid_pccc_pcs(pccc_pts, icd_name = "icd9_pcs")
-  res0p <- comorbid_pccc_pcs(pccc_pts, icd_name = "icd10_pcs")
+  expect_warning(
+    res9d <- comorbid_pccc_dx(pccc_pts, icd_name = "icd9_dx"),
+    regexp = NA
+  )
+
+  expect_warning(
+    res0d <- comorbid_pccc_dx(pccc_pts, icd_name = "icd10_dx"),
+    regexp = NA
+  )
+  expect_warning(
+    res9p <- comorbid_pccc_pcs(pccc_pts, icd_name = "icd9_pcs"),
+    regexp = NA
+  )
+  expect_warning(
+    res0p <- comorbid_pccc_pcs(pccc_pts, icd_name = "icd10_pcs"),
+    regexp = NA
+  )
   expect_identical(names(res9d), names(res9p))
   expect_identical(names(res9d), names(res0d))
   expect_identical(names(res9d), names(res0p))
 
-  res9dd <- icd9_comorbid_pccc_dx(pccc_pts, icd_name = "icd9_dx")
-  res0dd <- icd10_comorbid_pccc_dx(pccc_pts, icd_name = "icd10_dx")
-  res9pp <- icd9_comorbid_pccc_pcs(pccc_pts, icd_name = "icd9_pcs")
-  res0pp <- icd10_comorbid_pccc_pcs(pccc_pts, icd_name = "icd10_pcs")
+  expect_warning(
+    res9dd <- icd9_comorbid_pccc_dx(pccc_pts, icd_name = "icd9_dx"),
+    regexp = NA
+  )
+  expect_warning(
+    res0dd <- icd10_comorbid_pccc_dx(pccc_pts, icd_name = "icd10_dx"),
+    regexp = NA
+  )
+  expect_warning(
+    res9pp <- icd9_comorbid_pccc_pcs(pccc_pts, icd_name = "icd9_pcs"),
+    regexp = NA
+  )
+  expect_warning(
+    res0pp <- icd10_comorbid_pccc_pcs(pccc_pts, icd_name = "icd10_pcs"),
+    regexp = NA
+  )
   expect_identical(names(res9d), names(res9dd))
   expect_identical(names(res9d), names(res9pp))
   expect_identical(names(res9d), names(res0dd))
   expect_identical(names(res9d), names(res0pp))
+})
+
+test_that("binary vs logical and df output for PCCC", {
+  res_bin <- comorbid_pccc_dx(random_test_patients,
+                              return_binary = TRUE, return_df = TRUE)
+  res_log <- comorbid_pccc_dx(random_test_patients,
+                              return_binary = FALSE, return_df = TRUE)
+  expect_true(all(vapply(res_bin[-1], is.integer, logical(1))))
+  expect_true(all(vapply(res_log[-1], is.logical, logical(1))))
+  expect_identical(res_bin, logical_to_binary(res_log))
+  expect_identical(res_log, binary_to_logical(res_bin))
 })
