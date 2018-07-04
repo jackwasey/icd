@@ -168,3 +168,5 @@ pts_invalid_mix <- icd_long_data(
   icd9 = icd:::icd9(c("27801", "invalides", "25001")),
   poa = factor(c("Y", "N", "Y")),
   stringsAsFactors = FALSE)
+
+rm(n, np)

@@ -62,7 +62,7 @@ comorbid_pccc_pcs <- function(x, visit_name = get_visit_name(x),
                               return_df = FALSE,
                               return_binary = FALSE, ...) {
   stopifnot(visit_name %in% names(x), icd_name %in% names(x))
-  n <- min(n, length(x[[icd_name]]))
+  n <- min(10L, length(x[[icd_name]]))
   test_some <- as.character(x[seq_len(n), icd_name])
   nines_tens <- grepl(".*[A-Za-z].*", test_some, ignore.case = TRUE)
   is_icd9 <- TRUE
