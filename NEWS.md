@@ -1,5 +1,6 @@
-# Version 3.2.0.9000
- * development version
+# Version 3.2.1
+ * Pediatric Complex Chronic Condition functions more consistent with the other comorbidity functions
+ * Minor bug fixes
 
 # Version 3.2.0
  * added [Pediatric Complex Chronic Condition comorbidity classification](https://jackwasey.github.io/icd/articles/pccc.html)
