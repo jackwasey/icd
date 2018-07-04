@@ -2,6 +2,10 @@ library(icd)
 requireNamespace("comorbidity")
 requireNamespace("medicalrisk")
 requireNamespace("R.cache")
+requireNamespace("bench")
+requireNamespace("tidyr")
+
+find_cmb_cutoff <- FALSE
 
 get_ten_million_icd9_pts <- function() {
   ten_million_random_pts <-
@@ -16,69 +20,60 @@ get_ten_million_icd9_pts <- function() {
   invisible(ten_million_random_pts)
 }
 
-bench_n_vs_times <- function(start = 1, end = 5,
-                             it_base = 1e4, it_max = 25) {
-  stopifnot(nrow(ten_million_random_pts) >= 10^end)
-  r <- seq(from = start, to = end)
-  bench_times <- as.integer(it_base^(1/(r + 1)))
-  bench_times[bench_times > it_max] <- it_max
-  bench_n <- 10^r
-  unname(
-    as.list(
-      as.data.frame(
-        t(
-          matrix(byrow = FALSE, ncol = 2,
-                 data = c(bench_n, bench_times))))))
-}
-
 medicalrisk_fix <- function(pts_mr) {
   names(pts_mr) <- c("id", "icd9cm")
   pts_mr$icd9cm <- paste("D", pts_mr$icd9cm, sep = "")
   pts_mr
 }
 
-bench_versus_others <-
-  function(do_slow = FALSE,
-           end = 5,
-           bench_runs =  bench_n_vs_times(end = end)) {
-    set.seed(43)
-    ten_million_random_pts <- get_ten_million_icd9_pts()
-    bench_res <- list()
-    for (b_name in seq_along(bench_runs)) {
-      print(b_name)
-      b <- bench_runs[[b_name]]
-      n <- b[1]
-      times = b[2]
-      message("working on n = ", n, ", times = ", times)
-      pts <- ten_million_random_pts[seq_len(n), ]
-      pts_mr <- medicalrisk_fix(pts)
-      mb <- microbenchmark::microbenchmark(
-        icd::comorbid_charlson(pts, return_df = TRUE),
-        medicalrisk::generate_comorbidity_df(
-          pts_mr,
-          icd9mapfn = medicalrisk::icd9cm_charlson_quan),
-        times = times
-      )
-      # never use 'comorbidity' without parallel for huge calculations
-      mb2 <- if (n < 5e4 && do_slow)
-        microbenchmark::microbenchmark(
-          comorbidity::comorbidity(
-            x = pts, id = "visit_id",
-            code = "code", score = "charlson_icd9",
-            parallel = TRUE),
-          times = times)
-      else # if (n < cut_off)
-        microbenchmark::microbenchmark(
-          comorbidity::comorbidity(
-            x = pts, id = "visit_id",
-            code = "code", score = "charlson_icd9",
-            parallel = FALSE),
-          times = times)
-      mb <- rbind(mb, mb2)
-      print(mb)
-      bench_res[[b_name]] <- mb
-    }
-    invisible(bench_res)
+my_check <- function(x, y) {
+  x2 <- unname(x[2:18])
+  y2 <- unname(y[2:18])
+  if (is.data.frame(x2)) {
+    x2 <- lapply(x2, as.logical)
+    y2 <- lapply(y2, as.logical)
   }
+  all.equal(x2, y2)
+}
 
-j <- bench_versus_others(end = 5)
+set.seed(43)
+ten_million_random_pts <- get_ten_million_icd9_pts()
+# first need to benchmark comorbidity against itself to know the cut-off for
+# using the parallel flag
+if (find_cmb_cutoff) {
+  n <- 10^(0L:5L)
+  cmb_res <- bench::press(n = n, {
+    pts <- ten_million_random_pts[seq_len(n), ]
+    bench::mark(
+      comorbidity::comorbidity(
+        x = pts, id = "visit_id", code = "code", score = "charlson_icd9",
+        parallel = TRUE),
+      comorbidity::comorbidity(
+        x = pts, id = "visit_id", code = "code", score = "charlson_icd9",
+        parallel = FALSE)
+    )})
+}
+
+n <- 10^(0L:7L)
+bres <- bench::press(n = n, {
+  pts <- ten_million_random_pts[seq_len(n), ]
+  pts_mr <- medicalrisk_fix(pts)
+  bench::mark(
+    comorbid_charlson(pts),
+    comorbidity::comorbidity(
+      x = pts, id = "visit_id", code = "code", score = "charlson_icd9",
+      parallel = n >= 1e5),
+    medicalrisk::generate_comorbidity_df(
+      pts_mr, icd9mapfn = medicalrisk::icd9cm_charlson_quan),
+    check = FALSE
+  )
+})
+
+# now take the medians and make suitable for the article:
+res <- tidyr::spread(bres[c(1,2,5)], expression, median)
+names(res) <- c("datarows", "icd", "comorbidity", "medicalrisk")
+res$icd <- as.numeric(res$icd)
+res$comorbidity <- as.numeric(res$comorbidity)
+res$medicalrisk <- as.numeric(res$medicalrisk)
+res <- as.data.frame(res)
+dput(res)
