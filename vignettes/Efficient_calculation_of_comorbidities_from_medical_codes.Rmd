@@ -794,6 +794,6 @@ The synthetic data used for benchmarking contained real and invalid codes. More 
 
 \section*{Acknowledgments}
 
-I am deeply grateful to Steve Frank and Mohamed Rehman for their support. Thanks to my talented colleagues at the Children's Hospital of Philadelphia, notably Aaron Masino, Allan Simpao, Jorge Galvez and Jonathan Tan. Thanks also to several people who have contributed code, notably the work on Van Walraven scores (William Murphy), HCC (Anobel Odisho), CCS (Vitaly Druker) and an alternative ICD decoding format (Ed Lee). A full list of contributors may be seen on the [\pkg{icd}](https://cran.r-project.org/web/packages/icd/index.html) CRAN page, and on the [project](https://jackwasey.github.io/icd/) page.
+I am deeply grateful to Steve Frank and Mohamed Rehman for their support. Thanks to my talented colleagues at the Children's Hospital of Philadelphia, notably Aaron Masino, Allan Simpao, Jorge Galvez and Jonathan Tan. Thanks also to several people who have contributed code, including the work on Van Walraven scores (William Murphy), HCC (Anobel Odisho), CCS (Vitaly Druker) and an alternative ICD decoding format (Ed Lee). A full list of contributors may be seen on the [\pkg{icd}](https://cran.r-project.org/web/packages/icd/index.html) CRAN page, and on the [project](https://jackwasey.github.io/icd/) page.
 
 # References

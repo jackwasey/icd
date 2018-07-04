@@ -6,6 +6,11 @@
 
 command -v bibtool >/dev/null 2>&1 || { echo >&2 "I require bibtool but it's not installed. Aborting."; exit 1; }
 
+if [ -d vignettes ]; then
+  pushd vignettes
+  trap popd EXIT
+fi
+
 bibtool -s gplv3.bib other.bib icd.bib > all.bib
 
 # make sure there are no unescaped underscores in the URLs:
