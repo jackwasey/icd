@@ -146,6 +146,8 @@ my_kable(termdf, col.names = c("Term", "Description"),
          caption = "Terminology")
 ```
 
+\newpage
+
 ## Uses of comorbidities
 
 ### Comparing groups
@@ -444,7 +446,7 @@ b_{p,1} & b_{p,2} & \cdots & b_{p,q}
 
 Given there are tens or hundreds of thousands of possible ICD-9 or ICD-10 codes, the possible width of $\boldsymbol{A}$ is large ($n$ columns). There are also many ICD codes for each comorbidity, so the height of $\boldsymbol{B}$ is large ($p$ rows), although typical comorbidity maps only cover a subset of possible codes. Many data sets have tens of millions of patient-visits, each with typically up to 30 diagnostic codes, the mean being around five to ten, depending on the dataset, so the memory requirement using lower estimates, using four bytes per flag,[^word] is $10^7 \times 10^4 \times 4 = 4 \times 10^{11}$, which is 400 gigabytes simply to represent the patient-visit to disease relationships.
 
-[^word]: A \proglang{C++} \code{int} is used for each comorbidity flag, which is typically, in 2018, a four-byte word. However, the matrices used by \pkg{icd} hold only true or false values, represented as 1 or 0. It appears inefficient to use an entire \code{int}. An alternative is bit-packing of 32 `bool` bits into each \code{int}, which has a stormy history in the \proglang{C++} Standard Template Library [@Jarvi_Algorithm_2006], and, more importantly, is not supported by any major linear algebra library.
+[^word]: A \proglang{C++} \code{int} is used for each comorbidity flag, which is typically, in 2018, a four-byte word. However, the matrices used by \pkg{icd} hold only true or false values, represented as 1 or 0. It appears inefficient to use an entire \code{int}. An alternative is bit-packing of 32 `bool` bits into each \code{int}, which has a stormy history in the \proglang{C++} Standard Template Library [@jarvi_algorithmspecializationgeneric_2006], and, more importantly, is not supported by any major linear algebra library.
 
 Since the integer levels of the `factor` of ICD codes is common between the patient-visit and comorbidity matrices, $n = p$ and the comorbidities for each patient-visit is their matrix product.
 
