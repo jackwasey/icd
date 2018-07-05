@@ -54,7 +54,7 @@ if (find_cmb_cutoff) {
     )})
 }
 
-n <- 10^(0L:7L)
+n <- 10^(1L:7L)
 bres <- bench::press(n = n, {
   pts <- ten_million_random_pts[seq_len(n), ]
   pts_mr <- medicalrisk_fix(pts)
@@ -68,7 +68,7 @@ bres <- bench::press(n = n, {
     check = FALSE
   )
 })
-
+saveRDS(bres, paste0("bench-versus-result-", make.names(date()), ".rds"))
 # now take the medians and make suitable for the article:
 res <- tidyr::spread(bres[c(1,2,5)], expression, median)
 names(res) <- c("datarows", "icd", "comorbidity", "medicalrisk")

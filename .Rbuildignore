@@ -57,6 +57,7 @@ icd9cm_billable[[:digit:]]+\.RData$
 ^icd.*\.out$
 icd.*\.Rnw$
 icd.*tar\.gz
+^bench-versus-result.*rds$
 ^include-dependencies(\.d)?$
 inst\/standalone\/.*
 \.lintr$
