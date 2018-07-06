@@ -35,4 +35,34 @@ compare_versus_others <- function() {
   pt_39_codes <- bad_pts[bad_pts$visit_id == "39", "code"]
   # look for where chronic lung disease might be hiding
   explain_code(icd:::icd_get_major.icd9(pt_39_codes, short_code = TRUE), warn = FALSE)
+
+  # possible additions Jul 2018:
+  #
+  # ICD-9 750.87 doesn't exist, but Other specified anomalies of upper
+  # alimentary tract is 750.8
+  # http://www.icd9data.com/2015/Volume1/740-759/750/750.8.htm
+
+
+  charlson_cmp_chk <- function(x, y) {
+    x2 <- unname(x[2:18])
+    y2 <- unname(y[2:18])
+    if (is.data.frame(x2)) {
+      x2 <- lapply(x2, as.logical)
+      y2 <- lapply(y2, as.logical)
+    }
+    stopifnot(all.equal(x2, y2))
+  }
+
+  bad_pt <- data.frame(stringsAsFactors = FALSE, id = 1, icd9cm = "75087")
+  charlson_cmp_chk(
+    ires <- comorbid_charlson(bad_pt, return_df = TRUE),
+    comorbidity::comorbidity(bad_pt, id = "id", code = "icd9cm", score = "charlson_icd9")
+  )
+  charlson_cmp_chk(
+    medicalrisk::generate_comorbidity_df(
+      pts_mr,
+      icd9mapfn = medicalrisk::icd9cm_charlson_quan),
+    ires
+  )
+  # medicalrisk is outlier
 }
