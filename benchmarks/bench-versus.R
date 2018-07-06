@@ -44,16 +44,6 @@ medicalrisk_fix <- function(pts_mr) {
   pts_mr
 }
 
-my_check <- function(x, y) {
-  x2 <- unname(x[2:18])
-  y2 <- unname(y[2:18])
-  if (is.data.frame(x2)) {
-    x2 <- lapply(x2, as.logical)
-    y2 <- lapply(y2, as.logical)
-  }
-  all.equal(x2, y2)
-}
-
 ten_million_random_pts <- get_ten_million_icd9_pts()
 # first need to benchmark comorbidity against itself to know the cut-off for
 # using the parallel flag
@@ -95,34 +85,3 @@ res$medicalrisk <- as.numeric(res$medicalrisk)
 res <- as.data.frame(res)
 dput(res)
 
-
-data.frame(
-  datarows = c(10, 100, 1000, 10000, 1e+05, 1e+06, 1e+07),
-  icd = c(
-    0.00271933455951512,
-    0.00298570952145383,
-    0.00365349801722914,
-    0.0127100950339809,
-    0.116895835148171,
-    0.9445570159005,
-    12.3969755911967
-  ),
-  comorbidity = c(
-    0.027545070159249,
-    0.0408755420939997,
-    0.152954794000834,
-    1.2128290720284,
-    7.22272577905096,
-    38.3780716699548,
-    946.861061039963
-  ),
-  medicalrisk = c(
-    0.00384478160412982,
-    0.0118726470973343,
-    0.0797245030407794,
-    0.802611763007008,
-    8.43512935494073,
-    85.9830659220461,
-    6336.18419963482
-  )
-)
