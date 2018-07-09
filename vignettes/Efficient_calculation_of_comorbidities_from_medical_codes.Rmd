@@ -1,7 +1,7 @@
 ---
 author:
   - name: Jack O. Wasey
-    affiliation: Children''s Hospital of Philadelphia
+    affiliation: Children's Hospital of Philadelphia
     address: >
       3401 Civic Center Blvd.
       Philadelphia, PA 19102, USA
@@ -38,7 +38,7 @@ preamble: |
   \usepackage{booktabs}
   \usepackage{thumbpdf}
   \raggedbottom
-  \shortcites{quan_coding_2005,quan_updating_2011, Pope_RiskadjustmentMedicare_2004,Lee_PredictingMortalityPatients_2003,frank_risk-adjusted_2014}
+  \shortcites{quan_coding_2005,quan_updating_2011, Pope_RiskadjustmentMedicare_2004,Lee_PredictingMortalityPatients_2003,frank_risk-adjusted_2014,elixhauser_comorbidity_1998}
   \author{Jack O. Wasey\\Children's Hospital\\of Philadelphia \And Steven M. Frank\\Johns Hopkins Medical\\Institutions \And Mohamed A. Rehman\\Johns Hopkins All\\Children's Hospital}
 # graphicx, color, hyperref, ae, fancyverb and natbib are included by jss.cls
 biblio-style: jss
@@ -97,7 +97,7 @@ my_kable <- function(x, col.names, caption, ...)
 ```
 
 # Introduction
-ICD diagnostic codes are used to define tens of thousands of diseases. Originally from the World Health Organization (WHO), their purpose was to allow epidemiologists to study global health [@WHO_whointernationalclassification_2018]. In the USA, and elsewhere, the WHO ICD codes have been extended for administrative purposes, notably for billing [@centerformedicaidandmedicareservices_cmsicd10frequently_2017]. All over the world, ICD codes are the primary method by which diseases are recorded, often using national variants. This makes ICD codes important in many kinds of medical research, e.g., for defining national health metrics [@Lee_PredictingMortalityPatients_2003], and in many of clinical studies, especially those in which groups of patients are compared [e.g., @frank_risk-adjusted_2014]. \pkg{icd} was made to meet the need for ICD code interpretation in \proglang{R}, and, in particular, it is designed to compute comorbidities quickly, enabling a reproducible workflow when used with big or small data.
+ICD diagnostic codes are used to define tens of thousands of diseases. Originally from the World Health Organization (WHO), their purpose was to allow epidemiologists to study global health [@WHO_InternationalClassificationDiseases_2018]. In the USA, and elsewhere, the WHO ICD codes have been extended for administrative purposes by the government Centers for Medicare and Medicaid Services (CMS), notably for billing [@CMS_CentersMedicareMedicaid_2018]. All over the world, ICD codes are the primary method by which diseases are recorded, often using national variants. This makes ICD codes important in many kinds of medical research, e.g., for defining national health metrics [@Lee_PredictingMortalityPatients_2003], and in many of clinical studies, especially those in which groups of patients are compared [e.g., @frank_risk-adjusted_2014]. \pkg{icd} was made to meet the need for ICD code interpretation in \proglang{R}, and, in particular, it is designed to compute comorbidities quickly, enabling a reproducible workflow when used with big or small data.
 
 ## What is a comorbidity?
 Given there are tens of thousands of diagnostic codes, it is extremely difficult to use them directly in most statistical models: there are a few relatively common ICD codes, but there is a long tail to the frequency distribution (see Figure \ref{fig:longtail} for an example) since even common diagnoses can be finely sub-divded. The almost universal solution is to group these codes in a standardized way [e.g., @quan_coding_2005; @elixhauser_comorbidity_1998], and to use the presence and absence of any disease code in the comorbidity groups as covariates in models. The term comorbidity describes a disease which is present alongside a primary medical problem.
@@ -175,7 +175,14 @@ explain_code("V97.33XD")
 
 Because the WHO ICD is a subset of ICD Clinical Modification, \pkg{icd} is driven by ICD-9-CM and ICD-10-CM, both of which are available in the public domain, allowing analysis of WHO codes and more detailed USA or other national sets of codes. Unfortunately, the WHO exercises copyright over the international ICD-10 scheme, so it cannot be included. This does not affect comorbidity computations.
 
-ICD-9 codes are primarily numeric, have fewer codes defined, and have a more variable format, sometimes with a prefix of `V' or `E'. ICD-10 codes have top-level code in the form of a letter, then two numbers, with a longer section of mixed numbers and letters after the decimal divider. Both ICD-9 and ICD-10 codes can be presented with or without a decimal divider, thus there is potential ambiguity between ICD-9 and ICD-10 (e.g., V10 is in both schemes), and between ICD-9 codes without separators (e.g., 0100 and 100).
+ICD-9 codes are primarily numeric, have fewer codes defined, and have a more variable format, sometimes with a prefix of V or E. ICD-10 codes have top-level code in the form of a letter, then two numbers, with a longer section of mixed numbers and letters after the decimal divider. Both ICD-9 and ICD-10 codes can be presented with or without a decimal divider, thus there is potential ambiguity between ICD-9 and ICD-10 (e.g., V10 is in both schemes), and between ICD-9 codes without separators (e.g., 0100 and 100).
+
+```{r exampleambiguity}
+explain_code(as.icd9("V10"))
+explain_code(as.icd10("V10"))
+explain_code("0100")
+explain_code("100")
+```
 
 ### Breakdown of an ICD-10 code
 
@@ -625,7 +632,7 @@ res <- data.frame(
     6336.18419963482
   )
 )
-fit_res <- log10(res[5:8, ])
+fit_res <- log10(res[4:7, ])
 icd_model <- lm(icd ~ datarows, data = fit_res)
 cmb_model <- lm(comorbidity ~ datarows, data = fit_res)
 mdr_model <- lm(medicalrisk ~ datarows, data = fit_res)
@@ -650,12 +657,14 @@ rr <- data.frame(datarows = res$datarows,
 ```
 
 ```{r versus, echo=FALSE, fig.cap="Performance comparison of comorbidity packages up to 10,000,000 rows, with 500,000 patient-visits and 20 comorbidities per visit. Models are fitted where the log-log relationship becomes linear, where rows > 1,000. Using an eight core 3.40GHz CPU, R 3.4.4 using Linux, kernel 4.15. \\pkg{comorbidity} was run with and without parallel option, and the best result was chosen for each number of iterations."}
-{
+plt_inset <- 0.075
+xmin = 10
+  {
   plot(NA, NA, log = "xy",
        type = "l", col = 'darkred',
        xlab = "rows of data",
        ylab = "seconds",
-       xlim = c(1, max(res$datarows)),
+       xlim = c(xmin, max(res$datarows)),
        ylim = c(fac, max(c(res$medicalrisk, res$comorbidity))),
        xaxt = "n", yaxt = "n"
   )  
@@ -667,32 +676,33 @@ rr <- data.frame(datarows = res$datarows,
   abline(icd_model, col = colours["icd"], lty = 3)
   abline(cmb_model, col = colours["comorbidity"], lty = 3)
   abline(mdr_model, col = colours["medicalrisk"], lty = 3)
-  legend(1, 1000, names(res[-1]), fill = colours[names(res[-1])])
+  legend("topleft", inset = plt_inset, legend = names(res[-1]), fill = colours[names(res[-1])])
 }
 ```
 ```{r speedup, echo=FALSE, fig.width=6, fig.height=3.7, fig.cap="Relative speed-up using icd compared to the alternatives, using the same numbers of patient-visits and comorbidities in Figure \\ref{fig:versus}."}
+rr[nrow(rr), "medicalrisk"] <- NA
 {
   plot(NA, NA, log = "x",
        type = "l", col = 'darkred',
        xlab = "rows of data",
        ylab = "time / time using 'icd'",
-       xlim = c(1, max(rr$datarows)),
-       ylim = c(1, max(c(rr$medicalrisk, rr$comorbidity))),
+       xlim = c(xmin, max(rr$datarows)),
+       ylim = c(1, max(c(rr$medicalrisk, rr$comorbidity), na.rm = TRUE)),
        xaxt = "n"
   )
   axis(1, 10^xseq, logxaxis)
   lines(rr$datarows, rr$icd, col = colours["icd"])
   lines(rr$datarows, rr$comorbidity, col = colours["comorbidity"])
   lines(rr$datarows, rr$medicalrisk, col = colours["medicalrisk"])
-  legend(1, 170, legend = names(rr[-1]), fill = colours[names(rr[-1])])
+  legend("topleft", inset = plt_inset, legend = names(rr[-1]), fill = colours[names(rr[-1])])
 }
 ```
 ```{r bigdata, echo=FALSE, fig.cap="Predicted duration of computation for one hundred-million patient-visits, with twenty patients per patient"}
 {
   barplot(preds,
           col = colours[c("icd", "comorbidity", "medicalrisk")],
-          ylab = "hours", log = "y", ylim = c(1, 5000))
-  legend(0.2, 2500, names(preds), fill = colours[names(preds)])
+          ylab = "hours", log = "y", ylim = c(1, 100000))
+  legend("topleft", inset = plt_inset, legend = names(preds), fill = colours[names(preds)])
 }
 
 ```
@@ -722,13 +732,13 @@ sc <- c("Chronic Obstructive Pulmonary Disease And Allied Conditions",
 icd9_sub_chapters[sc]
 ```
 
-497 is not a valid code itself. It could be a typo for any of the other combinations, of which three are valid:
+497 is not a valid code itself. It could be a typo for any of the other combinations, of which four are completely different, yet valid codes:
 
 ```{r permute497}
-explain_code(c("947", "749", "794", "479"), warn = FALSE)
+explain_code(c("497", "479", "947", "974", "749", "794"), warn = FALSE)
 ```
 
-Given the wide range of disease processes, and no guarantee at all that the coder made a mistake only in the last digit, \pkg{icd} discards the code to avoid giving a false positive comorbidity flag.
+There are also many other ways the coder may have made the error other than a permutation of the intended code. Given the wide range of disease processes, and no guarantee at all that the coder made a mistake only in the last digit, \pkg{icd} discards the code to avoid giving a false positive comorbidity flag.
 
 ```{r charlson497}
 "497" %in% icd9_map_charlson
