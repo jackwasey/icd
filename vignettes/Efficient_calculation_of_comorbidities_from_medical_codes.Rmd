@@ -594,7 +594,7 @@ comorbid_matrix <- comorbid_ahrq(v)
 
 # Results
 
-There are now three active CRAN packages which calculate comorbidities: \pkg{icd}, \pkg{medicalrisk} [@medicalriskpkg], and \pkg{comorbidity} [@comorbiditypkg]. The latter two work using the strategy described in the \ref{pseudocode} above.
+There are now three active CRAN packages which calculate comorbidities: \pkg{icd}, \pkg{medicalrisk} [@medicalriskpkg], and \pkg{comorbidity} [@comorbiditypkg]. The latter two work using the strategy described in the pseudocode in Section \ref{pseudocode}.
 
 The following is a limited performance comparison using synthetic data. This synthetic data shares some characteristics of real data: firstly, the more patients there are, the more coverage there is of the entire code space of the ICD scheme; secondly, there are both valid and invalid ICD codes; thirdly, each patient is assigned twenty codes. From the author's experience, the mean number of codes per patient is around five to ten, so twenty per patient represents twenty a mild stress-test of the algorithms.
 
