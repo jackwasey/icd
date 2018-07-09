@@ -16,7 +16,7 @@
 # along with icd. If not, see <http:#www.gnu.org/licenses/>.
 
 # nocov start
-
+# nolint start
 #' get all ICD-10-CM codes
 #'
 #' Gets all ICD-10-CM codes from an archive on the CDC web site at Initially,
@@ -26,12 +26,12 @@
 #' This meant a lot of time debugging a problem when white space was ignored for
 #' sorting on some platforms, but not others (e.g. Travis and Wercker).
 #' @source
-#'   \url{http://www.cdc.gov/nchs/data/icd/icd10cm/2016/
-#'   ICD10CM_FY2016_code_descriptions.zip}.
+#'   \url{http://www.cdc.gov/nchs/data/icd/icd10cm/2016/ICD10CM_FY2016_code_descriptions.zip}.
 #' @references
 #'   https://www.cms.gov/Medicare/Coding/ICD10/downloads/icd-10quickrefer.pdf
 #' @keywords internal
 icd10cm_get_all_defined <- function(save_data = FALSE, offline = TRUE) {
+  # nolint stop
   f_info <- icd10cm_get_flat_file(offline = offline)
   stopifnot(!is.null(f_info))
   # readLines may muck up encoding, resulting in weird factor order generation
