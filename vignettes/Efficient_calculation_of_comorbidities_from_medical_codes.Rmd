@@ -196,7 +196,7 @@ These three are refinements offered only by ICD-10-CM:
 ```{r exampleicdcodecm}
 explain_code(c("S62.60", "S62.607", "S62.607S"))
 ```
-These codes are all contained in the sub-chapter, `Injuries To The Wrist, Hand And Fingers,' (S60 to S69) and the chapter `Injury, poisoning and certain other consequences of external causes.' (S00 to T88). 
+These codes are all contained in the sub-chapter, `Injuries To The Wrist, Hand And Fingers,` (S60 to S69) and the chapter `Injury, poisoning and certain other consequences of external causes.` (S00 to T88). 
 
 [^libraryicd]: Here the \pkg{icd} function `explain_code` is used. More detail on this can be found in Section \ref{other-functionality}.
 
@@ -304,7 +304,7 @@ and the ICD-10 codes from the first two comorbidities:
 icd10_map_charlson[1:2]
 ```
 
-Note that these codes are of `icd10` and `character` class, and that they carry the attribute `icd_short_diag` which is set to `TRUE`.
+Note that these codes are of `icd10` and `character` class, and that they carry the attribute `icd_short_diag` which is set to `TRUE`, since there is no decimal divider.
 
 # Methods
 
@@ -345,7 +345,7 @@ There are some major simplifications:
 
 ### Reduce number of codes
 
-Reducing the total number of codes in both patient-visit and comorbidity data is performed in step \ref{itm:intersect} of the algorithm. For matrix multiplication, the columns $n$ of the patient-visit matrix must match the rows $q$ of the comorbidity map both in number. This means a common vocabulary for the codes in the patient-visits and the comorbidity maps must be established. This is accomplished in step \ref{itm:encode} by using a factor,[^factor] where the levels represent the intersection of codes from the patient-visit data and the whole comorbidity map. Thus the integer factor indices become row or column indices in matrices $\boldsymbol{A}$ and $\boldsymbol{B}$ respectively. I.e., we only need to represent codes which are in both the patient-visit dad and the comorbidity map, making matrix $\boldsymbol{A}$ narrower and matrix $\boldsymbol{B}$ shorter. String searching strategies miss this optimization.
+Reducing the total number of codes in both patient-visit and comorbidity data is performed in step \ref{itm:intersect} of the algorithm. For matrix multiplication, the columns $n$ of the patient-visit matrix must match the rows $q$ of the comorbidity map both in number. This means a common vocabulary for the codes in the patient-visits and the comorbidity maps must be established. This is accomplished in step \ref{itm:encode} by using a factor,[^factor] where the levels represent the intersection of codes from the patient-visit data and the whole comorbidity map. Thus the integer factor indices become row or column indices in matrices $\boldsymbol{A}$ and $\boldsymbol{B}$ respectively. i.e., we only need to represent codes which are in both the patient-visit dad and the comorbidity map, making matrix $\boldsymbol{A}$ narrower and matrix $\boldsymbol{B}$ shorter. String searching strategies miss this optimization.
 
 Referring back to the pseudocode in Section \ref{pseudocode}, integer representation would allow much faster binary or linear search, but this is obviated by a matrix multiplication. Although the matrix multiplication probably performs more computations than needed, it has simpler flow control and is a problem for which highly-optimized solutions exist.
 
@@ -388,7 +388,7 @@ Referring back to the pseudocode in Section \ref{pseudocode}, integer representa
 
 In a large data set, less common codes are more likely to appear, resulting in more nearly empty columns in the patient-visit matrix. Since this representation is used primarily to facilitate calculation of huge datasets, we ignore the fact that sparse format may be less efficient than dense for small datasets. Row-major representation also makes sense, with each row corresponding to a patient-visit. This is done in step \ref{itm:gensparse} of the algorithm.
 
-The comorbidity matrix is more sparse than the patient-visit matrix, but is implemented as a dense data structure in step {itm:gendense} of the algorithm for two reasons: firstly, linear algebra software is often optimized for row-major sparse multiplications with dense matrices; secondly, this matrix has a maximum size limited by the comorbidity definitions, so does not need to scale with very large numbers of patients. For example, ignoring the problem reduction step described above, the maximum size of the ICD-9 AHRQ comorbidity matrix is: $14678 \times 30 \times 4 = 1.8 \times 10^6$, i.e., less than two megabytes,[^wordagain] which compares favorably to the eight megabyte CPU cache in the modest workstation used in the benchmarks presented in Section \ref{results}.
+The comorbidity matrix is more sparse than the patient-visit matrix, but is implemented as a dense data structure in step \ref{itm:gendense} of the algorithm for two reasons: firstly, linear algebra software is often optimized for row-major sparse multiplications with dense matrices; secondly, this matrix has a maximum size limited by the comorbidity definitions, so does not need to scale with very large numbers of patients. For example, ignoring the problem reduction step described above, the maximum size of the ICD-9 AHRQ comorbidity matrix is: $14678 \times 30 \times 4 = 1.8 \times 10^6$, i.e., less than two megabytes,[^wordagain] which compares favorably to the eight megabyte CPU cache in the modest workstation used in the benchmarks presented in Section \ref{results}.
 
 [^wordagain]: Again the calculation is done using a 32-bit word for each flag.
 
@@ -497,7 +497,7 @@ There are several things to note, which represent common features in real health
 
 - There are patient-visit codes which do not appear in the comorbidity map.
 - There are codes in the comorbidity map which do not appear in the patient-visit codes.
-- I11 appears in one comorbidities and its child code I110 appears in another.
+- I11 appears in one comorbidity and its child code I110 appears in another.
 - Patient two has code I0981, but only the parent code I098 appears in the comorbidity map.
 
 Let $\boldsymbol{A}$ be a simplified set of patient-visits, where the columns represent the ICD-10 codes I0981 (rheumatic heart failure), I10 (essential hypertension), and I110 (hypertensive heart disease with heart failure). Again, each row is a different patient-visit.
@@ -594,7 +594,7 @@ comorbid_matrix <- comorbid_ahrq(v)
 
 # Results
 
-There are now three active CRAN packages which calculate comorbidities: \pkg{icd}, \pkg{medicalrisk} [@medicalriskpkg], and \pkg{comorbidity} [@comorbiditypkg]. The latter two work using the strategy described in the [psuedocode](#pseudocode) above.
+There are now three active CRAN packages which calculate comorbidities: \pkg{icd}, \pkg{medicalrisk} [@medicalriskpkg], and \pkg{comorbidity} [@comorbiditypkg]. The latter two work using the strategy described in the \ref{pseudocode} above.
 
 The following is a limited performance comparison using synthetic data. This synthetic data shares some characteristics of real data: firstly, the more patients there are, the more coverage there is of the entire code space of the ICD scheme; secondly, there are both valid and invalid ICD codes; thirdly, each patient is assigned twenty codes. From the author's experience, the mean number of codes per patient is around five to ten, so twenty per patient represents twenty a mild stress-test of the algorithms.
 
