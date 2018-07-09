@@ -68,8 +68,11 @@ pkgdown:
 library("icd")
 requireNamespace("knitr")
 fig.width = 6.5
+fig.height = fig.width / ((1 + sqrt(5)) / 2)
+bitmap_dpi = 600
 knitr::opts_chunk$set(fig.width = fig.width)
-knitr::opts_chunk$set(fig.height = fig.width / ((1 + sqrt(5)) / 2))
+knitr::opts_chunk$set(fig.height = fig.height)
+knitr::opts_chunk$set(cache = FALSE)
 knitr::opts_knit$set(concordance = TRUE) # rstudio setting broken
 
 kable_caption_bottom <- function(x) {
@@ -408,19 +411,19 @@ $$ B_{p,q} =
 \vdots & \vdots & \vdots & \vdots & \vdots
 \end{matrix}$$\label{eq:bulk}
 
-```{r comorbidmatrix, echo=FALSE, fig.cap="These are visualizations of some complete maps, black representing the appearance of a particular ICD code in a comorbidity column"}
+```{r comorbidmatrix, echo=FALSE, fig.cap="These are visualizations of some complete maps, black representing the appearance of a particular ICD code in a comorbidity column", dev="png", dpi=bitmap_dpi}
 cmbimage <- function(map, xlab, ...) {
   code <- unique(unlist(map))
   x <- comorbid(map = map, x = data.frame(ptid = seq_along(code), code))
   mode(x) <- "integer"
-  image(t(x[, ]), ylim = c(1, 0), 
-        col = c("#FFFFFF", "#000000"), 
-        xaxt = 'n', yaxt = 'n', 
+  image(z = t(x), ylim = c(1, 0),
+        col = c("#FFFFFF", "#000000"),
+        xaxt = 'n', yaxt = 'n',
         useRaster = TRUE, ...)
   mtext(text = xlab, side = 1, line = 1.5, outer = FALSE)
 }
 {
-  par(mfcol = c(1, 3), cex = 1, 
+  par(mfcol = c(1, 3), cex = 1,
       mar = c(2, 2, 2, 1) + 0.1, oma = rep(0.5, 4))
   cmbimage(icd9_map_ahrq, xlab = "ICD-9 AHRQ\ncomorbidities")
   mtext(text = "ICD codes", side = 2, line = 0.5, outer = FALSE)
@@ -580,7 +583,7 @@ v_cmb <- comorbid_charlson(v, return_df = TRUE)
 ```{r vermontresult, echo=FALSE}
 print(head(v_cmb), row.names = FALSE)
 ```
-```{r vermontimage, echo=FALSE, fig.cap="This visualization of the result of the comorbidity calculation shows a black cell for each positive comorbidity in one thousand patients from Vermont, USA."}
+```{r vermontimage, echo=FALSE, fig.cap="This visualization of the result of the comorbidity calculation shows a black cell for each positive comorbidity in one thousand patients from Vermont, USA.", dev="png", dpi=bitmap_dpi}
 comorbid_matrix <- comorbid_ahrq(v)
 {
   image(comorbid_matrix, col = c("#FFFFFF", "#000000"),
