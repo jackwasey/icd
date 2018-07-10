@@ -11,7 +11,7 @@ if [ -d vignettes ]; then
   trap popd EXIT
 fi
 
-bibtool -s gplv3.bib other.bib icd.bib > all.bib
+bibtool -s gplv3.bib other.bib icd.bib -- preserve.key.case=on > all.bib
 
 # make sure there are no unescaped underscores in the URLs:
 if grep '[^\]_' all.bib | grep -v ^@

@@ -1,5 +1,7 @@
 url: https://jackwasey.github.io/icd/
 
+title: icd comorbidity calculations
+
 template:
   params:
     docsearch:

@@ -38,7 +38,7 @@ preamble: |
   \usepackage{booktabs}
   \usepackage{thumbpdf}
   \raggedbottom
-  \shortcites{quan_coding_2005,quan_updating_2011, Pope_RiskadjustmentMedicare_2004,Lee_PredictingMortalityPatients_2003,frank_risk-adjusted_2014,elixhauser_comorbidity_1998}
+  \shortcites{quan_coding_2005,quan_updating_2011, Pope_RiskadjustmentMedicare_2004,Lee_Predictingmortalitypatients_2003,frank_risk-adjusted_2014,elixhauser_comorbidity_1998}
   \author{Jack O. Wasey\\Children's Hospital\\of Philadelphia \And Steven M. Frank\\Johns Hopkins Medical\\Institutions \And Mohamed A. Rehman\\Johns Hopkins All\\Children's Hospital}
 # graphicx, color, hyperref, ae, fancyverb and natbib are included by jss.cls
 biblio-style: jss
@@ -100,7 +100,7 @@ my_kable <- function(x, col.names, caption, ...)
 ```
 
 # Introduction
-ICD diagnostic codes are used to define tens of thousands of diseases. Originally from the World Health Organization (WHO), their purpose was to allow epidemiologists to study global health [@WHO_InternationalClassificationDiseases_2018]. In the USA, and elsewhere, the WHO ICD codes have been extended for administrative purposes by the government Centers for Medicare and Medicaid Services (CMS), notably for billing [@CMS_CentersMedicareMedicaid_2018]. All over the world, ICD codes are the primary method by which diseases are recorded, often using national variants. This makes ICD codes important in many kinds of medical research, e.g., for defining national health metrics [@Lee_PredictingMortalityPatients_2003], and in many of clinical studies, especially those in which groups of patients are compared [e.g., @frank_risk-adjusted_2014]. \pkg{icd} was made to meet the need for ICD code interpretation in \proglang{R}, and, in particular, it is designed to compute comorbidities quickly, enabling a reproducible workflow when used with big or small data.
+ICD diagnostic codes are used to define tens of thousands of diseases. Originally from the World Health Organization (WHO), their purpose was to allow epidemiologists to study global health [@WHO_Internationalclassificationdiseases_2018]. In the USA, and elsewhere, the WHO ICD codes have been extended for administrative purposes by the government Centers for Medicare and Medicaid Services (CMS), notably for billing [@CMS_CentersMedicareMedicaid_2018]. All over the world, ICD codes are the primary method by which diseases are recorded, often using national variants. This makes ICD codes important in many kinds of medical research, e.g., for defining national health metrics [@Lee_Predictingmortalitypatients_2003], and in many of clinical studies, especially those in which groups of patients are compared [e.g., @frank_risk-adjusted_2014]. \pkg{icd} was made to meet the need for ICD code interpretation in \proglang{R}, and, in particular, it is designed to compute comorbidities quickly, enabling a reproducible workflow when used with big or small data.
 
 ## What is a comorbidity?
 Given there are tens of thousands of diagnostic codes, it is extremely difficult to use them directly in most statistical models: there are a few relatively common ICD codes, but there is a long tail to the frequency distribution (see Figure \ref{fig:longtail} for an example) since even common diagnoses can be finely sub-divded. The almost universal solution is to group these codes in a standardized way [e.g., @quan_coding_2005; @elixhauser_comorbidity_1998], and to use the presence and absence of any disease code in the comorbidity groups as covariates in models. The term comorbidity describes a disease which is present alongside a primary medical problem.
@@ -456,7 +456,7 @@ b_{p,1} & b_{p,2} & \cdots & b_{p,q}
 
 Given there are tens or hundreds of thousands of possible ICD-9 or ICD-10 codes, the possible width of $\boldsymbol{A}$ is large ($n$ columns). There are also many ICD codes for each comorbidity, so the height of $\boldsymbol{B}$ is large ($p$ rows), although typical comorbidity maps only cover a subset of possible codes. Many data sets have tens of millions of patient-visits, each with typically up to 30 diagnostic codes, the mean being around five to ten, depending on the dataset, so the memory requirement using lower estimates, using four bytes per flag,[^word] is $10^7 \times 10^4 \times 4 = 4 \times 10^{11}$, which is 400 gigabytes simply to represent the patient-visit to disease relationships.
 
-[^word]: A \proglang{C++} \code{int} is used for each comorbidity flag, which is typically, in 2018, a four-byte word. However, the matrices used by \pkg{icd} hold only true or false values, represented as 1 or 0. It appears inefficient to use an entire \code{int}. An alternative is bit-packing of 32 `bool` bits into each \code{int}, which has a stormy history in the \proglang{C++} Standard Template Library [@jarvi_algorithmspecializationgeneric_2006], and, more importantly, is not supported by any major linear algebra library.
+[^word]: A \proglang{C++} \code{int} is used for each comorbidity flag, which is typically, in 2018, a four-byte word. However, the matrices used by \pkg{icd} hold only true or false values, represented as 1 or 0. It appears inefficient to use an entire \code{int}. An alternative is bit-packing of 32 `bool` bits into each \code{int}, which has a stormy history in the \proglang{C++} Standard Template Library [@Jarvi_AlgorithmSpecializationGeneric_2006], and, more importantly, is not supported by any major linear algebra library.
 
 Since the integer levels of the `factor` of ICD codes is common between the patient-visit and comorbidity matrices, $n = p$ and the comorbidities for each patient-visit is their matrix product.
 
@@ -808,7 +808,7 @@ This package is built on the strong foundations of \proglang{R} [@R_2018], \pkg{
 
 \proglang{R}'s S3 class system is used for extensibility, so it is straightforward to include additional ICD schemes, e.g., for different national systems. Likewise, it is also easy to add new comorbidity maps, or use user-defined ones. Several authors have contributed code which extends \pkg{icd} to solve other problems:
 
-- Van Walraven risk scores [@vanwalraven_modificationelixhausercomorbidity_2009], analagous to Charlson scores, based on the Elixhauser comomribidites.
+- Van Walraven risk scores [@vanWalraven_modificationElixhausercomorbidity_2009], analagous to Charlson scores, based on the Elixhauser comomribidites.
 - assignment of CMS HCC categories [@Evans_EvaluationCMSHCCRisk_2011; @Pope_RiskadjustmentMedicare_2004]
 - emulation of the AHRQ CCS [@AgencyforHealthcareResearchandQuality_ClinicalClassificationsSoftware_2012]
 
