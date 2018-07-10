@@ -49,7 +49,7 @@ icd9_comorbid_hcc <- function(x,
                               visit_name = NULL,
                               icd_name = NULL)
   comorbid_hcc_worker(x,
-                      map = icd::icd9_map_cc,
+                      map = icd9_map_cc,
                       date_name = date_name,
                       visit_name = visit_name,
                       icd_name = icd_name)
@@ -61,7 +61,7 @@ icd10_comorbid_hcc <- function(x,
                                visit_name = NULL,
                                icd_name = NULL) {
   comorbid_hcc_worker(x,
-                      map = icd::icd10_map_cc,
+                      map = icd10_map_cc,
                       date_name = date_name,
                       visit_name = visit_name,
                       icd_name = icd_name)
@@ -86,7 +86,9 @@ comorbid_hcc_worker <- function(x,
   # Add column for year
   x$year <- as.numeric(format(x[[date_name]], "%Y"))
   # merge CCs to patient data based on ICD and year drop ICD info
-  x <- merge(x, map, all.x = TRUE)
+  x <- merge(x, map, all.x = TRUE,
+             by.x = c(icd_name, "year"),
+             by.y = c("icd_code", "year"))
   # Drop missing CC and convert to numeric
   # Not all ICDs resolve to a CC by definition
   x <- x[!is.na(x$cc), ]
@@ -97,7 +99,7 @@ comorbid_hcc_worker <- function(x,
   # Multiple ICDs for a patient can resolve to same CC
   x <- unique(x)
   # Duplicate the ifcc column needed for future matching
-  hierarchy <- icd::icd_map_cc_hcc
+  hierarchy <- icd_map_cc_hcc
   hierarchy$cc <- hierarchy$ifcc
   # Merge hierarchy rules with patient data
   x <- merge(x, hierarchy, all.x = TRUE)

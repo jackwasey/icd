@@ -161,7 +161,7 @@ pts_invalid_mix <- icd_long_data(
 # Sample datasets for HCC tests
 # 4 patients, some with ICDs that do not exist in CC crosswalk
 # One of the patients with multiple visit dates, all valid ICDs
-hcc_test_simple <- icd_long_data(
+hcc_test_simple9 <- icd_long_data(
   visit_id = c("1", "2", "3", "4", "4"),
   icd_code = c("20084", "1742", "30410", "41514", "95893"),
   date = as.Date(c("2011-01-01", "2011-01-02", "2011-01-03",
@@ -176,3 +176,6 @@ hcc_test_invalid <- icd_long_data(
   icd_code = c("20084", "174242", "aB30410", "41514", "95893"),
   date = as.Date(c("2011-01-01", "2011-01-02", "2011-01-03",
                    "2011-01-04", "2011-01-04")))
+hcc_test_simple10 <- hcc_test_simple9
+hcc_test_simple10$icd_code <- c("T410X2S", "M87071", "I82531", "I70232", "C434")
+hcc_test_simple10$date <- hcc_test_simple10$date + 6 * 365
