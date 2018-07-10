@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Explain ICD-9 and ICD-10 codes in English — explain_code • icd</title>
+<title>Explain ICD-9 and ICD-10 codes in English — explain_code • icd comorbidity calculations</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -68,8 +68,8 @@ conversion to decimal notation, but to the textual format." />
         <span class="icon-bar"></span>
       </button>
       <span class="navbar-brand">
-        <a class="navbar-link" href="../index.html">icd</a>
-        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">3.2.0.9000</span>
+        <a class="navbar-link" href="../index.html">icd comorbidity calculations</a>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">3.2.1</span>
       </span>
     </div>
 
@@ -254,7 +254,8 @@ ICD version</p></li>
 <li><p><code>list</code>: Explain all ICD-9 codes in a list of vectors</p></li>
 <li><p><code>icd9</code>: explain character vector of ICD-9 codes.</p></li>
 <li><p><code>icd9cm</code>: explain character vector of ICD-9-CM codes</p></li>
-<li><p><code>icd10cm</code>: ICD-10-CM explanation, current a minimal implementation</p></li>
+<li><p><code>icd10cm</code>: ICD-10-CM explanation, current a minimal
+implementation</p></li>
 <li><p><code>icd10</code>: ICD-10 explanation, falls back on ICD-10-CM until
 ICD-10 WHO copyright workaround is available</p></li>
 </ul>
@@ -283,7 +284,7 @@ ICD-10 WHO copyright workaround is available</p></li>
 #&gt; [2] "Left ventricular failure"                       
 #&gt; [3] "Unspecified systolic (congestive) heart failure"</div><div class='input'><span class='co'># nice to have magrittr, but not essential</span>
 <span class='fu'>library</span>(<span class='no'>magrittr</span>, <span class='kw'>warn.conflicts</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>quietly</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
-<span class='fu'>explain_code</span>(<span class='no'>icd9_map_ahrq</span>$<span class='no'>CHF</span>[<span class='fl'>1</span>:<span class='fl'>3</span>] <span class='kw'>%&gt;%</span> <span class='no'>condense</span>)</div><div class='output co'>#&gt; <span class='message'>'defined' not given, but all codes are indeed defined, so assuming TRUE</span></div><div class='output co'>#&gt; [1] "Rheumatic heart failure (congestive)"                   
+<span class='fu'>explain_code</span>(<span class='no'>icd9_map_ahrq</span>$<span class='no'>CHF</span>[<span class='fl'>1</span>:<span class='fl'>3</span>] <span class='kw'>%&gt;%</span> <span class='no'>condense</span>)</div><div class='output co'>#&gt; <span class='message'>'defined' not given, but all codes are indeed defined</span></div><div class='output co'>#&gt; [1] "Rheumatic heart failure (congestive)"                   
 #&gt; [2] "Malignant hypertensive heart disease with heart failure"
 #&gt; [3] "Benign hypertensive heart disease with heart failure"   </div></pre>
   </div>

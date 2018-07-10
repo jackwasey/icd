@@ -5,7 +5,7 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Using Hierarchical Condition Codes • icd</title>
+<title>Using Hierarchical Condition Codes • icd comorbidity calculations</title>
 <!-- jquery --><script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script><!-- Bootstrap --><link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script><!-- Font Awesome icons --><link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-T8Gy5hrqNKT+hzMclPo118YTQO6cYprQmhrYwIiQ/3axmI1hQomh7Ud2hPOy8SP1" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.7.1/clipboard.min.js" integrity="sha384-cV+rhyOuRHc9Ub/91rihWcGmMmCXDeksTtCihMupQHSsi8GIIRDG0ThDc3HGQFJ3" crossorigin="anonymous"></script><!-- sticky kit --><script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
@@ -30,8 +30,8 @@
         <span class="icon-bar"></span>
       </button>
       <span class="navbar-brand">
-        <a class="navbar-link" href="../index.html">icd</a>
-        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">3.2.0.9000</span>
+        <a class="navbar-link" href="../index.html">icd comorbidity calculations</a>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">3.2.1</span>
       </span>
     </div>
 
@@ -117,7 +117,7 @@
 <p>Hierarchical Condition Categories (HCC) is a method of categorizing ICD codes created by the Centers for Medicare and Medicaid Services (CMS). HCC is designed to categorize the risk level of a patient with chronic or serious illness using diagnoses and demographic information. Healthcare providers implement HCC in payment models for patients, as it can help predict the amount of services a patient will need in the future. HCC can be a useful tool in analysis with ICD codes, and the ICD package provides methods to utiliize them.</p>
 <p>HCC first assigns ICD codes to Condition Categories (CC). Condition categories are numeric values ranked based on severity/risk. If an ICD code belongs to more than one CC, the most severe CC is assigned. In other words, HCC classifies patients based on their most severe conditions.</p>
 <p>We can see the mapping of ICD-9 and ICD-10 codes to HCC with the <code>icd9_map_cc</code> and <code>icd10_map_cc</code> data.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">head</span>(icd9_map_cc)</code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw">head</span>(icd9_map_cc)</a></code></pre></div>
 <pre><code>##   icd_code  cc year
 ## 1     0031   2 2007
 ## 2    00322 112 2007
@@ -127,11 +127,11 @@
 ## 6     0074   5 2007</code></pre>
 <p>The method returns a table with each ICD-9 code and its corresponding CC. The third column labeled “year” specifies the year that a ICD-9 code was assigned to a corresponding CC. This is needed because HCC has been changed and updated over the years, so the CC assigned to a code in one year might be different from the CC assigned to that same code in another year.</p>
 <p>ICD also provides a method for mapping specific ICD codes to HCCs. The method <code>comorbid_hcc</code> takes as input a list of ICD-9 or ICD-10 codes and outputs a mapping of those codes to their corresponding CCs. For this example, we have an arbitrary table of five ICD-9 codes along with their corresponding patient identifiers and dates of visit.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">pts &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">patient_id =</span> <span class="kw">c</span>(<span class="st">"1"</span>, <span class="st">"2"</span>, <span class="st">"3"</span>, <span class="st">"4"</span>, <span class="st">"4"</span>),
-                  <span class="dt">icd_code =</span> <span class="kw">c</span>(<span class="st">"20084"</span>, <span class="st">"1742"</span>, <span class="st">"30410"</span>, <span class="st">"41514"</span>, <span class="st">"95893"</span>), 
-                  <span class="dt">date =</span> <span class="kw">as.Date</span>(<span class="kw">c</span>(<span class="st">"2011-01-01"</span>, <span class="st">"2011-01-02"</span>, <span class="st">"2011-01-03"</span>, <span class="st">"2011-01-04"</span>, <span class="st">"2011-01-04"</span>)))
-
-pts</code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1">pts &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">patient_id =</span> <span class="kw">c</span>(<span class="st">"1"</span>, <span class="st">"2"</span>, <span class="st">"3"</span>, <span class="st">"4"</span>, <span class="st">"4"</span>),</a>
+<a class="sourceLine" id="cb3-2" data-line-number="2">                  <span class="dt">icd_code =</span> <span class="kw">c</span>(<span class="st">"20084"</span>, <span class="st">"1742"</span>, <span class="st">"30410"</span>, <span class="st">"41514"</span>, <span class="st">"95893"</span>), </a>
+<a class="sourceLine" id="cb3-3" data-line-number="3">                  <span class="dt">date =</span> <span class="kw">as.Date</span>(<span class="kw">c</span>(<span class="st">"2011-01-01"</span>, <span class="st">"2011-01-02"</span>, <span class="st">"2011-01-03"</span>, <span class="st">"2011-01-04"</span>, <span class="st">"2011-01-04"</span>)))</a>
+<a class="sourceLine" id="cb3-4" data-line-number="4"></a>
+<a class="sourceLine" id="cb3-5" data-line-number="5">pts</a></code></pre></div>
 <pre><code>##   patient_id icd_code       date
 ## 1          1    20084 2011-01-01
 ## 2          2     1742 2011-01-02
@@ -140,7 +140,7 @@ pts</code></pre></div>
 ## 5          4    95893 2011-01-04</code></pre>
 <p>The function <code>comorbid_hcc</code> takes as input a data frame in the “long” format (i.e. mutiple rows per patients). If the data has one row per patient, but multiple codes in different columns, this is the “wide” format. <code>wide_to_long</code> could be used to convert before inputting into <code>comorbid_hcc</code>. Doing it this way, instead of with tools like <code>dplyr</code> allows some guessing for which columns are codes, and which are identifiers, and is also written specifically to do this task efficiently, given the usual structure of hospital data. <code>comorbid_hcc</code> also requires the ICD codes to be in “short” format. If your codes are in “decimal” format, you can easily convert them with the function <code>decimal_to_short</code>.</p>
 <p>Now that our data are in the correct form, we run the mapping function <code>comorbid_hcc</code> with our input, specifying the name of the column in our dataset that contains patients’ visit dates.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/comorbid_hcc.html">comorbid_hcc</a></span>(pts)</code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1"><span class="kw"><a href="../reference/comorbid_hcc.html">comorbid_hcc</a></span>(pts)</a></code></pre></div>
 <pre><code>##   patient_id       date hcc
 ## 1          1 2011-01-01   9
 ## 2          2 2011-01-02  10

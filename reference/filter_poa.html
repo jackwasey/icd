@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Filters data frame based on present-on-arrival flag — filter_poa • icd</title>
+<title>Filters data frame based on present-on-arrival flag — filter_poa • icd comorbidity calculations</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -41,8 +41,8 @@
 <meta property="og:description" content="Present On Arrival (POA) is not a simple flag, since many codes are exempt,
 unspecified, or unknown. Therefore, two options are given: get all the
 comorbidities where the POA flag was definitely negative, coded as 'N' or
-definitely positive and coded as 'Y'. Negating one set won't give the other set
-unless all codes were either Y or N." />
+definitely positive and coded as 'Y'. Negating one set won't give the other
+set unless all codes were either Y or N." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -70,8 +70,8 @@ unless all codes were either Y or N." />
         <span class="icon-bar"></span>
       </button>
       <span class="navbar-brand">
-        <a class="navbar-link" href="../index.html">icd</a>
-        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">3.2.0.9000</span>
+        <a class="navbar-link" href="../index.html">icd comorbidity calculations</a>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">3.2.1</span>
       </span>
     </div>
 
@@ -154,8 +154,8 @@ unless all codes were either Y or N." />
     <p>Present On Arrival (POA) is not a simple flag, since many codes are exempt,
 unspecified, or unknown. Therefore, two options are given: get all the
 comorbidities where the POA flag was definitely negative, coded as 'N' or
-definitely positive and coded as 'Y'. Negating one set won't give the other set
-unless all codes were either Y or N.</p>
+definitely positive and coded as 'Y'. Negating one set won't give the other
+set unless all codes were either Y or N.</p>
     
     </div>
 
@@ -248,7 +248,8 @@ out-of-hospital characteristics.</p></li>
 <span class='no'>myData</span> <span class='kw'>%&gt;%</span> <span class='fu'>filter_poa_not_no</span>() <span class='kw'>%&gt;%</span> <span class='fu'><a href='comorbid.html'>comorbid_ahrq</a></span>()
 <span class='co'># can fill out named fields also:</span>
 <span class='no'>myData</span> <span class='kw'>%&gt;%</span> <span class='fu'>filter_poa_yes</span>(<span class='kw'>poa_name</span><span class='kw'>=</span><span class='st'>"poa"</span>) <span class='kw'>%&gt;%</span>
-  <span class='fu'><a href='comorbid.html'>comorbid_ahrq</a></span>(<span class='kw'>icd_name</span> <span class='kw'>=</span> <span class='st'>"diag"</span>, <span class='kw'>visit_name</span> <span class='kw'>=</span> <span class='st'>"visit_id"</span>, <span class='kw'>short_code</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
+  <span class='fu'><a href='comorbid.html'>comorbid_ahrq</a></span>(<span class='kw'>icd_name</span> <span class='kw'>=</span> <span class='st'>"diag"</span>, <span class='kw'>visit_name</span> <span class='kw'>=</span> <span class='st'>"visit_id"</span>,
+  <span class='kw'>short_code</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
 <span class='co'># can call the core comorbid() function with an arbitrary mapping</span>
 <span class='no'>myData</span> <span class='kw'>%&gt;%</span>
   <span class='no'>filter_poa_yes</span> <span class='kw'>%&gt;%</span>
