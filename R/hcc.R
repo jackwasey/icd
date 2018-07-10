@@ -113,12 +113,14 @@ comorbid_hcc_worker <- function(x,
   todrop <- do.call(rbind, todrop)
   # Remove all NAs from CC field
   todrop <- todrop[!is.na(todrop$cc), ]
-  # Set flag for all of the CCs to be dropped
-  todrop$todrop <- TRUE
-  # Merge drop flags with patient data
-  x <- merge(x, todrop, all.x = TRUE)
-  # Drop flagged patients and keep columns of interest
-  x <- x[is.na(x$todrop), ]
+  if (nrow(todrop) > 0) {
+    # Set flag for all of the CCs to be dropped
+    todrop$todrop <- TRUE
+    # Merge drop flags with patient data
+    x <- merge(x, todrop, all.x = TRUE)
+    # Drop flagged patients and keep columns of interest
+    x <- x[is.na(x$todrop), ]
+  }
   x <- x[, c(visit_name, date_name, "cc")]
   names(x) <- c(visit_name, date_name, "hcc")
   x
