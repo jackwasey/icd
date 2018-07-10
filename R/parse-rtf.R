@@ -61,7 +61,7 @@ rtf_fetch_year <- function(year, offline = TRUE) {
 #' @keywords internal datagen
 rtf_parse_year <- function(year = "2011", ..., save_data = FALSE,
                            verbose = FALSE, offline = TRUE) {
-  # nolint stop
+  # nolint end
   assert_string(year)
   assert_flag(save_data)
   assert_flag(verbose)
