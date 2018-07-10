@@ -284,7 +284,7 @@ NULL
 #' @docType data
 #' @keywords datasets
 #' @examples
-#'   str(icd10_map_ahrq_pcs)
+#'   print(head(icd10_map_ahrq_pcs))
 NULL
 
 #' @name icd9_chapters

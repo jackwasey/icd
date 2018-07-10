@@ -245,6 +245,69 @@ RcppExport SEXP _icd_setShortDiag(SEXP xSEXP, SEXP valueSEXP) {
     UNPROTECT(1);
     return rcpp_result_gen;
 }
+// getEmptyDataFrame
+Rcpp::List getEmptyDataFrame(String visit_name, String code_name);
+static SEXP _icd_getEmptyDataFrame_try(SEXP visit_nameSEXP, SEXP code_nameSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::traits::input_parameter< String >::type visit_name(visit_nameSEXP);
+    Rcpp::traits::input_parameter< String >::type code_name(code_nameSEXP);
+    rcpp_result_gen = Rcpp::wrap(getEmptyDataFrame(visit_name, code_name));
+    return rcpp_result_gen;
+END_RCPP_RETURN_ERROR
+}
+RcppExport SEXP _icd_getEmptyDataFrame(SEXP visit_nameSEXP, SEXP code_nameSEXP) {
+    SEXP rcpp_result_gen;
+    {
+        Rcpp::RNGScope rcpp_rngScope_gen;
+        rcpp_result_gen = PROTECT(_icd_getEmptyDataFrame_try(visit_nameSEXP, code_nameSEXP));
+    }
+    Rboolean rcpp_isInterrupt_gen = Rf_inherits(rcpp_result_gen, "interrupted-error");
+    if (rcpp_isInterrupt_gen) {
+        UNPROTECT(1);
+        Rf_onintr();
+    }
+    Rboolean rcpp_isError_gen = Rf_inherits(rcpp_result_gen, "try-error");
+    if (rcpp_isError_gen) {
+        SEXP rcpp_msgSEXP_gen = Rf_asChar(rcpp_result_gen);
+        UNPROTECT(1);
+        Rf_error(CHAR(rcpp_msgSEXP_gen));
+    }
+    UNPROTECT(1);
+    return rcpp_result_gen;
+}
+// returnEmptyFrame
+List returnEmptyFrame(DataFrame df, String visit_name, String code_name);
+static SEXP _icd_returnEmptyFrame_try(SEXP dfSEXP, SEXP visit_nameSEXP, SEXP code_nameSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::traits::input_parameter< DataFrame >::type df(dfSEXP);
+    Rcpp::traits::input_parameter< String >::type visit_name(visit_nameSEXP);
+    Rcpp::traits::input_parameter< String >::type code_name(code_nameSEXP);
+    rcpp_result_gen = Rcpp::wrap(returnEmptyFrame(df, visit_name, code_name));
+    return rcpp_result_gen;
+END_RCPP_RETURN_ERROR
+}
+RcppExport SEXP _icd_returnEmptyFrame(SEXP dfSEXP, SEXP visit_nameSEXP, SEXP code_nameSEXP) {
+    SEXP rcpp_result_gen;
+    {
+        Rcpp::RNGScope rcpp_rngScope_gen;
+        rcpp_result_gen = PROTECT(_icd_returnEmptyFrame_try(dfSEXP, visit_nameSEXP, code_nameSEXP));
+    }
+    Rboolean rcpp_isInterrupt_gen = Rf_inherits(rcpp_result_gen, "interrupted-error");
+    if (rcpp_isInterrupt_gen) {
+        UNPROTECT(1);
+        Rf_onintr();
+    }
+    Rboolean rcpp_isError_gen = Rf_inherits(rcpp_result_gen, "try-error");
+    if (rcpp_isError_gen) {
+        SEXP rcpp_msgSEXP_gen = Rf_asChar(rcpp_result_gen);
+        UNPROTECT(1);
+        Rf_error(CHAR(rcpp_msgSEXP_gen));
+    }
+    UNPROTECT(1);
+    return rcpp_result_gen;
+}
 // factorSplit
 List factorSplit(const List& df, const CharacterVector& relevant, const String& id_name, const String& code_name);
 static SEXP _icd_factorSplit_try(SEXP dfSEXP, SEXP relevantSEXP, SEXP id_nameSEXP, SEXP code_nameSEXP) {
@@ -2091,6 +2154,8 @@ static int _icd_RcppExport_validate(const char* sig) {
         signatures.insert("void(*icd9AppendMinors)(VecStr&,const VecStr&,bool)");
         signatures.insert("void(*attr_decimal_diag)(Rcpp::RObject&,bool)");
         signatures.insert("void(*attr_short_diag)(Rcpp::RObject&,bool)");
+        signatures.insert("Rcpp::List(*getEmptyDataFrame)(String,String)");
+        signatures.insert("List(*returnEmptyFrame)(DataFrame,String,String)");
         signatures.insert("List(*factor_split_rcpp)(const List&,const CharacterVector&,const String&,const String&)");
         signatures.insert("List(*categorize_rcpp)()");
         signatures.insert("Rcpp::LogicalVector(*icd9ComorbidShortCpp)(const SEXP&,const Rcpp::List&,const std::string,const std::string,const int,const int,const int)");
@@ -2159,6 +2224,8 @@ RcppExport SEXP _icd_RcppExport_registerCCallable() {
     R_RegisterCCallable("icd", "_icd_icd9AppendMinors", (DL_FUNC)_icd_icd9AppendMinors_try);
     R_RegisterCCallable("icd", "_icd_attr_decimal_diag", (DL_FUNC)_icd_setDecimalDiag_try);
     R_RegisterCCallable("icd", "_icd_attr_short_diag", (DL_FUNC)_icd_setShortDiag_try);
+    R_RegisterCCallable("icd", "_icd_getEmptyDataFrame", (DL_FUNC)_icd_getEmptyDataFrame_try);
+    R_RegisterCCallable("icd", "_icd_returnEmptyFrame", (DL_FUNC)_icd_returnEmptyFrame_try);
     R_RegisterCCallable("icd", "_icd_factor_split_rcpp", (DL_FUNC)_icd_factorSplit_try);
     R_RegisterCCallable("icd", "_icd_categorize_rcpp", (DL_FUNC)_icd_categorize_rcpp_try);
     R_RegisterCCallable("icd", "_icd_icd9ComorbidShortCpp", (DL_FUNC)_icd_icd9ComorbidShortCpp_try);

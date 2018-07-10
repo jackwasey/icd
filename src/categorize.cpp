@@ -44,19 +44,22 @@ using Rcpp::as;
 using Rcpp::sugar::Max;
 using Rcpp::Named;
 
+// [[Rcpp::export]]
 Rcpp::List getEmptyDataFrame(String visit_name, String code_name) {
   TRACE("Making empty data frame.");
   List comorbid_df = List::create(
-
+    Named(visit_name) = CharacterVector(),
+    Named(code_name) = CharacterVector()
   );
   comorbid_df.attr("row.names") = CharacterVector::create();
-  comorbid_df.attr("names") = CharacterVector::create(visit_name, code_name);
   comorbid_df.attr("class") = "data.frame";
   return comorbid_df;
 }
 
+// [[Rcpp::export]]
 List returnEmptyFrame(DataFrame df, String visit_name, String code_name) {
-  DEBUG("There are no common codes between the map and patient data.");
+  DEBUG("No common codes between the map and patient data.");
+  DEBUG("Returning empty data frame.");
   List out = List::create(
     Named("comorbid_df") = getEmptyDataFrame(visit_name, code_name),
     Named("unique_no_comorbid") = NA_LOGICAL
@@ -111,6 +114,7 @@ List returnEmptyFrame(DataFrame df, String visit_name, String code_name) {
 //'   df <- data.frame(visit_id = factor(c("visit1", "visit2", "visit1")),
 //'                    icd_code = factor(c("410", "0010", "E999")))
 //'   icd:::factor_split_rcpp(df, "410", "visit_id", "icd_code")
+//'   icd:::factor_split_rcpp(df, "999", "visit_id", "icd_code")
 //' \dontrun{
 //' R -e "devtools::load_all();devtools::test(filter='github')"
 //' R -e "devtools::load_all();icd9_comorbid_ahrq(data.frame(a='vis', b='0010'))"

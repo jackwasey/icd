@@ -15,6 +15,8 @@
 # You should have received a copy of the GNU General Public License
 # along with icd. If not, see <http:#www.gnu.org/licenses/>.
 
+globalVariables(c("icd10_map_cc", "icd9_map_cc", "icd_map_cc_hcc"))
+
 #' Get Hierarchical Condition Codes (HCC)
 #'
 #' Applying CMS Hierarchical Condition Categories \code{comorbid_hcc} works

@@ -19,7 +19,7 @@ so the generic \code{\link{comorbid}} \code{\link{icd9_comorbid}}
 as the \code{map}.
 }
 \examples{
-  str(icd10_map_ahrq_pcs)
+  print(head(icd10_map_ahrq_pcs))
 }
 \seealso{
 \code{\link{comorbid}} \code{\link{icd9_comorbid}}
