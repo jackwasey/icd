@@ -34,6 +34,23 @@ test_that("simple cases", {
                    factor(c("a", "b"), levels = "c"))
 })
 
+test_that("simple na.rm cases", {
+  expect_identical(refactor(factor("a", levels = "a"), "a", na.rm = TRUE),
+                   factor("a", levels = "a"))
+  expect_identical(refactor(factor(NA, levels = "a"), "a", na.rm = TRUE),
+                   factor(c(), levels = "a"))
+  expect_identical(refactor(factor(NA, levels = "a"), "b", na.rm = TRUE),
+                   factor(c(), levels = "b"))
+  expect_identical(refactor(factor(NA, levels = "a"), "a", na.rm = TRUE),
+                   factor(c(), levels = "a"))
+  expect_identical(refactor(factor(c("a", "b")), "a", na.rm = TRUE),
+                   factor(c("a"), levels = "a"))
+  expect_identical(refactor(factor(c("a", "b")), "b", na.rm = TRUE),
+                   factor(c("b"), levels = "b"))
+  expect_identical(refactor(factor(c("a", "b")), "c", na.rm = TRUE),
+                   factor(c(), levels = "c"))
+})
+
 test_that("basic refactoring", {
   u <- c("a", "b", "c")
   v <- c("c", "d")
@@ -50,19 +67,29 @@ test_that("basic refactoring", {
     if (FALSE) print(paste("x: ", paste(unlist(m), collapse = " "),
                            "old levels: ", paste(unlist(p), collapse = " "),
                            "new levels: ", paste(unlist(n), collapse = " ")))
+    f <- factor(m, levels = p)
     expect_identical(
-      refactor(factor(m, levels = p), n),
-      factor(factor(m, levels = p), levels = n), # exclude NA by default, as factor does
+      refactor(f, n),
+      factor(f, levels = n), # exclude NA by default, as factor does
       info = paste("m = c('", paste(unlist(m), collapse = "', '"), "')\n",
                    "n = c('", paste(unlist(n), collapse = "', '"), "')",
                    "p: ", paste(unlist(p), collapse = " "), sep = "")
     )
     expect_identical(
-      refactor(factor(m, levels = p), n, na.rm = FALSE, exclude_na = FALSE),
-      factor(factor(m, levels = p), levels = n, exclude = NULL),
+      refactor(f, n, na.rm = FALSE, exclude_na = FALSE),
+      factor(f, levels = n, exclude = NULL),
       info = paste("m = c('", paste(unlist(m), collapse = "', '"), "')\n",
                    "n = c('", paste(unlist(n), collapse = "', '"), "')",
                    "p: ", paste(unlist(p), collapse = " "), sep = "")
     )
+    if (!anyNA(f) && !anyNA(levels(f)))
+        expect_identical(
+          refactor(f, n, na.rm = FALSE),
+          factor(f, levels = n),
+          info = paste("m = c('", paste(unlist(m), collapse = "', '"), "')\n",
+                       "n = c('", paste(unlist(n), collapse = "', '"), "')",
+                       "p: ", paste(unlist(p), collapse = " "), sep = "")
+
+        )
   }
 })
