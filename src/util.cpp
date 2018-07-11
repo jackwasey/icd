@@ -79,8 +79,7 @@ VecStr trimCpp(VecStr sv) {
   return sv;
 }
 
-// ncov start
-
+// nocov start
 // [[Rcpp::export(get_omp_cores)]]
 int getOmpCores() {
   int cores = 0;
@@ -89,8 +88,6 @@ int getOmpCores() {
 #endif
   return cores;
 }
-
-// nocov start
 
 // [[Rcpp::export(get_omp_max_threads)]]
 int getOmpMaxThreads() {
@@ -111,7 +108,6 @@ int getOmpThreads() {
 #endif
   return threads;
 }
-
 // nocov end
 
 // [[Rcpp::export]]

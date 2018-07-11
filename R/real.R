@@ -269,13 +269,15 @@ icd9cm_get_billable <- function(x, short_code = guess_short(x),
 #' @export
 #' @keywords internal
 get_billable.icd10cm <- function(x, short_code = guess_short(x),
-                                     invert = FALSE, icd10cm_edition = "2016", ...) {
+                                     invert = FALSE, icd10cm_edition = "2016",
+                                 ...) {
   assert_vector(x)
   assert_flag(short_code)
   assert_flag(invert)
   assert_string(icd10cm_edition)
   x <- as.short_diag(as.icd10cm(x), short_code)
-  x[is_billable.icd10cm(x, short_code = short_code, icd10cm_edition = icd10cm_edition) != invert]
+  x[is_billable.icd10cm(unclass(x), short_code = short_code,
+                        icd10cm_edition = icd10cm_edition) != invert]
 }
 
 #' @describeIn get_billable Get billable, i.e. leaf nodes from ICD-10-CM

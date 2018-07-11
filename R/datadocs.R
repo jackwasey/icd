@@ -119,6 +119,8 @@ NULL
 #' @aliases icd10_map_elix
 NULL
 
+# nocov start
+
 #' Medicare Hierarchical Condition Categories
 #'
 #' Medicare HCC model was developed to use current year diagnoses and
@@ -151,6 +153,8 @@ NULL
 #' @name icd9_map_hcc
 #' @aliases icd9_map_cc icd10_map_cc icd_map_cc_hcc
 NULL
+
+# nocov end
 
 #' Clinical Classifications Software (CCS) for ICD9/10-CM
 #'
@@ -278,8 +282,6 @@ NULL
 #' @seealso \code{\link{comorbid}} \code{\link{icd9_comorbid}}
 #'   \code{\link{icd10_comorbid}}
 #'   \url{https://www.hcup-us.ahrq.gov/toolssoftware/procedureicd10/procedure_icd10.jsp}
-#'
-#'
 #' @name icd10_map_ahrq_pcs
 #' @docType data
 #' @keywords datasets
