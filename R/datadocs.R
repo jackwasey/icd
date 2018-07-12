@@ -119,7 +119,7 @@ NULL
 #' @aliases icd10_map_elix
 NULL
 
-# nocov start
+# nolint start
 
 #' Medicare Hierarchical Condition Categories
 #'
@@ -154,7 +154,7 @@ NULL
 #' @aliases icd9_map_cc icd10_map_cc icd_map_cc_hcc
 NULL
 
-# nocov end
+# nolint end
 
 #' Clinical Classifications Software (CCS) for ICD9/10-CM
 #'

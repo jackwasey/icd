@@ -2,14 +2,14 @@ context("categorize")
 
 test_that("categorize result is empty", {
   expect_equal(0,
-               nrow(res <- categorize(one_icd10_pt[0,],
+               nrow(res <- categorize(one_icd10_pt[0, ],
                                       map = icd10_map_ahrq,
                                       id_name = "visit",
                                       code_name = "icd"))
   )
   expect_identical(colnames(res), names(icd10_map_ahrq))
   expect_equal(0,
-               nrow(rdf <- categorize(one_icd10_pt[0,],
+               nrow(rdf <- categorize(one_icd10_pt[0, ],
                                       map = icd10_map_ahrq,
                                       id_name = "visit",
                                       code_name = "icd"))
