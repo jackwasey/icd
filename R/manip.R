@@ -60,7 +60,6 @@ icd9_drop_leading_zeroes <- function(x, short_code = guess_short(x)) {
   }
 }
 
-#' @keywords internal manip
 icd9_add_leading_zeroes <- function(x, short_code = guess_short(x)) {
   assert(check_factor(x), check_character(x))
   assert_flag(short_code)

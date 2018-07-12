@@ -383,6 +383,7 @@ icd9AddLeadingZeroes_alt_ShortSingle <- function(x) {
 
 #' @title directly apply \code{icd9AddLeadingZeroesShortSingle} to each code
 #' without separating into parts
+#' @description Unclear which is faster yet: working with parts or whole.
 #' @keywords internal manip
 icd9_add_leading_zeroes_alt_cpp <- function(x, short_code) {
     .Call(`_icd_icd9AddLeadingZeroes_alt_Direct`, x, short_code)

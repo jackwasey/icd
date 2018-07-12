@@ -7,5 +7,8 @@ without separating into parts}
 \usage{
 icd9_add_leading_zeroes_alt_cpp(x, short_code)
 }
+\description{
+Unclear which is faster yet: working with parts or whole.
+}
 \keyword{internal}
 \keyword{manip}
