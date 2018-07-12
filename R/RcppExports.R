@@ -73,6 +73,14 @@ attr_short_diag <- function(x, value = TRUE) {
     invisible(.Call(`_icd_setShortDiag`, x, value))
 }
 
+getEmptyDataFrame <- function(visit_name, code_name) {
+    .Call(`_icd_getEmptyDataFrame`, visit_name, code_name)
+}
+
+returnEmptyFrame <- function(df, visit_name, code_name) {
+    .Call(`_icd_returnEmptyFrame`, df, visit_name, code_name)
+}
+
 #' @title Split data based on codes
 #' @description Using C++ because I also want to quickly return the visits
 #'   corresponding to the NA or non-NA factor elements. This is half-way to
@@ -92,7 +100,7 @@ attr_short_diag <- function(x, value = TRUE) {
 #'   df <- data.frame(visit_id = factor(c("visit1", "visit2", "visit1")),
 #'                    icd_code = factor(c("410", "0010", "E999")))
 #'   icd:::factor_split_rcpp(df, "410", "visit_id", "icd_code")
-#'   icd:::factor_split_rcpp(df, "E111", "visit_id", "icd_code")
+#'   icd:::factor_split_rcpp(df, "999", "visit_id", "icd_code")
 #' \dontrun{
 #' R -e "devtools::load_all();devtools::test(filter='github')"
 #' R -e "devtools::load_all();icd9_comorbid_ahrq(data.frame(a='v', b='0010'))"

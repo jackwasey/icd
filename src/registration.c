@@ -17,6 +17,7 @@ extern SEXP _icd_factorNoSort(SEXP, SEXP, SEXP);
 extern SEXP _icd_factorSplit(SEXP, SEXP, SEXP, SEXP);
 extern SEXP _icd_fastIntToString_alt_Std(SEXP);
 extern SEXP _icd_fastIntToStringRcpp(SEXP);
+extern SEXP _icd_getEmptyDataFrame(SEXP, SEXP);
 extern SEXP _icd_getOmpCores();
 extern SEXP _icd_getOmpMaxThreads();
 extern SEXP _icd_getOmpThreads();
@@ -76,6 +77,7 @@ extern SEXP _icd_randomMajorCpp(SEXP);
 extern SEXP _icd_RcppExport_registerCCallable();
 extern SEXP _icd_refactor(SEXP, SEXP, SEXP);
 extern SEXP _icd_refactor_narm(SEXP, SEXP);
+extern SEXP _icd_returnEmptyFrame(SEXP, SEXP, SEXP);
 extern SEXP _icd_setDecimalDiag(SEXP, SEXP);
 extern SEXP _icd_setShortDiag(SEXP, SEXP);
 extern SEXP _icd_simplifyMapLexicographic(SEXP, SEXP);
@@ -96,6 +98,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_icd_factorSplit",                          (DL_FUNC) &_icd_factorSplit,                          4},
     {"_icd_fastIntToString_alt_Std",              (DL_FUNC) &_icd_fastIntToString_alt_Std,              1},
     {"_icd_fastIntToStringRcpp",                  (DL_FUNC) &_icd_fastIntToStringRcpp,                  1},
+    {"_icd_getEmptyDataFrame",                    (DL_FUNC) &_icd_getEmptyDataFrame,                    2},
     {"_icd_getOmpCores",                          (DL_FUNC) &_icd_getOmpCores,                          0},
     {"_icd_getOmpMaxThreads",                     (DL_FUNC) &_icd_getOmpMaxThreads,                     0},
     {"_icd_getOmpThreads",                        (DL_FUNC) &_icd_getOmpThreads,                        0},
@@ -155,6 +158,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_icd_RcppExport_registerCCallable",         (DL_FUNC) &_icd_RcppExport_registerCCallable,         0},
     {"_icd_refactor",                             (DL_FUNC) &_icd_refactor,                             3},
     {"_icd_refactor_narm",                        (DL_FUNC) &_icd_refactor_narm,                        2},
+    {"_icd_returnEmptyFrame",                     (DL_FUNC) &_icd_returnEmptyFrame,                     3},
     {"_icd_setDecimalDiag",                       (DL_FUNC) &_icd_setDecimalDiag,                       2},
     {"_icd_setShortDiag",                         (DL_FUNC) &_icd_setShortDiag,                         2},
     {"_icd_simplifyMapLexicographic",             (DL_FUNC) &_icd_simplifyMapLexicographic,             2},

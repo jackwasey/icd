@@ -177,7 +177,7 @@ test_that("NA icd10 code", {
   d <- data.frame(visit = c("visit 1", "visit 1"), icd10 = c(NA, "G809"))
   res <- icd10_comorbid_ahrq(d)
   d <- data.frame(visit = c("visit 1", "visit 1"), icd10 = c(NA, "sillycode"))
-  expect_error(res <- icd10_comorbid_ahrq(d), regex = "icd_name")
+  expect_error(res <- icd10_comorbid_ahrq(d), regexp = "icd_name")
   res <- icd10_comorbid_ahrq(d, icd_name = "icd10")
   d <- data.frame(visit = c("visit 1", "visit 2"), icd10 = c("badcode", NA))
   res <- icd10_comorbid_ahrq(d, visit_name = "visit", icd_name = "icd10")
@@ -206,10 +206,10 @@ test_that("NA example which crashed during devel", {
 })
 
 test_that("ICD-10 comorbidities from uranium", {
-  expect_error(regex = NA, comorbid(uranium_pathology, icd10_map_quan_elix))
-  expect_error(regex = NA, comorbid(uranium_pathology, icd10_map_quan_deyo))
-  expect_error(regex = NA, comorbid(uranium_pathology, icd10_map_elix))
-  expect_error(regex = NA, comorbid(uranium_pathology, icd10_map_ahrq))
+  expect_error(regexp = NA, comorbid(uranium_pathology, icd10_map_quan_elix))
+  expect_error(regexp = NA, comorbid(uranium_pathology, icd10_map_quan_deyo))
+  expect_error(regexp = NA, comorbid(uranium_pathology, icd10_map_elix))
+  expect_error(regexp = NA, comorbid(uranium_pathology, icd10_map_ahrq))
 })
 
 test_that("mix and match comorbidity functions", {
@@ -240,7 +240,7 @@ test_that("mix and match comorbidity functions", {
                           id_name = "case", code_name = "icd10",
                           comorbid_fun = as.name(cmb_fun_name))
         expect_error(
-          regex = NA,
+          regexp = NA,
           res <- eval(call_expr),
           info = inf
         )
@@ -251,7 +251,7 @@ test_that("mix and match comorbidity functions", {
   for (r in names(results)[-1])
     expect_identical(results[[r]], results[[1]], info = r)
   expect_error(
-    regex = NA,
+    regexp = NA,
     icd:::categorize_simple(uranium_pathology, icd10_map_ahrq,
                             id_name = "case", code_name = "icd10",
                             comorbid_fun = icd:::comorbidMatMul)
@@ -259,13 +259,13 @@ test_that("mix and match comorbidity functions", {
 
 
   expect_error(
-    regex = NA,
+    regexp = NA,
     icd:::categorize(uranium_pathology, icd10_map_ahrq,
                      id_name = "case", code_name = "icd10",
                      comorbid_fun = icd:::comorbidMatMul)
   )
   expect_error(
-    regex = NA,
+    regexp = NA,
     icd:::categorize(uranium_pathology, umap,
                      id_name = "case", code_name = "icd10",
                      comorbid_fun = icd:::comorbidMatMulSimple)

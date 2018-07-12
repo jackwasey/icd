@@ -137,6 +137,44 @@ namespace icd {
             throw Rcpp::exception(Rcpp::as<std::string>(rcpp_result_gen).c_str());
     }
 
+    inline Rcpp::List getEmptyDataFrame(String visit_name, String code_name) {
+        typedef SEXP(*Ptr_getEmptyDataFrame)(SEXP,SEXP);
+        static Ptr_getEmptyDataFrame p_getEmptyDataFrame = NULL;
+        if (p_getEmptyDataFrame == NULL) {
+            validateSignature("Rcpp::List(*getEmptyDataFrame)(String,String)");
+            p_getEmptyDataFrame = (Ptr_getEmptyDataFrame)R_GetCCallable("icd", "_icd_getEmptyDataFrame");
+        }
+        RObject rcpp_result_gen;
+        {
+            RNGScope RCPP_rngScope_gen;
+            rcpp_result_gen = p_getEmptyDataFrame(Shield<SEXP>(Rcpp::wrap(visit_name)), Shield<SEXP>(Rcpp::wrap(code_name)));
+        }
+        if (rcpp_result_gen.inherits("interrupted-error"))
+            throw Rcpp::internal::InterruptedException();
+        if (rcpp_result_gen.inherits("try-error"))
+            throw Rcpp::exception(Rcpp::as<std::string>(rcpp_result_gen).c_str());
+        return Rcpp::as<Rcpp::List >(rcpp_result_gen);
+    }
+
+    inline List returnEmptyFrame(DataFrame df, String visit_name, String code_name) {
+        typedef SEXP(*Ptr_returnEmptyFrame)(SEXP,SEXP,SEXP);
+        static Ptr_returnEmptyFrame p_returnEmptyFrame = NULL;
+        if (p_returnEmptyFrame == NULL) {
+            validateSignature("List(*returnEmptyFrame)(DataFrame,String,String)");
+            p_returnEmptyFrame = (Ptr_returnEmptyFrame)R_GetCCallable("icd", "_icd_returnEmptyFrame");
+        }
+        RObject rcpp_result_gen;
+        {
+            RNGScope RCPP_rngScope_gen;
+            rcpp_result_gen = p_returnEmptyFrame(Shield<SEXP>(Rcpp::wrap(df)), Shield<SEXP>(Rcpp::wrap(visit_name)), Shield<SEXP>(Rcpp::wrap(code_name)));
+        }
+        if (rcpp_result_gen.inherits("interrupted-error"))
+            throw Rcpp::internal::InterruptedException();
+        if (rcpp_result_gen.inherits("try-error"))
+            throw Rcpp::exception(Rcpp::as<std::string>(rcpp_result_gen).c_str());
+        return Rcpp::as<List >(rcpp_result_gen);
+    }
+
     inline List factor_split_rcpp(const List& df, const CharacterVector& relevant, const String& id_name, const String& code_name) {
         typedef SEXP(*Ptr_factor_split_rcpp)(SEXP,SEXP,SEXP,SEXP);
         static Ptr_factor_split_rcpp p_factor_split_rcpp = NULL;

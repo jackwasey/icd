@@ -144,7 +144,8 @@ categorize <- function(x, map, id_name, code_name,
   else if (preserve_visit_id_type) {
     row_names <- switch(visit_class,
                         "integer" = as.integer(rownames(mat)),
-                        "numeric" = as.numeric(rownames(mat)))
+                        "numeric" = as.numeric(rownames(mat)),
+                        "character" = as.character(rownames(mat)))
     # TODO: don't convert uniq_visits to char, then convert back!
   } else
     row_names <- rownames(mat)
@@ -215,7 +216,8 @@ categorize_simple <- function(x, map, id_name, code_name,
   else if (preserve_visit_id_type) {
     row_names <- switch(visit_class,
                         "integer" = as.integer(rownames(mat)),
-                        "numeric" = as.numeric(rownames(mat)))
+                        "numeric" = as.numeric(rownames(mat)),
+                        "character" = as.character(rownames(mat)))
     # TODO: don't convert uniq_visits to char, then convert back!
   } else
     row_names <- rownames(mat)

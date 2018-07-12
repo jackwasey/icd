@@ -60,6 +60,7 @@ public:
 
 // TODO: make exportable version of get relevant? // [[Rcpp::export]]
 
+// nocov start
 void printCornerMap(DenseMap x) {
   DEBUG("Map matrix:");
   if (x.rows() >= 8 && x.cols() >= 32) {
@@ -86,7 +87,6 @@ void printCornerSparse(PtsSparse x) {
   else
     Rcpp::Rcout << dense << std::endl;
 }
-
 #ifdef ICD_DEBUG
 #define PRINTCORNERMAP(x) Rcpp::Rcout << #x << ": "; printCornerMap(x);
 #define PRINTCORNERSP(x) Rcpp::Rcout << #x << ": "; printCornerSparse(x);
@@ -96,6 +96,7 @@ void printCornerSparse(PtsSparse x) {
 #define PRINTCORNERSP(x) ((void)0);
 #define ICD_ASSIGN(row,col) mat.coeffRef(row, col) = true;
 #endif
+// nocov end
 
 // This is a complicated function
 //

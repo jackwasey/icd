@@ -24,18 +24,17 @@ icd_data_classes <- c("icd_long_data", "icd_wide_data")
 icd_other_classes <- c("comorbidity_map")
 icd_all_classes <- c(icd_version_classes, icd_data_classes, icd_other_classes)
 icd_system_classes <- c("data.frame", "list", "numeric", "character", "factor")
-
 icd_conflicts_with_icd9 <- function(x) inherits(x, icd10_classes)
 icd_conflicts_with_icd10 <- function(x) inherits(x, icd9_classes)
 icd_conflicts_with_icd9cm <- icd_conflicts_with_icd9
 
 icd_check_conflict_with_icd10 <- function(x)
   if (icd_conflicts_with_icd10(x))
-    stop("Trying to set ICD-10 class on an object which already has an ICD-9 class")
+    stop("Cannot set ICD-10 class when object already has an ICD-9 class")
 
 icd_check_conflict_with_icd9 <- function(x)
   if (icd_conflicts_with_icd9(x))
-    stop("Trying to set ICD-10 class on an object which already has an ICD-9 class")
+    stop("Cannot set ICD-9 class when object already has an ICD-10 class")
 
 # for now, but could be refined:
 icd_check_conflict_with_icd9cm <- icd_check_conflict_with_icd9
@@ -130,7 +129,6 @@ icd9 <- function(x) {
 #' @export
 as.icd9 <- function(x) {
   stopifnot(is.atomic(x))
-  if (missing(x)) x <- character()
   icd_check_conflict_with_icd9(x)
   if (is.icd9(x)) return(x)
   after <- match("icd9cm", class(x), nomatch = 0L)
@@ -151,7 +149,6 @@ icd9cm <- function(x) {
 #' @export
 as.icd9cm <- function(x) {
   stopifnot(is.atomic(x))
-  if (missing(x)) x <- character()
   icd_check_conflict_with_icd9cm(x)
   if (inherits(x, "icd9") && inherits(x, "icd9cm")) return(x)
   icd9_pos <- match("icd9", class(x))
@@ -167,7 +164,6 @@ as.icd9cm <- function(x) {
 #' @export
 as.icd10 <- function(x) {
   stopifnot(is.atomic(x))
-  if (missing(x)) x <- character()
   icd_check_conflict_with_icd10(x)
   if (inherits(x, "icd10")) return(x)
   icd10cm_pos <- match("icd10cm", class(x), nomatch = 0L)
@@ -188,7 +184,6 @@ icd10 <- function(x) {
 #' @export
 as.icd10cm <- function(x, short_code = NULL) {
   stopifnot(is.atomic(x))
-  if (missing(x)) x <- character()
   icd_check_conflict_with_icd10cm(x)
   if (inherits(x, "icd10cm")) return(x)
   icd10_pos <- match("icd10", class(x))
@@ -205,8 +200,7 @@ as.icd10cm <- function(x, short_code = NULL) {
 #' @keywords internal
 icd10cm <- function(x) {
   cl <- class(x)
-  if ("icd10cm" %in% cl)
-    return(x)
+  if ("icd10cm" %in% cl) return(x)
   if ("icd10" %in% cl)
     class(x) <- c("icd10cm", cl)
   else
@@ -227,7 +221,8 @@ as.icd_long_data <- function(x) {
   stopifnot(is.data.frame(x) || is.matrix(x))
   assert_data_frame(x)
   if (is.icd_wide_data(x))
-    warning("Setting 'icd_long_data' on a data.frame or matrix which already has 'icd_wide_data' class")
+    warning("Setting 'icd_long_data' on a data.frame or matrix which already",
+            " has 'icd_wide_data' class")
   if (is.icd_long_data(x))
     return(x)
   class(x) <- c("icd_long_data", class(x))
@@ -242,19 +237,22 @@ as.icd_long_data <- function(x) {
 as.icd_wide_data <- function(x) {
   stopifnot(is.data.frame(x) || is.matrix(x))
   if (is.icd_long_data(x))
-    warning("Setting 'icd_wide_data' on a data.frame or matrix which already has 'icd_long_data' class")
+    warning("Setting 'icd_wide_data' on a data.frame or matrix which already",
+            " has 'icd_long_data' class")
   if (is.icd_wide_data(x))
     return(x)
   class(x) <- c("icd_wide_data", class(x))
   x
 }
 
-#' @describeIn icd_long_data Construct a \code{data.frame}, adding the \code{icd_long_data} class.
+#' @describeIn icd_long_data Construct a \code{data.frame}, adding the
+#'   \code{icd_long_data} class.
 #' @export
 icd_long_data <- function(...)
   as.icd_long_data(data.frame(...))
 
-#' @describeIn icd_long_data Construct a \code{data.frame}, adding the \code{icd_wide_data} class.
+#' @describeIn icd_long_data Construct a \code{data.frame}, adding the
+#'   \code{icd_wide_data} class.
 #' @export
 icd_wide_data <- function(...)
   as.icd_wide_data(data.frame(...))
@@ -319,33 +317,55 @@ as.comorbidity_map <- function(x) {
 #' @export
 c.icd9 <- function(..., warn = FALSE) {
   dots <- list(...)
-
-  if (warn && any(vapply(dots, icd_conflicts_with_icd9, FUN.VALUE = logical(1))))
-    stop("Do you really want to combine ICD-9 codes (first argument) with ICD-10 codes (other arguments)?
-         If so, unset the class of the arguments")
-  structure(c(lapply(dots, unclass), recursive = TRUE), class = class(.subset2(dots, 1)))
-  # SOMEDAY: would be nice to set the attribute, but by default, R's 'c' drops attributes.
+  if (warn &&
+      any(vapply(dots, icd_conflicts_with_icd9, FUN.VALUE = logical(1))))
+    stop("Do you really want to combine ICD-9 codes (first argument) ",
+         " with ICD-9 codes (subsequent arguments)? If so, use 'unclass'",
+         " on some or all the arguments")
+  structure(c(lapply(dots, unclass), recursive = TRUE),
+            class = class(.subset2(dots, 1)))
+  # SOMEDAY: would be nice to set the attribute, but by default, R's 'c' drops
+  # attributes.
 }
 
 #' @rdname combine
+#' @examples
+#' (a <- as.icd10("A100SSX"))
+#' (b <- as.icd10("Z999A"))
+#' c(a, b)
+#' c(as.icd_short_diag(a), as.icd_short_diag(b))
+#' (d <- as.icd10("A10.0SSX"))
+#' (e <- as.icd10("Z99.9A"))
+#' c(d, e)
+#' c(as.icd_decimal_diag(d), as.icd_decimal_diag(e))
+#' # warn when mixing attribute types
+#' suppressWarnings(
+#'   c(as.icd_short_diag(a), as.icd_decimal_diag(e))
+#' )
 #' @export
 c.icd10 <- function(..., warn = FALSE) {
   dots <- list(...)
   base_class <- class(.subset2(dots, 1))
-  if (warn && any(vapply(dots, icd_conflicts_with_icd10, FUN.VALUE = logical(1))))
-    stop("Do you really want to combine ICD-10 codes (first argument) with ICD-9 codes (subsequent arguments)?
-         If so, use 'unclass' on some or all the arguments")
+  if (warn &&
+      any(vapply(dots, icd_conflicts_with_icd10, FUN.VALUE = logical(1))))
+    stop("Do you really want to combine ICD-10 codes (first argument) ",
+         " with ICD-9 codes (subsequent arguments)? If so, use 'unclass'",
+         " on some or all the arguments.")
   out <- structure(c(unlist(dots)), class = base_class)
   # only set this attribute if all the consituent terms have the same attribute
   # present. One NULL or one conflict will mean the attribute is not set
   attribs <- lapply(dots, attr, which = "icd_short_diag")
-  if (!any(vapply(attribs, is.null, logical(1)))) {
-    n <- sum(as.logical(attribs))
-    if (n == 0)
-      attr(out, "icd_short_diag") <- FALSE
-    else if (n == length(out))
-      attr(out, "icd_short_diag") <- TRUE
-  }
+  nulls <- vapply(attribs, is.null, logical(1))
+  if (all(nulls)) return(out)
+  short_attribs <- unlist(attribs[!nulls])
+  if (all(short_attribs))
+    attr(out, "icd_short_diag") <- TRUE
+  else if (!any(short_attribs))
+    attr(out, "icd_short_diag") <- FALSE
+  else
+    warning("Combining codes with different short and decimal attributes.",
+            " 'icd_short_diag' attribute will be removed from result. Did",
+            " you mean to do this?")
   out
 }
 
@@ -428,11 +448,13 @@ is.icd9cm <- function(x) inherits(x, "icd9cm")
 #' @export
 is.icd10cm <- function(x) inherits(x, "icd10cm")
 
-#' @describeIn icd_long_data Return \code{TRUE} if \code{x} has the \code{icd_long_data} class.
+#' @describeIn icd_long_data Return \code{TRUE} if \code{x} has the
+#'   \code{icd_long_data} class.
 #' @export
 is.icd_long_data <- function(x) inherits(x, "icd_long_data")
 
-#' @describeIn icd_long_data Return \code{TRUE} if \code{x} has the \code{icd_wide_data} class.
+#' @describeIn icd_long_data Return \code{TRUE} if \code{x} has the
+#'   \code{icd_wide_data} class.
 #' @export
 is.icd_wide_data <- function(x) inherits(x, "icd_wide_data")
 
