@@ -7,8 +7,6 @@
 #include "appendMinor.h"
 #include "convert.h"
 
-// nocov start
-// because covr seems to misinterpret contents of context sections
 #ifdef ICD_CATCH
 #include <testthat.h>
 using namespace Rcpp;
@@ -380,4 +378,3 @@ context("refactor") {
 }
 // endif have testthat ICD_CATCH
 #endif
-// nocov end

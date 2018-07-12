@@ -90,7 +90,7 @@ int getOmpCores() {
   return cores;
 }
 
-// nocov start
+// # nocov start
 
 // [[Rcpp::export(get_omp_max_threads)]]
 int getOmpMaxThreads() {
@@ -111,8 +111,6 @@ int getOmpThreads() {
 #endif
   return threads;
 }
-
-// nocov end
 
 // [[Rcpp::export]]
 void debug_parallel_env() {
@@ -151,8 +149,6 @@ void debug_parallel() {
    */
 }
 
-// nocov end
-
 // [[Rcpp::export]]
 int valgrindCallgrindStart(bool zerostats = false) {
   if (zerostats) {}; // no-op
@@ -179,6 +175,8 @@ int valgrindCallgrindStop() {
 #endif
   return 0;
 }
+
+// # nocov end
 
 bool icd9CompareStrings(std::string a, std::string b) {
   const char * acs = a.c_str();
