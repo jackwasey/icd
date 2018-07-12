@@ -24,10 +24,9 @@
 #include <vector>                            // for vector, vector<>::iterator
 #include "is.h"                              // for icd9IsASingleVE
 
-//Same as \code{icd9MajMinToCode} but assume codes are already trimmed and
-//correctly padded with zeros, e.g. E001, V09, 001. This version does handle NA
-//values correctly. ' @keywords internal
-
+// Same as icd9MajMinToCode but assume codes are already trimmed and correctly
+// padded with zeros, e.g. E001, V09, 001. This version does handle NA values
+// correctly.
 // [[Rcpp::export]]
 CV icd9MajMinToCode_alt_PrePadded(const CV mjr,
                                   const CV mnr,
@@ -66,24 +65,6 @@ VecStr icd9MajMinToCode_alt_Std(const VecStr& mjr, const VecStr& mnr, bool isSho
   return out;
 }
 
-// //' append minor to major using std, with reservation of string length
-// //'
-// //' if \code{m} string size is already reserved, then use other \code{icd9AppendMinors}
-// // [[Rcpp::export]]
-// void icd9AppendMinors(VecStr& m, const VecStr& mnr, bool isShort, bool reserve = true) {
-//   if (reserve)
-//     m.reserve(5 + (VecStr::size_type)isShort);
-//   VecStr::size_type mjsz = m.size();
-//   VecStr::size_type j;
-//   for (j = 0; j != mjsz; ++j) {
-//     if (!isShort && mnr[j] != "")
-//       m[j].append(".");
-//     m[j].append(mnr[j]);
-//   }
-// }
-
-//' initialize a std::vector of strings with repeated value of the minor
-//' @keywords internal
 // [[Rcpp::export]]
 VecStr icd9MajMinToShort_alt_Std(const VecStr& mjr, const VecStr& mnr) {
   if (mjr.size() != 1)

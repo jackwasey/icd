@@ -31,15 +31,12 @@ CV icd9MajMinToCode_alt_Old(CV mjr, CV mnr, bool isShort) {
   if (mjr.size() != mnr.size())
     Rcpp::stop("mjr and mnr lengths differ");
 #endif
-
 #ifdef ICD_DEBUG_TRACE
   Rcpp::Rcout << "mjr and mnr are the same?\n";
 #endif
-
   CV out;
   CV::iterator j = mjr.begin();
   CV::iterator n = mnr.begin();
-
   for (; j != mjr.end() && n != mnr.end(); ++j, ++n) {
     Rcpp::String mjrelem = *j;
     if (mjrelem == NA_STRING) {
@@ -82,7 +79,6 @@ CV icd9MajMinToCode_alt_Old(CV mjr, CV mnr, bool isShort) {
   return out;
 }
 
-// [[//Rcpp::export]]
 void icd9ShortToParts_alt_CppStd(VecStr icd9Short,
                                  std::string mnrEmpty,
                                  VecStr &mjr,

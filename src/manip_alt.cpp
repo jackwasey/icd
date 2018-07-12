@@ -22,12 +22,11 @@
 #include "convert.h"                      // for icd9DecimalToShort
 #include "is.h"                           // for icd9IsASingleV, icd9IsASing...
 
-//' Decompose a 'short' ICD code and insert the leading zeroes as needed.
-//'
-//' This should add leading zeroes when there is definitely no ambiguity,
-//' e.g. V1. However V10 should not be altered, because V010 is a different
-//' code. The goal is for this to be faster, but must be correct! Example in
-//' \code{manip.cpp} has the benchmark code.
+//' @title Decompose a 'short' ICD code and insert the leading zeroes as needed.
+//' @description: This should add leading zeroes when there is definitely no
+//' ambiguity, e.g. V1. However V10 should not be altered, because V010 is a
+//' different code. The goal is for this to be faster, but must be correct!
+//' Example in \code{manip.cpp} has the benchmark code.
 //' @keywords internal manip
 // [[Rcpp::export]]
 Rcpp::String icd9AddLeadingZeroes_alt_ShortSingle(Rcpp::String x) {
@@ -64,9 +63,8 @@ Rcpp::String icd9AddLeadingZeroes_alt_ShortSingle(Rcpp::String x) {
   return (s);
 }
 
-//' @describeIn icd9AddLeadingZeroes_alt_ShortSingle Directly apply
-//' \code{icd9AddLeadingZeroesShortSingle} to each code without separating into
-//' parts
+//' @title directly apply \code{icd9AddLeadingZeroesShortSingle} to each code
+//' without separating into parts
 //' @keywords internal manip
 // [[Rcpp::export(icd9_add_leading_zeroes_alt_cpp)]]
 CV icd9AddLeadingZeroes_alt_Direct(CV x, bool short_code) {

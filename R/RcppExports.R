@@ -21,10 +21,6 @@ icd9MajMinToDecimal <- function(mjr, mnr) {
     .Call(`_icd_icd9MajMinToDecimal`, mjr, mnr)
 }
 
-#' append minor to major using std
-#'
-#' benefits from having reserve string size of 5
-#' @keywords internal
 icd9AppendMinors <- function(m, mnr, isShort) {
     invisible(.Call(`_icd_icd9AppendMinors`, m, mnr, isShort))
 }
@@ -37,8 +33,6 @@ icd9MajMinToCode_alt_Std <- function(mjr, mnr, isShort) {
     .Call(`_icd_icd9MajMinToCode_alt_Std`, mjr, mnr, isShort)
 }
 
-#' initialize a std::vector of strings with repeated value of the minor
-#' @keywords internal
 icd9MajMinToShort_alt_Std <- function(mjr, mnr) {
     .Call(`_icd_icd9MajMinToShort_alt_Std`, mjr, mnr)
 }
@@ -377,20 +371,18 @@ icd9_add_leading_zeroes_cpp <- function(x, short_code) {
     .Call(`_icd_icd9AddLeadingZeroes`, x, short_code)
 }
 
-#' Decompose a 'short' ICD code and insert the leading zeroes as needed.
-#'
-#' This should add leading zeroes when there is definitely no ambiguity,
-#' e.g. V1. However V10 should not be altered, because V010 is a different
-#' code. The goal is for this to be faster, but must be correct! Example in
-#' \code{manip.cpp} has the benchmark code.
+#' @title Decompose a 'short' ICD code and insert the leading zeroes as needed.
+#' @description: This should add leading zeroes when there is definitely no
+#' ambiguity, e.g. V1. However V10 should not be altered, because V010 is a
+#' different code. The goal is for this to be faster, but must be correct!
+#' Example in \code{manip.cpp} has the benchmark code.
 #' @keywords internal manip
 icd9AddLeadingZeroes_alt_ShortSingle <- function(x) {
     .Call(`_icd_icd9AddLeadingZeroes_alt_ShortSingle`, x)
 }
 
-#' @describeIn icd9AddLeadingZeroes_alt_ShortSingle Directly apply
-#' \code{icd9AddLeadingZeroesShortSingle} to each code without separating into
-#' parts
+#' @title directly apply \code{icd9AddLeadingZeroesShortSingle} to each code
+#' without separating into parts
 #' @keywords internal manip
 icd9_add_leading_zeroes_alt_cpp <- function(x, short_code) {
     .Call(`_icd_icd9AddLeadingZeroes_alt_Direct`, x, short_code)
@@ -447,17 +439,10 @@ icd9ChildrenCpp <- function(icd9, isShort, icd9cmReal, onlyReal = TRUE) {
     .Call(`_icd_icd9ChildrenCpp`, icd9, isShort, icd9cmReal, onlyReal)
 }
 
-#' Find child codes from vector of ICD-9 codes.
-#'
-#' Pure C++11 implementation using \code{unordered set} to find children of
-#' given codes
-#' @keywords internal
 icd9ChildrenShort_alt_11 <- function(icd9Short, onlyReal) {
     .Call(`_icd_icd9ChildrenShort_alt_11`, icd9Short, onlyReal)
 }
 
-#' C++ implementation of finding children of short codes
-#' @keywords internal
 icd9ChildrenShort_alt_Std <- function(icd9Short, onlyReal) {
     .Call(`_icd_icd9ChildrenShort_alt_Std`, icd9Short, onlyReal)
 }

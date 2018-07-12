@@ -26,11 +26,6 @@
 #include "is.h"                         // for icd9IsASingleE
 #include "ranges_alt.h"                     // for icd9ExpandMinor_alt_Std
 
-//' Find child codes from vector of ICD-9 codes.
-//'
-//' Pure C++11 implementation using \code{unordered set} to find children of
-//' given codes
-//' @keywords internal
 // [[Rcpp::export]]
 CV icd9ChildrenShort_alt_11(CV icd9Short, bool onlyReal) {
   icd_set out; // we are never going to put NAs in the output?
@@ -67,8 +62,6 @@ CV icd9ChildrenShort_alt_11(CV icd9Short, bool onlyReal) {
   return rcppOut;
 }
 
-//' C++ implementation of finding children of short codes
-//' @keywords internal
 // [[Rcpp::export]]
 CV icd9ChildrenShort_alt_Std(CV icd9Short, bool onlyReal) {
   // set may be unordered_set if C++11 is available, so may have to reorder at end

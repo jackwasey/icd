@@ -125,10 +125,6 @@ CV icd9MajMinToDecimal(const CV mjr, const CV mnr) {
   return icd9MajMinToCode(mjr, mnr, false);
 }
 
-//' append minor to major using std
-//'
-//' benefits from having reserve string size of 5
-//' @keywords internal
 // [[Rcpp::export]]
 void icd9AppendMinors(VecStr& m, const VecStr& mnr, bool isShort) {
   VecStr::size_type mjsz = m.size();
