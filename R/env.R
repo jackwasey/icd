@@ -15,6 +15,9 @@
 # You should have received a copy of the GNU General Public License
 # along with icd. If not, see <http:#www.gnu.org/licenses/>.
 
+# these functions are only used in generating package data
+# nocov start
+
 #' create environment from vector
 #'
 #' create an environment by inserting the value \code{val} with names taken from
@@ -66,3 +69,5 @@ vec_to_lookup_pair <- function(x, env = new.env(hash = TRUE,
 "%ine%" <- function(x, table) {
   !is.null(table[[x]])
 }
+
+# nocov end
