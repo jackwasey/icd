@@ -89,3 +89,20 @@ test_that("different ID types are preserved (simple)", {
   expect_identical(ress_noid[[1]], ress_noid[[2]])
   expect_identical(ress_noid[[1]], ress_noid[[3]])
 })
+
+test_that("factor split basics", {
+  df <- data.frame(visit_id = factor(c("visit1", "visit2", "visit1")),
+                   icd_code = factor(c("410", "0010", "E999")))
+  expect_equal(
+    length(
+      res <- icd:::factor_split_rcpp(df, "410", "visit_id", "icd_code")),
+    2)
+  expect_equal(
+    length(
+      res_empty <- icd:::factor_split_rcpp(df, "999", "visit_id", "icd_code")),
+    2)
+  expect_equal(dim(res$comorbid_df), c(1, 2))
+  expect_equal(dim(res_empty$comorbid_df), c(0, 2))
+  expect_equal(res$unique_no_comorbid, "visit2")
+  expect_equal(res_empty$unique_no_comorbid, c("visit1", "visit2"))
+})

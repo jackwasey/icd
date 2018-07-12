@@ -68,7 +68,8 @@ after_success:
  - cat ./icd.Rcheck/tests/test-all.Rout
  - if [ "$ICD_COVERAGE" = "true" ]; then
      Rscript -e "covr::codecov(quiet = FALSE)"; fi
- - Rscript -e "lintr::lint_package()"
+ - if [ "$LINTR_COMMENT_BOT" = "true" ]; then
+     Rscript -e "lintr::lint_package()"; fi
 
 notifications:
   email:
