@@ -111,9 +111,10 @@ List returnEmptyFrame(DataFrame df, String visit_name, String code_name) {
 //'   df <- data.frame(visit_id = factor(c("visit1", "visit2", "visit1")),
 //'                    icd_code = factor(c("410", "0010", "E999")))
 //'   icd:::factor_split_rcpp(df, "410", "visit_id", "icd_code")
+//'   icd:::factor_split_rcpp(df, "E111", "visit_id", "icd_code")
 //' \dontrun{
 //' R -e "devtools::load_all();devtools::test(filter='github')"
-//' R -e "devtools::load_all();icd9_comorbid_ahrq(data.frame(a='vis', b='0010'))"
+//' R -e "devtools::load_all();icd9_comorbid_ahrq(data.frame(a='v', b='0010'))"
 //' }
 //' @md
 //' @keywords internal manip
