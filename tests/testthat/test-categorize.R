@@ -104,5 +104,5 @@ test_that("factor split basics", {
   expect_equal(dim(res$comorbid_df), c(1, 2))
   expect_equal(dim(res_empty$comorbid_df), c(0, 2))
   expect_equal(res$unique_no_comorbid, "visit2")
-  expect_equal(res_empty$unique_no_comorbid, c("visit1", "visit2"))
+  expect_setequal(res_empty$unique_no_comorbid, c("visit1", "visit2"))
 })
