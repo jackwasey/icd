@@ -38,19 +38,17 @@ env:
     - _R_CHECK_CRAN_INCOMING_=FALSE
     - _R_CHECK_CRAN_INCOMING_REMOTE_=FALSE
     - _R_CHECK_FORCE_SUGGESTS_=FALSE
-    - LINTR_COMMENT_BOT=false
+    - LINTR_COMMENT_BOT=true
     - ICD_COVERAGE=false
     - OMP_NUM_THREADS=2
 
 matrix:
   fast_finish: true
   include:
-  - env: LINTR_COMMENT_BOT=true
-  - env: ICD_COVERAGE=true ICD_TEST_DEPRECATED=true ICD_TEST_BUILD_DATA=true ICD_TEST_SLOW=true
-  - env: ICD_TEST_ALL=false ICD_TEST_DEPRECATED=true ICD_TEST_BUILD_DATA=true ICD_TEST_SLOW=true
+  - env: LINTR_COMMENT_BOT=false ICD_COVERAGE=true ICD_TEST_DEPRECATED=true ICD_TEST_BUILD_DATA=true ICD_TEST_SLOW=true
     r: release
   allow_failures:
-  - env: ICD_COVERAGE=true ICD_TEST_DEPRECATED=true ICD_TEST_BUILD_DATA=true ICD_TEST_SLOW=true
+  - env: LINTR_COMMENT_BOT=false ICD_COVERAGE=true ICD_TEST_DEPRECATED=true ICD_TEST_BUILD_DATA=true ICD_TEST_SLOW=true
   - r: oldrel
 
 before_script:
@@ -63,7 +61,7 @@ before_script:
 after_success:
  - if [ "$ICD_COVERAGE" = "true" ]; then
      Rscript -e "covr::codecov(quiet = FALSE)"; fi
- - if [ "$LINTR_COMMENT_BOT" = "true" ]; then
+ - if [ "$LINTR_COMMENT_BOT" = "true" -a "$TRAVIS_R_VERSION_STRING" = "release" ]; then
      Rscript -e "lintr::lint_package()"; fi
 
 notifications:
