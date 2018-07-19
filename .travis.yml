@@ -1,30 +1,31 @@
 # https://docs.travis-ci.com/user/languages/r
 language: r
-# dist: trusty
-# precise vs trusty as of Jan 2017. Use old environment for testing old compilers, R?
-# trusty will only work with sudo: true for now
+# dist: trusty # default is trusty, and with sudo false, only trusty.
 # https://ropensci.org/blog/2016/07/12/travis-osx
 # https://docs.travis-ci.com/user/ci-environment/
 
-sudo: false
+# required is slower to start but lets us install binary R packages more quickly
+sudo: required
 cache: packages
 
 # duplicate what's in DESCRIPTION
 r_binary_packages:
   - checkmate
-  - magrittr
-  - Rcpp
-  - stringr
-  - testthat
-
-r_packages:
-  - knitr
-  - roxygen2
-  - rmarkdown
   - covr
+  - knitr
+  - magrittr
+  - rmarkdown
+  - roxygen2
+  - testthat
+  - tinytex
+  - xml2
 
-r_github_packages:
-  - jimhester/lintr
+# is this not automatic based on package DESCRIPTION?
+r_packages:
+  - icd.data
+  - lintr
+  - Rcpp
+  - rticles
 
 r:
   - devel
@@ -37,7 +38,9 @@ warnings_are_errors: true
 
 env:
   global:
-    - R_CHECK_CRAN_INCOMING_=FALSE _R_CHECK_FORCE_SUGGESTS_=FALSE
+    - _R_CHECK_CRAN_INCOMING_=FALSE
+    - _R_CHECK_CRAN_INCOMING_REMOTE_=FALSE
+    - _R_CHECK_FORCE_SUGGESTS_=FALSE
     - LINTR_COMMENT_BOT=false
     - ICD_COVERAGE=false
     - OMP_NUM_THREADS=2
@@ -56,7 +59,6 @@ matrix:
   - r: oldrel
 
 before_script:
- - ls -aR
  - rm .Rinstignore  # do install everything for testing
  - sed -i'' '/.*[Dd]ata.*/d' .Rbuildignore # do include data for testing
  - sed -i'' '/\.covrignore/d' .Rbuildignore
@@ -64,8 +66,6 @@ before_script:
  - Rscript -e "Rcpp::compileAttributes()" # make sure Rcpp generated code is updated, ideally this is not be checked in repo...
 
 after_success:
- - ls -aR
- - cat ./icd.Rcheck/tests/test-all.Rout
  - if [ "$ICD_COVERAGE" = "true" ]; then
      Rscript -e "covr::codecov(quiet = FALSE)"; fi
  - if [ "$LINTR_COMMENT_BOT" = "true" ]; then

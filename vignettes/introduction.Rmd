@@ -65,7 +65,7 @@ hist(charlson(uranium_pathology))
 ## Introduction
 
 ```{r pkgdesc, results='asis', echo = FALSE}
-cat(packageDescription("icd")$Description)
+cat(utils::packageDescription("icd")$Description)
 ```
 
 When calculating which patients have which comorbidities, the data are typically structured in long or wide formats:
