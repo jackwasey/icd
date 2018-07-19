@@ -95,11 +95,11 @@ test_that("factor split basics", {
                    icd_code = factor(c("410", "0010", "E999")))
   expect_equal(
     length(
-      res <- icd:::factor_split_rcpp(df, "410", "visit_id", "icd_code")),
+      res <- factor_split_rcpp(df, "410", "visit_id", "icd_code")),
     2)
   expect_equal(
     length(
-      res_empty <- icd:::factor_split_rcpp(df, "999", "visit_id", "icd_code")),
+      res_empty <- factor_split_rcpp(df, "999", "visit_id", "icd_code")),
     2)
   expect_equal(dim(res$comorbid_df), c(1, 2))
   expect_equal(dim(res_empty$comorbid_df), c(0, 2))
