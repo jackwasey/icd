@@ -1,31 +1,16 @@
 # https://docs.travis-ci.com/user/languages/r
 language: r
-# dist: trusty # default is trusty, and with sudo false, only trusty.
 # https://ropensci.org/blog/2016/07/12/travis-osx
 # https://docs.travis-ci.com/user/ci-environment/
 
-# required is slower to start but lets us install binary R packages more quickly
-sudo: required
+sudo: false
 cache: packages
 
-# duplicate what's in DESCRIPTION
-r_binary_packages:
-  - checkmate
-  - covr
-  - knitr
-  - magrittr
-  - rmarkdown
-  - roxygen2
-  - testthat
-  - tinytex
-  - xml2
-
-# is this not automatic based on package DESCRIPTION?
+# only things not in DESCRIPTION
 r_packages:
-  - icd.data
   - lintr
-  - Rcpp
-  - rticles
+  - covr
+#   - pkgdown
 
 r:
   - devel
@@ -36,16 +21,23 @@ cran: https://cloud.r-project.org
 
 warnings_are_errors: true
 
+# try to speed up compilation time
+before_install:
+  - if [[ "$TRAVIS_R_VERSION_STRING" = 'devel' ]]; then
+      mkdir ~/.R
+      echo 'CFLAGS=-O0 -march=native' > ~/.R/Makevars
+      echo 'CXXFLAGS=-O0 -march=native' >> ~/.R/Makevars
+      echo 'CXX11FLAGS=-O0 -march=native' >> ~/.R/Makevars
+      fi
+
 env:
   global:
-    - _R_CHECK_CRAN_INCOMING_=FALSE
-    - _R_CHECK_CRAN_INCOMING_REMOTE_=FALSE
-    - _R_CHECK_FORCE_SUGGESTS_=FALSE
+    - R_CHECK_CRAN_INCOMING_=FALSE _R_CHECK_FORCE_SUGGESTS_=FALSE
     - LINTR_COMMENT_BOT=false
     - ICD_COVERAGE=false
     - OMP_NUM_THREADS=2
-    - CFLAGS="-Og -Werror -Wall -Wextra -pedantic"
-    - CXXFLAGS="-Og -Werror -Wall -Wextra -pedantic"
+    - CFLAGS="-O0 -Werror -Wall -Wextra -pedantic"
+    - CXXFLAGS="-O0 -Werror -Wall -Wextra -pedantic"
 
 matrix:
   fast_finish: true
