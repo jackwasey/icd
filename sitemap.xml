@@ -142,9 +142,6 @@
     <loc>https://jackwasey.github.io/icd//reference/factor_nosort.html</loc>
   </url>
   <url>
-    <loc>https://jackwasey.github.io/icd//reference/factor_split_na.html</loc>
-  </url>
-  <url>
     <loc>https://jackwasey.github.io/icd//reference/factor_split_rcpp.html</loc>
   </url>
   <url>
@@ -280,22 +277,13 @@
     <loc>https://jackwasey.github.io/icd//reference/icd9AddLeadingZeroes_alt_ShortSingle.html</loc>
   </url>
   <url>
-    <loc>https://jackwasey.github.io/icd//reference/icd9AppendMinors.html</loc>
-  </url>
-  <url>
-    <loc>https://jackwasey.github.io/icd//reference/icd9ChildrenShort_alt_11.html</loc>
-  </url>
-  <url>
-    <loc>https://jackwasey.github.io/icd//reference/icd9ChildrenShort_alt_Std.html</loc>
-  </url>
-  <url>
     <loc>https://jackwasey.github.io/icd//reference/icd9MajMinToCode.html</loc>
   </url>
   <url>
-    <loc>https://jackwasey.github.io/icd//reference/icd9MajMinToShort_alt_Std.html</loc>
+    <loc>https://jackwasey.github.io/icd//reference/icd9RandomShort.html</loc>
   </url>
   <url>
-    <loc>https://jackwasey.github.io/icd//reference/icd9RandomShort.html</loc>
+    <loc>https://jackwasey.github.io/icd//reference/icd9_add_leading_zeroes_alt_cpp.html</loc>
   </url>
   <url>
     <loc>https://jackwasey.github.io/icd//reference/icd9_add_leading_zeroes_cpp.html</loc>

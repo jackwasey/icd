@@ -524,12 +524,10 @@ according to Quan/Deyo ICD categories. Synonymous with
 
 <span class='no'>pt_hccs</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='comorbid_hcc.html'>comorbid_hcc</a></span>(<span class='no'>pts</span>, <span class='kw'>date_name</span> <span class='kw'>=</span> <span class='st'>"date"</span>)
 <span class='fu'>head</span>(<span class='no'>pt_hccs</span>)</div><div class='output co'>#&gt;   visit_name       date hcc
-#&gt; 1          1 2011-01-01   1
-#&gt; 2          2 2011-01-02   1
-#&gt; 3          3 2011-01-03   1
-#&gt; 4          4 2011-01-04   1
-#&gt; 5          1 2011-01-01   2
-#&gt; 6          2 2011-01-02   2</div><div class='input'>
+#&gt; 1          1 2011-01-01   9
+#&gt; 2          2 2011-01-02  10
+#&gt; 3          3 2011-01-03  52
+#&gt; 4          4 2011-01-04 164</div><div class='input'>
 <span class='no'>pts10</span> <span class='kw'>&lt;-</span> <span class='fu'>icd_long_data</span>(
   <span class='kw'>visit_name</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"a"</span>, <span class='st'>"b"</span>, <span class='st'>"c"</span>, <span class='st'>"d"</span>, <span class='st'>"e"</span>),
   <span class='kw'>icd_name</span> <span class='kw'>=</span><span class='fu'>c</span>(<span class='st'>"I058"</span>, <span class='fl'>NA</span>, <span class='st'>"T82817A"</span>, <span class='st'>""</span>, <span class='st'>"I69369"</span>),

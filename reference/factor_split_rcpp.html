@@ -209,9 +209,15 @@ codes.</p></li>
 #&gt; 
 #&gt; $unique_no_comorbid
 #&gt; [1] "visit2"
+#&gt; </div><div class='input'>  <span class='kw pkg'>icd</span><span class='kw ns'>:::</span><span class='fu'><a href='https://jackwasey.github.io/icd//reference/factor_split_rcpp.html'>factor_split_rcpp</a></span>(<span class='no'>df</span>, <span class='st'>"999"</span>, <span class='st'>"visit_id"</span>, <span class='st'>"icd_code"</span>)</div><div class='output co'>#&gt; $comorbid_df
+#&gt; [1] visit_id icd_code
+#&gt; &lt;0 rows&gt; (or 0-length row.names)
+#&gt; 
+#&gt; $unique_no_comorbid
+#&gt; [1] "visit2" "visit1"
 #&gt; </div># NOT RUN {
 R -e "devtools::load_all();devtools::test(filter='github')"
-R -e "devtools::load_all();icd9_comorbid_ahrq(data.frame(a='vis', b='0010'))"
+R -e "devtools::load_all();icd9_comorbid_ahrq(data.frame(a='v', b='0010'))"
 # }
 </pre>
   </div>

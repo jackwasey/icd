@@ -186,8 +186,33 @@ incompatible types are combined using <code>c</code></p></td>
     <pre class="examples"><div class='input'><span class='co'># Care with the following:</span>
 <span class='fu'>c</span>(<span class='fu'><a href='set_icd_class.html'>as.icd9</a></span>(<span class='st'>"E998"</span>), <span class='fu'><a href='set_icd_class.html'>as.icd10</a></span>(<span class='st'>"A10"</span>))</div><div class='output co'>#&gt; [1] "E998" "A10" 
 #&gt; attr(,"class")
-#&gt; [1] "icd9"      "character"</div><div class='input'># which results in both codes sharing the 'icd9' class.
-</div></pre>
+#&gt; [1] "icd9"      "character"</div><div class='input'><span class='co'># which results in both codes sharing the 'icd9' class.</span>
+(<span class='no'>a</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='set_icd_class.html'>as.icd10</a></span>(<span class='st'>"A100SSX"</span>))</div><div class='output co'>#&gt; [1] "A100SSX"
+#&gt; attr(,"class")
+#&gt; [1] "icd10"     "character"</div><div class='input'>(<span class='no'>b</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='set_icd_class.html'>as.icd10</a></span>(<span class='st'>"Z999A"</span>))</div><div class='output co'>#&gt; [1] "Z999A"
+#&gt; attr(,"class")
+#&gt; [1] "icd10"     "character"</div><div class='input'><span class='fu'>c</span>(<span class='no'>a</span>, <span class='no'>b</span>)</div><div class='output co'>#&gt; [1] "A100SSX" "Z999A"  
+#&gt; attr(,"class")
+#&gt; [1] "icd10"     "character"</div><div class='input'><span class='fu'>c</span>(<span class='fu'><a href='as.decimal_diag.html'>as.icd_short_diag</a></span>(<span class='no'>a</span>), <span class='fu'><a href='as.decimal_diag.html'>as.icd_short_diag</a></span>(<span class='no'>b</span>))</div><div class='output co'>#&gt; [1] "A100SSX" "Z999A"  
+#&gt; attr(,"class")
+#&gt; [1] "icd10"     "character"
+#&gt; attr(,"icd_short_diag")
+#&gt; [1] TRUE</div><div class='input'>(<span class='no'>d</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='set_icd_class.html'>as.icd10</a></span>(<span class='st'>"A10.0SSX"</span>))</div><div class='output co'>#&gt; [1] "A10.0SSX"
+#&gt; attr(,"class")
+#&gt; [1] "icd10"     "character"</div><div class='input'>(<span class='no'>e</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='set_icd_class.html'>as.icd10</a></span>(<span class='st'>"Z99.9A"</span>))</div><div class='output co'>#&gt; [1] "Z99.9A"
+#&gt; attr(,"class")
+#&gt; [1] "icd10"     "character"</div><div class='input'><span class='fu'>c</span>(<span class='no'>d</span>, <span class='no'>e</span>)</div><div class='output co'>#&gt; [1] "A10.0SSX" "Z99.9A"  
+#&gt; attr(,"class")
+#&gt; [1] "icd10"     "character"</div><div class='input'><span class='fu'>c</span>(<span class='fu'><a href='as.decimal_diag.html'>as.icd_decimal_diag</a></span>(<span class='no'>d</span>), <span class='fu'><a href='as.decimal_diag.html'>as.icd_decimal_diag</a></span>(<span class='no'>e</span>))</div><div class='output co'>#&gt; [1] "A10.0SSX" "Z99.9A"  
+#&gt; attr(,"class")
+#&gt; [1] "icd10"     "character"
+#&gt; attr(,"icd_short_diag")
+#&gt; [1] FALSE</div><div class='input'><span class='co'># warn when mixing attribute types</span>
+<span class='fu'>suppressWarnings</span>(
+  <span class='fu'>c</span>(<span class='fu'><a href='as.decimal_diag.html'>as.icd_short_diag</a></span>(<span class='no'>a</span>), <span class='fu'><a href='as.decimal_diag.html'>as.icd_decimal_diag</a></span>(<span class='no'>e</span>))
+)</div><div class='output co'>#&gt; [1] "A100SSX" "Z99.9A" 
+#&gt; attr(,"class")
+#&gt; [1] "icd10"     "character"</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

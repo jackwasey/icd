@@ -190,11 +190,7 @@ as the <code>map</code>.</p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'>  <span class='fu'>str</span>(<span class='no'>icd10_map_ahrq_pcs</span>)</div><div class='output co'>#&gt; List of 4
-#&gt;  $ Minor Diagnostic : chr [1:7361] "00903ZX" "00904ZX" "00913ZX" "00914ZX" ...
-#&gt;  $ Minor Therapeutic: chr [1:16991] "0020X0Z" "0020XYZ" "002EX0Z" "002EXYZ" ...
-#&gt;  $ Major Diagnostic : chr [1:2935] "00900ZX" "00910ZX" "00920ZX" "00930ZX" ...
-#&gt;  $ Major Therapeutic: chr [1:52079] "0016070" "0016071" "0016072" "0016073" ...</div></pre>
+    <pre class="examples"><div class='input'>  <span class='no'>icd10_map_ahrq_pcs</span><span class='kw'>[[</span><span class='st'>"Major Diagnostic"</span>]][<span class='fl'>1</span>:<span class='fl'>5</span>]</div><div class='output co'>#&gt; [1] "00900ZX" "00910ZX" "00920ZX" "00930ZX" "00940ZX"</div><div class='input'>  <span class='no'>icd10_map_ahrq_pcs</span><span class='kw'>[[</span><span class='st'>"Minor Therapeutic"</span>]][<span class='fl'>1</span>:<span class='fl'>5</span>]</div><div class='output co'>#&gt; [1] "0020X0Z" "0020XYZ" "002EX0Z" "002EXYZ" "002UX0Z"</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
