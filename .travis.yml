@@ -24,10 +24,13 @@ warnings_are_errors: true
 # try to speed up compilation time
 before_install:
   - if [[ "$TRAVIS_R_VERSION_STRING" = 'devel' ]]; then
-      mkdir ~/.R
-      echo 'CFLAGS=-O0 -march=native' > ~/.R/Makevars
-      echo 'CXXFLAGS=-O0 -march=native' >> ~/.R/Makevars
-      echo 'CXX11FLAGS=-O0 -march=native' >> ~/.R/Makevars
+      mkdir ~/.R ;
+      echo 'CC=clang' > ~/.R/Makevars ;
+      echo 'CXX=clang++' >> ~/.R/Makevars ;
+      echo 'CXX11=clang++' >> ~/.R/Makevars ;
+      echo 'CFLAGS=-O0 -march=native' >> ~/.R/Makevars ;
+      echo 'CXXFLAGS=-O0 -march=native' >> ~/.R/Makevars ;
+      echo 'CXX11FLAGS=-O0 -march=native' >> ~/.R/Makevars ;
       fi
 
 env:
@@ -36,8 +39,6 @@ env:
     - LINTR_COMMENT_BOT=false
     - ICD_COVERAGE=false
     - OMP_NUM_THREADS=2
-    - CFLAGS="-O0 -Werror -Wall -Wextra -pedantic"
-    - CXXFLAGS="-O0 -Werror -Wall -Wextra -pedantic"
 
 matrix:
   fast_finish: true
