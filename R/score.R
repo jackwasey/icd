@@ -165,7 +165,7 @@ charlson_from_comorbid <- function(x, visit_name = NULL, hierarchy = FALSE,
 #'   count_codes(mydf, return_df = TRUE)
 #'   count_codes(mydf)
 #'
-#'   cmb <- icd9_comorbid_quan_deyo(mydf, isShort = FALSE, return_df = TRUE)
+#'   cmb <- icd9_comorbid_quan_deyo(mydf, short_code = FALSE, return_df = TRUE)
 #'   count_comorbid(cmb)
 #'
 #'   wide <- data.frame(visit_name = c("r", "s", "t"),

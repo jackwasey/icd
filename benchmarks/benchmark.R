@@ -98,7 +98,7 @@ icd9_benchmark <- function() {
   prof_charl <- profr::profr(charlson(mydf,
                                       return.df = TRUE,
                                       stringsAsFactors = TRUE,
-                                      isShort = FALSE))
+                                      short_code = FALSE))
   ggplot2::ggplot(prof_charl, minlabel = 0.04)
 
   rng <- "300" %i9s% "450"
