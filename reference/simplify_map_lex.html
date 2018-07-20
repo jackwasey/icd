@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>Internal function to simplify a comorbidity map by only including codes
-which are parents, or identical to, a given list of codes. — simplify_map_lex • icd comorbidity calculations</title>
+which are parents, or identical to, a given list of codes. — simplify_map_lex • Comorbidity calculations and tools for ICD-9 and ICD-10 codes</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -70,7 +70,7 @@ large number of codes in it." />
         <span class="icon-bar"></span>
       </button>
       <span class="navbar-brand">
-        <a class="navbar-link" href="../index.html">icd comorbidity calculations</a>
+        <a class="navbar-link" href="../index.html">Comorbidity calculations and tools for ICD-9 and ICD-10 codes</a>
         <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">3.2.1</span>
       </span>
     </div>
@@ -272,7 +272,7 @@ the column using this argument avoids the guesswork.</p></td>
 #&gt; 3     FALSE      FALSE
 #&gt; 4     FALSE      FALSE
 #&gt; 5     FALSE      FALSE
-#&gt; 6     FALSE      FALSE</div><div class='input'><span class='fu'>head</span>(<span class='kw pkg'>icd</span><span class='kw ns'>:::</span><span class='fu'>categorize_simple</span>(<span class='no'>uranium_pathology</span>, <span class='no'>umap</span>,
+#&gt; 6     FALSE      FALSE</div><div class='input'><span class='fu'>head</span>(<span class='kw pkg'>icd</span><span class='kw ns'>:::</span><span class='fu'><a href='https://jackwasey.github.io/icd//reference/categorize.html'>categorize_simple</a></span>(<span class='no'>uranium_pathology</span>, <span class='no'>umap</span>,
                              <span class='kw'>id_name</span> <span class='kw'>=</span> <span class='st'>"case"</span>, <span class='kw'>code_name</span> <span class='kw'>=</span> <span class='st'>"icd10"</span>,
                              <span class='kw'>comorbid_fun</span> <span class='kw'>=</span> <span class='kw pkg'>icd</span><span class='kw ns'>:::</span><span class='no'><a href='https://jackwasey.github.io/icd//reference/comorbidMatMulSimple.html'>comorbidMatMulSimple</a></span>))</div><div class='output co'>#&gt;     CHF Valvular  PHTN   PVD   HTN HTNcx Paralysis NeuroOther Pulmonary    DM
 #&gt; 1 FALSE    FALSE FALSE FALSE FALSE FALSE     FALSE      FALSE     FALSE FALSE

@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Categorize codes according to a mapping — categorize • icd comorbidity calculations</title>
+<title>Categorize codes according to a mapping — categorize • Comorbidity calculations and tools for ICD-9 and ICD-10 codes</title>
 
 <!-- jquery -->
 <script src="https://code.jquery.com/jquery-3.1.0.min.js" integrity="sha384-nrOSfDHtoPMzJHjVTdCopGqIqeYETSXhZDFyniQ8ZHcVy08QesyHcnOUpMpqnmWq" crossorigin="anonymous"></script>
@@ -67,7 +67,7 @@ and forms the core of the package, along with the C++ matrix code." />
         <span class="icon-bar"></span>
       </button>
       <span class="navbar-brand">
-        <a class="navbar-link" href="../index.html">icd comorbidity calculations</a>
+        <a class="navbar-link" href="../index.html">Comorbidity calculations and tools for ICD-9 and ICD-10 codes</a>
         <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">3.2.1</span>
       </span>
     </div>
@@ -155,8 +155,12 @@ and forms the core of the package, along with the C++ matrix code.</p>
 
     <pre class="usage"><span class='fu'>categorize</span>(<span class='no'>x</span>, <span class='no'>map</span>, <span class='no'>id_name</span>, <span class='no'>code_name</span>, <span class='kw'>return_df</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
   <span class='kw'>return_binary</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>restore_id_order</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>unique_ids</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>preserve_visit_id_type</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>comorbid_fun</span> <span class='kw'>=</span> <span class='no'>comorbidMatMul</span>,
-  <span class='kw'>factor_fun</span> <span class='kw'>=</span> <span class='no'>factor_nosort_rcpp</span>, <span class='no'>...</span>)</pre>
+  <span class='kw'>preserve_id_type</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>comorbid_fun</span> <span class='kw'>=</span> <span class='no'>comorbidMatMul</span>,
+  <span class='kw'>factor_fun</span> <span class='kw'>=</span> <span class='no'>factor_nosort_rcpp</span>, <span class='no'>...</span>)
+
+<span class='fu'>categorize_simple</span>(<span class='no'>x</span>, <span class='no'>map</span>, <span class='no'>id_name</span>, <span class='no'>code_name</span>, <span class='kw'>return_df</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>return_binary</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>restore_id_order</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>unique_ids</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>preserve_id_type</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>comorbid_fun</span> <span class='kw'>=</span> <span class='no'>comorbidMatMulSimple</span>, <span class='no'>...</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -210,7 +214,7 @@ column given by <code>id_name</code> are assumed to be unique. Otherwise, the
 default action is to ensure they are unique.</p></td>
     </tr>
     <tr>
-      <th>preserve_visit_id_type</th>
+      <th>preserve_id_type</th>
       <td><p>Single logical value, if <code>TRUE</code>, the visit
 ID column will be converted back to its original type. The default of
 <code>FALSE</code> means only <code>factors</code> and <code>character</code> types are
@@ -229,6 +233,13 @@ very simple <code>Rcpp</code> implementation <code>factor_nosort_rcpp</code>.</p
     </tr>
     </table>
     
+    <h2 class="hasAnchor" id="functions"><a class="anchor" href="#functions"></a>Functions</h2>
+
+    <ul>
+<li><p><code>categorize_simple</code>: Simplified categorization, without requiring
+additional factor steps</p></li>
+</ul>
+    
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><span class='co'># NOT RUN {</span>
@@ -242,7 +253,9 @@ very simple <code>Rcpp</code> implementation <code>factor_nosort_rcpp</code>.</p
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
-            
+      
+      <li><a href="#functions">Functions</a></li>
+      
       <li><a href="#examples">Examples</a></li>
     </ul>
 
