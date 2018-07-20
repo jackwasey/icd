@@ -1,0 +1,18 @@
+comment:
+  layout: "header, diff, tree, changes"
+  behavior: default
+  require_changes: true  # only post if coverage changes
+  branches: null
+  flags: null
+  paths: null
+
+coverage:
+  status:
+    project:
+      default:
+        target: auto
+        threshold: 1%
+    patch:
+      default:
+        target: auto
+        threshold: 1%

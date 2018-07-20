@@ -1,9 +1,103 @@
 url: https://jackwasey.github.io/icd/
 
-title: icd comorbidity calculations
+title: Comorbidity calculations and tools for ICD-9 and ICD-10 codes
 
 template:
   params:
     docsearch:
       api_key: 797795ae271734faa8bc9b1f4aaae82b
       index_name: icd
+
+articles:
+- title: Journal of Statistical Software
+  desc: This manuscript was submitted to JSS
+  contents:
+  - '`Efficient_calculation_of_comorbidities_from_medical_codes`'
+
+- title: All vignettes
+  desc: ~
+  contents:
+  - '`introduction`'
+  - '`Charlson_and_other_scores`'
+  - '`Using_Hierarchical_Condition_Codes`'
+  - '`icd-10`'
+  - '`pccc`'
+  - '`Ranges`'
+  - '`Comparing_Comorbidity_Mappings_Vignette`'
+
+reference:
+
+- title: Package overview
+  desc: ~
+  contents:
+  - '`icd-package`'
+
+- title: Comorbidity and risk score calculations
+  desc: ~
+  contents:
+  - '`comorbid`'
+  - '`comorbid_hcc`'
+  - '`comorbid_pccc_dx`'
+  - '`charlson`'
+  - '`charlson_from_comorbid`'
+  - '`van_walraven`'
+  - '`count_codes`'
+  - '`count_codes_wide`'
+  - '`count_comorbid`'
+
+- title: Comorbidity to ICD code maps
+  desc: ~
+  contents:
+  - '`icd9_map_ahrq`'
+  - '`icd9_map_elix`'
+  - '`icd9_map_hcc`'
+  - '`icd9_map_pccc`'
+  - '`icd9_map_quan_deyo`'
+  - '`icd9_map_quan_elix`'
+  - '`icd9_map_single_ccs`'
+  - '`icd10_map_ahrq_pcs`'
+
+- title: Transforming ICD data
+  desc: ~
+  contents:
+  - '`comorbid_df_to_mat`'
+  - '`comorbid_mat_to_df`'
+  - '`long_to_wide`'
+  - '`wide_to_long`'
+  - '`convert`'
+
+- title: Metadata
+  desc: Optionally describe the type and structure of your data.
+  contents:
+  - '`as.icd_long_data`'
+  - '`as.decimal_diag`'
+  - '`is.icd9`'
+
+- title: Manipulation
+  desc: Working with codes and the ICD hierarchies
+  contents:
+  - '`children`'
+  - '`combine`'
+  - '`diff_comorbid`'
+  - '`filter_poa`'
+  - '`filter_valid`'
+  - '`get_defined`'
+#  - '`poa_choices`'
+#  - '`print.comorbidity_map`'
+#  - '`[[.comorbidity_map`'
+#  - '`subset_icd`'
+#  - '`unzip_single`'
+
+- title: Data
+  desc: ICD code lists, descriptions and comorbidity maps
+  contents:
+  - '`uranium_pathology`'
+  - '`vermont_dx`'
+  - '`icd10_chapters`'
+  - '`icd10_sub_chapters`'
+  - '`icd10cm2016`'
+  - '`icd10_pcs`'
+  - '`icd9_chapters`'
+  - '`icd9cm_billable`'
+  - '`icd9cm_hierarchy`'
+  - '`names_elix`'

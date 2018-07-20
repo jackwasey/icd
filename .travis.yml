@@ -8,9 +8,12 @@ cache: packages
 
 # only things not in DESCRIPTION
 r_packages:
-  - lintr
   - covr
-#   - pkgdown
+#  - lintr
+#  - pkgdown
+
+r_github_packages:
+  - jimhester/lintr
 
 r:
   - devel
