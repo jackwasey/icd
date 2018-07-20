@@ -9,7 +9,8 @@ icd9MajMinToCode(mjr, mnr, isShort)
 \arguments{
 \item{isShort}{Deprecated. Single logical value which determines whether the
 ICD-9 code provided is in short (\code{TRUE}) or decimal (\code{FALSE})
-form. Where reasonable, this is guessed from the input data.}
+form. Where reasonable, this is guessed from the input data. Use
+\code{short_code} instead.}
 
 \item{major}{character vector of 'major' part of ICD-9 codes, i.e. that part
 which falls before the decimal point, in decimal notation. (In five digit

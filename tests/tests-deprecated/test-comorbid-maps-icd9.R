@@ -605,8 +605,9 @@ test_that("failing example", {
                      icd9 = c("441", "412.93", "044.9"))
   cmb <- icd9_comorbid_quan_deyo(mydf, short_code = FALSE, hierarchy = TRUE)
   expect_false("names" %in% names(attributes(cmb)))
-  icd_charlson(mydf, isShort = FALSE)
-  expect_is(icd_charlson(mydf, isShort = FALSE, return_df = TRUE), "data.frame")
+  icd_charlson(mydf, short_code = FALSE)
+  expect_is(icd_charlson(mydf, short_code = FALSE, return_df = TRUE),
+            "data.frame")
   icd_charlson_from_comorbid(cmb)
 })
 

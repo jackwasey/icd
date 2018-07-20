@@ -408,7 +408,6 @@ test_that("filter valid - data frame input", {
     icd9_filter_valid(pts_invalid_mix, short_code = FALSE, invert = TRUE),
     pts_invalid_mix)
 
-  # use invert and isShort args:
   expect_equal(
     icd9_filter_valid(pts_invalid_mix, short_code = TRUE, invert = TRUE),
     pts_invalid_mix[2, ])

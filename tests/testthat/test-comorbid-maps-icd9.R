@@ -466,7 +466,7 @@ test_that("built-in icd9 to comorbidity mappings are all valid", {
 test_that("disordered visit ids", {
   pts <- data.frame(visit_id = c("2", "1", "2", "3", "3"),
                     icd9 = c("39891", "40110", "09322", "41514", "39891"))
-  res <- icd9_comorbid_ahrq(pts, restore_visit_order = TRUE)
+  res <- icd9_comorbid_ahrq(pts, restore_id_order = TRUE)
   expect_equal(rownames(res), c("2", "1", "3"))
 })
 

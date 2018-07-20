@@ -2,7 +2,11 @@
 
 #nocov start
 
-very_soft_deprecate <- function(fun, ...) {}
+very_soft_deprecate <- function(fun, ...) {
+  message("'icd_' prefixed functions have been replaced with either ",
+          "ICD-9 or ICD-10 specific functions, which have an ",
+          "'icd9_' or 'icd10_' prefix, or lost their prefix altogether. ")
+}
 
 #' @export
 `[[.icd_comorbidity_map` <- function(...) { very_soft_deprecate("[[.comorbidity_map"); `[[.comorbidity_map`(...) }

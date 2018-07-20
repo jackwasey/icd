@@ -6,10 +6,8 @@ CALLGRIND="valgrind --tool=callgrind --simulate-cache=yes"
 PKG_ARG="--default-packages=icd"
 
 # R -d valgrind -e "library(icd); library(testthat); source('tests/testthat/helper-base.R');
-# R -d valgrind -e "library(icd); library(testthat); test_package('icd', reporter=VeryVerboseReporter())"
 R -d "valgrind --leak-check=full --track-origins=yes --show-leak-kinds=all -v" -e "library(icd); library(testthat); test_package('icd')"
 # R -d valgrind -e "icd::comorbid_ahrq(data.frame(visit_id = c('a','a'), icd = c('39891','00321')), short_code = TRUE)"
-# R -d valgrind -e "source('tests/testthat/helper-base.R'); icd::comorbid_ahrq(ahrqTestDat, isShort = T, abbrevNames = F, applyHierarchy = T)"
 
 R -d "$CALLGRIND" -e "library(icd); icd:::icd_bench_comorbid_parallel()"
 # then run:

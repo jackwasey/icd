@@ -69,20 +69,20 @@ icd9_benchmark <- function() {
 
   tmp <- tempfile(fileext = ".Rprof")
   utils::Rprof(filename = tmp, line.profiling = TRUE, memory.profiling = TRUE)
-  utils::capture.output(icd9_comorbid_ahrq(rpts, isShort = TRUE))
+  utils::capture.output(icd9_comorbid_ahrq(rpts, short_code = TRUE))
   utils::Rprof(NULL)
   utils::summaryRprof(filename = tmp, memory = "both", lines = "show")
 
   # see how we do scaling up:
   set.seed(1441)
   microbenchmark::microbenchmark(
-    comorbid_ahrq.icd9(generate_random_pts(1), isShort = TRUE),
-    comorbid_ahrq.icd9(generate_random_pts(10), isShort = TRUE),
-    comorbid_ahrq.icd9(generate_random_pts(100), isShort = TRUE),
-    comorbid_ahrq.icd9(generate_random_pts(1000), isShort = TRUE),
+    comorbid_ahrq.icd9(generate_random_pts(1), short_code = TRUE),
+    comorbid_ahrq.icd9(generate_random_pts(10), short_code = TRUE),
+    comorbid_ahrq.icd9(generate_random_pts(100), short_code = TRUE),
+    comorbid_ahrq.icd9(generate_random_pts(1000), short_code = TRUE),
     # argh, we fall off a cliff between 1000 and 10000 and get much slower.
-    comorbid_ahrq.icd9(generate_random_pts(10000), isShort = TRUE),
-    comorbid_ahrq.icd9(generate_random_pts(100000), isShort = TRUE),
+    comorbid_ahrq.icd9(generate_random_pts(10000), short_code = TRUE),
+    comorbid_ahrq.icd9(generate_random_pts(100000), short_code = TRUE),
     times = 5
   )
 

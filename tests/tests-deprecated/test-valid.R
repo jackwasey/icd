@@ -386,8 +386,6 @@ test_that("filter valid - data frame input", {
   expect_true(is.icd_long_data(tfinvalid))
   # arg order irrelevant, but can be mixed up in S3 dispatch.
   expect_equal(icd9_filter_valid(pts_invalid_mix, short_code = FALSE, invert = TRUE), pts_invalid_mix)
-
-  # use invert and isShort args:
   expect_equal(icd9_filter_valid(pts_invalid_mix, short_code = TRUE, invert = TRUE), pts_invalid_mix[2, ])
   expect_equal(icd9_filter_valid(pts_invalid_mix, short_code = TRUE, invert = FALSE), pts_invalid_mix[c(1, 3), ])
 })

@@ -66,7 +66,7 @@ test_that("Charlson score", {
   expect_equivalent(icd_charlson(mydf,
                                  return_df = TRUE,
                                  stringsAsFactors = TRUE,
-                                 short_name = FALSE),
+                                 short_code = FALSE),
                     structure(list(visit_id = structure(1:3,
                                                        .Label = c("a", "b", "c"),
                                                        class = "factor"),
@@ -83,7 +83,7 @@ test_that("Charlson score", {
   expect_identical(icd_charlson(mydff,
                                 return_df = TRUE,
                                 stringsAsFactors = FALSE,
-                                short_name = FALSE),
+                                short_code = FALSE),
                    structure(list(visit_id = c("a", "b", "c"),
                                   Charlson = c(1, 1, 6)),
                              .Names = c("visit_id", "Charlson"),
@@ -94,7 +94,7 @@ test_that("Charlson score", {
   expect_identical(icd_charlson(mydff,
                                 return_df = TRUE,
                                 stringsAsFactors = TRUE,
-                                isShort = FALSE),
+                                short_code = FALSE),
                    structure(list(visit_id = factor(c("a", "b", "c")),
                                   Charlson = c(1, 1, 6)),
                              .Names = c("visit_id", "Charlson"),
@@ -107,7 +107,7 @@ test_that("Charlson score", {
   expect_equivalent(icd_charlson(mydfff,
                                  return_df = TRUE,
                                  stringsAsFactors = FALSE,
-                                 isShort = FALSE),
+                                 short_code = FALSE),
                     structure(list(v = c("a", "b", "c"),
                                    Charlson = c(1, 1, 6)),
                               .Names = c("v", "Charlson"),
@@ -268,7 +268,8 @@ test_that("icd_van_walraven comodbidity index and score", {
 
 test_that("github issue #64 - quan revised charleson scores", {
   mydf <- data.frame(visit_id = "a", icd9 = "250.0") %>% icd9
-  comorbids <- icd_comorbid_quan_deyo(mydf, isShort = FALSE, return_df = TRUE)
+  comorbids <-
+    icd_comorbid_quan_deyo(mydf, short_code = FALSE, return_df = TRUE)
 
   ## test against a known score for a single comorbidity
 
