@@ -15,11 +15,6 @@ r_packages:
 r_github_packages:
   - jimhester/lintr
 
-r:
-  - devel
-  - release
-  - oldrel
-
 cran: https://cloud.r-project.org
 
 warnings_are_errors: true
@@ -41,18 +36,28 @@ env:
     - _R_CHECK_CRAN_INCOMING_=FALSE
     - _R_CHECK_CRAN_INCOMING_REMOTE_=FALSE
     - _R_CHECK_FORCE_SUGGESTS_=FALSE
-    - LINTR_COMMENT_BOT=true
+    - LINTR_COMMENT_BOT=false
     - ICD_COVERAGE=false
     - OMP_NUM_THREADS=2
+    - ICD_TEST_DEPRECATED=true
+    - ICD_TEST_BUILD_DATA=true
+    - ICD_TEST_SLOW=true
 
 matrix:
   fast_finish: true
   include:
-  - env: LINTR_COMMENT_BOT=false ICD_COVERAGE=true ICD_TEST_DEPRECATED=true ICD_TEST_BUILD_DATA=true ICD_TEST_SLOW=true
-    r: release
-  allow_failures:
-  - env: LINTR_COMMENT_BOT=false ICD_COVERAGE=true ICD_TEST_DEPRECATED=true ICD_TEST_BUILD_DATA=true ICD_TEST_SLOW=true
+  - r: devel
+    env: LINTR_COMMENT_BOT=true
+  - r: release
   - r: oldrel
+  - r: release
+    r_check_args: --no-install -no-build-vignettes --no-vignettes --ignore-vignettes --no-codoc --no-manual
+    env: ICD_COVERAGE=true
+  allow_failures:
+  - r: oldrel
+  - r: release
+    r_check_args: --no-install -no-build-vignettes --no-vignettes --ignore-vignettes --no-codoc --no-manual
+    env: ICD_COVERAGE=true
 
 before_script:
  - rm .Rinstignore  # do install everything for testing
