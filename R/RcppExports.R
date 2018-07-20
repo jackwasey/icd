@@ -67,14 +67,6 @@ attr_short_diag <- function(x, value = TRUE) {
     invisible(.Call(`_icd_setShortDiag`, x, value))
 }
 
-getEmptyDataFrame <- function(visit_name, code_name) {
-    .Call(`_icd_getEmptyDataFrame`, visit_name, code_name)
-}
-
-returnEmptyFrame <- function(df, visit_name, code_name) {
-    .Call(`_icd_returnEmptyFrame`, df, visit_name, code_name)
-}
-
 #' @title Split data based on codes
 #' @description Using C++ because I also want to quickly return the visits
 #'   corresponding to the NA or non-NA factor elements. This is half-way to

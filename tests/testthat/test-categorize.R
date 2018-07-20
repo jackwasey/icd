@@ -82,11 +82,11 @@ test_that("different ID types are preserved w data frame return", {
                            empty_i, empty_n, empty_c, empty_f),
                       c("i", "n", "c", "f", "ei", "en", "ec", "ef")),
       function(x) eval(call(cat_fun, x,
-                          map = icd10_map_elix,
-                          id_name = "visit_id",
-                          code_name = "icd10",
-                          return_df = TRUE,
-                          preserve_id_type = TRUE)))
+                            map = icd10_map_elix,
+                            id_name = "visit_id",
+                            code_name = "icd10",
+                            return_df = TRUE,
+                            preserve_id_type = TRUE)))
     expect_equal(class(ress[["i"]][[1]]), "integer")
     expect_equal(class(ress[["n"]][[1]]), "numeric")
     expect_equal(class(ress[["c"]][[1]]), "character")
@@ -120,4 +120,13 @@ test_that("factor split basics", {
   expect_equal(dim(res_empty$comorbid_df), c(0, 2))
   expect_equal(res$unique_no_comorbid, "visit2")
   expect_setequal(res_empty$unique_no_comorbid, c("visit1", "visit2"))
+})
+
+test_that("factor split with no relevant codes", {
+  res <- factor_split_rcpp(random_icd10_pts, character(0), "visit_id", "icd10")
+  expect_equivalent(
+    res[["comorbid_df"]],
+    data.frame(visit_id = integer(0),
+               icd10 = factor(integer(0), levels = character(0)),
+               stringsAsFactors = FALSE))
 })

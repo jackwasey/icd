@@ -83,10 +83,6 @@ RcppExport SEXP _icd_icd9MajMinToCode(SEXP mjrSEXP, SEXP mnrSEXP, SEXP isShortSE
         UNPROTECT(1);
         Rf_onintr();
     }
-    bool rcpp_isLongjump_gen = Rcpp::internal::isLongjumpSentinel(rcpp_result_gen);
-    if (rcpp_isLongjump_gen) {
-        Rcpp::internal::resumeJump(rcpp_result_gen);
-    }
     Rboolean rcpp_isError_gen = Rf_inherits(rcpp_result_gen, "try-error");
     if (rcpp_isError_gen) {
         SEXP rcpp_msgSEXP_gen = Rf_asChar(rcpp_result_gen);
@@ -117,10 +113,6 @@ RcppExport SEXP _icd_icd9MajMinToShort(SEXP mjrSEXP, SEXP mnrSEXP) {
     if (rcpp_isInterrupt_gen) {
         UNPROTECT(1);
         Rf_onintr();
-    }
-    bool rcpp_isLongjump_gen = Rcpp::internal::isLongjumpSentinel(rcpp_result_gen);
-    if (rcpp_isLongjump_gen) {
-        Rcpp::internal::resumeJump(rcpp_result_gen);
     }
     Rboolean rcpp_isError_gen = Rf_inherits(rcpp_result_gen, "try-error");
     if (rcpp_isError_gen) {
@@ -153,10 +145,6 @@ RcppExport SEXP _icd_icd9MajMinToDecimal(SEXP mjrSEXP, SEXP mnrSEXP) {
         UNPROTECT(1);
         Rf_onintr();
     }
-    bool rcpp_isLongjump_gen = Rcpp::internal::isLongjumpSentinel(rcpp_result_gen);
-    if (rcpp_isLongjump_gen) {
-        Rcpp::internal::resumeJump(rcpp_result_gen);
-    }
     Rboolean rcpp_isError_gen = Rf_inherits(rcpp_result_gen, "try-error");
     if (rcpp_isError_gen) {
         SEXP rcpp_msgSEXP_gen = Rf_asChar(rcpp_result_gen);
@@ -188,10 +176,6 @@ RcppExport SEXP _icd_icd9AppendMinors(SEXP mSEXP, SEXP mnrSEXP, SEXP isShortSEXP
         UNPROTECT(1);
         Rf_onintr();
     }
-    bool rcpp_isLongjump_gen = Rcpp::internal::isLongjumpSentinel(rcpp_result_gen);
-    if (rcpp_isLongjump_gen) {
-        Rcpp::internal::resumeJump(rcpp_result_gen);
-    }
     Rboolean rcpp_isError_gen = Rf_inherits(rcpp_result_gen, "try-error");
     if (rcpp_isError_gen) {
         SEXP rcpp_msgSEXP_gen = Rf_asChar(rcpp_result_gen);
@@ -221,10 +205,6 @@ RcppExport SEXP _icd_setDecimalDiag(SEXP xSEXP, SEXP valueSEXP) {
     if (rcpp_isInterrupt_gen) {
         UNPROTECT(1);
         Rf_onintr();
-    }
-    bool rcpp_isLongjump_gen = Rcpp::internal::isLongjumpSentinel(rcpp_result_gen);
-    if (rcpp_isLongjump_gen) {
-        Rcpp::internal::resumeJump(rcpp_result_gen);
     }
     Rboolean rcpp_isError_gen = Rf_inherits(rcpp_result_gen, "try-error");
     if (rcpp_isError_gen) {
@@ -256,81 +236,6 @@ RcppExport SEXP _icd_setShortDiag(SEXP xSEXP, SEXP valueSEXP) {
         UNPROTECT(1);
         Rf_onintr();
     }
-    bool rcpp_isLongjump_gen = Rcpp::internal::isLongjumpSentinel(rcpp_result_gen);
-    if (rcpp_isLongjump_gen) {
-        Rcpp::internal::resumeJump(rcpp_result_gen);
-    }
-    Rboolean rcpp_isError_gen = Rf_inherits(rcpp_result_gen, "try-error");
-    if (rcpp_isError_gen) {
-        SEXP rcpp_msgSEXP_gen = Rf_asChar(rcpp_result_gen);
-        UNPROTECT(1);
-        Rf_error(CHAR(rcpp_msgSEXP_gen));
-    }
-    UNPROTECT(1);
-    return rcpp_result_gen;
-}
-// getEmptyDataFrame
-Rcpp::List getEmptyDataFrame(String visit_name, String code_name);
-static SEXP _icd_getEmptyDataFrame_try(SEXP visit_nameSEXP, SEXP code_nameSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::traits::input_parameter< String >::type visit_name(visit_nameSEXP);
-    Rcpp::traits::input_parameter< String >::type code_name(code_nameSEXP);
-    rcpp_result_gen = Rcpp::wrap(getEmptyDataFrame(visit_name, code_name));
-    return rcpp_result_gen;
-END_RCPP_RETURN_ERROR
-}
-RcppExport SEXP _icd_getEmptyDataFrame(SEXP visit_nameSEXP, SEXP code_nameSEXP) {
-    SEXP rcpp_result_gen;
-    {
-        Rcpp::RNGScope rcpp_rngScope_gen;
-        rcpp_result_gen = PROTECT(_icd_getEmptyDataFrame_try(visit_nameSEXP, code_nameSEXP));
-    }
-    Rboolean rcpp_isInterrupt_gen = Rf_inherits(rcpp_result_gen, "interrupted-error");
-    if (rcpp_isInterrupt_gen) {
-        UNPROTECT(1);
-        Rf_onintr();
-    }
-    bool rcpp_isLongjump_gen = Rcpp::internal::isLongjumpSentinel(rcpp_result_gen);
-    if (rcpp_isLongjump_gen) {
-        Rcpp::internal::resumeJump(rcpp_result_gen);
-    }
-    Rboolean rcpp_isError_gen = Rf_inherits(rcpp_result_gen, "try-error");
-    if (rcpp_isError_gen) {
-        SEXP rcpp_msgSEXP_gen = Rf_asChar(rcpp_result_gen);
-        UNPROTECT(1);
-        Rf_error(CHAR(rcpp_msgSEXP_gen));
-    }
-    UNPROTECT(1);
-    return rcpp_result_gen;
-}
-// returnEmptyFrame
-List returnEmptyFrame(DataFrame df, String visit_name, String code_name);
-static SEXP _icd_returnEmptyFrame_try(SEXP dfSEXP, SEXP visit_nameSEXP, SEXP code_nameSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::traits::input_parameter< DataFrame >::type df(dfSEXP);
-    Rcpp::traits::input_parameter< String >::type visit_name(visit_nameSEXP);
-    Rcpp::traits::input_parameter< String >::type code_name(code_nameSEXP);
-    rcpp_result_gen = Rcpp::wrap(returnEmptyFrame(df, visit_name, code_name));
-    return rcpp_result_gen;
-END_RCPP_RETURN_ERROR
-}
-RcppExport SEXP _icd_returnEmptyFrame(SEXP dfSEXP, SEXP visit_nameSEXP, SEXP code_nameSEXP) {
-    SEXP rcpp_result_gen;
-    {
-        Rcpp::RNGScope rcpp_rngScope_gen;
-        rcpp_result_gen = PROTECT(_icd_returnEmptyFrame_try(dfSEXP, visit_nameSEXP, code_nameSEXP));
-    }
-    Rboolean rcpp_isInterrupt_gen = Rf_inherits(rcpp_result_gen, "interrupted-error");
-    if (rcpp_isInterrupt_gen) {
-        UNPROTECT(1);
-        Rf_onintr();
-    }
-    bool rcpp_isLongjump_gen = Rcpp::internal::isLongjumpSentinel(rcpp_result_gen);
-    if (rcpp_isLongjump_gen) {
-        Rcpp::internal::resumeJump(rcpp_result_gen);
-    }
     Rboolean rcpp_isError_gen = Rf_inherits(rcpp_result_gen, "try-error");
     if (rcpp_isError_gen) {
         SEXP rcpp_msgSEXP_gen = Rf_asChar(rcpp_result_gen);
@@ -341,12 +246,12 @@ RcppExport SEXP _icd_returnEmptyFrame(SEXP dfSEXP, SEXP visit_nameSEXP, SEXP cod
     return rcpp_result_gen;
 }
 // factorSplit
-List factorSplit(const List& df, const CharacterVector& relevant, const String& id_name, const String& code_name);
+List factorSplit(const List& df, const Nullable<CharacterVector>& relevant, const String& id_name, const String& code_name);
 static SEXP _icd_factorSplit_try(SEXP dfSEXP, SEXP relevantSEXP, SEXP id_nameSEXP, SEXP code_nameSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::traits::input_parameter< const List& >::type df(dfSEXP);
-    Rcpp::traits::input_parameter< const CharacterVector& >::type relevant(relevantSEXP);
+    Rcpp::traits::input_parameter< const Nullable<CharacterVector>& >::type relevant(relevantSEXP);
     Rcpp::traits::input_parameter< const String& >::type id_name(id_nameSEXP);
     Rcpp::traits::input_parameter< const String& >::type code_name(code_nameSEXP);
     rcpp_result_gen = Rcpp::wrap(factorSplit(df, relevant, id_name, code_name));
@@ -363,10 +268,6 @@ RcppExport SEXP _icd_factorSplit(SEXP dfSEXP, SEXP relevantSEXP, SEXP id_nameSEX
     if (rcpp_isInterrupt_gen) {
         UNPROTECT(1);
         Rf_onintr();
-    }
-    bool rcpp_isLongjump_gen = Rcpp::internal::isLongjumpSentinel(rcpp_result_gen);
-    if (rcpp_isLongjump_gen) {
-        Rcpp::internal::resumeJump(rcpp_result_gen);
     }
     Rboolean rcpp_isError_gen = Rf_inherits(rcpp_result_gen, "try-error");
     if (rcpp_isError_gen) {
@@ -396,10 +297,6 @@ RcppExport SEXP _icd_categorize_rcpp() {
     if (rcpp_isInterrupt_gen) {
         UNPROTECT(1);
         Rf_onintr();
-    }
-    bool rcpp_isLongjump_gen = Rcpp::internal::isLongjumpSentinel(rcpp_result_gen);
-    if (rcpp_isLongjump_gen) {
-        Rcpp::internal::resumeJump(rcpp_result_gen);
     }
     Rboolean rcpp_isError_gen = Rf_inherits(rcpp_result_gen, "try-error");
     if (rcpp_isError_gen) {
@@ -450,10 +347,6 @@ RcppExport SEXP _icd_icd9ComorbidShortCpp(SEXP icd9dfSEXP, SEXP icd9MappingSEXP,
         UNPROTECT(1);
         Rf_onintr();
     }
-    bool rcpp_isLongjump_gen = Rcpp::internal::isLongjumpSentinel(rcpp_result_gen);
-    if (rcpp_isLongjump_gen) {
-        Rcpp::internal::resumeJump(rcpp_result_gen);
-    }
     Rboolean rcpp_isError_gen = Rf_inherits(rcpp_result_gen, "try-error");
     if (rcpp_isError_gen) {
         SEXP rcpp_msgSEXP_gen = Rf_asChar(rcpp_result_gen);
@@ -486,10 +379,6 @@ RcppExport SEXP _icd_lookupComorbidByChunkFor(SEXP vcdbSEXP, SEXP mapSEXP, SEXP 
     if (rcpp_isInterrupt_gen) {
         UNPROTECT(1);
         Rf_onintr();
-    }
-    bool rcpp_isLongjump_gen = Rcpp::internal::isLongjumpSentinel(rcpp_result_gen);
-    if (rcpp_isLongjump_gen) {
-        Rcpp::internal::resumeJump(rcpp_result_gen);
     }
     Rboolean rcpp_isError_gen = Rf_inherits(rcpp_result_gen, "try-error");
     if (rcpp_isError_gen) {
@@ -524,10 +413,6 @@ RcppExport SEXP _icd_icd10ComorbidParentSearchCpp(SEXP xSEXP, SEXP mapSEXP, SEXP
         UNPROTECT(1);
         Rf_onintr();
     }
-    bool rcpp_isLongjump_gen = Rcpp::internal::isLongjumpSentinel(rcpp_result_gen);
-    if (rcpp_isLongjump_gen) {
-        Rcpp::internal::resumeJump(rcpp_result_gen);
-    }
     Rboolean rcpp_isError_gen = Rf_inherits(rcpp_result_gen, "try-error");
     if (rcpp_isError_gen) {
         SEXP rcpp_msgSEXP_gen = Rf_asChar(rcpp_result_gen);
@@ -558,10 +443,6 @@ RcppExport SEXP _icd_simplifyMapLexicographic(SEXP pt_codesSEXP, SEXP mapSEXP) {
     if (rcpp_isInterrupt_gen) {
         UNPROTECT(1);
         Rf_onintr();
-    }
-    bool rcpp_isLongjump_gen = Rcpp::internal::isLongjumpSentinel(rcpp_result_gen);
-    if (rcpp_isLongjump_gen) {
-        Rcpp::internal::resumeJump(rcpp_result_gen);
     }
     Rboolean rcpp_isError_gen = Rf_inherits(rcpp_result_gen, "try-error");
     if (rcpp_isError_gen) {
@@ -595,10 +476,6 @@ RcppExport SEXP _icd_comorbidMatMulSimple(SEXP icd9dfSEXP, SEXP icd9MappingSEXP,
     if (rcpp_isInterrupt_gen) {
         UNPROTECT(1);
         Rf_onintr();
-    }
-    bool rcpp_isLongjump_gen = Rcpp::internal::isLongjumpSentinel(rcpp_result_gen);
-    if (rcpp_isLongjump_gen) {
-        Rcpp::internal::resumeJump(rcpp_result_gen);
     }
     Rboolean rcpp_isError_gen = Rf_inherits(rcpp_result_gen, "try-error");
     if (rcpp_isError_gen) {
@@ -635,10 +512,6 @@ RcppExport SEXP _icd_comorbidMatMul(SEXP icd9dfSEXP, SEXP icd9MappingSEXP, SEXP 
     if (rcpp_isInterrupt_gen) {
         UNPROTECT(1);
         Rf_onintr();
-    }
-    bool rcpp_isLongjump_gen = Rcpp::internal::isLongjumpSentinel(rcpp_result_gen);
-    if (rcpp_isLongjump_gen) {
-        Rcpp::internal::resumeJump(rcpp_result_gen);
     }
     Rboolean rcpp_isError_gen = Rf_inherits(rcpp_result_gen, "try-error");
     if (rcpp_isError_gen) {
@@ -683,10 +556,6 @@ RcppExport SEXP _icd_icd9PartsToShort(SEXP partsSEXP) {
         UNPROTECT(1);
         Rf_onintr();
     }
-    bool rcpp_isLongjump_gen = Rcpp::internal::isLongjumpSentinel(rcpp_result_gen);
-    if (rcpp_isLongjump_gen) {
-        Rcpp::internal::resumeJump(rcpp_result_gen);
-    }
     Rboolean rcpp_isError_gen = Rf_inherits(rcpp_result_gen, "try-error");
     if (rcpp_isError_gen) {
         SEXP rcpp_msgSEXP_gen = Rf_asChar(rcpp_result_gen);
@@ -716,10 +585,6 @@ RcppExport SEXP _icd_icd9PartsToDecimal(SEXP partsSEXP) {
     if (rcpp_isInterrupt_gen) {
         UNPROTECT(1);
         Rf_onintr();
-    }
-    bool rcpp_isLongjump_gen = Rcpp::internal::isLongjumpSentinel(rcpp_result_gen);
-    if (rcpp_isLongjump_gen) {
-        Rcpp::internal::resumeJump(rcpp_result_gen);
     }
     Rboolean rcpp_isError_gen = Rf_inherits(rcpp_result_gen, "try-error");
     if (rcpp_isError_gen) {
@@ -752,10 +617,6 @@ RcppExport SEXP _icd_icd9MajMinToParts(SEXP mjrSEXP, SEXP mnrSEXP) {
         UNPROTECT(1);
         Rf_onintr();
     }
-    bool rcpp_isLongjump_gen = Rcpp::internal::isLongjumpSentinel(rcpp_result_gen);
-    if (rcpp_isLongjump_gen) {
-        Rcpp::internal::resumeJump(rcpp_result_gen);
-    }
     Rboolean rcpp_isError_gen = Rf_inherits(rcpp_result_gen, "try-error");
     if (rcpp_isError_gen) {
         SEXP rcpp_msgSEXP_gen = Rf_asChar(rcpp_result_gen);
@@ -786,10 +647,6 @@ RcppExport SEXP _icd_icd9ShortToPartsCpp(SEXP icd9ShortSEXP, SEXP mnrEmptySEXP) 
     if (rcpp_isInterrupt_gen) {
         UNPROTECT(1);
         Rf_onintr();
-    }
-    bool rcpp_isLongjump_gen = Rcpp::internal::isLongjumpSentinel(rcpp_result_gen);
-    if (rcpp_isLongjump_gen) {
-        Rcpp::internal::resumeJump(rcpp_result_gen);
     }
     Rboolean rcpp_isError_gen = Rf_inherits(rcpp_result_gen, "try-error");
     if (rcpp_isError_gen) {
@@ -822,10 +679,6 @@ RcppExport SEXP _icd_icd10ShortToPartsCpp(SEXP xSEXP, SEXP mnr_emptySEXP) {
         UNPROTECT(1);
         Rf_onintr();
     }
-    bool rcpp_isLongjump_gen = Rcpp::internal::isLongjumpSentinel(rcpp_result_gen);
-    if (rcpp_isLongjump_gen) {
-        Rcpp::internal::resumeJump(rcpp_result_gen);
-    }
     Rboolean rcpp_isError_gen = Rf_inherits(rcpp_result_gen, "try-error");
     if (rcpp_isError_gen) {
         SEXP rcpp_msgSEXP_gen = Rf_asChar(rcpp_result_gen);
@@ -856,10 +709,6 @@ RcppExport SEXP _icd_icd9DecimalToPartsCpp(SEXP icd9DecimalSEXP, SEXP mnr_emptyS
     if (rcpp_isInterrupt_gen) {
         UNPROTECT(1);
         Rf_onintr();
-    }
-    bool rcpp_isLongjump_gen = Rcpp::internal::isLongjumpSentinel(rcpp_result_gen);
-    if (rcpp_isLongjump_gen) {
-        Rcpp::internal::resumeJump(rcpp_result_gen);
     }
     Rboolean rcpp_isError_gen = Rf_inherits(rcpp_result_gen, "try-error");
     if (rcpp_isError_gen) {
@@ -892,10 +741,6 @@ RcppExport SEXP _icd_icd10DecimalToPartsCpp(SEXP xSEXP, SEXP mnr_emptySEXP) {
         UNPROTECT(1);
         Rf_onintr();
     }
-    bool rcpp_isLongjump_gen = Rcpp::internal::isLongjumpSentinel(rcpp_result_gen);
-    if (rcpp_isLongjump_gen) {
-        Rcpp::internal::resumeJump(rcpp_result_gen);
-    }
     Rboolean rcpp_isError_gen = Rf_inherits(rcpp_result_gen, "try-error");
     if (rcpp_isError_gen) {
         SEXP rcpp_msgSEXP_gen = Rf_asChar(rcpp_result_gen);
@@ -925,10 +770,6 @@ RcppExport SEXP _icd_icd9ShortToDecimal(SEXP xSEXP) {
     if (rcpp_isInterrupt_gen) {
         UNPROTECT(1);
         Rf_onintr();
-    }
-    bool rcpp_isLongjump_gen = Rcpp::internal::isLongjumpSentinel(rcpp_result_gen);
-    if (rcpp_isLongjump_gen) {
-        Rcpp::internal::resumeJump(rcpp_result_gen);
     }
     Rboolean rcpp_isError_gen = Rf_inherits(rcpp_result_gen, "try-error");
     if (rcpp_isError_gen) {
@@ -960,10 +801,6 @@ RcppExport SEXP _icd_icd9DecimalToShort(SEXP xSEXP) {
         UNPROTECT(1);
         Rf_onintr();
     }
-    bool rcpp_isLongjump_gen = Rcpp::internal::isLongjumpSentinel(rcpp_result_gen);
-    if (rcpp_isLongjump_gen) {
-        Rcpp::internal::resumeJump(rcpp_result_gen);
-    }
     Rboolean rcpp_isError_gen = Rf_inherits(rcpp_result_gen, "try-error");
     if (rcpp_isError_gen) {
         SEXP rcpp_msgSEXP_gen = Rf_asChar(rcpp_result_gen);
@@ -994,10 +831,6 @@ RcppExport SEXP _icd_icd9GetMajor(SEXP xSEXP, SEXP short_codeSEXP) {
     if (rcpp_isInterrupt_gen) {
         UNPROTECT(1);
         Rf_onintr();
-    }
-    bool rcpp_isLongjump_gen = Rcpp::internal::isLongjumpSentinel(rcpp_result_gen);
-    if (rcpp_isLongjump_gen) {
-        Rcpp::internal::resumeJump(rcpp_result_gen);
     }
     Rboolean rcpp_isError_gen = Rf_inherits(rcpp_result_gen, "try-error");
     if (rcpp_isError_gen) {
@@ -1040,10 +873,6 @@ RcppExport SEXP _icd_fastIntToStringRcpp(SEXP xSEXP) {
         UNPROTECT(1);
         Rf_onintr();
     }
-    bool rcpp_isLongjump_gen = Rcpp::internal::isLongjumpSentinel(rcpp_result_gen);
-    if (rcpp_isLongjump_gen) {
-        Rcpp::internal::resumeJump(rcpp_result_gen);
-    }
     Rboolean rcpp_isError_gen = Rf_inherits(rcpp_result_gen, "try-error");
     if (rcpp_isError_gen) {
         SEXP rcpp_msgSEXP_gen = Rf_asChar(rcpp_result_gen);
@@ -1077,10 +906,6 @@ RcppExport SEXP _icd_guessShortCompleteCpp(SEXP x_SEXP, SEXP short_codeSEXP, SEX
         UNPROTECT(1);
         Rf_onintr();
     }
-    bool rcpp_isLongjump_gen = Rcpp::internal::isLongjumpSentinel(rcpp_result_gen);
-    if (rcpp_isLongjump_gen) {
-        Rcpp::internal::resumeJump(rcpp_result_gen);
-    }
     Rboolean rcpp_isError_gen = Rf_inherits(rcpp_result_gen, "try-error");
     if (rcpp_isError_gen) {
         SEXP rcpp_msgSEXP_gen = Rf_asChar(rcpp_result_gen);
@@ -1112,10 +937,6 @@ RcppExport SEXP _icd_guessShortPlusFactorCpp(SEXP x_SEXP, SEXP nSEXP) {
         UNPROTECT(1);
         Rf_onintr();
     }
-    bool rcpp_isLongjump_gen = Rcpp::internal::isLongjumpSentinel(rcpp_result_gen);
-    if (rcpp_isLongjump_gen) {
-        Rcpp::internal::resumeJump(rcpp_result_gen);
-    }
     Rboolean rcpp_isError_gen = Rf_inherits(rcpp_result_gen, "try-error");
     if (rcpp_isError_gen) {
         SEXP rcpp_msgSEXP_gen = Rf_asChar(rcpp_result_gen);
@@ -1145,10 +966,6 @@ RcppExport SEXP _icd_icd9_is_n_cpp(SEXP svSEXP) {
     if (rcpp_isInterrupt_gen) {
         UNPROTECT(1);
         Rf_onintr();
-    }
-    bool rcpp_isLongjump_gen = Rcpp::internal::isLongjumpSentinel(rcpp_result_gen);
-    if (rcpp_isLongjump_gen) {
-        Rcpp::internal::resumeJump(rcpp_result_gen);
     }
     Rboolean rcpp_isError_gen = Rf_inherits(rcpp_result_gen, "try-error");
     if (rcpp_isError_gen) {
@@ -1180,10 +997,6 @@ RcppExport SEXP _icd_icd9_is_v_cpp(SEXP svSEXP) {
         UNPROTECT(1);
         Rf_onintr();
     }
-    bool rcpp_isLongjump_gen = Rcpp::internal::isLongjumpSentinel(rcpp_result_gen);
-    if (rcpp_isLongjump_gen) {
-        Rcpp::internal::resumeJump(rcpp_result_gen);
-    }
     Rboolean rcpp_isError_gen = Rf_inherits(rcpp_result_gen, "try-error");
     if (rcpp_isError_gen) {
         SEXP rcpp_msgSEXP_gen = Rf_asChar(rcpp_result_gen);
@@ -1213,10 +1026,6 @@ RcppExport SEXP _icd_icd9_is_e_cpp(SEXP svSEXP) {
     if (rcpp_isInterrupt_gen) {
         UNPROTECT(1);
         Rf_onintr();
-    }
-    bool rcpp_isLongjump_gen = Rcpp::internal::isLongjumpSentinel(rcpp_result_gen);
-    if (rcpp_isLongjump_gen) {
-        Rcpp::internal::resumeJump(rcpp_result_gen);
     }
     Rboolean rcpp_isError_gen = Rf_inherits(rcpp_result_gen, "try-error");
     if (rcpp_isError_gen) {
@@ -1250,10 +1059,6 @@ RcppExport SEXP _icd_icd9LongToWideCpp(SEXP icd9dfSEXP, SEXP visitIdSEXP, SEXP i
     if (rcpp_isInterrupt_gen) {
         UNPROTECT(1);
         Rf_onintr();
-    }
-    bool rcpp_isLongjump_gen = Rcpp::internal::isLongjumpSentinel(rcpp_result_gen);
-    if (rcpp_isLongjump_gen) {
-        Rcpp::internal::resumeJump(rcpp_result_gen);
     }
     Rboolean rcpp_isError_gen = Rf_inherits(rcpp_result_gen, "try-error");
     if (rcpp_isError_gen) {
@@ -1308,10 +1113,6 @@ RcppExport SEXP _icd_icd9AddLeadingZeroesMajorSingle(SEXP mjrSEXP) {
         UNPROTECT(1);
         Rf_onintr();
     }
-    bool rcpp_isLongjump_gen = Rcpp::internal::isLongjumpSentinel(rcpp_result_gen);
-    if (rcpp_isLongjump_gen) {
-        Rcpp::internal::resumeJump(rcpp_result_gen);
-    }
     Rboolean rcpp_isError_gen = Rf_inherits(rcpp_result_gen, "try-error");
     if (rcpp_isError_gen) {
         SEXP rcpp_msgSEXP_gen = Rf_asChar(rcpp_result_gen);
@@ -1342,10 +1143,6 @@ RcppExport SEXP _icd_icd9AddLeadingZeroesMajorSingleStd(SEXP mSEXP) {
         UNPROTECT(1);
         Rf_onintr();
     }
-    bool rcpp_isLongjump_gen = Rcpp::internal::isLongjumpSentinel(rcpp_result_gen);
-    if (rcpp_isLongjump_gen) {
-        Rcpp::internal::resumeJump(rcpp_result_gen);
-    }
     Rboolean rcpp_isError_gen = Rf_inherits(rcpp_result_gen, "try-error");
     if (rcpp_isError_gen) {
         SEXP rcpp_msgSEXP_gen = Rf_asChar(rcpp_result_gen);
@@ -1375,10 +1172,6 @@ RcppExport SEXP _icd_icd9AddLeadingZeroesMajor(SEXP mjrSEXP) {
     if (rcpp_isInterrupt_gen) {
         UNPROTECT(1);
         Rf_onintr();
-    }
-    bool rcpp_isLongjump_gen = Rcpp::internal::isLongjumpSentinel(rcpp_result_gen);
-    if (rcpp_isLongjump_gen) {
-        Rcpp::internal::resumeJump(rcpp_result_gen);
     }
     Rboolean rcpp_isError_gen = Rf_inherits(rcpp_result_gen, "try-error");
     if (rcpp_isError_gen) {
@@ -1411,10 +1204,6 @@ RcppExport SEXP _icd_icd9AddLeadingZeroes(SEXP xSEXP, SEXP short_codeSEXP) {
         UNPROTECT(1);
         Rf_onintr();
     }
-    bool rcpp_isLongjump_gen = Rcpp::internal::isLongjumpSentinel(rcpp_result_gen);
-    if (rcpp_isLongjump_gen) {
-        Rcpp::internal::resumeJump(rcpp_result_gen);
-    }
     Rboolean rcpp_isError_gen = Rf_inherits(rcpp_result_gen, "try-error");
     if (rcpp_isError_gen) {
         SEXP rcpp_msgSEXP_gen = Rf_asChar(rcpp_result_gen);
@@ -1444,10 +1233,6 @@ RcppExport SEXP _icd_randomMajorCpp(SEXP nSEXP) {
     if (rcpp_isInterrupt_gen) {
         UNPROTECT(1);
         Rf_onintr();
-    }
-    bool rcpp_isLongjump_gen = Rcpp::internal::isLongjumpSentinel(rcpp_result_gen);
-    if (rcpp_isLongjump_gen) {
-        Rcpp::internal::resumeJump(rcpp_result_gen);
     }
     Rboolean rcpp_isError_gen = Rf_inherits(rcpp_result_gen, "try-error");
     if (rcpp_isError_gen) {
@@ -1479,10 +1264,6 @@ RcppExport SEXP _icd_icd9RandomShortN(SEXP nSEXP) {
         UNPROTECT(1);
         Rf_onintr();
     }
-    bool rcpp_isLongjump_gen = Rcpp::internal::isLongjumpSentinel(rcpp_result_gen);
-    if (rcpp_isLongjump_gen) {
-        Rcpp::internal::resumeJump(rcpp_result_gen);
-    }
     Rboolean rcpp_isError_gen = Rf_inherits(rcpp_result_gen, "try-error");
     if (rcpp_isError_gen) {
         SEXP rcpp_msgSEXP_gen = Rf_asChar(rcpp_result_gen);
@@ -1512,10 +1293,6 @@ RcppExport SEXP _icd_icd9RandomShortV(SEXP nSEXP) {
     if (rcpp_isInterrupt_gen) {
         UNPROTECT(1);
         Rf_onintr();
-    }
-    bool rcpp_isLongjump_gen = Rcpp::internal::isLongjumpSentinel(rcpp_result_gen);
-    if (rcpp_isLongjump_gen) {
-        Rcpp::internal::resumeJump(rcpp_result_gen);
     }
     Rboolean rcpp_isError_gen = Rf_inherits(rcpp_result_gen, "try-error");
     if (rcpp_isError_gen) {
@@ -1547,10 +1324,6 @@ RcppExport SEXP _icd_icd9RandomShortE(SEXP nSEXP) {
         UNPROTECT(1);
         Rf_onintr();
     }
-    bool rcpp_isLongjump_gen = Rcpp::internal::isLongjumpSentinel(rcpp_result_gen);
-    if (rcpp_isLongjump_gen) {
-        Rcpp::internal::resumeJump(rcpp_result_gen);
-    }
     Rboolean rcpp_isError_gen = Rf_inherits(rcpp_result_gen, "try-error");
     if (rcpp_isError_gen) {
         SEXP rcpp_msgSEXP_gen = Rf_asChar(rcpp_result_gen);
@@ -1580,10 +1353,6 @@ RcppExport SEXP _icd_icd9RandomShort(SEXP nSEXP) {
     if (rcpp_isInterrupt_gen) {
         UNPROTECT(1);
         Rf_onintr();
-    }
-    bool rcpp_isLongjump_gen = Rcpp::internal::isLongjumpSentinel(rcpp_result_gen);
-    if (rcpp_isLongjump_gen) {
-        Rcpp::internal::resumeJump(rcpp_result_gen);
     }
     Rboolean rcpp_isError_gen = Rf_inherits(rcpp_result_gen, "try-error");
     if (rcpp_isError_gen) {
@@ -1664,10 +1433,6 @@ RcppExport SEXP _icd_icd9ExpandMinor(SEXP mnrSEXP, SEXP isESEXP) {
         UNPROTECT(1);
         Rf_onintr();
     }
-    bool rcpp_isLongjump_gen = Rcpp::internal::isLongjumpSentinel(rcpp_result_gen);
-    if (rcpp_isLongjump_gen) {
-        Rcpp::internal::resumeJump(rcpp_result_gen);
-    }
     Rboolean rcpp_isError_gen = Rf_inherits(rcpp_result_gen, "try-error");
     if (rcpp_isError_gen) {
         SEXP rcpp_msgSEXP_gen = Rf_asChar(rcpp_result_gen);
@@ -1699,10 +1464,6 @@ RcppExport SEXP _icd_icd9ChildrenShort(SEXP icd9ShortSEXP, SEXP icd9cmRealSEXP, 
     if (rcpp_isInterrupt_gen) {
         UNPROTECT(1);
         Rf_onintr();
-    }
-    bool rcpp_isLongjump_gen = Rcpp::internal::isLongjumpSentinel(rcpp_result_gen);
-    if (rcpp_isLongjump_gen) {
-        Rcpp::internal::resumeJump(rcpp_result_gen);
     }
     Rboolean rcpp_isError_gen = Rf_inherits(rcpp_result_gen, "try-error");
     if (rcpp_isError_gen) {
@@ -1736,10 +1497,6 @@ RcppExport SEXP _icd_icd9ChildrenShortUnordered(SEXP icd9ShortSEXP, SEXP icd9cmR
         UNPROTECT(1);
         Rf_onintr();
     }
-    bool rcpp_isLongjump_gen = Rcpp::internal::isLongjumpSentinel(rcpp_result_gen);
-    if (rcpp_isLongjump_gen) {
-        Rcpp::internal::resumeJump(rcpp_result_gen);
-    }
     Rboolean rcpp_isError_gen = Rf_inherits(rcpp_result_gen, "try-error");
     if (rcpp_isError_gen) {
         SEXP rcpp_msgSEXP_gen = Rf_asChar(rcpp_result_gen);
@@ -1771,10 +1528,6 @@ RcppExport SEXP _icd_icd9ChildrenDecimalCpp(SEXP icd9DecimalSEXP, SEXP icd9cmRea
     if (rcpp_isInterrupt_gen) {
         UNPROTECT(1);
         Rf_onintr();
-    }
-    bool rcpp_isLongjump_gen = Rcpp::internal::isLongjumpSentinel(rcpp_result_gen);
-    if (rcpp_isLongjump_gen) {
-        Rcpp::internal::resumeJump(rcpp_result_gen);
     }
     Rboolean rcpp_isError_gen = Rf_inherits(rcpp_result_gen, "try-error");
     if (rcpp_isError_gen) {
@@ -1809,10 +1562,6 @@ RcppExport SEXP _icd_icd9ChildrenCpp(SEXP icd9SEXP, SEXP isShortSEXP, SEXP icd9c
         UNPROTECT(1);
         Rf_onintr();
     }
-    bool rcpp_isLongjump_gen = Rcpp::internal::isLongjumpSentinel(rcpp_result_gen);
-    if (rcpp_isLongjump_gen) {
-        Rcpp::internal::resumeJump(rcpp_result_gen);
-    }
     Rboolean rcpp_isError_gen = Rf_inherits(rcpp_result_gen, "try-error");
     if (rcpp_isError_gen) {
         SEXP rcpp_msgSEXP_gen = Rf_asChar(rcpp_result_gen);
@@ -1842,10 +1591,6 @@ RcppExport SEXP _icd_trimLeftCpp(SEXP sSEXP) {
     if (rcpp_isInterrupt_gen) {
         UNPROTECT(1);
         Rf_onintr();
-    }
-    bool rcpp_isLongjump_gen = Rcpp::internal::isLongjumpSentinel(rcpp_result_gen);
-    if (rcpp_isLongjump_gen) {
-        Rcpp::internal::resumeJump(rcpp_result_gen);
     }
     Rboolean rcpp_isError_gen = Rf_inherits(rcpp_result_gen, "try-error");
     if (rcpp_isError_gen) {
@@ -1877,10 +1622,6 @@ RcppExport SEXP _icd_strimCpp(SEXP sSEXP) {
         UNPROTECT(1);
         Rf_onintr();
     }
-    bool rcpp_isLongjump_gen = Rcpp::internal::isLongjumpSentinel(rcpp_result_gen);
-    if (rcpp_isLongjump_gen) {
-        Rcpp::internal::resumeJump(rcpp_result_gen);
-    }
     Rboolean rcpp_isError_gen = Rf_inherits(rcpp_result_gen, "try-error");
     if (rcpp_isError_gen) {
         SEXP rcpp_msgSEXP_gen = Rf_asChar(rcpp_result_gen);
@@ -1911,10 +1652,6 @@ RcppExport SEXP _icd_trimCpp(SEXP svSEXP) {
         UNPROTECT(1);
         Rf_onintr();
     }
-    bool rcpp_isLongjump_gen = Rcpp::internal::isLongjumpSentinel(rcpp_result_gen);
-    if (rcpp_isLongjump_gen) {
-        Rcpp::internal::resumeJump(rcpp_result_gen);
-    }
     Rboolean rcpp_isError_gen = Rf_inherits(rcpp_result_gen, "try-error");
     if (rcpp_isError_gen) {
         SEXP rcpp_msgSEXP_gen = Rf_asChar(rcpp_result_gen);
@@ -1943,10 +1680,6 @@ RcppExport SEXP _icd_getOmpCores() {
     if (rcpp_isInterrupt_gen) {
         UNPROTECT(1);
         Rf_onintr();
-    }
-    bool rcpp_isLongjump_gen = Rcpp::internal::isLongjumpSentinel(rcpp_result_gen);
-    if (rcpp_isLongjump_gen) {
-        Rcpp::internal::resumeJump(rcpp_result_gen);
     }
     Rboolean rcpp_isError_gen = Rf_inherits(rcpp_result_gen, "try-error");
     if (rcpp_isError_gen) {
@@ -1977,10 +1710,6 @@ RcppExport SEXP _icd_getOmpMaxThreads() {
         UNPROTECT(1);
         Rf_onintr();
     }
-    bool rcpp_isLongjump_gen = Rcpp::internal::isLongjumpSentinel(rcpp_result_gen);
-    if (rcpp_isLongjump_gen) {
-        Rcpp::internal::resumeJump(rcpp_result_gen);
-    }
     Rboolean rcpp_isError_gen = Rf_inherits(rcpp_result_gen, "try-error");
     if (rcpp_isError_gen) {
         SEXP rcpp_msgSEXP_gen = Rf_asChar(rcpp_result_gen);
@@ -2010,10 +1739,6 @@ RcppExport SEXP _icd_getOmpThreads() {
         UNPROTECT(1);
         Rf_onintr();
     }
-    bool rcpp_isLongjump_gen = Rcpp::internal::isLongjumpSentinel(rcpp_result_gen);
-    if (rcpp_isLongjump_gen) {
-        Rcpp::internal::resumeJump(rcpp_result_gen);
-    }
     Rboolean rcpp_isError_gen = Rf_inherits(rcpp_result_gen, "try-error");
     if (rcpp_isError_gen) {
         SEXP rcpp_msgSEXP_gen = Rf_asChar(rcpp_result_gen);
@@ -2042,10 +1767,6 @@ RcppExport SEXP _icd_debug_parallel_env() {
         UNPROTECT(1);
         Rf_onintr();
     }
-    bool rcpp_isLongjump_gen = Rcpp::internal::isLongjumpSentinel(rcpp_result_gen);
-    if (rcpp_isLongjump_gen) {
-        Rcpp::internal::resumeJump(rcpp_result_gen);
-    }
     Rboolean rcpp_isError_gen = Rf_inherits(rcpp_result_gen, "try-error");
     if (rcpp_isError_gen) {
         SEXP rcpp_msgSEXP_gen = Rf_asChar(rcpp_result_gen);
@@ -2073,10 +1794,6 @@ RcppExport SEXP _icd_debug_parallel() {
     if (rcpp_isInterrupt_gen) {
         UNPROTECT(1);
         Rf_onintr();
-    }
-    bool rcpp_isLongjump_gen = Rcpp::internal::isLongjumpSentinel(rcpp_result_gen);
-    if (rcpp_isLongjump_gen) {
-        Rcpp::internal::resumeJump(rcpp_result_gen);
     }
     Rboolean rcpp_isError_gen = Rf_inherits(rcpp_result_gen, "try-error");
     if (rcpp_isError_gen) {
@@ -2108,10 +1825,6 @@ RcppExport SEXP _icd_valgrindCallgrindStart(SEXP zerostatsSEXP) {
         UNPROTECT(1);
         Rf_onintr();
     }
-    bool rcpp_isLongjump_gen = Rcpp::internal::isLongjumpSentinel(rcpp_result_gen);
-    if (rcpp_isLongjump_gen) {
-        Rcpp::internal::resumeJump(rcpp_result_gen);
-    }
     Rboolean rcpp_isError_gen = Rf_inherits(rcpp_result_gen, "try-error");
     if (rcpp_isError_gen) {
         SEXP rcpp_msgSEXP_gen = Rf_asChar(rcpp_result_gen);
@@ -2140,10 +1853,6 @@ RcppExport SEXP _icd_valgrindCallgrindStop() {
     if (rcpp_isInterrupt_gen) {
         UNPROTECT(1);
         Rf_onintr();
-    }
-    bool rcpp_isLongjump_gen = Rcpp::internal::isLongjumpSentinel(rcpp_result_gen);
-    if (rcpp_isLongjump_gen) {
-        Rcpp::internal::resumeJump(rcpp_result_gen);
     }
     Rboolean rcpp_isError_gen = Rf_inherits(rcpp_result_gen, "try-error");
     if (rcpp_isError_gen) {
@@ -2175,10 +1884,6 @@ RcppExport SEXP _icd_icd9SortCpp(SEXP xSEXP) {
         UNPROTECT(1);
         Rf_onintr();
     }
-    bool rcpp_isLongjump_gen = Rcpp::internal::isLongjumpSentinel(rcpp_result_gen);
-    if (rcpp_isLongjump_gen) {
-        Rcpp::internal::resumeJump(rcpp_result_gen);
-    }
     Rboolean rcpp_isError_gen = Rf_inherits(rcpp_result_gen, "try-error");
     if (rcpp_isError_gen) {
         SEXP rcpp_msgSEXP_gen = Rf_asChar(rcpp_result_gen);
@@ -2208,10 +1913,6 @@ RcppExport SEXP _icd_icd9OrderCpp(SEXP xSEXP) {
     if (rcpp_isInterrupt_gen) {
         UNPROTECT(1);
         Rf_onintr();
-    }
-    bool rcpp_isLongjump_gen = Rcpp::internal::isLongjumpSentinel(rcpp_result_gen);
-    if (rcpp_isLongjump_gen) {
-        Rcpp::internal::resumeJump(rcpp_result_gen);
     }
     Rboolean rcpp_isError_gen = Rf_inherits(rcpp_result_gen, "try-error");
     if (rcpp_isError_gen) {
@@ -2245,10 +1946,6 @@ RcppExport SEXP _icd_factorNoSort(SEXP xSEXP, SEXP levelsSEXP, SEXP na_rmSEXP) {
         UNPROTECT(1);
         Rf_onintr();
     }
-    bool rcpp_isLongjump_gen = Rcpp::internal::isLongjumpSentinel(rcpp_result_gen);
-    if (rcpp_isLongjump_gen) {
-        Rcpp::internal::resumeJump(rcpp_result_gen);
-    }
     Rboolean rcpp_isError_gen = Rf_inherits(rcpp_result_gen, "try-error");
     if (rcpp_isError_gen) {
         SEXP rcpp_msgSEXP_gen = Rf_asChar(rcpp_result_gen);
@@ -2281,10 +1978,6 @@ RcppExport SEXP _icd_refactor(SEXP xSEXP, SEXP new_levelsSEXP, SEXP exclude_naSE
         UNPROTECT(1);
         Rf_onintr();
     }
-    bool rcpp_isLongjump_gen = Rcpp::internal::isLongjumpSentinel(rcpp_result_gen);
-    if (rcpp_isLongjump_gen) {
-        Rcpp::internal::resumeJump(rcpp_result_gen);
-    }
     Rboolean rcpp_isError_gen = Rf_inherits(rcpp_result_gen, "try-error");
     if (rcpp_isError_gen) {
         SEXP rcpp_msgSEXP_gen = Rf_asChar(rcpp_result_gen);
@@ -2315,10 +2008,6 @@ RcppExport SEXP _icd_refactor_narm(SEXP xSEXP, SEXP new_levelsSEXP) {
     if (rcpp_isInterrupt_gen) {
         UNPROTECT(1);
         Rf_onintr();
-    }
-    bool rcpp_isLongjump_gen = Rcpp::internal::isLongjumpSentinel(rcpp_result_gen);
-    if (rcpp_isLongjump_gen) {
-        Rcpp::internal::resumeJump(rcpp_result_gen);
     }
     Rboolean rcpp_isError_gen = Rf_inherits(rcpp_result_gen, "try-error");
     if (rcpp_isError_gen) {
@@ -2351,10 +2040,6 @@ RcppExport SEXP _icd_matchFast(SEXP xSEXP, SEXP tableSEXP) {
         UNPROTECT(1);
         Rf_onintr();
     }
-    bool rcpp_isLongjump_gen = Rcpp::internal::isLongjumpSentinel(rcpp_result_gen);
-    if (rcpp_isLongjump_gen) {
-        Rcpp::internal::resumeJump(rcpp_result_gen);
-    }
     Rboolean rcpp_isError_gen = Rf_inherits(rcpp_result_gen, "try-error");
     if (rcpp_isError_gen) {
         SEXP rcpp_msgSEXP_gen = Rf_asChar(rcpp_result_gen);
@@ -2386,10 +2071,6 @@ RcppExport SEXP _icd_inFast(SEXP xSEXP, SEXP tableSEXP) {
         UNPROTECT(1);
         Rf_onintr();
     }
-    bool rcpp_isLongjump_gen = Rcpp::internal::isLongjumpSentinel(rcpp_result_gen);
-    if (rcpp_isLongjump_gen) {
-        Rcpp::internal::resumeJump(rcpp_result_gen);
-    }
     Rboolean rcpp_isError_gen = Rf_inherits(rcpp_result_gen, "try-error");
     if (rcpp_isError_gen) {
         SEXP rcpp_msgSEXP_gen = Rf_asChar(rcpp_result_gen);
@@ -2410,9 +2091,7 @@ static int _icd_RcppExport_validate(const char* sig) {
         signatures.insert("void(*icd9AppendMinors)(VecStr&,const VecStr&,bool)");
         signatures.insert("void(*attr_decimal_diag)(Rcpp::RObject&,bool)");
         signatures.insert("void(*attr_short_diag)(Rcpp::RObject&,bool)");
-        signatures.insert("Rcpp::List(*getEmptyDataFrame)(String,String)");
-        signatures.insert("List(*returnEmptyFrame)(DataFrame,String,String)");
-        signatures.insert("List(*factor_split_rcpp)(const List&,const CharacterVector&,const String&,const String&)");
+        signatures.insert("List(*factor_split_rcpp)(const List&,const Nullable<CharacterVector>&,const String&,const String&)");
         signatures.insert("List(*categorize_rcpp)()");
         signatures.insert("Rcpp::LogicalVector(*icd9ComorbidShortCpp)(const SEXP&,const Rcpp::List&,const std::string,const std::string,const int,const int,const int)");
         signatures.insert("void(*lookupComorbidByChunkFor)(const VecVecInt&,const VecVecInt&,const VecVecIntSz,const VecVecIntSz,ComorbidOut&)");
@@ -2480,8 +2159,6 @@ RcppExport SEXP _icd_RcppExport_registerCCallable() {
     R_RegisterCCallable("icd", "_icd_icd9AppendMinors", (DL_FUNC)_icd_icd9AppendMinors_try);
     R_RegisterCCallable("icd", "_icd_attr_decimal_diag", (DL_FUNC)_icd_setDecimalDiag_try);
     R_RegisterCCallable("icd", "_icd_attr_short_diag", (DL_FUNC)_icd_setShortDiag_try);
-    R_RegisterCCallable("icd", "_icd_getEmptyDataFrame", (DL_FUNC)_icd_getEmptyDataFrame_try);
-    R_RegisterCCallable("icd", "_icd_returnEmptyFrame", (DL_FUNC)_icd_returnEmptyFrame_try);
     R_RegisterCCallable("icd", "_icd_factor_split_rcpp", (DL_FUNC)_icd_factorSplit_try);
     R_RegisterCCallable("icd", "_icd_categorize_rcpp", (DL_FUNC)_icd_categorize_rcpp_try);
     R_RegisterCCallable("icd", "_icd_icd9ComorbidShortCpp", (DL_FUNC)_icd_icd9ComorbidShortCpp_try);

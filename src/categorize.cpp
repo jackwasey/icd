@@ -21,77 +21,60 @@
 #include "util.h"
 #include <stdlib.h>
 #include <math.h>                              // for floor
-#include <stdio.h>                             // for sprintf
+#include <stdio.h>
 #include <string.h>                            // for strcmp
 #include <algorithm>                           // for copy, sort, transform
 #include <iterator>                            // for back_insert_iterator
 #include <ostream>                             // for size_t, operator<<
-#include <string>                              // for string, basic_string
-#include <vector>                              // for vector, vector<>::size...
+#include <string>
+#include <vector>
 #ifdef ICD_OPENMP
 #include <omp.h>
 #endif
 
-using Rcpp::List;
-using Rcpp::Vector;
-using Rcpp::LogicalVector;
-using Rcpp::IntegerVector;
-using Rcpp::CharacterVector;
-using Rcpp::DataFrame;
-using Rcpp::String;
-using Rcpp::Rcout;
-using Rcpp::as;
-using Rcpp::sugar::Max;
-using Rcpp::Named;
+using namespace Rcpp;
 
-// [[Rcpp::export]]
-Rcpp::List getEmptyDataFrame(String visit_name, String code_name) {
-  TRACE("Making empty data frame.");
-  List comorbid_df = List::create(
-    Named(visit_name) = CharacterVector(),
-    Named(code_name) = CharacterVector()
-  );
-  comorbid_df.attr("row.names") = CharacterVector::create();
-  comorbid_df.attr("class") = "data.frame";
-  return comorbid_df;
-}
-
-// [[Rcpp::export]]
-List returnEmptyFrame(DataFrame df, String visit_name, String code_name) {
+List returnEmptyFrame(DataFrame df, String id_name, String code_name) {
   DEBUG("No common codes between the map and patient data.");
   DEBUG("Returning empty data frame.");
+  IntegerVector empty_factor = IntegerVector::create();
+  empty_factor.attr("levels") = CV::create();
+  empty_factor.attr("class") = "factor";
+  DataFrame empty_df = DataFrame::create(
+    Named(id_name) = CV::create(),
+    Named(code_name) = empty_factor
+  );
+  SEXP v = df[id_name];
   List out = List::create(
-    Named("comorbid_df") = getEmptyDataFrame(visit_name, code_name),
+    Named("comorbid_df") = empty_df,
     Named("unique_no_comorbid") = NA_LOGICAL
   );
-  SEXP v = df[visit_name];
   switch (TYPEOF(v)) {
   case REALSXP: {
-    Rcpp::NumericVector nv = v;
-    out["unique_no_comorbid"] = unique(nv);
+    empty_df[id_name] = Rcpp::NumericVector();
+    out["comorbid_df"] = empty_df;
+    out["unique_no_comorbid"] = unique((NumericVector) v);
     return out;
   }
   case INTSXP: {
-    CharacterVector l = (as<IntegerVector>(v)).attr("levels");
-    bool isFactor = l.isNULL();
-    Rcpp::NumericVector nv = v;
-    if (isFactor) {
-      Rcpp::Environment base("package:base");
-      Rcpp::Function rUnique = base["unique.default"];
-      out["unique_no_comorbid"] = rUnique(l);
-      return out;
+    empty_df[id_name] = IntegerVector();
+    if (!Rf_isFactor(v))
+      out["unique_no_comorbid"] = unique((IntegerVector) v);
+    else {
+      CV vlevs = ((IntegerVector) v).attr("levels");
+      IntegerVector newids = empty_df[id_name];
+      newids.attr("levels") = vlevs;
+      out["unique_no_comorbid"] = vlevs;
     }
-    out["unique_no_comorbid"] = unique(nv);
+    out["comorbid_df"] = empty_df;
     return out;
   }
   case STRSXP: {
-    Rcpp::NumericVector nv = v;
-    out["unique_no_comorbid"] = unique(nv);
+    out["unique_no_comorbid"] = unique((CV) v);
     return out;
   }
-  default: {
-    Rcpp::stop("Unknown SEXP type");
-  }
+  default:
+    Rcpp::stop("Unknown SEXP type when returning empty");
   }
 }
 
@@ -123,10 +106,13 @@ List returnEmptyFrame(DataFrame df, String visit_name, String code_name) {
 //' @keywords internal manip
 // [[Rcpp::export(factor_split_rcpp)]]
 List factorSplit(const List &df,
-                 const CharacterVector &relevant,
+                 const Nullable<CharacterVector> &relevant,
                  const String &id_name,
                  const String &code_name) {
-  if (relevant.size() == 0)
+  if (relevant.isNull())
+    return returnEmptyFrame(df, id_name, code_name);
+  CharacterVector rv(relevant);
+  if (rv.size() == 0)
     return returnEmptyFrame(df, id_name, code_name);
   // TODO need to template over this for character/integer/factor visit ids?
   const CharacterVector visits = df[id_name];
@@ -151,14 +137,14 @@ List factorSplit(const List &df,
   CV no_na_lx = Rcpp::wrap(no_na_lx_std);
   DEBUG_VEC(no_na_lx);
   DEBUG_VEC(relevant);
-  IntegerVector new_level_idx = Rcpp::match(no_na_lx, relevant);
+  IntegerVector new_level_idx = Rcpp::match(no_na_lx, rv);
   DEBUG_VEC(new_level_idx);
   R_xlen_t fsz = x.size();
   DEBUG("fsz = " << fsz);
-// Simply setting the loop parallel causes memory errors.
-//#ifdef ICD_OPENMP
-//  #pragma omp parallel for
-//#endif
+  // Simply setting the loop parallel causes memory errors.
+  //#ifdef ICD_OPENMP
+  //  #pragma omp parallel for
+  //#endif
   for (R_xlen_t i = 0; i < fsz; ++i) {
     TRACE("considering index x[i] - 1: " << x[i] - 1 << " from new_level_idx");
     if (IntegerVector::is_na(x[i])) {
@@ -176,18 +162,20 @@ List factorSplit(const List &df,
       f_std.push_back(cur);
     }
   }
-  DEBUG_VEC(x);
   DEBUG_VEC(f_std);
   IntegerVector f = Rcpp::wrap(f_std);
-  f.attr("levels") = relevant;
+  DEBUG_VEC(f);
+  f.attr("levels") = rv;
   f.attr("class") = "factor";
   CharacterVector all_visits_comorbid = visits[inc_mask];
   CharacterVector all_visits_no_comorbid =
     visits[is_na(match(visits, all_visits_comorbid))];
   assert((all(f > 0)).is_true());
-  DEBUG(max(f));
-  DEBUG(f.size());
-  assert(max(f) < no_na_lx.size() + 1); // if relevant was correct, this should be =
+  DEBUG("max(f) =" << max(f));
+  DEBUG("f.size() =" << f.size());
+  DEBUG("no_na_lx.size() = " << no_na_lx.size());
+  // this should be satisfied if relevant is correct:
+  assert(f.size() == 0 || max(f) < (no_na_lx.size() + 1));
   List comorbid_df = List::create(Named(id_name) = all_visits_comorbid,
                                   Named(code_name) = f);
   Rcpp::CharacterVector rownames(f.size());
@@ -207,5 +195,6 @@ List factorSplit(const List &df,
 
 // [[Rcpp::export]]
 List categorize_rcpp() {
+  Rcpp::Rcerr << "Not implemented in pur C++ yet";
   return List::create();
 }

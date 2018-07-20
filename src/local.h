@@ -116,6 +116,15 @@ inline void printIt(const C& c, int n = 10) {
   Rcpp::Rcout.flush();
 }
 
+template <typename C>
+inline void printIt(const Rcpp::Nullable<C>& c, int n = 10) {
+  if (c.isNull()) {
+    Rcpp::Rcout << "NULL" << std::endl;
+    return;
+  }
+  printIt((C)c, n);
+}
+
 #endif // end (defined ICD_DEBUG || defined ICD_DEBUG_SETUP)
 #endif // LOCAL_H_
 
