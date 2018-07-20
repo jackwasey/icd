@@ -36,7 +36,7 @@
 #' @param unique_ids Single logical value, if \code{TRUE} then the visit IDs in
 #'   column given by \code{id_name} are assumed to be unique. Otherwise, the
 #'   default action is to ensure they are unique.
-#' @param preserve_visit_id_type Single logical value, if \code{TRUE}, the visit
+#' @param preserve_id_type Single logical value, if \code{TRUE}, the visit
 #'   ID column will be converted back to its original type. The default of
 #'   \code{FALSE} means only \code{factors} and \code{character} types are
 #'   restored in the returned data frame. For matrices, the row names are
@@ -59,7 +59,7 @@ categorize <- function(x, map, id_name, code_name,
                        return_df = FALSE, return_binary = FALSE,
                        restore_id_order = TRUE,
                        unique_ids = FALSE,
-                       preserve_visit_id_type = FALSE,
+                       preserve_id_type = FALSE,
                        comorbid_fun = comorbidMatMul,
                        factor_fun = factor_nosort_rcpp,
                        ...) {
@@ -73,21 +73,26 @@ categorize <- function(x, map, id_name, code_name,
   map <- lapply(map, as_char_no_warn)
   # need to convert to string and group these anyway, and much easier and
   # pretty quick to do it here than in C++
-  visit_was_factor <- is.factor(x[[id_name]])
+  id_was_factor <- is.factor(x[[id_name]])
   visit_class <- class(x[[id_name]])
-  if (visit_was_factor)
+  if (id_was_factor)
     iv_levels <- levels(x[[id_name]])
   if (nrow(x) == 0) {
     empty_mat_out <- matrix(nrow = 0,
                             ncol = length(map),
                             dimnames = list(character(0), names(map)))
     if (!return_df) return(empty_mat_out)
-    if (visit_was_factor)
+    if (id_was_factor)
       row_names <- factor_nosort(character(0), levels = iv_levels)
+    else if (preserve_id_type)
+      row_names <- switch(visit_class,
+                          "integer" = integer(0),
+                          "numeric" = numeric(0),
+                          "character" = character(0))
     else
       row_names <- character(0)
     df_empty_out <- cbind(row_names, as.data.frame(empty_mat_out),
-                          stringsAsFactors = visit_was_factor)
+                          stringsAsFactors = id_was_factor)
     names(df_empty_out)[1] <- id_name
     rownames(df_empty_out) <- NULL
     return(df_empty_out)
@@ -139,9 +144,9 @@ categorize <- function(x, map, id_name, code_name,
   if (return_binary) mat <- logical_to_binary(mat)
   if (!return_df)
     return(mat)
-  if (visit_was_factor)
+  if (id_was_factor)
     row_names <- factor_fun(x = rownames(mat), levels = iv_levels)
-  else if (preserve_visit_id_type) {
+  else if (preserve_id_type) {
     row_names <- switch(visit_class,
                         "integer" = as.integer(rownames(mat)),
                         "numeric" = as.numeric(rownames(mat)),
@@ -151,7 +156,7 @@ categorize <- function(x, map, id_name, code_name,
     row_names <- rownames(mat)
 
   df_out <- cbind(row_names, as.data.frame(mat),
-                  stringsAsFactors = visit_was_factor,
+                  stringsAsFactors = id_was_factor,
                   row.names = NULL)
   names(df_out)[1] <- id_name
   rownames(df_out) <- NULL
@@ -161,13 +166,16 @@ categorize <- function(x, map, id_name, code_name,
 comorbid_common <- function(..., visit_name, icd_name)
   categorize(..., id_name = visit_name, code_name = icd_name)
 
+#' @describeIn categorize Simplified categorization, without requiring
+#'   additional factor steps
+#' @keywords internal
 categorize_simple <- function(x, map, id_name, code_name,
-                       return_df = FALSE, return_binary = FALSE,
-                       restore_id_order = TRUE,
-                       unique_ids = FALSE,
-                       preserve_visit_id_type = FALSE,
-                       comorbid_fun = comorbidMatMulSimple,
-                       ...) {
+                              return_df = FALSE, return_binary = FALSE,
+                              restore_id_order = TRUE,
+                              unique_ids = FALSE,
+                              preserve_id_type = FALSE,
+                              comorbid_fun = comorbidMatMulSimple,
+                              ...) {
   assert_data_frame(x, min.cols = 2, col.names = "unique")
   class(x) <- "data.frame"
   assert_list(map, any.missing = FALSE, min.len = 1, names = "unique")
@@ -177,20 +185,25 @@ categorize_simple <- function(x, map, id_name, code_name,
   stopifnot(code_name %in% names(x))
   stopifnot(is.factor(x[[code_name]]) || is.character(x[[code_name]]))
   map <- lapply(map, as_char_no_warn) # TODO: no longer needed with Simple?
-  visit_was_factor <- is.factor(x[[id_name]])
+  id_was_factor <- is.factor(x[[id_name]])
   visit_class <- class(x[[id_name]])
-  if (visit_was_factor) iv_levels <- levels(x[[id_name]])
+  if (id_was_factor) iv_levels <- levels(x[[id_name]])
   if (nrow(x) == 0) {
     empty_mat_out <- matrix(nrow = 0,
                             ncol = length(map),
                             dimnames = list(character(0), names(map)))
     if (!return_df) return(empty_mat_out)
-    if (visit_was_factor)
+    if (id_was_factor)
       row_names <- factor_nosort(character(0), levels = iv_levels)
+    else if (preserve_id_type)
+      row_names <- switch(visit_class,
+                          "integer" = integer(0),
+                          "numeric" = numeric(0),
+                          "character" = character(0))
     else
       row_names <- character(0)
     df_empty_out <- cbind(row_names, as.data.frame(empty_mat_out),
-                          stringsAsFactors = visit_was_factor)
+                          stringsAsFactors = id_was_factor)
     names(df_empty_out)[1] <- id_name
     rownames(df_empty_out) <- NULL
     return(df_empty_out)
@@ -211,9 +224,9 @@ categorize_simple <- function(x, map, id_name, code_name,
   if (return_binary) mat <- logical_to_binary(mat)
   if (!return_df) return(mat)
   # TODO: next step better left to the pure C++ functions?
-  if (visit_was_factor)
+  if (id_was_factor)
     row_names <- factor_nosort_rcpp(x = rownames(mat), levels = iv_levels)
-  else if (preserve_visit_id_type) {
+  else if (preserve_id_type) {
     row_names <- switch(visit_class,
                         "integer" = as.integer(rownames(mat)),
                         "numeric" = as.numeric(rownames(mat)),
@@ -222,7 +235,7 @@ categorize_simple <- function(x, map, id_name, code_name,
   } else
     row_names <- rownames(mat)
   df_out <- cbind(row_names, as.data.frame(mat),
-                  stringsAsFactors = visit_was_factor,
+                  stringsAsFactors = id_was_factor,
                   row.names = NULL)
   names(df_out)[1] <- id_name
   rownames(df_out) <- NULL

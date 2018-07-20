@@ -482,7 +482,7 @@ test_that("integer visit IDs", {
   d$visit_id <- -1L
   mat_res <- comorbid_ahrq(d)
   expect_identical(rownames(mat_res), as.character(unique(d$visit_id)))
-  df_res <- comorbid_ahrq(d, return_df = TRUE, preserve_visit_id_type = TRUE)
+  df_res <- comorbid_ahrq(d, return_df = TRUE, preserve_id_type = TRUE)
   expect_identical(df_res$visit_id, d[1, "visit_id"])
 })
 
@@ -491,6 +491,6 @@ test_that("float visit IDs", {
   d$visit_id <- -1.7
   mat_res <- comorbid_ahrq(d)
   expect_identical(rownames(mat_res), as.character(unique(d$visit_id)))
-  df_res <- comorbid_ahrq(d, return_df = TRUE, preserve_visit_id_type = TRUE)
+  df_res <- comorbid_ahrq(d, return_df = TRUE, preserve_id_type = TRUE)
   expect_identical(df_res$visit_id, d[1, "visit_id"])
 })

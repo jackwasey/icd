@@ -126,7 +126,8 @@ List factorSplit(const List &df,
                  const CharacterVector &relevant,
                  const String &id_name,
                  const String &code_name) {
-  if (relevant.size() == 0) return returnEmptyFrame(df, id_name, code_name);
+  if (relevant.size() == 0)
+    return returnEmptyFrame(df, id_name, code_name);
   // TODO need to template over this for character/integer/factor visit ids?
   const CharacterVector visits = df[id_name];
   const IntegerVector &x = df[code_name];

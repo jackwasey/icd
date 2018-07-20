@@ -2,12 +2,17 @@
 % Please edit documentation in R/categorize.R
 \name{categorize}
 \alias{categorize}
+\alias{categorize_simple}
 \title{Categorize codes according to a mapping}
 \usage{
 categorize(x, map, id_name, code_name, return_df = FALSE,
   return_binary = FALSE, restore_id_order = TRUE, unique_ids = FALSE,
-  preserve_visit_id_type = FALSE, comorbid_fun = comorbidMatMul,
+  preserve_id_type = FALSE, comorbid_fun = comorbidMatMul,
   factor_fun = factor_nosort_rcpp, ...)
+
+categorize_simple(x, map, id_name, code_name, return_df = FALSE,
+  return_binary = FALSE, restore_id_order = TRUE, unique_ids = FALSE,
+  preserve_id_type = FALSE, comorbid_fun = comorbidMatMulSimple, ...)
 }
 \arguments{
 \item{x}{Data frame containing a column for an 'id' and a column for a code,
@@ -42,7 +47,7 @@ summarizing data, this can be set to \code{FALSE} for a big speed-up.}
 column given by \code{id_name} are assumed to be unique. Otherwise, the
 default action is to ensure they are unique.}
 
-\item{preserve_visit_id_type}{Single logical value, if \code{TRUE}, the visit
+\item{preserve_id_type}{Single logical value, if \code{TRUE}, the visit
 ID column will be converted back to its original type. The default of
 \code{FALSE} means only \code{factors} and \code{character} types are
 restored in the returned data frame. For matrices, the row names are
@@ -58,6 +63,12 @@ very simple \code{Rcpp} implementation \code{factor_nosort_rcpp}.}
 This is the function which optimizes the input data for the categorization,
 and forms the core of the package, along with the C++ matrix code.
 }
+\section{Functions}{
+\itemize{
+\item \code{categorize_simple}: Simplified categorization, without requiring
+additional factor steps
+}}
+
 \examples{
 \dontrun{
 u <- uranium_pathology
