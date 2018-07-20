@@ -19,8 +19,6 @@ context("Generic comorbidity calculation")
 
 test_that("comorbid quick test", {
   testres <- icd9_comorbid(two_pts, two_map, return_df = TRUE)
-  testres_cat <- categorize(two_pts, two_map, return_df = TRUE,
-                            id_name = "visit_id", code_name = "icd9")
   testres_cat_simple <- categorize_simple(two_pts, two_map, return_df = TRUE,
                                           id_name = "visit_id", code_name = "icd9")
   trueres <- data.frame("visit_id" = c("v01", "v02"),
@@ -28,7 +26,6 @@ test_that("comorbid quick test", {
                         "ailment" = c(TRUE, FALSE),
                         stringsAsFactors = FALSE)
   expect_equal(testres, trueres)
-  expect_equal(testres_cat, trueres)
   expect_equal(testres_cat_simple, trueres)
   testmat <- icd9_comorbid(two_pts, two_map, return_df = FALSE)
   truemat <- matrix(c(FALSE, TRUE, TRUE, FALSE), nrow = 2,
@@ -65,34 +62,6 @@ test_that("disordered visit_ids works by default", {
   expect_equal(sum(tres), sum(cres))
   expect_true(setequal(rownames(tres), rownames(cres)))
   expect_equal(colnames(tres), colnames(cres))
-})
-
-test_that("smaller test case based on random input", {
-  small_ccs_df <- data.frame(
-    visit_id = c("p1", "p2", "p1"),
-    code = c("C", "B", "A")
-  )
-  small_ccs_map <- list(X = "C",
-                        Y = "B",
-                        Z = "A")
-  # this simple map results in the map being the identity matrix
-  expected_res <- matrix(byrow = TRUE,
-                         data = c(TRUE, FALSE, TRUE,
-                                  FALSE, TRUE, FALSE),
-                         nrow = 2, ncol = 3,
-                         dimnames = list(c("p1", "p2"),
-                                         c("X", "Y", "Z"))
-  )
-  res <- comorbid_common(small_ccs_df, map = small_ccs_map,
-                         visit_name = "visit_id", icd_name = "code")
-  res2 <- comorbid_common(small_ccs_df, map = small_ccs_map,
-                          visit_name = "visit_id", icd_name = "code",
-                          categorize_fun = categorize,
-                          comorbid_fun = icd:::icd9ComorbidShortCpp)
-  # compare all three ways, for development only
-  expect_identical(res, expected_res)
-  expect_identical(res2, expected_res)
-  expect_identical(res, res2)
 })
 
 context("ICD-9 comorbidity calculations")
@@ -438,9 +407,6 @@ test_that("code appearing in two icd9 comorbidities", {
                    matrix(c(TRUE, TRUE), nrow = 1, dimnames = list("1", c("a", "b")))
   )
   dat_clean <- data.frame(id = "1", icd9 = factor("123"), stringsAsFactors = FALSE)
-  expect_identical(res, icd9_comorbid(dat_clean, map,
-                                      comorbid_fun = icd:::icd9ComorbidShortCpp,
-                                      categorize_fun = categorize))
 })
 
 test_that("comorbid for icd9 gives binary values if asked for matrices", {

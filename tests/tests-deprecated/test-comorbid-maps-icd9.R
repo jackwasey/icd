@@ -600,60 +600,6 @@ ac <-  lapply(icd9_map_ahrq, function(x) {
   f[!is.na(f)]
 })
 
-test_that("give factor instead of char to icd9ComorbidShortCpp", {
-  pts$visit_id <- factor(pts$visit_id)
-  expect_error(
-    icd9ComorbidShortCpp(pts, ac, visitId = "visit_id", icd9Field = "icd9Field"),
-    "character vector"
-  )
-})
-
-test_that("control params don't affect result of comorbid calc", {
-  pts$visit_id <- as_char_no_warn(pts$visit_id)
-  pts$code %<>% as.factor
-  upts <- length(unique(pts$visit_id))
-  expect_identical(
-    icd9ComorbidShortCpp(pts, ac, visitId = "visit_id", icd9Field = "icd9Field", threads = 1, chunk_size = 32),
-    icd9ComorbidShortCpp(pts, ac, visitId = "visit_id", icd9Field = "icd9Field", threads = 3, chunk_size = 32)
-  )
-  expect_identical(
-    icd9ComorbidShortCpp(pts, ac, visitId = "visit_id", icd9Field = "icd9Field", threads = 2, chunk_size = 32),
-    icd9ComorbidShortCpp(pts, ac, visitId = "visit_id", icd9Field = "icd9Field", threads = 5, chunk_size = 32)
-  )
-  expect_identical(
-    icd9ComorbidShortCpp(pts, ac, visitId = "visit_id", icd9Field = "icd9Field", threads = 3, chunk_size = 1),
-    icd9ComorbidShortCpp(pts, ac, visitId = "visit_id", icd9Field = "icd9Field", threads = 3, chunk_size = 32)
-  )
-  expect_identical(
-    icd9ComorbidShortCpp(pts, ac, visitId = "visit_id", icd9Field = "icd9Field", threads = 4, chunk_size = upts - 1),
-    icd9ComorbidShortCpp(pts, ac, visitId = "visit_id", icd9Field = "icd9Field", threads = 4, chunk_size = upts)
-  )
-  expect_identical(
-    icd9ComorbidShortCpp(pts, ac, visitId = "visit_id", icd9Field = "icd9Field", threads = 4, chunk_size = upts - 1),
-    icd9ComorbidShortCpp(pts, ac, visitId = "visit_id", icd9Field = "icd9Field", threads = 4, chunk_size = upts + 1)
-  )
-  expect_identical(
-    icd9ComorbidShortCpp(pts, ac, visitId = "visit_id", icd9Field = "icd9Field", threads = 4, chunk_size = upts + 1),
-    icd9ComorbidShortCpp(pts, ac, visitId = "visit_id", icd9Field = "icd9Field", threads = 4, chunk_size = upts)
-  )
-  expect_identical(
-    icd9ComorbidShortCpp(pts, ac, visitId = "visit_id", icd9Field = "icd9Field", threads = 3, chunk_size = upts - 2, omp_chunk_size = 1), # nolint
-    icd9ComorbidShortCpp(pts, ac, visitId = "visit_id", icd9Field = "icd9Field", threads = 3, chunk_size = upts + 2, omp_chunk_size = 1) # nolint
-  )
-  expect_identical(
-    icd9ComorbidShortCpp(pts, ac, visitId = "visit_id", icd9Field = "icd9Field", threads = 3, chunk_size = upts - 2, omp_chunk_size = 11), # nolint
-    icd9ComorbidShortCpp(pts, ac, visitId = "visit_id", icd9Field = "icd9Field", threads = 3, chunk_size = upts + 2, omp_chunk_size = 11) # nolint
-  )
-  expect_identical(
-    icd9ComorbidShortCpp(pts, ac, visitId = "visit_id", icd9Field = "icd9Field", threads = 3, chunk_size = upts, omp_chunk_size = 1), # nolint
-    icd9ComorbidShortCpp(pts, ac, visitId = "visit_id", icd9Field = "icd9Field", threads = 3, chunk_size = upts, omp_chunk_size = 11) # nolint
-  )
-  expect_identical(
-    icd9ComorbidShortCpp(pts, ac, visitId = "visit_id", icd9Field = "icd9Field"),
-    icd9ComorbidShortCpp(pts, ac, visitId = "visit_id", icd9Field = "icd9Field", threads = 3, chunk_size = 3, omp_chunk_size = 5) # nolint
-  )
-})
-
 test_that("failing example", {
   mydf <- data.frame(visit_id = c("a", "b", "c"),
                      icd9 = c("441", "412.93", "044.9"))

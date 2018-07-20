@@ -245,39 +245,6 @@ RcppExport SEXP _icd_setShortDiag(SEXP xSEXP, SEXP valueSEXP) {
     UNPROTECT(1);
     return rcpp_result_gen;
 }
-// factorSplit
-List factorSplit(const List& df, const Nullable<CharacterVector>& relevant, const String& id_name, const String& code_name);
-static SEXP _icd_factorSplit_try(SEXP dfSEXP, SEXP relevantSEXP, SEXP id_nameSEXP, SEXP code_nameSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::traits::input_parameter< const List& >::type df(dfSEXP);
-    Rcpp::traits::input_parameter< const Nullable<CharacterVector>& >::type relevant(relevantSEXP);
-    Rcpp::traits::input_parameter< const String& >::type id_name(id_nameSEXP);
-    Rcpp::traits::input_parameter< const String& >::type code_name(code_nameSEXP);
-    rcpp_result_gen = Rcpp::wrap(factorSplit(df, relevant, id_name, code_name));
-    return rcpp_result_gen;
-END_RCPP_RETURN_ERROR
-}
-RcppExport SEXP _icd_factorSplit(SEXP dfSEXP, SEXP relevantSEXP, SEXP id_nameSEXP, SEXP code_nameSEXP) {
-    SEXP rcpp_result_gen;
-    {
-        Rcpp::RNGScope rcpp_rngScope_gen;
-        rcpp_result_gen = PROTECT(_icd_factorSplit_try(dfSEXP, relevantSEXP, id_nameSEXP, code_nameSEXP));
-    }
-    Rboolean rcpp_isInterrupt_gen = Rf_inherits(rcpp_result_gen, "interrupted-error");
-    if (rcpp_isInterrupt_gen) {
-        UNPROTECT(1);
-        Rf_onintr();
-    }
-    Rboolean rcpp_isError_gen = Rf_inherits(rcpp_result_gen, "try-error");
-    if (rcpp_isError_gen) {
-        SEXP rcpp_msgSEXP_gen = Rf_asChar(rcpp_result_gen);
-        UNPROTECT(1);
-        Rf_error(CHAR(rcpp_msgSEXP_gen));
-    }
-    UNPROTECT(1);
-    return rcpp_result_gen;
-}
 // categorize_rcpp
 List categorize_rcpp();
 static SEXP _icd_categorize_rcpp_try() {
@@ -319,108 +286,6 @@ BEGIN_RCPP
     rcpp_result_gen = Rcpp::wrap(icd10cmChildrenDefined(x, icd10cm2016, nc));
     return rcpp_result_gen;
 END_RCPP
-}
-// icd9ComorbidShortCpp
-Rcpp::LogicalVector icd9ComorbidShortCpp(const SEXP& icd9df, const Rcpp::List& icd9Mapping, const std::string visitId, const std::string icd9Field, const int threads, const int chunk_size, const int omp_chunk_size);
-static SEXP _icd_icd9ComorbidShortCpp_try(SEXP icd9dfSEXP, SEXP icd9MappingSEXP, SEXP visitIdSEXP, SEXP icd9FieldSEXP, SEXP threadsSEXP, SEXP chunk_sizeSEXP, SEXP omp_chunk_sizeSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::traits::input_parameter< const SEXP& >::type icd9df(icd9dfSEXP);
-    Rcpp::traits::input_parameter< const Rcpp::List& >::type icd9Mapping(icd9MappingSEXP);
-    Rcpp::traits::input_parameter< const std::string >::type visitId(visitIdSEXP);
-    Rcpp::traits::input_parameter< const std::string >::type icd9Field(icd9FieldSEXP);
-    Rcpp::traits::input_parameter< const int >::type threads(threadsSEXP);
-    Rcpp::traits::input_parameter< const int >::type chunk_size(chunk_sizeSEXP);
-    Rcpp::traits::input_parameter< const int >::type omp_chunk_size(omp_chunk_sizeSEXP);
-    rcpp_result_gen = Rcpp::wrap(icd9ComorbidShortCpp(icd9df, icd9Mapping, visitId, icd9Field, threads, chunk_size, omp_chunk_size));
-    return rcpp_result_gen;
-END_RCPP_RETURN_ERROR
-}
-RcppExport SEXP _icd_icd9ComorbidShortCpp(SEXP icd9dfSEXP, SEXP icd9MappingSEXP, SEXP visitIdSEXP, SEXP icd9FieldSEXP, SEXP threadsSEXP, SEXP chunk_sizeSEXP, SEXP omp_chunk_sizeSEXP) {
-    SEXP rcpp_result_gen;
-    {
-        Rcpp::RNGScope rcpp_rngScope_gen;
-        rcpp_result_gen = PROTECT(_icd_icd9ComorbidShortCpp_try(icd9dfSEXP, icd9MappingSEXP, visitIdSEXP, icd9FieldSEXP, threadsSEXP, chunk_sizeSEXP, omp_chunk_sizeSEXP));
-    }
-    Rboolean rcpp_isInterrupt_gen = Rf_inherits(rcpp_result_gen, "interrupted-error");
-    if (rcpp_isInterrupt_gen) {
-        UNPROTECT(1);
-        Rf_onintr();
-    }
-    Rboolean rcpp_isError_gen = Rf_inherits(rcpp_result_gen, "try-error");
-    if (rcpp_isError_gen) {
-        SEXP rcpp_msgSEXP_gen = Rf_asChar(rcpp_result_gen);
-        UNPROTECT(1);
-        Rf_error(CHAR(rcpp_msgSEXP_gen));
-    }
-    UNPROTECT(1);
-    return rcpp_result_gen;
-}
-// lookupComorbidByChunkFor
-void lookupComorbidByChunkFor(const VecVecInt& vcdb, const VecVecInt& map, const VecVecIntSz chunkSize, const VecVecIntSz ompChunkSize, ComorbidOut& out);
-static SEXP _icd_lookupComorbidByChunkFor_try(SEXP vcdbSEXP, SEXP mapSEXP, SEXP chunkSizeSEXP, SEXP ompChunkSizeSEXP, SEXP outSEXP) {
-BEGIN_RCPP
-    Rcpp::traits::input_parameter< const VecVecInt& >::type vcdb(vcdbSEXP);
-    Rcpp::traits::input_parameter< const VecVecInt& >::type map(mapSEXP);
-    Rcpp::traits::input_parameter< const VecVecIntSz >::type chunkSize(chunkSizeSEXP);
-    Rcpp::traits::input_parameter< const VecVecIntSz >::type ompChunkSize(ompChunkSizeSEXP);
-    Rcpp::traits::input_parameter< ComorbidOut& >::type out(outSEXP);
-    lookupComorbidByChunkFor(vcdb, map, chunkSize, ompChunkSize, out);
-    return R_NilValue;
-END_RCPP_RETURN_ERROR
-}
-RcppExport SEXP _icd_lookupComorbidByChunkFor(SEXP vcdbSEXP, SEXP mapSEXP, SEXP chunkSizeSEXP, SEXP ompChunkSizeSEXP, SEXP outSEXP) {
-    SEXP rcpp_result_gen;
-    {
-        Rcpp::RNGScope rcpp_rngScope_gen;
-        rcpp_result_gen = PROTECT(_icd_lookupComorbidByChunkFor_try(vcdbSEXP, mapSEXP, chunkSizeSEXP, ompChunkSizeSEXP, outSEXP));
-    }
-    Rboolean rcpp_isInterrupt_gen = Rf_inherits(rcpp_result_gen, "interrupted-error");
-    if (rcpp_isInterrupt_gen) {
-        UNPROTECT(1);
-        Rf_onintr();
-    }
-    Rboolean rcpp_isError_gen = Rf_inherits(rcpp_result_gen, "try-error");
-    if (rcpp_isError_gen) {
-        SEXP rcpp_msgSEXP_gen = Rf_asChar(rcpp_result_gen);
-        UNPROTECT(1);
-        Rf_error(CHAR(rcpp_msgSEXP_gen));
-    }
-    UNPROTECT(1);
-    return rcpp_result_gen;
-}
-// icd10ComorbidParentSearchCpp
-Rcpp::LogicalMatrix icd10ComorbidParentSearchCpp(Rcpp::DataFrame x, Rcpp::List map, std::string visit_name, std::string icd_name);
-static SEXP _icd_icd10ComorbidParentSearchCpp_try(SEXP xSEXP, SEXP mapSEXP, SEXP visit_nameSEXP, SEXP icd_nameSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::traits::input_parameter< Rcpp::DataFrame >::type x(xSEXP);
-    Rcpp::traits::input_parameter< Rcpp::List >::type map(mapSEXP);
-    Rcpp::traits::input_parameter< std::string >::type visit_name(visit_nameSEXP);
-    Rcpp::traits::input_parameter< std::string >::type icd_name(icd_nameSEXP);
-    rcpp_result_gen = Rcpp::wrap(icd10ComorbidParentSearchCpp(x, map, visit_name, icd_name));
-    return rcpp_result_gen;
-END_RCPP_RETURN_ERROR
-}
-RcppExport SEXP _icd_icd10ComorbidParentSearchCpp(SEXP xSEXP, SEXP mapSEXP, SEXP visit_nameSEXP, SEXP icd_nameSEXP) {
-    SEXP rcpp_result_gen;
-    {
-        Rcpp::RNGScope rcpp_rngScope_gen;
-        rcpp_result_gen = PROTECT(_icd_icd10ComorbidParentSearchCpp_try(xSEXP, mapSEXP, visit_nameSEXP, icd_nameSEXP));
-    }
-    Rboolean rcpp_isInterrupt_gen = Rf_inherits(rcpp_result_gen, "interrupted-error");
-    if (rcpp_isInterrupt_gen) {
-        UNPROTECT(1);
-        Rf_onintr();
-    }
-    Rboolean rcpp_isError_gen = Rf_inherits(rcpp_result_gen, "try-error");
-    if (rcpp_isError_gen) {
-        SEXP rcpp_msgSEXP_gen = Rf_asChar(rcpp_result_gen);
-        UNPROTECT(1);
-        Rf_error(CHAR(rcpp_msgSEXP_gen));
-    }
-    UNPROTECT(1);
-    return rcpp_result_gen;
 }
 // simplifyMapLexicographic
 Rcpp::List simplifyMapLexicographic(const CV pt_codes, const Rcpp::List map);
@@ -471,42 +336,6 @@ RcppExport SEXP _icd_comorbidMatMulSimple(SEXP icd9dfSEXP, SEXP icd9MappingSEXP,
     {
         Rcpp::RNGScope rcpp_rngScope_gen;
         rcpp_result_gen = PROTECT(_icd_comorbidMatMulSimple_try(icd9dfSEXP, icd9MappingSEXP, visitIdSEXP, icd9FieldSEXP));
-    }
-    Rboolean rcpp_isInterrupt_gen = Rf_inherits(rcpp_result_gen, "interrupted-error");
-    if (rcpp_isInterrupt_gen) {
-        UNPROTECT(1);
-        Rf_onintr();
-    }
-    Rboolean rcpp_isError_gen = Rf_inherits(rcpp_result_gen, "try-error");
-    if (rcpp_isError_gen) {
-        SEXP rcpp_msgSEXP_gen = Rf_asChar(rcpp_result_gen);
-        UNPROTECT(1);
-        Rf_error(CHAR(rcpp_msgSEXP_gen));
-    }
-    UNPROTECT(1);
-    return rcpp_result_gen;
-}
-// comorbidMatMul
-LogicalMatrix comorbidMatMul(const DataFrame& icd9df, const List& icd9Mapping, const std::string visitId, const std::string icd9Field, const int threads, const int chunk_size, const int omp_chunk_size);
-static SEXP _icd_comorbidMatMul_try(SEXP icd9dfSEXP, SEXP icd9MappingSEXP, SEXP visitIdSEXP, SEXP icd9FieldSEXP, SEXP threadsSEXP, SEXP chunk_sizeSEXP, SEXP omp_chunk_sizeSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::traits::input_parameter< const DataFrame& >::type icd9df(icd9dfSEXP);
-    Rcpp::traits::input_parameter< const List& >::type icd9Mapping(icd9MappingSEXP);
-    Rcpp::traits::input_parameter< const std::string >::type visitId(visitIdSEXP);
-    Rcpp::traits::input_parameter< const std::string >::type icd9Field(icd9FieldSEXP);
-    Rcpp::traits::input_parameter< const int >::type threads(threadsSEXP);
-    Rcpp::traits::input_parameter< const int >::type chunk_size(chunk_sizeSEXP);
-    Rcpp::traits::input_parameter< const int >::type omp_chunk_size(omp_chunk_sizeSEXP);
-    rcpp_result_gen = Rcpp::wrap(comorbidMatMul(icd9df, icd9Mapping, visitId, icd9Field, threads, chunk_size, omp_chunk_size));
-    return rcpp_result_gen;
-END_RCPP_RETURN_ERROR
-}
-RcppExport SEXP _icd_comorbidMatMul(SEXP icd9dfSEXP, SEXP icd9MappingSEXP, SEXP visitIdSEXP, SEXP icd9FieldSEXP, SEXP threadsSEXP, SEXP chunk_sizeSEXP, SEXP omp_chunk_sizeSEXP) {
-    SEXP rcpp_result_gen;
-    {
-        Rcpp::RNGScope rcpp_rngScope_gen;
-        rcpp_result_gen = PROTECT(_icd_comorbidMatMul_try(icd9dfSEXP, icd9MappingSEXP, visitIdSEXP, icd9FieldSEXP, threadsSEXP, chunk_sizeSEXP, omp_chunk_sizeSEXP));
     }
     Rboolean rcpp_isInterrupt_gen = Rf_inherits(rcpp_result_gen, "interrupted-error");
     if (rcpp_isInterrupt_gen) {
@@ -2091,14 +1920,9 @@ static int _icd_RcppExport_validate(const char* sig) {
         signatures.insert("void(*icd9AppendMinors)(VecStr&,const VecStr&,bool)");
         signatures.insert("void(*attr_decimal_diag)(Rcpp::RObject&,bool)");
         signatures.insert("void(*attr_short_diag)(Rcpp::RObject&,bool)");
-        signatures.insert("List(*factor_split_rcpp)(const List&,const Nullable<CharacterVector>&,const String&,const String&)");
         signatures.insert("List(*categorize_rcpp)()");
-        signatures.insert("Rcpp::LogicalVector(*icd9ComorbidShortCpp)(const SEXP&,const Rcpp::List&,const std::string,const std::string,const int,const int,const int)");
-        signatures.insert("void(*lookupComorbidByChunkFor)(const VecVecInt&,const VecVecInt&,const VecVecIntSz,const VecVecIntSz,ComorbidOut&)");
-        signatures.insert("Rcpp::LogicalMatrix(*icd10_comorbid_parent_search_cpp)(Rcpp::DataFrame,Rcpp::List,std::string,std::string)");
         signatures.insert("Rcpp::List(*simplify_map_lex)(const CV,const Rcpp::List)");
         signatures.insert("LogicalMatrix(*comorbidMatMulSimple)(const DataFrame&,const List&,const std::string,const std::string)");
-        signatures.insert("LogicalMatrix(*comorbidMatMul)(const DataFrame&,const List&,const std::string,const std::string,const int,const int,const int)");
         signatures.insert("CV(*icd9PartsToShort)(const Rcpp::List)");
         signatures.insert("CV(*icd9PartsToDecimal)(const Rcpp::List)");
         signatures.insert("Rcpp::List(*icd9MajMinToParts)(const CV,const CV)");
@@ -2159,14 +1983,9 @@ RcppExport SEXP _icd_RcppExport_registerCCallable() {
     R_RegisterCCallable("icd", "_icd_icd9AppendMinors", (DL_FUNC)_icd_icd9AppendMinors_try);
     R_RegisterCCallable("icd", "_icd_attr_decimal_diag", (DL_FUNC)_icd_setDecimalDiag_try);
     R_RegisterCCallable("icd", "_icd_attr_short_diag", (DL_FUNC)_icd_setShortDiag_try);
-    R_RegisterCCallable("icd", "_icd_factor_split_rcpp", (DL_FUNC)_icd_factorSplit_try);
     R_RegisterCCallable("icd", "_icd_categorize_rcpp", (DL_FUNC)_icd_categorize_rcpp_try);
-    R_RegisterCCallable("icd", "_icd_icd9ComorbidShortCpp", (DL_FUNC)_icd_icd9ComorbidShortCpp_try);
-    R_RegisterCCallable("icd", "_icd_lookupComorbidByChunkFor", (DL_FUNC)_icd_lookupComorbidByChunkFor_try);
-    R_RegisterCCallable("icd", "_icd_icd10_comorbid_parent_search_cpp", (DL_FUNC)_icd_icd10ComorbidParentSearchCpp_try);
     R_RegisterCCallable("icd", "_icd_simplify_map_lex", (DL_FUNC)_icd_simplifyMapLexicographic_try);
     R_RegisterCCallable("icd", "_icd_comorbidMatMulSimple", (DL_FUNC)_icd_comorbidMatMulSimple_try);
-    R_RegisterCCallable("icd", "_icd_comorbidMatMul", (DL_FUNC)_icd_comorbidMatMul_try);
     R_RegisterCCallable("icd", "_icd_icd9PartsToShort", (DL_FUNC)_icd_icd9PartsToShort_try);
     R_RegisterCCallable("icd", "_icd_icd9PartsToDecimal", (DL_FUNC)_icd_icd9PartsToDecimal_try);
     R_RegisterCCallable("icd", "_icd_icd9MajMinToParts", (DL_FUNC)_icd_icd9MajMinToParts_try);

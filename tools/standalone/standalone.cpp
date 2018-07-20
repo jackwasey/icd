@@ -8,10 +8,9 @@ void buildVisitCodesSparse(const SEXP& icd9df,
                               PtsSparse& sparse_db,
                               VecStr& visitIds);
 
-LogicalMatrix comorbidMatMul(const Rcpp::DataFrame& icd9df, const Rcpp::List& icd9Mapping,
-                             const std::string visitId, const std::string icd9Field,
-                             const int threads = 8, const int chunk_size = 256,
-                             const int omp_chunk_size = 1);
+LogicalMatrix comorbidMatMulSimple(
+    const Rcpp::DataFrame& icd9df, const Rcpp::List& icd9Mapping,
+    const std::string visitId, const std::string icd9Field);
 
 // don't include my source files: this is like an external application so link
 // against my Rcpp generated headers.
@@ -48,9 +47,8 @@ int main(int argc, char *argv[]) {
     two_map["ailment"] = CharacterVector::create("003", "040");
 
     // call direct to avoid Rcpp intercepting the call?
-    Rcpp::LogicalMatrix out = comorbidMatMul(two_pts, two_map,
-                                             "visit_id", "icd9",
-                                             0, 0, 0, true);
+    Rcpp::LogicalMatrix out = comorbidMatMulSimple(two_pts, two_map,
+                                             "visit_id", "icd9");
 
     std::cout << "res = " << out << "\n";
 

@@ -32,126 +32,6 @@ bench_omp_vec_int <- function(n = 4, np = 2, threads = 6, chunk_size = 32) {
                     threads = threads, chunk_size = chunk_size)
 }
 
-bench_omp_threads <- function(n = 2 ^ 18 - 1, np = 7) {
-  # if chunk size is <32 (i.e. one word) bits aren't updated correctly by concurrent threads'
-  pts <- generate_random_pts(n, np)
-  stopifnot(identical(
-    icd9ComorbidShortCpp(pts, icd9_map_ahrq, visitId = get_visit_name(pts),
-                         icd9Field = get_icd_name(pts), threads = 8, chunk_size = 32),
-    icd9ComorbidShortCpp(pts, icd9_map_ahrq, visitId = get_visit_name(pts),
-                         icd9Field = get_icd_name(pts), threads = 8, chunk_size = 32)
-  ))
-  stopifnot(identical(
-    icd9ComorbidShortCpp(pts, icd9_map_ahrq, visitId = get_visit_name(pts),
-                         icd9Field = get_icd_name(pts), threads = 1, chunk_size = 32),
-    icd9ComorbidShortCpp(pts, icd9_map_ahrq, visitId = get_visit_name(pts),
-                         icd9Field = get_icd_name(pts), threads = 8, chunk_size = 32)
-  ))
-  microbenchmark::microbenchmark(
-    icd9ComorbidShortCpp(pts, icd9_map_ahrq, visitId = get_visit_name(pts),
-                         icd9Field = get_icd_name(pts), threads = 4, chunk_size = 32),
-    icd9ComorbidShortCpp(pts, icd9_map_ahrq, visitId = get_visit_name(pts),
-                         icd9Field = get_icd_name(pts), threads = 4, chunk_size = 256),
-    icd9ComorbidShortCpp(pts, icd9_map_ahrq, visitId = get_visit_name(pts),
-                         icd9Field = get_icd_name(pts), threads = 4, chunk_size = 1024),
-    times = 5
-  )
-}
-
-bench_vary_n <- function(np = 5, threads = 4, chunk_size = 256, omp_chunk_size = 1) {
-  # default to good options from other tests
-  mbr <- NULL
-  for (n in c(1e0, 1e3, 1e4, 1e5, 1e6)) {
-    #for (n in c(1e0, 1e3)) {
-    message("n = ", n)
-    pts <- icd::generate_random_ordered_pts(n, np)
-    res <- microbenchmark::microbenchmark(
-      icd9ComorbidShortCpp(pts, icd9_map_ahrq,
-                           visitId = get_visit_name(pts),
-                           icd9Field = get_icd_name(pts),
-                           threads = 4,
-                           chunk_size = chunk_size,
-                           omp_chunk_size = omp_chunk_size),
-      times = 5)
-    if (is.null(mbr))
-      mbr <- cbind(n, res)
-    else
-      mbr <- rbind(mbr, cbind(n, res))
-  }
-  mbr
-}
-
-otherbench <- function() {
-
-  # Someday explore the parameter space possibly with genetic optimization.
-
-  # vary threads for big n, chunk = 1
-  microbenchmark::microbenchmark(
-    icd9ComorbidShort(generate_random_pts(1000000), icd9_map_ahrq, threads = 1, chunk_size = 1),
-    icd9ComorbidShort(generate_random_pts(1000000), icd9_map_ahrq, threads = 2, chunk_size = 1),
-    icd9ComorbidShort(generate_random_pts(1000000), icd9_map_ahrq, threads = 4, chunk_size = 1),
-    icd9ComorbidShort(generate_random_pts(1000000), icd9_map_ahrq, threads = 6, chunk_size = 1),
-    icd9ComorbidShort(generate_random_pts(1000000), icd9_map_ahrq, threads = 8, chunk_size = 1),
-    times = 5
-  )
-  # vary threads for big n, chunk = 256
-  microbenchmark::microbenchmark(
-    icd9ComorbidShort(generate_random_pts(1000000), icd9_map_ahrq, threads = 1, chunk_size = 256),
-    icd9ComorbidShort(generate_random_pts(1000000), icd9_map_ahrq, threads = 2, chunk_size = 256),
-    icd9ComorbidShort(generate_random_pts(1000000), icd9_map_ahrq, threads = 4, chunk_size = 256),
-    icd9ComorbidShort(generate_random_pts(1000000), icd9_map_ahrq, threads = 6, chunk_size = 256),
-    icd9ComorbidShort(generate_random_pts(1000000), icd9_map_ahrq, threads = 8, chunk_size = 256),
-    times = 5
-  )
-  fivemillion <- generate_random_pts(5000000, 5);
-  microbenchmark::microbenchmark(
-    icd9ComorbidShort(fivemillion, icd9_map_ahrq, threads = 4, chunk_size = 32, omp_chunk_size = 1),
-    icd9ComorbidShort(fivemillion, icd9_map_ahrq, threads = 4, chunk_size = 256, omp_chunk_size = 1),
-    icd9ComorbidShort(fivemillion, icd9_map_ahrq, threads = 4, chunk_size = 4096, omp_chunk_size = 1),
-    icd9ComorbidShort(fivemillion, icd9_map_ahrq, threads = 4, chunk_size = 32, omp_chunk_size = 4),
-    # next row barely won with 1e6*5 rows
-    icd9ComorbidShort(fivemillion, icd9_map_ahrq, threads = 4, chunk_size = 256, omp_chunk_size = 4),
-    icd9ComorbidShort(fivemillion, icd9_map_ahrq, threads = 4, chunk_size = 4096, omp_chunk_size = 4),
-    icd9ComorbidShort(fivemillion, icd9_map_ahrq, threads = 4, chunk_size = 32, omp_chunk_size = 8),
-    icd9ComorbidShort(fivemillion, icd9_map_ahrq, threads = 4, chunk_size = 256, omp_chunk_size = 8),
-    icd9ComorbidShort(fivemillion, icd9_map_ahrq, threads = 4, chunk_size = 4096, omp_chunk_size = 8),
-    times = 5
-  )
-  microbenchmark::microbenchmark(
-    icd9ComorbidShort(fivemillion, icd9_map_ahrq, threads = 4, chunk_size = 256, omp_chunk_size = 2),
-    icd9ComorbidShort(fivemillion, icd9_map_ahrq, threads = 4, chunk_size = 256, omp_chunk_size = 4),
-    icd9ComorbidShort(fivemillion, icd9_map_ahrq, threads = 4, chunk_size = 256, omp_chunk_size = 8),
-    icd9ComorbidShort(fivemillion, icd9_map_ahrq, threads = 8, chunk_size = 256, omp_chunk_size = 2),
-    icd9ComorbidShort(fivemillion, icd9_map_ahrq, threads = 8, chunk_size = 256, omp_chunk_size = 4),
-    icd9ComorbidShort(fivemillion, icd9_map_ahrq, threads = 8, chunk_size = 256, omp_chunk_size = 8),
-    times = 25
-  )
-  # with parallel for, best is 8 threads, static chunk of ONE (dynamic slightly slower)
-  for (threads in c(1, 4, 8)) {
-    for (n in c(500000)) {
-      for (cs in c(1, 32, 1024)) {
-        message("threads = ", threads, ", n = ", n, ", cs = ", cs)
-        print(microbenchmark::microbenchmark(
-          icd9ComorbidShort(generate_random_pts(n), icd9_map_ahrq, threads = threads, chunk_size = cs),
-          check = my_check, times = 10
-        ))
-      }
-    }
-  }
-  stopifnot(identical(
-    icd9ComorbidShort(generate_random_pts(n), icd9_map_ahrq, threads = 4, chunk_size = 1),
-    icd9ComorbidShort(generate_random_pts(n), icd9_map_ahrq, threads = 4, chunk_size = 32)
-  ))
-  stopifnot(identical(
-    icd9ComorbidShort(generate_random_pts(n), icd9_map_ahrq, threads = 1, chunk_size = 1),
-    icd9ComorbidShort(generate_random_pts(n), icd9_map_ahrq, threads = 4, chunk_size = 1)
-  ))
-  stopifnot(identical(
-    icd9ComorbidShort(generate_random_pts(n), icd9_map_ahrq, threads = 1, chunk_size = 32),
-    icd9ComorbidShort(generate_random_pts(n), icd9_map_ahrq, threads = 4, chunk_size = 32)
-  ))
-}
-
 bench_long_to_wide <- function(n = 10000, np = 7, times = 10) {
   pts <- generate_random_ordered_pts(n, np)
   #   microbenchmark::microbenchmark(icd9LongToWideMatrixByMap(pts),
@@ -164,34 +44,6 @@ bench_long_to_wide <- function(n = 10000, np = 7, times = 10) {
   )
 }
 
-bench_thread_chunk <- function() {
-  for (n in c(1, 12345)) {
-    for (np in c(1, 30)) {
-      pts <- generate_random_pts(n, np);
-      message("NOT BENCHMARKING HERE, just checking. np = ", np, ", n = ", n)
-      # use microbenchmark::microbenchmark to conveniently check the results are all identical
-      microbenchmark::microbenchmark(
-        icd9ComorbidShortCpp(pts, icd9_map_ahrq, visitId = "visitId", icd9Field = "code",
-                             threads = 1, chunk_size = 1, omp_chunk_size = 1),
-        icd9ComorbidShortCpp(pts, icd9_map_ahrq, visitId = "visitId", icd9Field = "code",
-                             threads = 1, chunk_size = 1, omp_chunk_size = 1024),
-        icd9ComorbidShortCpp(pts, icd9_map_ahrq, visitId = "visitId", icd9Field = "code",
-                             threads = 1, chunk_size = 1024, omp_chunk_size = 1),
-        icd9ComorbidShortCpp(pts, icd9_map_ahrq, visitId = "visitId", icd9Field = "code",
-                             threads = 1, chunk_size = 1024, omp_chunk_size = 1024),
-        icd9ComorbidShortCpp(pts, icd9_map_ahrq, visitId = "visitId", icd9Field = "code",
-                             threads = 8, chunk_size = 1, omp_chunk_size = 1),
-        icd9ComorbidShortCpp(pts, icd9_map_ahrq, visitId = "visitId", icd9Field = "code",
-                             threads = 8, chunk_size = 1, omp_chunk_size = 1024),
-        icd9ComorbidShortCpp(pts, icd9_map_ahrq, visitId = "visitId", icd9Field = "code",
-                             threads = 8, chunk_size = 1024, omp_chunk_size = 1),
-        icd9ComorbidShortCpp(pts, icd9_map_ahrq, visitId = "visitId", icd9Field = "code",
-                             threads = 8, chunk_size = 1024, omp_chunk_size = 1024),
-        check = my_check, times = 1)
-    }
-  }
-}
-
 my_check <- function(values) {
   sapply(values, function(x) message("dims: ", nrow(x), " by ", ncol(x)))
   sapply(values, function(x) message("digest: ", digest::digest(x)))
@@ -199,30 +51,6 @@ my_check <- function(values) {
     print(head(x)); print(tail(x))
   })
   all(sapply(values[-1], function(x) identical(values[[1]], x)))
-}
-
-icd_bench_comorbid_parallel <- function() {
-  pts10000 <- generate_random_pts(10000)
-  pts100000 <- generate_random_pts(100000)
-  pts_big <- generate_random_pts(500000)
-  print(microbenchmark::microbenchmark(
-    icd9ComorbidShortCpp(pts10000, visitId = "visitId", icd9Field = "code", icd9_map_ahrq, threads = 0),
-    icd9ComorbidShortCpp(pts10000, visitId = "visitId", icd9Field = "code", icd9_map_ahrq, threads = 1),
-    icd9ComorbidShortCpp(pts10000, visitId = "visitId", icd9Field = "code", icd9_map_ahrq, threads = 2),
-    icd9ComorbidShortCpp(pts10000, visitId = "visitId", icd9Field = "code", icd9_map_ahrq, threads = 4),
-    icd9ComorbidShortCpp(pts10000, visitId = "visitId", icd9Field = "code", icd9_map_ahrq, threads = 6),
-    icd9ComorbidShortCpp(pts100000, visitId = "visitId", icd9Field = "code", icd9_map_ahrq, threads = 0),
-    icd9ComorbidShortCpp(pts100000, visitId = "visitId", icd9Field = "code", icd9_map_ahrq, threads = 1),
-    icd9ComorbidShortCpp(pts100000, visitId = "visitId", icd9Field = "code", icd9_map_ahrq, threads = 2),
-    icd9ComorbidShortCpp(pts100000, visitId = "visitId", icd9Field = "code", icd9_map_ahrq, threads = 4),
-    icd9ComorbidShortCpp(pts100000, visitId = "visitId", icd9Field = "code", icd9_map_ahrq, threads = 6),
-    icd9ComorbidShortCpp(pts_big, visitId = "visitId", icd9Field = "code", icd9_map_ahrq, threads = 0),
-    icd9ComorbidShortCpp(pts_big, visitId = "visitId", icd9Field = "code", icd9_map_ahrq, threads = 1),
-    icd9ComorbidShortCpp(pts_big, visitId = "visitId", icd9Field = "code", icd9_map_ahrq, threads = 2),
-    icd9ComorbidShortCpp(pts_big, visitId = "visitId", icd9Field = "code", icd9_map_ahrq, threads = 4),
-    icd9ComorbidShortCpp(pts_big, visitId = "visitId", icd9Field = "code", icd9_map_ahrq, threads = 6),
-    # 8 is very slow (maxes hyperthreading...)
-    times = 5))
 }
 
 #' benchmark and profile major functions with larger data sets

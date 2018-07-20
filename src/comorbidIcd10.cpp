@@ -17,90 +17,18 @@
 
 // [[Rcpp::interfaces(r, cpp)]]
 // [[Rcpp::plugins(openmp)]]
+#include "icd_types.h"
+#include "local.h"
 #include "config.h"
-#include "local.h" // for DEBUG
 #include "comorbidIcd10.h"
 #include <string.h>                         // for strlen, strncpy
 #include <string>                           // for string
-#include "Rcpp.h"                           // for wrap
-#include "icd_types.h"                      // for CV
+#include "Rcpp.h"
 extern "C" {
 #include <cstddef>                          // for size_t
 }
 
-using Rcpp::IntegerVector;
-using Rcpp::LogicalMatrix;
-using Rcpp::String;
-using Rcpp::wrap;
-using Rcpp::any;
-using Rcpp::as;
-
-//' Internal function to find ICD-10 parents
-//' @param x Character vector (not factor)
-//' @template mapping
-//' @template visit_name
-//' @template icd_name
-//' @seealso \url{https://github.com/s-u/fastmatch/blob/master/src/fastmatch.c}
-//' @keywords internal
-// [[Rcpp::export(icd10_comorbid_parent_search_cpp)]]
-Rcpp::LogicalMatrix icd10ComorbidParentSearchCpp(Rcpp::DataFrame x,
-                                                 Rcpp::List map,
-                                                 std::string visit_name,
-                                                 std::string icd_name) {
-  CV icd_codes = x[icd_name];
-  LogicalMatrix intermed(icd_codes.size(), map.size()); // zero-filled
-  // simplest code (and maybe fastest) is to calc comorbidity for each code,
-  // then aggregate on patient code
-  String code;
-  std::size_t codeNchar; // or char? we know it'll be short
-  CV oneCbd;
-  // this must be longer than any code plus one for zero terminator. Some risk
-  // of buffer overflow here.
-  char codeCur[16];
-
-  for (R_xlen_t i = 0; i != icd_codes.size(); ++i) {
-    // look backwards from length of current code in characters. This seems
-    // terrible, but when there are so many miniscule subdivisions of ICD-10-CM,
-    // we can't easily or efficiently extrapolate all these current and future
-    // possibilities without a lot of memory use (and more time searching those
-    // lookups)
-    code = icd_codes[i];
-    const char * code_cstring = code.get_cstring();
-    codeNchar = strlen(code_cstring);
-    if (codeNchar > 15)
-      Rcpp::stop("ICD-10 codes must all be less than 16 characters long.");
-    if (codeNchar <3) {
-      // abort to avoid segfault. will need to do better than this and
-      // replace with NA and go to next item
-      //Rcpp::stop("ICD-10 codes must be at least three characters long.");
-      continue;
-    }
-    size_t codeCurChar;
-    for (R_xlen_t j = 0; j != map.size(); ++j) {
-      oneCbd = map[j];
-      for (codeCurChar = 3; codeCurChar != codeNchar + 1; ++codeCurChar) {
-        strncpy(codeCur, code_cstring,  codeCurChar); // write codeCurChar chars to codeCur
-        codeCur[codeCurChar] = '\0'; // place the null terminator
-        SEXP test_str = PROTECT(Rf_mkString(codeCur));
-        CV lookup_code = test_str;
-        Rcpp::IntegerVector matched_indices = Rcpp::match(lookup_code, oneCbd);
-        if (matched_indices[0] > 0) {
-          intermed(i, j) = true; // the rest are zero filled
-          // we've found the comorbidity for the current code, so break out of
-          // comorbidity loop
-          UNPROTECT(1);
-          goto got_comorbid;
-        }
-        UNPROTECT(1);
-      } // for chars in a single code
-      got_comorbid: // just placeholder for the goto target
-        ;
-    } // each comorbidity
-  } // each row of input data
-  // haven't aggregated yet, so there is a row for each row of the input data
-  intermed.attr("dimnames") = Rcpp::List::create(x[visit_name], map.names());
-  return intermed;
-}
+using namespace Rcpp;
 
 //' @title Internal function to simplify a comorbidity map by only including codes
 //' which are parents, or identical to, a given list of codes.
@@ -122,15 +50,10 @@ Rcpp::LogicalMatrix icd10ComorbidParentSearchCpp(Rcpp::DataFrame x,
 //' stopifnot(simple_map$PHTN != character(0))
 //' stopifnot(simple_map$PVD == "I26019")
 //' umap <- icd:::simplify_map_lex(uranium_pathology$icd10, icd10_map_ahrq)
-//' head(icd:::categorize(uranium_pathology, icd10_map_ahrq,
-//'                       id_name = "case", code_name = "icd10",
-//'                       comorbid_fun = icd:::comorbidMatMul))
-//' head(icd:::categorize(uranium_pathology, icd10_map_ahrq,
-//'                       id_name = "case", code_name = "icd10",
-//'                       comorbid_fun = icd:::comorbidMatMul))
+//' head(icd:::categorize_simple(uranium_pathology, icd10_map_ahrq,
+//'                       id_name = "case", code_name = "icd10"))
 //' head(icd:::categorize_simple(uranium_pathology, umap,
-//'                              id_name = "case", code_name = "icd10",
-//'                              comorbid_fun = icd:::comorbidMatMulSimple))
+//'                              id_name = "case", code_name = "icd10"))
 //' @keywords internal
 // [[Rcpp::export(simplify_map_lex)]]
 Rcpp::List simplifyMapLexicographic(const CV pt_codes, const Rcpp::List map) {

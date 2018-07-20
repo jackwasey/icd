@@ -39,9 +39,9 @@ env:
     - LINTR_COMMENT_BOT=false
     - ICD_COVERAGE=false
     - OMP_NUM_THREADS=2
-    - ICD_TEST_DEPRECATED=true
-    - ICD_TEST_BUILD_DATA=true
-    - ICD_TEST_SLOW=true
+    - ICD_TEST_DEPRECATED=false
+    - ICD_TEST_BUILD_DATA=false
+    - ICD_TEST_SLOW=false
 
 matrix:
   fast_finish: true
@@ -52,12 +52,20 @@ matrix:
   - r: oldrel
   - r: release
     r_check_args: --no-install -no-build-vignettes --no-vignettes --ignore-vignettes --no-codoc --no-manual
-    env: ICD_COVERAGE=true
+    env:
+    - ICD_COVERAGE=true
+    - ICD_TEST_DEPRECATED=true
+    - ICD_TEST_BUILD_DATA=true
+    - ICD_TEST_SLOW=true
   allow_failures:
   - r: oldrel
   - r: release
     r_check_args: --no-install -no-build-vignettes --no-vignettes --ignore-vignettes --no-codoc --no-manual
-    env: ICD_COVERAGE=true
+    env:
+    - ICD_COVERAGE=true
+    - ICD_TEST_DEPRECATED=true
+    - ICD_TEST_BUILD_DATA=true
+    - ICD_TEST_SLOW=true
 
 before_script:
  - rm .Rinstignore  # do install everything for testing

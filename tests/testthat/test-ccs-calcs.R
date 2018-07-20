@@ -38,10 +38,6 @@ test_that("one code from each single level", {
     stringsAsFactors = FALSE
   )
   res <- icd9_comorbid_ccs(test_all_ccs_df)
-  res2 <- icd9_comorbid_ccs(test_all_ccs_df,
-                            categorize_fun = categorize,
-                            comorbid_fun = icd:::icd9ComorbidShortCpp)
-  expect_identical(res, res2)
   # should be one for each (do this way to ignore the empty first group)
   expect_equal(sum(res), length(first_from_each))
 
@@ -52,10 +48,6 @@ test_that("one code from each single level", {
     stringsAsFactors = FALSE
   )
   res <- icd9_comorbid_ccs(test_all_ccs_df)
-  res2 <- icd9_comorbid_ccs(test_all_ccs_df,
-                            categorize_fun = categorize,
-                            comorbid_fun = icd:::icd9ComorbidShortCpp)
-  expect_identical(res, res2)
   # should be one for each (do this way to ignore the empty first group)
   expect_equal(sum(res), length(first_from_each))
 })
@@ -71,10 +63,6 @@ test_that("one code from each single level backwards", {
     icd9 = first_from_each
   )
   res <- icd9_comorbid_ccs(test_all_ccs_df)
-  res2 <- icd9_comorbid_ccs(test_all_ccs_df,
-                            categorize_fun = categorize,
-                            comorbid_fun = icd:::icd9ComorbidShortCpp)
-  expect_identical(res, res2)
   # should be one for each (do this way to ignore the empty first group)
   expect_equal(sum(res), length(first_from_each))
 })
@@ -92,10 +80,6 @@ test_that("one code from each single level backwards with disordered visits", {
     icd9 = first_from_each
   )
   res <- icd9_comorbid_ccs(rnd_ccs_df)
-  res2 <- icd9_comorbid_ccs(rnd_ccs_df,
-                            categorize_fun = categorize,
-                            comorbid_fun = icd:::icd9ComorbidShortCpp)
-  expect_identical(res, res2)
   # should be one for each (do this way to ignore the empty first group)
   expect_equal(sum(res), length(first_from_each))
 })
@@ -113,13 +97,6 @@ test_that("ahrq ccs icd 9 is performing correctly", {
       stringsAsFactors = FALSE
     )
   res <- icd9_comorbid_ccs(test_df)
-  if (exists("comorbidMatMul") && exists("icd9ComorbidShortCpp")) {
-    expect_identical(
-      icd9_comorbid_ccs(test_df, categorize_fun = categorize,
-                        comorbid_fun = icd:::comorbidMatMul),
-      icd9_comorbid_ccs(test_df, categorize_fun = categorize,
-                        comorbid_fun = icd:::icd9ComorbidShortCpp))
-  }
 
   a_res <- which(sapply(icd9_map_single_ccs, function(y) "01012" %in% y))
   b_res1 <- which(sapply(icd9_map_single_ccs, function(y) "32341" %in% y))

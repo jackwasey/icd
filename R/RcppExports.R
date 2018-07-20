@@ -67,63 +67,12 @@ attr_short_diag <- function(x, value = TRUE) {
     invisible(.Call(`_icd_setShortDiag`, x, value))
 }
 
-#' @title Split data based on codes
-#' @description Using C++ because I also want to quickly return the visits
-#'   corresponding to the NA or non-NA factor elements. This is half-way to
-#'   implementing the core comorbidity calculation all in C++.
-#' @param df A `data.frame`, with a visit column (name given by `visit_name`),
-#'   and a code column (name given by `code_name` -- not `icd_name` in this
-#'   function). The code column must be a `factor`.
-#' @param relevant A character vector containing the factor levels of interest.
-#' @template visit_name
-#' @param code_name String with name of column containing the codes.
-#' @return Returns a list with two components:
-#'   1. A reduced data frame, with only those rows where are least one visit
-#'       had a relevant code
-#'   2. A character vector with all the visits where there were no matching
-#'       codes.
-#' @examples
-#'   df <- data.frame(visit_id = factor(c("visit1", "visit2", "visit1")),
-#'                    icd_code = factor(c("410", "0010", "E999")))
-#'   icd:::factor_split_rcpp(df, "410", "visit_id", "icd_code")
-#'   icd:::factor_split_rcpp(df, "999", "visit_id", "icd_code")
-#' \dontrun{
-#' R -e "devtools::load_all();devtools::test(filter='github')"
-#' R -e "devtools::load_all();icd9_comorbid_ahrq(data.frame(a='v', b='0010'))"
-#' }
-#' @md
-#' @keywords internal manip
-factor_split_rcpp <- function(df, relevant, id_name, code_name) {
-    .Call(`_icd_factorSplit`, df, relevant, id_name, code_name)
-}
-
 categorize_rcpp <- function() {
     .Call(`_icd_categorize_rcpp`)
 }
 
 icd10cm_children_defined_cpp <- function(x, icd10cm2016, nc) {
     .Call(`_icd_icd10cmChildrenDefined`, x, icd10cm2016, nc)
-}
-
-icd9ComorbidShortCpp <- function(icd9df, icd9Mapping, visitId, icd9Field, threads = 8L, chunk_size = 256L, omp_chunk_size = 1L) {
-    .Call(`_icd_icd9ComorbidShortCpp`, icd9df, icd9Mapping, visitId, icd9Field, threads, chunk_size, omp_chunk_size)
-}
-
-#' core search for ICD code in a map
-#' @keywords internal
-lookupComorbidByChunkFor <- function(vcdb, map, chunkSize, ompChunkSize, out) {
-    invisible(.Call(`_icd_lookupComorbidByChunkFor`, vcdb, map, chunkSize, ompChunkSize, out))
-}
-
-#' Internal function to find ICD-10 parents
-#' @param x Character vector (not factor)
-#' @template mapping
-#' @template visit_name
-#' @template icd_name
-#' @seealso \url{https://github.com/s-u/fastmatch/blob/master/src/fastmatch.c}
-#' @keywords internal
-icd10_comorbid_parent_search_cpp <- function(x, map, visit_name, icd_name) {
-    .Call(`_icd_icd10ComorbidParentSearchCpp`, x, map, visit_name, icd_name)
 }
 
 #' @title Internal function to simplify a comorbidity map by only including codes
@@ -146,15 +95,10 @@ icd10_comorbid_parent_search_cpp <- function(x, map, visit_name, icd_name) {
 #' stopifnot(simple_map$PHTN != character(0))
 #' stopifnot(simple_map$PVD == "I26019")
 #' umap <- icd:::simplify_map_lex(uranium_pathology$icd10, icd10_map_ahrq)
-#' head(icd:::categorize(uranium_pathology, icd10_map_ahrq,
-#'                       id_name = "case", code_name = "icd10",
-#'                       comorbid_fun = icd:::comorbidMatMul))
-#' head(icd:::categorize(uranium_pathology, icd10_map_ahrq,
-#'                       id_name = "case", code_name = "icd10",
-#'                       comorbid_fun = icd:::comorbidMatMul))
+#' head(icd:::categorize_simple(uranium_pathology, icd10_map_ahrq,
+#'                       id_name = "case", code_name = "icd10"))
 #' head(icd:::categorize_simple(uranium_pathology, umap,
-#'                              id_name = "case", code_name = "icd10",
-#'                              comorbid_fun = icd:::comorbidMatMulSimple))
+#'                              id_name = "case", code_name = "icd10"))
 #' @keywords internal
 simplify_map_lex <- function(pt_codes, map) {
     .Call(`_icd_simplifyMapLexicographic`, pt_codes, map)
@@ -183,31 +127,6 @@ simplify_map_lex <- function(pt_codes, map) {
 #' @keywords internal array algebra
 comorbidMatMulSimple <- function(icd9df, icd9Mapping, visitId, icd9Field) {
     .Call(`_icd_comorbidMatMulSimple`, icd9df, icd9Mapping, visitId, icd9Field)
-}
-
-#' @title Comorbidity calculation as a matrix multiplication
-#' @description
-#' The problem is that the matrices could be huge: the patient-icd matrix would
-#' be millions of patient rows, and ~15000 columns for all AHRQ comorbidities.
-#' @details
-#' Several ways of reducing the problem: firstly, as with existing code, we can
-#' drop any ICD codes from the map which are not in the patient data. With many
-#' patients, this will be less effective as the long tail becomes apparent.
-#' However, with the (small) Vermont data, we see ~15,000 codes being reduced to
-#' 339.
-#' @section Sparse matrices:
-#' Using sparse matrices is another solution. Building
-#' the initial matrix may become a significant part of the calculation, but once
-#' done, the solution could be a simple matrix multiplication, which is
-#' potentially highly optimized (Eigen, BLAS, GPU, etc.)
-#' @section Eigen:
-#' Eigen has parallel (non-GPU) optimized sparse row-major *
-#' dense matrix. Patients-ICD matrix must be the row-major sparse one, so the
-#' dense matrix is then the comorbidity map
-#' \url{https://eigen.tuxfamily.org/dox/TopicMultiThreading.html}
-#' @keywords internal array algebra
-comorbidMatMul <- function(icd9df, icd9Mapping, visitId, icd9Field, threads = 8L, chunk_size = 256L, omp_chunk_size = 1L) {
-    .Call(`_icd_comorbidMatMul`, icd9df, icd9Mapping, visitId, icd9Field, threads, chunk_size, omp_chunk_size)
 }
 
 icd9MajMinToCode_alt_Old <- function(mjr, mnr, isShort) {

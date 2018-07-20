@@ -11,8 +11,10 @@ autom4te\.cache$
 (^vignettes\/)?\.build\.timestamp$
 .*_cache.*
 callgrind\.out
+^codecov.yml$
 ^config\.log$
 ^config\.status$
+conftest\.dSYM$
 ^configure\.ac$
 ^configure\.scan$
 ^CONTRIBUTING\.md$
