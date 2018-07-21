@@ -50,8 +50,11 @@ matrix:
     env: LINTR_COMMENT_BOT=true
   - r: release
   - r: oldrel
+    r_build_args: --no-build-vignettes --no-manual --resave-data=no
+    r_check_args: -no-build-vignettes --no-vignettes --ignore-vignettes --no-codoc --no-manual
   - r: release
-    r_check_args: --no-install -no-build-vignettes --no-vignettes --ignore-vignettes --no-codoc --no-manual
+    r_build_args: --no-build-vignettes --no-manual --resave-data=no
+    r_check_args: -no-build-vignettes --no-vignettes --ignore-vignettes --no-codoc --no-manual
     env:
     - ICD_COVERAGE=true
     - ICD_TEST_DEPRECATED=true
@@ -59,7 +62,10 @@ matrix:
     - ICD_TEST_SLOW=true
   allow_failures:
   - r: oldrel
+    r_build_args: --no-build-vignettes --no-manual --resave-data=no
+    r_check_args: --no-install -no-build-vignettes --no-vignettes --ignore-vignettes --no-codoc --no-manual
   - r: release
+    r_build_args: --no-build-vignettes --no-manual --resave-data=no
     r_check_args: --no-install -no-build-vignettes --no-vignettes --ignore-vignettes --no-codoc --no-manual
     env:
     - ICD_COVERAGE=true
