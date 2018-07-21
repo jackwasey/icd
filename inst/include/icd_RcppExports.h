@@ -971,25 +971,6 @@ namespace icd {
         return Rcpp::as<int >(rcpp_result_gen);
     }
 
-    inline VecStr icd9_sort_cpp(VecStr x) {
-        typedef SEXP(*Ptr_icd9_sort_cpp)(SEXP);
-        static Ptr_icd9_sort_cpp p_icd9_sort_cpp = NULL;
-        if (p_icd9_sort_cpp == NULL) {
-            validateSignature("VecStr(*icd9_sort_cpp)(VecStr)");
-            p_icd9_sort_cpp = (Ptr_icd9_sort_cpp)R_GetCCallable("icd", "_icd_icd9_sort_cpp");
-        }
-        RObject rcpp_result_gen;
-        {
-            RNGScope RCPP_rngScope_gen;
-            rcpp_result_gen = p_icd9_sort_cpp(Shield<SEXP>(Rcpp::wrap(x)));
-        }
-        if (rcpp_result_gen.inherits("interrupted-error"))
-            throw Rcpp::internal::InterruptedException();
-        if (rcpp_result_gen.inherits("try-error"))
-            throw Rcpp::exception(Rcpp::as<std::string>(rcpp_result_gen).c_str());
-        return Rcpp::as<VecStr >(rcpp_result_gen);
-    }
-
     inline std::vector<std::size_t> icd9_order_cpp(VecStr x) {
         typedef SEXP(*Ptr_icd9_order_cpp)(SEXP);
         static Ptr_icd9_order_cpp p_icd9_order_cpp = NULL;

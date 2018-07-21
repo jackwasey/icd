@@ -1692,36 +1692,6 @@ RcppExport SEXP _icd_valgrindCallgrindStop() {
     UNPROTECT(1);
     return rcpp_result_gen;
 }
-// icd9SortCpp
-VecStr icd9SortCpp(VecStr x);
-static SEXP _icd_icd9SortCpp_try(SEXP xSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::traits::input_parameter< VecStr >::type x(xSEXP);
-    rcpp_result_gen = Rcpp::wrap(icd9SortCpp(x));
-    return rcpp_result_gen;
-END_RCPP_RETURN_ERROR
-}
-RcppExport SEXP _icd_icd9SortCpp(SEXP xSEXP) {
-    SEXP rcpp_result_gen;
-    {
-        Rcpp::RNGScope rcpp_rngScope_gen;
-        rcpp_result_gen = PROTECT(_icd_icd9SortCpp_try(xSEXP));
-    }
-    Rboolean rcpp_isInterrupt_gen = Rf_inherits(rcpp_result_gen, "interrupted-error");
-    if (rcpp_isInterrupt_gen) {
-        UNPROTECT(1);
-        Rf_onintr();
-    }
-    Rboolean rcpp_isError_gen = Rf_inherits(rcpp_result_gen, "try-error");
-    if (rcpp_isError_gen) {
-        SEXP rcpp_msgSEXP_gen = Rf_asChar(rcpp_result_gen);
-        UNPROTECT(1);
-        Rf_error(CHAR(rcpp_msgSEXP_gen));
-    }
-    UNPROTECT(1);
-    return rcpp_result_gen;
-}
 // icd9OrderCpp
 std::vector<std::size_t> icd9OrderCpp(VecStr x);
 static SEXP _icd_icd9OrderCpp_try(SEXP xSEXP) {
@@ -1964,7 +1934,6 @@ static int _icd_RcppExport_validate(const char* sig) {
         signatures.insert("void(*debug_parallel)()");
         signatures.insert("int(*valgrindCallgrindStart)(bool)");
         signatures.insert("int(*valgrindCallgrindStop)()");
-        signatures.insert("VecStr(*icd9_sort_cpp)(VecStr)");
         signatures.insert("std::vector<std::size_t>(*icd9_order_cpp)(VecStr)");
         signatures.insert("IntegerVector(*factor_nosort_rcpp_worker)(const CharacterVector&,const CharacterVector&,const bool)");
         signatures.insert("Rcpp::IntegerVector(*refactor_worker)(const IntegerVector&,const CV&,bool)");
@@ -2027,7 +1996,6 @@ RcppExport SEXP _icd_RcppExport_registerCCallable() {
     R_RegisterCCallable("icd", "_icd_debug_parallel", (DL_FUNC)_icd_debug_parallel_try);
     R_RegisterCCallable("icd", "_icd_valgrindCallgrindStart", (DL_FUNC)_icd_valgrindCallgrindStart_try);
     R_RegisterCCallable("icd", "_icd_valgrindCallgrindStop", (DL_FUNC)_icd_valgrindCallgrindStop_try);
-    R_RegisterCCallable("icd", "_icd_icd9_sort_cpp", (DL_FUNC)_icd_icd9SortCpp_try);
     R_RegisterCCallable("icd", "_icd_icd9_order_cpp", (DL_FUNC)_icd_icd9OrderCpp_try);
     R_RegisterCCallable("icd", "_icd_factor_nosort_rcpp_worker", (DL_FUNC)_icd_factorNoSort_try);
     R_RegisterCCallable("icd", "_icd_refactor_worker", (DL_FUNC)_icd_refactor_try);

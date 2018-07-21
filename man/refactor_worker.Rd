@@ -2,13 +2,21 @@
 % Please edit documentation in R/RcppExports.R
 \name{refactor_worker}
 \alias{refactor_worker}
+\alias{refactor_narm_worker}
 \title{Re-generate a factor with new levels, without doing string matching}
 \usage{
 refactor_worker(x, new_levels, exclude_na)
+
+refactor_narm_worker(x, new_levels)
 }
 \description{
 This is called by an R wrapper. There is an \code{na.rm} version,
 too.
 }
+\section{Functions}{
+\itemize{
+\item \code{refactor_narm_worker}: Drop all `NA` values from levels and values
+}}
+
 \keyword{internal}
 \keyword{manip}

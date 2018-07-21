@@ -1,9 +1,9 @@
 // [[Rcpp::depends(RcppEigen)]]
 // [[Rcpp::interfaces(r, cpp)]]
 // [[Rcpp::plugins(cpp11)]]
-#include "config.h"                     // for valgrind, CXX11 etc
-#include "local.h"                     // for ICD_OPENMP
-#include "icd_types.h"                 // for ComorbidOut, VecVecInt, VecVec...
+#include "icd_types.h"
+#include "config.h"
+#include "local.h"
 #include "comorbidMatMul.h"
 #include "fastIntToString.h"
 #include <algorithm>                   // for binary_search, copy
@@ -58,7 +58,8 @@ public:
 
 // TODO: make exportable version of get relevant? // [[Rcpp::export]]
 
-// nocov start
+// # nocov start
+#ifdef ICD_DEBUG
 void printCornerMap(DenseMap x) {
   DEBUG("Map matrix:");
   if (x.rows() >= 8 && x.cols() >= 32) {
@@ -85,7 +86,6 @@ void printCornerSparse(PtsSparse x) {
   else
     Rcpp::Rcout << dense << std::endl;
 }
-#ifdef ICD_DEBUG
 #define PRINTCORNERMAP(x) Rcpp::Rcout << #x << ": "; printCornerMap(x);
 #define PRINTCORNERSP(x) Rcpp::Rcout << #x << ": "; printCornerSparse(x);
 #define ICD_ASSIGN(row,col) mat(row, col) = true; // bounds check
@@ -94,7 +94,7 @@ void printCornerSparse(PtsSparse x) {
 #define PRINTCORNERSP(x) ((void)0);
 #define ICD_ASSIGN(row,col) mat.coeffRef(row, col) = true;
 #endif
-// nocov end
+// # nocov end
 
 // This is a complicated function
 //
@@ -199,99 +199,6 @@ void buildVisitCodesSparseSimple(const RObject& visits,
   visMat.conservativeResize(visitIds.size(), relevantSize);
   DEBUG("Built visMt, rows:" << visMat.rows() << ", cols: " << visMat.cols());
   PRINTCORNERSP(visMat);
-}
-
-void buildVisitCodesSparse(const SEXP& icd9df,
-                           const std::string& visitId,
-                           const std::string& icd9Field,
-                           PtsSparse& visit_codes_sparse,
-                           VecStr& visitIds // will have to get this from sparse matrix at end, but needed?
-) {
-  SEXP icds = PROTECT(getRListOrDfElement(icd9df, icd9Field.c_str())); // this is a factor
-  SEXP vsexp = PROTECT(getRListOrDfElement(icd9df, visitId.c_str()));
-  IntegerVector icd9dfFactor = as<IntegerVector>(icds);
-  CV factorLevels = icd9dfFactor.attr("levels");
-  R_xlen_t numUniqueCodes = factorLevels.length();
-
-  //char* lastVisit;
-  //std::strcpy(lastVisit, "JJ94967295JJ"); // random string
-  std::string lastVisit = "JJ94967295JJ94967295JJ"; // random long string TODO: test consequences of going over length.
-
-  int vlen = Rf_length(icds); // same as length of vsexp
-  // make an unordered set for quick check for duplicates while building list of unique visit ids
-  VisLk vis_lookup;
-  vis_lookup.reserve(vlen);
-  // also maintain list of (ordered as first encountered) visit ids
-  visitIds.resize(vlen); // resize and trim at end, as alternative to reserve
-  int n;
-
-  VecVecIntSz vcdb_max_idx = -1; // we increment immediately to zero as first index
-  VecVecIntSz vcdb_new_idx;
-  VecVecIntSz vcdb_last_idx = 2094967295; // extremely unlikely random, < 2^32 (to avoid 32bit R build warn)
-
-  visit_codes_sparse.resize(vlen, numUniqueCodes); // overestimate badly to start
-  visit_codes_sparse.reserve(vlen); // but memory commitment is known and limited.
-
-  std::vector<Triplet> visTriplets;
-  visTriplets.reserve(vlen * 30); // overestimate codes per patient to avoid resizing while filling
-
-  // the result matrix size should have dimensions rows: number of unique
-  // visitIds, cols: number of unique ICD codes.
-  for (int i = 0; i != vlen; ++i) {
-#ifdef ICD_DEBUG_SETUP_TRACE
-    Rcpp::Rcout << "vcdb_max_idx: " << vcdb_max_idx <<
-      " vcdb_new_idx: " << vcdb_new_idx <<
-        " vcdb_last_idx: " <<  vcdb_last_idx << std::endl;
-#endif
-    std::string visit = CHAR(STRING_ELT(vsexp, i));
-    n = INTEGER(icds)[i]; // ICD codes are in a factor, so get the integer index
-
-    if (lastVisit != visit) {
-#ifdef ICD_DEBUG_SETUP_TRACE
-      Rcpp::Rcout << "visit has changed" << std::endl;
-#endif
-      vcdb_new_idx = vcdb_max_idx + 1;
-      VisLk::iterator found = vis_lookup.find(visit); // did we see this visit already? Get name-index pair.
-      if (found != vis_lookup.end()) { // we found the old visit
-        // we saved the index in the map, so use that to insert a triplet:
-#ifdef ICD_DEBUG_SETUP
-        Rcpp::Rcout << "Found " << found->first << " with row id: " << found->second << std::endl;
-#endif
-#ifdef ICD_DEBUG_SETUP_TRACE
-        Rcpp::Rcout << "adding true at index (" << found->second << ", " << n-1 << ")" << std::endl;
-#endif
-        visTriplets.push_back(Triplet(found->second, n - 1, true));
-        continue; // and continue with next row
-      } else { // otherwise we found a new visitId, so add it to our lookup table
-#ifdef ICD_DEBUG_SETUP_TRACE
-        Rcpp::Rcout << "visit is new" << std::endl;
-#endif
-        VisLkPair vis_lookup_pair = std::make_pair(visit, vcdb_new_idx);
-        vis_lookup.insert(vis_lookup_pair); // new visit, with associated position in vcdb
-      }
-      // we didn't find an existing visitId
-#ifdef ICD_DEBUG_SETUP_TRACE
-      Rcpp::Rcout << "adding true at index (" << vcdb_new_idx << ", " << n-1 << ")" << std::endl;
-#endif
-      visTriplets.push_back(Triplet(vcdb_new_idx, n - 1, true));
-      visitIds[vcdb_new_idx] = visit; // keep list of visitIds in order encountered.
-      lastVisit = visit;
-      vcdb_last_idx = vcdb_new_idx;
-      ++vcdb_max_idx;
-    } else { // last visitId was the same as the current one, so we can skip all the logic
-#ifdef ICD_DEBUG_SETUP_TRACE
-      Rcpp::Rcout << "adding true at index (" << vcdb_last_idx << ", " << n-1 << ")" << std::endl;
-#endif
-
-      visTriplets.push_back(Triplet(vcdb_last_idx, n - 1, true));
-    }
-  } // end loop through all visit-code input data
-  UNPROTECT(2);
-
-  // visit_codes_sparse and visitIds are updated
-  visit_codes_sparse.setFromTriplets(visTriplets.begin(), visTriplets.end());
-  visit_codes_sparse.conservativeResize(vcdb_max_idx + 1, numUniqueCodes);
-  visitIds.resize(vcdb_max_idx + 1); // we over-sized (not just over-reserved) so now we trim.
 }
 
 class MapPlus {

@@ -200,12 +200,6 @@ bool icd9ComparePair(pas a, pas b) {
   return icd9CompareStrings(af, bf);
 }
 
-// [[Rcpp::export(icd9_sort_cpp)]]
-VecStr icd9SortCpp(VecStr x) {
-  std::sort(x.begin(), x.end(), icd9CompareStrings);
-  return x;
-}
-
 // add one because R indexes from 1, not 0
 inline std::size_t getSecondPlusOne(const std::pair<std::string, std::size_t>& p) {
   return p.second + 1;
@@ -360,8 +354,11 @@ Rcpp::IntegerVector refactor(const IntegerVector& x, const CV& new_levels, bool 
   return(f);
 }
 
+//' @describeIn refactor_worker Drop all `NA` values from levels and values
+//' @keywords internal
 // [[Rcpp::export(refactor_narm_worker)]]
-Rcpp::IntegerVector refactor_narm(const IntegerVector& x, const CV& new_levels) {
+Rcpp::IntegerVector refactor_narm(const IntegerVector& x,
+                                  const CV& new_levels) {
   TRACE_UTIL("Refactoring, dropping NA");
   IntegerVector f(x.size()); // too many if we are dropping NA values.
   f.attr("class") = "factor";
@@ -391,7 +388,7 @@ Rcpp::IntegerVector refactor_narm(const IntegerVector& x, const CV& new_levels) 
   DEBUG_UTIL_VEC(no_na_new_levels);
   if (no_na_new_levels.size() == 0) {
     DEBUG_UTIL("no_na_new_levels is empty, so whole result must be empty");
-    f = Rcpp::rep(NA_INTEGER, x.size());
+    f = IntegerVector::create();
     f.attr("levels") = CV::create();
     f.attr("class") = "factor";
     return(f);
@@ -463,9 +460,10 @@ IntegerVector matchFastTemplate(const Vector<RTYPE>& x, const Vector<RTYPE>& tab
 
 //' @title Faster match
 //' @name match_rcpp
-//' @description Try \pkg{Rcpp} hashing (and simpler logic) compared to
-//' internal \R \code{do_match} and \code{match5} morass. Lose the ability to use
-//' \code{incomparables}.
+//' @description TODO: Try \pkg{Rcpp} hashing (and simpler logic) compared to
+//'   internal \R \code{do_match} and \code{match5} morass. Lose the ability to
+//'   use \code{incomparables}. There may be a problem with the IndexHash code,
+//'   though.
 //' @keywords internal
 // [[Rcpp::export(match_rcpp)]]
 SEXP matchFast(SEXP x, SEXP table) {

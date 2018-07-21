@@ -407,10 +407,6 @@ valgrindCallgrindStop <- function() {
     .Call(`_icd_valgrindCallgrindStop`)
 }
 
-icd9_sort_cpp <- function(x) {
-    .Call(`_icd_icd9SortCpp`, x)
-}
-
 icd9_order_cpp <- function(x) {
     .Call(`_icd_icd9OrderCpp`, x)
 }
@@ -431,15 +427,18 @@ refactor_worker <- function(x, new_levels, exclude_na) {
     .Call(`_icd_refactor`, x, new_levels, exclude_na)
 }
 
+#' @describeIn refactor_worker Drop all `NA` values from levels and values
+#' @keywords internal
 refactor_narm_worker <- function(x, new_levels) {
     .Call(`_icd_refactor_narm`, x, new_levels)
 }
 
 #' @title Faster match
 #' @name match_rcpp
-#' @description Try \pkg{Rcpp} hashing (and simpler logic) compared to
-#' internal \R \code{do_match} and \code{match5} morass. Lose the ability to use
-#' \code{incomparables}.
+#' @description TODO: Try \pkg{Rcpp} hashing (and simpler logic) compared to
+#'   internal \R \code{do_match} and \code{match5} morass. Lose the ability to
+#'   use \code{incomparables}. There may be a problem with the IndexHash code,
+#'   though.
 #' @keywords internal
 match_rcpp <- function(x, table) {
     .Call(`_icd_matchFast`, x, table)

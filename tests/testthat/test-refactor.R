@@ -64,9 +64,6 @@ test_that("basic refactoring", {
     m <- test_cases[tc, 1][[1]]
     n <- test_cases[tc, 2][[1]]
     p <- unique(test_cases[tc, 3][[1]])
-    if (FALSE) print(paste("x: ", paste(unlist(m), collapse = " "),
-                           "old levels: ", paste(unlist(p), collapse = " "),
-                           "new levels: ", paste(unlist(n), collapse = " ")))
     f <- factor(m, levels = p)
     expect_identical(
       refactor(f, n),
@@ -92,4 +89,17 @@ test_that("basic refactoring", {
 
         )
   }
+})
+
+test_that("new factor has empty levels when necessary", {
+  f <- factor("a")
+  expect_equal(
+    refactor(f, levels = NA, na.rm = TRUE),
+    factor())
+  expect_equal(
+    refactor(f, levels = NA, na.rm = FALSE, exclude_na = TRUE),
+    factor(NA, levels = NULL))
+  expect_equal(
+    refactor(f, levels = NA, na.rm = FALSE, exclude_na = FALSE),
+    factor(NA, exclude = NULL))
 })

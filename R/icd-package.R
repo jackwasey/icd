@@ -121,6 +121,7 @@
 #'   check_data_frame check_matrix assert_count expect_data_frame assert_scalar
 #'   assert_environment assert_vector assert_matrix assert_integer
 #'   expect_scalar_na expect_logical assert_integerish expect_character
+#'   assert_factor
 #' @importFrom magrittr "%>%" "%<>%" set_names extract2
 #' @importFrom utils head tail read.fwf
 #' @importFrom stats setNames
