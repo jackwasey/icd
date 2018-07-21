@@ -115,6 +115,7 @@
 #' @useDynLib icd, .registration=TRUE
 #' @importFrom icd.data assign_icd_data
 #' @importFrom Rcpp cppFunction
+#' @importFrom methods setLoadAction
 #' @importFrom checkmate assert assert_flag assert_list assert_data_frame
 #'   assert_string check_string check_null check_factor check_character
 #'   assert_int expect_numeric check_flag assert_logical assert_character
