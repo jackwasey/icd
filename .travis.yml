@@ -77,7 +77,7 @@ before_script:
 after_success:
  - if [ "$ICD_COVERAGE" = "true" ]; then
      Rscript -e "covr::codecov(quiet = FALSE)"; fi
- - if [ "$LINTR_COMMENT_BOT" = "true" -a "$TRAVIS_R_VERSION_STRING" = "release" ]; then
+ - if [ "$LINTR_COMMENT_BOT" = "true" ]; then
      Rscript -e "lintr::lint_package()"; fi
 
 notifications:

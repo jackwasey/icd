@@ -9,8 +9,7 @@ test_that("github #133 doesn't crash R", {
   res <- icd10_comorbid(x,
                         icd10_map_ahrq,
                         visit_name = "CLAIMNO",
-                        icd_name = "icd10",
-                        aggregate = FALSE)
+                        icd_name = "icd10")
   expect_equal(dim(res), c(20, 30))
   expect_equal(
     rownames(res),
