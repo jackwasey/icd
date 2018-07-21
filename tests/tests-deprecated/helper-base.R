@@ -90,7 +90,7 @@ test_twenty <- structure(
   class = "data.frame")
 
 # first and last item from each AHRQ comorbidity:
-icd:::icd9(
+icd9(
   unlist(
     unname(
       c(lapply(icd9_map_ahrq, head, n = 1),
@@ -145,7 +145,7 @@ othersalmonella <- c("0030", "0031", "00320", "00321", "00322",
                      "00323", "00324", "00329", "0038", "0039")
 
 # one code from each ICD-9 chapter
-one_of_each <- icd:::get_one_of_each()
+one_of_each <- get_one_of_each()
 
 # one icd9 patient
 one_pt_one_icd9 <- data.frame(visit_id = c("a"),
@@ -165,7 +165,7 @@ two_map <- list("malady" = c("100", "2000"),
 
 pts_invalid_mix <- icd_long_data(
   visit_id = c(1000, 1000, 1001),
-  icd9 = icd:::icd9(c("27801", "invalides", "25001")),
+  icd9 = icd9(c("27801", "invalides", "25001")),
   poa = factor(c("Y", "N", "Y")),
   stringsAsFactors = FALSE)
 

@@ -51,6 +51,7 @@ Depends:
 Imports:
     checkmate (>= 1.7.0),
     magrittr,
+    methods,
     stats,
     Rcpp (>= 0.12.3),
     utils

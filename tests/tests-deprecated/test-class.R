@@ -1,33 +1,33 @@
 context("S3 class functions")
 
 test_that("classes are created and identified correctly", {
-  expect_true(is.icd9(icd:::icd9("V10")))
-  expect_true(is.icd9cm(icd:::icd9cm("V10")))
-  expect_true(is.icd10(icd:::icd10("V10")))
-  expect_true(is.icd10cm(icd:::icd10cm("V10")))
+  expect_true(is.icd9(icd9("V10")))
+  expect_true(is.icd9cm(icd9cm("V10")))
+  expect_true(is.icd10(icd10("V10")))
+  expect_true(is.icd10cm(icd10cm("V10")))
 })
 
 test_that("subclasses still have parent class", {
-  expect_true(is.icd9(icd:::icd9cm("V10")))
-  expect_true(is.icd10(icd:::icd10cm("V10")))
+  expect_true(is.icd9(icd9cm("V10")))
+  expect_true(is.icd10(icd10cm("V10")))
 })
 
 test_that("setting conflicting icd data class gives error", {
-  expect_error(as.icd10(icd:::icd9("V10")))
-  expect_error(as.icd10cm(icd:::icd9("V10")))
-  expect_error(as.icd10(icd:::icd9cm("V10")))
-  expect_error(as.icd10cm(icd:::icd9cm("V10")))
-  expect_error(as.icd9(icd:::icd10("V10")))
-  expect_error(as.icd9(icd:::icd10cm("V10")))
-  expect_error(as.icd9cm(icd:::icd10("V10")))
-  expect_error(as.icd9cm(icd:::icd10cm("V10")))
+  expect_error(as.icd10(icd9("V10")))
+  expect_error(as.icd10cm(icd9("V10")))
+  expect_error(as.icd10(icd9cm("V10")))
+  expect_error(as.icd10cm(icd9cm("V10")))
+  expect_error(as.icd9(icd10("V10")))
+  expect_error(as.icd9(icd10cm("V10")))
+  expect_error(as.icd9cm(icd10("V10")))
+  expect_error(as.icd9cm(icd10cm("V10")))
 })
 
 test_that("well ordered class lists are created", {
-  expect_classes_ordered(icd:::icd9(""))
-  expect_classes_ordered(icd:::icd9cm(""))
-  expect_classes_ordered(icd:::icd10(""))
-  expect_classes_ordered(icd:::icd10cm(""))
+  expect_classes_ordered(icd9(""))
+  expect_classes_ordered(icd9cm(""))
+  expect_classes_ordered(icd10(""))
+  expect_classes_ordered(icd10cm(""))
 
   expect_classes_ordered(as.icd_short_diag(""))
   expect_classes_ordered(as.icd_decimal_diag(""))
@@ -35,15 +35,15 @@ test_that("well ordered class lists are created", {
 })
 
 test_that("well ordered class lists short/decimal ICD combos are created", {
-  expect_classes_ordered(as.icd_short_diag(icd:::icd9("V102")))
-  expect_classes_ordered(as.icd_decimal_diag(icd:::icd9cm("410.00")))
-  expect_classes_ordered(as.icd_short_diag(icd:::icd10("A100")))
-  expect_classes_ordered(as.icd_decimal_diag(icd:::icd10cm("B23.1")))
+  expect_classes_ordered(as.icd_short_diag(icd9("V102")))
+  expect_classes_ordered(as.icd_decimal_diag(icd9cm("410.00")))
+  expect_classes_ordered(as.icd_short_diag(icd10("A100")))
+  expect_classes_ordered(as.icd_decimal_diag(icd10cm("B23.1")))
 
-  expect_classes_ordered(as.icd_decimal_diag(icd:::icd9("V10.2")))
-  expect_classes_ordered(as.icd_short_diag(icd:::icd9cm("41000")))
-  expect_classes_ordered(as.icd_decimal_diag(icd:::icd10("A10.0")))
-  expect_classes_ordered(as.icd_short_diag(icd:::icd10cm("B231")))
+  expect_classes_ordered(as.icd_decimal_diag(icd9("V10.2")))
+  expect_classes_ordered(as.icd_short_diag(icd9cm("41000")))
+  expect_classes_ordered(as.icd_decimal_diag(icd10("A10.0")))
+  expect_classes_ordered(as.icd_short_diag(icd10cm("B231")))
 })
 
 test_that("is short or decimal code", {
@@ -80,8 +80,8 @@ test_that("attributes set and queried", {
 })
 
 test_that("ICD version supertype set", {
-  expect_true(is.icd9(icd:::icd9cm("")))
-  expect_true(is.icd10(icd:::icd10cm("")))
+  expect_true(is.icd9(icd9cm("")))
+  expect_true(is.icd10(icd10cm("")))
 })
 
 x <- icd9_map_quan_elix
@@ -192,18 +192,18 @@ test_that("is comorbidity map?", {
 context("class conflicts")
 
 test_that("no conflict for standard classes", {
-  expect_false(icd_classes_conflict(icd:::icd9("100.1")))
-  expect_false(icd_classes_conflict(icd:::icd9("100.1") %>% as.icd_decimal_diag))
-  expect_false(icd_classes_conflict(icd:::icd9("1001") %>% as.icd_short_diag))
-  expect_false(icd_classes_conflict(icd:::icd9cm("100.1")))
-  expect_false(icd_classes_conflict(icd:::icd9cm("100.1") %>% as.icd_decimal_diag))
-  expect_false(icd_classes_conflict(icd:::icd9cm("1001") %>% as.icd_short_diag))
-  expect_false(icd_classes_conflict(icd:::icd10("A00.0")))
-  expect_false(icd_classes_conflict(icd:::icd10("A00.0") %>% as.icd_decimal_diag))
-  expect_false(icd_classes_conflict(icd:::icd10("A000") %>% as.icd_short_diag))
-  expect_false(icd_classes_conflict(icd:::icd10cm("A00.0")))
-  expect_false(icd_classes_conflict(icd:::icd10cm("A00.0") %>% as.icd_decimal_diag))
-  expect_false(icd_classes_conflict(icd:::icd10cm("A000") %>% as.icd_short_diag))
+  expect_false(icd_classes_conflict(icd9("100.1")))
+  expect_false(icd_classes_conflict(icd9("100.1") %>% as.icd_decimal_diag))
+  expect_false(icd_classes_conflict(icd9("1001") %>% as.icd_short_diag))
+  expect_false(icd_classes_conflict(icd9cm("100.1")))
+  expect_false(icd_classes_conflict(icd9cm("100.1") %>% as.icd_decimal_diag))
+  expect_false(icd_classes_conflict(icd9cm("1001") %>% as.icd_short_diag))
+  expect_false(icd_classes_conflict(icd10("A00.0")))
+  expect_false(icd_classes_conflict(icd10("A00.0") %>% as.icd_decimal_diag))
+  expect_false(icd_classes_conflict(icd10("A000") %>% as.icd_short_diag))
+  expect_false(icd_classes_conflict(icd10cm("A00.0")))
+  expect_false(icd_classes_conflict(icd10cm("A00.0") %>% as.icd_decimal_diag))
+  expect_false(icd_classes_conflict(icd10cm("A000") %>% as.icd_short_diag))
 })
 
 test_that("no conflict for built-in data", {
