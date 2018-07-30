@@ -10,10 +10,11 @@
 \alias{icd_condense}
 \title{Condense ICD-9 code by replacing complete families with parent codes}
 \usage{
-condense(x, short_code = guess_short(x), defined = NULL, warn = TRUE, ...)
-
-\method{condense}{character}(x, short_code = guess_short(x), defined = NULL,
+condense(x, short_code = guess_short(x), defined = NULL, warn = TRUE,
   ...)
+
+\method{condense}{character}(x, short_code = guess_short(x),
+  defined = NULL, ...)
 
 icd9_condense_decimal(x, defined = NULL, warn = TRUE,
   keep_factor_levels = FALSE)
@@ -106,5 +107,6 @@ explain_code(icd9_map_elix$CHF, condense = TRUE, warn = FALSE)
 Other ICD-9 ranges: \code{\link{children}},
   \code{\link{expand_minor}}, \code{\link{expand_range}}
 }
+\concept{ICD-9 ranges}
 \keyword{internal}
 \keyword{manip}

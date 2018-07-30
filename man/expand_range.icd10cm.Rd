@@ -4,8 +4,8 @@
 \alias{expand_range.icd10cm}
 \title{Expand range of ICD-10 codes returning only defined codes in ICD-10-CM}
 \usage{
-\method{expand_range}{icd10cm}(start, end, short_code = guess_short(c(start,
-  end)), defined = TRUE, ...)
+\method{expand_range}{icd10cm}(start, end,
+  short_code = guess_short(c(start, end)), defined = TRUE, ...)
 }
 \arguments{
 \item{start}{character vector of length one containing an ICD code}

@@ -4,8 +4,8 @@
 \alias{icd9_generate_all_}
 \title{generate lookup data for each class of ICD-9 code}
 \usage{
-icd9_generate_all_(major_fun, short_code = TRUE, env = new.env(hash = TRUE,
-  baseenv()))
+icd9_generate_all_(major_fun, short_code = TRUE, env = new.env(hash =
+  TRUE, baseenv()))
 }
 \value{
 list with two items, the first being an environment, the second being

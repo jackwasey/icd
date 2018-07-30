@@ -11,15 +11,15 @@
 \alias{icd10-package}
 \alias{package-icd10}
 \title{icd: Comorbidity Calculations and Tools for ICD-9 and ICD-10
-Codes}
+    Codes}
 \description{
 Calculate comorbidities, Charlson and van Walraven
-scores, perform fast and accurate validation, conversion,
-manipulation, filtering and comparison of ICD-9 and ICD-10 codes. This
-package enables a work flow from raw lists of ICD codes in hospital
-databases to comorbidities.  ICD-9 and ICD-10 comorbidity mappings
-from Quan (Deyo and Elixhauser versions), Elixhauser and AHRQ
-included.  Common ambiguities and code formats are handled.
+    scores, perform fast and accurate validation, conversion,
+    manipulation, filtering and comparison of ICD-9 and ICD-10 codes. This
+    package enables a work flow from raw lists of ICD codes in hospital
+    databases to comorbidities.  ICD-9 and ICD-10 comorbidity mappings
+    from Quan (Deyo and Elixhauser versions), Elixhauser and AHRQ
+    included.  Common ambiguities and code formats are handled.
 }
 \details{
 \describe{ \item{Comorbidities}{ \code{\link{comorbid}} determines
@@ -124,8 +124,6 @@ Useful links:
 \author{
 Jack O. Wasey \email{jack@jackwasey.com}
 }
-\concept{
-ICD-9 ICD-10 comorbidity comorbidities
-}
+\concept{ICD-9 ICD-10 comorbidity comorbidities}
 \keyword{misc}
 \keyword{utilities}

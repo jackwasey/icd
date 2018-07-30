@@ -76,3 +76,4 @@ wide_to_long(widedf)
 Other ICD code conversion: \code{\link{as.icd_long_data}},
   \code{\link{convert}}, \code{\link{long_to_wide}}
 }
+\concept{ICD code conversion}

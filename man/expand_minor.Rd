@@ -51,5 +51,6 @@ no obvious need, and ICD-10 children can be very complex.
 Other ICD-9 ranges: \code{\link{children}},
   \code{\link{condense}}, \code{\link{expand_range}}
 }
+\concept{ICD-9 ranges}
 \keyword{internal}
 \keyword{manip}

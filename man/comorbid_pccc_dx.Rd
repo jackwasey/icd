@@ -125,3 +125,5 @@ Other comorbidities: \code{\link{comorbid_hcc}},
   \code{\link{icd9_map_quan_elix}},
   \code{\link{icd9_map_single_ccs}}
 }
+\concept{comorbidities}
+\concept{comorbidity computations}

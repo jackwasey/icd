@@ -7,7 +7,6 @@
 \alias{icd_wide_data}
 \alias{is.icd_long_data}
 \alias{is.icd_wide_data}
-\alias{icd_long_data}
 \title{Convert between and identify 'long' and 'wide' patient data formats}
 \usage{
 as.icd_long_data(x)
@@ -75,3 +74,4 @@ Other ICD code conversion: \code{\link{convert}},
 Other ICD code conversion: \code{\link{convert}},
   \code{\link{long_to_wide}}, \code{\link{wide_to_long}}
 }
+\concept{ICD code conversion}

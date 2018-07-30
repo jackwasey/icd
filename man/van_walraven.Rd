@@ -12,8 +12,9 @@
 van_walraven(x, visit_name = NULL, return_df = FALSE,
   stringsAsFactors = getOption("stringsAsFactors"), ...)
 
-\method{van_walraven}{data.frame}(x, visit_name = NULL, return_df = FALSE,
-  stringsAsFactors = getOption("stringsAsFactors"), ...)
+\method{van_walraven}{data.frame}(x, visit_name = NULL,
+  return_df = FALSE, stringsAsFactors = getOption("stringsAsFactors"),
+  ...)
 
 van_walraven_from_comorbid(x, visit_name = NULL, hierarchy = FALSE)
 

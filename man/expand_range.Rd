@@ -24,13 +24,14 @@ expand_range(start, end, ...)
   defined = TRUE, ...)
 
 \method{expand_range}{icd9}(start, end, short_code = guess_short(c(start,
-  end)), defined = TRUE, ex_ambig_start = TRUE, ex_ambig_end = TRUE, ...)
+  end)), defined = TRUE, ex_ambig_start = TRUE, ex_ambig_end = TRUE,
+  ...)
 
-icd9_expand_range_short(start, end, defined = TRUE, ex_ambig_start = TRUE,
-  ex_ambig_end = TRUE)
+icd9_expand_range_short(start, end, defined = TRUE,
+  ex_ambig_start = TRUE, ex_ambig_end = TRUE)
 
-icd9_expand_range_decimal(start, end, defined = TRUE, ex_ambig_start = TRUE,
-  ex_ambig_end = TRUE)
+icd9_expand_range_decimal(start, end, defined = TRUE,
+  ex_ambig_start = TRUE, ex_ambig_end = TRUE)
 
 start \%i9da\% end
 
@@ -135,4 +136,5 @@ class is not known
 Other ICD-9 ranges: \code{\link{children}},
   \code{\link{condense}}, \code{\link{expand_minor}}
 }
+\concept{ICD-9 ranges}
 \keyword{internal}

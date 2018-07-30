@@ -20,7 +20,8 @@ get_invalid(...)
 
 \method{get_invalid}{icd10}(x, short_code = guess_short(x), ...)
 
-\method{get_invalid}{comorbidity_map}(x, short_code = guess_short(x), ...)
+\method{get_invalid}{comorbidity_map}(x, short_code = guess_short(x),
+  ...)
 
 icd_get_invalid.comorbidity_map(...)
 

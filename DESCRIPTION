@@ -76,4 +76,4 @@ Classification/ACM-2012: Social and professional topics~Medical
 Copyright: See file (inst/)COPYRIGHTS
 LazyData: true
 LazyDataCompression: xz
-RoxygenNote: 6.0.1
+RoxygenNote: 6.1.0

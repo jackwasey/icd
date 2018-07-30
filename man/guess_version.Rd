@@ -19,8 +19,8 @@ guess_version(x, short_code, ...)
 
 \method{guess_version}{character}(x, short_code = NULL, ...)
 
-\method{guess_version}{data.frame}(x, short_code = NULL, icd_name = NULL,
-  ...)
+\method{guess_version}{data.frame}(x, short_code = NULL,
+  icd_name = NULL, ...)
 
 icd_guess_version.character(...)
 

@@ -26,8 +26,8 @@ get_billable(...)
 \method{get_billable}{icd10cm}(x, short_code = guess_short(x),
   invert = FALSE, icd10cm_edition = "2016", ...)
 
-\method{get_billable}{icd10}(x, short_code = guess_short(x), invert = FALSE,
-  icd10cm_edition = "2016", ...)
+\method{get_billable}{icd10}(x, short_code = guess_short(x),
+  invert = FALSE, icd10cm_edition = "2016", ...)
 
 icd_get_billable(...)
 

@@ -5,8 +5,9 @@
 \alias{icd_long_to_wide}
 \title{Convert ICD data from long to wide format}
 \usage{
-long_to_wide(x, visit_name = get_visit_name(x), icd_name = get_icd_name(x),
-  prefix = "icd_", min_width = 0, aggr = TRUE, return_df = FALSE)
+long_to_wide(x, visit_name = get_visit_name(x),
+  icd_name = get_icd_name(x), prefix = "icd_", min_width = 0,
+  aggr = TRUE, return_df = FALSE)
 
 icd_long_to_wide(...)
 }
@@ -75,3 +76,5 @@ is a reasonably simple solution using built-in functions.
 Other ICD code conversion: \code{\link{as.icd_long_data}},
   \code{\link{convert}}, \code{\link{wide_to_long}}
 }
+\concept{ICD code conversion}
+\concept{ICD-9 convert}

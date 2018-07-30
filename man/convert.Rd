@@ -21,3 +21,4 @@ For conversions of ICD-9 or ICD-10 codes between the \emph{short} and
 Other ICD code conversion: \code{\link{as.icd_long_data}},
   \code{\link{long_to_wide}}, \code{\link{wide_to_long}}
 }
+\concept{ICD code conversion}

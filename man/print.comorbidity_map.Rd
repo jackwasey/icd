@@ -4,7 +4,8 @@
 \alias{print.comorbidity_map}
 \title{Print a comorbidity map}
 \usage{
-\method{print}{comorbidity_map}(x, ..., n_comorbidities = 7, n_codes = 7)
+\method{print}{comorbidity_map}(x, ..., n_comorbidities = 7,
+  n_codes = 7)
 }
 \arguments{
 \item{x}{a list optionally with class \code{comorbidity_map}}

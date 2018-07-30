@@ -15,14 +15,14 @@
 \usage{
 is_defined(x, short_code = guess_short(x), ...)
 
-\method{is_defined}{icd9}(x, short_code = guess_short(x), billable = FALSE,
-  ...)
+\method{is_defined}{icd9}(x, short_code = guess_short(x),
+  billable = FALSE, ...)
 
 \method{is_defined}{icd10cm}(x, short_code = guess_short(x),
   billable = FALSE, nomatch = 0L, ...)
 
-\method{is_defined}{icd10}(x, short_code = guess_short(x), billable = FALSE,
-  ...)
+\method{is_defined}{icd10}(x, short_code = guess_short(x),
+  billable = FALSE, ...)
 
 \method{is_defined}{default}(x, short_code = guess_short(x), ...)
 

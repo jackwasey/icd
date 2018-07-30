@@ -8,8 +8,8 @@
 and similar files run from 1996 to 2011.
 }
 \usage{
-rtf_parse_year(year = "2011", ..., save_data = FALSE, verbose = FALSE,
-  offline = TRUE)
+rtf_parse_year(year = "2011", ..., save_data = FALSE,
+  verbose = FALSE, offline = TRUE)
 }
 \arguments{
 \item{year}{from 1996 to 2012 (this is what CDC has published). Only 2012

@@ -16,7 +16,6 @@
 \alias{icd_explain.icd9}
 \alias{icd_explain.icd9cm}
 \alias{icd_explain.list}
-\alias{icd_explain}
 \title{Explain ICD-9 and ICD-10 codes in English}
 \usage{
 explain_code(...)

@@ -20,8 +20,8 @@ children(x, ...)
 
 \method{children}{character}(x, ...)
 
-\method{children}{icd9cm}(x, short_code = guess_short(x), defined = TRUE,
-  billable = FALSE, ...)
+\method{children}{icd9cm}(x, short_code = guess_short(x),
+  defined = TRUE, billable = FALSE, ...)
 
 \method{children}{icd9}(x, short_code = guess_short(x), defined = TRUE,
   billable = FALSE, ...)
@@ -121,4 +121,5 @@ children(short_code = FALSE, "2.34")
 Other ICD-9 ranges: \code{\link{condense}},
   \code{\link{expand_minor}}, \code{\link{expand_range}}
 }
+\concept{ICD-9 ranges}
 \keyword{manip}

@@ -7,13 +7,14 @@
 \alias{icd_charlson.data.frame}
 \title{Calculate Charlson Comorbidity Index (Charlson Score)}
 \usage{
-charlson(x, visit_name = NULL, scoring_system = c("original", "charlson",
-  "quan"), return_df = FALSE,
+charlson(x, visit_name = NULL, scoring_system = c("original",
+  "charlson", "quan"), return_df = FALSE,
   stringsAsFactors = getOption("stringsAsFactors"), ...)
 
 \method{charlson}{data.frame}(x, visit_name = NULL,
-  scoring_system = c("original", "charlson", "quan"), return_df = FALSE,
-  stringsAsFactors = getOption("stringsAsFactors"), ...)
+  scoring_system = c("original", "charlson", "quan"),
+  return_df = FALSE, stringsAsFactors = getOption("stringsAsFactors"),
+  ...)
 
 icd_charlson(...)
 

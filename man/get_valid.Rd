@@ -58,5 +58,6 @@ structure, which is a super-set of WHO ICD-10
   the prefix, e.g., \code{\link{icd_wide_data}}.
 }
 
+\concept{ICD-9 validation}
 \keyword{internal}
 \keyword{manip}

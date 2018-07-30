@@ -46,4 +46,6 @@ Other comorbidities: \code{\link{comorbid_hcc}},
   \code{\link{icd9_map_quan_deyo}},
   \code{\link{icd9_map_quan_elix}}
 }
+\concept{comorbidities}
+\concept{comorbidity maps}
 \keyword{datasets}
