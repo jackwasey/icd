@@ -159,14 +159,15 @@ predictive.</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>charlson</span>(<span class='no'>x</span>, <span class='kw'>visit_name</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>scoring_system</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"original"</span>, <span class='st'>"charlson"</span>,
-  <span class='st'>"quan"</span>), <span class='kw'>return_df</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+    <pre class="usage"><span class='fu'>charlson</span>(<span class='no'>x</span>, <span class='kw'>visit_name</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>scoring_system</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"original"</span>,
+  <span class='st'>"charlson"</span>, <span class='st'>"quan"</span>), <span class='kw'>return_df</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
   <span class='kw'>stringsAsFactors</span> <span class='kw'>=</span> <span class='fu'>getOption</span>(<span class='st'>"stringsAsFactors"</span>), <span class='no'>...</span>)
 
 <span class='co'># S3 method for data.frame</span>
 <span class='fu'>charlson</span>(<span class='no'>x</span>, <span class='kw'>visit_name</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>scoring_system</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"original"</span>, <span class='st'>"charlson"</span>, <span class='st'>"quan"</span>), <span class='kw'>return_df</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>stringsAsFactors</span> <span class='kw'>=</span> <span class='fu'>getOption</span>(<span class='st'>"stringsAsFactors"</span>), <span class='no'>...</span>)
+  <span class='kw'>scoring_system</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"original"</span>, <span class='st'>"charlson"</span>, <span class='st'>"quan"</span>),
+  <span class='kw'>return_df</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>stringsAsFactors</span> <span class='kw'>=</span> <span class='fu'>getOption</span>(<span class='st'>"stringsAsFactors"</span>),
+  <span class='no'>...</span>)
 
 <span class='fu'>icd_charlson</span>(<span class='no'>...</span>)
 

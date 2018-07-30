@@ -214,9 +214,8 @@ the column using this argument avoids the guesswork.</p></td>
 <span class='fu'>stopifnot</span>(<span class='no'>simple_map</span>$<span class='no'>PHTN</span> <span class='kw'>!=</span> <span class='fu'>character</span>(<span class='fl'>0</span>))
 <span class='fu'>stopifnot</span>(<span class='no'>simple_map</span>$<span class='no'>PVD</span> <span class='kw'>==</span> <span class='st'>"I26019"</span>)
 <span class='no'>umap</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>icd</span><span class='kw ns'>:::</span><span class='fu'><a href='https://jackwasey.github.io/icd//reference/simplify_map_lex.html'>simplify_map_lex</a></span>(<span class='no'>uranium_pathology</span>$<span class='no'>icd10</span>, <span class='no'>icd10_map_ahrq</span>)
-<span class='fu'>head</span>(<span class='kw pkg'>icd</span><span class='kw ns'>:::</span><span class='fu'><a href='https://jackwasey.github.io/icd//reference/categorize.html'>categorize</a></span>(<span class='no'>uranium_pathology</span>, <span class='no'>icd10_map_ahrq</span>,
-                      <span class='kw'>id_name</span> <span class='kw'>=</span> <span class='st'>"case"</span>, <span class='kw'>code_name</span> <span class='kw'>=</span> <span class='st'>"icd10"</span>,
-                      <span class='kw'>comorbid_fun</span> <span class='kw'>=</span> <span class='kw pkg'>icd</span><span class='kw ns'>:::</span><span class='no'><a href='https://jackwasey.github.io/icd//reference/comorbidMatMul.html'>comorbidMatMul</a></span>))</div><div class='output co'>#&gt;     CHF Valvular  PHTN   PVD   HTN HTNcx Paralysis NeuroOther Pulmonary    DM
+<span class='fu'>head</span>(<span class='kw pkg'>icd</span><span class='kw ns'>:::</span><span class='fu'><a href='https://jackwasey.github.io/icd//reference/categorize_simple.html'>categorize_simple</a></span>(<span class='no'>uranium_pathology</span>, <span class='no'>icd10_map_ahrq</span>,
+                      <span class='kw'>id_name</span> <span class='kw'>=</span> <span class='st'>"case"</span>, <span class='kw'>code_name</span> <span class='kw'>=</span> <span class='st'>"icd10"</span>))</div><div class='output co'>#&gt;     CHF Valvular  PHTN   PVD   HTN HTNcx Paralysis NeuroOther Pulmonary    DM
 #&gt; 1 FALSE    FALSE FALSE FALSE FALSE FALSE     FALSE      FALSE     FALSE FALSE
 #&gt; 2 FALSE    FALSE FALSE FALSE FALSE FALSE     FALSE      FALSE     FALSE FALSE
 #&gt; 3 FALSE    FALSE FALSE FALSE FALSE FALSE     FALSE      FALSE     FALSE FALSE
@@ -243,38 +242,8 @@ the column using this argument avoids the guesswork.</p></td>
 #&gt; 3     FALSE      FALSE
 #&gt; 4     FALSE      FALSE
 #&gt; 5     FALSE      FALSE
-#&gt; 6     FALSE      FALSE</div><div class='input'><span class='fu'>head</span>(<span class='kw pkg'>icd</span><span class='kw ns'>:::</span><span class='fu'><a href='https://jackwasey.github.io/icd//reference/categorize.html'>categorize</a></span>(<span class='no'>uranium_pathology</span>, <span class='no'>icd10_map_ahrq</span>,
-                      <span class='kw'>id_name</span> <span class='kw'>=</span> <span class='st'>"case"</span>, <span class='kw'>code_name</span> <span class='kw'>=</span> <span class='st'>"icd10"</span>,
-                      <span class='kw'>comorbid_fun</span> <span class='kw'>=</span> <span class='kw pkg'>icd</span><span class='kw ns'>:::</span><span class='no'><a href='https://jackwasey.github.io/icd//reference/comorbidMatMul.html'>comorbidMatMul</a></span>))</div><div class='output co'>#&gt;     CHF Valvular  PHTN   PVD   HTN HTNcx Paralysis NeuroOther Pulmonary    DM
-#&gt; 1 FALSE    FALSE FALSE FALSE FALSE FALSE     FALSE      FALSE     FALSE FALSE
-#&gt; 2 FALSE    FALSE FALSE FALSE FALSE FALSE     FALSE      FALSE     FALSE FALSE
-#&gt; 3 FALSE    FALSE FALSE FALSE FALSE FALSE     FALSE      FALSE     FALSE FALSE
-#&gt; 4 FALSE    FALSE FALSE FALSE FALSE FALSE     FALSE      FALSE     FALSE FALSE
-#&gt; 5 FALSE    FALSE FALSE FALSE FALSE FALSE     FALSE      FALSE     FALSE FALSE
-#&gt; 6 FALSE    FALSE FALSE FALSE FALSE FALSE     FALSE      FALSE     FALSE FALSE
-#&gt;    DMcx Hypothyroid Renal Liver   PUD   HIV Lymphoma  Mets Tumor Rheumatic
-#&gt; 1 FALSE       FALSE FALSE FALSE FALSE FALSE    FALSE FALSE FALSE     FALSE
-#&gt; 2 FALSE       FALSE FALSE FALSE FALSE FALSE    FALSE FALSE FALSE     FALSE
-#&gt; 3 FALSE       FALSE FALSE FALSE FALSE FALSE    FALSE FALSE FALSE     FALSE
-#&gt; 4 FALSE       FALSE FALSE FALSE FALSE FALSE    FALSE FALSE FALSE     FALSE
-#&gt; 5 FALSE       FALSE FALSE FALSE FALSE FALSE    FALSE FALSE FALSE     FALSE
-#&gt; 6 FALSE       FALSE FALSE FALSE FALSE FALSE    FALSE FALSE FALSE     FALSE
-#&gt;   Coagulopathy Obesity WeightLoss FluidsLytes BloodLoss Anemia Alcohol Drugs
-#&gt; 1        FALSE   FALSE      FALSE       FALSE     FALSE  FALSE   FALSE FALSE
-#&gt; 2        FALSE   FALSE      FALSE       FALSE     FALSE  FALSE   FALSE FALSE
-#&gt; 3        FALSE   FALSE      FALSE       FALSE     FALSE  FALSE   FALSE FALSE
-#&gt; 4        FALSE   FALSE      FALSE       FALSE     FALSE  FALSE   FALSE FALSE
-#&gt; 5        FALSE   FALSE      FALSE       FALSE     FALSE  FALSE   FALSE FALSE
-#&gt; 6        FALSE   FALSE      FALSE       FALSE     FALSE  FALSE   FALSE FALSE
-#&gt;   Psychoses Depression
-#&gt; 1     FALSE      FALSE
-#&gt; 2     FALSE      FALSE
-#&gt; 3     FALSE      FALSE
-#&gt; 4     FALSE      FALSE
-#&gt; 5     FALSE      FALSE
-#&gt; 6     FALSE      FALSE</div><div class='input'><span class='fu'>head</span>(<span class='kw pkg'>icd</span><span class='kw ns'>:::</span><span class='fu'><a href='https://jackwasey.github.io/icd//reference/categorize.html'>categorize_simple</a></span>(<span class='no'>uranium_pathology</span>, <span class='no'>umap</span>,
-                             <span class='kw'>id_name</span> <span class='kw'>=</span> <span class='st'>"case"</span>, <span class='kw'>code_name</span> <span class='kw'>=</span> <span class='st'>"icd10"</span>,
-                             <span class='kw'>comorbid_fun</span> <span class='kw'>=</span> <span class='kw pkg'>icd</span><span class='kw ns'>:::</span><span class='no'><a href='https://jackwasey.github.io/icd//reference/comorbidMatMulSimple.html'>comorbidMatMulSimple</a></span>))</div><div class='output co'>#&gt;     CHF Valvular  PHTN   PVD   HTN HTNcx Paralysis NeuroOther Pulmonary    DM
+#&gt; 6     FALSE      FALSE</div><div class='input'><span class='fu'>head</span>(<span class='kw pkg'>icd</span><span class='kw ns'>:::</span><span class='fu'><a href='https://jackwasey.github.io/icd//reference/categorize_simple.html'>categorize_simple</a></span>(<span class='no'>uranium_pathology</span>, <span class='no'>umap</span>,
+                             <span class='kw'>id_name</span> <span class='kw'>=</span> <span class='st'>"case"</span>, <span class='kw'>code_name</span> <span class='kw'>=</span> <span class='st'>"icd10"</span>))</div><div class='output co'>#&gt;     CHF Valvular  PHTN   PVD   HTN HTNcx Paralysis NeuroOther Pulmonary    DM
 #&gt; 1 FALSE    FALSE FALSE FALSE FALSE FALSE     FALSE      FALSE     FALSE FALSE
 #&gt; 2 FALSE    FALSE FALSE FALSE FALSE FALSE     FALSE      FALSE     FALSE FALSE
 #&gt; 3 FALSE    FALSE FALSE FALSE FALSE FALSE     FALSE      FALSE     FALSE FALSE

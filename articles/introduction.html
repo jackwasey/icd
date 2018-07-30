@@ -665,28 +665,28 @@ along with icd. If not, see <http:#www.gnu.org/licenses/>.
 <div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb30-1" data-line-number="1">ahrq_strict &lt;-<span class="st"> </span><span class="kw">lapply</span>(icd9_map_ahrq, get_defined)</a>
 <a class="sourceLine" id="cb30-2" data-line-number="2"><span class="kw">str</span>(icd9_map_ahrq[<span class="dv">1</span><span class="op">:</span><span class="dv">5</span>]) <span class="co"># first five of the original:</span></a>
 <a class="sourceLine" id="cb30-3" data-line-number="3"><span class="co">#&gt; List of 5</span></a>
-<a class="sourceLine" id="cb30-4" data-line-number="4"><span class="co">#&gt;  $ CHF     :Classes 'icd9', 'character'  atomic [1:121] 39891 40201 40211 40291 ...</span></a>
-<a class="sourceLine" id="cb30-5" data-line-number="5"><span class="co">#&gt;   .. ..- attr(*, "icd_short_diag")= logi TRUE</span></a>
-<a class="sourceLine" id="cb30-6" data-line-number="6"><span class="co">#&gt;  $ Valvular:Classes 'icd9', 'character'  atomic [1:554] 0932 09320 09321 09322 ...</span></a>
-<a class="sourceLine" id="cb30-7" data-line-number="7"><span class="co">#&gt;   .. ..- attr(*, "icd_short_diag")= logi TRUE</span></a>
-<a class="sourceLine" id="cb30-8" data-line-number="8"><span class="co">#&gt;  $ PHTN    :Classes 'icd9', 'character'  atomic [1:133] 4151 41510 41511 41512 ...</span></a>
-<a class="sourceLine" id="cb30-9" data-line-number="9"><span class="co">#&gt;   .. ..- attr(*, "icd_short_diag")= logi TRUE</span></a>
-<a class="sourceLine" id="cb30-10" data-line-number="10"><span class="co">#&gt;  $ PVD     :Classes 'icd9', 'character'  atomic [1:598] 440 4400 44000 44001 ...</span></a>
-<a class="sourceLine" id="cb30-11" data-line-number="11"><span class="co">#&gt;   .. ..- attr(*, "icd_short_diag")= logi TRUE</span></a>
-<a class="sourceLine" id="cb30-12" data-line-number="12"><span class="co">#&gt;  $ HTN     :Classes 'icd9', 'character'  atomic [1:33] 4011 40110 40111 40112 ...</span></a>
-<a class="sourceLine" id="cb30-13" data-line-number="13"><span class="co">#&gt;   .. ..- attr(*, "icd_short_diag")= logi TRUE</span></a>
+<a class="sourceLine" id="cb30-4" data-line-number="4"><span class="co">#&gt;  $ CHF     : 'icd9' chr [1:121] "39891" "40201" "40211" "40291" ...</span></a>
+<a class="sourceLine" id="cb30-5" data-line-number="5"><span class="co">#&gt;   ..- attr(*, "icd_short_diag")= logi TRUE</span></a>
+<a class="sourceLine" id="cb30-6" data-line-number="6"><span class="co">#&gt;  $ Valvular: 'icd9' chr [1:554] "0932" "09320" "09321" "09322" ...</span></a>
+<a class="sourceLine" id="cb30-7" data-line-number="7"><span class="co">#&gt;   ..- attr(*, "icd_short_diag")= logi TRUE</span></a>
+<a class="sourceLine" id="cb30-8" data-line-number="8"><span class="co">#&gt;  $ PHTN    : 'icd9' chr [1:133] "4151" "41510" "41511" "41512" ...</span></a>
+<a class="sourceLine" id="cb30-9" data-line-number="9"><span class="co">#&gt;   ..- attr(*, "icd_short_diag")= logi TRUE</span></a>
+<a class="sourceLine" id="cb30-10" data-line-number="10"><span class="co">#&gt;  $ PVD     : 'icd9' chr [1:598] "440" "4400" "44000" "44001" ...</span></a>
+<a class="sourceLine" id="cb30-11" data-line-number="11"><span class="co">#&gt;   ..- attr(*, "icd_short_diag")= logi TRUE</span></a>
+<a class="sourceLine" id="cb30-12" data-line-number="12"><span class="co">#&gt;  $ HTN     : 'icd9' chr [1:33] "4011" "40110" "40111" "40112" ...</span></a>
+<a class="sourceLine" id="cb30-13" data-line-number="13"><span class="co">#&gt;   ..- attr(*, "icd_short_diag")= logi TRUE</span></a>
 <a class="sourceLine" id="cb30-14" data-line-number="14"><span class="kw">str</span>(ahrq_strict[<span class="dv">1</span><span class="op">:</span><span class="dv">5</span>]) <span class="co"># and first five of the result:</span></a>
 <a class="sourceLine" id="cb30-15" data-line-number="15"><span class="co">#&gt; List of 5</span></a>
-<a class="sourceLine" id="cb30-16" data-line-number="16"><span class="co">#&gt;  $ CHF     :Classes 'icd9', 'character'  atomic [1:29] 39891 40201 40211 40291 ...</span></a>
-<a class="sourceLine" id="cb30-17" data-line-number="17"><span class="co">#&gt;   .. ..- attr(*, "icd_short_diag")= logi TRUE</span></a>
-<a class="sourceLine" id="cb30-18" data-line-number="18"><span class="co">#&gt;  $ Valvular:Classes 'icd9', 'character'  atomic [1:41] 0932 09320 09321 09322 ...</span></a>
-<a class="sourceLine" id="cb30-19" data-line-number="19"><span class="co">#&gt;   .. ..- attr(*, "icd_short_diag")= logi TRUE</span></a>
-<a class="sourceLine" id="cb30-20" data-line-number="20"><span class="co">#&gt;  $ PHTN    :Classes 'icd9', 'character'  atomic [1:12] 4151 41511 41512 41513 ...</span></a>
-<a class="sourceLine" id="cb30-21" data-line-number="21"><span class="co">#&gt;   .. ..- attr(*, "icd_short_diag")= logi TRUE</span></a>
-<a class="sourceLine" id="cb30-22" data-line-number="22"><span class="co">#&gt;  $ PVD     :Classes 'icd9', 'character'  atomic [1:63] 440 4400 4401 4402 ...</span></a>
-<a class="sourceLine" id="cb30-23" data-line-number="23"><span class="co">#&gt;   .. ..- attr(*, "icd_short_diag")= logi TRUE</span></a>
-<a class="sourceLine" id="cb30-24" data-line-number="24"><span class="co">#&gt;  $ HTN     :Classes 'icd9', 'character'  atomic [1:8] 4011 4019 6420 64200 ...</span></a>
-<a class="sourceLine" id="cb30-25" data-line-number="25"><span class="co">#&gt;   .. ..- attr(*, "icd_short_diag")= logi TRUE</span></a></code></pre></div>
+<a class="sourceLine" id="cb30-16" data-line-number="16"><span class="co">#&gt;  $ CHF     : 'icd9' chr [1:29] "39891" "40201" "40211" "40291" ...</span></a>
+<a class="sourceLine" id="cb30-17" data-line-number="17"><span class="co">#&gt;   ..- attr(*, "icd_short_diag")= logi TRUE</span></a>
+<a class="sourceLine" id="cb30-18" data-line-number="18"><span class="co">#&gt;  $ Valvular: 'icd9' chr [1:41] "0932" "09320" "09321" "09322" ...</span></a>
+<a class="sourceLine" id="cb30-19" data-line-number="19"><span class="co">#&gt;   ..- attr(*, "icd_short_diag")= logi TRUE</span></a>
+<a class="sourceLine" id="cb30-20" data-line-number="20"><span class="co">#&gt;  $ PHTN    : 'icd9' chr [1:12] "4151" "41511" "41512" "41513" ...</span></a>
+<a class="sourceLine" id="cb30-21" data-line-number="21"><span class="co">#&gt;   ..- attr(*, "icd_short_diag")= logi TRUE</span></a>
+<a class="sourceLine" id="cb30-22" data-line-number="22"><span class="co">#&gt;  $ PVD     : 'icd9' chr [1:63] "440" "4400" "4401" "4402" ...</span></a>
+<a class="sourceLine" id="cb30-23" data-line-number="23"><span class="co">#&gt;   ..- attr(*, "icd_short_diag")= logi TRUE</span></a>
+<a class="sourceLine" id="cb30-24" data-line-number="24"><span class="co">#&gt;  $ HTN     : 'icd9' chr [1:8] "4011" "4019" "6420" "64200" ...</span></a>
+<a class="sourceLine" id="cb30-25" data-line-number="25"><span class="co">#&gt;   ..- attr(*, "icd_short_diag")= logi TRUE</span></a></code></pre></div>
 <p>Note the much smaller numbers of codes in each group, now we have discarded all the ones which are not defined as diagnoses.</p>
 </div>
 <div id="which-three-character-icd-9-codes-have-no-child-codes" class="section level3">

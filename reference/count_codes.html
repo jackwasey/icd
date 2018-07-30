@@ -227,7 +227,7 @@ first column is used.</p>
   <span class='fu'>count_codes</span>(<span class='no'>mydf</span>, <span class='kw'>return_df</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt;   visit_name icd_count
 #&gt; 1          r         2
 #&gt; 2          s         1</div><div class='input'>  <span class='fu'>count_codes</span>(<span class='no'>mydf</span>)</div><div class='output co'>#&gt; [1] 2 1</div><div class='input'>
-  <span class='no'>cmb</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='comorbid.html'>icd9_comorbid_quan_deyo</a></span>(<span class='no'>mydf</span>, <span class='kw'>isShort</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>return_df</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
+  <span class='no'>cmb</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='comorbid.html'>icd9_comorbid_quan_deyo</a></span>(<span class='no'>mydf</span>, <span class='kw'>short_code</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>return_df</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
   <span class='fu'><a href='count_comorbid.html'>count_comorbid</a></span>(<span class='no'>cmb</span>)</div><div class='output co'>#&gt; r s 
 #&gt; 2 1 </div><div class='input'>
   <span class='no'>wide</span> <span class='kw'>&lt;-</span> <span class='fu'>data.frame</span>(<span class='kw'>visit_name</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"r"</span>, <span class='st'>"s"</span>, <span class='st'>"t"</span>),

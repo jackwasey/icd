@@ -171,19 +171,20 @@ Clinical Classification Software (CCS) rules from AHRQ, see
 
     <pre class="usage"><span class='fu'>comorbid</span>(<span class='no'>x</span>, <span class='no'>map</span>, <span class='kw'>visit_name</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>icd_name</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>short_code</span> <span class='kw'>=</span> <span class='fu'><a href='guess_short.html'>guess_short</a></span>(<span class='no'>x</span>, <span class='kw'>icd_name</span> <span class='kw'>=</span> <span class='no'>icd_name</span>),
-  <span class='kw'>short_map</span> <span class='kw'>=</span> <span class='fu'><a href='guess_short.html'>guess_short</a></span>(<span class='no'>map</span>), <span class='kw'>return_df</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>return_binary</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>categorize_fun</span> <span class='kw'>=</span> <span class='no'>categorize_simple</span>, <span class='no'>...</span>)
+  <span class='kw'>short_map</span> <span class='kw'>=</span> <span class='fu'><a href='guess_short.html'>guess_short</a></span>(<span class='no'>map</span>), <span class='kw'>return_df</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>return_binary</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>categorize_fun</span> <span class='kw'>=</span> <span class='no'>categorize_simple</span>, <span class='no'>...</span>)
 
 <span class='fu'>icd10_comorbid</span>(<span class='no'>x</span>, <span class='no'>map</span>, <span class='kw'>visit_name</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>icd_name</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>short_code</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>short_map</span> <span class='kw'>=</span> <span class='fu'><a href='guess_short.html'>guess_short</a></span>(<span class='no'>map</span>), <span class='kw'>return_df</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>return_binary</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>icd10_comorbid_fun</span> <span class='kw'>=</span> <span class='no'>icd10_comorbid_reduce</span>, <span class='no'>...</span>)
+  <span class='kw'>return_binary</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>icd10_comorbid_fun</span> <span class='kw'>=</span> <span class='no'>icd10_comorbid_reduce</span>,
+  <span class='no'>...</span>)
 
 <span class='fu'>icd9_comorbid</span>(<span class='no'>x</span>, <span class='no'>map</span>, <span class='kw'>visit_name</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>icd_name</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>short_code</span> <span class='kw'>=</span> <span class='fu'><a href='guess_short.html'>guess_short</a></span>(<span class='no'>x</span>, <span class='kw'>icd_name</span> <span class='kw'>=</span> <span class='no'>icd_name</span>),
-  <span class='kw'>short_map</span> <span class='kw'>=</span> <span class='fu'><a href='guess_short.html'>guess_short</a></span>(<span class='no'>map</span>), <span class='kw'>return_df</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>return_binary</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>preclean</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>visitId</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>icd9Field</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>categorize_fun</span> <span class='kw'>=</span> <span class='no'>categorize_simple</span>, <span class='kw'>comorbid_fun</span> <span class='kw'>=</span> <span class='no'>comorbidMatMulSimple</span>,
-  <span class='no'>...</span>)
+  <span class='kw'>short_map</span> <span class='kw'>=</span> <span class='fu'><a href='guess_short.html'>guess_short</a></span>(<span class='no'>map</span>), <span class='kw'>return_df</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>return_binary</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>preclean</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>visitId</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>icd9Field</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>categorize_fun</span> <span class='kw'>=</span> <span class='no'>categorize_simple</span>,
+  <span class='kw'>comorbid_fun</span> <span class='kw'>=</span> <span class='no'>comorbidMatMulSimple</span>, <span class='no'>...</span>)
 
 <span class='fu'>icd9_comorbid_ahrq</span>(<span class='no'>x</span>, <span class='no'>...</span>, <span class='kw'>abbrev_names</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>hierarchy</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
 
@@ -499,7 +500,7 @@ according to Quan/Deyo ICD categories. Synonymous with
 #&gt;  Mode :logical  
 #&gt;  FALSE:334      
 #&gt;                 </div><div class='input'>
-<span class='no'>pts</span> <span class='kw'>&lt;-</span> <span class='fu'>icd_long_data</span>(<span class='kw'>visit_name</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"2"</span>, <span class='st'>"1"</span>, <span class='st'>"2"</span>, <span class='st'>"3"</span>, <span class='st'>"3"</span>),
+<span class='no'>pts</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='icd_long_data.html'>icd_long_data</a></span>(<span class='kw'>visit_name</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"2"</span>, <span class='st'>"1"</span>, <span class='st'>"2"</span>, <span class='st'>"3"</span>, <span class='st'>"3"</span>),
                  <span class='kw'>icd9</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"39891"</span>, <span class='st'>"40110"</span>, <span class='st'>"09322"</span>, <span class='st'>"41514"</span>, <span class='st'>"39891"</span>))
 <span class='fu'>comorbid</span>(<span class='no'>pts</span>, <span class='no'>icd9_map_ahrq</span>, <span class='kw'>short_code</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>) <span class='co'># visit_name is now sorted</span></div><div class='output co'>#&gt;     CHF Valvular  PHTN   PVD   HTN HTNcx Paralysis NeuroOther Pulmonary    DM
 #&gt; 2  TRUE     TRUE FALSE FALSE FALSE FALSE     FALSE      FALSE     FALSE FALSE
@@ -516,7 +517,7 @@ according to Quan/Deyo ICD categories. Synonymous with
 #&gt;   Psychoses Depression
 #&gt; 2     FALSE      FALSE
 #&gt; 1     FALSE      FALSE
-#&gt; 3     FALSE      FALSE</div><div class='input'><span class='no'>pts</span> <span class='kw'>&lt;-</span> <span class='fu'>icd_long_data</span>(
+#&gt; 3     FALSE      FALSE</div><div class='input'><span class='no'>pts</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='icd_long_data.html'>icd_long_data</a></span>(
            <span class='kw'>visit_name</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"1"</span>, <span class='st'>"2"</span>, <span class='st'>"3"</span>, <span class='st'>"4"</span>, <span class='st'>"4"</span>),
            <span class='kw'>icd_name</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"20084"</span>, <span class='st'>"1742"</span>, <span class='st'>"30410"</span>, <span class='st'>"41514"</span>, <span class='st'>"95893"</span>),
            <span class='kw'>date</span> <span class='kw'>=</span> <span class='fu'>as.Date</span>(<span class='fu'>c</span>(<span class='st'>"2011-01-01"</span>, <span class='st'>"2011-01-02"</span>, <span class='st'>"2011-01-03"</span>,
@@ -528,7 +529,7 @@ according to Quan/Deyo ICD categories. Synonymous with
 #&gt; 2          2 2011-01-02  10
 #&gt; 3          3 2011-01-03  52
 #&gt; 4          4 2011-01-04 164</div><div class='input'>
-<span class='no'>pts10</span> <span class='kw'>&lt;-</span> <span class='fu'>icd_long_data</span>(
+<span class='no'>pts10</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='icd_long_data.html'>icd_long_data</a></span>(
   <span class='kw'>visit_name</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"a"</span>, <span class='st'>"b"</span>, <span class='st'>"c"</span>, <span class='st'>"d"</span>, <span class='st'>"e"</span>),
   <span class='kw'>icd_name</span> <span class='kw'>=</span><span class='fu'>c</span>(<span class='st'>"I058"</span>, <span class='fl'>NA</span>, <span class='st'>"T82817A"</span>, <span class='st'>""</span>, <span class='st'>"I69369"</span>),
   <span class='kw'>date</span> <span class='kw'>=</span> <span class='fu'>as.Date</span>(

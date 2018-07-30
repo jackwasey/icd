@@ -22,7 +22,7 @@
     <loc>https://jackwasey.github.io/icd//reference/attr_short_diag.html</loc>
   </url>
   <url>
-    <loc>https://jackwasey.github.io/icd//reference/categorize.html</loc>
+    <loc>https://jackwasey.github.io/icd//reference/categorize_simple.html</loc>
   </url>
   <url>
     <loc>https://jackwasey.github.io/icd//reference/chapter_to_desc_range.html</loc>
@@ -47,9 +47,6 @@
   </url>
   <url>
     <loc>https://jackwasey.github.io/icd//reference/comorbid.html</loc>
-  </url>
-  <url>
-    <loc>https://jackwasey.github.io/icd//reference/comorbidMatMul.html</loc>
   </url>
   <url>
     <loc>https://jackwasey.github.io/icd//reference/comorbidMatMulSimple.html</loc>
@@ -142,9 +139,6 @@
     <loc>https://jackwasey.github.io/icd//reference/factor_nosort.html</loc>
   </url>
   <url>
-    <loc>https://jackwasey.github.io/icd//reference/factor_split_rcpp.html</loc>
-  </url>
-  <url>
     <loc>https://jackwasey.github.io/icd//reference/fastIntToStringRcpp.html</loc>
   </url>
   <url>
@@ -227,12 +221,6 @@
   </url>
   <url>
     <loc>https://jackwasey.github.io/icd//reference/icd10_chapters.html</loc>
-  </url>
-  <url>
-    <loc>https://jackwasey.github.io/icd//reference/icd10_comorbid_parent_search.html</loc>
-  </url>
-  <url>
-    <loc>https://jackwasey.github.io/icd//reference/icd10_comorbid_parent_search_cpp.html</loc>
   </url>
   <url>
     <loc>https://jackwasey.github.io/icd//reference/icd10_comorbid_reduce.html</loc>
@@ -419,9 +407,6 @@
   </url>
   <url>
     <loc>https://jackwasey.github.io/icd//reference/long_to_wide.html</loc>
-  </url>
-  <url>
-    <loc>https://jackwasey.github.io/icd//reference/lookupComorbidByChunkFor.html</loc>
   </url>
   <url>
     <loc>https://jackwasey.github.io/icd//reference/match_rcpp.html</loc>
