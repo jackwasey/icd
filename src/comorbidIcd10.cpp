@@ -30,12 +30,11 @@ extern "C" {
 
 using namespace Rcpp;
 
-//' @title Internal function to simplify a comorbidity map by only including codes
-//' which are parents, or identical to, a given list of codes.
-//' @description
-//' Specifically, this is useful for ICD-10 codes where there are a huge number
-//' of possible codes, but we do not want to make a comorbidity map with such a
-//' large number of codes in it.
+//' @title Internal function to simplify a comorbidity map by only including
+//'   codes which are parents, or identical to, a given list of codes.
+//' @description Specifically, this is useful for ICD-10 codes where there are a
+//' huge number of possible codes, but we do not want to make a comorbidity map
+//' with such a large number of codes in it.
 //' @param x Character vector (not factor)
 //' @template mapping
 //' @template visit_name
@@ -61,42 +60,58 @@ Rcpp::List simplifyMapLexicographic(const CV pt_codes, const Rcpp::List map) {
   size_t searchLen;
   size_t pos;
   size_t cmb_len;
-  CV icd_codes = Rcpp::unique(pt_codes); // hmm, would be nice to only scan the pt_codes once, but I don't want to write my own hash map code....
+  // hmm, would be nice to only scan the pt_codes once, but I don't want to
+  // write my own hash map code....
+  CV icd_codes = Rcpp::unique(pt_codes);
+  DEBUG_VEC(icd_codes);
   std::vector<std::unordered_set<std::string> > newMapStd(map.length());
   for (R_xlen_t i = 0; i != icd_codes.size(); ++i) {
     ptCode = icd_codes[i];
+    DEBUG("i = " << i << ", and ptCode = " << ptCode);
     size_t codeLen = ptCode.length();
-    if (codeLen < 3)
-      continue; // cannot be a valid ICD-10 code
-// cannot break or goto in openmp loops #pragma omp parallel for private(searchLen, pos, cmb_len)
+    if (codeLen < 3) continue; // cannot be a valid ICD-10 code
+    DEBUG("code len >=3 chars");
+    // cannot break or goto in openmp loops
+    // #pragma omp parallel for private(searchLen, pos, cmb_len)
     for (R_xlen_t j = 0; j < map.size(); ++j) {
+      DEBUG("cmb, j = " << j);
       const CV &cmbCodes = map[j];
       for (R_xlen_t k = 0; k != cmbCodes.length(); ++k) {
         cmb_len = cmbCodes[k].size();
-        if (cmb_len > codeLen)
-          continue; // if map code is longer than the patient's code, it'll never match
-        // we always have at least three characters, so spare looping inside strcmp
+        // if map code is longer than the patient's code, it'll never match
+        if (cmb_len > codeLen) continue; // TODO: or != ???
+        // we always have at least 3 characters, so spare looping inside strcmp
+        TRACE("cmbCodes[k][0] = " << cmbCodes[k][0]);
+        TRACE("cmbCodes[k][1] = " << cmbCodes[k][1]);
+        TRACE("cmbCodes[k][2] = " << cmbCodes[k][2]);
+        TRACE("ptCode[k][0] = " << ptCode[0]);
+        TRACE("ptCode[k][1] = " << ptCode[1]);
+        TRACE("ptCode[k][2] = " << ptCode[2]);
         if (cmbCodes[k][0] != ptCode[0] ||
             cmbCodes[k][1] != ptCode[1] ||
             cmbCodes[k][2] != ptCode[2])
           goto no_match;
         searchLen = std::min(cmb_len, codeLen);
+        DEBUG("searchLen = " << searchLen);
         pos = 3;
         while(pos != searchLen) {
-          if (cmbCodes[k][pos] != ptCode[pos])
-            goto no_match;
+          if (cmbCodes[k][pos] != ptCode[pos]) {
+          DEBUG("mismatch, going to no_match");
+          goto no_match;
+          }
           ++pos;
         }
         // push the patient's ICD code, not the original comorbidity ICD code
         // onto the new map. This should be okay with openmp without critical
         // pragma, but goto is not.
         newMapStd[j].insert(ptCode);
-        goto next_ptCode;
-        no_match:
-          ;
+        DEBUG("Going to next comorbidity");
+        goto next_comorbidity;
+        no_match:;
       } // end of codes in current comorbidity
+      next_comorbidity:;
     } // each comorbidity
-    next_ptCode:;
+    DEBUG("finished a comorbidity");
   } // each row of input data
   Rcpp::List newMap = Rcpp::List::create();
   for (auto cmbSet : newMapStd) {
