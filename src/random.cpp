@@ -72,13 +72,13 @@ CV icd9RandomShort(unsigned int n = 5) {
     t = R::rnorm(2.49, 0.5); // force to unsigned char type
     switch (t % 3) {
     case 2:
-      sprintf(buffer, "%u", r);
+      sprintf(buffer, "%lu", r);
       break;
     case 0:
-      sprintf(buffer, "V%u", r / 10);
+      sprintf(buffer, "V%lu", r / 10);
       break;
     case 1:
-      sprintf(buffer, "E%u", r / 10);
+      sprintf(buffer, "E%lu", r / 10);
       break;
     default:
       {}

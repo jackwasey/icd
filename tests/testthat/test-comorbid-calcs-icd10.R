@@ -197,3 +197,9 @@ test_that("ICD-10 comorbidities from uranium", {
   expect_error(regexp = NA, comorbid(uranium_pathology, icd10_map_elix))
   expect_error(regexp = NA, comorbid(uranium_pathology, icd10_map_ahrq))
 })
+
+test_that("Alcoholic fatty liver", {
+  dat <- data.frame(id=1:3, icd10 = c('K700','K7030','K709'))
+  res <- icd10_comorbid_elix(dat)
+  expect_true(all(res$Alcohol))
+})
