@@ -1,3 +1,12 @@
+|                           |
+|---------------------------|
+| title: icd Readme         |
+| output:                   |
+| md\_document:             |
+| variant: markdown\_github |
+| date: “August 08, 2018”   |
+| author: Jack O. Wasey     |
+
 <!--
 Copyright (C) 2014 - 2018  Jack O. Wasey
 
@@ -16,8 +25,7 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with icd. If not, see <http:#www.gnu.org/licenses/>.
 -->
-<!-- README.md is generated from README.Rmd. Please edit that file and render with 
-rmarkdown::render("README.Rmd")
+<!-- README.md is generated from README.Rmd. Please edit that file and render with rmarkdown::render("README.Rmd")
 -->
 icd
 ===
@@ -27,6 +35,8 @@ icd
 [![Travis](https://travis-ci.org/jackwasey/icd.svg?branch=master "Travis Build Status")](https://travis-ci.org/jackwasey/icd)
 [![Appveyor](https://ci.appveyor.com/api/projects/status/9ncfgxht3n5i8t60/branch/master?svg=true "Appveyor Build Status")](https://ci.appveyor.com/project/jackwasey/icd/branch/master)
 [![codecov.io](https://codecov.io/github/jackwasey/icd/coverage.svg?branch=master "Core Code Coverage")](https://codecov.io/github/jackwasey/icd?branch=master)
+[![CII Best
+Practices](https://bestpractices.coreinfrastructure.org/projects/2092/badge)](https://bestpractices.coreinfrastructure.org/projects/2092)
 [![CRAN RStudio mirror downloads last calendar
 month](https://cranlogs.r-pkg.org/badges/icd "RStudio Mirror Downloads Last Calendar Month")](https://cran.r-project.org/package=icd)
 [![CRAN RStudio mirror downloads last
@@ -72,13 +82,13 @@ install.packages("icd")
 Introduction
 ------------
 
-Calculate comorbidities, Charlson scores, perform fast and accurate
-validation, conversion, manipulation, filtering and comparison of ICD-9
-and ICD-10 codes. This package enables a work flow from raw lists of ICD
-codes in hospital databases to comorbidities. ICD-9 and ICD-10
-comorbidity mappings from Quan (Deyo and Elixhauser versions),
-Elixhauser and AHRQ included. Common ambiguities and code formats are
-handled.
+Calculate comorbidities, Charlson and van Walraven scores, perform fast
+and accurate validation, conversion, manipulation, filtering and
+comparison of ICD-9 and ICD-10 codes. This package enables a work flow
+from raw lists of ICD codes in hospital databases to comorbidities.
+ICD-9 and ICD-10 comorbidity mappings from Quan (Deyo and Elixhauser
+versions), Elixhauser and AHRQ included. Common ambiguities and code
+formats are handled.
 
 Relevance
 ---------
