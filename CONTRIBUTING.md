@@ -12,6 +12,10 @@ The [github issues](https://github.com/jackwasey/icd/issues) also sketch out fut
 
 Contributions should follow the coding standard seen elsewhere in the package, which is defined by both the [general recommendations](http://adv-r.had.co.nz/Style.html) of Hadley Wickham, and the `.lintr` file in the project root directory. I'd prefer that new dependencies aren't included unless absolutely necessary.
 
+## Security vulnerabilities
+
+In the unlikely event of a security vulnerability, which is not due to R itself, please email me directly and do not file a github issue immediately.
+
 Thanks!
 
 Jack Wasey
