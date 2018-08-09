@@ -2,8 +2,8 @@
 % Please edit documentation in R/RcppExports.R
 \name{simplify_map_lex}
 \alias{simplify_map_lex}
-\title{Internal function to simplify a comorbidity map by only including codes
-which are parents, or identical to, a given list of codes.}
+\title{Internal function to simplify a comorbidity map by only including
+  codes which are parents, or identical to, a given list of codes.}
 \usage{
 simplify_map_lex(pt_codes, map)
 }
@@ -36,9 +36,9 @@ Failing this, it will take the first column in the data frame. Specifying
 the column using this argument avoids the guesswork.}
 }
 \description{
-Specifically, this is useful for ICD-10 codes where there are a huge number
-of possible codes, but we do not want to make a comorbidity map with such a
-large number of codes in it.
+Specifically, this is useful for ICD-10 codes where there are a
+huge number of possible codes, but we do not want to make a comorbidity map
+with such a large number of codes in it.
 }
 \examples{
 # one exact match, next cmb parent code, next cmb child code
