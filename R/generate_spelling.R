@@ -9,8 +9,8 @@
 generate_spelling <- function(out = ".aspell/words.pws", save_data = TRUE) {
   medical <- c("arrythmia", "Musculoskeletal", "Myocardial",
                "Puerperium", "laterality", "Infarction", "healthcare")
-  proper_nouns <- c("Charlson", "Deyo", "Elixhauser", "Mansour", "OpenMP", "Quan",
-                    "Sharabiani", "Travis", "Walraven", "Wasey", "Wercker", "Wickham",
+  proper_nouns <- c("Charlson", "Deyo", "Elixhauser", "Mansour", "Quan",
+                    "Sharabiani", "Travis", "Walraven", "Wasey", "Wickham",
                     "wmurphyrd", "Hadley", "Eigen")
   proper_nouns <- c(proper_nouns, paste(proper_nouns, "'s", sep = ""))
   acronyms <- c("AHRQ", "BISHCA", "CC", "CCs", "CCS", "CRAN", "CDC", "CMS",

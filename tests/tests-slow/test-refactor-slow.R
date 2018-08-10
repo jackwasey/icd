@@ -1,5 +1,5 @@
 context("refactor bigger factors")
-test_that("longer factor to touch openmp", {
+test_that("longer factors", {
   n <- 1e6
   nl <- 1e5
   set.seed(1441)

@@ -1,4 +1,3 @@
-#include "config.h"
 #include "icd_types.h"
 #include "local.h"
 #include "manip_alt.h"

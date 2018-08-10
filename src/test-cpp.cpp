@@ -1,4 +1,3 @@
-#include "config.h"
 #include "icd_types.h"
 #include "local.h"
 #include "is.h"
@@ -87,14 +86,6 @@ context("icd9ShortToPartsCpp") {
     expect_true(CV::is_na(n[1]));
     expect_true(CV::is_na(j[2]));
     expect_true(CV::is_na(n[2]));
-  }
-}
-
-context("parallel debug") {
-  test_that("debug parallel runs without error") {
-    debug_parallel_env();
-    debug_parallel();
-    expect_true(true);
   }
 }
 

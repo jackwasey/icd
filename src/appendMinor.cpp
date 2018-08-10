@@ -15,14 +15,13 @@
 // You should have received a copy of the GNU General Public License
 // along with icd. If not, see <http://www.gnu.org/licenses/>.
 
-// [[Rcpp::interfaces(r, cpp)]]
-#include "icd_types.h"                       // for VecStr, CV, Str
+#include "icd_types.h"
+#include "is.h"                              // for icd9IsASingleVE
 #include <string.h>                          // for strlen
 #include <algorithm>                         // for fill
 #include <iterator>                          // for distance
 #include <string>                            // for basic_string, operator!=
 #include <vector>                            // for vector, vector<>::iterator
-#include "is.h"                              // for icd9IsASingleVE
 
 //' Convert \code{mjr} and \code{mnr} vectors to single code
 //'

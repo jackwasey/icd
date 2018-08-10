@@ -3,7 +3,7 @@
 set -euo pipefail
 IFS=$'\n\t'
 pushd /tmp
-R CMD build --no-build-vignettes --no-manual --resave-data=no ~/icd
+R CMD build --no-build-vignettes --no-manual --resave-data=no "$HOME/icd"
 
 # for all environment variable options see here:
 # https://cran.r-project.org/doc/manuals/r-release/R-ints.html#Tools

@@ -15,10 +15,7 @@
 // You should have received a copy of the GNU General Public License
 // along with icd. If not, see <http://www.gnu.org/licenses/>.
 
-// [[Rcpp::interfaces(r, cpp)]]
-// [[Rcpp::plugins(openmp)]]
 #include "local.h"
-#include "config.h"
 #include "util.h"
 #include <stdlib.h>
 #include <math.h>                              // for floor
@@ -67,8 +64,7 @@ std::string trimLeftCpp(std::string s) {
 std::string strimCpp(std::string s) {
   // according to
   // http://stackoverflow.com/questions/10789740/passing-stdstring-by-value-or-reference
-  // C++11 (i.e. almost everyone) will avoid copy even without using reference
-  // argument.
+  // C++11 will avoid copy even without using reference argument.
   return trimLeftCpp(trimRightCpp(s));
 }
 
@@ -80,72 +76,6 @@ VecStr trimCpp(VecStr sv) {
 }
 
 // # nocov start
-
-// [[Rcpp::export(get_omp_cores)]]
-int getOmpCores() {
-  int cores = 0;
-#ifdef ICD_OPENMP
-  cores = omp_get_num_procs();
-#endif
-  return cores;
-}
-
-// [[Rcpp::export(get_omp_max_threads)]]
-int getOmpMaxThreads() {
-  int maxthreads = 0;
-#ifdef ICD_OPENMP
-  maxthreads = omp_get_max_threads();
-#endif
-  return maxthreads;
-}
-
-// https://stackoverflow.com/questions/43736622/which-openmp-schedule-am-i-running/43755259#43755259
-// [[Rcpp::export(get_omp_threads)]]
-int getOmpThreads() {
-  int threads = 0;
-#ifdef ICD_OPENMP
-  omp_sched_t sched;
-  omp_get_schedule(&sched, &threads);
-#endif
-  return threads;
-}
-
-// [[Rcpp::export]]
-void debug_parallel_env() {
-#ifdef ICD_DEBUG_PARALLEL
-  Rcout << "checking OpenMP flags...\n";
-#ifdef HAVE_R_OPENMP
-  Rcout << "HAVE_R_OPENMP is defined.\n";
-#endif
-#ifdef _OPENMP
-  Rcout << "_OPENMP is defined.\n";
-#else
-  Rcout << "_OPENMP is not defined.\n";
-#endif
-
-#ifdef ICD_OPENMP
-  Rcout << "ICD_OPENMP is defined.\n";
-#else
-  Rcout << "ICD_OPENMP is not defined.\n";
-#endif
-#endif
-}
-
-// [[Rcpp::export]]
-void debug_parallel() {
-  //  cannot use Rcpp:Rcout in multithreaded code: alternative (for debugging
-  //  only) is RcppThreads. Small package but I'm reluctant to add another
-  //  dependency.
-  /*
-#if defined(ICD_OPENMP) && defined(ICD_DEBUG_PARALLEL)
-   Rcpp::Rcout << "threads per omp_get_schedule = " << getOmpThreads()
-               << " max threads per omp_get_schedule = " << getOmpMaxThreads()
-               << " avail threads = " << omp_get_num_threads()
-               << " omp_get_thread_num = " << omp_get_thread_num()
-               << " omp_get_num_procs = " << getOmpCores() << "\n";
-#endif // ICD_DEBUG_PARALLEL
-   */
-}
 
 // [[Rcpp::export]]
 int valgrindCallgrindStart(bool zerostats = false) {
@@ -287,9 +217,6 @@ Rcpp::IntegerVector refactor(const IntegerVector& x, const CV& new_levels, bool 
   LogicalVector matched_na_level(fsz, false);
   R_xlen_t fi = 0;
   R_xlen_t i;
-  //#ifdef ICD_OPENMP
-  //#pragma omp parallel for shared(fi)
-  //#endif
   for (i = 0; i < fsz; ++i) {
     TRACE_UTIL("refactor considering i: " << i << ", x[i]: " << x[i] << ", "
                                           << "fi: " << fi);
@@ -404,9 +331,6 @@ Rcpp::IntegerVector refactor_narm(const IntegerVector& x,
   DEBUG_UTIL("fsz = " << fsz);
   R_xlen_t fi = 0;
   R_xlen_t i;
-  //#ifdef ICD_OPENMP
-  //#pragma omp parallel for shared(fi)
-  //#endif
   for (i = 0; i < fsz; ++i) {
     TRACE_UTIL("refactor considering i: " << i << ", x[i]: " << x[i] << ", "
                                           << "fi: " << fi);

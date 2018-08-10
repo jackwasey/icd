@@ -10,14 +10,9 @@
 /* .Call calls */
 extern SEXP _icd_categorize_rcpp();
 extern SEXP _icd_comorbidMatMulSimple(SEXP, SEXP, SEXP, SEXP);
-extern SEXP _icd_debug_parallel();
-extern SEXP _icd_debug_parallel_env();
 extern SEXP _icd_factorNoSort(SEXP, SEXP, SEXP);
 extern SEXP _icd_fastIntToString_alt_Std(SEXP);
 extern SEXP _icd_fastIntToStringRcpp(SEXP);
-extern SEXP _icd_getOmpCores();
-extern SEXP _icd_getOmpMaxThreads();
-extern SEXP _icd_getOmpThreads();
 extern SEXP _icd_guessShortCompleteCpp(SEXP, SEXP, SEXP, SEXP);
 extern SEXP _icd_guessShortPlusFactorCpp(SEXP, SEXP);
 extern SEXP _icd_icd10cmChildrenDefined(SEXP, SEXP, SEXP);
@@ -67,7 +62,6 @@ extern SEXP _icd_icd9ShortToPartsCpp(SEXP, SEXP);
 extern SEXP _icd_inFast(SEXP, SEXP);
 extern SEXP _icd_matchFast(SEXP, SEXP);
 extern SEXP _icd_randomMajorCpp(SEXP);
-extern SEXP _icd_RcppExport_registerCCallable();
 extern SEXP _icd_refactor(SEXP, SEXP, SEXP);
 extern SEXP _icd_refactor_narm(SEXP, SEXP);
 extern SEXP _icd_setDecimalDiag(SEXP, SEXP);
@@ -83,14 +77,9 @@ extern SEXP run_testthat_tests();
 static const R_CallMethodDef CallEntries[] = {
     {"_icd_categorize_rcpp",                      (DL_FUNC) &_icd_categorize_rcpp,                      0},
     {"_icd_comorbidMatMulSimple",                 (DL_FUNC) &_icd_comorbidMatMulSimple,                 4},
-    {"_icd_debug_parallel",                       (DL_FUNC) &_icd_debug_parallel,                       0},
-    {"_icd_debug_parallel_env",                   (DL_FUNC) &_icd_debug_parallel_env,                   0},
     {"_icd_factorNoSort",                         (DL_FUNC) &_icd_factorNoSort,                         3},
     {"_icd_fastIntToString_alt_Std",              (DL_FUNC) &_icd_fastIntToString_alt_Std,              1},
     {"_icd_fastIntToStringRcpp",                  (DL_FUNC) &_icd_fastIntToStringRcpp,                  1},
-    {"_icd_getOmpCores",                          (DL_FUNC) &_icd_getOmpCores,                          0},
-    {"_icd_getOmpMaxThreads",                     (DL_FUNC) &_icd_getOmpMaxThreads,                     0},
-    {"_icd_getOmpThreads",                        (DL_FUNC) &_icd_getOmpThreads,                        0},
     {"_icd_guessShortCompleteCpp",                (DL_FUNC) &_icd_guessShortCompleteCpp,                4},
     {"_icd_guessShortPlusFactorCpp",              (DL_FUNC) &_icd_guessShortPlusFactorCpp,              2},
     {"_icd_icd10cmChildrenDefined",               (DL_FUNC) &_icd_icd10cmChildrenDefined,               3},
@@ -140,7 +129,6 @@ static const R_CallMethodDef CallEntries[] = {
     {"_icd_inFast",                               (DL_FUNC) &_icd_inFast,                               2},
     {"_icd_matchFast",                            (DL_FUNC) &_icd_matchFast,                            2},
     {"_icd_randomMajorCpp",                       (DL_FUNC) &_icd_randomMajorCpp,                       1},
-    {"_icd_RcppExport_registerCCallable",         (DL_FUNC) &_icd_RcppExport_registerCCallable,         0},
     {"_icd_refactor",                             (DL_FUNC) &_icd_refactor,                             3},
     {"_icd_refactor_narm",                        (DL_FUNC) &_icd_refactor_narm,                        2},
     {"_icd_setDecimalDiag",                       (DL_FUNC) &_icd_setDecimalDiag,                       2},

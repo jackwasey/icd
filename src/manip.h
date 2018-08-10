@@ -18,7 +18,6 @@
 #ifndef MANIP_H_
 #define MANIP_H_
 
-// [[Rcpp::interfaces(r, cpp)]]
 #include "icd_types.h"
 #include "Rcpp/String.h"  // for String
 #include <string>

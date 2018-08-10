@@ -1,4 +1,0 @@
-#!/bin/sh
-
-rm -rf config.src config.log src/Makevars src/config.h *.dSYM
-

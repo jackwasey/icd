@@ -1,8 +1,5 @@
 // [[Rcpp::depends(RcppEigen)]]
-// [[Rcpp::interfaces(r, cpp)]]
-// [[Rcpp::plugins(cpp11)]]
 #include "icd_types.h"
-#include "config.h"
 #include "local.h"
 #include "comorbidMatMul.h"
 #include "fastIntToString.h"

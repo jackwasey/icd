@@ -7,7 +7,7 @@ function finish {
   echo "Finished with $tmpd"
 }
 trap finish EXIT
-cp -r "${ICD_HOME:-$HOME/rprojects/icd}" "$tmpd"
+rsync -r --exclude=".git" "${ICD_HOME:-$HOME/rprojects/icd}" "$tmpd"
 pushd "$tmpd"
 R CMD build icd
 # for all environment variable options see here:
@@ -28,7 +28,7 @@ MAKEFLAGS=-j$(getconf _NPROCESSORS_ONLN) \
   _R_CHECK_RD_EXAMPLES_T_AND_F_=TRUE \
   _R_CHECK_RD_LINE_WIDTHS_=true \
   _R_CHECK_TESTS_NLINES_=0 \
-  _R_CHECK_USE_INSTALL_LOG_=FALSE \
+  _R_CHECK_USE_INSTALL_LOG_=TRUE \
   _R_CHECK_VIGNETTES_NLINES_=0 \
  R CMD check "$(ls -t $tmpd/icd*.tar.gz | head -1)"
 popd

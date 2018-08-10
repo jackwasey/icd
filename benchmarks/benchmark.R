@@ -23,15 +23,6 @@ slow_tests <- function(...) {
   invisible(res)
 }
 
-bench_omp_vec_int <- function(n = 4, np = 2, threads = 6, chunk_size = 32) {
-  icd9df <- generate_random_pts(n, np = np)
-  icd9ComorbidShort(icd9df = icd9df,
-                    icd9Mapping = icd9_map_ahrq,
-                    visitId = get_visit_name(icd9df),
-                    icd9Field = get_icd_name(icd9df),
-                    threads = threads, chunk_size = chunk_size)
-}
-
 bench_long_to_wide <- function(n = 10000, np = 7, times = 10) {
   pts <- generate_random_ordered_pts(n, np)
   #   microbenchmark::microbenchmark(icd9LongToWideMatrixByMap(pts),
@@ -133,10 +124,5 @@ icd9_benchmark <- function() {
 
   microbenchmark::microbenchmark(times = 3, grepl(pattern = "[EeVv]", rpts))
 }
-
-runOpenMPVecInt <- bench_omp_vec_int # nolint
-benchOpenMPThreads <- bench_omp_threads # nolint
-benchLongToWide <- bench_long_to_wide # nolint
-checkThreadChunk <- bench_thread_chunk # nolint
 
 # nocov end

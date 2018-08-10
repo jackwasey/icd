@@ -1,6 +1,5 @@
-// [[Rcpp::interfaces(r, cpp)]]
+#include "icd_types.h"
 #include "local.h"
-#include "config.h"
 #include <string>
 #include <vector>
 using Rcpp::runif;

@@ -1,4 +1,5 @@
-#include "icd_types.h"
+#include <vector>
+#include <string>
 
 // [[Rcpp::export]]
 std::vector<std::string> fastIntToString_alt_Std(std::vector<int> x) {

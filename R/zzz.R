@@ -64,7 +64,6 @@ release_questions <- function() {
     "Have you checked on Windows, win_builder (if possible with configure.win failure),
       Mac, Ubuntu, UBSAN rocker, and updated my docker image which
       resembles a CRAN maintainers environment?",
-    "is R_OPENMP macro updated from R sources: m4/openmp.m4",
     "look for residual tmp files or dirs after checking, CRAN doesn't tolerate",
     # final manual check:
     "Are all NOTES from R CMD check documented in cran-comments.md",

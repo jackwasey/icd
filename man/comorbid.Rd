@@ -204,10 +204,6 @@ and the underlying algorithm used. Usually this would be the order of the
 first occurrence of each visit/patient identifier, but this is not
 guaranteed unless \code{restore_id_order} is set to \code{TRUE}.
 
-The threading of the C++ can be controlled using e.g.
-\code{option(icd.threads = 4)}. If it is not set, the number of cores in
-the machine is used. 'OpenMP' environment variables also work.
-
 \code{data.frame}s of patient data may have columns within them
   which are of class \code{icd9}, \code{icd10} etc., but do not themselves
   have a class: therefore, the S3 mechanism for dispatch is not suitable. I

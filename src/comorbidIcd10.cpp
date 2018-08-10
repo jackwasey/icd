@@ -15,11 +15,8 @@
 // You should have received a copy of the GNU General Public License
 // along with icd. If not, see <http://www.gnu.org/licenses/>.
 
-// [[Rcpp::interfaces(r, cpp)]]
-// [[Rcpp::plugins(openmp)]]
 #include "icd_types.h"
 #include "local.h"
-#include "config.h"
 #include "comorbidIcd10.h"
 #include <string.h>                         // for strlen, strncpy
 #include <string>                           // for string
@@ -71,8 +68,6 @@ Rcpp::List simplifyMapLexicographic(const CV pt_codes, const Rcpp::List map) {
     size_t codeLen = ptCode.length();
     if (codeLen < 3) continue; // cannot be a valid ICD-10 code
     DEBUG("code len >=3 chars");
-    // cannot break or goto in openmp loops
-    // #pragma omp parallel for private(searchLen, pos, cmb_len)
     for (R_xlen_t j = 0; j < map.size(); ++j) {
       DEBUG("cmb, j = " << j);
       const CV &cmbCodes = map[j];
@@ -102,8 +97,7 @@ Rcpp::List simplifyMapLexicographic(const CV pt_codes, const Rcpp::List map) {
           ++pos;
         }
         // push the patient's ICD code, not the original comorbidity ICD code
-        // onto the new map. This should be okay with openmp without critical
-        // pragma, but goto is not.
+        // onto the new map.
         newMapStd[j].insert(ptCode);
         DEBUG("Going to next comorbidity");
         goto next_comorbidity;

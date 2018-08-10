@@ -18,7 +18,6 @@
 #ifndef UTIL_H_
 #define UTIL_H_
 
-#include "config.h"
 #include "local.h"                      // for ICD_OPENMP
 #include "icd_types.h"                  // for VecStr
 #include <cstddef>                      // for size_t
@@ -33,11 +32,6 @@
 typedef std::pair<std::string, std::size_t> pas;
 std::string trimLeftCpp(std::string s);
 std::string strimCpp(std::string s);
-int getOmpCores();
-int getOmpThreads();
-int getOmpMaxThreads();
-void debug_parallel();
-void debug_parallel_env();
 Rcpp::NumericVector randomMajorCpp(int n);
 VecStr icd9RandomShortN(VecStr::size_type n);
 VecStr icd9RandomShortV(VecStr::size_type n);

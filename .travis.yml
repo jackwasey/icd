@@ -38,7 +38,6 @@ env:
     - _R_CHECK_FORCE_SUGGESTS_=FALSE
     - LINTR_COMMENT_BOT=false
     - ICD_COVERAGE=false
-    - OMP_NUM_THREADS=2
     - ICD_TEST_DEPRECATED=false
     - ICD_TEST_BUILD_DATA=false
     - ICD_TEST_SLOW=false

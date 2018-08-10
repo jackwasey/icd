@@ -30,10 +30,7 @@ Authors@R:
       person(given = "Kevin",
              family = "Ushey",
              role = "ctb",
-             comment = "Code adapted for fast factor generation"),
-      person(given = "R Core Team",
-             role = c("ctb", "cph"),
-             comment = "m4 macro for OpenMP detection in configure"))
+             comment = "Code adapted for fast factor generation"))
 Maintainer: Jack O. Wasey <jack@jackwasey.com>
 Description: Calculate comorbidities, Charlson and van Walraven
     scores, perform fast and accurate validation, conversion,

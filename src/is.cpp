@@ -15,7 +15,7 @@
 // You should have received a copy of the GNU General Public License
 // along with icd. If not, see <http://www.gnu.org/licenses/>.
 
-// [[Rcpp::interfaces(r, cpp)]]
+#include "icd_types.h"
 #include "is.h"
 #include <string>
 #include <vector>
@@ -40,7 +40,7 @@ bool icd9IsASingleVE(const char* s) {
 
 //' Do elements of vector begin with V, E (or any other character)?
 //'
-//' Current returns a vector of \code{bool} which is not thread safe, or
+//' Currently returns a vector of \code{bool} which is not thread safe, or
 //' particularly fast, although it is memory efficient in the standard
 //' implementation. As of \code{icd9} (now known as \code{icd}) version 1.2,
 //' this is not called by threaded code, but this could change, so beware! ASCII

@@ -18,7 +18,6 @@
 #ifndef GUESS_H_
 #define GUESS_H_
 
-#include "config.h"
 #include "icd_types.h"
 #include <vector>
 #include <string>

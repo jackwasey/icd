@@ -1,6 +1,7 @@
 # Version 3.2.1
  * Pediatric Complex Chronic Condition functions more consistent with the other comorbidity functions
  * Minor bug fixes
+ * Eigen library is multithreaded, so OpenMP dependencies now dropped from this package, simplifying and speeding up build, dropping configure script, etc..
 
 # Version 3.2.0
  * added [Pediatric Complex Chronic Condition comorbidity classification](https://jackwasey.github.io/icd/articles/pccc.html)

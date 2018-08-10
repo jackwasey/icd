@@ -78,10 +78,6 @@ poa_choices <- c("yes", "no", "notYes", "notNo")
 #'   and the underlying algorithm used. Usually this would be the order of the
 #'   first occurrence of each visit/patient identifier, but this is not
 #'   guaranteed unless `restore_id_order` is set to `TRUE`.
-#'
-#'   The threading of the C++ can be controlled using e.g.
-#'   \code{option(icd.threads = 4)}. If it is not set, the number of cores in
-#'   the machine is used. 'OpenMP' environment variables also work.
 #' @md
 #' @family comorbidity computations
 #' @family comorbidities

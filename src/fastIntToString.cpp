@@ -1,9 +1,7 @@
-#include <icd_types.h>
+#include "icd_types.h"
 #include <stdio.h>                      // for sprintf, size_t
 #include <string>                       // for string, basic_string
 #include <vector>                       // for vector, vector<>::size_type
-
-// [[Rcpp::interfaces(r, cpp)]]
 
 //' @title Convert integers to strings as quickly as possible
 //' @description Have tried R, `sprintf` with \pkg{Rcpp} and C++ standard

@@ -20,7 +20,7 @@ icd9_is_e_cpp(sv)
 \item{invert}{single logical, if TRUE, negates the condition}
 }
 \description{
-Current returns a vector of \code{bool} which is not thread safe, or
+Currently returns a vector of \code{bool} which is not thread safe, or
 particularly fast, although it is memory efficient in the standard
 implementation. As of \code{icd9} (now known as \code{icd}) version 1.2,
 this is not called by threaded code, but this could change, so beware! ASCII

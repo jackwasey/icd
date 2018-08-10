@@ -15,7 +15,7 @@
 // You should have received a copy of the GNU General Public License
 // along with icd. If not, see <http://www.gnu.org/licenses/>.
 
-#include "icd_types.h"                       // for VecStr, CV, Str
+#include "icd_types.h"
 #include "appendMinor.h"
 #include <string.h>                          // for strlen
 #include <algorithm>                         // for fill

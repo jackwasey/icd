@@ -19,9 +19,10 @@
 #define ICD_TYPES_H_
 
 #include <Rcpp.h>
-#include "config.h" // to know whether we have OpenMP, Eigen, etc. which have typedefs
 #include <vector>
 #include <string>
+#include <unordered_map>
+#include <unordered_set>
 typedef std::string Str;
 typedef std::vector<Str> VecStr;
 typedef std::vector<int> VecInt;

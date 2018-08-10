@@ -15,7 +15,6 @@
 // You should have received a copy of the GNU General Public License
 // along with icd. If not, see <http://www.gnu.org/licenses/>.
 
-// [[Rcpp::interfaces(r, cpp)]]
 #include "icd_types.h"                 // for ComorbidOut, VecVecInt, VecVec...
 #include "guess.h"
 #include <vector>

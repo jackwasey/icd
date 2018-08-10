@@ -24,7 +24,7 @@
 #'
 #' The factor generation uses \code{sort.default} which is locale dependent.
 #' This meant a lot of time debugging a problem when white space was ignored for
-#' sorting on some platforms, but not others (e.g. Travis and Wercker).
+#' sorting on some platforms, but not others.
 #' @source
 #'   \url{http://www.cdc.gov/nchs/data/icd/icd10cm/2016/ICD10CM_FY2016_code_descriptions.zip}.
 #' @references

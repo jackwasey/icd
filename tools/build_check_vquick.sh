@@ -7,7 +7,7 @@ function finish {
   echo "Finished with $tmpd"
 }
 trap finish EXIT
-cp -r "${ICD_HOME:-$HOME/rprojects/icd}" "$tmpd"
+rsync -r --exclude=".git" "${ICD_HOME:-$HOME/rprojects/icd}" "$tmpd"
 pushd "$tmpd"
 R CMD build \
   --no-build-vignettes \

@@ -16,7 +16,7 @@ this just grabs 2016.
 \details{
 The factor generation uses \code{sort.default} which is locale dependent.
 This meant a lot of time debugging a problem when white space was ignored for
-sorting on some platforms, but not others (e.g. Travis and Wercker).
+sorting on some platforms, but not others.
 }
 \references{
 https://www.cms.gov/Medicare/Coding/ICD10/downloads/icd-10quickrefer.pdf
