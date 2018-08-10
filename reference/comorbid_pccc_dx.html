@@ -242,19 +242,7 @@ other tools, e.g. <code>apply(x, 2, as.integer)</code></p></td>
 
     <ul>
 <li><p><code>comorbid_pccc_pcs</code>: Calculate the PCCC comorbidities based
-  on procedure codes,
-  @examples
-# Six random codes from each PCCC procedure code map. 'icd' will use
-# an heuristic to guess whether ICD-9 or ICD-10:
-pts &lt;- data.frame(encounters = c(10, 11, 12),
-                  icd9_pcs = c("0152", "304", "0050"),
-                  icd10_pcs = c("0B110Z4", "02YA0Z2", "031209D"))
-comorbid_pccc_pcs(pts, icd_name = "icd9_pcs", return_binary = TRUE)
-comorbid_pccc_pcs(pts, icd_name = "icd10_pcs", return_binary = TRUE)</p>
-<p># All ICD-9 procedure codes are numeric, some ICD-10 procedure codes
-# are numeric, so best to call functions directly:
-pts &lt;- data.frame(encounters = c(100), icd10_pcs = c("0016070"))
-icd10_comorbid_pccc_pcs(pts, icd_name = "icd10_pcs")</p></li>
+on procedure codes,</p></li>
 <li><p><code>icd9_comorbid_pccc_dx</code>: Calculate PCCC comorbidities from ICD-9
 diagnosis codes</p></li>
 <li><p><code>icd10_comorbid_pccc_dx</code>: Calculate PCCC comorbidities from ICD-10
@@ -293,7 +281,33 @@ procedure codes</p></li>
 #&gt; 13           FALSE      FALSE    FALSE    FALSE      FALSE
 #&gt; 16           FALSE      FALSE    FALSE    FALSE      FALSE
 #&gt; 37           FALSE      FALSE    FALSE    FALSE      FALSE
-#&gt; 41           FALSE      FALSE    FALSE    FALSE      FALSE</div></pre>
+#&gt; 41           FALSE      FALSE    FALSE    FALSE      FALSE</div><div class='input'><span class='co'># Six random codes from each PCCC procedure code map. 'icd' will use</span>
+<span class='co'># an heuristic to guess whether ICD-9 or ICD-10:</span>
+<span class='no'>pts</span> <span class='kw'>&lt;-</span> <span class='fu'>data.frame</span>(<span class='kw'>encounters</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fl'>10</span>, <span class='fl'>11</span>, <span class='fl'>12</span>),
+                  <span class='kw'>icd9_pcs</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"0152"</span>, <span class='st'>"304"</span>, <span class='st'>"0050"</span>),
+                  <span class='kw'>icd10_pcs</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"0B110Z4"</span>, <span class='st'>"02YA0Z2"</span>, <span class='st'>"031209D"</span>))
+<span class='fu'>comorbid_pccc_pcs</span>(<span class='no'>pts</span>, <span class='kw'>icd_name</span> <span class='kw'>=</span> <span class='st'>"icd9_pcs"</span>, <span class='kw'>return_binary</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt;    neuromusc cvd respiratory renal gi hemato_immu metabolic congeni_genetic
+#&gt; 10         1   0           0     0  0           0         0               0
+#&gt; 11         0   0           1     0  0           0         0               0
+#&gt; 12         0   1           0     0  0           0         0               0
+#&gt;    malignancy neonatal tech_dep transplant
+#&gt; 10          0        0        0          0
+#&gt; 11          0        0        0          0
+#&gt; 12          0        0        1          0</div><div class='input'><span class='fu'>comorbid_pccc_pcs</span>(<span class='no'>pts</span>, <span class='kw'>icd_name</span> <span class='kw'>=</span> <span class='st'>"icd10_pcs"</span>, <span class='kw'>return_binary</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt;    neuromusc cvd respiratory renal gi hemato_immu metabolic congeni_genetic
+#&gt; 10         0   0           1     0  0           0         0               0
+#&gt; 11         0   1           0     0  0           0         0               0
+#&gt; 12         0   0           0     1  0           0         0               0
+#&gt;    malignancy neonatal tech_dep transplant
+#&gt; 10          0        0        0          0
+#&gt; 11          0        0        0          1
+#&gt; 12          0        0        1          0</div><div class='input'>
+<span class='co'># All ICD-9 procedure codes are numeric, some ICD-10 procedure codes</span>
+<span class='co'># are numeric, so best to call functions directly:</span>
+<span class='no'>pts</span> <span class='kw'>&lt;-</span> <span class='fu'>data.frame</span>(<span class='kw'>encounters</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='fl'>100</span>), <span class='kw'>icd10_pcs</span> <span class='kw'>=</span> <span class='fu'>c</span>(<span class='st'>"0016070"</span>))
+<span class='fu'>icd10_comorbid_pccc_pcs</span>(<span class='no'>pts</span>, <span class='kw'>icd_name</span> <span class='kw'>=</span> <span class='st'>"icd10_pcs"</span>)</div><div class='output co'>#&gt;     neuromusc   cvd respiratory renal    gi hemato_immu metabolic
+#&gt; 100      TRUE FALSE       FALSE FALSE FALSE       FALSE     FALSE
+#&gt;     congeni_genetic malignancy neonatal tech_dep transplant
+#&gt; 100           FALSE      FALSE    FALSE    FALSE      FALSE</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
