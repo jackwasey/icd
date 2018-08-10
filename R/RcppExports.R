@@ -414,10 +414,6 @@ refactor_narm_worker <- function(x, new_levels) {
 
 #' @title Faster match
 #' @name match_rcpp
-#' @description TODO: Try \pkg{Rcpp} hashing (and simpler logic) compared to
-#'   internal \R \code{do_match} and \code{match5} morass. Lose the ability to
-#'   use \code{incomparables}. There may be a problem with the IndexHash code,
-#'   though.
 #' @keywords internal
 match_rcpp <- function(x, table) {
     .Call(`_icd_matchFast`, x, table)

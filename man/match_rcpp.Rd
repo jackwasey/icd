@@ -16,10 +16,7 @@ x \%fin\% table
 x \%fnin\% table
 }
 \description{
-TODO: Try \pkg{Rcpp} hashing (and simpler logic) compared to
-  internal \R \code{do_match} and \code{match5} morass. Lose the ability to
-  use \code{incomparables}. There may be a problem with the IndexHash code,
-  though.
+Faster match
 }
 \section{Functions}{
 \itemize{

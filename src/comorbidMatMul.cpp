@@ -155,11 +155,6 @@ void buildVisitCodesSparseSimple(const RObject& visits,
     // it wouldn't be a problem.
     visitIds = as<VecStr>(uv);
     DEBUG_VEC(visitIds);
-    // cannot do this:
-    // IHS visHash = IHS(uv);
-    //rows = visHash.lookup(uv.get_ref()); // it should work by
-    // using pointer to global string cache (another hash!), but it appears not
-    // to do this.
     rows = match(v, uv);
     // matrix row names are character. TODO: consider option not to
     // name the rows, e.g. for people who just summarize the data: will save a

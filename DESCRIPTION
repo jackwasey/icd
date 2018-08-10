@@ -71,7 +71,8 @@ Classification/ACM-2012: Social and professional topics~Medical
     records, Applied computing~Health care information systems, Applied
     computing~Health informatics, Applied computing~Bioinformatics
 Copyright: See file (inst/)COPYRIGHTS
+Encoding: UTF-8
+Language: en-US
 LazyData: true
 LazyDataCompression: xz
-Encoding: UTF-8
 RoxygenNote: 6.1.0

@@ -46,9 +46,6 @@ typedef Rcpp::CharacterVector CV;
 #include <RcppEigen.h> // also add LinkingTo element in DESCRIPTION to enable
 #include <Eigen/SparseCore>
 
-// using the typedef confuses Rcpp?
-//typedef Eigen::SparseMatrix<char, Eigen::RowMajor> SparseOut; // bool, char or int?
-// https://eigen.tuxfamily.org/dox/group__TutorialSparse.html
 typedef int SparseValue;
 typedef Eigen::Triplet<SparseValue> Triplet;
 typedef Eigen::SparseMatrix<SparseValue, Eigen::RowMajor> PtsSparse;

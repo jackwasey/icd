@@ -41,7 +41,7 @@ comorbid_pccc_dx <- function(x, visit_name = get_visit_name(x),
 
 #' @describeIn comorbid_pccc_dx Calculate the PCCC comorbidities based
 #'   on procedure codes,
-#'   @examples
+#' @examples
 #' # Six random codes from each PCCC procedure code map. 'icd' will use
 #' # an heuristic to guess whether ICD-9 or ICD-10:
 #' pts <- data.frame(encounters = c(10, 11, 12),

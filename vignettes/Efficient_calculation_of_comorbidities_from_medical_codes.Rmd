@@ -28,7 +28,7 @@ title:
     from ICD Codes Using Sparse Matrix Multiplication in \proglang{R}
   short: "\\pkg{icd}: Efficient calculation of comorbidities from ICD codes"
 abstract: >
-  Medical research often describes the existing diseases (comorbidities) in its study populations, and retrospective research may rely on this information for risk adjustment. Sets of International Classifcation of Diseases (ICD) codes are often used for high-level classification of patients into comorbidities (e.g., 'Cancer' or 'Heart Disease') to help summarize characteristics of a population. Similar tools were not available in \proglang{R}, and do not scale to big data sets. The \pkg{icd} extension for \proglang{R} includes validated mappings of ICD codes to comorbidities, and uses an efficient, fast and scalable algorithm to apply these mappings to patient data. This enables reproducible workflows with hundreds of millions of patient records as are increasingly seen in large national and international databases.
+  Medical research often describes the existing diseases (comorbidities) in its study populations, and retrospective research may rely on this information for risk adjustment. Sets of International Classification of Diseases (ICD) codes are often used for high-level classification of patients into comorbidities (e.g., 'Cancer' or 'Heart Disease') to help summarize characteristics of a population. Similar tools were not available in \proglang{R}, and do not scale to big data sets. The \pkg{icd} extension for \proglang{R} includes validated mappings of ICD codes to comorbidities, and uses an efficient, fast and scalable algorithm to apply these mappings to patient data. This enables reproducible workflows with hundreds of millions of patient records as are increasingly seen in large national and international databases.
 keywords:
   formatted: [medical informatics, administrative data, matrix algebra, "\\proglang{R}", "\\proglang{C++}", "ICD", "mapping"]
   plain:     [medical informatics, administrative data, matrix algebra, R, C++, ICD, mapping]
@@ -189,7 +189,7 @@ explain_code("100")
 
 ### Breakdown of an ICD-10 code
 
-This is a breakdown of an ICD-10-CM code, chosen to illustrate the hierarchical nature of the codes, and difference betwen WHO ICD-10 and ICD-10-CM. The following two codes are shared by the WHO definitions and ICD-10-CM.[^libraryicd]
+This is a breakdown of an ICD-10-CM code, chosen to illustrate the hierarchical nature of the codes, and difference between WHO ICD-10 and ICD-10-CM. The following two codes are shared by the WHO definitions and ICD-10-CM.[^libraryicd]
 ```{r exampleicdcodewho}
 explain_code(c("S62", "S62.6"))
 ```
@@ -333,7 +333,7 @@ The main internal feature of this software is the algorithm for assigning the di
 
 ### ICD-9 
 
-Step \ref{itm:dataprep} of the algorithm is only applicable to ICD-9 codes. The comorbidity maps for ICD-9 codes already contain all the synactically valid permutations of child codes according to the ICD-9 specification. This means exact matching can be done in subsequent steps. The pre-calculation of the ICD-9 maps is done at package creation time, using internal functions which are included for reproducibility.
+Step \ref{itm:dataprep} of the algorithm is only applicable to ICD-9 codes. The comorbidity maps for ICD-9 codes already contain all the syntactically valid permutations of child codes according to the ICD-9 specification. This means exact matching can be done in subsequent steps. The pre-calculation of the ICD-9 maps is done at package creation time, using internal functions which are included for reproducibility.
 
 ### ICD-10
 
@@ -395,7 +395,7 @@ The comorbidity matrix is more sparse than the patient-visit matrix, but is impl
 
 [^wordagain]: Again the calculation is done using a 32-bit word for each flag.
 
-There is a detailed example below in Section \ref{workedex}, but a better idea of the bulk structure of this matrix can be seen below for a fictious comorbidity map with five categories, and also in Figure \ref{fig:comorbidmatrix}. Note that the code represented by the last row appears in the first and third comorbidities, whereas the others are all unique to one comorbidity.
+There is a detailed example below in Section \ref{workedex}, but a better idea of the bulk structure of this matrix can be seen below for a fictitious comorbidity map with five categories, and also in Figure \ref{fig:comorbidmatrix}. Note that the code represented by the last row appears in the first and third comorbidities, whereas the others are all unique to one comorbidity.
 $$ B_{p,q} =
 \begin{matrix}
 1 & 0 & 0 & 0 & 0 \\
@@ -505,7 +505,7 @@ There are several things to note, which represent common features in real health
 
 Let $\boldsymbol{A}$ be a simplified set of patient-visits, where the columns represent the ICD-10 codes I0981 (rheumatic heart failure), I10 (essential hypertension), and I110 (hypertensive heart disease with heart failure). Again, each row is a different patient-visit.
 
-Let $\boldsymbol{B}$ be a simplified comorbidity map, where the columns represent congestive heart failure and hypertension, in that order. Note that 110 is found in both these comrobidities.
+Let $\boldsymbol{B}$ be a simplified comorbidity map, where the columns represent congestive heart failure and hypertension, in that order. Note that 110 is found in both these comorbidities.
 
 $$\boldsymbol{A} =
 \begin{pmatrix}
@@ -716,7 +716,7 @@ rr[nrow(rr), "medicalrisk"] <- NA
 
 It is important to have a reproducible audit trail for foundational work, so \pkg{icd} contains code which parses \proglang{SAS} source code in order to derive the original intent of the author in how the comorbidity maps were implemented. The AHRQ and \citeauthor{quan_updating_2011} provide such \proglang{SAS} source code, whereas other maps are only available in the form of tabulated data in journal articles.
 
-### Parsing orignal SAS code
+### Parsing original SAS code
 
 For example, \citeauthor{quan_updating_2011} offer the following code for pulmonary disease in the ICD-9 Charlson map. The lines split for clarity.
 
@@ -747,7 +747,7 @@ There are also many other ways the coder may have made the error other than a pe
 "497" %in% icd9_map_charlson
 ```
 
-The comorbidity maps are therefore constructed by generously including all children (valid or invalid) of the explicitly defined three-digit codes, but they do not extrapolate to other three-digit codes. Suppose additional digits were defined by a country's extension of ICD-9, but do not appear in the WHO or ICD-9-CM definitions. \pkg{icd} already includes all possible structurally valid ICD-9 child codes in the map. This can be seen here, where two ficticious decimal places are seen in the map, but not three:
+The comorbidity maps are therefore constructed by generously including all children (valid or invalid) of the explicitly defined three-digit codes, but they do not extrapolate to other three-digit codes. Suppose additional digits were defined by a country's extension of ICD-9, but do not appear in the WHO or ICD-9-CM definitions. \pkg{icd} already includes all possible structurally valid ICD-9 child codes in the map. This can be seen here, where two fictitious decimal places are seen in the map, but not three:
 
 ```{r neighbor497}
 "49699" %in% icd9_map_quan_deyo[["Pulmonary"]]
@@ -802,13 +802,13 @@ explain_code(children("4410"), condense = FALSE)
 
 ## Software libraries
 
-This package is built on the strong foundations of \proglang{R} [@R_2018], \pkg{Rcpp} [@Eddelbuettel_RcppSeamlessIntegration_2011], \pkg{RcppEigen} [@Eddelbeuttel_FastElegantNumerical_2013], and \pkg{Eigen} \citep*{Guennebaud_Eigen_2017}, the highly optimized \proglang{C++} linear algebra library. Eigen was chosen because of its performance oriented approach to matrix multiplication using advanced x86 instructions when possible, and, in the case of the row-major sparse multiplication with a dense matrix, a multithreaded solution. Once this was impemented, the bottlenecks moved to the data preparation before the matrix multiplication, which itself was optimized by simple R techniques such as vectorization.
+This package is built on the strong foundations of \proglang{R} [@R_2018], \pkg{Rcpp} [@Eddelbuettel_RcppSeamlessIntegration_2011], \pkg{RcppEigen} [@Eddelbeuttel_FastElegantNumerical_2013], and \pkg{Eigen} \citep*{Guennebaud_Eigen_2017}, the highly optimized \proglang{C++} linear algebra library. Eigen was chosen because of its performance oriented approach to matrix multiplication using advanced x86 instructions when possible, and, in the case of the row-major sparse multiplication with a dense matrix, a multi-threaded solution. Once this was impemented, the bottlenecks moved to the data preparation before the matrix multiplication, which itself was optimized by simple R techniques such as vectorization.
 
 ## Extensions
 
 \proglang{R}'s S3 class system is used for extensibility, so it is straightforward to include additional ICD schemes, e.g., for different national systems. Likewise, it is also easy to add new comorbidity maps, or use user-defined ones. Several authors have contributed code which extends \pkg{icd} to solve other problems:
 
-- Van Walraven risk scores [@vanWalraven_modificationElixhausercomorbidity_2009], analagous to Charlson scores, based on the Elixhauser comomribidites.
+- Van Walraven risk scores [@vanWalraven_modificationElixhausercomorbidity_2009], analogous to Charlson scores, based on the Elixhauser comomribidites.
 - assignment of CMS HCC categories [@Evans_EvaluationCMSHCCRisk_2011; @Pope_RiskadjustmentMedicare_2004]
 - emulation of the AHRQ CCS [@AgencyforHealthcareResearchandQuality_ClinicalClassificationsSoftware_2012]
 

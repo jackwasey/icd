@@ -384,10 +384,6 @@ IntegerVector matchFastTemplate(const Vector<RTYPE>& x, const Vector<RTYPE>& tab
 
 //' @title Faster match
 //' @name match_rcpp
-//' @description TODO: Try \pkg{Rcpp} hashing (and simpler logic) compared to
-//'   internal \R \code{do_match} and \code{match5} morass. Lose the ability to
-//'   use \code{incomparables}. There may be a problem with the IndexHash code,
-//'   though.
 //' @keywords internal
 // [[Rcpp::export(match_rcpp)]]
 SEXP matchFast(SEXP x, SEXP table) {

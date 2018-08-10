@@ -41,7 +41,6 @@ release_questions <- function() {
     "update_everything(), then copy data to icd.data package",
     "aspell_package_Rd_files('.')",
     "tools/package-registration.r",
-    "autoreconf",
     "tools/publish.sh to run pkgdown::build_site() then push to gh-pages",
     # documentation:
     "Check all TODO comments, make into github issues",
@@ -51,20 +50,18 @@ release_questions <- function() {
     "Does every file have correct licence information?",
     # code quality:
     "foghorn::summary_cran_details(pkg = 'icd')",
-    "Consider results of 'goodpractice' package.",
+    "Consider results of goodpractice::gp()",
     "Are you happy with the _core_ code coverage?",
     "Is every SEXP PROTECT()ed and UNPROTECT()ed, when appropriate?",
     "Are all public S3 classes all exported? use devtools::missing_s3()",
     "use LLVM static scan build, scan-build before compiler in .R/Makevars",
     # testing and compilation and different platforms:
     "Have you run tests in tests-deprecated and tests-build-code?",
-    "Has config.h.win been updated to reflect latest configure.ac results?",
     "Are there skipped tests which should be run?",
     "Does it compile, test and check fine on travis and appveyor?",
     "Have you checked on Windows, win_builder (if possible with configure.win failure),
       Mac, Ubuntu, UBSAN rocker, and updated my docker image which
       resembles a CRAN maintainers environment?",
-    "look for residual tmp files or dirs after checking, CRAN doesn't tolerate",
     # final manual check:
     "Are all NOTES from R CMD check documented in cran-comments.md",
     "Have all unnecessary files been ignored in built archive? Especially
