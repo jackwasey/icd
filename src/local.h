@@ -75,12 +75,6 @@ extern "C" {
 #define DEBUG_VALGRIND(x) ((void)0)
 #endif
 
-#ifdef ICD_DEBUG_PARALLEL
-#define DEBUG_PARALLEL(x) DEBUG(x)
-#else
-#define DEBUG_PARALLEL(x) ((void)0)
-#endif
-
 //#ifndef HAVE_RCPPEIGEN_H
 #define ICD_CATCH
 // #ifndef HAVE_TESTTHAT_H
