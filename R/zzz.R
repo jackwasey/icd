@@ -18,10 +18,6 @@
 # nocov start
 
 .onAttach <- function(libname, pkgname) {
-  packageStartupMessage(
-    "Welcome to the 'icd' package for finding comorbidities and interpretation of ICD-9 and ICD-10 codes.\n",
-    "?icd or visit https://jackwasey.github.io/icd to get started.\n",
-    "Please cite this package if you find it useful in your published work citation(package = \"icd\")")
   if (system.file(package = "icd9") != "")
     packageStartupMessage(paste(
       "The 'icd9' package is now deprecated, and should be removed to avoid conflicts",
@@ -59,7 +55,7 @@ release_questions <- function() {
     "Have you run tests in tests-deprecated and tests-build-code?",
     "Are there skipped tests which should be run?",
     "Does it compile, test and check fine on travis and appveyor?",
-    "Have you checked on Windows, win_builder (if possible with configure.win failure),
+    "Have you checked on Windows, win_builder,
       Mac, Ubuntu, UBSAN rocker, and updated my docker image which
       resembles a CRAN maintainers environment?",
     # final manual check:
