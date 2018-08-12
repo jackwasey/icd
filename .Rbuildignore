@@ -54,7 +54,6 @@ icd.*tar\.gz
 \.lintr$
 .*\.log$
 ^man-roxygen$
-^NEWS\.md$
 ^.*\.o$
 ^README-*\.png$
 ^README\.Rmd$

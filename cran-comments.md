@@ -7,7 +7,13 @@ Minor update, including a bug fix which could affect output accuracy.
 * MacOS High Sierra, brew clang 6
 * winbuilder fails due to pandoc version error
 
+# CRAN checks
+ 
+CRAN checks show warnings for Windows platforms due to pandoc version error when rebuilding vignettes.
+
 # R CMD check results
+
+Sometimes I get a URL download fail for the URL http://ftp.cdc.gov/pub/Health_Statistics/NCHS/Publications/ICD9-CM/2011/Dtab12.zip which is in a man page. The problem is that the http site directs to https sometimes, and then on some platforms has a certificate error. The URL is valid.
 
 There is one note:
 
