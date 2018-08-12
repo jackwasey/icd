@@ -1,8 +1,10 @@
 ---
 title: "Pediatric Complex Chronic Conditions"
 author: "Jack O. Wasey"
-date: "May 18, 2018"
-output: html_document
+date: "`r Sys.Date()`"
+output:
+  html_document:
+    toc: yes
 vignette: >
   %\VignetteIndexEntry{Pediatric Complex Chronic Conditions}
   %\VignetteEngine{knitr::rmarkdown}

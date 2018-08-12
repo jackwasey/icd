@@ -17,9 +17,9 @@
 
 #' AHRQ comorbidities
 #'
-#' This mapping of comorbidities to ICD-9 codes is derived directly from
-#' SAS code provided by AHRQ, and translated into this R data structure.
-#' This is a revision of the Elixhauser system, notably excluding
+#' These mappings of comorbidities to ICD-9 and ICD-10 codes are derived
+#' directly from SAS code provided by AHRQ then translated into this R data
+#' structure. This is a revision of the Elixhauser system, notably excluding
 #' cardiac arrythmia.
 #' @family comorbidity maps
 #' @family comorbidities

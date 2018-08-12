@@ -3,17 +3,15 @@ title: "Using Hierarchical Condition Codes"
 author:
 - Andrew Cooper (original)
 - Jack Wasey (minor updates)
-date: "June 14, 2017"
-output: html_document
+date: "`r Sys.Date()`"
+output:
+  html_document:
+    toc: yes
 vignette: >
   %\VignetteIndexEntry{Using Hierarchical Condition Codes}
   %\VignetteEngine{knitr::rmarkdown}
   \usepackage[utf8]{inputenc}
 ---
-
-```{r, include=FALSE}
-library("icd")
-```
 
 Hierarchical Condition Categories (HCC) is a method of categorizing ICD codes created by the Centers for Medicare and Medicaid Services (CMS). HCC is designed to categorize the risk level of a patient with chronic or serious illness using diagnoses and demographic information. Healthcare providers implement HCC in payment models for patients, as it can help predict the amount of services a patient will need in the future. HCC can be a useful tool in analysis with ICD codes, and the ICD package provides methods to use them.
 
@@ -22,6 +20,7 @@ HCC first assigns ICD codes to Condition Categories (CC). Condition categories a
 We can see the mapping of ICD-9 and ICD-10 codes to HCC with the `icd9_map_cc` and `icd10_map_cc` data.
 
 ```{r head}
+library("icd")
 head(icd9_map_cc)
 ```
 

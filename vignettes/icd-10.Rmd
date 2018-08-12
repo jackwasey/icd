@@ -1,8 +1,10 @@
 ---
 title: "ICD-10 comorbidities"
 author: "Jack O. Wasey"
-date: "8 May, 2018"
-output: html_document
+date: "`r Sys.Date()`"
+output:
+  html_document:
+    toc: yes
 vignette: >
   %\VignetteIndexEntry{ICD-10 comorbidities}
   %\VignetteEngine{knitr::rmarkdown}
@@ -40,7 +42,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-This package now includes ICD-10 support, with some sample ICD-10-CM data, and comorbidity mappings from ICD-10 codes to comorbidities. There are also 2018 ICD-10-CM procedure codes, and a mapping to categorize these from AHRQ. The sample data are from https://ustur.wsu.edu/about-us/ where de-identified diagnoses are given for a few hundred pathology cases relating to uranium exposure.
+The [icd package](https://cran.r-project.org/package=icd) for R includes ICD-10 support, sample ICD-10-CM data, and [fast comorbidity calculations](introduction.html) from ICD-10 (and ICD-9) diagnostic codes to the standard comorbidities defined in the literature by Charlson, Quan, Deyo, Elixhauser, [pediatric complex chronic conditions](pccc.html) and the US AHRQ. There are also 2018 ICD-10-CM procedure codes, and a mapping to categorize these. The sample data are from the [US Transuranium and Uranium Registries](https://ustur.wsu.edu/about-us/) where de-identified diagnoses are given for a few hundred pathology cases relating to uranium exposure.
 
 The sample data is in the 'long' format, i.e., multiple rows per case
 ```{r uranium-long}

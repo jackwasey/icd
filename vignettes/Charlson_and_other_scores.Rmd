@@ -1,8 +1,10 @@
 ---
 title: "Charlson and Van Walraven scores"
 author: "Jack O. Wasey"
-date: "8 May, 2018"
-output: html_document
+date: "`r Sys.Date()`"
+output:
+  html_document:
+    toc: yes
 vignette: >
   %\VignetteIndexEntry{Charlson and Van Walraven scores}
   %\VignetteEngine{knitr::rmarkdown}
