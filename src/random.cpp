@@ -63,9 +63,12 @@ VecStr icd9RandomShortE(VecStr::size_type n = 5) {
 // [[Rcpp::export]]
 CV icd9RandomShort(unsigned int n = 5) {
   CV out(n);
-  char buffer[7]; // 5+1 for null should be okay...
-  uint_fast32_t r; // need 32 bits for 99999
-  uint_fast8_t t;
+  char buffer[7];
+  // need 32 bits for 99999 // not _fast because it gives long on linux and int
+  // on Mac, and thus compiler warnings. _fast versions have a minimum length,
+  // which may vary with platform.
+  uint32_t r;
+  uint8_t t;
   for (unsigned int i = 0; i != n; ++i) {
     r = R::runif(0.1, 99998.9); // force to unsigned integer type
     t = R::rnorm(2.49, 0.5); // force to unsigned char type
