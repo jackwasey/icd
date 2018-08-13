@@ -105,7 +105,7 @@
                         <h4 class="author">Andrew Cooper (original)</h4>
                         <h4 class="author">Jack Wasey (minor updates)</h4>
             
-            <h4 class="date">2018-08-12</h4>
+            <h4 class="date">2018-08-13</h4>
       
       
       <div class="hidden name"><code>Using_Hierarchical_Condition_Codes.Rmd</code></div>
@@ -114,7 +114,8 @@
 
     
     
-<p>Hierarchical Condition Categories (HCC) is a method of categorizing ICD codes created by the Centers for Medicare and Medicaid Services (CMS). HCC is designed to categorize the risk level of a patient with chronic or serious illness using diagnoses and demographic information. Healthcare providers implement HCC in payment models for patients, as it can help predict the amount of services a patient will need in the future. HCC can be a useful tool in analysis with ICD codes, and the ICD package provides methods to use them.</p>
+<p>Hierarchical Condition Categories (HCC) is a method of categorizing ICD codes created by the Centers for Medicare and Medicaid Services (CMS), which is implemented in the <a href="https://cran.r-project.org/package=icd">icd package</a> for R. The package provides <a href="introduction.html">fast comorbidity calculations</a> for HCCs and other maps which translate ICD codes to comorbidities.</p>
+<p>HCC is designed to categorize the risk level of a patient with chronic or serious illness using diagnoses and demographic information. Healthcare providers implement HCC in payment models for patients, as it can help predict the amount of services a patient will need in the future. HCC can be a useful tool in analysis with ICD codes, and the ICD package provides methods to use them.</p>
 <p>HCC first assigns ICD codes to Condition Categories (CC). Condition categories are numeric values ranked based on severity/risk. If an ICD code belongs to more than one CC, the most severe CC is assigned. In other words, HCC classifies patients based on their most severe conditions.</p>
 <p>We can see the mapping of ICD-9 and ICD-10 codes to HCC with the <code>icd9_map_cc</code> and <code>icd10_map_cc</code> data.</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw">library</span>(<span class="st">"icd"</span>)</a></code></pre></div>
