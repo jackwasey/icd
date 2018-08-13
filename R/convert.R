@@ -33,8 +33,6 @@
 #'   an existing \code{data.frame}.
 #' @name icd_long_data
 NULL
-# #' @include convert.R # avoid collation which gets confused by _alt in
-# .Rbuildignore, therefore keep it in convert.R instead.
 
 #' Convert ICD9 codes between formats and structures.
 #'

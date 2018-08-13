@@ -8,6 +8,7 @@ output:
 vignette: >
   %\VignetteIndexEntry{Ranges of ICD codes}
   %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteDepends{magrittr, utils}
   \usepackage[utf8]{inputenc}
 ---
 <!--

@@ -3,14 +3,15 @@ test_that("longer factors", {
   n <- 1e6
   nl <- 1e5
   set.seed(1441)
-  expect_error(regexp = NA, v1 <- icd:::icd9RandomShort(n))
+  expect_error(regexp = NA, v1 <- icd:::generate_random_short_icd9(n))
   v2 <- v1
   v2[1] <- "INVALID"
   l1 <- sample(v1, size = nl)
   l2 <- c(NA_character_, l1)
   l3 <- c(l1, NA_character_)
   l4 <- c(l1, "XXX")
-  expect_error(regexp = NA, l5 <- unique(icd:::icd9RandomShort(n * 2)))
+  expect_error(l5 <- unique(icd:::generate_random_short_icd9(n * 2)),
+               regexp = NA)
   expect_error(regexp = NA,
                test_cases <- expand.grid(
                  list(v1, v2),
