@@ -1,12 +1,3 @@
-|                           |
-|---------------------------|
-| title: icd Readme         |
-| output:                   |
-| md\_document:             |
-| variant: markdown\_github |
-| date: “August 08, 2018”   |
-| author: Jack O. Wasey     |
-
 <!--
 Copyright (C) 2014 - 2018  Jack O. Wasey
 
@@ -31,7 +22,7 @@ icd
 ===
 
 [![CRAN](https://www.r-pkg.org/badges/version/icd "CRAN")](https://cran.r-project.org/package=icd)
-[![GitHub](https://img.shields.io/badge/devel%20version-3.2.1-blue.svg?style=flat "GitHub")](https://github.com/jackwasey/icd)
+[![GitHub](https://img.shields.io/badge/devel%20version-3.2.2-blue.svg?style=flat "GitHub")](https://github.com/jackwasey/icd)
 [![Travis](https://travis-ci.org/jackwasey/icd.svg?branch=master "Travis Build Status")](https://travis-ci.org/jackwasey/icd)
 [![Appveyor](https://ci.appveyor.com/api/projects/status/9ncfgxht3n5i8t60/branch/master?svg=true "Appveyor Build Status")](https://ci.appveyor.com/project/jackwasey/icd/branch/master)
 [![codecov.io](https://codecov.io/github/jackwasey/icd/coverage.svg?branch=master "Core Code Coverage")](https://codecov.io/github/jackwasey/icd?branch=master)
@@ -48,8 +39,8 @@ Comorbidities from ICD-9 and ICD-10 codes, manipulation and validation
 Features
 --------
 
--   find comorbidities of patients based on admission or discharge ICD-9
-    or ICD-10 codes, e.g. Cancer, Heart Disease
+-   find comorbidities of patients based on ICD-9 or ICD-10 codes,
+    e.g. Cancer, Heart Disease
     -   several standard mappings of ICD codes to comorbidities are
         included (Quan, Deyo, Elixhauser, AHRQ, PCCC)
     -   very fast assignment of ICD codes to comorbidities (using matrix
@@ -60,8 +51,7 @@ Features
 -   Clinical Classifcations Software (CCS) comorbidities from AHRQ
 -   Pediatric Complex Chronic Condition comorbidities
 -   AHRQ ICD-10 procedure code classification
--   validation of ICD codes from different annual revisions of ICD-9-CM
-    and ICD-10-CM
+-   annual revisions of ICD-9-CM and ICD-10-CM
 -   correct conversion between different representations of ICD codes,
     with and without a decimal points, leading and trailing characters
     (this is not trivial for ICD-9-CM). ICD-9 to ICD-10 cross-walk is
@@ -69,8 +59,7 @@ Features
 -   comprehensive test suite to increase confidence in accurate
     processing of ICD codes
 -   all internal ICD and comorbidity data is extracted directly from
-    publically available data or code, increasing confidence in the
-    results
+    public data or code, allowing end-to-end reproducibility
 
 Install
 -------
@@ -149,6 +138,8 @@ See also the vignettes and examples embedded in the help for each
 function for more. Here’s a taste:
 
 ``` r
+library(icd)
+
 patient_data
 #>   visit_id  icd9  poa
 #> 1     1000 40201    Y
@@ -206,20 +197,8 @@ straightforward as using the various Hadley Wickham tools for doing
 this: knowing the more detailed structure of the data let’s us do this
 better for the case of dealing with ICD codes.
 
-Advanced
---------
-
-### Source Data and SAS format files
-
-In the spirit of reproducible research, all the R data files in this
-package can be recreated from source. The size of the source files makes
-it cumbersome to include them in the R package available on CRAN. Using
-the github source, you can pull the original data and SAS format files,
-and rebuild the data; or use the tools provided by this package to
-update the data using new source data files, e.g. when ICD-10-CM 2017 is
-released.
-
-### Development version
+Development version
+-------------------
 
 The latest version is available in [github
 icd](https://github.com/jackwasey/icd), and can be installed with:
@@ -235,13 +214,14 @@ release. The CRAN releases are stable milestones. Contributions and bug
 reports are encouraged and essential for this package to remain current
 and useful to the many people who have installed it.
 
-### Contributing and Building
+Contributing and Building
+-------------------------
 
 A substantial amount of code has now been contributed to the package.
 Contributions of any kind to `icd` are very welcome. See the \[GitHub
-issues page\]\](<https://github.com/jackwasey/icd/issues>) to see jobs
-and feature requests. Documentation, vignettes and examples are very
-welcome, especially if accompanied by some real-world data.
+issues page\]\](<https://github.com/jackwasey/icd/issues>) to see open
+issues and feature requests. Documentation, vignettes and examples are
+very welcome, especially if accompanied by some real-world data.
 
 To build `icd`, `Rcpp` must be compiled from source. This happens
 automatically on Linux, but on Mac and Windows, the following may be

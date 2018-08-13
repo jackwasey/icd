@@ -58,7 +58,7 @@ patient_data <- data.frame(
 
 ## Features
 
- * find comorbidities of patients based on admission or discharge ICD-9 or ICD-10 codes, e.g. Cancer, Heart Disease
+ * find comorbidities of patients based on ICD-9 or ICD-10 codes, e.g. Cancer, Heart Disease
      + several standard mappings of ICD codes to comorbidities are included (Quan, Deyo, Elixhauser, AHRQ, PCCC)
      + very fast assignment of ICD codes to comorbidities (using matrix multiplication with C and C++ internally)
  * summarizing groups of ICD codes in natural language
@@ -67,10 +67,10 @@ patient_data <- data.frame(
  * Clinical Classifcations Software (CCS) comorbidities from AHRQ
  * Pediatric Complex Chronic Condition comorbidities
  * AHRQ ICD-10 procedure code classification
- * validation of ICD codes from different annual revisions of ICD-9-CM and ICD-10-CM
+ * annual revisions of ICD-9-CM and ICD-10-CM
  * correct conversion between different representations of ICD codes, with and without a decimal points, leading and trailing characters (this is not trivial for ICD-9-CM). ICD-9 to ICD-10 cross-walk is not yet implemented
  * comprehensive test suite to increase confidence in accurate processing of ICD codes
- * all internal ICD and comorbidity data is extracted directly from publically available data or code, increasing confidence in the results
+ * all internal ICD and comorbidity data is extracted directly from public data or code, allowing end-to-end reproducibility
 
 ## Install
 
@@ -105,6 +105,8 @@ ICD-10 has a somewhat simpler format, with consistent use of a letter, then two 
 See also the vignettes and examples embedded in the help for each function for more. Here's a taste: 
 
 ```{r example}
+library(icd)
+
 patient_data
 
 # get comorbidities using Quan's application of Deyo's Charlson comorbidity groups
@@ -127,13 +129,7 @@ Look at the help files for details and examples of almost every function in this
 
 Note that reformatting from wide to long and back is not as straightforward as using the various Hadley Wickham tools for doing this: knowing the more detailed structure of the data let's us do this better for the case of dealing with ICD codes.
 
-## Advanced
-
-### Source Data and SAS format files
-
-In the spirit of reproducible research, all the R data files in this package can be recreated from source. The size of the source files makes it cumbersome to include them in the R package available on CRAN. Using the github source, you can pull the original data and SAS format files, and rebuild the data; or use the tools provided by this package to update the data using new source data files, e.g. when ICD-10-CM 2017 is released.
-
-### Development version
+## Development version
 
 The latest version is available in [github icd](https://github.com/jackwasey/icd), and can be installed with:
 ```{r show install, eval = FALSE, echo = TRUE}
@@ -143,10 +139,9 @@ The latest version is available in [github icd](https://github.com/jackwasey/icd
 
 The _master_ branch at github should always build and pass all tests and R CMD check, and will be similar or identical to the most recent CRAN release. The CRAN releases are stable milestones. Contributions and bug reports are encouraged and essential for this package to remain current and useful to the many people who have installed it.
 
+## Contributing and Building
 
-### Contributing and Building
-
-A substantial amount of code has now been contributed to the package. Contributions of any kind to `icd` are very welcome. See the [GitHub issues page]](https://github.com/jackwasey/icd/issues) to see jobs and feature requests. Documentation, vignettes and examples are very welcome, especially if accompanied by some real-world data.
+A substantial amount of code has now been contributed to the package. Contributions of any kind to `icd` are very welcome. See the [GitHub issues page]](https://github.com/jackwasey/icd/issues) to see open issues and feature requests. Documentation, vignettes and examples are very welcome, especially if accompanied by some real-world data.
 
 To build `icd`, `Rcpp` must be compiled from source. This happens automatically on Linux, but on Mac and Windows, the following may be required:
 `install.packages("Rcpp", type="source")`
