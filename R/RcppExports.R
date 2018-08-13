@@ -25,22 +25,6 @@ icd9AppendMinors <- function(m, mnr, isShort) {
     invisible(.Call(`_icd_icd9AppendMinors`, m, mnr, isShort))
 }
 
-icd9MajMinToCode_alt_PrePadded <- function(mjr, mnr, isShort) {
-    .Call(`_icd_icd9MajMinToCode_alt_PrePadded`, mjr, mnr, isShort)
-}
-
-icd9MajMinToCode_alt_Std <- function(mjr, mnr, isShort) {
-    .Call(`_icd_icd9MajMinToCode_alt_Std`, mjr, mnr, isShort)
-}
-
-icd9MajMinToShort_alt_Std <- function(mjr, mnr) {
-    .Call(`_icd_icd9MajMinToShort_alt_Std`, mjr, mnr)
-}
-
-icd9MajMinToShortSingle_alt_Std <- function(mjr, mnr) {
-    .Call(`_icd_icd9MajMinToShortSingle_alt_Std`, mjr, mnr)
-}
-
 #' Set ICD short-form diagnosis code attribute
 #'
 #' Doing this in an R function doesn't work for 'void' equivalent, and does a
@@ -181,10 +165,6 @@ get_major.icd9 <- function(x, short_code) {
     .Call(`_icd_icd9GetMajor`, x, short_code)
 }
 
-icd9MajMinToCode_alt_Old <- function(mjr, mnr, isShort) {
-    .Call(`_icd_icd9MajMinToCode_alt_Old`, mjr, mnr, isShort)
-}
-
 #' @title Convert integers to strings as quickly as possible
 #' @description Have tried R, `sprintf` with \pkg{Rcpp} and C++ standard
 #' library. Doesn't do bounds checking, but limited by length of integers.
@@ -194,10 +174,6 @@ icd9MajMinToCode_alt_Old <- function(mjr, mnr, isShort) {
 #' @keywords internal manip
 fastIntToStringRcpp <- function(x) {
     .Call(`_icd_fastIntToStringRcpp`, x)
-}
-
-fastIntToString_alt_Std <- function(x) {
-    .Call(`_icd_fastIntToString_alt_Std`, x)
 }
 
 #' Guess whether codes are \code{short_code} or \code{decimal_code}
@@ -281,24 +257,6 @@ icd9_add_leading_zeroes_cpp <- function(x, short_code) {
     .Call(`_icd_icd9AddLeadingZeroes`, x, short_code)
 }
 
-#' @title Decompose a 'short' ICD code and insert the leading zeroes as needed.
-#' @description: This should add leading zeroes when there is definitely no
-#' ambiguity, e.g. V1. However V10 should not be altered, because V010 is a
-#' different code. The goal is for this to be faster, but must be correct!
-#' Example in \code{manip.cpp} has the benchmark code.
-#' @keywords internal manip
-icd9AddLeadingZeroes_alt_ShortSingle <- function(x) {
-    .Call(`_icd_icd9AddLeadingZeroes_alt_ShortSingle`, x)
-}
-
-#' @title directly apply \code{icd9AddLeadingZeroesShortSingle} to each code
-#' without separating into parts
-#' @description Unclear which is faster yet: working with parts or whole.
-#' @keywords internal manip
-icd9_add_leading_zeroes_alt_cpp <- function(x, short_code) {
-    .Call(`_icd_icd9AddLeadingZeroes_alt_Direct`, x, short_code)
-}
-
 icd9_expand_minor_wrap <- function(mnr, isE) {
     .Call(`_icd_icd9ExpandMinor`, mnr, isE)
 }
@@ -317,22 +275,6 @@ icd9ChildrenDecimalCpp <- function(icd9Decimal, icd9cmReal, onlyReal) {
 
 icd9ChildrenCpp <- function(icd9, isShort, icd9cmReal, onlyReal = TRUE) {
     .Call(`_icd_icd9ChildrenCpp`, icd9, isShort, icd9cmReal, onlyReal)
-}
-
-icd9ChildrenShort_alt_11 <- function(icd9Short, onlyReal) {
-    .Call(`_icd_icd9ChildrenShort_alt_11`, icd9Short, onlyReal)
-}
-
-icd9ChildrenShort_alt_Std <- function(icd9Short, onlyReal) {
-    .Call(`_icd_icd9ChildrenShort_alt_Std`, icd9Short, onlyReal)
-}
-
-icd9Children_alt_ShortNoNaUnordered <- function(icd9Short, onlyReal) {
-    .Call(`_icd_icd9Children_alt_ShortNoNaUnordered`, icd9Short, onlyReal)
-}
-
-icd9ExpandMinor_alt_Std <- function(mnr, isE) {
-    .Call(`_icd_icd9ExpandMinor_alt_Std`, mnr, isE)
 }
 
 trimLeftCpp <- function(s) {

@@ -33,5 +33,5 @@ test_that("cpp: failure with non character visitId", {
   # and make sure it works otherwise
   pts$visit_id <- as_char_no_warn(pts$visit_id)
   expect_warning(long_to_wide_cpp(pts, visitId = "visit_id", icd9Field = "code"),
-                 regex = NA)
+                 regexp = NA)
 })

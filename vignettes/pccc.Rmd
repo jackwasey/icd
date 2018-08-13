@@ -8,6 +8,7 @@ output:
 vignette: >
   %\VignetteIndexEntry{Pediatric Complex Chronic Conditions}
   %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteDepends{}
   \usepackage[utf8]{inputenc}
 ---
 ```{r setup, include=FALSE}
@@ -27,7 +28,7 @@ dat <- data.frame(id = n + seq(n),
 
 ## Introduction
 
-The adult comorbidities defined by authors such as Charlson, Quan and Elixhuaser are not suitable for pediatric research. Feudtner and others produced comorbidity definitions suitable for infants and children, with mappings defined for both ICD-9 and ICD-10 codes. These are now included in `icd`.
+The adult comorbidities defined by authors such as Charlson, Quan and Elixhuaser are not suitable for pediatric research. Feudtner and others produced comorbidity definitions suitable for infants and children, with mappings defined for both ICD-9 and ICD-10 codes. These are now included in the [icd package](https://cran.r-project.org/package=icd) for R, which enables [fast calculation of comorbidities](introduction.html) for PCCC and other ICD code to comorbidity maps.
 
 ## Calculating PCCC comorbidities.
 

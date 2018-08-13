@@ -8,6 +8,7 @@ output:
 vignette: >
   %\VignetteIndexEntry{Charlson and Van Walraven scores}
   %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteDepends{magrittr, icd.data}
   \usepackage[utf8]{inputenc}
 ---
 <!--

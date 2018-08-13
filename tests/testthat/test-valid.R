@@ -498,22 +498,6 @@ test_that("an invalid short code is not billable decimal", {
   expect_true(is_billable("410.00", short_code = FALSE))
 })
 
-
-test_that("valid short n", {
-  x <- icd9RandomShortN(100)
-  expect_true(all(icd9_is_valid_short_n(x)))
-})
-
-test_that("valid short v", {
-  x <- icd9RandomShortV(100)
-  expect_true(all(icd9_is_valid_short_v(x)))
-})
-
-test_that("valid short e", {
-  x <- icd9RandomShortE(100)
-  expect_true(all(icd9_is_valid_short_e(x)))
-})
-
 test_that("icd9 and icd10 get valid gives same type as input", {
   expect_equal(get_valid(c("invalid", "100")), "100")
   expect_equal(get_valid(as.icd9(c("invalid", "100"))), as.icd9("100"))

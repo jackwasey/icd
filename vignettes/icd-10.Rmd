@@ -8,6 +8,7 @@ output:
 vignette: >
   %\VignetteIndexEntry{ICD-10 comorbidities}
   %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteDepends{magrittr}
   \usepackage[utf8]{inputenc}
 ---
 <!--
