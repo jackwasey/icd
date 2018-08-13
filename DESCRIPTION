@@ -67,6 +67,7 @@ LinkingTo:
 VignetteBuilder: 
     knitr
 ByteCompile: true
+SystemRequirements: pandoc >= 2.2 to build the JSS vignette
 Classification/ACM-2012: Social and professional topics~Medical
     records, Applied computing~Health care information systems, Applied
     computing~Health informatics, Applied computing~Bioinformatics

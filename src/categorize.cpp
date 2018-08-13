@@ -26,9 +26,6 @@
 #include <ostream>                             // for size_t, operator<<
 #include <string>
 #include <vector>
-#ifdef ICD_OPENMP
-#include <omp.h>
-#endif
 
 using namespace Rcpp;
 

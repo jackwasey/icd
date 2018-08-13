@@ -40,8 +40,6 @@ rtf_fetch_year <- function(year, offline = TRUE) {
   unzip_to_data_raw(rtf_dat$rtf_url, file_name = fn, offline = offline)
 }
 
-# nolint start
-
 #' parse RTF description of entire ICD-9-CM for a specific year
 #'
 #' Currently only the most recent update is implemented. Note that CMS have
@@ -55,13 +53,11 @@ rtf_fetch_year <- function(year, offline = TRUE) {
 #'   implemented thus far
 #' @template save_data
 #' @template verbose
-#' @source
-#' \url{http://ftp.cdc.gov/pub/Health_Statistics/NCHS/Publications/ICD9-CM/2011/Dtab12.zip}
-#' and similar files run from 1996 to 2011.
+#' @source \url{https://www.cdc.gov/nchs/icd/icd9cm.htm} Navigate to
+#' 'Dtab12.zip' in the 2011 data. and similar files run from 1996 to 2011.
 #' @keywords internal datagen
 rtf_parse_year <- function(year = "2011", ..., save_data = FALSE,
                            verbose = FALSE, offline = TRUE) {
-  # nolint end
   assert_string(year)
   assert_flag(save_data)
   assert_flag(verbose)

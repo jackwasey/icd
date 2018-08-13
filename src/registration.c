@@ -53,15 +53,10 @@ extern SEXP _icd_icd9MajMinToShortSingle_alt_Std(SEXP, SEXP);
 extern SEXP _icd_icd9OrderCpp(SEXP);
 extern SEXP _icd_icd9PartsToDecimal(SEXP);
 extern SEXP _icd_icd9PartsToShort(SEXP);
-extern SEXP _icd_icd9RandomShort(SEXP);
-extern SEXP _icd_icd9RandomShortE(SEXP);
-extern SEXP _icd_icd9RandomShortN(SEXP);
-extern SEXP _icd_icd9RandomShortV(SEXP);
 extern SEXP _icd_icd9ShortToDecimal(SEXP);
 extern SEXP _icd_icd9ShortToPartsCpp(SEXP, SEXP);
 extern SEXP _icd_inFast(SEXP, SEXP);
 extern SEXP _icd_matchFast(SEXP, SEXP);
-extern SEXP _icd_randomMajorCpp(SEXP);
 extern SEXP _icd_refactor(SEXP, SEXP, SEXP);
 extern SEXP _icd_refactor_narm(SEXP, SEXP);
 extern SEXP _icd_setDecimalDiag(SEXP, SEXP);
@@ -120,15 +115,10 @@ static const R_CallMethodDef CallEntries[] = {
     {"_icd_icd9OrderCpp",                         (DL_FUNC) &_icd_icd9OrderCpp,                         1},
     {"_icd_icd9PartsToDecimal",                   (DL_FUNC) &_icd_icd9PartsToDecimal,                   1},
     {"_icd_icd9PartsToShort",                     (DL_FUNC) &_icd_icd9PartsToShort,                     1},
-    {"_icd_icd9RandomShort",                      (DL_FUNC) &_icd_icd9RandomShort,                      1},
-    {"_icd_icd9RandomShortE",                     (DL_FUNC) &_icd_icd9RandomShortE,                     1},
-    {"_icd_icd9RandomShortN",                     (DL_FUNC) &_icd_icd9RandomShortN,                     1},
-    {"_icd_icd9RandomShortV",                     (DL_FUNC) &_icd_icd9RandomShortV,                     1},
     {"_icd_icd9ShortToDecimal",                   (DL_FUNC) &_icd_icd9ShortToDecimal,                   1},
     {"_icd_icd9ShortToPartsCpp",                  (DL_FUNC) &_icd_icd9ShortToPartsCpp,                  2},
     {"_icd_inFast",                               (DL_FUNC) &_icd_inFast,                               2},
     {"_icd_matchFast",                            (DL_FUNC) &_icd_matchFast,                            2},
-    {"_icd_randomMajorCpp",                       (DL_FUNC) &_icd_randomMajorCpp,                       1},
     {"_icd_refactor",                             (DL_FUNC) &_icd_refactor,                             3},
     {"_icd_refactor_narm",                        (DL_FUNC) &_icd_refactor_narm,                        2},
     {"_icd_setDecimalDiag",                       (DL_FUNC) &_icd_setDecimalDiag,                       2},

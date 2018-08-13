@@ -18,35 +18,28 @@
 #ifndef UTIL_H_
 #define UTIL_H_
 
-#include "local.h"                      // for ICD_OPENMP
-#include "icd_types.h"                  // for VecStr
+#include "icd_types.h"
+#include "local.h"
 #include <cstddef>                      // for size_t
 #include <string>                       // for string
 #include <utility>                      // for pair
 #include <vector>                       // for vector
 
-#ifdef ICD_OPENMP
-#include <omp.h>
-#endif
-
 typedef std::pair<std::string, std::size_t> pas;
 std::string trimLeftCpp(std::string s);
 std::string strimCpp(std::string s);
-Rcpp::NumericVector randomMajorCpp(int n);
-VecStr icd9RandomShortN(VecStr::size_type n);
-VecStr icd9RandomShortV(VecStr::size_type n);
-VecStr icd9RandomShortE(VecStr::size_type n);
-CV icd9RandomShort(unsigned int n);
 int valgrindCallgrindStart(bool zerostats);
 int valgrindCallgrindStop();
 bool icd9CompareStrings(std::string a, std::string b);
 std::vector<std::size_t> icd9OrderCpp(VecStr x);
 Rcpp::IntegerVector factorNoSort(const Rcpp::CharacterVector& x,
-                           const Rcpp::CharacterVector& levels,
-                           const bool na_rm = false);
-Rcpp::IntegerVector refactor(const Rcpp::IntegerVector& x, const CV& new_levels,
+                                 const Rcpp::CharacterVector& levels,
+                                 const bool na_rm = false);
+Rcpp::IntegerVector refactor(const Rcpp::IntegerVector& x,
+                             const CV& new_levels,
                              bool exclude_na = true);
-Rcpp::IntegerVector refactor_narm(const Rcpp::IntegerVector& x, const CV& new_levels);
+Rcpp::IntegerVector refactor_narm(const Rcpp::IntegerVector& x,
+                                  const CV& new_levels);
 
 // concatenate a vector of vectors
 template <class COCiter, class Oiter>
@@ -56,4 +49,5 @@ void my_concat (COCiter start, COCiter end, Oiter dest) {
     ++start;
   }
 }
+
 #endif /* UTIL_H_ */
