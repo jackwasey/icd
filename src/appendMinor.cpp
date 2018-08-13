@@ -37,10 +37,8 @@ CV icd9MajMinToCode(const CV mjr, const CV mnr, bool isShort) {
   Rcpp::Rcout << "icd9MajMinToCode: mjr.size() = " << mjr.size()
               << " and mnr.size() = " << mnr.size() << "\n";
 #endif
-#ifdef ICD_DEBUG
   if (mjr.size() != mnr.size())
     Rcpp::stop("mjr and mnr lengths differ");
-#endif
   VecStr out(mjr.size());
   VecChar out_is_na(mjr.size()); // boolean in char
   CV::const_iterator j = mjr.begin();
@@ -102,13 +100,11 @@ CV icd9MajMinToShort(const CV mjr,
   Rcpp::Rcout << "icd9MajMinToShort: mjr.size() = " << mjr.size()
               << " and mnr.size() = " << mnr.size() << "\n";
 #endif
-#ifdef ICD_DEBUG
   if ((mjr.size() != 1 && mjr.size() != mnr.size())
         || (mjr.size() == 1 && mnr.size() == 0)) {
     Rcpp::stop(
       "Length of mjrs and mnrs must be equal, unless mjrs length is one.");
   }
-#endif
   if (mjr.size() == 1) {
 #ifdef ICD_DEBUG_TRACE
     Rcpp::Rcout << "icd9MajMinToShort: mjr.size() = 1\n";
@@ -122,15 +118,4 @@ CV icd9MajMinToShort(const CV mjr,
 // [[Rcpp::export]]
 CV icd9MajMinToDecimal(const CV mjr, const CV mnr) {
   return icd9MajMinToCode(mjr, mnr, false);
-}
-
-// [[Rcpp::export]]
-void icd9AppendMinors(VecStr& m, const VecStr& mnr, bool isShort) {
-  VecStr::size_type mjsz = m.size();
-  VecStr::size_type j;
-  for (j = 0; j != mjsz; ++j) {
-    if (!isShort && mnr[j] != "")
-      m[j].append(".");
-    m[j].append(mnr[j]);
-  }
 }

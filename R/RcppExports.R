@@ -21,10 +21,6 @@ icd9MajMinToDecimal <- function(mjr, mnr) {
     .Call(`_icd_icd9MajMinToDecimal`, mjr, mnr)
 }
 
-icd9AppendMinors <- function(m, mnr, isShort) {
-    invisible(.Call(`_icd_icd9AppendMinors`, m, mnr, isShort))
-}
-
 #' Set ICD short-form diagnosis code attribute
 #'
 #' Doing this in an R function doesn't work for 'void' equivalent, and does a

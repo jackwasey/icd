@@ -24,7 +24,6 @@ extern SEXP _icd_icd9AddLeadingZeroes(SEXP, SEXP);
 extern SEXP _icd_icd9AddLeadingZeroesMajor(SEXP);
 extern SEXP _icd_icd9AddLeadingZeroesMajorSingle(SEXP);
 extern SEXP _icd_icd9AddLeadingZeroesMajorSingleStd(SEXP);
-extern SEXP _icd_icd9AppendMinors(SEXP, SEXP, SEXP);
 extern SEXP _icd_icd9ChildrenCpp(SEXP, SEXP, SEXP, SEXP);
 extern SEXP _icd_icd9ChildrenDecimalCpp(SEXP, SEXP, SEXP);
 extern SEXP _icd_icd9ChildrenShort(SEXP, SEXP, SEXP);
@@ -74,7 +73,6 @@ static const R_CallMethodDef CallEntries[] = {
     {"_icd_icd9AddLeadingZeroesMajor",          (DL_FUNC) &_icd_icd9AddLeadingZeroesMajor,          1},
     {"_icd_icd9AddLeadingZeroesMajorSingle",    (DL_FUNC) &_icd_icd9AddLeadingZeroesMajorSingle,    1},
     {"_icd_icd9AddLeadingZeroesMajorSingleStd", (DL_FUNC) &_icd_icd9AddLeadingZeroesMajorSingleStd, 1},
-    {"_icd_icd9AppendMinors",                   (DL_FUNC) &_icd_icd9AppendMinors,                   3},
     {"_icd_icd9ChildrenCpp",                    (DL_FUNC) &_icd_icd9ChildrenCpp,                    4},
     {"_icd_icd9ChildrenDecimalCpp",             (DL_FUNC) &_icd_icd9ChildrenDecimalCpp,             3},
     {"_icd_icd9ChildrenShort",                  (DL_FUNC) &_icd_icd9ChildrenShort,                  3},

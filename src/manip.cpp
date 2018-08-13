@@ -62,6 +62,10 @@ Rcpp::String icd9AddLeadingZeroesMajorSingle(Rcpp::String mjr) {
     case 4:
       if (icd9IsASingleE(m.c_str()))
         return (m);
+      // # nocov start
+    default:
+      Rcpp::stop("Major length invalid");
+    // # nocov end
     }
   }
   return NA_STRING;

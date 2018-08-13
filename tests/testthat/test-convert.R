@@ -20,12 +20,20 @@ context("icd9 type conversions")
 test_that("extract decimal parts - invalid or empty input", {
   expect_equal(decimal_to_parts.icd9(character()), list(mjr = character(),
                                                         mnr = character()))
-
+  expect_equal(decimal_to_parts.icd10(character()), list(mjr = character(),
+                                                         mnr = character()))
   expect_equal(decimal_to_parts.icd9(""),
                list(mjr = NA_character_, mnr = NA_character_))
-
+  expect_equal(decimal_to_parts.icd10(""),
+               list(mjr = NA_character_, mnr = NA_character_))
+  expect_equal(decimal_to_parts(""),
+               list(mjr = NA_character_, mnr = NA_character_))
   expect_equal(
     decimal_to_parts.icd9("", mnr_empty = NA_character_),
+    list(mjr = NA_character_, mnr = NA_character_)
+  )
+  expect_equal(
+    decimal_to_parts.icd10("", mnr_empty = NA_character_),
     list(mjr = NA_character_, mnr = NA_character_)
   )
 })
@@ -368,16 +376,16 @@ test_that("maj min to short for multiple majors", {
 })
 
 test_that("icd9 parts to short: don't allow cycling.", {
-  expect_equal(icd9MajMinToShort(c("123", "34", "56"), c("1", "20")),
-               c("1231", "03420", ""))
+  expect_error(icd9MajMinToShort(c("123", "34", "56"), c("1", "20")),
+               regexp = "length")
   # causes hang only when compiled with MinGW GCC 4.9 in Rtools 3.2 on 64 bit
-  expect_equal(icd9MajMinToShort(c("123", "34"), c("1", "20", "45")),
-               c("1231", "03420"))
+  expect_error(icd9MajMinToShort(c("123", "34"), c("1", "20", "45")),
+               regexp = "length")
 })
 
 test_that("Windows Rtools 3.2 hang test - also triggers bug #75", {
-  expect_equal(icd9MajMinToShort(c("123", "34"), c("1", "20", "45")),
-               c("1231", "03420"))
+  expect_error(icd9MajMinToShort(c("123", "34"), c("1", "20", "45")),
+               regexp = "equal")
   # see Rcpp issue #276.
 })
 

@@ -339,20 +339,6 @@ test_that("maj min to short for multiple majors", {
                    c("10010", "20020"))
 })
 
-test_that("icd9 parts to short: don't allow cycling.", {
-  expect_equal(icd9MajMinToShort(c("123", "34", "56"), c("1", "20")),
-               c("1231", "03420", ""))
-  # causes hang only when compiled with MinGW GCC 4.9 in Rtools 3.2 on 64 bit
-  expect_equal(icd9MajMinToShort(c("123", "34"), c("1", "20", "45")),
-               c("1231", "03420"))
-})
-
-test_that("Windows Rtools 3.2 hang test - also triggers bug #75", {
-  expect_equal(icd9MajMinToShort(c("123", "34"), c("1", "20", "45")),
-               c("1231", "03420"))
-  # see Rcpp issue #276.
-})
-
 test_that("icd9 parts to short form V and E input, mismatched lengths", {
   expect_equal(icd9MajMinToShort(10L, "20"), "01020")
   expect_equal(icd9MajMinToShort("V10", c("0", "1")), c("V100", "V101"))

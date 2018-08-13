@@ -44,18 +44,6 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// icd9AppendMinors
-void icd9AppendMinors(VecStr& m, const VecStr& mnr, bool isShort);
-RcppExport SEXP _icd_icd9AppendMinors(SEXP mSEXP, SEXP mnrSEXP, SEXP isShortSEXP) {
-BEGIN_RCPP
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< VecStr& >::type m(mSEXP);
-    Rcpp::traits::input_parameter< const VecStr& >::type mnr(mnrSEXP);
-    Rcpp::traits::input_parameter< bool >::type isShort(isShortSEXP);
-    icd9AppendMinors(m, mnr, isShort);
-    return R_NilValue;
-END_RCPP
-}
 // setDecimalDiag
 void setDecimalDiag(Rcpp::RObject& x, bool value);
 RcppExport SEXP _icd_setDecimalDiag(SEXP xSEXP, SEXP valueSEXP) {
