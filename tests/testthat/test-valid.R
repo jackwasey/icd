@@ -226,6 +226,30 @@ test_that("detect valid short codes", {
   expect_false(is_valid.icd9(short_code = TRUE, "11.22")) # am not expecting decimal points
 })
 
+test_that("detect valid short codes directly", {
+  expect_equal(icd9_is_valid_short_n(character()), logical())
+  expect_error(icd9_is_valid_short_n(list(1230, c(12323, 2323), c("nonesnseses"))))
+  expect_true(icd9_is_valid_short_n("0"))
+  expect_equal(
+    icd9_is_valid_short_n(c("0", "00", "000", "0000", "00000")),
+    c(TRUE, TRUE, TRUE, TRUE, TRUE))
+  expect_true(icd9_is_valid_short_n("12345"))
+  expect_true(icd9_is_valid_short_n("12 "))
+  expect_error(icd9_is_valid_short_n(1))
+  expect_equal(icd9_is_valid_short_n(c("99999", "1")), c(TRUE, TRUE))
+  expect_equal(icd9_is_valid_short_n(c("1", "100", "222.22")), c(TRUE, TRUE, FALSE))
+  expect_equal(
+    icd9_is_valid_short_n(as.factor(c("1", "100", "222.22", "100", "1.1"))),
+    c(TRUE, TRUE, FALSE, TRUE, FALSE))
+  expect_true(icd9_is_valid_short_v("V1")) # not zero-padded, but not ambiguous.
+
+  expect_false(icd9_is_valid_short_n("jericho"))
+  expect_false(icd9_is_valid_short_n(""))
+  expect_false(icd9_is_valid_short_n("123456"))
+  expect_false(icd9_is_valid_short_n("10.1"))
+  expect_false(icd9_is_valid_short_n("11.22")) # am not expecting decimal points
+})
+
 test_that("validate short form V codes - invalid codes", {
   expect_false(is_valid.icd9(short_code = TRUE, "V"))
   expect_false(is_valid.icd9(short_code = TRUE, "VV"))
@@ -233,11 +257,19 @@ test_that("validate short form V codes - invalid codes", {
   expect_false(is_valid.icd9(short_code = TRUE, " V0"))
   expect_false(is_valid.icd9(short_code = TRUE, "V00000"))
   expect_false(is_valid.icd9(short_code = TRUE, "V123456"))
+  expect_false(icd9_is_valid_short_v("V"))
+  expect_false(icd9_is_valid_short_v("VV"))
+  expect_false(icd9_is_valid_short_v("Vbog"))
+  expect_false(icd9_is_valid_short_v(" V0"))
+  expect_false(icd9_is_valid_short_v("V00000"))
+  expect_false(icd9_is_valid_short_v("V123456"))
 })
 
 test_that("validate short form V codes - valid codes", {
   expect_true(is_valid.icd9(short_code = TRUE, "V234"))
   expect_true(is_valid.icd9(short_code = TRUE, " V45"))
+  expect_true(icd9_is_valid_short_v("V234"))
+  expect_true(icd9_is_valid_short_v(" V45"))
 })
 
 test_that("valid short form E codes - invalid input", {
@@ -289,6 +321,80 @@ test_that("valid short form E codes - invalid input", {
   expect_false(is_valid.icd9(short_code = TRUE, ".E999.1"))
   expect_false(is_valid.icd9(short_code = TRUE, ".E9991"))
   expect_false(is_valid.icd9(short_code = TRUE, "E98765"))
+})
+
+test_that("valid short form E codes - invalid input", {
+  # call the E validation directly for these completely non-E codes
+  expect_false(icd9_is_valid_short_e(NA_character_))
+  expect_false(icd9_is_valid_short_e("NA"))
+  expect_false(icd9_is_valid_short_e(""))
+  expect_false(icd9_is_valid_short_e(" "))
+  expect_false(icd9_is_valid_short_e("   "))
+  expect_false(icd9_is_valid_short_e("."))
+  # now test by routing through the higher level function (which is really the
+  # only one that should be used)
+  expect_false(icd9_is_valid_short_e("0E1"))
+  expect_false(icd9_is_valid_short_e("E"))
+  expect_false(icd9_is_valid_short_e("E."))
+  expect_false(icd9_is_valid_short_e("E00000"))
+  expect_false(icd9_is_valid_short_e("E0."))
+  expect_false(icd9_is_valid_short_e("E00."))
+  expect_false(icd9_is_valid_short_e("E000."))
+  expect_false(icd9_is_valid_short_e("E0000."))
+  expect_false(icd9_is_valid_short_e("E00000."))
+  expect_false(icd9_is_valid_short_e("E0.0"))
+  expect_false(icd9_is_valid_short_e("E00.0"))
+  expect_false(icd9_is_valid_short_e("E000.0"))
+  expect_false(icd9_is_valid_short_e("E0000.0"))
+  expect_false(icd9_is_valid_short_e("E00000.0"))
+  expect_false(icd9_is_valid_short_e("E1000."))
+  expect_false(icd9_is_valid_short_e("E10000."))
+  expect_false(icd9_is_valid_short_e("E1000.0"))
+  expect_false(icd9_is_valid_short_e("E10000.0"))
+  expect_false(icd9_is_valid_short_e("E0.1"))
+  expect_false(icd9_is_valid_short_e("E00.1"))
+  expect_false(icd9_is_valid_short_e("E000.1"))
+  expect_false(icd9_is_valid_short_e("E0000.1"))
+  expect_false(icd9_is_valid_short_e("E00000.1"))
+  expect_false(icd9_is_valid_short_e("E1000.1"))
+  expect_false(icd9_is_valid_short_e("E10000.1"))
+  expect_false(icd9_is_valid_short_e("E.1"))
+  expect_false(icd9_is_valid_short_e("E00000"))
+  expect_true(icd9_is_valid_short_e("E1234"))
+  expect_false(icd9_is_valid_short_e("E000.00"))
+  expect_false(icd9_is_valid_short_e("E999.12"))
+  expect_false(icd9_is_valid_short_e("E099.12"))
+  expect_false(icd9_is_valid_short_e("E99.12"))
+  expect_false(icd9_is_valid_short_e("E009.12"))
+  expect_false(icd9_is_valid_short_e("E099.12"))
+  expect_false(icd9_is_valid_short_e("E009.12"))
+  expect_false(icd9_is_valid_short_e("E99.9.12"))
+  expect_false(icd9_is_valid_short_e(".E999.1"))
+  expect_false(icd9_is_valid_short_e(".E9991"))
+  expect_false(icd9_is_valid_short_e("E98765"))
+})
+
+test_that("valid short form E codes - valid input", {
+  # E000 is valid!
+  # http://www.icd9data.com/2012/Volume1/E000-E999/E000-E000/E000/default.htm
+  expect_true(icd9_is_valid_short_e("E0"))
+  expect_true(icd9_is_valid_short_e("E00"))
+  expect_true(icd9_is_valid_short_e("E000"))
+  expect_true(icd9_is_valid_short_e("E0000"))
+  expect_true(icd9_is_valid_short_e("E999"))
+  expect_true(icd9_is_valid_short_e("E0999"))
+  expect_true(icd9_is_valid_short_e("e800"))
+  expect_true(icd9_is_valid_short_e(" E999"))
+  expect_true(icd9_is_valid_short_e("E999 "))
+  expect_true(icd9_is_valid_short_e("  E999 "))
+  expect_true(icd9_is_valid_short_e("E100"))
+  expect_true(icd9_is_valid_short_e("E1001"))
+  expect_true(icd9_is_valid_short_e("E010"))
+  expect_true(icd9_is_valid_short_e("E0101"))
+  expect_true(icd9_is_valid_short_e("E10"))
+  expect_true(icd9_is_valid_short_e("E001"))
+  expect_true(icd9_is_valid_short_e("E0010"))
+  expect_true(icd9_is_valid_short_e("E1"))
 })
 
 test_that("valid short form E codes - valid input", {
@@ -384,6 +490,15 @@ test_that("get valid - vector input", {
   expect_equal(get_invalid.icd9(c("100", "nolk")), "nolk")
 })
 
+test_that("get invalid - vector input", {
+  expect_equal(get_invalid("10x"), "10x")
+  expect_equal(get_invalid(icd9("100")), icd9(character()))
+  expect_equal(get_invalid("nolk"), "nolk")
+  expect_equal(get_invalid(c("100", "nolk")), "nolk")
+  expect_equal(get_invalid(short_code = FALSE, c("10.0", "100.x")), "100.x")
+  expect_equal(get_invalid(short_code = TRUE, "nolk"), "nolk")
+  expect_equal(get_invalid(short_code = TRUE, c("V100", "nolk")), "nolk")
+})
 test_that("filter valid - data frame input", {
 
   expect_equal(icd9_filter_valid(pts_invalid_mix), pts_invalid_mix[c(1, 3), ])
