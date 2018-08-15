@@ -56,12 +56,21 @@ patient_data <- data.frame(
 
 # Comorbidities from ICD-9 and ICD-10 codes, manipulation and validation
 
+## Introduction
+
+```{r pkgdesc, results = "asis", echo = FALSE}
+cat(packageDescription("icd")$Description)
+```
+
+`icd` is used by many researchers around the world who work in public health, epidemiology, clinical research, nutrition, journalism, health administration and more. I'm grateful for contact from people in these fields for their feedback and code contributions, and I'm pleased to say that `icd` has been used in works like the [Pulitzer finalist](http://www.pulitzer.org/finalists/staff-propublica) work on [maternal death](http://www.pulitzer.org/finalists/staff-propublica) by [ProPublica](https://www.propublica.org).
+
 ## Features
 
  * find comorbidities of patients based on ICD-9 or ICD-10 codes, e.g. Cancer, Heart Disease
      + several standard mappings of ICD codes to comorbidities are included (Quan, Deyo, Elixhauser, AHRQ, PCCC)
-     + very fast assignment of ICD codes to comorbidities (using matrix multiplication with C and C++ internally)
- * summarizing groups of ICD codes in natural language
+     + *very fast* assignment of ICD codes to comorbidities (using novel matrix multiplication algorithm and C++ internally)
+ * use your existing data format, minimizing requirements for pre-processing
+ * summarize groups of ICD codes in natural language
  * Charlson and Van Walraven score calculations
  * Hierarchical Condition Codes (HCC) from CMS
  * Clinical Classifcations Software (CCS) comorbidities from AHRQ
@@ -71,17 +80,12 @@ patient_data <- data.frame(
  * correct conversion between different representations of ICD codes, with and without a decimal points, leading and trailing characters (this is not trivial for ICD-9-CM). ICD-9 to ICD-10 cross-walk is not yet implemented
  * comprehensive test suite to increase confidence in accurate processing of ICD codes
  * all internal ICD and comorbidity data is extracted directly from public data or code, allowing end-to-end reproducibility
+ * used, tested and benchmarked against other comorbidity calculators on hardware from laptops to big servers
 
 ## Install
 
 ```{r simpleinstall, eval = FALSE, echo = TRUE}
 install.packages("icd")
-```
-
-## Introduction
-
-```{r pkgdesc, results = 'asis', echo = FALSE}
-cat(packageDescription("icd")$Description)
 ```
 
 ## Relevance

@@ -36,6 +36,26 @@ week](https://cranlogs.r-pkg.org/badges/last-week/icd "RStudio Mirror Downloads 
 Comorbidities from ICD-9 and ICD-10 codes, manipulation and validation
 ======================================================================
 
+Introduction
+------------
+
+Calculate comorbidities, Charlson and van Walraven scores, perform fast
+and accurate validation, conversion, manipulation, filtering and
+comparison of ICD-9 and ICD-10 codes. This package enables a work flow
+from raw lists of ICD codes in hospital databases to comorbidities.
+ICD-9 and ICD-10 comorbidity mappings from Quan (Deyo and Elixhauser
+versions), Elixhauser and AHRQ included. Common ambiguities and code
+formats are handled.
+
+`icd` is used by many researchers around the world who work in public
+health, epidemiology, clinical research, nutrition, journalism, health
+administration and more. I’m grateful for contact from people in these
+fields for their feedback and code contributions, and I’m pleased to say
+that `icd` has been used in works like the [Pulitzer
+finalist](http://www.pulitzer.org/finalists/staff-propublica) work on
+[maternal death](http://www.pulitzer.org/finalists/staff-propublica) by
+[ProPublica](https://www.propublica.org).
+
 Features
 --------
 
@@ -43,9 +63,11 @@ Features
     e.g. Cancer, Heart Disease
     -   several standard mappings of ICD codes to comorbidities are
         included (Quan, Deyo, Elixhauser, AHRQ, PCCC)
-    -   very fast assignment of ICD codes to comorbidities (using matrix
-        multiplication with C and C++ internally)
--   summarizing groups of ICD codes in natural language
+    -   *very fast* assignment of ICD codes to comorbidities (using
+        novel matrix multiplication algorithm and C++ internally)
+-   use your existing data format, minimizing requirements for
+    pre-processing
+-   summarize groups of ICD codes in natural language
 -   Charlson and Van Walraven score calculations
 -   Hierarchical Condition Codes (HCC) from CMS
 -   Clinical Classifcations Software (CCS) comorbidities from AHRQ
@@ -60,6 +82,8 @@ Features
     processing of ICD codes
 -   all internal ICD and comorbidity data is extracted directly from
     public data or code, allowing end-to-end reproducibility
+-   used, tested and benchmarked against other comorbidity calculators
+    on hardware from laptops to big servers
 
 Install
 -------
@@ -67,17 +91,6 @@ Install
 ``` r
 install.packages("icd")
 ```
-
-Introduction
-------------
-
-Calculate comorbidities, Charlson and van Walraven scores, perform fast
-and accurate validation, conversion, manipulation, filtering and
-comparison of ICD-9 and ICD-10 codes. This package enables a work flow
-from raw lists of ICD codes in hospital databases to comorbidities.
-ICD-9 and ICD-10 comorbidity mappings from Quan (Deyo and Elixhauser
-versions), Elixhauser and AHRQ included. Common ambiguities and code
-formats are handled.
 
 Relevance
 ---------
