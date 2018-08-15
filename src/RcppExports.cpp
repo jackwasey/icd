@@ -242,6 +242,18 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// guessShortPlusFactorCpp
+bool guessShortPlusFactorCpp(SEXP x_, int n);
+RcppExport SEXP _icd_guessShortPlusFactorCpp(SEXP x_SEXP, SEXP nSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< SEXP >::type x_(x_SEXP);
+    Rcpp::traits::input_parameter< int >::type n(nSEXP);
+    rcpp_result_gen = Rcpp::wrap(guessShortPlusFactorCpp(x_, n));
+    return rcpp_result_gen;
+END_RCPP
+}
 // guessShortCompleteCpp
 bool guessShortCompleteCpp(SEXP x_, SEXP short_code, int n, SEXP icd_name);
 RcppExport SEXP _icd_guessShortCompleteCpp(SEXP x_SEXP, SEXP short_codeSEXP, SEXP nSEXP, SEXP icd_nameSEXP) {
@@ -253,18 +265,6 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< int >::type n(nSEXP);
     Rcpp::traits::input_parameter< SEXP >::type icd_name(icd_nameSEXP);
     rcpp_result_gen = Rcpp::wrap(guessShortCompleteCpp(x_, short_code, n, icd_name));
-    return rcpp_result_gen;
-END_RCPP
-}
-// guessShortPlusFactorCpp
-bool guessShortPlusFactorCpp(SEXP x_, int n);
-RcppExport SEXP _icd_guessShortPlusFactorCpp(SEXP x_SEXP, SEXP nSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< SEXP >::type x_(x_SEXP);
-    Rcpp::traits::input_parameter< int >::type n(nSEXP);
-    rcpp_result_gen = Rcpp::wrap(guessShortPlusFactorCpp(x_, n));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -425,71 +425,6 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// trimLeftCpp
-std::string trimLeftCpp(std::string s);
-RcppExport SEXP _icd_trimLeftCpp(SEXP sSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< std::string >::type s(sSEXP);
-    rcpp_result_gen = Rcpp::wrap(trimLeftCpp(s));
-    return rcpp_result_gen;
-END_RCPP
-}
-// strimCpp
-std::string strimCpp(std::string s);
-RcppExport SEXP _icd_strimCpp(SEXP sSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< std::string >::type s(sSEXP);
-    rcpp_result_gen = Rcpp::wrap(strimCpp(s));
-    return rcpp_result_gen;
-END_RCPP
-}
-// trimCpp
-VecStr trimCpp(VecStr sv);
-RcppExport SEXP _icd_trimCpp(SEXP svSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< VecStr >::type sv(svSEXP);
-    rcpp_result_gen = Rcpp::wrap(trimCpp(sv));
-    return rcpp_result_gen;
-END_RCPP
-}
-// valgrindCallgrindStart
-int valgrindCallgrindStart(bool zerostats);
-RcppExport SEXP _icd_valgrindCallgrindStart(SEXP zerostatsSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< bool >::type zerostats(zerostatsSEXP);
-    rcpp_result_gen = Rcpp::wrap(valgrindCallgrindStart(zerostats));
-    return rcpp_result_gen;
-END_RCPP
-}
-// valgrindCallgrindStop
-int valgrindCallgrindStop();
-RcppExport SEXP _icd_valgrindCallgrindStop() {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    rcpp_result_gen = Rcpp::wrap(valgrindCallgrindStop());
-    return rcpp_result_gen;
-END_RCPP
-}
-// icd9OrderCpp
-std::vector<std::size_t> icd9OrderCpp(VecStr x);
-RcppExport SEXP _icd_icd9OrderCpp(SEXP xSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< VecStr >::type x(xSEXP);
-    rcpp_result_gen = Rcpp::wrap(icd9OrderCpp(x));
-    return rcpp_result_gen;
-END_RCPP
-}
 // factorNoSort
 IntegerVector factorNoSort(const CharacterVector& x, const CharacterVector& levels, const bool na_rm);
 RcppExport SEXP _icd_factorNoSort(SEXP xSEXP, SEXP levelsSEXP, SEXP na_rmSEXP) {
@@ -528,6 +463,50 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// trimLeftCpp
+std::string trimLeftCpp(std::string s);
+RcppExport SEXP _icd_trimLeftCpp(SEXP sSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< std::string >::type s(sSEXP);
+    rcpp_result_gen = Rcpp::wrap(trimLeftCpp(s));
+    return rcpp_result_gen;
+END_RCPP
+}
+// strimCpp
+std::string strimCpp(std::string s);
+RcppExport SEXP _icd_strimCpp(SEXP sSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< std::string >::type s(sSEXP);
+    rcpp_result_gen = Rcpp::wrap(strimCpp(s));
+    return rcpp_result_gen;
+END_RCPP
+}
+// trimCpp
+VecStr trimCpp(VecStr sv);
+RcppExport SEXP _icd_trimCpp(SEXP svSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< VecStr >::type sv(svSEXP);
+    rcpp_result_gen = Rcpp::wrap(trimCpp(sv));
+    return rcpp_result_gen;
+END_RCPP
+}
+// icd9OrderCpp
+std::vector<std::size_t> icd9OrderCpp(VecStr x);
+RcppExport SEXP _icd_icd9OrderCpp(SEXP xSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< VecStr >::type x(xSEXP);
+    rcpp_result_gen = Rcpp::wrap(icd9OrderCpp(x));
+    return rcpp_result_gen;
+END_RCPP
+}
 // matchFast
 SEXP matchFast(SEXP x, SEXP table);
 RcppExport SEXP _icd_matchFast(SEXP xSEXP, SEXP tableSEXP) {
@@ -549,6 +528,27 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< SEXP >::type x(xSEXP);
     Rcpp::traits::input_parameter< SEXP >::type table(tableSEXP);
     rcpp_result_gen = Rcpp::wrap(inFast(x, table));
+    return rcpp_result_gen;
+END_RCPP
+}
+// valgrindCallgrindStart
+int valgrindCallgrindStart(bool zerostats);
+RcppExport SEXP _icd_valgrindCallgrindStart(SEXP zerostatsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< bool >::type zerostats(zerostatsSEXP);
+    rcpp_result_gen = Rcpp::wrap(valgrindCallgrindStart(zerostats));
+    return rcpp_result_gen;
+END_RCPP
+}
+// valgrindCallgrindStop
+int valgrindCallgrindStop();
+RcppExport SEXP _icd_valgrindCallgrindStop() {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    rcpp_result_gen = Rcpp::wrap(valgrindCallgrindStop());
     return rcpp_result_gen;
 END_RCPP
 }

@@ -172,6 +172,10 @@ fastIntToStringRcpp <- function(x) {
     .Call(`_icd_fastIntToStringRcpp`, x)
 }
 
+guessShortPlusFactorCpp <- function(x_, n = 1000L) {
+    .Call(`_icd_guessShortPlusFactorCpp`, x_, n)
+}
+
 #' Guess whether codes are \code{short_code} or \code{decimal_code}
 #'
 #' The goal is to guess whether codes are \code{short_code} or
@@ -189,10 +193,6 @@ fastIntToStringRcpp <- function(x) {
 #' @keywords internal
 guess_short <- function(x_, short_code = NULL, n = 1000L, icd_name = NULL) {
     .Call(`_icd_guessShortCompleteCpp`, x_, short_code, n, icd_name)
-}
-
-guessShortPlusFactorCpp <- function(x_, n) {
-    .Call(`_icd_guessShortPlusFactorCpp`, x_, n)
 }
 
 #' Do elements of vector begin with V, E (or any other character)?
@@ -273,30 +273,6 @@ icd9ChildrenCpp <- function(icd9, isShort, icd9cmReal, onlyReal = TRUE) {
     .Call(`_icd_icd9ChildrenCpp`, icd9, isShort, icd9cmReal, onlyReal)
 }
 
-trimLeftCpp <- function(s) {
-    .Call(`_icd_trimLeftCpp`, s)
-}
-
-strimCpp <- function(s) {
-    .Call(`_icd_strimCpp`, s)
-}
-
-trimCpp <- function(sv) {
-    .Call(`_icd_trimCpp`, sv)
-}
-
-valgrindCallgrindStart <- function(zerostats = FALSE) {
-    .Call(`_icd_valgrindCallgrindStart`, zerostats)
-}
-
-valgrindCallgrindStop <- function() {
-    .Call(`_icd_valgrindCallgrindStop`)
-}
-
-icd9_order_cpp <- function(x) {
-    .Call(`_icd_icd9OrderCpp`, x)
-}
-
 #' @describeIn factor_nosort \pkg{Rcpp} implementation, requiring character
 #' vector inputs only, no argument checking.
 #' @keywords internal manip
@@ -319,6 +295,22 @@ refactor_narm_worker <- function(x, new_levels) {
     .Call(`_icd_refactor_narm`, x, new_levels)
 }
 
+trimLeftCpp <- function(s) {
+    .Call(`_icd_trimLeftCpp`, s)
+}
+
+strimCpp <- function(s) {
+    .Call(`_icd_strimCpp`, s)
+}
+
+trimCpp <- function(sv) {
+    .Call(`_icd_trimCpp`, sv)
+}
+
+icd9_order_cpp <- function(x) {
+    .Call(`_icd_icd9OrderCpp`, x)
+}
+
 #' @title Faster match
 #' @name match_rcpp
 #' @keywords internal
@@ -330,5 +322,13 @@ match_rcpp <- function(x, table) {
 #' @keywords internal
 fin <- function(x, table) {
     .Call(`_icd_inFast`, x, table)
+}
+
+valgrindCallgrindStart <- function(zerostats = FALSE) {
+    .Call(`_icd_valgrindCallgrindStart`, zerostats)
+}
+
+valgrindCallgrindStop <- function() {
+    .Call(`_icd_valgrindCallgrindStop`)
 }
 

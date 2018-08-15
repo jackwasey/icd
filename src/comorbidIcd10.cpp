@@ -17,13 +17,7 @@
 
 #include "icd_types.h"
 #include "local.h"
-#include "comorbidIcd10.h"
-#include <string.h>                         // for strlen, strncpy
 #include <string>                           // for string
-#include "Rcpp.h"
-extern "C" {
-#include <cstddef>                          // for size_t
-}
 
 using namespace Rcpp;
 

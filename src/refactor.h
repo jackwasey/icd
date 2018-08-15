@@ -15,7 +15,18 @@
 // You should have received a copy of the GNU General Public License
 // along with icd. If not, see <http://www.gnu.org/licenses/>.
 
-#ifndef COMORBIDICD10_H_
-#define COMORBIDICD10_H_
+#ifndef REFACTOR_H_
+#define REFACTOR_H_
 
-#endif /* COMORBIDICD10_H_ */
+#include "local.h"
+#include <Rcpp.h>
+
+using namespace Rcpp;
+IntegerVector factorNoSort(const CharacterVector& x,
+                           const CharacterVector& levels,
+                           const bool na_rm);
+Rcpp::IntegerVector refactor(const IntegerVector& x,
+                             const CV& new_levels, bool exclude_na);
+Rcpp::IntegerVector refactor_narm(const IntegerVector& x, const CV& new_levels);
+
+#endif /* REFACTOR_H_ */

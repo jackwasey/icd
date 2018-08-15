@@ -23,7 +23,8 @@
 // need default argument here for other functions to exploit,
 // but this is then not exported by Rcpp (which works on the function body).
 Rcpp::List icd9ShortToPartsCpp(CV icd9Short, Rcpp::String mnr_empty = "");
-Rcpp::List icd9DecimalToPartsCpp(const CV icd9Decimal, const Rcpp::String mnr_empty = "");
+Rcpp::List icd9DecimalToPartsCpp(const CV icd9Decimal,
+                                 const Rcpp::String mnr_empty = "");
 CV icd9PartsToShort(const Rcpp::List parts);
 CV icd9PartsToDecimal(const Rcpp::List parts);
 CV icd9DecimalToShort(const CV icd9Decimal);

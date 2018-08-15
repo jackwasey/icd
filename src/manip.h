@@ -19,8 +19,6 @@
 #define MANIP_H_
 
 #include "icd_types.h"
-#include "Rcpp/String.h"  // for String
-#include <string>
 
 CV icd9AddLeadingZeroes(CV icd9, bool isShort);
 CV icd9AddLeadingZeroesShort(CV icd9Short);

@@ -15,12 +15,16 @@
 // You should have received a copy of the GNU General Public License
 // along with icd. If not, see <http://www.gnu.org/licenses/>.
 
-#ifndef GUESS_H_
-#define GUESS_H_
+#ifndef VALGRIND_ICD_H_
+#define VALGRIND_ICD_H_
 
 #include "icd_types.h"
-#include <vector>
-#include <string>
+#include "local.h"
+#include <string>                       // for string
+#include <utility>                      // for pair
+#include <vector>                       // for vector
 
-bool guessShortPlusFactorCpp(SEXP x_, int n = 1000L);
-#endif /* GUESS_H_ */
+int valgrindCallgrindStart(bool zerostats);
+int valgrindCallgrindStop();
+
+#endif /* ICD_VALGRIND_ICD_H_ */

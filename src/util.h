@@ -20,10 +20,7 @@
 
 #include "icd_types.h"
 #include "local.h"
-#include <cstddef>                      // for size_t
-#include <string>                       // for string
 #include <utility>                      // for pair
-#include <vector>                       // for vector
 
 typedef std::pair<std::string, std::size_t> pas;
 std::string trimLeftCpp(std::string s);
@@ -32,15 +29,6 @@ int valgrindCallgrindStart(bool zerostats);
 int valgrindCallgrindStop();
 bool icd9CompareStrings(std::string a, std::string b);
 std::vector<std::size_t> icd9OrderCpp(VecStr x);
-Rcpp::IntegerVector factorNoSort(const Rcpp::CharacterVector& x,
-                                 const Rcpp::CharacterVector& levels,
-                                 const bool na_rm = false);
-Rcpp::IntegerVector refactor(const Rcpp::IntegerVector& x,
-                             const CV& new_levels,
-                             bool exclude_na = true);
-Rcpp::IntegerVector refactor_narm(const Rcpp::IntegerVector& x,
-                                  const CV& new_levels);
-
 // concatenate a vector of vectors
 template <class COCiter, class Oiter>
 void my_concat (COCiter start, COCiter end, Oiter dest) {

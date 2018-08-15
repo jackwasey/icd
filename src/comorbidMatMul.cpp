@@ -1,17 +1,14 @@
 // [[Rcpp::depends(RcppEigen)]]
 #include "icd_types.h"
 #include "local.h"
-#include "comorbidMatMul.h"
+#include "valgrind_icd.h"
 #include "fastIntToString.h"
 #include <algorithm>                   // for binary_search, copy
 #include <vector>                      // for vector, vector<>::const_iterator
 #include <unordered_set>
-#include "util.h"                     // for debug_parallel
+#include "refactor.h"
 #include <string>
 #include <cstring>
-extern "C" {
-#include "cutil.h"                              // for getRListOrDfElement
-}
 
 /*
  MAKEFLAGS=-j16 R -e 'devtools::load_all(); icd9_comorbid_ahrq(ahrq_test_dat)'

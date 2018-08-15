@@ -75,9 +75,7 @@ extern "C" {
 #define DEBUG_VALGRIND(x) ((void)0)
 #endif
 
-//#ifndef HAVE_RCPPEIGEN_H
 #define ICD_CATCH
-// #ifndef HAVE_TESTTHAT_H
 #ifdef NDEBUG
 #undef ICD_CATCH
 #endif
@@ -110,5 +108,5 @@ inline void printIt(const Rcpp::Nullable<C>& c, int n = 10) {
 }
 
 #endif // end (defined ICD_DEBUG || defined ICD_DEBUG_SETUP)
-#endif // LOCAL_H_
+#endif /* LOCAL_H_ */
 
