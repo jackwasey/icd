@@ -10,8 +10,8 @@ output:
 vignette: >
   %\VignetteIndexEntry{Using Hierarchical Condition Codes}
   %\VignetteEngine{knitr::rmarkdown}
-  %\VignetteDepends{}
-  \usepackage[utf8]{inputenc}
+  %\VignetteDepends{icd.data}
+  %\VignetteEncoding{UTF-8}
 ---
 
 Hierarchical Condition Categories (HCC) is a method of categorizing ICD codes created by the Centers for Medicare and Medicaid Services (CMS), which is implemented in the [icd package](https://cran.r-project.org/package=icd) for R. The package provides [fast comorbidity calculations](introduction.html) for HCCs and other maps which translate ICD codes to comorbidities.

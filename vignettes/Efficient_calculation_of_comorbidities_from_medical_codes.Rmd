@@ -49,9 +49,9 @@ bibliography:
   - all.bib
 vignette: >
   %\VignetteIndexEntry{icd: Efficient Computation of Comorbidities from ICD Codes Using Sparse Matrix Multiplication in R}
-  %\VignetteDepends{}
+  %\VignetteDepends{icd.data}
   %\VignetteEngine{knitr::rmarkdown}
-  \usepackage[utf8]{inputenc}
+  %\VignetteEncoding{UTF-8}
 editor_options:
   chunk_output_type: inline
 pkgdown:

@@ -8,8 +8,8 @@ output: html_document
 vignette: >
   %\VignetteIndexEntry{Comparing Comorbidity Mappings}
   %\VignetteEngine{knitr::rmarkdown}
-  %\VignetteDepends{}
-  \usepackage[utf8]{inputenc}
+  %\VignetteDepends{icd.data}
+  %\VignetteEncoding{UTF-8}
 ---
 <!--
 Copyright (C) 2014 - 2018  Jack O. Wasey

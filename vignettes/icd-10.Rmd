@@ -8,8 +8,8 @@ output:
 vignette: >
   %\VignetteIndexEntry{ICD-10 comorbidities}
   %\VignetteEngine{knitr::rmarkdown}
-  %\VignetteDepends{magrittr}
-  \usepackage[utf8]{inputenc}
+  %\VignetteDepends{icd.data, magrittr}
+  %\VignetteEncoding{UTF-8}
 ---
 <!--
 Copyright (C) 2014 - 2018  Jack O. Wasey

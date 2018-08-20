@@ -8,8 +8,8 @@ output:
 vignette: >
   %\VignetteIndexEntry{Pediatric Complex Chronic Conditions}
   %\VignetteEngine{knitr::rmarkdown}
-  %\VignetteDepends{}
-  \usepackage[utf8]{inputenc}
+  %\VignetteDepends{icd.data}
+  %\VignetteEncoding{UTF-8}
 ---
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)

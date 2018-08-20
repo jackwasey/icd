@@ -8,7 +8,8 @@ output:
 vignette: >
   %\VignetteIndexEntry{Quick Introduction to icd}
   %\VignetteEngine{knitr::rmarkdown}
-  \usepackage[utf8]{inputenc}
+  %\VignetteDepends{icd.data, magrittr, utils}
+  %\VignetteEncoding{UTF-8}
 ---
 <!--
 Copyright (C) 2014 - 2018  Jack O. Wasey
