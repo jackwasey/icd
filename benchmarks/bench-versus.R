@@ -1,3 +1,4 @@
+source("install-dependencies.R")
 args <- commandArgs(trailingOnly = TRUE)
 n_order <- 5L
 if (length(args) > 1L) stop("Only one argument is accepted, which is the order",
@@ -14,7 +15,7 @@ requireNamespace("comorbidity")
 requireNamespace("medicalrisk")
 requireNamespace("R.cache")
 requireNamespace("bench")
-requireNamespace("tidyr")
+requireNamespace("tidyr", quietly = TRUE)
 library(icd)
 
 # include generation functions for reproducibility

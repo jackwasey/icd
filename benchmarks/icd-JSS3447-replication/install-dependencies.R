@@ -18,6 +18,10 @@ if (!require("checkmate")) install.packages("checkmate")
 if (!require("magrittr")) install.packages("magrittr")
 if (!require("Rcpp")) install.packages("Rcpp")
 
+# some suggested dependencies needed for building replication materials
+if (!require("rmarkdown")) install.packages("Rcpp")
+if (!require("knitr")) install.packages("Rcpp")
+
 # The following are specifically for benchmark and not pacakge dependencies
 if (!require("comorbidity")) install.packages("comorbidity")
 if (!require("medicalrisk")) install.packages("medicalrisk")
