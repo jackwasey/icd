@@ -1,0 +1,38 @@
+---
+title: "icd: Efficient Computation of Comorbidities from ICD Codes Using Sparse Matrix Multiplication in R"
+subtitle: "Benchmark replication instructions"
+author: "Jack O. Wasey"
+date: "`r Sys.Date()`"
+output: html_document
+---
+```{r include = FALSE}
+knitr::opts_chunk$set(
+  eval = FALSE,
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+### Introduction
+
+The following instructions allow the user to install the dependencies for replicating the benchmarks reported in the accompanying document entitled, "icd: Efficient Computation of Comorbidities from ICD Codes Using Sparse Matrix Multiplication in R"
+
+The benchmarking code is necessarily time-consuming and resource intensive to run, and may take hours to complete. This has been done successfully by the lead developer on hardware ranging from a 2014 laptop, to a 1TB RAM, 72 core server. The benchmarking can be run with or without the biggest and most resource-intensive tests to demonstrate that it functions correctly.
+
+The specifications of the machine used for the reported benchmark results are in the main article.
+
+All the code in this document should be run with the R or shell working directory set to the directory created after decompressing the replication materials archive.
+
+### Quick start
+
+Running `make` in the replication materials directory will complete all the following steps and run abbreviated benchmarks to demonstrate replicability for the quicker iterations. See below to run the complete, but very time-consuming benchmarks reported in the article.
+
+### Dependencies
+
+The following script will make sure a CRAN repository is set, create a working library directory named `icd-bench-lib`, and install all the benchmark dependencies into it. It will also attempt to clean up on exit.
+
+```{r}
+source("install-dependencies.R")
+```
+
+```{r}
+```

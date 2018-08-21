@@ -1,28 +1,21 @@
-# Ensure the user has a CRAN repository to install benchmark dependencies
-repos_new <- repos_old <- getOption("repos")
-if (length(repos_old) == 0) {
-  repos_new[["CRAN"]] = "https://cloud.r-project.org/"
-  options(repos = repos_new)
-}
-on.exit(options(repos = repos_old))
+args <- commandArgs(trailingOnly = TRUE)
+n_order <- 5L
+if (length(args) > 1L) stop("Only one argument is accepted, which is the order",
+                            " of magitude of the biggest benchmark")
+if (length(args) == 1L)
+  n_order <- as.integer(args[1])
+message("Running benchmarks, with biggest synthetic data set having 10^",
+        n_order, " rows.")
+if (n_order > 5L)
+  warning("Depending on hardware, running these benchmarks with 10^6 or more",
+          " rows may take hours.")
 
-# icd should already have required this in package Depends, but let's make sure
-if (!require("icd.data")) install.packages("icd.data")
-
-# icd should also have the following installed because listed as Imports
-if (!require("checkmate")) install.packages("checkmate")
-if (!require("magrittr")) install.packages("magrittr")
-if (!require("Rcpp")) install.packages("Rcpp")
-
-# The following are specifically for benchmark and not pacakge dependencies
-if (!requireNamespace("comorbidity")) install.packages("comorbidity")
-if (!requireNamespace("medicalrisk")) install.packages("medicalrisk")
-if (!requireNamespace("R.cache")) install.packages("R.cache")
-if (!requireNamespace("bench")) install.packages("bench")
-if (!requireNamespace("tidyr")) install.packages("tidyr")
+requireNamespace("comorbidity")
+requireNamespace("medicalrisk")
+requireNamespace("R.cache")
+requireNamespace("bench")
+requireNamespace("tidyr")
 library(icd)
-
-find_cmb_cutoff <- FALSE
 
 # include generation functions for reproducibility
 generate_random_short_icd9 <- function(n = 50000)
@@ -62,23 +55,7 @@ medicalrisk_fix <- function(pts_mr) {
 }
 
 ten_million_random_pts <- get_ten_million_icd9_pts()
-# first need to benchmark comorbidity against itself to know the cut-off for
-# using the parallel flag
-if (find_cmb_cutoff) {
-  n <- 10^(0L:5L)
-  cmb_res <- bench::press(n = n, {
-    pts <- ten_million_random_pts[seq_len(n), ]
-    bench::mark(
-      comorbidity::comorbidity(
-        x = pts, id = "visit_id", code = "code", score = "charlson_icd9",
-        parallel = TRUE),
-      comorbidity::comorbidity(
-        x = pts, id = "visit_id", code = "code", score = "charlson_icd9",
-        parallel = FALSE)
-    )})
-}
-# benchmark
-n <- 10^(1L:7L)
+n <- 10^(1L:n_order)
 bres <- bench::press(n = n, {
   pts <- ten_million_random_pts[seq_len(n), ]
   pts_mr <- medicalrisk_fix(pts)
@@ -92,7 +69,16 @@ bres <- bench::press(n = n, {
     check = FALSE
   )
 })
-saveRDS(bres, paste0("bench-versus-result-", make.names(date()), ".rds"))
+
+host <- Sys.info()["nodename"]
+
+# keep the results (Makefile will look for updated dput results below)
+saveRDS(bres,
+        paste0(
+          paste("bench-versus-result", n_order, host,
+                make.names(Sys.Date()), sep = "-"),
+          ".rds")
+)
 # now take the medians and make suitable for the article:
 res <- tidyr::spread(bres[c(1, 2, 5)], expression, median)
 names(res) <- c("datarows", "icd", "comorbidity", "medicalrisk")
@@ -100,5 +86,13 @@ res$icd <- as.numeric(res$icd)
 res$comorbidity <- as.numeric(res$comorbidity)
 res$medicalrisk <- as.numeric(res$medicalrisk)
 res <- as.data.frame(res)
+# work around R abbreviating dput output in some R versions
+old_opt_dml <- options(deparse.max.lines = 0)
 dput(res)
-
+# keep file name the same so Makefile will keep track
+dput(res,
+     paste0(
+       paste("bench-versus-dput", n_order, host, sep = "-"),
+       ".R")
+)
+options(old_opt_dml)
