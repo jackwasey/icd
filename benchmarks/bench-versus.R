@@ -1,4 +1,8 @@
 source("install-dependencies.R")
+if (!require("icd")) {
+  yn <- readline("'icd' not installed. Installing from CRAN? (y/n)")
+  if (tolower(yn) == "y") install.packages("icd")
+}
 args <- commandArgs(trailingOnly = TRUE)
 n_order <- 5L
 if (length(args) > 1L) stop("Only one argument is accepted, which is the order",
