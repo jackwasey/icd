@@ -14,12 +14,6 @@ if (n_order > 5L)
 libPaths_old <- .libPaths()
 icd_bench_lib <- file.path(getwd(), "icd-bench-lib")
 .libPaths(icd_bench_lib)
-requireNamespace("comorbidity")
-requireNamespace("medicalrisk")
-requireNamespace("R.cache")
-requireNamespace("bench")
-requireNamespace("tidyr", quietly = TRUE)
-library(icd)
 
 # include generation functions for reproducibility
 generate_random_short_icd9 <- function(n = 50000)
@@ -101,4 +95,3 @@ dput(res,
 )
 options(old_opt_dml)
 .libPaths(libPaths_old)
-
