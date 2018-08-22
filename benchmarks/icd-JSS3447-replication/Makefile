@@ -30,16 +30,18 @@ readme: $(README).html
 
 purl: $(ARTICLE).R
 
-deps:
+deps: lib/icd.data/DESCRIPTION
+
+lib/icd.data/DESCRIPTION:
 	Rscript install-dependencies.R
 
-$(RES3):
+$(RES3): deps
 	Rscript bench-versus.R 3
 
-$(RES5):
+$(RES5): deps
 	Rscript bench-versus.R 5
 
-$(RES7):
+$(RES7): deps
 	Rscript bench-versus.R 7
 
 quickbench: $(RES3) bench-versus.R

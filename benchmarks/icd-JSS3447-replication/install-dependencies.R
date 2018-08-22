@@ -4,28 +4,37 @@ if (length(repos_old) == 0) {
   repos_new[["CRAN"]] = "https://cloud.r-project.org/"
   options(repos = repos_new)
 }
-icd_bench_lib <- file.path(getwd(), "icd-bench-lib")
+icd_bench_lib <- file.path(getwd(), "lib-bench")
 dir.create(icd_bench_lib, showWarnings = FALSE)
+message("library paths are:")
+print(.libPaths())
+message("updating packages to benchmark pacakge library, not whole system")
+update.packages(lib.loc = c(icd_bench_lib, .libPaths()[1]),
+                instlib = icd_bench_lib,
+                ask = FALSE)
 
-# icd should already have required this in package Depends, but let's make sure
-if (!require("icd.data")) install.packages("icd.data", lib = icd_bench_lib)
+for (p in c("icd.data",
+            "checkmate",
+            "Rcpp",
+            "RcppEigen",
+            "rmarkdown",
+            "knitr",
+            "bench",
+            "tidyr",
+            "tinytex",
+            "R.cache",
+            "comorbidity",
+            "medicalrisk")) {
+  if (!require(package = p,
+               #lib.loc = c(icd_bench_lib, .libPaths()),
+               lib.loc = icd_bench_lib,
+               quietly = TRUE,
+               warn.conflicts = FALSE,
+               character.only = TRUE))
+    install.packages(p, lib = icd_bench_lib)
+}
 
-# icd should also have the following installed because listed as Imports
-if (!require("checkmate")) install.packages("checkmate", lib = icd_bench_lib)
-if (!require("magrittr")) install.packages("magrittr", lib = icd_bench_lib)
-if (!require("Rcpp")) install.packages("Rcpp", lib = icd_bench_lib)
-
-# some suggested dependencies needed for building replication materials
-if (!require("rmarkdown")) install.packages("rmarkdown", lib = icd_bench_lib)
-if (!require("knitr")) install.packages("knitr", lib = icd_bench_lib)
-
-# The following are specifically for benchmark and not pacakge dependencies
-if (!require("comorbidity")) install.packages("comorbidity", lib = icd_bench_lib)
-if (!require("medicalrisk")) install.packages("medicalrisk", lib = icd_bench_lib)
-if (!require("R.cache")) install.packages("R.cache", lib = icd_bench_lib)
-if (!require("bench")) install.packages("bench", lib = icd_bench_lib)
-if (!require("tidyr")) install.packages("tidyr", lib = icd_bench_lib)
-
+# may be installed in a different library, so don't use the temporary benchmarking library
 if (!require("icd")) {
   yn <- readline("'icd' not installed. Installing from CRAN? (y/n)")
   if (!interactive() || tolower(yn) == "y")

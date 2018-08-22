@@ -1,4 +1,7 @@
 source("install-dependencies.R")
+# load icd from either an installed tarball or CRAN version, so should not be
+# from the temporary package library
+library(icd, lib.loc = c(.libPaths(), "lib-bench"))
 args <- commandArgs(trailingOnly = TRUE)
 n_order <- 5L
 if (length(args) > 1L) stop("Only one argument is accepted, which is the order",
@@ -11,9 +14,9 @@ if (n_order > 5L)
   warning("Depending on hardware, running these benchmarks with 10^6 or more",
           " rows may take hours.")
 
-libPaths_old <- .libPaths()
-icd_bench_lib <- file.path(getwd(), "icd-bench-lib")
-.libPaths(icd_bench_lib)
+#libPaths_old <- .libPaths()
+#icd_bench_lib <- file.path(getwd(), "icd-bench-lib")
+#.libPaths(icd_bench_lib)
 
 # include generation functions for reproducibility
 generate_random_short_icd9 <- function(n = 50000)
@@ -24,7 +27,7 @@ generate_pts <- function(num_patients, dz_per_patient = 20,
   set.seed(1441)
   pts <- round(n / np)
   data.frame(
-    visit_id = as_char_no_warn(sample(seq(1, pts), replace = TRUE, size = n)),
+    visit_id = as.character(sample(seq(1, pts), replace = TRUE, size = n)),
     code = fun(n),
     poa = as.factor(
       sample(x = c("Y", "N", "n", "n", "y", "X", "E", "", NA),
@@ -93,5 +96,5 @@ dput(res,
        paste("bench-versus-dput", n_order, host, sep = "-"),
        ".R")
 )
-options(old_opt_dml)
-.libPaths(libPaths_old)
+#options(old_opt_dml)
+#.libPaths(libPaths_old)

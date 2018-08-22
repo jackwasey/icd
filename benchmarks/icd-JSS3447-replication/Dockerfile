@@ -1,7 +1,9 @@
 FROM rocker/tidyverse:latest
-COPY . /
-RUN echo 'options(repos = c(CRAN = "https://cran.rstudio.com"))' >> /usr/local/lib/R/etc/Rprofile.site
+COPY install-dependencies.R /
 RUN mkdir ~/.R
-RUN echo 'CXXFLAGS+=-march=native -flto -pipe -wno-ignored-attributes' >> ~/.R/Makevars
-RUN MAKEFLAGS=-j4 Rscript install-dependencies.R
-CMD MAKEFLAGS=-j4 make
+RUN echo 'CXXFLAGS+=-march=native -O0 -pipe -Wno-ignored-attributes' > ~/.R/Makevars
+RUN echo 'CXX11FLAGS+=-march=native -O0 -pipe -Wno-ignored-attributes' >> ~/.R/Makevars
+RUN MAKEFLAGS=-j5 Rscript install-dependencies.R
+COPY bench-versus.R /
+COPY Makefile /
+CMD MAKEFLAGS=-j5 make
