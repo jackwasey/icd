@@ -70,4 +70,13 @@ cleantar:
 cleanbench:
 	rm -f bench-versus-result* bench-versus-dput*
 
-.PHONY: bench quickbench fullbench deps all full extras purl tar cleantar cleanbench clean readme replicate
+dockerbuild:
+	docker build -t icd-jss3447-replication .
+
+dockerrun:
+	docker run --rm -ti icd-jss3447-replication
+
+dockerbash:
+	docker run --rm -ti icd-jss3447-replication bash
+
+.PHONY: bench quickbench fullbench deps all full extras purl tar cleantar cleanbench clean readme replicate dockerbuild dockerrun dockerbash

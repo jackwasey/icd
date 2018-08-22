@@ -1,8 +1,4 @@
 source("install-dependencies.R")
-if (!require("icd")) {
-  yn <- readline("'icd' not installed. Installing from CRAN? (y/n)")
-  if (tolower(yn) == "y") install.packages("icd")
-}
 args <- commandArgs(trailingOnly = TRUE)
 n_order <- 5L
 if (length(args) > 1L) stop("Only one argument is accepted, which is the order",
@@ -15,6 +11,9 @@ if (n_order > 5L)
   warning("Depending on hardware, running these benchmarks with 10^6 or more",
           " rows may take hours.")
 
+libPaths_old <- .libPaths()
+icd_bench_lib <- file.path(getwd(), "icd-bench-lib")
+.libPaths(icd_bench_lib)
 requireNamespace("comorbidity")
 requireNamespace("medicalrisk")
 requireNamespace("R.cache")
@@ -101,3 +100,5 @@ dput(res,
        ".R")
 )
 options(old_opt_dml)
+.libPaths(libPaths_old)
+
