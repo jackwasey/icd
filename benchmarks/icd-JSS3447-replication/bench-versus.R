@@ -1,7 +1,8 @@
 source("install-dependencies.R")
+source("checkpoint.R")
 # load icd from either an installed tarball or CRAN version, so should not be
 # from the temporary package library
-library(icd, lib.loc = c(.libPaths(), "lib-bench"))
+old_lib_paths <- icd_checkpoint()
 args <- commandArgs(trailingOnly = TRUE)
 n_order <- 5L
 if (length(args) > 1L) stop("Only one argument is accepted, which is the order",
@@ -14,13 +15,10 @@ if (n_order > 5L)
   warning("Depending on hardware, running these benchmarks with 10^6 or more",
           " rows may take hours.")
 
-#libPaths_old <- .libPaths()
-#icd_bench_lib <- file.path(getwd(), "icd-bench-lib")
-#.libPaths(icd_bench_lib)
-
 # include generation functions for reproducibility
 generate_random_short_icd9 <- function(n = 50000)
   as.character(floor(stats::runif(min = 1, max = 99999, n = n)))
+
 generate_pts <- function(num_patients, dz_per_patient = 20,
                          n = num_patients, np = dz_per_patient,
                          fun = generate_random_short_icd9) {
@@ -41,7 +39,7 @@ get_ten_million_icd9_pts <- function() {
     R.cache::loadCache(key = list("ten_million_random_pts"),
                        suffix = "icd.Rcache")
   if (is.null(ten_million_random_pts)) {
-    ten_million_random_pts <- generate_pts(1e7)
+    ten_million_random_pts <- icd::generate_pts(1e7)
     R.cache::saveCache(ten_million_random_pts,
                        key = list("ten_million_random_pts"),
                        suffix = "icd.Rcache")
@@ -61,7 +59,7 @@ bres <- bench::press(n = n, {
   pts <- ten_million_random_pts[seq_len(n), ]
   pts_mr <- medicalrisk_fix(pts)
   bench::mark(
-    comorbid_charlson(pts),
+    icd::comorbid_charlson(pts),
     comorbidity::comorbidity(
       x = pts, id = "visit_id", code = "code", score = "charlson_icd9",
       parallel = n >= 1e5),
@@ -87,7 +85,7 @@ res$icd <- as.numeric(res$icd)
 res$comorbidity <- as.numeric(res$comorbidity)
 res$medicalrisk <- as.numeric(res$medicalrisk)
 res <- as.data.frame(res)
-# work around R abbreviating dput output in some R versions
+# work around an older R version abbreviating dput output in some R versions
 old_opt_dml <- options(deparse.max.lines = 0)
 dput(res)
 # keep file name the same so Makefile will keep track
@@ -96,5 +94,5 @@ dput(res,
        paste("bench-versus-dput", n_order, host, sep = "-"),
        ".R")
 )
-#options(old_opt_dml)
-#.libPaths(libPaths_old)
+options(old_opt_dml)
+checkpoint::unCheckpoint(old_lib_paths)

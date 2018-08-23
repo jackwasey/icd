@@ -52,3 +52,4 @@ icd10cm_codes_2017.txt
 icd10cm_codes_2018.txt
 Efficient_calculation_of_comorbidities_from_medical_codes.R
 bench-versus-result*.rds
+.checkpoint
