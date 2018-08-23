@@ -24,7 +24,7 @@ All the code in this document should be run with the R or shell working director
 
 ### Quick start
 
-Running `make` in the replication materials directory will complete all the following steps and run abbreviated benchmarks to demonstrate replicability for the quicker iterations. See below to run the complete, but very time-consuming benchmarks reported in the article.
+Running `make` in the replication materials directory will complete all the following steps and run abbreviated benchmarks to demonstrate replicability for the benchmarks with a smaller number of iterations. See below to run the complete, very time-consuming benchmarks reported in the article.
 
 ### Dependencies
 
