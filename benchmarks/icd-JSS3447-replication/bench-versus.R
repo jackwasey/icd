@@ -39,7 +39,7 @@ get_ten_million_icd9_pts <- function() {
     R.cache::loadCache(key = list("ten_million_random_pts"),
                        suffix = "icd.Rcache")
   if (is.null(ten_million_random_pts)) {
-    ten_million_random_pts <- icd::generate_pts(1e7)
+    ten_million_random_pts <- generate_pts(1e7)
     R.cache::saveCache(ten_million_random_pts,
                        key = list("ten_million_random_pts"),
                        suffix = "icd.Rcache")
@@ -96,3 +96,4 @@ dput(res,
 )
 options(old_opt_dml)
 checkpoint::unCheckpoint(old_lib_paths)
+
