@@ -1,5 +1,6 @@
 icd_checkpoint <- function(dt_str = "2018-08-23") {
-  if (!requireNamespace("checkpoint")) install.packages("checkpoint")
+  if (!requireNamespace("checkpoint", quietly = TRUE))
+    install.packages("checkpoint")
   old_lib_paths <- .libPaths()
   dir.create(".checkpoint", showWarnings = FALSE)
   checkpoint::checkpoint(dt_str,
