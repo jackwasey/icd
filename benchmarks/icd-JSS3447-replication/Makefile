@@ -30,10 +30,11 @@ readme: $(README).html
 
 purl: $(ARTICLE).R
 
-deps: .checkpoint/2018-08-23/lib/x86_64-pc-linux-gnu/3.5.1/icd.data/DESCRIPTION
+deps: .checkpoint/2018-08-23
 
-.checkpoint/2018-08-23/lib/x86_64-pc-linux-gnu/3.5.1/icd.data/DESCRIPTION:
+".checkpoint/2018-08-23":
 	-mkdir .checkpoint
+	-mkdir .checkpoint/2018-08-23
 	Rscript install-dependencies.R
 
 $(RES3): deps

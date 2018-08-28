@@ -17,9 +17,8 @@
 
 #' Filter ICD codes by validity.
 #'
-#' Filters a data.frame of patients for valid or invalid ICD-9
-#'   codes
-#' @param x input vector of ICD codes
+#' Filters a data.frame of patients for valid or invalid ICD codes
+#' @param x a data.frame containing a column of ICD codes
 #' @template icd_name
 #' @template short_code
 #' @template invert
