@@ -34,7 +34,7 @@ icd_filter_invalid(...)
 icd_filter_valid(...)
 }
 \arguments{
-\item{x}{input vector of ICD codes}
+\item{x}{a data.frame containing a column of ICD codes}
 
 \item{icd_name}{The name of the column in the \code{data.frame} which
 contains the ICD codes. This is a character vector of length one. If it is
@@ -53,8 +53,7 @@ if seeking valid ICD-9 codes, the invalid ones are returned.}
 \item{...}{arguments passed to the class-specific functions}
 }
 \description{
-Filters a data.frame of patients for valid or invalid ICD-9
-  codes
+Filters a data.frame of patients for valid or invalid ICD codes
 }
 \section{Functions}{
 \itemize{
