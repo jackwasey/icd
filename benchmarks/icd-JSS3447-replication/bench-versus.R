@@ -1,22 +1,7 @@
 source("install-dependencies.R")
-source("checkpoint.R")
+#source("checkpoint.R")
 
-# state library dependencies here, because checkpoint scans file names alphabetically, finds 'bench' first, then fails.
-
-# here are the dependencies of bench itself:
-#library(glue)
-#library(pillar)
-#library(profmem)
-#library(rlang)
-#library(tibble)
-#library(utils)
-#library(stats)
-#library(methods)
-
-, methods, pillar, profmem, rlang, stats, tibble, utils
-
-
-old_lib_paths <- icd_checkpoint()
+#old_lib_paths <- icd_checkpoint()
 args <- commandArgs(trailingOnly = TRUE)
 n_order <- 5L
 if (length(args) > 1L) stop("Only one argument is accepted, which is the order",
@@ -34,8 +19,7 @@ generate_random_short_icd9 <- function(n = 50000)
   as.character(floor(stats::runif(min = 1, max = 99999, n = n)))
 
 generate_pts <- function(num_patients, dz_per_patient = 20,
-                         n = num_patients, np = dz_per_patient,
-                         fun = generate_random_short_icd9) {
+                         n = num_patients, np = dz_per_patient) {
   set.seed(1441)
   pts <- round(n / np)
   data.frame(
@@ -109,5 +93,5 @@ dput(res,
        ".R")
 )
 options(old_opt_dml)
-checkpoint::unCheckpoint(old_lib_paths)
+#checkpoint::unCheckpoint(old_lib_paths)
 
