@@ -1,7 +1,21 @@
 source("install-dependencies.R")
 source("checkpoint.R")
-# load icd from either an installed tarball or CRAN version, so should not be
-# from the temporary package library
+
+# state library dependencies here, because checkpoint scans file names alphabetically, finds 'bench' first, then fails.
+
+# here are the dependencies of bench itself:
+#library(glue)
+#library(pillar)
+#library(profmem)
+#library(rlang)
+#library(tibble)
+#library(utils)
+#library(stats)
+#library(methods)
+
+, methods, pillar, profmem, rlang, stats, tibble, utils
+
+
 old_lib_paths <- icd_checkpoint()
 args <- commandArgs(trailingOnly = TRUE)
 n_order <- 5L

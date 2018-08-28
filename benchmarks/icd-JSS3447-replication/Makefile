@@ -1,8 +1,11 @@
-# this should work on unices and Windows
+# this should work on unices and Windows, but PATH to R is not set on Windows in command window by default
+R_HOME := $(shell R RHOME)
+VANILLA := 
+RSCRIPT := $(shell echo '$(R_HOME)/bin/Rscript')
 HOST := $(shell hostname)
-RES3 := $(shell Rscript -e 'cat(paste0(paste("bench-versus-dput", 3, Sys.info()["nodename"], sep = "-"), ".R"))')
-RES5 := $(shell Rscript -e 'cat(paste0(paste("bench-versus-dput", 5, Sys.info()["nodename"], sep = "-"), ".R"))')
-RES7 := $(shell Rscript -e 'cat(paste0(paste("bench-versus-dput", 7, Sys.info()["nodename"], sep = "-"), ".R"))')
+RES3 := $(shell "$(RSCRIPT)" "$(VANILLA)" -e 'cat(paste0(paste("bench-versus-dput", 3, Sys.info()["nodename"], sep = "-"), ".R"))')
+RES5 := $(shell "$(RSCRIPT)" "$(VANILLA)" -e 'cat(paste0(paste("bench-versus-dput", 5, Sys.info()["nodename"], sep = "-"), ".R"))')
+RES7 := $(shell "$(RSCRIPT)" "$(VANILLA)" -e 'cat(paste0(paste("bench-versus-dput", 7, Sys.info()["nodename"], sep = "-"), ".R"))')
 NAME := icd-JSS3447-replication
 ARTICLE := Efficient_calculation_of_comorbidities_from_medical_codes
 README := README-replication
@@ -21,10 +24,10 @@ extras: purl readme tar
 $(ARTICLE).R:
 	@echo 'icd' must be installed for the extraction of replication code,
 	@echo or 'knitr::purl' should be called directly from the source tree.
-	Rscript -e 'knitr::purl(system.file("doc", "$(ARTICLE).Rmd", package = "icd"), output = "$(ARTICLE).R")'
+	"$(RSCRIPT)" "$(VANILLA)" -e 'knitr::purl(system.file("doc", "$(ARTICLE).Rmd", package = "icd"), output = "$(ARTICLE).R")'
 
 $(README).html:
-	Rscript -e 'rmarkdown::render("$(README).Rmd")'
+	"$(RSCRIPT)" "$(VANILLA)" -e 'rmarkdown::render("$(README).Rmd")'
 
 readme: $(README).html
 
@@ -32,19 +35,19 @@ purl: $(ARTICLE).R
 
 deps: .checkpoint/2018-08-23
 
-".checkpoint/2018-08-23":
+.checkpoint/2018-08-23:
 	-mkdir .checkpoint
 	-mkdir .checkpoint/2018-08-23
-	Rscript install-dependencies.R
+	$(RSCRIPT) install-dependencies.R
 
 $(RES3): deps
-	Rscript bench-versus.R 3
+	"$(RSCRIPT)" "$(VANILLA)" bench-versus.R 3
 
 $(RES5): deps
-	Rscript bench-versus.R 5
+	"$(RSCRIPT)" "$(VANILLA)" bench-versus.R 5
 
 $(RES7): deps
-	Rscript bench-versus.R 7
+	"$(RSCRIPT)" "$(VANILLA)" bench-versus.R 7
 
 quickbench: $(RES3) bench-versus.R
 
