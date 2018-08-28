@@ -28,11 +28,7 @@ readme: $(README).html
 
 purl: $(ARTICLE).R
 
-deps: .checkpoint/2018-08-23
-
-.checkpoint/2018-08-23:
-	-mkdir .checkpoint
-	-mkdir .checkpoint/2018-08-23
+deps:
 	$(RSCRIPT) install-dependencies.R
 
 $(RES3): deps
@@ -41,7 +37,7 @@ $(RES3): deps
 $(RES5): deps
 	$(RSCRIPT) bench-versus.R 5
 
-$(RES5): deps
+$(RES6): deps
 	$(RSCRIPT) bench-versus.R 6
 
 $(RES7): deps
