@@ -67,19 +67,20 @@ NULL
 icd9_chapters_to_map <- function(x, defined = FALSE) {
   if (is.character(x) && exists(x))
     x <- get(x)
-  assert_list(x, types = "character", any.missing = FALSE, min.len = 1, names = "unique")
+  assert_list(x, types = "character", min.len = 1, names = "unique")
   ranges <- names(x)
   map <- list()
   for (r in ranges) {
-    map[[r]] <- expand_range.icd9(x[[r]][1], x[[r]][2], short_code = TRUE, defined = defined)
+    map[[r]] <- expand_range.icd9(x[[r]][1], x[[r]][2],
+                                  short_code = TRUE, defined = defined)
   }
   map
 }
 
 #' Convert ICD data from wide to long format
 #'
-#' Reshaping data is a common task, and is made easier here by knowing more about
-#' the underlying structure of the data. This function wraps the
+#' Reshaping data is a common task, and is made easier here by knowing more
+#' about the underlying structure of the data. This function wraps the
 #' \code{\link[stats]{reshape}} function with specific behavior and checks
 #' related to ICD codes. Empty strings and NA values will be dropped, and
 #' everything else kept. No validation of the ICD codes is done.
@@ -91,8 +92,8 @@ icd9_chapters_to_map <- function(x, defined = FALSE) {
 #'   all columns matching the regular expression \code{icd_regex} will be
 #'   included.
 #' @template icd_name
-#' @param icd_regex vector of character strings containing a regular expression to
-#'   identify ICD-9 diagnosis columns to try (case-insensitive) in order.
+#' @param icd_regex vector of character strings containing a regular expression
+#'   to identify ICD-9 diagnosis columns to try (case-insensitive) in order.
 #'   Default is \code{c("icd", "diag", "dx_", "dx")}
 #' @return \code{data.frame} with visit_name column named the same as input, and
 #'   a column named by \code{icd.name} containing all the non-NA and non-empty
@@ -122,7 +123,8 @@ wide_to_long <- function(x,
   if (is.null(icd_labels)) {
     re <- length(icd_regex)
     while (re > 0) {
-      icd_labels <- grep(rev(icd_regex)[re], names(x), ignore.case = TRUE, value = TRUE)
+      icd_labels <- grep(rev(icd_regex)[re], names(x),
+                         ignore.case = TRUE, value = TRUE)
       if (length(icd_labels)) break
       re <- re - 1
     }
@@ -192,14 +194,16 @@ long_to_wide <- function(x,
   if (icd9_name_was_factor) iv_levels <- levels(x[[visit_name]])
   x[[visit_name]] <- as_char_no_warn(x[[visit_name]])
   x[[icd_name]] <- as_char_no_warn(x[[icd_name]])
-  mat <- long_to_wide_cpp(x, visitId = visit_name, icd9Field = icd_name, aggregate = aggr)
+  mat <- long_to_wide_cpp(x, visitId = visit_name,
+                          icd9Field = icd_name, aggregate = aggr)
   if (!return_df)
     return(as.icd_wide_data(mat))
   if (icd9_name_was_factor)
     rownm <- factor(x = rownames(mat), levels = iv_levels)
   else
     rownm <- rownames(mat)
-  df.out <- cbind(rownm, as.data.frame(unname(mat)), stringsAsFactors = icd9_name_was_factor)
+  df.out <- cbind(rownm, as.data.frame(unname(mat)),
+                  stringsAsFactors = icd9_name_was_factor)
   names(df.out)[1] <- visit_name
   # perhaps leave (duplicated) rownames which came from the matrix:
   rownames(df.out) <- NULL
@@ -241,7 +245,8 @@ long_to_wide <- function(x,
 #' @export
 comorbid_mat_to_df <- function(x, visit_name = "visit_id",
                                stringsAsFactors = getOption("stringsAsFactors")) { # nolint
-  assert_matrix(x, min.rows = 1, min.cols = 1, row.names = "named", col.names = "named")
+  assert_matrix(x, min.rows = 1, min.cols = 1,
+                row.names = "named", col.names = "named")
   assert_string(visit_name)
   assert_flag(stringsAsFactors) # nolint
   out <- data.frame(rownames(x), x, stringsAsFactors = stringsAsFactors, row.names = NULL) # nolint

@@ -150,7 +150,7 @@ icd10_comorbid <- function(x,
                            return_df = FALSE, return_binary = FALSE,
                            icd10_comorbid_fun = icd10_comorbid_reduce, ...) {
   assert_data_frame(x, min.cols = 2, col.names = "unique")
-  assert_list(map, any.missing = FALSE, min.len = 1, names = "unique")
+  assert_list(map, min.len = 1, names = "unique")
   assert(check_string(visit_name), check_null(visit_name))
   assert(check_string(icd_name), check_null(icd_name))
   visit_name <- get_visit_name(x, visit_name)
@@ -221,7 +221,7 @@ icd9_comorbid <- function(x, map, visit_name = NULL, icd_name = NULL,
       icd_name <- icd9Field #nolint
   }
   assert_data_frame(x, min.cols = 2, col.names = "unique")
-  assert_list(map, any.missing = FALSE, min.len = 1, names = "unique")
+  assert_list(map, min.len = 1, names = "unique")
   assert(check_string(visit_name), check_null(visit_name))
   assert(check_string(icd_name), check_null(icd_name))
   visit_name <- get_visit_name(x, visit_name)

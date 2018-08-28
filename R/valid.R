@@ -320,7 +320,7 @@ icd9_is_valid_major_e <- function(x, whitespace_ok = TRUE)
 #' @export
 #' @keywords internal
 is_valid.comorbidity_map <- function(x, short_code, ...) {
-  assert_list(x, types = "character", any.missing = FALSE,
+  assert_list(x, types = "character",
               min.len = 1, unique = TRUE, names = "named")
   assert_flag(short_code)
   all(unlist(

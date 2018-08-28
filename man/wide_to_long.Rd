@@ -36,8 +36,8 @@ progressively less likely possibilities until it matches a single column.
 Failing this, it will take the first column in the data frame. Specifying
 the column using this argument avoids the guesswork.}
 
-\item{icd_regex}{vector of character strings containing a regular expression to
-identify ICD-9 diagnosis columns to try (case-insensitive) in order.
+\item{icd_regex}{vector of character strings containing a regular expression
+to identify ICD-9 diagnosis columns to try (case-insensitive) in order.
 Default is \code{c("icd", "diag", "dx_", "dx")}}
 
 \item{...}{arguments passed on to other functions}
@@ -48,8 +48,8 @@ Default is \code{c("icd", "diag", "dx_", "dx")}}
   codes found in the wide input data.
 }
 \description{
-Reshaping data is a common task, and is made easier here by knowing more about
-the underlying structure of the data. This function wraps the
+Reshaping data is a common task, and is made easier here by knowing more
+about the underlying structure of the data. This function wraps the
 \code{\link[stats]{reshape}} function with specific behavior and checks
 related to ICD codes. Empty strings and NA values will be dropped, and
 everything else kept. No validation of the ICD codes is done.

@@ -264,7 +264,7 @@ icd_wide_data <- function(...)
 #' @rdname set_icd_class
 #' @keywords internal
 comorbidity_map <- function(x) {
-  assert_list(x, any.missing = FALSE, min.len = 1, names = "unique")
+  assert_list(x, min.len = 1, names = "unique")
   cl <- class(x)
   if ("comorbidity_map" %in% cl) return(x)
   class(x) <- c("comorbidity_map", cl)
@@ -274,7 +274,7 @@ comorbidity_map <- function(x) {
 #' @rdname set_icd_class
 #' @export
 as.comorbidity_map <- function(x) {
-  assert_list(x, any.missing = FALSE, min.len = 1, names = "unique")
+  assert_list(x, min.len = 1, names = "unique")
   # avoid copying the data if class is already correct.
   if (inherits(x, "comorbidity_map"))
     return(x)
