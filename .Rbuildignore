@@ -6,6 +6,7 @@
 (^vignettes\/)?\.build\.timestamp$
 .*_cache.*
 callgrind\.out
+\.checkpoint
 ^codecov.yml$
 ^CONTRIBUTING\.md$
 ^\.covrignore$
