@@ -26,3 +26,5 @@ if (!require("icd")) {
   message("icd not yet installed, so installing from CRAN")
   install.packages("icd")
 }
+
+if (!file.exists(".deps")) file.create(".deps", showWarnings = FALSE)

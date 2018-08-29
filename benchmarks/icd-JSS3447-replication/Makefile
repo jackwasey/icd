@@ -3,8 +3,9 @@ R_HOME := $(shell R RHOME)
 RSCRIPT := $(shell echo '$(R_HOME)/bin/Rscript')
 HOST := $(shell hostname)
 RES3 := $(shell $(RSCRIPT) -e 'cat(paste0(paste("bench-versus-dput", 3, Sys.info()["nodename"], sep = "-"), ".R"))')
+RES4 := $(shell $(RSCRIPT) -e 'cat(paste0(paste("bench-versus-dput", 4, Sys.info()["nodename"], sep = "-"), ".R"))')
 RES5 := $(shell $(RSCRIPT) -e 'cat(paste0(paste("bench-versus-dput", 5, Sys.info()["nodename"], sep = "-"), ".R"))')
-RES5 := $(shell $(RSCRIPT) -e 'cat(paste0(paste("bench-versus-dput", 6, Sys.info()["nodename"], sep = "-"), ".R"))')
+RES6 := $(shell $(RSCRIPT) -e 'cat(paste0(paste("bench-versus-dput", 6, Sys.info()["nodename"], sep = "-"), ".R"))')
 RES7 := $(shell $(RSCRIPT) -e 'cat(paste0(paste("bench-versus-dput", 7, Sys.info()["nodename"], sep = "-"), ".R"))')
 RES8 := $(shell $(RSCRIPT) -e 'cat(paste0(paste("bench-versus-dput", 8, Sys.info()["nodename"], sep = "-"), ".R"))')
 NAME := icd-JSS3447-replication
@@ -28,37 +29,43 @@ readme: $(README).html
 
 purl: $(ARTICLE).R
 
-deps:
+deps: .deps
+
+.deps:
 	$(RSCRIPT) install-dependencies.R
 
-$(RES3): deps
+$(RES3): .deps
 	$(RSCRIPT) bench-versus.R 3
-
-$(RES5): deps
+$(RES4): .deps
+	$(RSCRIPT) bench-versus.R 4
+$(RES5): .deps
 	$(RSCRIPT) bench-versus.R 5
-
-$(RES6): deps
+$(RES6): .deps
 	$(RSCRIPT) bench-versus.R 6
-
-$(RES7): deps
+$(RES7): .deps
 	$(RSCRIPT) bench-versus.R 7
-
-$(RES8): deps
+$(RES8): .deps
 	$(RSCRIPT) bench-versus.R 8
 
 quickbench: bench3
-
 fullbench: bench7
-
 bench3: $(RES3) bench-versus.R
-
+bench4: $(RES4) bench-versus.R
 bench5: $(RES5) bench-versus.R
-
 bench6: $(RES6) bench-versus.R
-
 bench7: $(RES7) bench-versus.R
-
 bench8: $(RES8) bench-versus.R
+
+result3: $(RES3)
+	Rscript -e 'dget("$(RES3)")'
+result4: $(RES4)
+	Rscript -e 'dget("$(RES4)")'
+result5: $(RES5)
+	Rscript -e 'dget("$(RES5)")'
+result6: $(RES6)
+	Rscript -e 'dget("$(RES6)")'
+result7: $(RES7)
+	Rscript -e 'dget("$(RES7)")'
 
 tar: $(NAME).tar.gz
 
@@ -92,4 +99,4 @@ dockerrun:
 dockerbash:
 	docker run --rm -ti icd-jss3447-replication bash
 
-.PHONY: bench3 bench5 bench6 bench7 bench8 quickbench fullbench deps all full extras purl tar cleantar cleanbench clean readme replicate dockerbuild dockerrun dockerbash
+.PHONY: result bench3 bench4 bench5 bench6 bench7 bench8 quickbench fullbench deps all full extras purl tar cleantar cleanbench clean readme replicate dockerbuild dockerrun dockerbash

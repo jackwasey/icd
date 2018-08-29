@@ -86,13 +86,13 @@ bres <- bench::press(n = n, {
 
 host <- Sys.info()["nodename"]
 
-# keep the results (Makefile will look for updated dput results below)
+# keep the dated results
 saveRDS(bres,
         paste0(
-          paste("bench-versus-result", n_order, host,
-                make.names(Sys.Date()), sep = "-"),
+          paste("bench-versus-result", n_order, host, Sys.Date(), sep = "-"),
           ".rds")
 )
+
 # now take the medians and make suitable for the article:
 res <- tidyr::spread(bres[c(1, 2, 5)], expression, median)
 # name order is not deterministic!
@@ -106,10 +106,17 @@ res <- as.data.frame(res)
 # work around an older R version abbreviating dput output in some R versions
 old_opt_dml <- options(deparse.max.lines = 0)
 dput(res)
-# keep file name the same so Makefile will keep track
+# keep file name the same so Makefile will keep track, i.e. not dated, but
+# unique for machine and benchmark
 dput(res,
      paste0(
        paste("bench-versus-dput", n_order, host, sep = "-"),
+       ".R")
+)
+# and a dated version
+dput(res,
+     paste0(
+       paste("bench-versus-dput", n_order, host, Sys.Date(), sep = "-"),
        ".R")
 )
 options(old_opt_dml)
