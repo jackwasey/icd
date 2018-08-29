@@ -98,7 +98,7 @@ res <- tidyr::spread(bres[c(1, 2, 5)], expression, median)
 # name order is not deterministic!
 names(res) <- c("datarows",
                 sub("([^:]*).*", "\\1", names(res)[-1]))
-res[c("datarows", "icd", "comorbidity", "medicalrisk")]
+res <- res[c("datarows", "icd", "comorbidity", "medicalrisk")]
 res$icd <- as.numeric(res$icd)
 res$comorbidity <- as.numeric(res$comorbidity)
 res$medicalrisk <- as.numeric(res$medicalrisk)
