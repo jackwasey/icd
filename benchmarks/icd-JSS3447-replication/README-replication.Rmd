@@ -12,19 +12,29 @@ knitr::opts_chunk$set(
   comment = "#>"
 )
 ```
-### Introduction
+# Introduction
 
-The following instructions allow the user to install the dependencies for replicating the benchmarks reported in the accompanying document entitled, "icd: Efficient Computation of Comorbidities from ICD Codes Using Sparse Matrix Multiplication in R"
+The following instructions allow the user to install the dependencies for replicating the benchmarks reported in the accompanying document entitled, "icd: Efficient Computation of Comorbidities from ICD Codes Using Sparse Matrix Multiplication in R."
 
-The benchmarking code is necessarily time-consuming and resource intensive to run, and may take hours to complete. This has been done successfully by the lead developer on hardware ranging from a 2014 laptop, to a 1TB RAM, 72 core server. The benchmarking can be run with or without the biggest and most resource-intensive tests to demonstrate that it functions correctly.
+The benchmarking code is necessarily time-consuming and resource intensive to run, and may take hours to complete. This has been done successfully by the lead developer on hardware ranging from a 2014 laptop, to a 1TB RAM, 72 core server. The benchmarking can be run with or without the biggest and most resource-intensive tests to demonstrate that it functions correctly. The specifications of the machine used for the reported benchmark results are in the main article.
 
-The specifications of the machine used for the reported benchmark results are in the main article.
+All the code in this document should be run with the R or shell working directory set to the directory created after decompressing the replication materials archive. Packages will be installed in the user's library, according to the content of `.libPaths()`, which may be modified by setting the environment variable `R_LIBS_USER` to a temporary library directory before starting R. This may then be safely deleted after completing benchmarking.
 
-All the code in this document should be run with the R or shell working directory set to the directory created after decompressing the replication materials archive.
+# Requirements for replication materials
+
+There are requirements for various R packages beyond those stated in the package `DESCRIPTION`, which are just for running or building the `icd` package.
+
+## Windows
+
+`Rscript` and `make` should be on the path.
 
 ### Quick start
 
-Running `make` in the replication materials directory will complete all the following steps and run abbreviated benchmarks to demonstrate replicability for the benchmarks with a smaller number of iterations. See below to run the complete, very time-consuming benchmarks reported in the article.
+In a shell, set the working directory to the replication materials directory. In the R package, this is in `icd/benchmarks/icd-JSS3447-replication`. For replicating the materials submitted to JSS, the compressed archive of the replication materials should be unpacked to a directory, and that chosen directory should be set as the working directory.
+
+Running `make result3` in the replication materials directory will install dependencies, and run the benchmarking code with simulated data of up to 10^3 rows. This small benchmark takes a few seconds. For replication of the full benchmarking presented in the article, `make result7` should be invoked. Be aware, this may take many hours, even on a large multi-core server. Benchmarks of intermediate size may be invoked with `make result4`, `make result5`, and make `result6`.
+
+For each of these, raw benchmark data and a `dput` dump are made. The 
 
 ### Dependencies
 

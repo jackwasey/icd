@@ -2,19 +2,24 @@
 R_HOME := $(shell R RHOME)
 RSCRIPT := $(shell echo '$(R_HOME)/bin/Rscript')
 HOST := $(shell hostname)
-RES3 := $(shell $(RSCRIPT) -e 'cat(paste0(paste("bench-versus-dput", 3, Sys.info()["nodename"], sep = "-"), ".R"))')
-RES4 := $(shell $(RSCRIPT) -e 'cat(paste0(paste("bench-versus-dput", 4, Sys.info()["nodename"], sep = "-"), ".R"))')
-RES5 := $(shell $(RSCRIPT) -e 'cat(paste0(paste("bench-versus-dput", 5, Sys.info()["nodename"], sep = "-"), ".R"))')
-RES6 := $(shell $(RSCRIPT) -e 'cat(paste0(paste("bench-versus-dput", 6, Sys.info()["nodename"], sep = "-"), ".R"))')
-RES7 := $(shell $(RSCRIPT) -e 'cat(paste0(paste("bench-versus-dput", 7, Sys.info()["nodename"], sep = "-"), ".R"))')
-RES8 := $(shell $(RSCRIPT) -e 'cat(paste0(paste("bench-versus-dput", 8, Sys.info()["nodename"], sep = "-"), ".R"))')
+#RES3 := $(shell $(RSCRIPT) -e 'cat(paste0(paste("bench-versus-dput", 3, "*", sep = "-"), ".R"))')
+#RES4 := $(shell $(RSCRIPT) -e 'cat(paste0(paste("bench-versus-dput", 4, "*", sep = "-"), ".R"))')
+#RES5 := $(shell $(RSCRIPT) -e 'cat(paste0(paste("bench-versus-dput", 5, "*", sep = "-"), ".R"))')
+#RES6 := $(shell $(RSCRIPT) -e 'cat(paste0(paste("bench-versus-dput", 6, "*", sep = "-"), ".R"))')
+#RES7 := $(shell $(RSCRIPT) -e 'cat(paste0(paste("bench-versus-dput", 7, "*", sep = "-"), ".R"))')
+#RES8 := $(shell $(RSCRIPT) -e 'cat(paste0(paste("bench-versus-dput", 8, "*", sep = "-"), ".R"))')
+RES3 := dput-latest-n-3.R
+RES4 := dput-latest-n-4.R
+RES5 := dput-latest-n-5.R
+RES6 := dput-latest-n-6.R
+RES7 := dput-latest-n-7.R
 NAME := icd-JSS3447-replication
 ARTICLE := Efficient_calculation_of_comorbidities_from_medical_codes
 README := README-replication
 
-all: quickbench extras
+default: quickbench
 
-extras: purl readme tar
+all: quickbench purl readme tar
 
 # replication of benchmark results in icd JSS submission
 $(ARTICLE).R:
@@ -88,7 +93,7 @@ cleantar:
 	rm -f $(NAME).tar.gz
 
 cleanbench:
-	rm -f bench-versus-result* bench-versus-dput*
+	rm -f bench-versus-result* bench-versus-dput* dput-latest* dput-dated*
 
 dockerbuild:
 	docker build -t icd-jss3447-replication .
@@ -99,4 +104,4 @@ dockerrun:
 dockerbash:
 	docker run --rm -ti icd-jss3447-replication bash
 
-.PHONY: result bench3 bench4 bench5 bench6 bench7 bench8 quickbench fullbench deps all full extras purl tar cleantar cleanbench clean readme replicate dockerbuild dockerrun dockerbash
+.PHONY: default bench3 bench4 bench5 bench6 bench7 bench8 quickbench fullbench deps all purl tar cleantar cleanbench clean readme replicate dockerbuild dockerrun dockerbash

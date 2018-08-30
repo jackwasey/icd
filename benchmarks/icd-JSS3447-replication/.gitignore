@@ -1,6 +1,8 @@
 *.tar.gz
 bench-versus-result*.rds
 bench-versus-dput*.R
+dput-dated*.R
+dput-latest*.R
 lib-bench
 .deps
 

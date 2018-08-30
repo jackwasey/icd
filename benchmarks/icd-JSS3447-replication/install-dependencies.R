@@ -22,9 +22,10 @@ for (p in c(
           quietly = TRUE, warn.conflicts = FALSE)
 }
 
-if (!require("icd")) {
+if (!require("icd", quietly = TRUE)) {
   message("icd not yet installed, so installing from CRAN")
   install.packages("icd")
+  library("icd", quietly = TRUE)
 }
 
 if (!file.exists(".deps")) file.create(".deps", showWarnings = FALSE)

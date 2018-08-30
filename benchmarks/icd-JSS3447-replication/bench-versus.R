@@ -1,6 +1,14 @@
 source("install-dependencies.R")
-args <- commandArgs(trailingOnly = TRUE)
+# these control default behavior
+# n is total number of rows of data
+# dz_per_pt is number of disease codes per patient
+# total number of patients is n / dz_per_pt
+#
+# N.b., changing these numbers will interfere with Makefile knowing what to do.
 n_order <- 3L
+dz_per_pt <- 20L
+
+args <- commandArgs(trailingOnly = TRUE)
 if (length(args) > 1L) stop("Only one argument is accepted, which is the order",
                             " of magitude of the biggest benchmark")
 if (length(args) == 1L)
@@ -10,55 +18,28 @@ message("Running benchmarks, with biggest synthetic data set having 10^",
 if (n_order > 5L)
   warning("Depending on hardware, running these benchmarks with 10^6 or more",
           " rows may take hours.")
+#
+# get_ten_million_icd9_pts <- function() {
+#   ten_million_random_pts <-
+#     R.cache::loadCache(key = list("ten_million_random_pts"),
+#                        suffix = "icd.Rcache")
+#   if (is.null(ten_million_random_pts)) {
+#     ten_million_random_pts <- generate_pts(1e7)
+#     R.cache::saveCache(ten_million_random_pts,
+#                        key = list("ten_million_random_pts"),
+#                        suffix = "icd.Rcache")
+#   }
+#   invisible(ten_million_random_pts)
+# }
 
-# include generation functions for reproducibility
-generate_random_short_icd9 <- function(n = 50000)
-  as.character(floor(stats::runif(min = 1, max = 99999, n = n)))
-
-generate_pts <- function(num_patients, dz_per_patient = 20,
-                         n = num_patients, np = dz_per_patient) {
-  set.seed(1441)
-  pts <- round(n / np)
-  data.frame(
-    visit_id = as.character(sample(seq(1, pts), replace = TRUE, size = n)),
-    code = fun(n),
-    poa = as.factor(
-      sample(x = c("Y", "N", "n", "n", "y", "X", "E", "", NA),
-             replace = TRUE, size = n)),
-    stringsAsFactors = FALSE
-  )
-}
-
-get_ten_million_icd9_pts <- function() {
-  ten_million_random_pts <-
-    R.cache::loadCache(key = list("ten_million_random_pts"),
-                       suffix = "icd.Rcache")
-  if (is.null(ten_million_random_pts)) {
-    ten_million_random_pts <- generate_pts(1e7)
-    R.cache::saveCache(ten_million_random_pts,
-                       key = list("ten_million_random_pts"),
-                       suffix = "icd.Rcache")
-  }
-  invisible(ten_million_random_pts)
-}
-
-get_pts <- function(n = 1e6, dz_per_pt = 5, use_cache = FALSE) {
-  if (use_cache) {
-    pts <- R.cache::loadCache(key = list("pts_real_diags", n, dz_per_pt),
-                              suffix = "icd.Rcache")
-    if (!is.null(pts)) return(pts)
-  }
+get_pts <- function(n = 1e6, dz_per_pt = 20) {
   set.seed(1441)
   diags <- sample(icd.data::icd9cm_hierarchy$code, size = n, replace = TRUE)
-  pts <- data.frame(
+  data.frame(
     visit_id = as.character(floor(seq_len(n) / dz_per_pt)),
     code = diags,
     stringsAsFactors = FALSE
   )
-  R.cache::saveCache(pts,
-                     key = list("pts_real_diags", n, dz_per_pt),
-                     suffix = "icd.Rcache")
-  pts
 }
 
 medicalrisk_fix <- function(pts_mr) {
@@ -68,10 +49,11 @@ medicalrisk_fix <- function(pts_mr) {
 }
 
 #ten_million_random_pts <- get_ten_million_icd9_pts()
-ten_million_random_pts <- get_pts(1e7, dz_per_pt = 5, use_cache = TRUE)
-n <- 10^(1L:n_order)
+#ten_million_random_pts <- get_pts(1e7, dz_per_pt = 20, use_cache = TRUE)
+n <- 10L^(1L:n_order)
 bres <- bench::press(n = n, {
-  pts <- ten_million_random_pts[seq_len(n), ]
+  #pts <- ten_million_random_pts[seq_len(n), ]
+  pts <- get_pts(n, dz_per_pt = dz_per_pt)
   pts_mr <- medicalrisk_fix(pts)
   bench::mark(
     icd::comorbid_charlson(pts),
@@ -84,14 +66,22 @@ bres <- bench::press(n = n, {
   )
 })
 
-host <- Sys.info()["nodename"]
+get_bench_filename <- function(prefix, suffix, use_date = FALSE) {
+  paste0(
+    paste(prefix, "n", n_order, "dz", dz_per_pt,
+          Sys.info()["nodename"], ifelse(use_date, Sys.Date(), ""), sep = "-"),
+    ".", suffix)
+}
+
+get_bench_short_filename <- function(prefix, suffix) {
+  paste0(
+    paste(prefix, "n", n_order, # "dz", dz_per_pt,
+          sep = "-"),
+    ".", suffix)
+}
 
 # keep the dated results
-saveRDS(bres,
-        paste0(
-          paste("bench-versus-result", n_order, host, Sys.Date(), sep = "-"),
-          ".rds")
-)
+saveRDS(bres, get_bench_filename("bench-versus-result", "rds", use_date = TRUE))
 
 # now take the medians and make suitable for the article:
 res <- tidyr::spread(bres[c(1, 2, 5)], expression, median)
@@ -105,18 +95,9 @@ res$medicalrisk <- as.numeric(res$medicalrisk)
 res <- as.data.frame(res)
 # work around an older R version abbreviating dput output in some R versions
 old_opt_dml <- options(deparse.max.lines = 0)
-dput(res)
 # keep file name the same so Makefile will keep track, i.e. not dated, but
 # unique for machine and benchmark
-dput(res,
-     paste0(
-       paste("bench-versus-dput", n_order, host, sep = "-"),
-       ".R")
-)
+dput(res, get_bench_short_filename("dput-latest", "R"))
 # and a dated version
-dput(res,
-     paste0(
-       paste("bench-versus-dput", n_order, host, Sys.Date(), sep = "-"),
-       ".R")
-)
+dput(res, get_bench_filename("dput-dated", "R", use_date = TRUE))
 options(old_opt_dml)
