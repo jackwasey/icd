@@ -1,6 +1,10 @@
 # this should work on unices and Windows, but PATH to R is not set on Windows in command window by default
-R_HOME := $(shell R RHOME)
-RSCRIPT := $(shell echo '$(R_HOME)/bin/Rscript')
+R_HOME := "$(shell R RHOME)"
+ifeq ($(OS),Windows_NT)
+	RSCRIPT := $(shell echo '$(R_HOME)\\bin\\Rscript')
+else
+	RSCRIPT := $(shell echo '$(R_HOME)/bin/Rscript')
+endif
 HOST := $(shell hostname)
 #RES3 := $(shell $(RSCRIPT) -e 'cat(paste0(paste("bench-versus-dput", 3, "*", sep = "-"), ".R"))')
 #RES4 := $(shell $(RSCRIPT) -e 'cat(paste0(paste("bench-versus-dput", 4, "*", sep = "-"), ".R"))')
