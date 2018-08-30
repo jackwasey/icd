@@ -7,7 +7,6 @@ for (p in c(
   "testthat",
   "knitr",
   "profmem",
-  "R.cache",
   "Rcpp",
   "RcppEigen",
   "tidyr",

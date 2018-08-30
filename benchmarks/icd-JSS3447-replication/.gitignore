@@ -5,4 +5,3 @@ dput-dated*.R
 dput-latest*.R
 lib-bench
 .deps
-

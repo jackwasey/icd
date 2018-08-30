@@ -18,19 +18,6 @@ message("Running benchmarks, with biggest synthetic data set having 10^",
 if (n_order > 5L)
   warning("Depending on hardware, running these benchmarks with 10^6 or more",
           " rows may take hours.")
-#
-# get_ten_million_icd9_pts <- function() {
-#   ten_million_random_pts <-
-#     R.cache::loadCache(key = list("ten_million_random_pts"),
-#                        suffix = "icd.Rcache")
-#   if (is.null(ten_million_random_pts)) {
-#     ten_million_random_pts <- generate_pts(1e7)
-#     R.cache::saveCache(ten_million_random_pts,
-#                        key = list("ten_million_random_pts"),
-#                        suffix = "icd.Rcache")
-#   }
-#   invisible(ten_million_random_pts)
-# }
 
 get_pts <- function(n = 1e6, dz_per_pt = 20) {
   set.seed(1441)
