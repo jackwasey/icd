@@ -1,3 +1,6 @@
+repos = options("reops")
+if (length(repos) == 0)
+  repos = c(CRAN = "https://cloud.r-project.org/")
 for (p in c(
   "utf8",
   "bench",
@@ -16,14 +19,14 @@ for (p in c(
 )) {
   if (!require(p, character.only = TRUE,
                quietly = TRUE, warn.conflicts = FALSE))
-    install.packages(p, character.only = TRUE)
+    install.packages(p, character.only = TRUE, repos = repos)
   library(p, character.only = TRUE,
           quietly = TRUE, warn.conflicts = FALSE)
 }
 
 if (!require("icd", quietly = TRUE)) {
   message("icd not yet installed, so installing from CRAN")
-  install.packages("icd")
+  install.packages("icd", repos = repos)
   library("icd", quietly = TRUE)
 }
 
