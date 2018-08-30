@@ -1,4 +1,4 @@
-repos = options("reops")
+repos = options("repos")
 if (length(repos) == 0)
   repos = c(CRAN = "https://cloud.r-project.org/")
 for (p in c(
