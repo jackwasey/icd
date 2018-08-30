@@ -1,5 +1,5 @@
 repos = options("repos")
-if (is.null(repos))
+if (is.null(repos$repos))
   repos = c(CRAN = "https://cloud.r-project.org/")
 for (p in c(
   "utf8",
