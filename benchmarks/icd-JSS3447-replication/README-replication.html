@@ -11,7 +11,7 @@
 
 <meta name="author" content="Jack O. Wasey" />
 
-<meta name="date" content="2018-08-22" />
+<meta name="date" content="2018-08-31" />
 
 <title>icd: Efficient Computation of Comorbidities from ICD Codes Using Sparse Matrix Multiplication in R</title>
 
@@ -310,26 +310,35 @@ $(document).ready(function () {
 <h1 class="title toc-ignore">icd: Efficient Computation of Comorbidities from ICD Codes Using Sparse Matrix Multiplication in R</h1>
 <h3 class="subtitle"><em>Benchmark replication instructions</em></h3>
 <h4 class="author"><em>Jack O. Wasey</em></h4>
-<h4 class="date"><em>2018-08-22</em></h4>
+<h4 class="date"><em>2018-08-31</em></h4>
 
 </div>
 
 
-<div id="introduction" class="section level3">
-<h3>Introduction</h3>
-<p>The following instructions allow the user to install the dependencies for replicating the benchmarks reported in the accompanying document entitled, “icd: Efficient Computation of Comorbidities from ICD Codes Using Sparse Matrix Multiplication in R”</p>
-<p>The benchmarking code is necessarily time-consuming and resource intensive to run, and may take hours to complete. This has been done successfully by the lead developer on hardware ranging from a 2014 laptop, to a 1TB RAM, 72 core server. The benchmarking can be run with or without the biggest and most resource-intensive tests to demonstrate that it functions correctly.</p>
-<p>The specifications of the machine used for the reported benchmark results are in the main article.</p>
-<p>All the code in this document should be run with the R or shell working directory set to the directory created after decompressing the replication materials archive.</p>
+<div id="introduction" class="section level1">
+<h1>Introduction</h1>
+<p>The following instructions allow the user to install the dependencies for replicating the benchmarks reported in the accompanying document entitled, “icd: Efficient Computation of Comorbidities from ICD Codes Using Sparse Matrix Multiplication in R.”</p>
+<p>The benchmarking code is necessarily time-consuming and resource intensive to run, and may take hours to complete. This has been done successfully by the lead developer on hardware ranging from a 2014 laptop, to a 1TB RAM, 72 core server. The benchmarking can be run with or without the biggest and most resource-intensive tests to demonstrate that it functions correctly. The specifications of the machine used for the reported benchmark results are in the main article.</p>
+<p>All the code in this document should be run with the R or shell working directory set to the directory created after decompressing the replication materials archive. Packages will be installed in the user’s library, according to the content of <code>.libPaths()</code>, which may be modified by setting the environment variable <code>R_LIBS_USER</code> to a temporary library directory before starting R. This may then be safely deleted after completing benchmarking.</p>
 </div>
+<div id="requirements-for-replication-materials" class="section level1">
+<h1>Requirements for replication materials</h1>
+<p>There are requirements for various R packages beyond those stated in the package <code>DESCRIPTION</code>, which are just for running or building the <code>icd</code> package.</p>
+<div id="windows" class="section level2">
+<h2>Windows</h2>
+<p><code>Rscript</code> and <code>make</code> should be on the path.</p>
 <div id="quick-start" class="section level3">
 <h3>Quick start</h3>
-<p>Running <code>make</code> in the replication materials directory will complete all the following steps and run abbreviated benchmarks to demonstrate replicability for the quicker iterations. See below to run the complete, but very time-consuming benchmarks reported in the article.</p>
+<p>In a shell, set the working directory to the replication materials directory. In the R package, this is in <code>icd/benchmarks/icd-JSS3447-replication</code>. For replicating the materials submitted to JSS, the compressed archive of the replication materials should be unpacked to a directory, and that chosen directory should be set as the working directory.</p>
+<p>Running <code>make result3</code> in the replication materials directory will install dependencies, and run the benchmarking code with simulated data of up to 10^3 rows. This small benchmark takes a few seconds. For replication of the full benchmarking presented in the article, <code>make result7</code> should be invoked. Be aware, this may take many hours, even on a large multi-core server. Benchmarks of intermediate size may be invoked with <code>make result4</code>, <code>make result5</code>, and make <code>result6</code>.</p>
+<p>For each of these, raw benchmark data and a <code>dput</code> dump are made. The</p>
 </div>
 <div id="dependencies" class="section level3">
 <h3>Dependencies</h3>
 <p>The following script will make sure a CRAN repository is set, create a working library directory named <code>icd-bench-lib</code>, and install all the benchmark dependencies into it. It will also attempt to clean up on exit.</p>
 <pre class="r"><code>source(&quot;install-dependencies.R&quot;)</code></pre>
+</div>
+</div>
 </div>
 
 
