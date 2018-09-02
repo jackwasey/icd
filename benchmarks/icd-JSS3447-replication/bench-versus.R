@@ -35,23 +35,22 @@ medicalrisk_fix <- function(pts_mr) {
   pts_mr
 }
 
-#ten_million_random_pts <- get_ten_million_icd9_pts()
-#ten_million_random_pts <- get_pts(1e7, dz_per_pt = 20, use_cache = TRUE)
-n <- 10L^(1L:n_order)
-bres <- bench::press(n = n, {
-  #pts <- ten_million_random_pts[seq_len(n), ]
-  pts <- get_pts(n, dz_per_pt = dz_per_pt)
-  pts_mr <- medicalrisk_fix(pts)
-  bench::mark(
-    icd::comorbid_charlson(pts),
-    comorbidity::comorbidity(
-      x = pts, id = "visit_id", code = "code", score = "charlson_icd9",
-      parallel = n >= 1e5),
-    medicalrisk::generate_comorbidity_df(
-      pts_mr, icd9mapfn = medicalrisk::icd9cm_charlson_quan),
-    check = FALSE
-  )
-})
+bench_versus <- function(norder = norder, n = 10L^(1L:n_order)) {
+  bench::press(n = n, {
+    pts <- get_pts(n, dz_per_pt = dz_per_pt)
+    pts_mr <- medicalrisk_fix(pts)
+    # the output is saved to result, and is potentially gigantic, so use local
+    bench::mark(
+      local(icd::comorbid_charlson(pts)),
+      local(comorbidity::comorbidity(
+        x = pts, id = "visit_id", code = "code", score = "charlson_icd9",
+        parallel = n >= 1e5)),
+      local(medicalrisk::generate_comorbidity_df(
+        pts_mr, icd9mapfn = medicalrisk::icd9cm_charlson_quan)),
+      check = FALSE
+    )
+  })
+}
 
 get_bench_filename <- function(prefix, suffix, use_date = FALSE) {
   paste0(
@@ -67,14 +66,15 @@ get_bench_short_filename <- function(prefix, suffix) {
     ".", suffix)
 }
 
+bres <- bench_versus()
 # keep the dated results
-saveRDS(bres, get_bench_filename("bench-versus-result", "rds", use_date = TRUE))
+saveRDS(bres, get_bench_filename("result", "rds", use_date = TRUE))
 
 # now take the medians and make suitable for the article:
 res <- tidyr::spread(bres[c(1, 2, 5)], expression, median)
 # name order is not deterministic!
 names(res) <- c("datarows",
-                sub("([^:]*).*", "\\1", names(res)[-1]))
+                sub("local\\(([^:]*).*", "\\1", names(res)[-1]))
 res <- res[c("datarows", "icd", "comorbidity", "medicalrisk")]
 res$icd <- as.numeric(res$icd)
 res$comorbidity <- as.numeric(res$comorbidity)

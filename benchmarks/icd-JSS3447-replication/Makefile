@@ -112,7 +112,8 @@ cleantar:
 	rm -f $(NAME).tar.gz
 
 cleanbench:
-	rm -f bench-versus-result* bench-versus-dput* dput-latest* dput-dated*
+	rm -f bench-versus-result* bench-versus-dput* \
+	  dput-latest*.R dput-dated*.R result*.rds
 
 dockerbuild:
 	docker build -t icd-jss3447-replication .
