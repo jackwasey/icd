@@ -15,9 +15,9 @@ NAME := icd-JSS3447-replication
 ARTICLE := Efficient_calculation_of_comorbidities_from_medical_codes
 README := README-replication
 
-default: quickbench
+default: result3
 
-all: quickbench purl readme tar
+all: result3 purl readme tar
 
 # replication of benchmark results in icd JSS submission
 $(ARTICLE).R:
@@ -52,10 +52,6 @@ $(RES7): .deps
 
 $(RES8): .deps
 	$(RSCRIPT) bench-versus.R 8
-
-quickbench: bench3
-
-fullbench: bench7
 
 bench3: $(RES3) bench-versus.R
 
@@ -124,7 +120,7 @@ dockerrun:
 dockerbash:
 	docker run --rm -ti icd-jss3447-replication bash
 
-.benchall: bench3 bench4 bench5 bench6 bench7 bench8 quickbench fullbench
+.benchall: bench3 bench4 bench5 bench6 bench7 bench8
 
 .resultall: result3 result4 result5 result6 result7 result8
 
