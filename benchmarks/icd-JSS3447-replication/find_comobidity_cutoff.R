@@ -15,4 +15,6 @@ cmb_res <- bench::press(n = n, {
     comorbidity::comorbidity(
       x = pts, id = "visit_id", code = "code", score = "charlson_icd9",
       parallel = FALSE)
-  )})
+  )
+})
+print(cmb_res)

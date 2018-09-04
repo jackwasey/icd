@@ -352,6 +352,10 @@ source(&quot;bench-versus.R&quot;)</code></pre>
 <pre><code>make docker</code></pre>
 </div>
 </div>
+<div id="comorbidity-parallel-option" class="section level2">
+<h2><code>comorbidity</code> parallel option</h2>
+<p>The <code>comorbidity</code> has a user-specified parallel option, but gives not guidance for when it should be used. The script <code>find_comorbidity_cutoff.R</code> benchmarks comorbidity against itself to find when the benchmarks againts <code>icd</code> should use the parallel option. The script should be sourced in an R session after sourcing <code>install_dependencies.R</code> and <code>bench-versus.R</code>.</p>
+</div>
 
 
 

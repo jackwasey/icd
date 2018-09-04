@@ -62,3 +62,7 @@ The benchmarks can be run in a docker container, which enables clean installatio
 ```
 make docker
 ```
+
+## `comorbidity` parallel option
+
+The `comorbidity` has a user-specified parallel option, but gives not guidance for when it should be used. The script `find_comorbidity_cutoff.R` benchmarks comorbidity against itself to find when the benchmarks againts `icd` should use the parallel option. The script should be sourced in an R session after sourcing `install_dependencies.R` and `bench-versus.R`.
