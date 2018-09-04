@@ -3,7 +3,7 @@ install_jss3447_deps <- function() {
   # don't even assume the option for CRAN repo is correct...
   cran_ok <- TRUE
   tryCatch(readLines(url(repos)),
-           error = function(e) cran_ok <<- TRUE,
+           error = function(e) cran_ok <<- FALSE,
            warning = function(e) {})
   if (is.null(repos$repos) || !cran_ok)
     repos = c(CRAN = "https://cloud.r-project.org/")
