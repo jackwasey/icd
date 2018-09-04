@@ -1,11 +1,24 @@
+if (!file.exists("install-dependencies.R")) {
+  message("not running in the benchmark replication directory")
+  if (file.exists(file.path("benchmarks",
+                        "icd-JSS3447-replication",
+                        "install-dependencies.R"))) {
+    message("setting directory to benchmark replication directory")
+      setwd(file.path("benchmarks", "icd-JSS3447-replication"))
+  } else {
+    stop("cannot find benchmark replication directory")
+  }
+}
 source("install-dependencies.R")
-# these control default behavior
+
+# the following control default behavior
 # n is total number of rows of data
 # dz_per_pt is number of disease codes per patient
 # total number of patients is n / dz_per_pt
 #
 # N.b., changing these numbers will interfere with Makefile knowing what to do.
-n_order <- 3L
+n_order <- 6L
+n_order_big = 5L # cut-off for only doing one iteration
 dz_per_pt <- 20L
 
 # r-lib/bench package does memory profiling and garbage collection analysis,
@@ -41,8 +54,8 @@ medicalrisk_fix <- function(pts_mr) {
   pts_mr
 }
 
-bench_small <- function(n_order = n_order, n = 10L^(1L:n_order)) {
-  stopifnot(max(n) <= 10L^4L)
+bench_small <- function() {
+  n = 10L^(1L:min(n_order, n_order_big - 1))
   bench::press(n = n, {
     pts <- get_pts(n, dz_per_pt = dz_per_pt)
     pts_mr <- medicalrisk_fix(pts)
@@ -59,18 +72,19 @@ bench_small <- function(n_order = n_order, n = 10L^(1L:n_order)) {
   })
 }
 
-time_big <- function(n_order_min = 5L,
-                     n_order = n_order,
-                     n = 10L^(norder_min:n_order)) {
+time_big <- function() {
+  n = 10L^(n_order_big:n_order)
   res <- data.frame(datarows = integer(),
                     icd = numeric(),
                     comorbidity = numeric(),
                     medicalrisk = numeric())
-  if (norder < norder_min) return(res)
+  if (n_order < n_order_big) return(res)
+  message("Running one iteration with:")
   for (nit in seq_along(n)) {
+    message(n[nit])
     pts <- get_pts(n[nit], dz_per_pt = dz_per_pt)
     pts_mr <- medicalrisk_fix(pts)
-    res[n,] <- c(
+    res[nit,] <- c(
       n[nit],
       system.time(icd::comorbid_charlson(pts))["elapsed"],
       system.time(comorbidity::comorbidity(
@@ -98,11 +112,8 @@ get_bench_short_filename <- function(prefix, suffix) {
 }
 
 bres <- bench_small()
-# keep the dated results
-saveRDS(bres, get_bench_filename("result", "rds", use_date = TRUE))
-
 # now take the medians and make suitable for the article:
-res <- tidyr::spread(bres[c(1, 2, 5)], expression, median)
+res <- tidyr::spread(bres[c("expression", "n", "median")], expression, median)
 # name order is not deterministic!
 names(res) <- c("datarows",
                 sub("local\\(([^:]*).*", "\\1", names(res)[-1]))
@@ -111,7 +122,8 @@ res$icd <- as.numeric(res$icd)
 res$comorbidity <- as.numeric(res$comorbidity)
 res$medicalrisk <- as.numeric(res$medicalrisk)
 res <- as.data.frame(res)
-
+# add the timings for the very long-running computations (which bench only does
+# once anyway, and which are dominated by the computations themselves)
 res <- rbind(res, time_big())
 
 # work around an older R version abbreviating dput output in some R versions
