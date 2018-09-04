@@ -1,5 +1,5 @@
 install_jss3447_deps <- function() {
-  repos = options("repos")
+  repos = options("repos")[1]
   # don't even assume the option for CRAN repo is correct...
   cran_ok <- TRUE
   tryCatch(readLines(url(repos)),
@@ -23,12 +23,10 @@ install_jss3447_deps <- function() {
     "medicalrisk",
     "icd.data"
   )) {
-    message("Checking whether package ", p, " is installed")
     if (!require(p, character.only = TRUE,
                  quietly = TRUE, warn.conflicts = FALSE)) {
       install.packages(p, character.only = TRUE, repos = repos)
     }
-    message("loading package ", p)
     library(p, character.only = TRUE,
             quietly = TRUE, warn.conflicts = FALSE)
   }

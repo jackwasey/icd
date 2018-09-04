@@ -18,31 +18,31 @@ The following instructions allow the user to install the dependencies for replic
 
 The benchmarking code is necessarily time-consuming and resource intensive to run, and may take hours to complete. This has been done successfully by the lead developer on hardware ranging from a 2014 laptop, to a 1TB RAM, 72 core server. The benchmarking can be run with or without the biggest and most resource-intensive tests to demonstrate that it functions correctly. The specifications of the machine used for the reported benchmark results are in the main article.
 
-All the code in this document should be run with the R or shell working directory set to the directory created after decompressing the replication materials archive. Packages will be installed in the user's library, according to the content of `.libPaths()`, which may be modified by setting the environment variable `R_LIBS_USER` to a temporary library directory before starting R. This may then be safely deleted after completing benchmarking.
+All the code in this document should be run with the R or shell working directory set to the directory created after decompressing the replication materials archive. Packages will be installed in the user's library, according to the content of `.libPaths()`, which may be modified by setting the environment variable `R_LIBS_USER` to a temporary library directory before starting R. This may then be safely deleted after completing benchmarking. Packages are installed from CRAN, using the user's current `options("repos")` configuration, if valid, and, failing that, the [R-project cloud repository URL](https://cloud.r-project.org/).
+
+It may be necessary to update installed packages using `update.packages()`. In particular, Rcpp has specific requirements about sometimes needing to recompiled packages that depend on it. See Rcpp documentation for details in event of problems.
 
 # Requirements for replication materials
 
-There are requirements for various R packages beyond those stated in the package `DESCRIPTION`, which are just for running or building the `icd` package.
+There are requirements for various R packages beyond those stated in the package `DESCRIPTION`, which are just for running or building the `icd` package. Additional packages are required for replicating the benchmarks.
 
 ## Windows
 
 `Rscript` and `make` should be on the path.
 
-### Quick start
+## Running the benchmarks
 
-In a shell, set the working directory to the replication materials directory. In the R package, this is in `icd/benchmarks/icd-JSS3447-replication`. For replicating the materials submitted to JSS, the compressed archive of the replication materials should be unpacked to a directory, and that chosen directory should be set as the working directory.
+In a shell, set the working directory to the replication materials directory. In the source package structure, this is in `benchmarks/icd-JSS3447-replication`. For replicating the materials submitted to JSS, the compressed archive of the replication materials should be unpacked to a directory, and that chosen directory should be set as the working directory.
 
-Running `make result3` in the replication materials directory will install dependencies, and run the benchmarking code with simulated data of up to 10^3 rows. This small benchmark takes a few seconds. For replication of the full benchmarking presented in the article, `make result7` should be invoked. Be aware, this may take many hours, even on a large multi-core server. Benchmarks of intermediate size may be invoked with `make result4`, `make result5`, and make `result6`.
+Running `make` in the replication materials directory will install dependencies, and run the abbreviated benchmarking code with simulated data of up to 10^3 rows. This small benchmark takes a few seconds. For replication of the full benchmarking presented in the article, `make result7` should be invoked. Be aware, this may take many hours, even on a large multi-core server, since most of the time, the competing packages are bound to a single threads. Benchmarks of intermediate size may be invoked with `make result4`, `make result5`, and make `result6`.
 
-For each of these, raw benchmark data and a `dput` dump are made. The 
+A `dput` dump is made for each benchmarking run, which gives R code which contains the benchmarking results. These results may be used in place of the pre-calculated benchmark results that are in the submitted replication materials for the submitted article.
 
-### Dependencies
+## Alternative
 
-The following script will make sure a CRAN repository is set, create a working library directory named `icd-bench-lib`, and install all the benchmark dependencies into it. It will also attempt to clean up on exit.
+The preferred method for running the benchmarks is using `make`. Alternatively, the abreviated benchmarks can be run from within R as follows:
 
 ```{r}
 source("install-dependencies.R")
-```
-
-```{r}
+source("bench-versus.R")
 ```
