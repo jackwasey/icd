@@ -8,6 +8,12 @@ source("install-dependencies.R")
 n_order <- 3L
 dz_per_pt <- 20L
 
+# r-lib/bench package does memory profiling and garbage collection analysis,
+# which themselves use a lot of memory, and cause out-of-memory process aborts
+# with 32GB RAM. Therefore, since running time is so long for comorbidity and
+# medicalrisk, I will just time these expression for one execution with large
+# iteration counts.
+
 args <- commandArgs(trailingOnly = TRUE)
 if (length(args) > 1L) stop("Only one argument is accepted, which is the order",
                             " of magitude of the biggest benchmark")
@@ -35,7 +41,8 @@ medicalrisk_fix <- function(pts_mr) {
   pts_mr
 }
 
-bench_versus <- function(norder = norder, n = 10L^(1L:n_order)) {
+bench_small <- function(n_order = n_order, n = 10L^(1L:n_order)) {
+  stopifnot(max(n) <= 10L^4L)
   bench::press(n = n, {
     pts <- get_pts(n, dz_per_pt = dz_per_pt)
     pts_mr <- medicalrisk_fix(pts)
@@ -52,6 +59,30 @@ bench_versus <- function(norder = norder, n = 10L^(1L:n_order)) {
   })
 }
 
+time_big <- function(n_order_min = 5L,
+                     n_order = n_order,
+                     n = 10L^(norder_min:n_order)) {
+  res <- data.frame(datarows = integer(),
+                    icd = numeric(),
+                    comorbidity = numeric(),
+                    medicalrisk = numeric())
+  if (norder < norder_min) return(res)
+  for (nit in seq_along(n)) {
+    pts <- get_pts(n[nit], dz_per_pt = dz_per_pt)
+    pts_mr <- medicalrisk_fix(pts)
+    res[n,] <- c(
+      n[nit],
+      system.time(icd::comorbid_charlson(pts))["elapsed"],
+      system.time(comorbidity::comorbidity(
+        x = pts, id = "visit_id", code = "code", score = "charlson_icd9",
+        parallel = TRUE))["elapsed"],
+      system.time(medicalrisk::generate_comorbidity_df(
+        pts_mr, icd9mapfn = medicalrisk::icd9cm_charlson_quan))["elapsed"]
+    )
+  }
+  res
+}
+
 get_bench_filename <- function(prefix, suffix, use_date = FALSE) {
   paste0(
     paste(prefix, "n", n_order, "dz", dz_per_pt,
@@ -66,7 +97,7 @@ get_bench_short_filename <- function(prefix, suffix) {
     ".", suffix)
 }
 
-bres <- bench_versus()
+bres <- bench_small()
 # keep the dated results
 saveRDS(bres, get_bench_filename("result", "rds", use_date = TRUE))
 
@@ -80,6 +111,9 @@ res$icd <- as.numeric(res$icd)
 res$comorbidity <- as.numeric(res$comorbidity)
 res$medicalrisk <- as.numeric(res$medicalrisk)
 res <- as.data.frame(res)
+
+res <- rbind(res, time_big())
+
 # work around an older R version abbreviating dput output in some R versions
 old_opt_dml <- options(deparse.max.lines = 0)
 # keep file name the same so Makefile will keep track, i.e. not dated, but
