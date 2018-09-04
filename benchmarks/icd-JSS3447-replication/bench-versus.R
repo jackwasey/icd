@@ -17,8 +17,8 @@ source("install-dependencies.R")
 # total number of patients is n / dz_per_pt
 #
 # N.b., changing these numbers will interfere with Makefile knowing what to do.
-n_order <- 6L
-n_order_big = 5L # cut-off for only doing one iteration
+n_order <- 3L
+n_order_big = 6L # cut-off for only doing one iteration
 dz_per_pt <- 20L
 
 # r-lib/bench package does memory profiling and garbage collection analysis,
@@ -67,6 +67,7 @@ bench_small <- function() {
         parallel = n >= 1e5)),
       local(medicalrisk::generate_comorbidity_df(
         pts_mr, icd9mapfn = medicalrisk::icd9cm_charlson_quan)),
+      filter_gc = TRUE,
       check = FALSE
     )
   })

@@ -96,8 +96,8 @@ $(NAME).tar.gz:
 	COPYFILE_DISABLE=1 tar -cvz -f $(NAME).tar.gz \
 	  --exclude=".*" \
 	  --exclude=$(NAME).tar.gz \
-	  --exclude="bench-versus-dput*.R" \
-	  --exclude=bench-versus-result\*.rds $(NAME); \
+	  --exclude="dput*.R" \
+	  --exclude=result\*.rds $(NAME); \
 	cd "$$olddir";	cp $(ICDTMP)/$(NAME).tar.gz "$$olddir"; rm -rf "$(ICDTMP)"
 
 clean: cleantar
