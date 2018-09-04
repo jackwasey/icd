@@ -1,6 +1,11 @@
 install_jss3447_deps <- function() {
   repos = options("repos")
-  if (is.null(repos$repos))
+  # don't even assume the option for CRAN repo is correct...
+  cran_ok <- TRUE
+  tryCatch(readLines(url(repos)),
+           error = function(e) cran_ok <<- TRUE,
+           warning = function(e) {})
+  if (is.null(repos$repos) || !cran_ok)
     repos = c(CRAN = "https://cloud.r-project.org/")
   for (p in c(
     "utf8",
