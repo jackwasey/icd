@@ -340,6 +340,8 @@ $(document).ready(function () {
 <p>The preferred method for running the benchmarks is using <code>make</code>. Alternatively, the abreviated benchmarks can be run from within R as follows:</p>
 <pre class="r"><code>source(&quot;install-dependencies.R&quot;)
 source(&quot;bench-versus.R&quot;)</code></pre>
+<p>This will install dependencies and run the abbreviated benchmarks. To run longer benchmarks, the user may then call the <code>bench_versus</code> function. E.g.:</p>
+<pre class="r"><code>bench_versus(4)</code></pre>
 </div>
 </div>
 

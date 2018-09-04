@@ -46,3 +46,9 @@ The preferred method for running the benchmarks is using `make`. Alternatively, 
 source("install-dependencies.R")
 source("bench-versus.R")
 ```
+
+This will install dependencies and run the abbreviated benchmarks. To run longer benchmarks, the user may then call the `bench_versus` function. E.g.:
+
+```{r}
+bench_versus(4)
+```
