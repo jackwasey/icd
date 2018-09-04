@@ -3,11 +3,11 @@
 # option to compare to 'icd'. Unfortunately, both are slow, so this may take
 # many minutes or hours, depending on hardware.
 
-# The 'install-dependencies.R' script should be run before this.
+# The 'install-dependencies.R' and 'bench-versus.R" scripts should be run first.
 
 n <- 10^(0L:5L)
 cmb_res <- bench::press(n = n, {
-  pts <- ten_million_random_pts[seq_len(n), ]
+  pts <- get_pts(n, dz_per_pt = 20)
   bench::mark(
     comorbidity::comorbidity(
       x = pts, id = "visit_id", code = "code", score = "charlson_icd9",

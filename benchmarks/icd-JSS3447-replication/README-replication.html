@@ -315,19 +315,20 @@ $(document).ready(function () {
 </div>
 
 
-<div id="introduction" class="section level1">
-<h1>Introduction</h1>
+<div id="introduction" class="section level2">
+<h2>Introduction</h2>
 <p>The following instructions allow the user to install the dependencies for replicating the benchmarks reported in the accompanying document entitled, “icd: Efficient Computation of Comorbidities from ICD Codes Using Sparse Matrix Multiplication in R.”</p>
 <p>The benchmarking code is necessarily time-consuming and resource intensive to run, and may take hours to complete. This has been done successfully by the lead developer on hardware ranging from a 2014 laptop, to a 1TB RAM, 72 core server. The benchmarking can be run with or without the biggest and most resource-intensive tests to demonstrate that it functions correctly. The specifications of the machine used for the reported benchmark results are in the main article.</p>
 <p>All the code in this document should be run with the R or shell working directory set to the directory created after decompressing the replication materials archive. Packages will be installed in the user’s library, according to the content of <code>.libPaths()</code>, which may be modified by setting the environment variable <code>R_LIBS_USER</code> to a temporary library directory before starting R. This may then be safely deleted after completing benchmarking. Packages are installed from CRAN, using the user’s current <code>options(&quot;repos&quot;)</code> configuration, if valid, and, failing that, the <a href="https://cloud.r-project.org/">R-project cloud repository URL</a>.</p>
 <p>It may be necessary to update installed packages using <code>update.packages()</code>. In particular, Rcpp has specific requirements about sometimes needing to recompiled packages that depend on it. See Rcpp documentation for details in event of problems.</p>
 </div>
-<div id="requirements-for-replication-materials" class="section level1">
-<h1>Requirements for replication materials</h1>
+<div id="requirements-for-replication-materials" class="section level2">
+<h2>Requirements for replication materials</h2>
 <p>There are requirements for various R packages beyond those stated in the package <code>DESCRIPTION</code>, which are just for running or building the <code>icd</code> package. Additional packages are required for replicating the benchmarks.</p>
-<div id="windows" class="section level2">
-<h2>Windows</h2>
+<div id="windows" class="section level3">
+<h3>Windows</h3>
 <p><code>Rscript</code> and <code>make</code> should be on the path.</p>
+</div>
 </div>
 <div id="running-the-benchmarks" class="section level2">
 <h2>Running the benchmarks</h2>
@@ -335,13 +336,20 @@ $(document).ready(function () {
 <p>Running <code>make</code> in the replication materials directory will install dependencies, and run the abbreviated benchmarking code with simulated data of up to 10^3 rows. This small benchmark takes a few seconds. For replication of the full benchmarking presented in the article, <code>make result7</code> should be invoked. Be aware, this may take many hours, even on a large multi-core server, since most of the time, the competing packages are bound to a single threads. Benchmarks of intermediate size may be invoked with <code>make result4</code>, <code>make result5</code>, and make <code>result6</code>.</p>
 <p>A <code>dput</code> dump is made for each benchmarking run, which gives R code which contains the benchmarking results. These results may be used in place of the pre-calculated benchmark results that are in the submitted replication materials for the submitted article.</p>
 </div>
-<div id="alternative" class="section level2">
-<h2>Alternative</h2>
+<div id="alternatives" class="section level2">
+<h2>Alternatives</h2>
+<div id="r" class="section level3">
+<h3>R</h3>
 <p>The preferred method for running the benchmarks is using <code>make</code>. Alternatively, the abreviated benchmarks can be run from within R as follows:</p>
 <pre class="r"><code>source(&quot;install-dependencies.R&quot;)
 source(&quot;bench-versus.R&quot;)</code></pre>
 <p>This will install dependencies and run the abbreviated benchmarks. To run longer benchmarks, the user may then call the <code>bench_versus</code> function. E.g.:</p>
 <pre class="r"><code>bench_versus(4)</code></pre>
+</div>
+<div id="docker" class="section level3">
+<h3>Docker</h3>
+<p>The benchmarks can be run in a docker container, which enables clean installation of dependencies in a new environment. It may well be slower than on bare metal. The default Docker build will run the full time-consuming benchmark.</p>
+<pre><code>make docker</code></pre>
 </div>
 </div>
 

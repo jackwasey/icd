@@ -103,6 +103,7 @@ $(NAME).tar.gz:
 clean: cleantar
 	rm -f $(ARTICLE).R
 	rm -f $(README).html
+	rm .deps
 
 cleantar:
 	rm -f $(NAME).tar.gz
@@ -111,20 +112,20 @@ cleanbench:
 	rm -f bench-versus-result* bench-versus-dput* \
 	  dput-latest*.R dput-dated*.R result*.rds
 
-dockerbuild:
+dockerbuild: Dockerfile install-dependencies.R bench-versus.R Makefile
 	docker build -t icd-jss3447-replication .
-
-dockerrun:
-	docker run --rm -ti icd-jss3447-replication
 
 dockerbash:
 	docker run --rm -ti icd-jss3447-replication bash
+
+docker: dockerbuild
+	docker run --rm -ti icd-jss3447-replication
 
 .benchall: bench3 bench4 bench5 bench6 bench7 bench8
 
 .resultall: result3 result4 result5 result6 result7 result8
 
-.dockerall: dockerbash dockerrun dockerbuild
+.dockerall: docker dockerbuild dockerbash
 
 .cleanall: cleantar cleanbench clean
 

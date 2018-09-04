@@ -12,7 +12,7 @@ knitr::opts_chunk$set(
   comment = "#>"
 )
 ```
-# Introduction
+## Introduction
 
 The following instructions allow the user to install the dependencies for replicating the benchmarks reported in the accompanying document entitled, "icd: Efficient Computation of Comorbidities from ICD Codes Using Sparse Matrix Multiplication in R."
 
@@ -22,11 +22,11 @@ All the code in this document should be run with the R or shell working director
 
 It may be necessary to update installed packages using `update.packages()`. In particular, Rcpp has specific requirements about sometimes needing to recompiled packages that depend on it. See Rcpp documentation for details in event of problems.
 
-# Requirements for replication materials
+## Requirements for replication materials
 
 There are requirements for various R packages beyond those stated in the package `DESCRIPTION`, which are just for running or building the `icd` package. Additional packages are required for replicating the benchmarks.
 
-## Windows
+### Windows
 
 `Rscript` and `make` should be on the path.
 
@@ -38,7 +38,9 @@ Running `make` in the replication materials directory will install dependencies,
 
 A `dput` dump is made for each benchmarking run, which gives R code which contains the benchmarking results. These results may be used in place of the pre-calculated benchmark results that are in the submitted replication materials for the submitted article.
 
-## Alternative
+## Alternatives
+
+### R
 
 The preferred method for running the benchmarks is using `make`. Alternatively, the abreviated benchmarks can be run from within R as follows:
 
@@ -51,4 +53,12 @@ This will install dependencies and run the abbreviated benchmarks. To run longer
 
 ```{r}
 bench_versus(4)
+```
+
+### Docker
+
+The benchmarks can be run in a docker container, which enables clean installation of dependencies in a new environment. It may well be slower than on bare metal. The default Docker build will run the full time-consuming benchmark.
+
+```
+make docker
 ```
