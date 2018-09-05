@@ -1,10 +1,10 @@
 if (!file.exists("install-dependencies.R")) {
   message("not running in the benchmark replication directory")
   if (file.exists(file.path("benchmarks",
-                        "icd-JSS3447-replication",
-                        "install-dependencies.R"))) {
+                            "icd-JSS3447-replication",
+                            "install-dependencies.R"))) {
     message("setting directory to benchmark replication directory")
-      setwd(file.path("benchmarks", "icd-JSS3447-replication"))
+    setwd(file.path("benchmarks", "icd-JSS3447-replication"))
   } else {
     stop("cannot find benchmark replication directory")
   }
@@ -55,8 +55,8 @@ medicalrisk_fix <- function(pts_mr) {
 }
 
 bench_small <- function(n_order = n_order_default) {
-  n = 10L^(1L:min(n_order, n_order_big - 1))
-  bench::press(n = n, {
+  ns = 10L^(1L:min(n_order, n_order_big - 1))
+  bench::press(n = ns, {
     pts <- get_pts(n, dz_per_pt = dz_per_pt)
     pts_mr <- medicalrisk_fix(pts)
     # the output is saved to result, and is potentially gigantic, so use local

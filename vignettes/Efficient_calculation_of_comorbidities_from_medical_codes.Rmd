@@ -606,50 +606,54 @@ Figure \ref{fig:versus} shows time to compute comorbidites for increasing number
 
 ```{r bench, echo=FALSE}
 fac <- 1e-3
-res <- data.frame(
-  datarows = c(10, 100, 1000, 10000, 1e+05, 1e+06, 1e+07),
+res <- structure(list(
+  datarows = c(10, 100, 1000, 10000, 1e+05, 1e+06, 1e+07), 
   icd = c(
-    0.00271933455951512,
-    0.00298570952145383,
-    0.00365349801722914,
-    0.0127100950339809,
-    0.116895835148171,
-    0.9445570159005,
-    12.3969755911967
-  ),
+    0.0010278929839842,
+    0.00120355357648805,
+    0.00180120998993516,
+    0.008042294124607, 
+    0.062866612104699, 
+    1.573,
+    15.609
+    ),
   comorbidity = c(
-    0.027545070159249,
-    0.0408755420939997,
-    0.152954794000834,
-    1.2128290720284,
-    7.22272577905096,
-    38.3780716699548,
-    946.861061039963
-  ),
+    0.0132215245394036, 
+    0.0231163185089827,
+    0.111484928464051, 
+    1.00265117513482,
+    5.36533053999301, 
+    87.162, 
+    10986.539
+    ),
   medicalrisk = c(
-    0.00384478160412982,
-    0.0118726470973343,
-    0.0797245030407794,
-    0.802611763007008,
-    8.43512935494073,
-    85.9830659220461,
-    6336.18419963482
-  )
-)
+    0.00351565598975867, 
+    0.0102955044712871, 
+    0.0715644441079348, 
+    0.756538210087456,
+    7.0441670359578, 
+    72.286, 
+    854.759
+    )), 
+  row.names = c(NA, -7L), 
+  class = "data.frame")
 fit_res <- log10(res[4:7, ])
 icd_model <- lm(icd ~ datarows, data = fit_res)
 cmb_model <- lm(comorbidity ~ datarows, data = fit_res)
 mdr_model <- lm(medicalrisk ~ datarows, data = fit_res)
 pred_hours <- function(model)
-  10 ^ predict(model, data.frame(datarows = log10(20 * 10e8))) / 3600
+  10 ^ predict(model, data.frame(datarows = log10(20 * 1e8))) / 3600
 preds <- vapply(list(icd_model, cmb_model, mdr_model),
                 FUN = pred_hours, FUN.VALUE = numeric(1))
 names(preds) <- c("icd", "comorbidity", "medicalrisk")
 xseq = seq(0, 7)
 yseq = seq(-3, 3, 3)
-logxaxis <- sapply(paste("expression(10^", xseq, ")", sep = ""),
+ysrr = 0:4
+logxaxis <- sapply(paste0("expression(10^", xseq, ")"),
                    function(x) eval(parse(text = x)))
-logyaxis <- sapply(paste("expression(10^", yseq, ")", sep = ""),
+logyaxis <- sapply(paste0("expression(10^", yseq, ")"),
+                   function(x) eval(parse(text = x)))
+logyaxrr <- sapply(paste0("expression(", 10^ysrr, ")"),
                    function(x) eval(parse(text = x)))
 colours <- c(comorbidity = 'darkred',
              icd = 'black',
@@ -660,8 +664,8 @@ rr <- data.frame(datarows = res$datarows,
                        medicalrisk = res$medicalrisk / res$icd)
 ```
 
-```{r versus, echo=FALSE, fig.cap="Performance comparison of comorbidity packages up to 10,000,000 rows, with 500,000 patient-visits and 20 comorbidities per visit. Models are fitted where the log-log relationship becomes linear, where rows > 1,000. Using an eight core 3.40GHz CPU, R 3.4.4 using Linux, kernel 4.15. \\pkg{comorbidity} was run with and without parallel option, and the best result was chosen for each number of iterations."}
-plt_inset <- 0.075
+```{r versus, echo=FALSE, fig.cap="Performance comparison of comorbidity packages up to 10,000,000 rows, with 500,000 patient-visits and 20 comorbidities per visit. Models are fitted where the log-log relationship becomes linear, where rows > 1,000. Using an eight core 3.40GHz CPU, 32GB RAM R 3.5.1 using Linux, kernel 4.15. \\pkg{comorbidity} was run with and without parallel option, and the best strategy was chosen for each number of iterations."}
+plt_inset <- 0.05
 xmin = 10
   {
   plot(NA, NA, log = "xy",
@@ -683,25 +687,32 @@ xmin = 10
   legend("topleft", inset = plt_inset, legend = names(res[-1]), fill = colours[names(res[-1])])
 }
 ```
-```{r speedup, echo=FALSE, fig.width=6, fig.height=3.7, fig.cap="Relative speed-up using icd compared to the alternatives, using the same numbers of patient-visits and comorbidities in Figure \\ref{fig:versus}."}
-rr[nrow(rr), "medicalrisk"] <- NA
+```{r speedup, echo=FALSE, fig.width=6, fig.height=3.7, fig.cap="Relative speed-up using icd compared to the alternatives, using the same numbers of patient-visits and comorbidities as in Figure \\ref{fig:versus}."}
 {
-  plot(NA, NA, log = "x",
+  ymaxrr <- 10^ceiling(
+    log10(
+      max(c(rr$medicalrisk, rr$comorbidity))
+    )
+  )
+  plot(NA, NA, log = "xy",
        type = "l", col = 'darkred',
        xlab = "rows of data",
        ylab = "time / time using 'icd'",
        xlim = c(xmin, max(rr$datarows)),
-       ylim = c(1, max(c(rr$medicalrisk, rr$comorbidity), na.rm = TRUE)),
-       xaxt = "n"
+       ylim = c(1, ymaxrr),
+       xaxt = "n", yaxt = "n"
   )
   axis(1, 10^xseq, logxaxis)
+  axis(2, 10^ysrr, logyaxrr)
   lines(rr$datarows, rr$icd, col = colours["icd"])
   lines(rr$datarows, rr$comorbidity, col = colours["comorbidity"])
   lines(rr$datarows, rr$medicalrisk, col = colours["medicalrisk"])
-  legend("topleft", inset = plt_inset, legend = names(rr[-1]), fill = colours[names(rr[-1])])
+  legend("topleft", inset = plt_inset, 
+         legend = names(rr[-1]), 
+         fill = colours[names(rr[-1])])
 }
 ```
-```{r bigdata, echo=FALSE, fig.cap="Predicted duration of computation for one hundred-million patient-visits, with twenty patients per patient"}
+```{r bigdata, echo=FALSE, fig.cap="Predicted duration of computation for one hundred-million patient-visits, with twenty diagnoses per patient"}
 {
   barplot(preds,
           col = colours[c("icd", "comorbidity", "medicalrisk")],
