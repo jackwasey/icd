@@ -38,6 +38,7 @@ install_jss3447_deps <- function() {
   }
 
   if (!file.exists(".deps")) file.create(".deps", showWarnings = FALSE)
+  return(invisible())
 }
 
 install_jss3447_deps()
