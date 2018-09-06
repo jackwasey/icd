@@ -1,7 +1,9 @@
 R_HOME := "$(shell R RHOME)"
 ifeq ($(OS),Windows_NT)
+	R := $(shell echo '$(R_HOME)\\bin\\R')
 	RSCRIPT := $(shell echo '$(R_HOME)\\bin\\Rscript')
 else
+	R := $(shell echo '$(R_HOME)/bin/R')
 	RSCRIPT := $(shell echo '$(R_HOME)/bin/Rscript')
 endif
 HOST := $(shell hostname)
@@ -83,7 +85,7 @@ result7: $(RES7)
 result8: $(RES8)
 	Rscript -e 'dget("$(RES8)")'
 
-tar: $(NAME).tar.gz
+tar: $(NAME).tar.gz .icd.built
 
 # tar the replication code
 # COPYFILE_DISABLE=1 to avoid MacOS adding ._ files to tarball
@@ -95,25 +97,29 @@ $(NAME).tar.gz:
 	cd $(ICDTMP); \
 	COPYFILE_DISABLE=1 tar -cvz -f $(NAME).tar.gz \
 	  --exclude=".*" \
-	  --exclude=$(NAME).tar.gz \
+	  --exclude="*.tar.gz" \
 	  --exclude="dput*.R" \
 	  --exclude=result\*.rds $(NAME); \
 	cd "$$olddir";	cp $(ICDTMP)/$(NAME).tar.gz "$$olddir"; rm -rf "$(ICDTMP)"
 
+.icd.built: ../../DESCRIPTION
+	R CMD build --compact-vignettes ../..
+	touch .icd.built
+
 clean: cleantar
 	rm -f $(ARTICLE).R
 	rm -f $(README).html
-	rm .deps
+	rm .deps .icd.built
 
 cleantar:
-	rm -f $(NAME).tar.gz
+	rm -f $(NAME).tar.gz icd_*.tar.gz
 
 cleanbench:
 	rm -f bench-versus-result* bench-versus-dput* \
 	  dput-latest*.R dput-dated*.R result*.rds
 
 dockerbuild: Dockerfile install-dependencies.R bench-versus.R Makefile
-	docker build -t icd-jss3447-replication .
+	docker build -t $(NAME) .
 
 dockerbash:
 	docker run --rm -ti icd-jss3447-replication bash
@@ -128,5 +134,11 @@ docker: dockerbuild
 .dockerall: docker dockerbuild dockerbash
 
 .cleanall: cleantar cleanbench clean
+
+Makefile: ;
+
+Dockerfile: ;
+
+../../DESCRIPTION: ;
 
 .PHONY: default .benchall .resultall deps all purl tar readme .dockerall .cleanall
