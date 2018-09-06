@@ -1,4 +1,7 @@
 *.tar.gz
+*.pdf
+*.tex
+*_files/
 bench-versus-result*.rds
 bench-versus-dput*.R
 dput-dated*.R
@@ -7,3 +10,5 @@ dput-latest*.R
 lib-bench
 .deps
 result-*.rds
+README-replication.html
+

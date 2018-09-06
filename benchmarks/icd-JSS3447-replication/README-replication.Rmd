@@ -16,15 +16,17 @@ knitr::opts_chunk$set(
 
 The following instructions allow the user to install the dependencies for replicating the benchmarks reported in the accompanying document entitled, "icd: Efficient Computation of Comorbidities from ICD Codes Using Sparse Matrix Multiplication in R."
 
+This replication code produces the data used to construct figures 5, 6 and 7 in the Results section of the submitted article. Manipulation of this data is done in the `.Rmd` file, only in order to present it using R plots. These manipulations can be seen in the accompanying file `Efficient_calculation_of_comorbidities_from_medical_codes.R`, which is produced using `knitr::purl`.
+
 The benchmarking code is necessarily time-consuming and resource intensive to run, and may take hours to complete. This has been done successfully by the lead developer on hardware ranging from a 2014 laptop, to a 1TB RAM, 72 core server. The benchmarking can be run with or without the biggest and most resource-intensive tests to demonstrate that it functions correctly. The specifications of the machine used for the reported benchmark results are in the main article.
 
 All the code in this document should be run with the R or shell working directory set to the directory created after decompressing the replication materials archive. Packages will be installed in the user's library, according to the content of `.libPaths()`, which may be modified by setting the environment variable `R_LIBS_USER` to a temporary library directory before starting R. This may then be safely deleted after completing benchmarking. Packages are installed from CRAN, using the user's current `options("repos")` configuration, if valid, and, failing that, the [R-project cloud repository URL](https://cloud.r-project.org/).
 
-It may be necessary to update installed packages using `update.packages()`. In particular, Rcpp has specific requirements about sometimes needing to recompiled packages that depend on it. See Rcpp documentation for details in event of problems.
+It may be necessary to update installed packages using `update.packages()`. In particular, Rcpp has specific requirements about sometimes needing to recompiled packages that depend on it. See Rcpp documentation for details in the event of problems, or consider running the benchmarks in a docker container (please see below).
 
 ## Requirements for replication materials
 
-There are requirements for various R packages beyond those stated in the package `DESCRIPTION`, which are just for running or building the `icd` package. Additional packages are required for replicating the benchmarks.
+There are requirements for various R packages beyond those stated in the package `DESCRIPTION`, which are required for replicating the benchmarks.
 
 ### Windows
 
@@ -32,11 +34,13 @@ There are requirements for various R packages beyond those stated in the package
 
 ## Running the benchmarks
 
+### make
+
 In a shell, set the working directory to the replication materials directory. In the source package structure, this is in `benchmarks/icd-JSS3447-replication`. For replicating the materials submitted to JSS, the compressed archive of the replication materials should be unpacked to a directory, and that chosen directory should be set as the working directory.
 
-Running `make` in the replication materials directory will install dependencies, and run the abbreviated benchmarking code with simulated data of up to 10^3 rows. This small benchmark takes a few seconds. For replication of the full benchmarking presented in the article, `make result7` should be invoked. Be aware, this may take many hours, even on a large multi-core server, since most of the time, the competing packages are bound to a single threads. Benchmarks of intermediate size may be invoked with `make result4`, `make result5`, and make `result6`.
+Running `make` in the replication materials directory will install dependencies, and run the abbreviated benchmarking code with simulated data of up to 10^3 rows. This small benchmark takes a few seconds. For replication of the full benchmarking presented in the article, `make result7` should be invoked. Be aware, this may take many hours, even on a large multi-core server, since most of the time, the competing packages are bound to a single threads.
 
-A `dput` dump is made for each benchmarking run, which gives R code which contains the benchmarking results. These results may be used in place of the pre-calculated benchmark results that are in the submitted replication materials for the submitted article.
+A `dput` dump is made for each benchmarking run, which gives R code which contains the benchmarking results. These results may be used in place of the pre-calculated benchmark results that are included in the accompanying `Efficient_calculation_of_comorbidities_from_medical_codes.R` file, which was produced using `knitr::purl`.
 
 ## Alternatives
 
@@ -57,12 +61,12 @@ bench_versus(4)
 
 ### Docker
 
-The benchmarks can be run in a docker container, which enables clean installation of dependencies in a new environment. It may well be slower than on bare metal. The default Docker build will run the full time-consuming benchmark.
+The benchmarks may be run in a docker container, which enables clean installation of dependencies in a new environment. It may well be slower than on bare metal. The default Docker build will run the full time-consuming benchmark.
 
 ```
 make docker
 ```
 
-## `comorbidity` parallel option
+## `find_comorbidity_cutoff.R`
 
-The `comorbidity` has a user-specified parallel option, but gives not guidance for when it should be used. The script `find_comorbidity_cutoff.R` benchmarks comorbidity against itself to find when the benchmarks againts `icd` should use the parallel option. The script should be sourced in an R session after sourcing `install_dependencies.R` and `bench-versus.R`.
+The `comorbidity` has a user-specified parallel option, but gives no guidance for when it should be used. The script `find_comorbidity_cutoff.R` benchmarks comorbidity against itself to find when the benchmarks againts `icd` should use the parallel option. The script should be sourced in an R session after sourcing `install_dependencies.R` and `bench-versus.R`.

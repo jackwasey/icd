@@ -14,16 +14,25 @@ RES6 := dput-latest-n-6.R
 RES7 := dput-latest-n-7.R
 RES8 := dput-latest-n-8.R
 NAME := icd-JSS3447-replication
+DTAG := icdjss3447repl
 ARTICLE := Efficient_calculation_of_comorbidities_from_medical_codes
 README := README-replication
 
 default: result3
 
-all: result3 purl readme tar
+submission: result3 purl readme tar $(ARTICLE).pdf
+	COPYFILE_DISABLE=1 tar -cvzf "JSS3447_updated_article_and_replication.tar.gz" \
+	$(NAME).tar.gz \
+	icd_*.tar.gz \
+	$(ARTICLE).pdf
 
-# replication of benchmark results in icd JSS submission
-$(ARTICLE).R:
-	$(RSCRIPT) -e 'knitr::purl(system.file("doc", "$(ARTICLE).Rmd", package = "icd"), output = "$(ARTICLE).R")'
+$(ARTICLE).pdf:
+	$(RSCRIPT) -e 'rmarkdown::render("../../vignettes/$(ARTICLE).Rmd", output_dir = getwd())'
+
+../../vignettes/$(ARTICLE).Rmd: ;
+
+$(ARTICLE).R: ../../vignettes/$(ARTICLE).Rmd
+	$(RSCRIPT) -e 'knitr::purl("../../vignettes/$(ARTICLE).Rmd", output = "$(ARTICLE).R")'
 
 $(README).html:
 	$(RSCRIPT) -e 'rmarkdown::render("$(README).Rmd")'
@@ -95,7 +104,7 @@ $(NAME).tar.gz:
 	cp * $(ICDTMP)/$(NAME); \
 	olddir="$$PWD"; \
 	cd $(ICDTMP); \
-	COPYFILE_DISABLE=1 tar -cvz -f $(NAME).tar.gz \
+	COPYFILE_DISABLE=1 tar -cvzf $(NAME).tar.gz \
 	  --exclude=".*" \
 	  --exclude="*.tar.gz" \
 	  --exclude="dput*.R" \
@@ -121,13 +130,10 @@ cleanbench:
 cleanall: cleantar cleanbench clean
 
 dockerbuild: Dockerfile install-dependencies.R bench-versus.R Makefile
-	docker build -t $(NAME) .
-
-dockerbash:
-	docker run --rm -ti icd-jss3447-replication bash
+	docker build -t $(DTAG) .
 
 docker: dockerbuild
-	docker run --rm -ti icd-jss3447-replication
+	docker run --rm -ti $(DTAG)
 
 Makefile: ;
 
@@ -139,6 +145,5 @@ Dockerfile: ;
 
 .resultall: result3 result4 result5 result6 result7 result8
 
-.dockerall: docker dockerbuild dockerbash
+.PHONY: default deps all purl tar readme docker dockerbuid
 
-.PHONY: default deps all purl tar readme
