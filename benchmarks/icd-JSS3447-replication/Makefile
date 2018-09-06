@@ -109,7 +109,7 @@ $(NAME).tar.gz:
 clean: cleantar
 	rm -f $(ARTICLE).R
 	rm -f $(README).html
-	rm .deps .icd.built
+	rm -f .deps .icd.built
 
 cleantar:
 	rm -f $(NAME).tar.gz icd_*.tar.gz
@@ -117,6 +117,8 @@ cleantar:
 cleanbench:
 	rm -f bench-versus-result* bench-versus-dput* \
 	  dput-latest*.R dput-dated*.R result*.rds
+
+cleanall: cleantar cleanbench clean
 
 dockerbuild: Dockerfile install-dependencies.R bench-versus.R Makefile
 	docker build -t $(NAME) .
@@ -127,18 +129,16 @@ dockerbash:
 docker: dockerbuild
 	docker run --rm -ti icd-jss3447-replication
 
-.benchall: bench3 bench4 bench5 bench6 bench7 bench8
-
-.resultall: result3 result4 result5 result6 result7 result8
-
-.dockerall: docker dockerbuild dockerbash
-
-.cleanall: cleantar cleanbench clean
-
 Makefile: ;
 
 Dockerfile: ;
 
 ../../DESCRIPTION: ;
 
-.PHONY: default .benchall .resultall deps all purl tar readme .dockerall .cleanall
+.benchall: bench3 bench4 bench5 bench6 bench7 bench8
+
+.resultall: result3 result4 result5 result6 result7 result8
+
+.dockerall: docker dockerbuild dockerbash
+
+.PHONY: default deps all purl tar readme
