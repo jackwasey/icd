@@ -16,18 +16,25 @@ RES8 := dput-latest-n-8.R
 NAME := icd-JSS3447-replication
 DTAG := icdjss3447repl
 ARTICLE := Efficient_calculation_of_comorbidities_from_medical_codes
+UPDATED := $(ARTICLE).UPDATED
+ARTICLEPDF := $(UPDATED).pdf
 README := README-replication
+SUB := JSS3447_updated_article_and_replication.tar.gz
 
 default: result3
 
-submission: result3 purl readme tar $(ARTICLE).pdf
-	COPYFILE_DISABLE=1 tar -cvzf "JSS3447_updated_article_and_replication.tar.gz" \
+submission: $(SUB)
+
+$(SUB): .icd.built $(NAME).tar.gz purl readme $(ARTICLEPDF)
+	COPYFILE_DISABLE=1 tar -cvzf "$(SUB)" \
 	$(NAME).tar.gz \
 	icd_*.tar.gz \
-	$(ARTICLE).pdf
+	$(ARTICLEPDF)
 
-$(ARTICLE).pdf:
-	$(RSCRIPT) -e 'rmarkdown::render("../../vignettes/$(ARTICLE).Rmd", output_dir = getwd())'
+$(ARTICLEPDF):
+	$(RSCRIPT) -e 'rmarkdown::render("../../vignettes/$(ARTICLE).Rmd", \
+	  output_dir = getwd(), \
+	  output_file = "$(ARTICLEPDF)")'
 
 ../../vignettes/$(ARTICLE).Rmd: ;
 
@@ -94,11 +101,9 @@ result7: $(RES7)
 result8: $(RES8)
 	Rscript -e 'dget("$(RES8)")'
 
-tar: $(NAME).tar.gz .icd.built
-
 # tar the replication code
 # COPYFILE_DISABLE=1 to avoid MacOS adding ._ files to tarball
-$(NAME).tar.gz:
+$(NAME).tar.gz: purl readme
 	$(eval ICDTMP := $(shell mktemp -d))
 	@mkdir "$(ICDTMP)/$(NAME)"
 	cp * $(ICDTMP)/$(NAME); \
@@ -107,7 +112,10 @@ $(NAME).tar.gz:
 	COPYFILE_DISABLE=1 tar -cvzf $(NAME).tar.gz \
 	  --exclude=".*" \
 	  --exclude="*.tar.gz" \
+	  --exclude="*.tex" \
+	  --exclude="*pdf" \
 	  --exclude="dput*.R" \
+	  --exclude="$(README).Rmd" \
 	  --exclude=result\*.rds $(NAME); \
 	cd "$$olddir";	cp $(ICDTMP)/$(NAME).tar.gz "$$olddir"; rm -rf "$(ICDTMP)"
 
@@ -115,19 +123,17 @@ $(NAME).tar.gz:
 	R CMD build --compact-vignettes ../..
 	touch .icd.built
 
-clean: cleantar
+clean:
 	rm -f $(ARTICLE).R
+	rm -rf $(UPDATED)_files/
+	rm -f $(UPDATED).*
 	rm -f $(README).html
 	rm -f .deps .icd.built
-
-cleantar:
-	rm -f $(NAME).tar.gz icd_*.tar.gz
+	rm -f $(NAME).tar.gz icd_*.tar.gz JSS*.tar.gz
 
 cleanbench:
 	rm -f bench-versus-result* bench-versus-dput* \
 	  dput-latest*.R dput-dated*.R result*.rds
-
-cleanall: cleantar cleanbench clean
 
 dockerbuild: Dockerfile install-dependencies.R bench-versus.R Makefile
 	docker build -t $(DTAG) .
@@ -145,5 +151,4 @@ Dockerfile: ;
 
 .resultall: result3 result4 result5 result6 result7 result8
 
-.PHONY: default deps all purl tar readme docker dockerbuid
-
+.PHONY: default deps all purl readme docker dockerbuid clean cleanbench submission

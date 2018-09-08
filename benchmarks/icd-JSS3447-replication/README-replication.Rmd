@@ -26,7 +26,7 @@ It may be necessary to update installed packages using `update.packages()`. In p
 
 ## Requirements for replication materials
 
-There are requirements for various R packages beyond those stated in the package `DESCRIPTION`, which are required for replicating the benchmarks.
+There are requirements for various R packages beyond those stated in the package `DESCRIPTION`, which are required for replicating the benchmarks. These may be seen in the `install_dependencies.R` file found in these replication materials. `make` is used for replicating the results more easily, but everything can also be done without `make` in an R session: please see below.
 
 ### Windows
 
@@ -36,7 +36,7 @@ There are requirements for various R packages beyond those stated in the package
 
 ### make
 
-In a shell, set the working directory to the replication materials directory. In the source package structure, this is in `benchmarks/icd-JSS3447-replication`. For replicating the materials submitted to JSS, the compressed archive of the replication materials should be unpacked to a directory, and that chosen directory should be set as the working directory.
+In a shell, set the working directory to the replication materials directory. In the source package structure, this is in `benchmarks/icd-JSS3447-replication`. For replicating the materials submitted to JSS, the compressed archive of the replication materials should be unpacked to a directory, and that directory should be set as the working directory.
 
 Running `make` in the replication materials directory will install dependencies, and run the abbreviated benchmarking code with simulated data of up to 10^3 rows. This small benchmark takes a few seconds. For replication of the full benchmarking presented in the article, `make result7` should be invoked. Be aware, this may take many hours, even on a large multi-core server, since most of the time, the competing packages are bound to a single threads.
 
@@ -69,4 +69,4 @@ make docker
 
 ## `find_comorbidity_cutoff.R`
 
-The `comorbidity` has a user-specified parallel option, but gives no guidance for when it should be used. The script `find_comorbidity_cutoff.R` benchmarks comorbidity against itself to find when the benchmarks againts `icd` should use the parallel option. The script should be sourced in an R session after sourcing `install_dependencies.R` and `bench-versus.R`.
+The `comorbidity` has a user-specified parallel option, but gives no guidance for when it should be used. The script `find_comorbidity_cutoff.R` benchmarks comorbidity against itself to find when the benchmarks againts `icd` should use the parallel option. The script may be sourced in an R session after sourcing `install_dependencies.R` and `bench-versus.R`. This led to the parallel option being used for the comorbidity package when the number of iterations was 100,000 or greater, which can be seen in `bench-versus.R`.
