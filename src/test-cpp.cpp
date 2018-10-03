@@ -5,6 +5,7 @@
 #include "util.h"
 #include "appendMinor.h"
 #include "convert.h"
+#include "refactor.h"
 
 #ifdef ICD_CATCH
 #include <testthat.h>
@@ -110,7 +111,7 @@ context("MajMin to code") {
 
 context("add leading zeroes to major") {
   test_that("when major len is 0, result is empty, non-std") {
-    expect_true(icd9AddLeadingZeroesMajorSingle("") == NA_CHARACTER);
+    expect_true(icd9AddLeadingZeroesMajorSingle("") == NA_STRING);
   }
   test_that("when major len is 0, result is empty, std") {
     expect_true(icd9AddLeadingZeroesMajorSingleStd("") == "");
@@ -145,7 +146,7 @@ context("add leading zeroes to major") {
     expect_true(icd9AddLeadingZeroesMajorSingleStd("E2") == "E002");
   }
   test_that("1234 too long major") {
-    expect_true(icd9AddLeadingZeroesMajorSingle("1234") == NA_CHARACTER);
+    expect_true(icd9AddLeadingZeroesMajorSingle("1234") == NA_STRING);
     expect_true(icd9AddLeadingZeroesMajorSingleStd("1234") == "");
   }
 }
@@ -159,11 +160,11 @@ context("refactor") {
   CV b_level = CV::create("b");
   CV j;
   IntegerVector res;
-  test_that("empty factor levels") {
+  test_that("one factor level") {
     f = {1};
     f.attr("levels") = "old_level";
     f.attr("class") = "factor";
-    res = refactor(f, empty_levels);
+    res = refactor(f, empty_levels, false);
     expect_true(IntegerVector::is_na(res[0]));
     j = res.attr("levels");
     expect_true(j.size() == 0);
@@ -172,7 +173,7 @@ context("refactor") {
     f = {1};
     f.attr("levels") = empty_levels;
     f.attr("class") = "factor";
-    res = refactor(f, empty_levels);
+    res = refactor(f, empty_levels, false);
     expect_true(IntegerVector::is_na(res[0]));
     j = res.attr("levels");
     expect_true(j.size() == 0);
@@ -261,7 +262,7 @@ context("refactor") {
     new_levels = CV::create("a", "b");
     f.attr("levels") = new_levels;
     f.attr("class") = "factor";
-    res = refactor(f, new_levels);
+    res = refactor(f, new_levels, false);
     expect_true(is_true(all(f == res)));
     bool levels_equal = is_true(all(new_levels == ((CV)res.attr("levels"))));
     expect_true(levels_equal);
@@ -274,7 +275,7 @@ context("refactor") {
     f2 = {2, 1};
     f2.attr("levels") = new_levels;
     f2.attr("class") = "factor";
-    res = refactor(f, new_levels);
+    res = refactor(f, new_levels, false);
     expect_true(is_true(all(f2 == res)));
     bool levels_equal = is_true(all(((CV)f2.attr("levels")) == ((CV)res.attr("levels"))));
     expect_true(levels_equal);
@@ -287,7 +288,7 @@ context("refactor") {
     new_levels = CV::create("c", "b", "a");
     f2.attr("levels") = new_levels;
     f2.attr("class") = "factor";
-    res = refactor(f, new_levels);
+    res = refactor(f, new_levels, false);
     expect_true(is_true(all(f2 == res)));
     bool levels_equal = is_true(all(((CV)f2.attr("levels")) == ((CV)res.attr("levels"))));
     expect_true(levels_equal);
@@ -300,7 +301,7 @@ context("refactor") {
     new_levels = CV::create("c", "b", "a");
     f2.attr("levels") = new_levels;
     f2.attr("class") = "factor";
-    res = refactor(f, new_levels);
+    res = refactor(f, new_levels, false);
     expect_true(is_true(all(f2 == res)));
     bool levels_equal = is_true(all(((CV)f2.attr("levels")) == ((CV)res.attr("levels"))));
     expect_true(levels_equal);
