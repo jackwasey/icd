@@ -1,4 +1,4 @@
-source("install-dependencies.R")
+#source("install-dependencies.R")
 if (!require("icd")) {
   yn <- readline("'icd' not installed. Installing from CRAN? (y/n)")
   if (tolower(yn) == "y") install.packages("icd")
@@ -17,6 +17,7 @@ if (n_order > 5L)
 
 requireNamespace("comorbidity")
 requireNamespace("medicalrisk")
+requireNamespace("touch")
 requireNamespace("R.cache")
 requireNamespace("bench")
 requireNamespace("tidyr", quietly = TRUE)
@@ -64,13 +65,16 @@ n <- 10^(1L:n_order)
 bres <- bench::press(n = n, {
   pts <- ten_million_random_pts[seq_len(n), ]
   pts_mr <- medicalrisk_fix(pts)
+  # slow for making matrix of many rows, don't count against 'touch'
+  pts_mat <- icd::long_to_wide(pts)
   bench::mark(
     comorbid_charlson(pts),
     comorbidity::comorbidity(
-      x = pts, id = "visit_id", code = "code", score = "charlson_icd9",
+      x = pts, id = "visit_id", code = "code", score = "charlson",
       parallel = n >= 1e5),
     medicalrisk::generate_comorbidity_df(
       pts_mr, icd9mapfn = medicalrisk::icd9cm_charlson_quan),
+    touch::cmbd(pts), # AHRQ, Charlson not available.
     check = FALSE
   )
 })
@@ -86,10 +90,11 @@ saveRDS(bres,
 )
 # now take the medians and make suitable for the article:
 res <- tidyr::spread(bres[c(1, 2, 5)], expression, median)
-names(res) <- c("datarows", "icd", "comorbidity", "medicalrisk")
+names(res) <- c("datarows", "icd", "comorbidity", "medicalrisk", "touch")
 res$icd <- as.numeric(res$icd)
 res$comorbidity <- as.numeric(res$comorbidity)
 res$medicalrisk <- as.numeric(res$medicalrisk)
+res$touch <- as.numeric(res$touch)
 res <- as.data.frame(res)
 # work around R abbreviating dput output in some R versions
 old_opt_dml <- options(deparse.max.lines = 0)

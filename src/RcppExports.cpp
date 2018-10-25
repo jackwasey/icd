@@ -301,9 +301,9 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// icd9LongToWideCpp
-CV icd9LongToWideCpp(const SEXP& icd9df, const std::string visitId, const std::string icd9Field, bool aggregate);
-RcppExport SEXP _icd_icd9LongToWideCpp(SEXP icd9dfSEXP, SEXP visitIdSEXP, SEXP icd9FieldSEXP, SEXP aggregateSEXP) {
+// longToWideCpp
+CV longToWideCpp(const SEXP& icd9df, const std::string visitId, const std::string icd9Field, bool aggregate);
+RcppExport SEXP _icd_longToWideCpp(SEXP icd9dfSEXP, SEXP visitIdSEXP, SEXP icd9FieldSEXP, SEXP aggregateSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -311,7 +311,7 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< const std::string >::type visitId(visitIdSEXP);
     Rcpp::traits::input_parameter< const std::string >::type icd9Field(icd9FieldSEXP);
     Rcpp::traits::input_parameter< bool >::type aggregate(aggregateSEXP);
-    rcpp_result_gen = Rcpp::wrap(icd9LongToWideCpp(icd9df, visitId, icd9Field, aggregate));
+    rcpp_result_gen = Rcpp::wrap(longToWideCpp(icd9df, visitId, icd9Field, aggregate));
     return rcpp_result_gen;
 END_RCPP
 }

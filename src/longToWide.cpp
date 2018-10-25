@@ -55,8 +55,9 @@ CV raggedToWide(const VecVecStr& ragged, int max_per_pt,
       // write in row major format, but this means transpose needed later
       VecVecStr::size_type out_idx = row_it + (distinct_visits * col_it);
       out[out_idx] = this_row[col_it];
-    }
-  }
+    } // end inner for
+    Rcpp::checkUserInterrupt();
+  } // end outer for
 #ifdef ICD_DEBUG
   Rcpp::Rcout << "writing dimensions\n";
 #endif
@@ -114,22 +115,22 @@ int longToRagged(const SEXP& icd9df, VecVecStr& ragged, VecStr& visitIds,
 #ifdef ICD_DEBUG_TRACE
     Rcpp::Rcout << "ragged size is " << ragged.size() << "\n";
 #endif
-
     lastVisitId = vi;
+    Rcpp::checkUserInterrupt();
   } // end loop through all visit-code input data
 
 #ifdef ICD_VALGRIND
   CALLGRIND_STOP_INSTRUMENTATION;
   //        CALLGRIND_DUMP_STATS;
 #endif
-  UNPROTECT(2); // do sooner if possible?
+  UNPROTECT(2);
   return max_per_pt;
 }
 
 // [[Rcpp::export(long_to_wide_cpp)]]
-CV icd9LongToWideCpp(const SEXP& icd9df,
-                     const std::string visitId, const std::string icd9Field,
-                     bool aggregate = true) {
+CV longToWideCpp(const SEXP& icd9df,
+                 const std::string visitId, const std::string icd9Field,
+                 bool aggregate = true) {
 
   // a few options here. character matrix would make sense, but this can't be a factor. data frame harder to process on C++ side.
   // Matrix easy to convert to data frame in R, if needed. Rows in output don't correspond to input, so no strong reason to preserve factors in any way.

@@ -50,6 +50,9 @@ on_failure:
   - 7z a failure.zip *.Rcheck\*
   - appveyor PushArtifact failure.zip
 
+on_success:
+  - cd benchmarks/icd-JSS3447-replication; make
+
 artifacts:
   - path: '*.Rcheck\**\*.log'
     name: Logs
