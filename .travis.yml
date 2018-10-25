@@ -84,6 +84,7 @@ after_success:
      Rscript -e "covr::codecov(quiet = FALSE)"; fi
  - if [ "$LINTR_COMMENT_BOT" = "true" ]; then
      Rscript -e "lintr::lint_package()"; fi
+ - cd benchmarks/icd-JSS3447-replication; make
 
 notifications:
   email:

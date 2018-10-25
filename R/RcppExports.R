@@ -224,7 +224,7 @@ icd9_is_e_cpp <- function(sv) {
 }
 
 long_to_wide_cpp <- function(icd9df, visitId, icd9Field, aggregate = TRUE) {
-    .Call(`_icd_icd9LongToWideCpp`, icd9df, visitId, icd9Field, aggregate)
+    .Call(`_icd_longToWideCpp`, icd9df, visitId, icd9Field, aggregate)
 }
 
 #' Simpler add leading zeroes without converting to parts and back

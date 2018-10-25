@@ -28,6 +28,8 @@ submission: $(SUB)
 $(SUB): .icd.built $(NAME).tar.gz purl readme $(ARTICLEPDF)
 	COPYFILE_DISABLE=1 tar -cvzf "$(SUB)" \
 	$(NAME).tar.gz \
+	medicalrisk_1.2.tar.gz \
+	comorbidity_0.1.1.tar.gz \
 	icd_*.tar.gz \
 	$(ARTICLEPDF)
 

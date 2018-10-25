@@ -3,7 +3,7 @@
 #include <stdlib.h> // for NULL
 #include <R_ext/Rdynload.h>
 
-/* FIXME: 
+/* FIXME:
    Check these declarations against the C/Fortran source code.
 */
 
@@ -32,7 +32,7 @@ extern SEXP _icd_icd9DecimalToPartsCpp(SEXP, SEXP);
 extern SEXP _icd_icd9DecimalToShort(SEXP);
 extern SEXP _icd_icd9ExpandMinor(SEXP, SEXP);
 extern SEXP _icd_icd9GetMajor(SEXP, SEXP);
-extern SEXP _icd_icd9LongToWideCpp(SEXP, SEXP, SEXP, SEXP);
+extern SEXP _icd_longToWideCpp(SEXP, SEXP, SEXP, SEXP);
 extern SEXP _icd_icd9MajMinToCode(SEXP, SEXP, SEXP);
 extern SEXP _icd_icd9MajMinToDecimal(SEXP, SEXP);
 extern SEXP _icd_icd9MajMinToParts(SEXP, SEXP);
@@ -81,7 +81,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_icd_icd9DecimalToShort",                 (DL_FUNC) &_icd_icd9DecimalToShort,                 1},
     {"_icd_icd9ExpandMinor",                    (DL_FUNC) &_icd_icd9ExpandMinor,                    2},
     {"_icd_icd9GetMajor",                       (DL_FUNC) &_icd_icd9GetMajor,                       2},
-    {"_icd_icd9LongToWideCpp",                  (DL_FUNC) &_icd_icd9LongToWideCpp,                  4},
+    {"_icd_longToWideCpp",                      (DL_FUNC) &_icd_longToWideCpp,                  4},
     {"_icd_icd9MajMinToCode",                   (DL_FUNC) &_icd_icd9MajMinToCode,                   3},
     {"_icd_icd9MajMinToDecimal",                (DL_FUNC) &_icd_icd9MajMinToDecimal,                2},
     {"_icd_icd9MajMinToParts",                  (DL_FUNC) &_icd_icd9MajMinToParts,                  2},
