@@ -60,6 +60,9 @@ matrix:
     - ICD_TEST_BUILD_DATA=true
     - ICD_TEST_SLOW=true
   allow_failures:
+  # temporarily allow failure for lintr run on travis as a dependency of lintr fails to install.
+  - r: devel
+    env: LINTR_COMMENT_BOT=true
   - r: oldrel
     r_build_args: --no-build-vignettes --no-manual --resave-data=no
     r_check_args: -no-build-vignettes --no-vignettes --ignore-vignettes --no-codoc --no-manual
