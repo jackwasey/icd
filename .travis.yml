@@ -81,10 +81,13 @@ before_script:
 
 after_success:
  - if [ "$ICD_COVERAGE" = "true" ]; then
+     cd benchmarks/icd-JSS3447-replication
+     make
+   fi
+ - if [ "$ICD_COVERAGE" = "true" ]; then
      Rscript -e "covr::codecov(quiet = FALSE)"; fi
  - if [ "$LINTR_COMMENT_BOT" = "true" ]; then
      Rscript -e "lintr::lint_package()"; fi
- - cd benchmarks/icd-JSS3447-replication; make
 
 notifications:
   email:
