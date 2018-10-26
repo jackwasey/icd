@@ -53,7 +53,8 @@ on_failure:
 
 on_success:
   - pwd
-  - cd C:/projects/icd/benchmarks/icd-JSS3447-replication; make
+  - cd /c/projects/icd/benchmarks/icd-JSS3447-replication
+  - cd /c/projects/icd/benchmarks/icd-JSS3447-replication; make
 
 artifacts:
   - path: '*.Rcheck\**\*.log'
