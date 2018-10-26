@@ -66,7 +66,7 @@ after_build:
   - pwd
   - ls -aR
   - ps: |
-      if ($MINI_BENCH -eq true) {
+      if ($MINI_BENCH -eq $true) {
         cd /c/projects/icd/benchmarks/icd-JSS3447-replication
         make
       }
