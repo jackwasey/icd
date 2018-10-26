@@ -51,7 +51,8 @@ on_failure:
   - appveyor PushArtifact failure.zip
 
 on_success:
-  - cd benchmarks/icd-JSS3447-replication; make
+  - pwd
+  - cd C:/projects/icd/benchmarks/icd-JSS3447-replication; make
 
 artifacts:
   - path: '*.Rcheck\**\*.log'
