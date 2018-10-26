@@ -23,7 +23,7 @@ before_build:
   - ls -aR
   - rm .Rinstignore  # do install everything for testing
   - sed -i'' -e '/.*[Dd]ata.*/d' .Rbuildignore # do include data for testing, some data not in github though
-  - sed -i'' -e '/\benchmark/d' .Rbuildignore # do include benchmarks
+  - sed -i'' -e '/.*benchmark.*/d' .Rbuildignore
   - Rscript -e "install.packages(c('devtools', 'Rcpp'), repos = 'https://cloud.r-project.org/'); Rcpp::compileAttributes()" # make sure Rcpp generated code is made, if not checked in to repo
 
 build_script:
@@ -43,6 +43,17 @@ environment:
       ICD_TEST_DEPRECATED: true
       ICD_TEST_BUILD_DATA: true
       ICD_TEST_SLOW: true
+    - R_VERSION: release
+      MINI_BENCH: true
+
+matrix:
+  fast_finish: true
+  allow_failures:
+    - platform: x64
+      MINI_BENCH: true
+  exclude:
+    - platform: x86
+      MINI_BENCH: true
 
 test_script:
   - travis-tool.sh run_tests
@@ -51,10 +62,14 @@ on_failure:
   - 7z a failure.zip *.Rcheck\*
   - appveyor PushArtifact failure.zip
 
-on_success:
+after_build:
   - pwd
-  - cd /c/projects/icd/benchmarks/icd-JSS3447-replication
-  - cd /c/projects/icd/benchmarks/icd-JSS3447-replication; make
+  - ls -aR
+  - ps: |
+      if ($MINI_BENCH -eq true) {
+        cd /c/projects/icd/benchmarks/icd-JSS3447-replication
+        make
+      }
 
 artifacts:
   - path: '*.Rcheck\**\*.log'
