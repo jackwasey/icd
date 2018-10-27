@@ -63,16 +63,9 @@ on_failure:
 
 after_build:
   - pwd
-  - Rscript benchmarks/icd-JSS3447-replication/install-dependencies.R
   - IF NOT "%MINI_BENCH%"=="" cd benchmarks/icd-JSS3447-replication
   - IF NOT "%MINI_BENCH%"=="" make
   - IF NOT "%MINI_BENCH%"=="" cd ../..
-  - ps: |
-      if ($Env:MINI_BENCH -eq "yes") {
-        cd benchmarks/icd-JSS3447-replication
-        make 2>&1
-        cd ../..
-        }
 
 artifacts:
   - path: '*.Rcheck\**\*.log'
