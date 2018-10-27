@@ -20,7 +20,7 @@ platform:
   - x64
 
 before_build:
-  - ls -aR
+#  - ls -aR
   - rm .Rinstignore  # do install everything for testing
   - sed -i'' -e '/.*[Dd]ata.*/d' .Rbuildignore # do include data for testing, some data not in github though
   - Rscript -e "install.packages(c('devtools', 'Rcpp'), repos = 'https://cloud.r-project.org/'); Rcpp::compileAttributes()" # make sure Rcpp generated code is made, if not checked in to repo
@@ -63,11 +63,9 @@ on_failure:
 
 after_build:
   - pwd
-  - ls -aR
   - ps: |
       if ($Env:MINI_BENCH -eq "yes") {
-        cd benchmarks/icd-JSS3447-replication
-        make
+        make -C benchmarks/icd-JSS3447-replication
       }
 
 artifacts:
