@@ -67,7 +67,7 @@ after_build:
       if ($Env:MINI_BENCH -eq "yes") {
         cd benchmarks/icd-JSS3447-replication
         make
-        cd
+        cd ..
         }
 
 artifacts:
