@@ -23,7 +23,6 @@ before_build:
   - ls -aR
   - rm .Rinstignore  # do install everything for testing
   - sed -i'' -e '/.*[Dd]ata.*/d' .Rbuildignore # do include data for testing, some data not in github though
-  - sed -i'' -e '/.*benchmark.*/d' .Rbuildignore
   - Rscript -e "install.packages(c('devtools', 'Rcpp'), repos = 'https://cloud.r-project.org/'); Rcpp::compileAttributes()" # make sure Rcpp generated code is made, if not checked in to repo
 
 build_script:
@@ -36,6 +35,8 @@ environment:
   NOT_CRAN: true
   matrix:
     - R_VERSION: release
+      MINI_BENCH: true
+    - R_VERSION: release
       ICD_TEST_DEPRECATED: true
       ICD_TEST_BUILD_DATA: true
       ICD_TEST_SLOW: true
@@ -43,8 +44,6 @@ environment:
       ICD_TEST_DEPRECATED: true
       ICD_TEST_BUILD_DATA: true
       ICD_TEST_SLOW: true
-    - R_VERSION: release
-      MINI_BENCH: true
 
 matrix:
   fast_finish: true
