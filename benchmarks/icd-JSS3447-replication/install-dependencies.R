@@ -14,7 +14,7 @@ install_jss3447_deps <- function() {
     "checkmate",
     "magrittr",
     "parallel", # used by 'comorbidity'
-    "plyr", "reshape", "hash", # used by 'medicalrisk'
+    "plyr", "reshape2", "hash", # used by 'medicalrisk'
     "testthat",
     "knitr",
     "profmem",
