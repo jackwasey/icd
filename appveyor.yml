@@ -65,8 +65,10 @@ after_build:
   - pwd
   - ps: |
       if ($Env:MINI_BENCH -eq "yes") {
-        make -C benchmarks/icd-JSS3447-replication
-      }
+        cd benchmarks/icd-JSS3447-replication
+        make
+        cd
+        }
 
 artifacts:
   - path: '*.Rcheck\**\*.log'
