@@ -35,7 +35,7 @@ environment:
   NOT_CRAN: true
   matrix:
     - R_VERSION: release
-      MINI_BENCH: true
+      MINI_BENCH: "yes"
     - R_VERSION: release
       ICD_TEST_DEPRECATED: true
       ICD_TEST_BUILD_DATA: true
@@ -49,10 +49,10 @@ matrix:
   fast_finish: true
   allow_failures:
     - platform: x64
-      MINI_BENCH: true
+      MINI_BENCH: "yes"
   exclude:
     - platform: x86
-      MINI_BENCH: true
+      MINI_BENCH: "yes"
 
 test_script:
   - travis-tool.sh run_tests
@@ -65,7 +65,7 @@ after_build:
   - pwd
   - ls -aR
   - ps: |
-      if ($MINI_BENCH -eq $true) {
+      if ($Env:MINI_BENCH -eq "yes") {
         cd /c/projects/icd/benchmarks/icd-JSS3447-replication
         make
       }
