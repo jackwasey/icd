@@ -25,6 +25,8 @@ default: result3
 
 submission: $(SUB)
 
+replmat: $(NAME).tar.gz
+
 $(SUB): .icd.built $(NAME).tar.gz purl readme $(ARTICLEPDF)
 	COPYFILE_DISABLE=1 tar -cvzf "$(SUB)" \
 	$(NAME).tar.gz \
@@ -34,9 +36,7 @@ $(SUB): .icd.built $(NAME).tar.gz purl readme $(ARTICLEPDF)
 	$(ARTICLEPDF)
 
 $(ARTICLEPDF):
-	$(RSCRIPT) -e 'rmarkdown::render("../../vignettes/$(ARTICLE).Rmd", \
-	  output_dir = getwd(), \
-	  output_file = "$(ARTICLEPDF)")'
+	$(RSCRIPT) -e 'rmarkdown::render("../../vignettes/$(ARTICLE).Rmd", output_dir = getwd(), output_file = "$(ARTICLEPDF)")'
 
 ../../vignettes/$(ARTICLE).Rmd: ;
 
@@ -153,4 +153,4 @@ Dockerfile: ;
 
 .resultall: result3 result4 result5 result6 result7 result8
 
-.PHONY: default deps all purl readme docker dockerbuid clean cleanbench submission
+.PHONY: default deps all purl readme docker dockerbuid clean cleanbench submission replmat
