@@ -86,7 +86,7 @@ before_script:
 after_success:
  - if [ "$ICD_COVERAGE" = "true" ]; then
      cd benchmarks/icd-JSS3447-replication;
-     make;
+     make bench3; make replmat;
    fi
  - if [ "$ICD_COVERAGE" = "true" ]; then
      Rscript -e "covr::codecov(quiet = FALSE)"; fi

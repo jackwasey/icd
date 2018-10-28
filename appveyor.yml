@@ -64,7 +64,8 @@ on_failure:
 after_build:
   - pwd
   - IF NOT "%MINI_BENCH%"=="" cd benchmarks/icd-JSS3447-replication
-  - IF NOT "%MINI_BENCH%"=="" make
+  - IF NOT "%MINI_BENCH%"=="" make bench3
+  - IF NOT "%MINI_BENCH%"=="" make replmat
   - IF NOT "%MINI_BENCH%"=="" cd ../..
 
 artifacts:

@@ -25,6 +25,8 @@ default: result3
 
 submission: $(SUB)
 
+replmat: $(NAME).tar.gz readme
+
 $(SUB): .icd.built $(NAME).tar.gz purl readme $(ARTICLEPDF)
 	COPYFILE_DISABLE=1 tar -cvzf "$(SUB)" \
 	$(NAME).tar.gz \
@@ -34,9 +36,7 @@ $(SUB): .icd.built $(NAME).tar.gz purl readme $(ARTICLEPDF)
 	$(ARTICLEPDF)
 
 $(ARTICLEPDF):
-	$(RSCRIPT) -e 'rmarkdown::render("../../vignettes/$(ARTICLE).Rmd", \
-	  output_dir = getwd(), \
-	  output_file = "$(ARTICLEPDF)")'
+	$(RSCRIPT) -e 'rmarkdown::render("../../vignettes/$(ARTICLE).Rmd", output_dir = getwd(), output_file = "$(ARTICLEPDF)")'
 
 ../../vignettes/$(ARTICLE).Rmd: ;
 
@@ -113,13 +113,17 @@ $(NAME).tar.gz: purl readme
 	cd $(ICDTMP); \
 	COPYFILE_DISABLE=1 tar -cvzf $(NAME).tar.gz \
 	  --exclude=".*" \
-	  --exclude="*.tar.gz" \
 	  --exclude="*.tex" \
+	  --exclude=$(NAME).tar.gz \
+	  --exclude=$(SUB) \
+	  --exclude=icd_3.\*tar.gz \
 	  --exclude="*pdf" \
 	  --exclude="dput*.R" \
 	  --exclude="$(README).Rmd" \
 	  --exclude=result\*.rds $(NAME); \
-	cd "$$olddir";	cp $(ICDTMP)/$(NAME).tar.gz "$$olddir"; rm -rf "$(ICDTMP)"
+	cd "$$olddir"; \
+	cp $(ICDTMP)/$(NAME).tar.gz "$$olddir"; \
+	rm -rf "$(ICDTMP)"
 
 .icd.built: ../../DESCRIPTION
 	R CMD build --compact-vignettes ../..
@@ -153,4 +157,4 @@ Dockerfile: ;
 
 .resultall: result3 result4 result5 result6 result7 result8
 
-.PHONY: default deps all purl readme docker dockerbuid clean cleanbench submission
+.PHONY: default deps all purl readme docker dockerbuid clean cleanbench submission replmat
