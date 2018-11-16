@@ -1,3 +1,8 @@
+# Version 3.2.2
+ * Fixes #160, #161
+ * Includes replication code for benchmarking, showing enormous speed of 'icd' over alternatives.
+ * Improved referencing and documentation
+
 # Version 3.2.1
  * Pediatric Complex Chronic Condition functions more consistent with the other comorbidity functions
  * Minor bug fixes

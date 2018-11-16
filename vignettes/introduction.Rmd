@@ -58,8 +58,12 @@ patients_icd9 <- data.frame(
 library(icd)
 head(uranium_pathology, 10)
 head(comorbid_charlson(uranium_pathology))
-comorbid_charlson(uranium_pathology, return_df = TRUE)[1:5, 1:5]
-hist(charlson(uranium_pathology))
+comorbid_charlson(uranium_pathology, 
+                  return_df = TRUE,
+                  return_binary = TRUE)[1:5, 1:5]
+hist(charlson(uranium_pathology), 
+     main = "Histogram of Charlson scores in Uranium data",
+     xlab = "Charlson Score")
 ```
 
 ## Introduction
@@ -67,6 +71,8 @@ hist(charlson(uranium_pathology))
 ```{r pkgdesc, results='asis', echo = FALSE}
 cat(utils::packageDescription("icd")$Description)
 ```
+
+**This package is what you need to generate data for 'Table 1' of your prospective or retrospective study.**
 
 When calculating which patients have which comorbidities, the data are typically structured in long or wide formats:
 ```{r show data formats, echo=TRUE}
@@ -107,8 +113,9 @@ vermont_cmb <- vermont_dx %>% wide_to_long %>%
 
 head(vermont_cmb)
 
-barplot(colSums(vermont_cmb[,1:5]),
-        main = "Histogram of Elixhauser Comorbidities in Vermont data")
+barplot(colSums(vermont_cmb[, 1:5]),
+        main = "Incidence of Elixhauser Comorbidities in Vermont data")
+
 
 ```
 
@@ -233,16 +240,15 @@ This package contains ICD-9-CM to comorbidity mappings from several sources, bas
 
 ### AHRQ comorbidity classification
 
-The AHRQ keeps an updated version of the Elixhauser classification of ICD-9-CM codes into comorbidities, useful for research. They provide the data in the form of SAS code. The names of the comorbidities derived from ICD-9 and ICD-10 codes are the same. Maps contain the ICD code to comorbidity mappings; the functions that apply those mappings are called things like `icd10_comorbid_ahrq`.
+The AHRQ keeps an updated version of the Elixhauser classification of ICD-9-CM codes into comorbidities, useful for research. They provide the data in the form of SAS code [@AgencyforHealthcareResearchandQuality_Elixhausercomorbiditysoftware_2018]. The names of the comorbidities derived from ICD-9 and ICD-10 codes are the same. Maps contain the ICD code to comorbidity mappings; the functions that apply those mappings are called things like `icd10_comorbid_ahrq`.
 ```{r ahrq}
-#icd9_map_ahrq <- icd:::sas_parse_ahrq() # user doesn't need to do this
 names(icd9_map_ahrq)
 icd9_map_ahrq$CHF[1:5]
 icd10_map_ahrq$CHF[1:5]
 ```
 
 ### Elixhauser comorbidities
-Elixhauser originally devleoped this set of comorbidities to predict long term mortality based on hospital ICD-9-CM coding records. The AHRQ comorbidities are an updated version of this, however the original Elixhauser have been used in many publications. The ICD-9-CM codes have changed slightly over the years.
+Elixhauser originally devleoped this set of comorbidities to predict long term mortality based on hospital ICD-9-CM coding records [@elixhauser_comorbidity_1998]. The AHRQ comorbidities are an updated version of this, however the original Elixhauser have been used in many publications.
 ```{r elix}
 # the names of the comorbidities in each map are available as named lists:
 names_elix[1:5]
@@ -253,7 +259,7 @@ icd10_map_elix$HTNcx
 ```
 
 ### Quan
-Quan's paper looked at indices using both ICD-10 and ICD-9-CM. Quan generated updated ICD-9-CM codes for all 30 of Elixhauser and all 17 of Charlson/Deyo's comorbidities. Thus there are two 'Quan' comorbidity mappings.
+In a classic paper, Quan [@quan_updating_2011] paper looked at indices using both ICD-10 and ICD-9-CM. Quan generated updated ICD-9-CM codes for all 30 of Elixhauser and all 17 of Charlson/Deyo's comorbidities. Thus there are two 'Quan' comorbidity mappings.
 ```{r quan elix}
 names(icd10_map_quan_deyo)
 names(icd10_map_quan_elix)
@@ -355,3 +361,5 @@ data.frame(code = lost_since_27, desc = lost_since_27 %>% explain_code)
 ## Conclusion
 
 This package allows fluid, fast and accurate manipulation of ICD-9 and ICD-10 codes, especially when combined with [magrittr](https://cran.r-project.org/package=magrittr). Suggestions, contributions and comments are welcome via [github](https://github.com/jackwasey/icd/issues).
+
+## References

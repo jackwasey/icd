@@ -3,8 +3,7 @@ title: "ICD-10 comorbidities"
 author: "Jack O. Wasey"
 date: "`r Sys.Date()`"
 output:
-  html_document:
-    toc: yes
+  html_document
 vignette: >
   %\VignetteIndexEntry{ICD-10 comorbidities}
   %\VignetteEngine{knitr::rmarkdown}
@@ -43,13 +42,19 @@ knitr::opts_chunk$set(
 )
 ```
 
-The [icd package](https://cran.r-project.org/package=icd) for R includes ICD-10 support, sample ICD-10-CM data, and [fast comorbidity calculations](introduction.html) from ICD-10 (and ICD-9) diagnostic codes to the standard comorbidities defined in the literature by Charlson, Quan, Deyo, Elixhauser, [pediatric complex chronic conditions](pccc.html) and the US AHRQ. There are also 2018 ICD-10-CM procedure codes, and a mapping to categorize these. The sample data are from the [US Transuranium and Uranium Registries](https://ustur.wsu.edu/about-us/) where de-identified diagnoses are given for a few hundred pathology cases relating to uranium exposure.
+# Introduction
 
-The sample data is in the 'long' format, i.e., multiple rows per case
+The [icd package](https://cran.r-project.org/package=icd) for R includes ICD-10-CM definitions, sample ICD-10-CM data, and [very fast](efficiency.html) [comorbidity calculations](introduction.html) from ICD-10 diagnostic and procedure codes (and ICD-9, or other schemes) to the standard comorbidities defined in the literature following Charlson [@charlson_new_1987], Quan, Deyo [@quan_coding_2005], Elixhauser [@elixhauser_comorbidity_1998], [pediatric complex chronic conditions](pccc.html) [@Feudtner_Pediatriccomplexchronic_2014] and the US AHRQ [@AgencyforHealthcareResearchandQuality_Elixhausercomorbiditysoftware_2018]. There are also 2018 ICD-10-CM procedure codes, and a mapping to categorize these. The sample data are from the [US Transuranium and Uranium Registries](https://ustur.wsu.edu/about-us/) where deidentified diagnoses are given for a few hundred pathology cases relating to uranium exposure.
+
+The sample data is in the 'long' format, i.e., multiple rows per case.
 ```{r uranium-long}
 uranium_pathology[1:10, ]
 ```
-We can convert the date from long to wide format easily. This is done quickly in C++, and gives reliable output with factors). It also has other features which make it work well with other functions in this package. However, you may be happier using \pkg{dplyr} and friends for this manipulation.
+Pick a code, and see what it means.
+```{r explain10}
+explain_code("R55")
+```
+We can convert the date from long to wide format easily, accounting for the most common features of medical coding data. You may be happier using \pkg{dplyr} and friends for this manipulation, and you will find that 'icd' functions work well with \pkg{magrittr} and the 'tidyverse' packages, although none are used internally.
 ```{r uranium-wide}
 uranium_pathology %>% long_to_wide %>% head
 ```
@@ -65,7 +70,8 @@ The ICD-10-CM mappings are recorded a bit differently from the ICD-9-CM mappings
 ```{r cholera}
 # create trivial comorbidity map:
 cholera_typhoid_map <- list(cholera = "A00", typhoid = "A01")
-patients <- data.frame(patient = c("0001", "0001", "0002"), code = c("A001234567", "A01", "A019"))
+patients <- data.frame(patient = c("0001", "0001", "0002"), 
+                       code = c("A001234567", "A01", "A019"))
 comorbid(patients , map = cholera_typhoid_map)
 ```
 Here are the codes for hypertension with complications from Quan et al. Note that the vector has class `icd10` and has the attribute `icd_short_diag` indicating there are no decimal point delimiters in the codes.
@@ -73,9 +79,10 @@ Here are the codes for hypertension with complications from Quan et al. Note tha
 icd10_map_quan_elix$HTNcx
 ```
 
-## Procedure codes
+# Procedure codes
 
 The AHRQ publishes an annually updated categorization of ICD-10-CM procedure codes into four classes, representing diagnostic and therapeutic procedures, each being either minor or major.
+
 ```{r icd10pcs}
 set.seed(1441)
 pts <- data.frame(id = sample(LETTERS, 10),
@@ -93,3 +100,5 @@ For more information on working with ICD-10 codes, see the introduction vignette
 ?comorbid
 ?explain
 ```
+
+# References
