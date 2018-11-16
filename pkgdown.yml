@@ -2,14 +2,14 @@ pandoc: 2.2.1
 pkgdown: 1.1.0
 pkgdown_sha: ~
 articles:
-  Charlson_and_other_scores: Charlson_and_other_scores.html
-  Comparing_Comorbidity_Mappings_Vignette: Comparing_Comorbidity_Mappings_Vignette.html
-  Efficient_calculation_of_comorbidities_from_medical_codes: Efficient_calculation_of_comorbidities_from_medical_codes.html
+  CMS-HCC: CMS-HCC.html
+  PCCC: PCCC.html
   Ranges: Ranges.html
-  Using_Hierarchical_Condition_Codes: Using_Hierarchical_Condition_Codes.html
+  charlson-scores: charlson-scores.html
+  compare-maps: compare-maps.html
+  efficiency: efficiency.html
   icd-10: icd-10.html
   introduction: introduction.html
-  pccc: pccc.html
 urls:
   reference: https://jackwasey.github.io/icd//reference
   article: https://jackwasey.github.io/icd//articles
