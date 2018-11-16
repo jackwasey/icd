@@ -10,7 +10,6 @@
 #'
 #' These feature from base R are missing: \code{exclude = NA, ordered =
 #' is.ordered(x), nmax = NA}
-#' @author Kevin Ushey, adapted by Jack Wasey
 #' @param x An object of atomic type \code{integer}, \code{numeric},
 #'   \code{character} or \code{logical}.
 #' @param levels An optional character vector of levels. Is coerced to the same

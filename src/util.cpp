@@ -97,7 +97,8 @@ bool icd9ComparePair(pas a, pas b) {
 }
 
 // add one because R indexes from 1, not 0
-inline std::size_t getSecondPlusOne(const std::pair<std::string, std::size_t>& p) {
+inline std::size_t getSecondPlusOne(const std::pair<std::string,
+                                    std::size_t>& p) {
   return p.second + 1;
 }
 
@@ -110,12 +111,14 @@ std::vector<std::size_t> icd9OrderCpp(VecStr x) {
   for (std::size_t i = 0; i != x.size(); ++i)
     vp.push_back(std::make_pair(x[i], i));
   std::sort(vp.begin(), vp.end(), icd9ComparePair);
-  std::transform(vp.begin(), vp.end(), std::back_inserter(out), getSecondPlusOne);
+  std::transform(vp.begin(), vp.end(), std::back_inserter(out),
+                 getSecondPlusOne);
   return out;
 }
 
 template <int RTYPE>
-IntegerVector matchFastTemplate(const Vector<RTYPE>& x, const Vector<RTYPE>& table) {
+IntegerVector matchFastTemplate(const Vector<RTYPE>& x,
+                                const Vector<RTYPE>& table) {
   return(match(x, table));
 }
 
@@ -133,7 +136,8 @@ SEXP matchFast(SEXP x, SEXP table) {
 }
 
 template <int RTYPE>
-LogicalVector inFastTemplate(const Vector<RTYPE>& x, const Vector<RTYPE>& table) {
+LogicalVector inFastTemplate(const Vector<RTYPE>& x,
+                             const Vector<RTYPE>& table) {
   return(!is_na(match(x, table)));
 }
 
