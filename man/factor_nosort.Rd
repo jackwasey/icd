@@ -65,8 +65,5 @@ f <- factor(c("a", "b", "b", "c"))
 g <- icd:::factor_nosort(f, levels = c("a", "c", "b"))
 stopifnot(g[4] == "c")
 }
-\author{
-Kevin Ushey, adapted by Jack Wasey
-}
 \keyword{internal}
 \keyword{manip}

@@ -11,7 +11,7 @@ if [ -d vignettes ]; then
   trap popd EXIT
 fi
 
-bibtool -s gplv3.bib other.bib icd.bib -- preserve.key.case=on > all.bib
+bibtool -s gplv3.bib other.bib icdjss.bib -- preserve.key.case=on > all.bib
 
 # make sure there are no unescaped underscores in the URLs:
 if grep '[^\]_' all.bib | grep -v ^@
@@ -19,15 +19,10 @@ then
   echo "Underscores found in all.bib entries"
 
   echo "attempting to fix"
-  perl -pi -e 's/(url.*[^\\])_(.*)/\1\\_\2/g' all.bib
-  perl -pi -e 's/(url.*[^\\])_(.*)/\1\\_\2/g' all.bib
-  perl -pi -e 's/(url.*[^\\])_(.*)/\1\\_\2/g' all.bib
-  perl -pi -e 's/(url.*[^\\])_(.*)/\1\\_\2/g' all.bib
-  perl -pi -e 's/(url.*[^\\])_(.*)/\1\\_\2/g' all.bib
-  perl -pi -e 's/(url.*[^\\])_(.*)/\1\\_\2/g' all.bib
-  perl -pi -e 's/(url.*[^\\])_(.*)/\1\\_\2/g' all.bib
-  perl -pi -e 's/(url.*[^\\])_(.*)/\1\\_\2/g' all.bib
+  for run in {1..10}
+  do
+    perl -pi -e 's/(url.*[^\\])_(.*)/\1\\_\2/g' all.bib
+  done
   exit 1
 fi
-
 

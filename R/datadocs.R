@@ -238,13 +238,9 @@ NULL
 #' There are seven comorbidity maps which represent the combinations of
 #' ICD-9, ICD-10, diagnosis and procedure codes, and three also with a
 #' set of 'fixed' codes. (See reference).
-#' @references Feudtner C, et al. Pediatric complex chronic conditions
-#'   classification system version 2: updated for ICD-10 and complex
-#'   medical technology dependence and transplantation, BMC Pediatrics,
-#'   2014, 14:199, DOI: 10.1186/1471-2431-14-199
 #' @references Feudtner C, Feinstein JA, Zhong W, Hall M, Dai D.
-#'   Pediatric complex chronicconditions classification system version
-#'   2: updated for ICD-10 and complexmedical technology dependence and
+#'   Pediatric complex chronic conditions classification system version
+#'   2: updated for ICD-10 and complex medical technology dependence and
 #'   transplantation. BMC Pediatr. 2014 Aug8;14:199. doi:
 #'   10.1186/1471-2431-14-199.
 #'   \url{https://www.ncbi.nlm.nih.gov/pubmed/25102958}
