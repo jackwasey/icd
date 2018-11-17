@@ -1,7 +1,8 @@
-# Version 3.2.2
+# Version 3.3
  * Fixes #160, #161
  * Includes replication code for benchmarking, showing enormous speed of 'icd' over alternatives.
  * Improved referencing and documentation
+ * Functions to print vectors of ICD codes more cleanly when they have 'icd' classes or attributes.
 
 # Version 3.2.1
  * Pediatric Complex Chronic Condition functions more consistent with the other comorbidity functions

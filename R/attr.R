@@ -104,3 +104,10 @@ is.icd_short_diag <- function(x, must_work = FALSE) {
   else
     isTRUE(res)
 }
+
+#' Remove any attributes set by 'icd'
+#' @keywords internal
+icd_attr_clean <- function(x) {
+  attr(x, "icd_short_diag") <- NULL
+  x
+}

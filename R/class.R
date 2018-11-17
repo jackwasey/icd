@@ -461,3 +461,52 @@ is.icd_wide_data <- function(x) inherits(x, "icd_wide_data")
 #' @rdname is.icd9
 #' @export
 is.comorbidity_map <- function(x) inherits(x, "comorbidity_map")
+
+#' Print ICD codes and comorbidity maps cleanly
+#' @examples
+#' x <- structure(
+#'   c("40201", "2258", "7208", "25001", "34400", "4011", "4011", NA),
+#'   class = c("icd9cm", "icd9", "character"),
+#'   icd_short_diag = TRUE)
+#' print(x)
+#' print(x, verbose = TRUE)
+#' # as.factor drops any 'icd' classes
+#' print(as.factor(x), verbose = TRUE)
+#' @param x ICD codes to be printed
+#' @param verbose Annotate based on code attributes, e.g., decimal versus short
+#'   codes.
+#' @keywords internal
+#' @export
+print.icd9 <- function(x, verbose = FALSE, ...)
+  print_codes(x,
+              ifelse(is.icd9cm(x), "ICD-9-CM", "ICD-9"),
+              verbose = verbose, ...)
+
+#' @rdname print.icd9
+#' @examples
+#' u <- uranium_pathology[1:10, "icd10"]
+#' print(u)
+#' print(u, verbose = TRUE)
+#' # as.character will unclass the 'icd' classes
+#' print(as.character(u), verbose = TRUE)
+#' @keywords internal
+#' @export
+print.icd10 <- function(x, verbose = FALSE, ...)
+  print_codes(x,
+              ifelse(is.icd10cm(x), "ICD-10-CM", "ICD-10"),
+              verbose = verbose, ...)
+
+print_codes <- function(x, code_str, verbose = FALSE, ...) {
+  if (verbose) {
+    if (is.icd_short_diag(x))
+      cat("Short-form", code_str, "codes:\n")
+    else if (is.icd_decimal_diag(x))
+      cat("Decimal-form", code_str, "codes:\n")
+    else
+      cat(code_str, "codes (short/decimal attribute not set):\n")
+  }
+  x <- icd_attr_clean(x)
+  icd_cl <- class(x) %in% c(icd9_classes, icd10_classes)
+  class(x) <- class(x)[!icd_cl]
+  print(x, ...)
+}
