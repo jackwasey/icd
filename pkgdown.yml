@@ -3,12 +3,12 @@ pkgdown: 1.1.0
 pkgdown_sha: ~
 articles:
   CMS-HCC: CMS-HCC.html
+  ICD-10: ICD-10.html
   PCCC: PCCC.html
   Ranges: Ranges.html
   charlson-scores: charlson-scores.html
   compare-maps: compare-maps.html
   efficiency: efficiency.html
-  icd-10: icd-10.html
   introduction: introduction.html
 urls:
   reference: https://jackwasey.github.io/icd//reference
