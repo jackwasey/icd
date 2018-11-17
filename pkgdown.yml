@@ -5,11 +5,11 @@ articles:
   CMS-HCC: CMS-HCC.html
   ICD-10: ICD-10.html
   PCCC: PCCC.html
-  Ranges: Ranges.html
   charlson-scores: charlson-scores.html
   compare-maps: compare-maps.html
   efficiency: efficiency.html
   introduction: introduction.html
+  ranges: ranges.html
 urls:
   reference: https://jackwasey.github.io/icd//reference
   article: https://jackwasey.github.io/icd//articles
