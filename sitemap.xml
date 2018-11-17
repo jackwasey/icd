@@ -367,6 +367,9 @@
     <loc>https://jackwasey.github.io/icd//reference/icd9cm_latest_edition.html</loc>
   </url>
   <url>
+    <loc>https://jackwasey.github.io/icd//reference/icd_attr_clean.html</loc>
+  </url>
+  <url>
     <loc>https://jackwasey.github.io/icd//reference/icd_classes_conflict.html</loc>
   </url>
   <url>
@@ -419,6 +422,9 @@
   </url>
   <url>
     <loc>https://jackwasey.github.io/icd//reference/print.comorbidity_map.html</loc>
+  </url>
+  <url>
+    <loc>https://jackwasey.github.io/icd//reference/print.icd9.html</loc>
   </url>
   <url>
     <loc>https://jackwasey.github.io/icd//reference/random_string.html</loc>

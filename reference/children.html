@@ -68,7 +68,7 @@ codes which are defined or billable (leaf nodes)." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Comorbidity calculations and tools for ICD-9 and ICD-10 codes</a>
-        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">3.2.2</span>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">3.3</span>
       </span>
     </div>
 
@@ -259,23 +259,11 @@ only applies to ICD-10-CM for now).</p></li>
     <pre class="examples"><div class='input'><span class='fu'>library</span>(<span class='no'>magrittr</span>, <span class='kw'>warn.conflicts</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>quietly</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>) <span class='co'># optional</span>
 
 <span class='co'># no children other than self</span>
-<span class='fu'>children</span>(<span class='st'>"10201"</span>, <span class='kw'>short_code</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>defined</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; [1] "10201"
-#&gt; attr(,"icd_short_diag")
-#&gt; [1] TRUE
-#&gt; attr(,"class")
-#&gt; [1] "icd9"      "character"</div><div class='input'>
+<span class='fu'>children</span>(<span class='st'>"10201"</span>, <span class='kw'>short_code</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>defined</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; [1] "10201"</div><div class='input'>
 <span class='co'># guess it was ICD-9 and a short, not decimal code</span>
-<span class='fu'>children</span>(<span class='st'>"0032"</span>)</div><div class='output co'>#&gt; [1] "0032"  "00320" "00321" "00322" "00323" "00324" "00329"
-#&gt; attr(,"icd_short_diag")
-#&gt; [1] TRUE
-#&gt; attr(,"class")
-#&gt; [1] "icd9"      "character"</div><div class='input'>
+<span class='fu'>children</span>(<span class='st'>"0032"</span>)</div><div class='output co'>#&gt; [1] "0032"  "00320" "00321" "00322" "00323" "00324" "00329"</div><div class='input'>
 <span class='co'># empty because 102.01 is not meaningful</span>
-<span class='fu'>children</span>(<span class='st'>"10201"</span>, <span class='kw'>short_code</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>defined</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; character(0)
-#&gt; attr(,"icd_short_diag")
-#&gt; [1] TRUE
-#&gt; attr(,"class")
-#&gt; [1] "icd9"      "character"</div><div class='input'><span class='fu'>children</span>(<span class='st'>"003"</span>, <span class='kw'>short_code</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>defined</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>) <span class='kw'>%&gt;%</span>
+<span class='fu'>children</span>(<span class='st'>"10201"</span>, <span class='kw'>short_code</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>defined</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; character(0)</div><div class='input'><span class='fu'>children</span>(<span class='st'>"003"</span>, <span class='kw'>short_code</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>defined</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>) <span class='kw'>%&gt;%</span>
   <span class='fu'><a href='explain_code.html'>explain_code</a></span>(<span class='kw'>condense</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>short_code</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt;  [1] "Other salmonella infections"                
 #&gt;  [2] "Salmonella gastroenteritis"                 
 #&gt;  [3] "Salmonella septicemia"                      
@@ -288,19 +276,7 @@ only applies to ICD-10-CM for now).</p></li>
 #&gt; [10] "Other localized salmonella infections"      
 #&gt; [11] "Other specified salmonella infections"      
 #&gt; [12] "Salmonella infection, unspecified"          </div><div class='input'>
-<span class='fu'>children</span>(<span class='kw'>short_code</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='st'>"100.0"</span>)</div><div class='output co'>#&gt; [1] "100.0"
-#&gt; attr(,"icd_short_diag")
-#&gt; [1] FALSE
-#&gt; attr(,"class")
-#&gt; [1] "icd9"      "character"</div><div class='input'><span class='fu'>children</span>(<span class='kw'>short_code</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='st'>"100.00"</span>)</div><div class='output co'>#&gt; character(0)
-#&gt; attr(,"icd_short_diag")
-#&gt; [1] FALSE
-#&gt; attr(,"class")
-#&gt; [1] "icd9"      "character"</div><div class='input'><span class='fu'>children</span>(<span class='kw'>short_code</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='st'>"2.34"</span>)</div><div class='output co'>#&gt; character(0)
-#&gt; attr(,"icd_short_diag")
-#&gt; [1] FALSE
-#&gt; attr(,"class")
-#&gt; [1] "icd9"      "character"</div></pre>
+<span class='fu'>children</span>(<span class='kw'>short_code</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='st'>"100.0"</span>)</div><div class='output co'>#&gt; [1] "100.0"</div><div class='input'><span class='fu'>children</span>(<span class='kw'>short_code</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='st'>"100.00"</span>)</div><div class='output co'>#&gt; character(0)</div><div class='input'><span class='fu'>children</span>(<span class='kw'>short_code</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='st'>"2.34"</span>)</div><div class='output co'>#&gt; character(0)</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

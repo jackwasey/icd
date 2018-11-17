@@ -68,7 +68,7 @@ result" />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Comorbidity calculations and tools for ICD-9 and ICD-10 codes</a>
-        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">3.2.2</span>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">3.3</span>
       </span>
     </div>
 
@@ -183,23 +183,13 @@ result</p>
     <pre class="examples"><div class='input'><span class='no'>x</span> <span class='kw'>&lt;-</span> <span class='fu'>list</span>(<span class='kw'>my_codes</span> <span class='kw'>=</span> <span class='fu'><a href='set_icd_class.html'>as.icd9</a></span>(<span class='fu'>c</span>(<span class='st'>"V10.1"</span>, <span class='st'>"441.1"</span>)))
 <span class='no'>x</span>[<span class='fl'>1</span>]</div><div class='output co'>#&gt; $my_codes
 #&gt; [1] "V10.1" "441.1"
-#&gt; attr(,"class")
-#&gt; [1] "icd9"      "character"
-#&gt; </div><div class='input'><span class='no'>x</span><span class='kw'>[[</span><span class='fl'>1</span>]]</div><div class='output co'>#&gt; [1] "V10.1" "441.1"
-#&gt; attr(,"class")
-#&gt; [1] "icd9"      "character"</div><div class='input'><span class='no'>x</span><span class='kw'>[[</span><span class='fl'>1</span>]][<span class='fl'>2</span>]</div><div class='output co'>#&gt; [1] "441.1"
-#&gt; attr(,"class")
-#&gt; [1] "icd9"      "character"</div><div class='input'><span class='co'># subsetting a list should give the underlying data structure type,</span>
+#&gt; </div><div class='input'><span class='no'>x</span><span class='kw'>[[</span><span class='fl'>1</span>]]</div><div class='output co'>#&gt; [1] "V10.1" "441.1"</div><div class='input'><span class='no'>x</span><span class='kw'>[[</span><span class='fl'>1</span>]][<span class='fl'>2</span>]</div><div class='output co'>#&gt; [1] "441.1"</div><div class='input'><span class='co'># subsetting a list should give the underlying data structure type,</span>
 <span class='co'># preserving the ICD class</span>
 <span class='fu'>stopifnot</span>(!<span class='fu'>inherits</span>(<span class='no'>x</span><span class='kw'>[[</span><span class='fl'>1</span>]], <span class='st'>"list"</span>))
 <span class='fu'>stopifnot</span>(!<span class='fu'>inherits</span>(<span class='no'>x</span><span class='kw'>[[</span><span class='fl'>1</span>]][<span class='fl'>2</span>], <span class='st'>"list"</span>))
 
 <span class='no'>y</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='set_icd_class.html'>as.icd10</a></span>(<span class='fu'>c</span>(<span class='st'>"A01"</span>, <span class='st'>"B0234"</span>))
-<span class='no'>y</span>[<span class='fl'>2</span>]</div><div class='output co'>#&gt; [1] "B0234"
-#&gt; attr(,"class")
-#&gt; [1] "icd10"     "character"</div><div class='input'><span class='no'>y</span><span class='kw'>[[</span><span class='fl'>2</span>]]</div><div class='output co'>#&gt; [1] "B0234"
-#&gt; attr(,"class")
-#&gt; [1] "icd10"     "character"</div><div class='input'><span class='fu'>stopifnot</span>(<span class='fu'>inherits</span>(<span class='no'>y</span>[<span class='fl'>2</span>], <span class='st'>"icd10"</span>))
+<span class='no'>y</span>[<span class='fl'>2</span>]</div><div class='output co'>#&gt; [1] "B0234"</div><div class='input'><span class='no'>y</span><span class='kw'>[[</span><span class='fl'>2</span>]]</div><div class='output co'>#&gt; [1] "B0234"</div><div class='input'><span class='fu'>stopifnot</span>(<span class='fu'>inherits</span>(<span class='no'>y</span>[<span class='fl'>2</span>], <span class='st'>"icd10"</span>))
 <span class='fu'>stopifnot</span>(<span class='fu'>inherits</span>(<span class='no'>y</span><span class='kw'>[[</span><span class='fl'>2</span>]], <span class='st'>"icd10"</span>))</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">

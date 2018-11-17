@@ -73,7 +73,7 @@ databases." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Comorbidity calculations and tools for ICD-9 and ICD-10 codes</a>
-        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">3.2.2</span>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">3.3</span>
       </span>
     </div>
 
@@ -285,27 +285,7 @@ class is not known</p></li>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='st'>"4280"</span> <span class='kw'>%i9s%</span> <span class='st'>"4289"</span></div><div class='output co'>#&gt;  [1] "4280"  "4281"  "4282"  "42820" "42821" "42822" "42823" "4283"  "42830"
-#&gt; [10] "42831" "42832" "42833" "4284"  "42840" "42841" "42842" "42843" "4289" 
-#&gt; attr(,"icd_short_diag")
-#&gt; [1] TRUE
-#&gt; attr(,"class")
-#&gt; [1] "icd9"      "character"</div><div class='input'><span class='st'>"4280"</span> <span class='kw'>%i9s%</span> <span class='st'>"42821"</span></div><div class='output co'>#&gt; [1] "4280"  "4281"  "42820" "42821"
-#&gt; attr(,"icd_short_diag")
-#&gt; [1] TRUE
-#&gt; attr(,"class")
-#&gt; [1] "icd9"      "character"</div><div class='input'><span class='st'>"42799"</span> <span class='kw'>%i9sa%</span> <span class='st'>"42802"</span> <span class='co'># doesn't include 428 or 4280</span></div><div class='output co'>#&gt; [1] "42799" "42800" "42801" "42802"
-#&gt; attr(,"icd_short_diag")
-#&gt; [1] TRUE
-#&gt; attr(,"class")
-#&gt; [1] "icd9"      "character"</div><div class='input'><span class='st'>"427.99"</span> <span class='kw'>%i9da%</span> <span class='st'>"428.02"</span></div><div class='output co'>#&gt; [1] "427.99" "428.00" "428.01" "428.02"
-#&gt; attr(,"icd_short_diag")
-#&gt; [1] FALSE
-#&gt; attr(,"class")
-#&gt; [1] "icd9"      "character"</div><div class='input'><span class='st'>"V80"</span> <span class='kw'>%i9s%</span> <span class='st'>"V810"</span></div><div class='output co'>#&gt; [1] "V80"   "V800"  "V8001" "V8009" "V801"  "V802"  "V803"  "V810" 
-#&gt; attr(,"icd_short_diag")
-#&gt; [1] TRUE
-#&gt; attr(,"class")
-#&gt; [1] "icd9"      "character"</div></pre>
+#&gt; [10] "42831" "42832" "42833" "4284"  "42840" "42841" "42842" "42843" "4289" </div><div class='input'><span class='st'>"4280"</span> <span class='kw'>%i9s%</span> <span class='st'>"42821"</span></div><div class='output co'>#&gt; [1] "4280"  "4281"  "42820" "42821"</div><div class='input'><span class='st'>"42799"</span> <span class='kw'>%i9sa%</span> <span class='st'>"42802"</span> <span class='co'># doesn't include 428 or 4280</span></div><div class='output co'>#&gt; [1] "42799" "42800" "42801" "42802"</div><div class='input'><span class='st'>"427.99"</span> <span class='kw'>%i9da%</span> <span class='st'>"428.02"</span></div><div class='output co'>#&gt; [1] "427.99" "428.00" "428.01" "428.02"</div><div class='input'><span class='st'>"V80"</span> <span class='kw'>%i9s%</span> <span class='st'>"V810"</span></div><div class='output co'>#&gt; [1] "V80"   "V800"  "V8001" "V8009" "V801"  "V802"  "V803"  "V810" </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

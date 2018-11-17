@@ -71,7 +71,7 @@ of as the inverse operation to children." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Comorbidity calculations and tools for ICD-9 and ICD-10 codes</a>
-        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">3.2.2</span>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">3.3</span>
       </span>
     </div>
 
@@ -255,16 +255,8 @@ from input data</p></li>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='no'>kids</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='children.html'>children</a></span>(<span class='st'>"V40"</span>)
-<span class='no'>kids</span></div><div class='output co'>#&gt; [1] "V40"   "V400"  "V401"  "V402"  "V403"  "V4031" "V4039" "V409" 
-#&gt; attr(,"icd_short_diag")
-#&gt; [1] TRUE
-#&gt; attr(,"class")
-#&gt; [1] "icd9"      "character"</div><div class='input'><span class='fu'>condense</span>(<span class='no'>kids</span>, <span class='kw'>defined</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; [1] "V40"</div><div class='input'><span class='no'>kids_with_undefined</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='children.html'>children</a></span>(<span class='st'>"V40"</span>, <span class='kw'>defined</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
-<span class='fu'>head</span>(<span class='no'>kids_with_undefined</span>)</div><div class='output co'>#&gt; [1] "V40"   "V400"  "V4000" "V4001" "V4002" "V4003"
-#&gt; attr(,"icd_short_diag")
-#&gt; [1] TRUE
-#&gt; attr(,"class")
-#&gt; [1] "icd9"      "character"</div><div class='input'><span class='fu'>length</span>(<span class='no'>kids_with_undefined</span>)</div><div class='output co'>#&gt; [1] 111</div><div class='input'><span class='fu'>condense</span>(<span class='no'>kids</span>, <span class='kw'>defined</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; [1] "V40"</div><div class='input'>
+<span class='no'>kids</span></div><div class='output co'>#&gt; [1] "V40"   "V400"  "V401"  "V402"  "V403"  "V4031" "V4039" "V409" </div><div class='input'><span class='fu'>condense</span>(<span class='no'>kids</span>, <span class='kw'>defined</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; [1] "V40"</div><div class='input'><span class='no'>kids_with_undefined</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='children.html'>children</a></span>(<span class='st'>"V40"</span>, <span class='kw'>defined</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
+<span class='fu'>head</span>(<span class='no'>kids_with_undefined</span>)</div><div class='output co'>#&gt; [1] "V40"   "V400"  "V4000" "V4001" "V4002" "V4003"</div><div class='input'><span class='fu'>length</span>(<span class='no'>kids_with_undefined</span>)</div><div class='output co'>#&gt; [1] 111</div><div class='input'><span class='fu'>condense</span>(<span class='no'>kids</span>, <span class='kw'>defined</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; [1] "V40"</div><div class='input'>
 <span class='co'># what happens if we have additional codes?</span>
 <span class='co'># (condense will warn if we don't explicitly ask to condense</span>
 <span class='co'># based on defined or possible codes.)</span>
@@ -282,11 +274,7 @@ from input data</p></li>
 #&gt;  [82] "42867" "42868" "42869" "4287"  "42870" "42871" "42872" "42873" "42874"
 #&gt;  [91] "42875" "42876" "42877" "42878" "42879" "4288"  "42880" "42881" "42882"
 #&gt; [100] "42883" "42884" "42885" "42886" "42887" "42888" "42889" "4289"  "42890"
-#&gt; [109] "42891" "42892" "42893" "42894" "42895" "42896" "42897" "42898" "42899"
-#&gt; attr(,"icd_short_diag")
-#&gt; [1] TRUE
-#&gt; attr(,"class")
-#&gt; [1] "icd9"      "character"</div><div class='input'><span class='fu'>condense</span>(<span class='no'>icd9_map_elix</span>$<span class='no'>CHF</span>, <span class='kw'>warn</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; [1] "39891" "40211" "40291" "40411" "40413" "40491" "40493" "428"  </div><div class='input'><span class='co'># explaining big groups of codes takes advantage of this:</span>
+#&gt; [109] "42891" "42892" "42893" "42894" "42895" "42896" "42897" "42898" "42899"</div><div class='input'><span class='fu'>condense</span>(<span class='no'>icd9_map_elix</span>$<span class='no'>CHF</span>, <span class='kw'>warn</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; [1] "39891" "40211" "40291" "40411" "40413" "40491" "40493" "428"  </div><div class='input'><span class='co'># explaining big groups of codes takes advantage of this:</span>
 <span class='fu'><a href='explain_code.html'>explain_code</a></span>(<span class='no'>icd9_map_elix</span>$<span class='no'>CHF</span>, <span class='kw'>condense</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>warn</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; [1] "Heart failure"                                                                                                                                          
 #&gt; [2] "Rheumatic heart failure (congestive)"                                                                                                                   
 #&gt; [3] "Benign hypertensive heart disease with heart failure"                                                                                                   
