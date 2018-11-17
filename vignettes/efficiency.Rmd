@@ -27,6 +27,7 @@ title:
     \pkg{icd}: Efficient Computation of Comorbidities\
     from ICD Codes Using Sparse Matrix Multiplication in \proglang{R}
   short: "\\pkg{icd}: Efficient calculation of comorbidities from ICD codes"
+pagetitle: "icd: Efficient Computation of Comorbidities from ICD Codes Using Sparse Matrix Multiplication in R"
 abstract: >
   Medical research often describes the existing diseases (comorbidities) in its study populations, and retrospective research may rely on this information for risk adjustment. Sets of International Classification of Diseases (ICD) codes are often used for high-level classification of patients into comorbidities (e.g., 'Cancer' or 'Heart Disease') to help summarize characteristics of a population. Similar tools were not available in \proglang{R}, and do not scale to big data sets. The \pkg{icd} extension for \proglang{R} includes validated mappings of ICD codes to comorbidities, and uses an efficient, fast and scalable algorithm to apply these mappings to patient data. This enables reproducible workflows with hundreds of millions of patient records as are increasingly seen in large national and international databases.
 keywords:

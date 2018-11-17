@@ -12,18 +12,18 @@ articles:
 - title: Journal of Statistical Software
   desc: This manuscript was submitted to JSS
   contents:
-  - '`Efficient_calculation_of_comorbidities_from_medical_codes`'
+  - '`efficiency`'
 
 - title: All vignettes
   desc: ~
   contents:
   - '`introduction`'
-  - '`Charlson_and_other_scores`'
-  - '`Using_Hierarchical_Condition_Codes`'
-  - '`icd-10`'
-  - '`pccc`'
-  - '`Ranges`'
-  - '`Comparing_Comorbidity_Mappings_Vignette`'
+  - '`charlson-scores`'
+  - '`CMS-HCC`'
+  - '`ICD-10`'
+  - '`PCCC`'
+  - '`ranges`'
+  - '`compare-maps`'
 
 reference:
 

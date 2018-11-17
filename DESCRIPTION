@@ -72,4 +72,4 @@ Encoding: UTF-8
 Language: en-US
 LazyData: true
 LazyDataCompression: xz
-RoxygenNote: 6.1.0
+RoxygenNote: 6.1.1
