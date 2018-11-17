@@ -18,6 +18,7 @@ along with icd. If not, see <http:#www.gnu.org/licenses/>.
 -->
 <!-- README.md is generated from README.Rmd. Please edit that file and render with rmarkdown::render("README.Rmd")
 -->
+
 icd
 ===
 
@@ -85,11 +86,46 @@ Features
 -   used, tested and benchmarked against other comorbidity calculators
     on hardware from laptops to big servers
 
-Install
--------
+Examples
+--------
+
+See also the vignettes and examples embedded in the help for each
+function for more. Here’s a taste:
 
 ``` r
-install.packages("icd")
+# install.packages("icd")
+library(icd)
+
+# Typical diagnostic code data, with many-to-many relationship
+patient_data
+#>   visit_id  icd9
+#> 1     1000 40201
+#> 2     1000  2258
+#> 3     1000  7208
+#> 4     1000 25001
+#> 5     1001 34400
+#> 6     1001  4011
+#> 7     1002  4011
+#> 8     1000  <NA>
+
+# get comorbidities using Quan's application of Deyo's Charlson comorbidity groups
+comorbid_charlson(patient_data)
+#>         MI   CHF   PVD Stroke Dementia Pulmonary Rheumatic   PUD LiverMild
+#> 1000 FALSE  TRUE FALSE  FALSE    FALSE     FALSE     FALSE FALSE     FALSE
+#> 1001 FALSE FALSE FALSE  FALSE    FALSE     FALSE     FALSE FALSE     FALSE
+#> 1002 FALSE FALSE FALSE  FALSE    FALSE     FALSE     FALSE FALSE     FALSE
+#>         DM  DMcx Paralysis Renal Cancer LiverSevere  Mets   HIV
+#> 1000  TRUE FALSE     FALSE FALSE  FALSE       FALSE FALSE FALSE
+#> 1001 FALSE FALSE      TRUE FALSE  FALSE       FALSE FALSE FALSE
+#> 1002 FALSE FALSE     FALSE FALSE  FALSE       FALSE FALSE FALSE
+
+# or go straight to the Charlson scores:
+charlson(patient_data)
+#> 1000 1001 1002 
+#>    2    2    0
+
+# for more examples, see this and other vignettes
+vignette("introduction", package = "icd")
 ```
 
 Relevance
@@ -144,65 +180,27 @@ ICD-10, but comorbidities can be generated from older ICD-9 codes and
 newer ICD-10 codes in parallel, and the comorbidities can then be
 compared.
 
-Examples
---------
-
-See also the vignettes and examples embedded in the help for each
-function for more. Here’s a taste:
-
-``` r
-library(icd)
-
-patient_data
-#>   visit_id  icd9  poa
-#> 1     1000 40201    Y
-#> 2     1000  2258 <NA>
-#> 3     1000  7208    N
-#> 4     1000 25001    Y
-#> 5     1001 34400    X
-#> 6     1001  4011    Y
-#> 7     1002  4011    E
-
-# get comorbidities using Quan's application of Deyo's Charlson comorbidity groups
-comorbid_charlson(patient_data)
-#>         MI   CHF   PVD Stroke Dementia Pulmonary Rheumatic   PUD LiverMild
-#> 1000 FALSE  TRUE FALSE  FALSE    FALSE     FALSE     FALSE FALSE     FALSE
-#> 1001 FALSE FALSE FALSE  FALSE    FALSE     FALSE     FALSE FALSE     FALSE
-#> 1002 FALSE FALSE FALSE  FALSE    FALSE     FALSE     FALSE FALSE     FALSE
-#>         DM  DMcx Paralysis Renal Cancer LiverSevere  Mets   HIV
-#> 1000  TRUE FALSE     FALSE FALSE  FALSE       FALSE FALSE FALSE
-#> 1001 FALSE FALSE      TRUE FALSE  FALSE       FALSE FALSE FALSE
-#> 1002 FALSE FALSE     FALSE FALSE  FALSE       FALSE FALSE FALSE
-
-# or go straight to the Charlson scores:
-charlson(patient_data)
-#> 1000 1001 1002 
-#>    2    2    0
-
-# get comorbidities based on present-on-arrival diagnoses, use magrittr to flow the data
-patient_data %>% filter_poa %>% comorbid_elix
-#>        CHF Arrhythmia Valvular  PHTN   PVD   HTN Paralysis NeuroOther
-#> 1000 FALSE      FALSE    FALSE FALSE FALSE FALSE     FALSE      FALSE
-#> 1001 FALSE      FALSE    FALSE FALSE FALSE  TRUE     FALSE      FALSE
-#>      Pulmonary    DM  DMcx Hypothyroid Renal Liver   PUD   HIV Lymphoma
-#> 1000     FALSE  TRUE FALSE       FALSE FALSE FALSE FALSE FALSE    FALSE
-#> 1001     FALSE FALSE FALSE       FALSE FALSE FALSE FALSE FALSE    FALSE
-#>       Mets Tumor Rheumatic Coagulopathy Obesity WeightLoss FluidsLytes
-#> 1000 FALSE FALSE     FALSE        FALSE   FALSE      FALSE       FALSE
-#> 1001 FALSE FALSE     FALSE        FALSE   FALSE      FALSE       FALSE
-#>      BloodLoss Anemia Alcohol Drugs Psychoses Depression
-#> 1000     FALSE  FALSE   FALSE FALSE     FALSE      FALSE
-#> 1001     FALSE  FALSE   FALSE FALSE     FALSE      FALSE
-```
+How to get help
+---------------
 
 Look at the help files for details and examples of almost every function
-in this package.
+in this package. There are several vignettes showing the main features.
+Many users have emailed me directly for help, and I’ll do what I can,
+but it is often better to examine or add to the list of
+[issues](https://github.com/jackwasey/icd) so we can help each other.
+Advanced users may look at the [source
+code](https://github.com/jackwasey/icd), particularly the extensive test
+suite which exercises all the key functions.
 
 ``` r
 ?comorbid
 ?comorbid_hcc
 ?explain_code
 ?is_valid
+
+# first show the list
+vignette(package = "icd")
+vignette("pccc", package = "icd")
 ```
 
 Note that reformatting from wide to long and back is not as
@@ -221,21 +219,22 @@ icd](https://github.com/jackwasey/icd), and can be installed with:
     devtools::install_github("jackwasey/icd")
 ```
 
-The *master* branch at github should always build and pass all tests and
-R CMD check, and will be similar or identical to the most recent CRAN
-release. The CRAN releases are stable milestones. Contributions and bug
-reports are encouraged and essential for this package to remain current
-and useful to the many people who have installed it.
-
 Contributing and Building
 -------------------------
 
 A substantial amount of code has now been contributed to the package.
 Contributions of any kind to `icd` are very welcome. See the \[GitHub
-issues page\]\](<https://github.com/jackwasey/icd/issues>) to see open
-issues and feature requests. Documentation, vignettes and examples are
-very welcome, especially if accompanied by some real-world data.
+issues
+page\]\](<a href="https://github.com/jackwasey/icd/issues" class="uri">https://github.com/jackwasey/icd/issues</a>)
+to see open issues and feature requests. Documentation, vignettes and
+examples are very welcome, especially if accompanied by some real-world
+data.
 
 To build `icd`, `Rcpp` must be compiled from source. This happens
-automatically on Linux, but on Mac and Windows, the following may be
-required: `install.packages("Rcpp", type="source")`
+automatically on Linux, but on Mac and Windows, the following may
+sometimes be required, especially after upgrading R itself. This is a
+limitation of the R build system.
+
+``` r
+install.packages("Rcpp", type = "source")
+```

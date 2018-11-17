@@ -38,9 +38,9 @@ knitr::opts_chunk$set(
   fig.path = "README-"
 )
 patient_data <- data.frame(
-  visit_id = c(1000, 1000, 1000, 1000, 1001, 1001, 1002),
-  icd9 = as.icd9cm(c("40201", "2258", "7208", "25001", "34400", "4011", "4011")),
-  poa = c("Y", NA, "N", "Y", "X", "Y", "E"),
+  visit_id = c(1000, 1000, 1000, 1000, 1001, 1001, 1002, 1000),
+  icd9 = as.icd9cm(c("40201", "2258", "7208", "25001",
+                     "34400", "4011", "4011", NA)),
   stringsAsFactors = FALSE
   )
 ```
@@ -82,10 +82,25 @@ cat(packageDescription("icd")$Description)
  * all internal ICD and comorbidity data is extracted directly from public data or code, allowing end-to-end reproducibility
  * used, tested and benchmarked against other comorbidity calculators on hardware from laptops to big servers
 
-## Install
+## Examples
 
-```{r simpleinstall, eval = FALSE, echo = TRUE}
-install.packages("icd")
+See also the vignettes and examples embedded in the help for each function for more. Here's a taste: 
+
+```{r example}
+# install.packages("icd")
+library(icd)
+
+# Typical diagnostic code data, with many-to-many relationship
+patient_data
+
+# get comorbidities using Quan's application of Deyo's Charlson comorbidity groups
+comorbid_charlson(patient_data)
+
+# or go straight to the Charlson scores:
+charlson(patient_data)
+
+# for more examples, see this and other vignettes
+vignette("introduction", package = "icd")
 ```
 
 ## Relevance
@@ -104,31 +119,19 @@ ICD-9 codes are not numbers, and great care is needed when matching individual c
 
 ICD-10 has a somewhat simpler format, with consistent use of a letter, then two alphanumeric characters. However, especially for ICD-10-CM, there are a multitude of qualifiers, e.g. specifying recurrence, laterality, which vastly increase the number of possible codes. This package recognizes validity of codes by syntax alone, or whether the codes appear in a canonical list. The current ICD-10-CM master list is the 2016 set. There is no capability of converting between ICD-9 and ICD-10, but comorbidities can be generated from older ICD-9 codes and newer ICD-10 codes in parallel, and the comorbidities can then be compared.
 
-## Examples
+## How to get help
 
-See also the vignettes and examples embedded in the help for each function for more. Here's a taste: 
+Look at the help files for details and examples of almost every function in this package. There are several vignettes showing the main features. Many users have emailed me directly for help, and I'll do what I can, but it is often better to examine or add to the list of [issues](https://github.com/jackwasey/icd) so we can help each other. Advanced users may look at the [source code](https://github.com/jackwasey/icd), particularly the extensive test suite which exercises all the key functions.
 
-```{r example}
-library(icd)
-
-patient_data
-
-# get comorbidities using Quan's application of Deyo's Charlson comorbidity groups
-comorbid_charlson(patient_data)
-
-# or go straight to the Charlson scores:
-charlson(patient_data)
-
-# get comorbidities based on present-on-arrival diagnoses, use magrittr to flow the data
-patient_data %>% filter_poa %>% comorbid_elix
-```
-
-Look at the help files for details and examples of almost every function in this package.
 ```{r how to get further examples, echo = TRUE, eval = FALSE}
 ?comorbid
 ?comorbid_hcc
 ?explain_code
 ?is_valid
+
+# first show the list
+vignette(package = "icd")
+vignette("pccc", package = "icd")
 ```
 
 Note that reformatting from wide to long and back is not as straightforward as using the various Hadley Wickham tools for doing this: knowing the more detailed structure of the data let's us do this better for the case of dealing with ICD codes.
@@ -141,11 +144,12 @@ The latest version is available in [github icd](https://github.com/jackwasey/icd
     devtools::install_github("jackwasey/icd")
 ```
 
-The _master_ branch at github should always build and pass all tests and R CMD check, and will be similar or identical to the most recent CRAN release. The CRAN releases are stable milestones. Contributions and bug reports are encouraged and essential for this package to remain current and useful to the many people who have installed it.
-
 ## Contributing and Building
 
 A substantial amount of code has now been contributed to the package. Contributions of any kind to `icd` are very welcome. See the [GitHub issues page]](https://github.com/jackwasey/icd/issues) to see open issues and feature requests. Documentation, vignettes and examples are very welcome, especially if accompanied by some real-world data.
 
-To build `icd`, `Rcpp` must be compiled from source. This happens automatically on Linux, but on Mac and Windows, the following may be required:
-`install.packages("Rcpp", type="source")`
+To build `icd`, `Rcpp` must be compiled from source. This happens automatically on Linux, but on Mac and Windows, the following may sometimes be required, especially after upgrading R itself. This is a limitation of the R build system.
+
+```{r eval = FALSE, echo = TRUE}
+install.packages("Rcpp", type = "source")
+```
