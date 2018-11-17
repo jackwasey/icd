@@ -31,7 +31,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Comorbidity calculations and tools for ICD-9 and ICD-10 codes</a>
-        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">3.2.2</span>
+        <span class="label label-default" data-toggle="tooltip" data-placement="bottom" title="Released package">3.3</span>
       </span>
     </div>
 
@@ -54,28 +54,28 @@
   </a>
   <ul class="dropdown-menu" role="menu">
 <li>
-      <a href="../articles/Charlson_and_other_scores.html">Charlson and Van Walraven scores</a>
+      <a href="../articles/CMS-HCC.html">Using Hierarchical Condition Codes</a>
     </li>
     <li>
-      <a href="../articles/Comparing_Comorbidity_Mappings_Vignette.html">Comparing Comorbidity Mappings</a>
+      <a href="../articles/ICD-10.html">ICD-10 comorbidities</a>
     </li>
     <li>
-      <a href="../articles/Efficient_calculation_of_comorbidities_from_medical_codes.pdf">icd: Efficient Computation of Comorbidities from ICD Codes Using Sparse Matrix Multiplication in R (PDF)</a>
+      <a href="../articles/PCCC.html">Pediatric Complex Chronic Conditions</a>
     </li>
     <li>
       <a href="../articles/Ranges.html">Ranges of ICD codes</a>
     </li>
     <li>
-      <a href="../articles/Using_Hierarchical_Condition_Codes.html">Using Hierarchical Condition Codes</a>
+      <a href="../articles/charlson-scores.html">Charlson and Van Walraven scores</a>
     </li>
     <li>
-      <a href="../articles/icd-10.html">ICD-10 comorbidities</a>
+      <a href="../articles/compare-maps.html">Comparing Comorbidity Mappings</a>
+    </li>
+    <li>
+      <a href="../articles/efficiency.pdf">icd: Efficient Computation of Comorbidities from ICD Codes Using Sparse Matrix Multiplication in R (PDF)</a>
     </li>
     <li>
       <a href="../articles/introduction.html">Quick Introduction to icd</a>
-    </li>
-    <li>
-      <a href="../articles/pccc.html">Pediatric Complex Chronic Conditions</a>
     </li>
   </ul>
 </li>
@@ -104,10 +104,10 @@
       <h1>Charlson and Van Walraven scores</h1>
                         <h4 class="author">Jack O. Wasey</h4>
             
-            <h4 class="date">2018-08-28</h4>
+            <h4 class="date">2018-11-17</h4>
       
       
-      <div class="hidden name"><code>Charlson_and_other_scores.Rmd</code></div>
+      <div class="hidden name"><code>charlson-scores.Rmd</code></div>
 
     </div>
 
@@ -183,7 +183,7 @@ along with icd. If not, see <http:#www.gnu.org/licenses/>.
 <p>The same principle can be used to calculate the Van Walraven score, which is the Charlson score counterpart for Elixhauser comorbidities.</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="st">`</span><span class="dt">Vermont Van Walraven Scores</span><span class="st">`</span> &lt;-<span class="st"> </span><span class="kw"><a href="../reference/van_walraven.html">van_walraven</a></span>(v)</a>
 <a class="sourceLine" id="cb3-2" data-line-number="2"><span class="kw">hist</span>(<span class="st">`</span><span class="dt">Vermont Van Walraven Scores</span><span class="st">`</span>)</a></code></pre></div>
-<p><img src="Charlson_and_other_scores_files/figure-html/vermontvanwalraven-1.png" width="700"></p>
+<p><img src="charlson-scores_files/figure-html/vermontvanwalraven-1.png" width="700"></p>
 </div>
 <div id="working-with-mixed-icd-9-and-icd-10-codes" class="section level2">
 <h2 class="hasAnchor">
