@@ -7,13 +7,9 @@ function finish {
   echo "Finished with $tmpd"
 }
 trap finish EXIT
-rsync -r --exclude=".git" "${ICD_HOME:-$HOME/rprojects/icd}" "$tmpd"
+#rsync -r --exclude=".git" "${ICD_HOME:-$HOME/rprojects/icd}" "$tmpd"
 pushd "$tmpd"
-R CMD build \
-  --no-build-vignettes \
-  --no-manual \
-  --resave-data=no \
-  icd
+${ICD_HOME:-$HOME/rprojects/icd}/tools/build.sh --no-build-vignettes --no-manual --resave-data=no
 
 # try to unset debug flag, so ccache caches the results regardless of original path,
 # or configure ccache to do this

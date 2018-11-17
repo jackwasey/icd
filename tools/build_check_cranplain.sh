@@ -7,10 +7,10 @@ function finish {
   echo "Finished with $tmpd"
 }
 trap finish EXIT
-rsync -r --exclude=".git" "${ICD_HOME:-$HOME/rprojects/icd}" "$tmpd"
-
+#rsync -r --exclude=".git" "${ICD_HOME:-$HOME/rprojects/icd}" "$tmpd"
 pushd "$tmpd"
-R CMD build icd
+# build with standard release options, i.e. compacting vignettes.
+${ICD_HOME:-$HOME/rprojects/icd}/tools/build.sh
 # for all environment variable options see here:
 # https://cran.r-project.org/doc/manuals/r-release/R-ints.html#Tools
 #R_MAKEVARS_USER="$HOME/.R/Makevars.clang" \

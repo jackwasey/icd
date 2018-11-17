@@ -3,7 +3,8 @@
 set -euo pipefail
 IFS=$'\n\t'
 pushd /tmp
-R CMD build --no-build-vignettes --no-manual --resave-data=no "$HOME/icd"
+# build with standard release options, i.e. compacting vignettes.
+${ICD_HOME:-$HOME/rprojects/icd}/tools/build.sh --no-build-vignettes --no-manual --resave-data=no
 
 # for all environment variable options see here:
 # https://cran.r-project.org/doc/manuals/r-release/R-ints.html#Tools

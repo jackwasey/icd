@@ -7,13 +7,9 @@ function finish {
   echo "Finished with $tmpd"
 }
 trap finish EXIT
-rsync -r --exclude=".git" "${ICD_HOME:-$HOME/rprojects/icd}" "$tmpd"
+# rsync -r --exclude=".git" "${ICD_HOME:-$HOME/rprojects/icd}" "$tmpd"
 pushd "$tmpd"
-R CMD build \
-  --no-build-vignettes \
-  --no-manual \
-  --resave-data=no \
-  icd
+${ICD_HOME:-$HOME/rprojects/icd}/tools/build.sh --no-build-vignettes --no-manual --resave-data=no
 
 # for all environment variable options see here:
 # https://cran.r-project.org/doc/manuals/r-release/R-ints.html#Tools

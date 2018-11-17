@@ -5,13 +5,11 @@ function finish {
   echo "Not cleaning $tmpd"
 }
 trap finish EXIT
-rsync -r --exclude=".git" "${ICD_HOME:-$HOME/rprojects/icd}" "$tmpd"
+#rsync -r --exclude=".git" "${ICD_HOME:-$HOME/rprojects/icd}" "$tmpd"
 pushd "$tmpd"
-R CMD build \
-  --no-build-vignettes \
-  --no-manual \
-  --resave-data=no \
-  icd
+
+${ICD_HOME:-$HOME/rprojects/icd}/tools/build.sh --no-build-vignettes --no-manual --resave-data=no
+
 # --use-valgrind needs a .valgrindrc or VALGRIND_OPTS for options. If just running R with valgrind,
 # this is not necessary, can just specify options in the R -d "valgrind ..." command.
 
