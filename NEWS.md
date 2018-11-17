@@ -11,8 +11,8 @@
  * Eigen library is multithreaded, so OpenMP dependencies now dropped from this package, simplifying and speeding up build, dropping configure script, etc..
 
 # Version 3.2.0
- * added [Pediatric Complex Chronic Condition comorbidity classification](https://jackwasey.github.io/icd/articles/pccc.html)
- * added ICD-10 procedure code data, and AHRQ procedure code classification -- see [ICD-10 vignette](https://jackwasey.github.io/icd/articles/icd-10.html)
+ * added [Pediatric Complex Chronic Condition comorbidity classification](https://jackwasey.github.io/icd/articles/PCCC.html)
+ * added ICD-10 procedure code data, and AHRQ procedure code classification -- see [ICD-10 vignette](https://jackwasey.github.io/icd/articles/ICD-10.html)
  * added ICD-10-CM data from US CMS for 2015 to 2018
  * fixed 588 instead of 588.0 in Quan Elixhauser ICD-9 comorbidity map
  * fix regression where codes appearing in two comorbidities would only count once
