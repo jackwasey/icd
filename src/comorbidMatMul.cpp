@@ -9,6 +9,8 @@
 #include "refactor.h"
 #include <string>
 #include <cstring>
+#include "relevant.h"
+#include "mapplus.h"
 
 /*
  MAKEFLAGS=-j16 R -e 'devtools::load_all(); icd9_comorbid_ahrq(ahrq_test_dat)'
@@ -17,40 +19,6 @@
  */
 
 using namespace Rcpp;
-
-class Relevant {
-public:
-  const List& src_map;
-  const CV relevant;
-  IHS hash;
-  CV keys;
-  Relevant(const List& map, const CV& codes) : src_map(map), relevant(findRelevant(codes)), hash(IHS(relevant).fill()), keys(hash.keys()) {}
-
-  CV findRelevant(const CV& codes) {
-    std::unordered_set<std::string> r;
-    r.reserve(100 * src_map.size());
-    IHS codeHash(codes);
-    codeHash.fill();
-    DEBUG_VEC(codes);
-    DEBUG_VEC(codeHash.keys());
-    // TODO codes may be factor, if so, return levels
-    for (CV cmb : src_map) {
-      for (auto code : cmb) {
-        // IndexHash contains causes compiler warning, so compare directly:
-        if ((int) codeHash.get_index(code) != NA_INTEGER) {
-          TRACE("Pushing back " << code);
-          //r.push_back(((String) code).get_cstring());
-          r.insert(((String) code).get_cstring());
-        }
-      }
-    }
-    return(wrap(r)); // or keep as STL container?
-  }
-
-  R_xlen_t size() { return relevant.size(); }
-}; // Relevant
-
-// TODO: make exportable version of get relevant? // [[Rcpp::export]]
 
 // # nocov start
 #ifdef ICD_DEBUG
@@ -104,11 +72,12 @@ void printCornerSparse(PtsSparse x) {
 // If the icd codes are character, we can construct the indexhash, then return a
 // new factor. This is basically what factorNosort does, but I need the hash
 // internals for lookups, so can't use it directly here.
-void buildVisitCodesSparseSimple(const RObject& visits,
-                                 const RObject& codes, // todo handle factor in parent function
-                                 Relevant& rh,
-                                 PtsSparse& visMat,
-                                 VecStr& visitIds // get this from sparse matrix at end, but needed?
+void buildVisitCodesSparseSimple(
+    const RObject& visits,
+    const RObject& codes, // todo handle factor in parent function
+    Relevant& rh,
+    PtsSparse& visMat, // output
+    VecStr& visitIds // output: can get this from sparse matrix at end? Needed?
 ) {
   TRACE("Starting build of visit matrix");
   assert(Rf_length(visits) == Rf_length(codes));
@@ -175,8 +144,8 @@ void buildVisitCodesSparseSimple(const RObject& visits,
   // now we have rows and columns, just make the triplets and insert.
   for (R_xlen_t i = 0; i != rows.size(); ++i) {
     if (IntegerVector::is_na(cols[i])) {
-     TRACE("dropping NA col value");
-    continue;
+      TRACE("dropping NA col value");
+      continue;
     }
     TRACE("adding triplet at R idx:" << rows[i] << ", " << cols[i]);
     visTriplets.push_back(Triplet(rows[i] - 1, cols[i] - 1, true));
@@ -190,43 +159,39 @@ void buildVisitCodesSparseSimple(const RObject& visits,
   PRINTCORNERSP(visMat);
 }
 
-class MapPlus {
-public:
-  MapPlus(const List& icd9Mapping, const Relevant& rh);
-  void buildMatrix();
-  List map; // consider ListOf<IntegerVector>
-  DenseMap mat;
-  R_xlen_t rows() { return mat.rows(); }
-};
-// constructor
+void buildVisitCodesSparseWide(
+    const RObject& visits,
+    const String id_field,
+    const CV code_fields, // todo handle factor in parent function
+    Relevant& rh,
+    PtsSparse& visMat, // output
+    VecStr& visitIds // output: can get this from sparse matrix at end? Needed?
+) {
+
+}
+
+// MapPlus constructor
 MapPlus::MapPlus(const List& mapList, const Relevant& rh) {
-  // take a map of character vectors or factors and reduce it to only relevant
+  // take a map of character vectors and reduce it to only relevant
   // codes using hashmap
   //
   // downside is that each list element has a copy of the same relevant levels.
   //List remap(const List& map, IHS& relevantHash) {
   CharacterVector cmbs = mapList.names();
-  bool areFactors = Rf_isFactor(mapList[0]);
   for (R_xlen_t i = 0; i != mapList.size(); ++i) {
     String cmb_name = cmbs[i];
     TRACE("remapping: " << cmb_name.get_cstring());
-    if (!areFactors && TYPEOF(mapList[0]) != STRSXP)
-      Rcpp::stop("remap expects a list of only character vectors or factors.");
-    if (areFactors) {
-      TRACE("factor in input map");
-      IntegerVector this_map_cmb = mapList[i];
-      map[cmb_name] = refactor_narm(this_map_cmb, rh.keys);
-    } else { // most common case (re-use the hash!)
-      TRACE("character vector in input map");
-      CV this_map_cmb = mapList[i];
-      // make factor using existing hash, so R-indexed numbers.
-      IntegerVector this_cmb = (IntegerVector) rh.hash.lookup(this_map_cmb);
-      this_cmb.attr("levels") = (CharacterVector) rh.keys;
-      this_cmb.attr("class") = "factor";
-      this_cmb = this_cmb[!is_na(this_cmb)];
-      TRACE_VEC(this_cmb);
-      map[cmb_name] = this_cmb;
-    } // factor or not
+    if (TYPEOF(mapList[0]) != STRSXP)
+      Rcpp::stop("maps should be lists of character vectors, not factors");
+    TRACE("character vector in input map");
+    CV this_map_cmb = mapList[i];
+    // make factor using existing hash, so R-indexed numbers.
+    IntegerVector this_cmb = (IntegerVector) rh.hash.lookup(this_map_cmb);
+    this_cmb.attr("levels") = (CharacterVector) rh.keys;
+    this_cmb.attr("class") = "factor";
+    this_cmb = this_cmb[!is_na(this_cmb)];
+    TRACE_VEC(this_cmb);
+    map[cmb_name] = this_cmb;
   } // for
   DEBUG("Map reduced. Initializing the Eigen matrix");
   mat = DenseMap(rh.keys.size(), mapList.size());
@@ -277,6 +242,40 @@ void MapPlus::buildMatrix() {
 //' \url{https://eigen.tuxfamily.org/dox/TopicMultiThreading.html}
 //' @keywords internal array algebra
 // [[Rcpp::export]]
+LogicalMatrix comorbidMatMulWide(const DataFrame& data,
+                                 const List& map,
+                                 const std::string id_field,
+                                 const CV code_fields) {
+  VecStr out_row_names; // size is reserved in buildVisitCodesVec
+  RObject visits = data[id_field]; // does this copy??? RObject instead?
+
+  //CV codes = icd9df[icd9Field];
+
+  //TODO: Relevant requires CV right now, not factor
+  // Relevant r(map, codes); // potential to template over codes type
+  const List& code_data = data[code_fields];
+  Relevant r(map, code_data);
+  MapPlus m(map, r);
+  PtsSparse visMat; // reservation and sizing done within next function
+  DEBUG("*** building visMat ***");
+  buildVisitCodesSparseWide(data, id_field, code_fields,
+                              r, visMat, out_row_names);
+  DEBUG("built visit matrix");
+  if (visMat.cols() != m.rows())
+    Rcpp::stop("matrix multiplication won't work");
+  DenseMap result = visMat * m.mat; // col major result
+  DEBUG("Result rows: " << result.rows() << ", cols: " << result.cols());
+  PRINTCORNERMAP(result);
+  Rcpp::IntegerMatrix mat_out_int = Rcpp::wrap(result);
+  Rcpp::LogicalMatrix mat_out_bool = Rcpp::wrap(mat_out_int);
+  List dimnames = Rcpp::List::create(out_row_names, map.names());
+  mat_out_bool.attr("dimnames") = dimnames;
+  return mat_out_bool;
+}
+
+//' @rdname comorbidMatMulWide
+//' @keywords internal array algebra
+// [[Rcpp::export]]
 LogicalMatrix comorbidMatMulSimple(const DataFrame& icd9df,
                                    const List& icd9Mapping,
                                    const std::string visitId,
@@ -304,3 +303,4 @@ LogicalMatrix comorbidMatMulSimple(const DataFrame& icd9df,
   valgrindCallgrindStop();
   return mat_out_bool;
 }
+

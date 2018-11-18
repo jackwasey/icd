@@ -1,3 +1,6 @@
+# Version 3.4
+ * Handle 'wide' format data much more efficiently, without having to convert to long format first.
+
 # Version 3.3
  * Fixes #160, #161
  * Includes replication code for benchmarking, showing enormous speed of 'icd' over alternatives.

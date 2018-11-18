@@ -41,6 +41,7 @@ typedef std::vector<NewOutPt> NewOut;
 typedef VecVecInt::iterator NewOutIt;
 typedef std::unordered_map<std::string, VecInt::size_type> VisLk;
 typedef std::unordered_set<std::string> icd_set;
+typedef std::unordered_set<std::string> US;
 typedef Rcpp::CharacterVector CV;
 
 #include <RcppEigen.h> // also add LinkingTo element in DESCRIPTION to enable

@@ -104,6 +104,12 @@ simplify_map_lex <- function(pt_codes, map) {
 #' dense matrix is then the comorbidity map
 #' \url{https://eigen.tuxfamily.org/dox/TopicMultiThreading.html}
 #' @keywords internal array algebra
+comorbidMatMulWide <- function(data, map, id_field, code_fields) {
+    .Call(`_icd_comorbidMatMulWide`, data, map, id_field, code_fields)
+}
+
+#' @rdname comorbidMatMulWide
+#' @keywords internal array algebra
 comorbidMatMulSimple <- function(icd9df, icd9Mapping, visitId, icd9Field) {
     .Call(`_icd_comorbidMatMulSimple`, icd9df, icd9Mapping, visitId, icd9Field)
 }
