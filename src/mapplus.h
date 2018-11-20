@@ -4,7 +4,6 @@
 #include "relevant.h"
 using namespace Rcpp;
 
-
 #ifndef MAPPLUS_H_
 #define MAPPLUS_H_
 
