@@ -167,6 +167,7 @@ void buildVisitCodesSparseWide(
     PtsSparse& visMat, // output
     VecStr& visitIds // output: can get this from sparse matrix at end? Needed?
 ) {
+  DEBUG("*** building wide visMat ***");
 
 }
 
@@ -257,7 +258,6 @@ LogicalMatrix comorbidMatMulWide(const DataFrame& data,
   Relevant r(map, code_data);
   MapPlus m(map, r);
   PtsSparse visMat; // reservation and sizing done within next function
-  DEBUG("*** building visMat ***");
   buildVisitCodesSparseWide(data, id_field, code_fields,
                               r, visMat, out_row_names);
   DEBUG("built visit matrix");

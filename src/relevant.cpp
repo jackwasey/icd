@@ -26,8 +26,8 @@ void Relevant::buildCodeSet(const SEXP& codes) {
   switch (TYPEOF(codes)) {
   case INTSXP: {
     if (!Rf_isFactor(codes)) {
-      stop("Integer vector, but not factor in Relevant.");
-    }
+    stop("Integer vector, but not factor in Relevant.");
+  }
     CV code_levs = ((IntegerVector) codes).attr("levels");
     DEBUG_VEC(code_levs);
     buildCodeSetCV(code_levs);
@@ -39,11 +39,8 @@ void Relevant::buildCodeSet(const SEXP& codes) {
   }
   case VECSXP: {
     for (SEXP listItem : (List) codes) {
-    //List c = (List) codes;
-    //for (List::iterator i = c.begin(); i != c.end(); ++i) {
-      //buildCodeSet(*i);
-      buildCodeSet(listItem);
-    }
+    buildCodeSet(listItem);
+  }
     break;
   }
   default: {
@@ -52,11 +49,8 @@ void Relevant::buildCodeSet(const SEXP& codes) {
   }
 }
 
-CV Relevant::findRelevant(const SEXP& codes) {
-  //r.reserve(10); // TODO: remove this test!
-  //r.reserve(100 * src_map.size());
-  r.reserve(1); // TODO: remove okay?
-  buildCodeSet(codes);
+// do the finding
+CV Relevant::findRelevant() {
   for (CV cmb : src_map) {
     for (String cmbCode : cmb) {
       if (allCodesSet.find(cmbCode.get_cstring()) != allCodesSet.end()) {
@@ -65,5 +59,27 @@ CV Relevant::findRelevant(const SEXP& codes) {
       }
     }
   }
+  return(wrap(r)); // or keep as STL container?
+}
+
+// setup find based on a data frame, list or vector
+CV Relevant::findRelevant(const SEXP& codes) {
+  buildCodeSet(codes);
+  findRelevant();
+  return(wrap(r)); // or keep as STL container?
+}
+
+// setup find based on some columns in a data frame
+CV Relevant::findRelevant(const List& data, CV code_fields) {
+  IntegerVector cols = match(code_fields, (CV) data.names());
+  if (cols.size() == 0) return(CV::create());
+  if (any(is_na(cols))) stop("Relevant: column names not found in data frame");
+  //r.reserve(1); // TODO: reserve an acceptable size
+  //for (CV::iterator ci = code_fields.begin(); ci != code_fields.end(); ++ci)
+  //std::string code_field = (String) *ci;
+  for (auto col : cols) {
+    buildCodeSet(data[col - 1]);
+  }
+  findRelevant();
   return(wrap(r)); // or keep as STL container?
 }

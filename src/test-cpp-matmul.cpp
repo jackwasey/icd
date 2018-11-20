@@ -45,6 +45,15 @@ context("matmul cpp") {
     expect_true(r0.keys.size() == 0);
   }
 
+  test_that("make a relevant object with some cols of data frame") {
+    DataFrame df = DataFrame::create(_["dx0"] = v1, _["dx1"] = v2);
+    Relevant rdf0(map_v1, df, "dx0");
+    Relevant rdf1(map_v1, df, "dx1");
+    Relevant rdf01(map_v1, df, CV::create("dx0", "dx1"));
+    expect_true(rdf0.keys.size() == v1.size());
+    expect_true(rdf1.keys.size() == 0);
+  }
+
   test_that("make a relevant object with code factor") {
     IntegerVector f1;
     f1.push_back(2);
