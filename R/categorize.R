@@ -91,10 +91,10 @@ categorize_simple <- function(x, map, id_name, code_name,
     rownames(df_empty_out) <- NULL
     return(df_empty_out)
   }
-  mat <- comorbid_fun(icd9df = x,
-                      icd9Mapping = map,
-                      visitId = id_name,
-                      icd9Field = code_name) #nolint
+  mat <- comorbid_fun(data = x,
+                      map = map,
+                      id_name = id_name,
+                      code_name = code_name) #nolint
   # TODO: move the following into C++ where we have already hashed the vectors
   if (restore_id_order) {
     uniq_visits <- if (unique_ids)

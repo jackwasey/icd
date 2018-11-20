@@ -32,8 +32,10 @@ test_that("ordered and unordered methods on ordered data are identical", {
 test_that("cpp: failure with non character visitId", {
   pts_int_visit <- pts
   pts_int_visit$visit_id <- as.integer(pts$visit_id)
-  expect_error(long_to_wide_cpp(pts_int_visit, visitId = "visit_id", icd9Field = "code"), "converted to")
+  expect_error(
+    long_to_wide_cpp(pts_int_visit, id_name = "visit_id", code_name = "code"),
+    "converted to")
   # and make sure it works otherwise
   pts$visit_id <- as_char_no_warn(pts$visit_id)
-  res <- long_to_wide_cpp(pts, visitId = "visit_id", icd9Field = "code")
+  res <- long_to_wide_cpp(pts, id_name = "visit_id", code_name = "code")
 })

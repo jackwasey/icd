@@ -1,5 +1,6 @@
 # Version 3.4
  * Handle 'wide' format data much more efficiently, without having to convert to long format first.
+ * drop deprecated arguments to 'comorbid': visitId and icd9Field. Use 'visit_name' and 'icd_name' instead.
 
 # Version 3.3
  * Fixes #160, #161

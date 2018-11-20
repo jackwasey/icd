@@ -194,8 +194,8 @@ long_to_wide <- function(x,
   if (icd9_name_was_factor) iv_levels <- levels(x[[visit_name]])
   x[[visit_name]] <- as_char_no_warn(x[[visit_name]])
   x[[icd_name]] <- as_char_no_warn(x[[icd_name]])
-  mat <- long_to_wide_cpp(x, visitId = visit_name,
-                          icd9Field = icd_name, aggregate = aggr)
+  mat <- long_to_wide_cpp(x, id_name = visit_name,
+                          code_name = icd_name, aggregate = aggr)
   if (!return_df)
     return(as.icd_wide_data(mat))
   if (icd9_name_was_factor)

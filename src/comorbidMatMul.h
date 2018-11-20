@@ -1,12 +1,7 @@
 // [[Rcpp::depends(RcppEigen)]]
 #include "icd_types.h"
 #include "local.h"
-#include <algorithm>                   // for binary_search, copy
-#include <vector>                      // for vector, vector<>::const_iterator
-#include <unordered_set>
 #include "refactor.h"
-#include <string>
-#include <cstring>
 #include "relevant.h"
 #include "mapplus.h"
 
@@ -35,8 +30,8 @@ void buildVisitCodesSparseSimple(
 );
 void buildVisitCodesSparseWide(
     const RObject& visits,
-    const String id_field,
-    const CV code_fields, // todo handle factor in parent function
+    const List& data,
+    const CV code_fields,
     Relevant& rh,
     PtsSparse& visMat, // output
     VecStr& visitIds // output: can get this from sparse matrix at end? Needed?
@@ -45,7 +40,7 @@ LogicalMatrix comorbidMatMulWide(const DataFrame& data,
                                  const List& map,
                                  const std::string id_field,
                                  const CV code_fields);
-LogicalMatrix comorbidMatMulSimple(const DataFrame& icd9df,
-                                   const List& icd9Mapping,
-                                   const std::string visitId,
-                                   const std::string icd9Field);
+LogicalMatrix comorbidMatMulSimple(const DataFrame& data,
+                                   const List& map,
+                                   const std::string id_field,
+                                   const std::string code_field);

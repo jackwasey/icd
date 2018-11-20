@@ -49,23 +49,9 @@ void printCornerSparse(PtsSparse x) {
   else
     Rcpp::Rcout << dense << std::endl;
 }
-#define PRINTCORNERMAP(x) Rcpp::Rcout << #x << ": "; printCornerMap(x);
-#define PRINTCORNERSP(x) Rcpp::Rcout << #x << ": "; printCornerSparse(x);
-//#define ICD_ASSIGN(row,col) mat(row, col) = true; // bounds check
-#else
-#define PRINTCORNERMAP(x) ((void)0);
-#define PRINTCORNERSP(x) ((void)0);
-//#define ICD_ASSIGN(row,col) mat.coeffRef(row, col) = true;
 #endif
 // # nocov end
 
-// This is a complicated function
-//
-// Goal is to avoid any string matching or even hash calculation at all.
-//
-// visitids are easier, because we need to build an IndexHash for them, but we
-// have to do this in a type specific way. int, numeric, string, factor...
-//
 // icd codes are either factor or character type. if a factor, we can use the
 // factor level index as the column in the visit matrix, but we need to know
 // this also to construct the comorbidity matrix where the codes are rows.
@@ -85,7 +71,6 @@ void buildVisitCodesSparseSimple(
   const CV relevantKeys = rh.keys;
   const R_xlen_t relevantSize = rh.size();
   R_xlen_t vlen = Rf_length(visits);
-  DEBUG("Setting levels");
   DEBUG("relevantSize = " << relevantSize << ", vlen = " << vlen);
   std::vector<Triplet> visTriplets;
   visTriplets.reserve(vlen);
@@ -128,10 +113,6 @@ void buildVisitCodesSparseSimple(
     // lot of character processing
   } else {
     DEBUG("visits are factors");
-    // CV visit_levels = wrap(visits.attr("levels"));
-    //  use the factor level as the row number (R vs C index)
-    //rows = ((IntegerVector) visits - 1);
-    // keep R index
     rows = visits; // can do this without copy using unique_ptr?
     visitIds = as<VecStr>(rows.attr("levels"));
   }
@@ -162,14 +143,55 @@ void buildVisitCodesSparseSimple(
 
 void buildVisitCodesSparseWide(
     const RObject& visits,
-    const String id_field,
-    const CV code_fields, // todo handle factor in parent function
+    const List& data,
+    const CV code_names,
     Relevant& rh,
     PtsSparse& visMat, // output
     VecStr& visitIds // output: can get this from sparse matrix at end? Needed?
 ) {
-  DEBUG("*** building wide visMat ***");
-
+    //assert(Rf_length(visits) == Rf_length(codes));
+  const CV relevantKeys = rh.keys;
+  const R_xlen_t relevantSize = rh.size();
+  R_xlen_t vlen = Rf_length(visits);
+  std::vector<Triplet> visTriplets;
+  // visTriplets is going to be vlen * number of data cols
+  visTriplets.reserve(vlen);
+  IntegerVector rows;
+  IntegerVector cols = IntegerVector::create();
+  // cols is going to be vlen * number of data cols
+  IntegerVector data_col_names = match(code_names, (CV) data.names());
+  for (auto data_col_name : data_col_names) {
+    if (Rf_isFactor(data[data_col_name])) {
+      Rcpp::warning("Working on ", data_col_name);
+      stop("For wide data, currently codes cannot be factors.");
+    }
+    const CV& codes_cv = (CV) data[data_col_name];
+    //cols.insert(cols.end(), rh.hash.lookup(codes_cv)); // C indexed
+  }
+  if (!Rf_isFactor(visits)) {
+    CV v = (CV) visits; // assume character for now
+    CV uv = unique(v);
+    visitIds = as<VecStr>(uv);
+    rows = match(v, uv);
+  } else {
+    rows = visits; // can do this without copy using unique_ptr?
+    visitIds = as<VecStr>(rows.attr("levels"));
+  }
+  // for wide, we need to duplicate the rows to match number of cols
+  auto rows_orig = clone(rows);
+  for (auto cf : code_names) {
+    //rows.insert(rows.end(), rows_orig);
+  }
+  assert(rows.size() == cols.size());
+  visMat.resize(visitIds.size(), relevantSize); // unique ids
+  visMat.reserve(vlen); // number of triplets is just vlen (for long data)
+  // now we have rows and columns, just make the triplets and insert.
+  for (R_xlen_t i = 0; i != rows.size(); ++i) {
+    if (IntegerVector::is_na(cols[i])) continue;
+    visTriplets.push_back(Triplet(rows[i] - 1, cols[i] - 1, true));
+  }
+  visMat.setFromTriplets(visTriplets.begin(), visTriplets.end());
+  visMat.conservativeResize(visitIds.size(), relevantSize);
 }
 
 //' @title Comorbidity calculation as a matrix multiplication
@@ -196,21 +218,18 @@ void buildVisitCodesSparseWide(
 // [[Rcpp::export]]
 LogicalMatrix comorbidMatMulWide(const DataFrame& data,
                                  const List& map,
-                                 const std::string id_field,
-                                 const CV code_fields) {
+                                 const std::string id_name,
+                                 const CV code_names) {
   VecStr out_row_names; // size is reserved in buildVisitCodesVec
-  RObject visits = data[id_field]; // does this copy??? RObject instead?
-
-  //CV codes = icd9df[icd9Field];
+  RObject visits = data[id_name]; // does this copy??? RObject instead?
 
   //TODO: Relevant requires CV right now, not factor
-  // Relevant r(map, codes); // potential to template over codes type
-  const List& code_data = data[code_fields];
-  Relevant r(map, code_data);
+  // Does making a data.frame with subset of columns make a deep copy?
+  Relevant r(map, data, code_names);
   MapPlus m(map, r);
   PtsSparse visMat; // reservation and sizing done within next function
-  buildVisitCodesSparseWide(data, id_field, code_fields,
-                              r, visMat, out_row_names);
+  buildVisitCodesSparseWide(data, id_name, code_names,
+                            r, visMat, out_row_names);
   DEBUG("built visit matrix");
   if (visMat.cols() != m.rows())
     Rcpp::stop("matrix multiplication won't work");
@@ -227,21 +246,18 @@ LogicalMatrix comorbidMatMulWide(const DataFrame& data,
 //' @rdname comorbidMatMulWide
 //' @keywords internal array algebra
 // [[Rcpp::export]]
-LogicalMatrix comorbidMatMulSimple(const DataFrame& icd9df,
-                                   const List& icd9Mapping,
-                                   const std::string visitId,
-                                   const std::string icd9Field) {
-  valgrindCallgrindStart(false);
+LogicalMatrix comorbidMatMulSimple(const DataFrame& data,
+                                   const List& map,
+                                   const std::string id_name,
+                                   const std::string code_name) {
   VecStr out_row_names; // size is reserved in buildVisitCodesVec
-  RObject visits = icd9df[visitId]; // does this copy??? RObject instead?
-  CV codes = icd9df[icd9Field];
+  RObject visits = data[id_name]; // does this copy??? RObject instead?
+  CV codes = data[code_name];
   //TODO: Relevant requires CV right now, not factor
-  Relevant r(icd9Mapping, codes); // potential to template over codes type
-  MapPlus m(icd9Mapping, r);
+  Relevant r(map, codes); // potential to template over codes type
+  MapPlus m(map, r);
   PtsSparse visMat; // reservation and sizing done within next function
-  DEBUG("*** building visMat ***");
   buildVisitCodesSparseSimple(visits, codes, r, visMat, out_row_names);
-  DEBUG("built visit matrix");
   if (visMat.cols() != m.rows())
     Rcpp::stop("matrix multiplication won't work");
   DenseMap result = visMat * m.mat; // col major result
@@ -249,9 +265,7 @@ LogicalMatrix comorbidMatMulSimple(const DataFrame& icd9df,
   PRINTCORNERMAP(result);
   Rcpp::IntegerMatrix mat_out_int = Rcpp::wrap(result);
   Rcpp::LogicalMatrix mat_out_bool = Rcpp::wrap(mat_out_int);
-  List dimnames = Rcpp::List::create(out_row_names, icd9Mapping.names());
+  List dimnames = Rcpp::List::create(out_row_names, map.names());
   mat_out_bool.attr("dimnames") = dimnames;
-  valgrindCallgrindStop();
   return mat_out_bool;
 }
-

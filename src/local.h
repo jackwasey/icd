@@ -94,6 +94,15 @@ inline void printIt(const C& c, int n = 10) {
   for (int i = 0; i != std::min(n, (int) c.size()); ++i)
     o << c[i] << " ";
   o << std::endl;
+  o << "Length: " << c.size() << std::endl;
+  Rcpp::Rcout << o.str();
+  Rcpp::Rcout.flush();
+}
+
+template <typename V>
+inline void printIt(const V& v) {
+  std::ostringstream o;
+  o << v << std::endl;
   Rcpp::Rcout << o.str();
   Rcpp::Rcout.flush();
 }

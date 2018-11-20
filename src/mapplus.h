@@ -7,7 +7,6 @@ using namespace Rcpp;
 #ifndef MAPPLUS_H_
 #define MAPPLUS_H_
 
-
 class MapPlus {
 public:
   MapPlus(const List& icd9Mapping, const Relevant& rh);

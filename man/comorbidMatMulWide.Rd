@@ -7,7 +7,7 @@
 \usage{
 comorbidMatMulWide(data, map, id_field, code_fields)
 
-comorbidMatMulSimple(icd9df, icd9Mapping, visitId, icd9Field)
+comorbidMatMulSimple(data, map, id_field, code_field)
 }
 \description{
 The problem is that the matrices could be huge: the patient-icd matrix would

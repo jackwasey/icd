@@ -104,14 +104,14 @@ simplify_map_lex <- function(pt_codes, map) {
 #' dense matrix is then the comorbidity map
 #' \url{https://eigen.tuxfamily.org/dox/TopicMultiThreading.html}
 #' @keywords internal array algebra
-comorbidMatMulWide <- function(data, map, id_field, code_fields) {
-    .Call(`_icd_comorbidMatMulWide`, data, map, id_field, code_fields)
+comorbidMatMulWide <- function(data, map, id_name, code_names) {
+    .Call(`_icd_comorbidMatMulWide`, data, map, id_name, code_names)
 }
 
 #' @rdname comorbidMatMulWide
 #' @keywords internal array algebra
-comorbidMatMulSimple <- function(icd9df, icd9Mapping, visitId, icd9Field) {
-    .Call(`_icd_comorbidMatMulSimple`, icd9df, icd9Mapping, visitId, icd9Field)
+comorbidMatMulSimple <- function(data, map, id_name, code_name) {
+    .Call(`_icd_comorbidMatMulSimple`, data, map, id_name, code_name)
 }
 
 icd9PartsToShort <- function(parts) {
@@ -229,8 +229,8 @@ icd9_is_e_cpp <- function(sv) {
     .Call(`_icd_icd9_is_e_cpp`, sv)
 }
 
-long_to_wide_cpp <- function(icd9df, visitId, icd9Field, aggregate = TRUE) {
-    .Call(`_icd_longToWideCpp`, icd9df, visitId, icd9Field, aggregate)
+long_to_wide_cpp <- function(x, id_name, code_name, aggregate = TRUE) {
+    .Call(`_icd_longToWideCpp`, x, id_name, code_name, aggregate)
 }
 
 #' Simpler add leading zeroes without converting to parts and back

@@ -2,7 +2,6 @@
 #include "local.h"
 #include "valgrind_icd.h"
 #include "fastIntToString.h"
-#include <algorithm>                   // for binary_search, copy
 #include "refactor.h"
 #include <string>
 #include <cstring>
@@ -12,8 +11,8 @@
 
 using namespace Rcpp;
 
-// MapPlus constructor
-MapPlus::MapPlus(const List& mapList, const Relevant& rh) {
+// MapPlus constructor - a reduced comobidity map for one computation
+MapPlus::MapPlus(const List& mapList, const Relevant& r) {
   // take a map of character vectors and reduce it to only relevant
   // codes using hashmap
   //
@@ -28,15 +27,15 @@ MapPlus::MapPlus(const List& mapList, const Relevant& rh) {
     TRACE("character vector in input map");
     CV this_map_cmb = mapList[i];
     // make factor using existing hash, so R-indexed numbers.
-    IntegerVector this_cmb = (IntegerVector) rh.hash.lookup(this_map_cmb);
-    this_cmb.attr("levels") = (CharacterVector) rh.keys;
+    IntegerVector this_cmb = (IntegerVector) r.hash.lookup(this_map_cmb);
+    this_cmb.attr("levels") = (CharacterVector) r.keys;
     this_cmb.attr("class") = "factor";
     this_cmb = this_cmb[!is_na(this_cmb)];
     TRACE_VEC(this_cmb);
     map[cmb_name] = this_cmb;
   } // for
   DEBUG("Map reduced. Initializing the Eigen matrix");
-  mat = DenseMap(rh.keys.size(), mapList.size());
+  mat = DenseMap(r.keys.size(), mapList.size());
   mat.setZero();
   DEBUG("mat rows: " << mat.rows() << ", cols: " << mat.cols());
   buildMatrix();

@@ -28,10 +28,3 @@ test_that("ordered and unordered methods on ordered data are identical", {
   expect_true(all(pts$visit_id %in% rownames(ord)))
   expect_true(all(pts$visit_id %in% rownames(agg)))
 })
-
-test_that("cpp: failure with non character visitId", {
-  # and make sure it works otherwise
-  pts$visit_id <- as_char_no_warn(pts$visit_id)
-  expect_warning(long_to_wide_cpp(pts, visitId = "visit_id", icd9Field = "code"),
-                 regexp = NA)
-})

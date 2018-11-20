@@ -61,9 +61,7 @@ poa_choices <- c("yes", "no", "notYes", "notNo")
 #'   \code{comorbid_ahrq}, since these also name the fields correctly, apply any
 #'   hierarchical rules (see \code{hierarchy} below)
 #' @template visit_name
-#' @param visitId Deprecated. Use \code{visit_name} instead.
 #' @template icd_name
-#' @param icd9Field Deprecated. Use \code{icd_name} instead.
 #' @template short_code
 #' @template short_map
 #' @template abbrev_names
@@ -206,20 +204,9 @@ icd9_comorbid <- function(x, map, visit_name = NULL, icd_name = NULL,
                           short_map = guess_short(map),
                           return_df = FALSE, return_binary = FALSE,
                           preclean = TRUE,
-                          visitId = NULL, icd9Field = NULL, #nolint
                           categorize_fun = categorize_simple,
                           comorbid_fun = comorbidMatMulSimple,
                           ...) {
-  if (!missing(visitId)) { #nolint
-    warning("Use visit_name instead of visit_id.")
-    if (is.null(visit_name))
-      visit_name <- visitId #nolint
-  }
-  if (!missing(icd9Field)) {
-    warning("Use icd_name instead of icd9Field.")
-    if (is.null(icd_name))
-      icd_name <- icd9Field #nolint
-  }
   assert_data_frame(x, min.cols = 2, col.names = "unique")
   assert_list(map, min.len = 1, names = "unique")
   assert(check_string(visit_name), check_null(visit_name))

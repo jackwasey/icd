@@ -102,30 +102,30 @@ BEGIN_RCPP
 END_RCPP
 }
 // comorbidMatMulWide
-LogicalMatrix comorbidMatMulWide(const DataFrame& data, const List& map, const std::string id_field, const CV code_fields);
-RcppExport SEXP _icd_comorbidMatMulWide(SEXP dataSEXP, SEXP mapSEXP, SEXP id_fieldSEXP, SEXP code_fieldsSEXP) {
+LogicalMatrix comorbidMatMulWide(const DataFrame& data, const List& map, const std::string id_name, const CV code_names);
+RcppExport SEXP _icd_comorbidMatMulWide(SEXP dataSEXP, SEXP mapSEXP, SEXP id_nameSEXP, SEXP code_namesSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< const DataFrame& >::type data(dataSEXP);
     Rcpp::traits::input_parameter< const List& >::type map(mapSEXP);
-    Rcpp::traits::input_parameter< const std::string >::type id_field(id_fieldSEXP);
-    Rcpp::traits::input_parameter< const CV >::type code_fields(code_fieldsSEXP);
-    rcpp_result_gen = Rcpp::wrap(comorbidMatMulWide(data, map, id_field, code_fields));
+    Rcpp::traits::input_parameter< const std::string >::type id_name(id_nameSEXP);
+    Rcpp::traits::input_parameter< const CV >::type code_names(code_namesSEXP);
+    rcpp_result_gen = Rcpp::wrap(comorbidMatMulWide(data, map, id_name, code_names));
     return rcpp_result_gen;
 END_RCPP
 }
 // comorbidMatMulSimple
-LogicalMatrix comorbidMatMulSimple(const DataFrame& icd9df, const List& icd9Mapping, const std::string visitId, const std::string icd9Field);
-RcppExport SEXP _icd_comorbidMatMulSimple(SEXP icd9dfSEXP, SEXP icd9MappingSEXP, SEXP visitIdSEXP, SEXP icd9FieldSEXP) {
+LogicalMatrix comorbidMatMulSimple(const DataFrame& data, const List& map, const std::string id_name, const std::string code_name);
+RcppExport SEXP _icd_comorbidMatMulSimple(SEXP dataSEXP, SEXP mapSEXP, SEXP id_nameSEXP, SEXP code_nameSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const DataFrame& >::type icd9df(icd9dfSEXP);
-    Rcpp::traits::input_parameter< const List& >::type icd9Mapping(icd9MappingSEXP);
-    Rcpp::traits::input_parameter< const std::string >::type visitId(visitIdSEXP);
-    Rcpp::traits::input_parameter< const std::string >::type icd9Field(icd9FieldSEXP);
-    rcpp_result_gen = Rcpp::wrap(comorbidMatMulSimple(icd9df, icd9Mapping, visitId, icd9Field));
+    Rcpp::traits::input_parameter< const DataFrame& >::type data(dataSEXP);
+    Rcpp::traits::input_parameter< const List& >::type map(mapSEXP);
+    Rcpp::traits::input_parameter< const std::string >::type id_name(id_nameSEXP);
+    Rcpp::traits::input_parameter< const std::string >::type code_name(code_nameSEXP);
+    rcpp_result_gen = Rcpp::wrap(comorbidMatMulSimple(data, map, id_name, code_name));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -316,16 +316,16 @@ BEGIN_RCPP
 END_RCPP
 }
 // longToWideCpp
-CV longToWideCpp(const SEXP& icd9df, const std::string visitId, const std::string icd9Field, bool aggregate);
-RcppExport SEXP _icd_longToWideCpp(SEXP icd9dfSEXP, SEXP visitIdSEXP, SEXP icd9FieldSEXP, SEXP aggregateSEXP) {
+CV longToWideCpp(const SEXP& x, const std::string id_name, const std::string code_name, bool aggregate);
+RcppExport SEXP _icd_longToWideCpp(SEXP xSEXP, SEXP id_nameSEXP, SEXP code_nameSEXP, SEXP aggregateSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const SEXP& >::type icd9df(icd9dfSEXP);
-    Rcpp::traits::input_parameter< const std::string >::type visitId(visitIdSEXP);
-    Rcpp::traits::input_parameter< const std::string >::type icd9Field(icd9FieldSEXP);
+    Rcpp::traits::input_parameter< const SEXP& >::type x(xSEXP);
+    Rcpp::traits::input_parameter< const std::string >::type id_name(id_nameSEXP);
+    Rcpp::traits::input_parameter< const std::string >::type code_name(code_nameSEXP);
     Rcpp::traits::input_parameter< bool >::type aggregate(aggregateSEXP);
-    rcpp_result_gen = Rcpp::wrap(longToWideCpp(icd9df, visitId, icd9Field, aggregate));
+    rcpp_result_gen = Rcpp::wrap(longToWideCpp(x, id_name, code_name, aggregate));
     return rcpp_result_gen;
 END_RCPP
 }
