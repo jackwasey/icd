@@ -70,7 +70,8 @@ factor_nosort_rcpp <- function(x, levels, na.rm = FALSE) {
 #' With `NA` values, margin is smaller, but still beats base `factor`.
 #' @param exclude_na Simpler equivalent to `base::factor` exclude. By default,
 #'   `refactor` will not count `NA` as a factor level if there are `NA` elements
-#'   in the input data.
+#'   in the input data. As with `base::factor`, if `exclude_na` is `TRUE`, an
+#'   `NA` level explicitly requested in the `levels` argument is still dropped.
 #' @examples
 #' \dontrun{
 #'   f <- factor(c(1, 2, 3))
@@ -81,7 +82,7 @@ factor_nosort_rcpp <- function(x, levels, na.rm = FALSE) {
 #' @md
 #' @keywords internal manip
 refactor <- function(x, levels, na.rm = FALSE, exclude_na = TRUE) {
-  assert_factor(x)
+  stopifnot(is.factor(x))
   assert_character(levels)
   assert_flag(na.rm)
   assert_flag(exclude_na)

@@ -90,9 +90,9 @@ test_that("ahrq all comorbidities in one patient, no abbrev, hier", {
 })
 
 test_that("empty data returns empty data with or without hierarchy", {
-  expect_warning(res <- icd9_comorbid_ahrq(empty_pts, hierarchy = FALSE))
-  expect_warning(res2 <- dim(icd9_comorbid_ahrq(empty_pts, hierarchy = TRUE)))
-  expect_warning(res3 <- icd9_comorbid_ahrq(empty_pts, hierarchy = TRUE))
+  res <- icd9_comorbid_ahrq(empty_pts, hierarchy = FALSE)
+  res2 <- dim(icd9_comorbid_ahrq(empty_pts, hierarchy = TRUE))
+  res3 <- icd9_comorbid_ahrq(empty_pts, hierarchy = TRUE)
   expect_identical(res, empty_ahrq_mat)
   expect_identical(res2, dim(empty_ahrq_mat_heir))
   expect_identical(res3, empty_ahrq_mat_heir)

@@ -90,12 +90,12 @@ BEGIN_RCPP
 END_RCPP
 }
 // simplifyMapLexicographic
-Rcpp::List simplifyMapLexicographic(const CV pt_codes, const Rcpp::List map);
+Rcpp::List simplifyMapLexicographic(const CV& pt_codes, const Rcpp::List map);
 RcppExport SEXP _icd_simplifyMapLexicographic(SEXP pt_codesSEXP, SEXP mapSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const CV >::type pt_codes(pt_codesSEXP);
+    Rcpp::traits::input_parameter< const CV& >::type pt_codes(pt_codesSEXP);
     Rcpp::traits::input_parameter< const Rcpp::List >::type map(mapSEXP);
     rcpp_result_gen = Rcpp::wrap(simplifyMapLexicographic(pt_codes, map));
     return rcpp_result_gen;

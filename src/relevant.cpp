@@ -54,7 +54,7 @@ CV Relevant::findRelevant() {
   for (CV cmb : src_map) {
     for (String cmbCode : cmb) {
       if (allCodesSet.find(cmbCode.get_cstring()) != allCodesSet.end()) {
-        TRACE("Pushing back " << cmbCode);
+        TRACE("Pushing back" << cmbCode.get_cstring());
         r.insert(((String) cmbCode).get_cstring());
       }
     }

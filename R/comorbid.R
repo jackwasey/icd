@@ -183,8 +183,10 @@ icd10_comorbid_reduce <- function(x = x, map, visit_name, icd_name, short_code,
   # TODO: could  reduce list of input visits here, as we are scanning the codes
   # TODO: must we factor here?
   x[icd_name] <- lapply(x[icd_name], factor_nosort_rcpp, na.rm = FALSE)
-  stop("need to vectorize the following over multiple icd columns")
-  reduced_map <- simplify_map_lex(levels(x[[icd_name]]), map)
+  reduced_map <- simplify_map_lex(
+    pt_codes = unlist(lapply(x[icd_name], levels)),
+    map = map
+    )
   categorize_fun(x = x, map = reduced_map,
                  id_name = visit_name, code_name = icd_name,
                  return_df = return_df, return_binary = return_binary, ...)

@@ -80,14 +80,14 @@ test_that("basic refactoring", {
                    "p: ", paste(unlist(p), collapse = " "), sep = "")
     )
     if (!anyNA(f) && !anyNA(levels(f)))
-        expect_identical(
-          refactor(f, n, na.rm = FALSE),
-          factor(f, levels = n),
-          info = paste("m = c('", paste(unlist(m), collapse = "', '"), "')\n",
-                       "n = c('", paste(unlist(n), collapse = "', '"), "')",
-                       "p: ", paste(unlist(p), collapse = " "), sep = "")
+      expect_identical(
+        refactor(f, n, na.rm = FALSE),
+        factor(f, levels = n),
+        info = paste("m = c('", paste(unlist(m), collapse = "', '"), "')\n",
+                     "n = c('", paste(unlist(n), collapse = "', '"), "')",
+                     "p: ", paste(unlist(p), collapse = " "), sep = "")
 
-        )
+      )
   }
 })
 
@@ -102,4 +102,46 @@ test_that("new factor has empty levels when necessary", {
   expect_equal(
     refactor(f, levels = NA, na.rm = FALSE, exclude_na = FALSE),
     factor(NA, exclude = NULL))
+  for (narm in c(TRUE, FALSE)) {
+    refactor(NA, NA, na.rm = narm)
+    refactor(factor(NA), NA, na.rm = narm)
+    refactor(factor(NA), "a", na.rm = narm)
+    refactor(factor(NA, levels = NA), c("a", NA), na.rm = narm)
+    refactor(factor(NA), c("a", NA), na.rm = narm)
+    refactor(factor("a"), c("a", NA), na.rm = narm)
+    refactor(factor("a"), NA, na.rm = narm)
+  }
+})
+
+test_that("no crash with NA levels", {
+  for (ena in c(TRUE, FALSE)) {
+    for (narm in c(TRUE, FALSE)) {
+      message("ena = ", ena, ", narm = ", narm)
+      expect_error(
+        refactor(factor(NA, NA, exclude = NULL),
+                 NA, na.rm = narm, exclude_na = ena), #ok
+        NA, info = paste(ifelse(narm, "na.rm", "!na.rm"),
+                         ifelse(ena, "exclude_na", "!exclude_na")))
+      expect_error(
+        refactor(factor(NA, c("a", NA), exclude = NULL),
+                 NA, na.rm = narm, exclude_na = ena), #ok
+        NA, info = paste(ifelse(narm, "na.rm", "!na.rm"),
+                         ifelse(ena, "exclude_na", "!exclude_na")))
+      expect_error(
+        refactor(factor(NA, NA, exclude = NULL),
+                 "a", na.rm = narm, exclude_na = ena),
+        NA, info = paste(ifelse(narm, "na.rm", "!na.rm"),
+                         ifelse(ena, "exclude_na", "!exclude_na")))
+      expect_error(
+        refactor(factor(NA, c("a", NA), exclude = NULL),
+                 "a", na.rm = narm, exclude_na = ena),
+        NA, info = paste(ifelse(narm, "na.rm", "!na.rm"),
+                         ifelse(ena, "exclude_na", "!exclude_na")))
+      expect_error(
+        refactor(factor(c("a", NA), c("a", NA), exclude = NULL),
+                 "a", na.rm = narm, exclude_na = ena),
+        NA, info = paste(ifelse(narm, "na.rm", "!na.rm"),
+                         ifelse(ena, "exclude_na", "!exclude_na")))
+    }
+  }
 })
