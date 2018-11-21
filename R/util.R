@@ -230,16 +230,13 @@ get_visit_name.matrix <- function(x, visit_name = NULL)
 get_icd_name <- function(x, icd_name = NULL, valid_codes = TRUE,
                          defined_codes = FALSE, multi = FALSE) {
   # TODO: change this error message, no longer true!
-  if (is.icd_wide_data(x))
-    stop("Unable to infer the name of a single ICD field name from wide data, which has multiple ICD fields. ",
-         "Comorbidity calculations require 'long' format data, 'wide' data should be converted to 'long' ",
-         "using 'wide_to_long'. ",
-         "If the data is indeed 'long' format, remove the class 'icd_wide_data' and ",
-         "use 'as.icd_long_data' to set the correct class. See '?icd_long_data' for help.")
+  #if (is.icd_wide_data(x))
   if (!is.null(icd_name)) {
-    stopifnot(icd_name %in% names(x))
+    stopifnot(all(icd_name %in% names(x)))
     return(icd_name)
   }
+  if (any(grepl(pattern = "poa", icd_name, ignore.case = TRUE)))
+    warning("'POA' Present-on-arrival fields in 'icd_name'.")
   icd_name <- guess_icd_col_by_name(x, valid_codes = valid_codes,
                         defined_codes = defined_codes)
   if (is.null(icd_name)) {
@@ -254,9 +251,9 @@ get_icd_name <- function(x, icd_name = NULL, valid_codes = TRUE,
   if (nrow(x) < 2 || (!valid_codes && !defined_codes))
     return(icd_name)
   pc <- if (defined_codes)
-    get_icd_defined_percent(x[[icd_name]]) # TODO vectorize this function
+    get_icd_defined_percent(x[[icd_name[1]]]) # TODO vectorize this function
   else
-    get_icd_valid_percent(x[[icd_name]])
+    get_icd_valid_percent(x[[icd_name[1]]])
   if (pc$icd9 < 10 && pc$icd10 < 10)
     stop("identified field with ICD codes as: '", icd_name,
          "' but fewer than 10% of codes are valid ICD-9 or ICD-10. ",
@@ -299,8 +296,8 @@ guess_icd_col_by_name <- function(x, valid_codes = TRUE,
     return(unlist(guessed[guesses_logical]))
   }
   best_guess <- which(guess_counts == max(guess_counts))
-  if (length(best_guess) == 1)
-    return(guessed[[best_guess]])
+  if (length(best_guess) > 0)
+    return(guessed[[best_guess[1]]])
   return(NULL)
 }
 

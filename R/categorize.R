@@ -25,7 +25,7 @@
 #' @template mapping
 #' @param id_name The name of the `data.frame` field which is the unique
 #'   identifier.
-#' @param code_name String with name of column containing the codes.
+#' @param code_name String with name(s) of column(s) containing the codes.
 #' @template return_df
 #' @param return_binary Logical value, if \code{TRUE}, the output will be in 0s
 #'   and 1s instead of TRUE and FALSE.
@@ -58,15 +58,16 @@ categorize_simple <- function(x, map, id_name, code_name,
                               restore_id_order = TRUE,
                               unique_ids = FALSE,
                               preserve_id_type = FALSE,
-                              comorbid_fun = comorbidMatMulSimple) {
+                              comorbid_fun = comorbidMatMulWide) {
   assert_data_frame(x, min.cols = 2, col.names = "unique")
   class(x) <- "data.frame"
   assert_list(map, min.len = 1, names = "unique")
   assert(check_string(id_name), check_null(id_name))
-  assert(check_string(code_name), check_null(code_name))
+  assert_character(code_name)
   stopifnot(id_name %in% names(x))
-  stopifnot(code_name %in% names(x))
-  stopifnot(is.factor(x[[code_name]]) || is.character(x[[code_name]]))
+  stopifnot(all(code_name %in% names(x)))
+  for (cd in code_name) stopifnot(is.factor(cd) || is.character(cd))
+  #stopifnot(is.factor(x[[code_name]]) || is.character(x[[code_name]]))
   map <- lapply(map, as_char_no_warn) # TODO: no longer needed with Simple?
   id_was_factor <- is.factor(x[[id_name]])
   visit_class <- class(x[[id_name]])

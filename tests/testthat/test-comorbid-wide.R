@@ -53,7 +53,7 @@ test_that("convert long to wide, then do wide cmb", {
     by_long <- comorbid_ahrq(get(df))
     df_wide <- long_to_wide(get(df), return_df = TRUE)
     icd_names <- names(df_wide)[-1]
-    by_wide <- comorbid_ahrq(df_wide, icd_names)
-    expect_equivalent(by_long, by_wide)
+    by_wide <- comorbid_ahrq(df_wide, icd_name = icd_names)
+    expect_equivalent(by_long, by_wide, info = paste("Wide", df))
   }
 })

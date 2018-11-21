@@ -81,9 +81,6 @@ void buildVisitCodesSparseSimple(
     CV code_levels = wrap(codes.attr("levels"));
     const IntegerVector codes_relevant =
       refactor((IntegerVector) codes, rh.relevant, true); // no NA in output levels, please
-    //const CV code_levels_cv = (CV) code_levels;
-    //assert(Rf_length(code_relevant.attr("levels")) == relevantSize);
-    //assert(code_levels_cv[0] == rh.keys[0]); // TODO better checks?
     cols = ((IntegerVector) codes_relevant); // keep R indexing
   }
   if (!Rf_isFactor(visits)) {
@@ -161,19 +158,27 @@ void buildVisitCodesSparseWide(
     String data_col_name = code_names[j];
     const SEXP& data_col = data[data_col_name];
     if (Rf_isFactor(data_col)) {
-      Rcpp::warning(data_col_name);
-      DEBUG_VEC((IntegerVector) data_col);
-      stop("For wide data, currently codes cannot be factors.");
-    }
-    const CV& data_col_cv = (CV) data_col;
-    DEBUG_VEC(data_col_cv);
-    for (R_xlen_t i = 0; i != rows.size(); ++i) {
-      auto found = rh.rel.find(((String) data_col_cv[i]).get_cstring());
-      //if (IntegerVector::is_na(iv[i])) continue;
-      if (found == rh.rel.cend()) continue;
-      DEBUG("adding triplet at R idx:" << rows[i] << ", " << found->second);
-      visTriplets.push_back(Triplet(rows[i] - 1, found->second, true));
-    } // end i loop through rows
+      const IntegerVector& data_col_fc = (IntegerVector) data_col;
+      DEBUG("codes are still in a factor...");
+      const CV code_levels = data_col_fc.attr("levels");
+      const IntegerVector codes_relevant =
+        refactor(data_col_fc, rh.relevant, true); // no NA in output levels, please
+      assert(rows.size() == codes_relevant.size());
+      for (R_xlen_t i = 0; i != rows.size(); ++i) {
+        DEBUG("adding triplet at R idx:" << rows[i] << ", " << codes_relevant[i]);
+        if (IntegerVector::is_na(codes_relevant[i])) continue;
+        visTriplets.push_back(Triplet(rows[i] - 1, codes_relevant[i] - 1, true));
+      } // end i loop through rows
+    } else {
+      const CV& data_col_cv = (CV) data_col;
+      DEBUG_VEC(data_col_cv);
+      for (R_xlen_t i = 0; i != rows.size(); ++i) {
+        auto found = rh.rel.find(((String) data_col_cv[i]).get_cstring());
+        if (found == rh.rel.cend()) continue;
+        DEBUG("adding triplet at R idx:" << rows[i] << ", " << found->second);
+        visTriplets.push_back(Triplet(rows[i] - 1, found->second, true));
+      } // end i loop through rows
+    } // factor vs character for this code column
   } // end j loop through data columns
   visMat.resize(visitIds.size(), rh.relevant.size()); // unique ids
   visMat.reserve(vlen * ncol); // upper bound

@@ -6,6 +6,10 @@
 \usage{
 guess_icd_col_by_name(x, valid_codes = TRUE, defined_codes = FALSE)
 }
+\value{
+Zero, one or many names of columns likely to contain ICD codes based
+  on the column names.
+}
 \description{
 get candidate column(s) from wide or long data frame frame, using hints
 }
@@ -15,5 +19,11 @@ wide_df <- data.frame(a = letters,
                       dx1 = icd9_map_elix$PVD[1:26],
                       dx2 = icd9_map_elix$HTN[1:26])
 icd:::guess_icd_col_by_name(wide_df)
+wide_dc <- data.frame(a = letters,
+                      dx0 = as.icd9cm(icd9_map_elix$CHF[1:26]),
+                      dx1 = as.icd9cm(icd9_map_elix$PVD[1:26]),
+                      dx2 = as.icd9cm(icd9_map_elix$HTN[1:26]),
+                      stringsAsFactors = FALSE)
+icd:::guess_icd_col_by_name(wide_dc)
 }
 \keyword{internal}

@@ -6,7 +6,7 @@
 \usage{
 categorize_simple(x, map, id_name, code_name, return_df = FALSE,
   return_binary = FALSE, restore_id_order = TRUE, unique_ids = FALSE,
-  preserve_id_type = FALSE, comorbid_fun = comorbidMatMulSimple)
+  preserve_id_type = FALSE, comorbid_fun = comorbidMatMulWide)
 }
 \arguments{
 \item{x}{Data frame containing a column for an 'id' and a column for a code,
@@ -22,7 +22,7 @@ c("3004", "30112", "3090", "3091", "311"))} amongst other longer groups.}
 \item{id_name}{The name of the \code{data.frame} field which is the unique
 identifier.}
 
-\item{code_name}{String with name of column containing the codes.}
+\item{code_name}{String with name(s) of column(s) containing the codes.}
 
 \item{return_df}{single logical value, if \code{TRUE}, return the result as a data frame with the first column being
 the \code{visit_id}, and the second being the count. If \code{visit_id} was a factor or named differently in the

@@ -132,7 +132,7 @@ guess_version.character <- function(x, short_code = NULL, ...) {
 guess_version.data.frame <- function(x, short_code = NULL, icd_name = NULL, ...) {
   if (is.null(icd_name))
     icd_name <- get_icd_name(x)
-  guess_version(x[[icd_name]])
+  guess_version(x[[icd_name[1]]])
 }
 
 #' Guess version of ICD and update class

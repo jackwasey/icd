@@ -159,7 +159,7 @@ icd10_comorbid <- function(x,
   if (is.null(icd_name))
     icd_name <- get_icd_name(x)
   if (is.null(short_code))
-    short_code <- guess_short(x[[icd_name]])
+    short_code <- guess_short(x[[icd_name[1]]])
   icd10_comorbid_fun(x = x, map = map, visit_name = visit_name,
                      icd_name = icd_name, short_code = short_code,
                      short_map = short_map, return_df = return_df,
@@ -179,10 +179,11 @@ icd10_comorbid_reduce <- function(x = x, map, visit_name, icd_name, short_code,
                                   return_binary = FALSE,
                                   categorize_fun = categorize_simple, ...) {
   if (!short_code)
-    x[[icd_name]] <- decimal_to_short.icd10(x[[icd_name]])
+    x[icd_name] <- lapply(x[icd_name], decimal_to_short.icd10)
   # TODO: could  reduce list of input visits here, as we are scanning the codes
   # TODO: must we factor here?
-  x[icd_name] <- factor_nosort_rcpp(x[[icd_name]], na.rm = FALSE)
+  x[icd_name] <- lapply(x[icd_name], factor_nosort_rcpp, na.rm = FALSE)
+  stop("need to vectorize the following over multiple icd columns")
   reduced_map <- simplify_map_lex(levels(x[[icd_name]]), map)
   categorize_fun(x = x, map = reduced_map,
                  id_name = visit_name, code_name = icd_name,
@@ -205,26 +206,29 @@ icd9_comorbid <- function(x, map, visit_name = NULL, icd_name = NULL,
                           return_df = FALSE, return_binary = FALSE,
                           preclean = TRUE,
                           categorize_fun = categorize_simple,
-                          comorbid_fun = comorbidMatMulSimple,
+                          comorbid_fun = comorbidMatMulWide,
                           ...) {
   assert_data_frame(x, min.cols = 2, col.names = "unique")
   assert_list(map, min.len = 1, names = "unique")
   assert(check_string(visit_name), check_null(visit_name))
   #assert(check_string(icd_name), check_null(icd_name))
   visit_name <- get_visit_name(x, visit_name)
-  #icd_name <- get_icd_name(x, icd_name)
+  icd_name <- get_icd_name(x, icd_name)
   stopifnot(is.character(icd_name) || is.null(icd_name))
   assert_string(visit_name)
-  assert_string(icd_name)
+  #assert_string(icd_name)
   assert_flag(short_code)
   assert_flag(short_map)
   # confirm class is ICD-9, and add leading zeroes if missing, and if levels
   # like 010 and 10 exists, then these get contracted by decimal_to_short,
   # making the results different if icd codes are short or not.
-  if (!short_code)
-    x[[icd_name]] <- decimal_to_short.icd9(x[[icd_name]])
-  else if (preclean)
-    x[[icd_name]] <- icd9_add_leading_zeroes(x[[icd_name]], short_code = TRUE)
+  if (!short_code) {
+    #x[[icd_name]] <- decimal_to_short.icd9(x[[icd_name]])
+    x[icd_name] <- lapply(x[icd_name], decimal_to_short.icd9)
+  } else if (preclean) {
+    #x[[icd_name]] <- icd9_add_leading_zeroes(x[[icd_name]], short_code = TRUE)
+    x[icd_name] <- lapply(x[icd_name], icd9_add_leading_zeroes, short_code = TRUE)
+  }
   if (!short_map)
     map <- lapply(map, decimal_to_short)
   categorize_fun(x = x, map = map, id_name = visit_name,
