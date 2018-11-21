@@ -55,10 +55,6 @@ void printCornerSparse(PtsSparse x) {
 // icd codes are either factor or character type. if a factor, we can use the
 // factor level index as the column in the visit matrix, but we need to know
 // this also to construct the comorbidity matrix where the codes are rows.
-//
-// If the icd codes are character, we can construct the indexhash, then return a
-// new factor. This is basically what factorNosort does, but I need the hash
-// internals for lookups, so can't use it directly here.
 void buildVisitCodesSparseSimple(
     const RObject& visits,
     const RObject& codes, // todo handle factor in parent function
@@ -123,10 +119,7 @@ void buildVisitCodesSparseSimple(
 
   // now we have rows and columns, just make the triplets and insert.
   for (R_xlen_t i = 0; i != rows.size(); ++i) {
-    if (IntegerVector::is_na(cols[i])) {
-      TRACE("dropping NA col value");
-      continue;
-    }
+    if (IntegerVector::is_na(cols[i])) continue;
     TRACE("adding triplet at R idx:" << rows[i] << ", " << cols[i]);
     visTriplets.push_back(Triplet(rows[i] - 1, cols[i] - 1, true));
   }
@@ -174,16 +167,12 @@ void buildVisitCodesSparseWide(
     }
     const CV& data_col_cv = (CV) data_col;
     DEBUG_VEC(data_col_cv);
-
-    //IntegerVector debugiv = rh.hash.lookup("0930");
-    //if (is_true(any(is_na(debugiv)))) stop("NA!");
-
-    IntegerVector iv = rh.hash.lookup(data_col_cv); // vector of length vlen with NAs
-    DEBUG_VEC(iv);
     for (R_xlen_t i = 0; i != rows.size(); ++i) {
-      if (IntegerVector::is_na(iv[i])) continue;
-      DEBUG("inserting triplet");
-      visTriplets.push_back(Triplet(rows[i] - 1, iv[i] - 1, true));
+      auto found = rh.rel.find(((String) data_col_cv[i]).get_cstring());
+      //if (IntegerVector::is_na(iv[i])) continue;
+      if (found == rh.rel.cend()) continue;
+      DEBUG("adding triplet at R idx:" << rows[i] << ", " << found->second);
+      visTriplets.push_back(Triplet(rows[i] - 1, found->second, true));
     } // end i loop through rows
   } // end j loop through data columns
   visMat.resize(visitIds.size(), rh.relevant.size()); // unique ids

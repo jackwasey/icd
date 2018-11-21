@@ -155,7 +155,7 @@ str_pair_match <- function(string, pattern, pos, swap = FALSE, ...) {
     assert_integerish(pos, len = 2L, lower = 1L, any.missing = FALSE)
   res <- lapply(string,
                 function(x) unlist(
-                  regmatches(x = x, m = regexec(pattern = pattern, text = x, ...))
+                  regmatches(x, m = regexec(pattern = pattern, text = x, ...))
                 )[-1]
   )
   res <- res[vapply(res, function(x) length(x) != 0, logical(1))]
@@ -225,8 +225,11 @@ get_visit_name.matrix <- function(x, visit_name = NULL)
 #' @param icd_name usually \code{NULL} but if specified, will be checked it is
 #'   valid (i.e. a character vector of length one, which is indeed a name of one
 #'   of \code{x}'s columns) and returned unchanged
+#' @param multi If \code{TRUE}, allow multiple ICD field names to be returned.
 #' @keywords internal
-get_icd_name <- function(x, icd_name = NULL, valid_codes = TRUE, defined_codes = FALSE) {
+get_icd_name <- function(x, icd_name = NULL, valid_codes = TRUE,
+                         defined_codes = FALSE, multi = FALSE) {
+  # TODO: change this error message, no longer true!
   if (is.icd_wide_data(x))
     stop("Unable to infer the name of a single ICD field name from wide data, which has multiple ICD fields. ",
          "Comorbidity calculations require 'long' format data, 'wide' data should be converted to 'long' ",
@@ -234,45 +237,24 @@ get_icd_name <- function(x, icd_name = NULL, valid_codes = TRUE, defined_codes =
          "If the data is indeed 'long' format, remove the class 'icd_wide_data' and ",
          "use 'as.icd_long_data' to set the correct class. See '?icd_long_data' for help.")
   if (!is.null(icd_name)) {
-    assert_string(icd_name)
     stopifnot(icd_name %in% names(x))
     return(icd_name)
   }
-  guesses <- c("icd.?(9|10)", "icd.?(9|10).?Code", "icd",
-               "diagnos", "diag.?code", "diag", "i(9|10)", "code")
-  assert_data_frame(x, min.cols = 1, col.names = "named")
-  # if one column exactly has a class like icd9, then we're done.
-  cls <- lapply(x, class)
-  class_cols <- unlist(lapply(cls, function(cl) sum(cl %in% icd_version_classes)))
-  one_class_col <- which(class_cols >= 1)
-  if (length(unname(one_class_col)) == 1)
-    return(names(x)[one_class_col])
-  # zero or multiple columns matched classes, and icd_name not already set:
-  for (guess in guesses) {
-    guess_matched <- grep(guess, names(x), ignore.case = TRUE, value = TRUE)
-    if (length(guess_matched) == 1) {
-      icd_name <- guess_matched
-      break
-    } else if (length(guess_matched) > 1) {
-      warning(paste("more than one column name matched while guessing icd_name. Using first one.",
-                    "To specify exactly which column, use icd_name=\"myicdcol\" or set the class of",
-                    "the column, e.g. x$myicdcol <- as.icd10cm(x$myicdcol) .",
-                    "Matched column names are:", guess_matched))
-      icd_name <- guess_matched[1]
-    }
-  }
-  if (is.null(icd_name))
+  icd_name <- guess_icd_col_by_name(x, valid_codes = valid_codes,
+                        defined_codes = defined_codes)
+  if (is.null(icd_name)) {
+    icd_name = character()
     for (n in names(x)) {
       pc <- get_icd_defined_percent(x[[n]])
       if (pc$icd9 > 25 || pc$icd10 > 25) {
-        icd_name <- n
-        break
+        icd_name <- c(icd_name, n)
       }
     }
+  }
   if (nrow(x) < 2 || (!valid_codes && !defined_codes))
     return(icd_name)
   pc <- if (defined_codes)
-    get_icd_defined_percent(x[[icd_name]])
+    get_icd_defined_percent(x[[icd_name]]) # TODO vectorize this function
   else
     get_icd_valid_percent(x[[icd_name]])
   if (pc$icd9 < 10 && pc$icd10 < 10)
@@ -283,6 +265,43 @@ get_icd_name <- function(x, icd_name = NULL, valid_codes = TRUE, defined_codes =
          "set the class using something like",
          " x[[icd_name]] <- as.icd9[[x[[icd_name]]")
   icd_name
+}
+
+#' get candidate column(s) from wide or long data frame frame, using hints
+#' @examples
+#' wide_df <- data.frame(a = letters,
+#'                       dx0 = icd9_map_elix$CHF[1:26],
+#'                       dx1 = icd9_map_elix$PVD[1:26],
+#'                       dx2 = icd9_map_elix$HTN[1:26])
+#' icd:::guess_icd_col_by_name(wide_df)
+#' wide_dc <- data.frame(a = letters,
+#'                       dx0 = as.icd9cm(icd9_map_elix$CHF[1:26]),
+#'                       dx1 = as.icd9cm(icd9_map_elix$PVD[1:26]),
+#'                       dx2 = as.icd9cm(icd9_map_elix$HTN[1:26]),
+#'                       stringsAsFactors = FALSE)
+#' icd:::guess_icd_col_by_name(wide_dc)
+#' @return Zero, one or many names of columns likely to contain ICD codes based
+#'   on the column names.
+#' @keywords internal
+guess_icd_col_by_name <- function(x, valid_codes = TRUE,
+                                  defined_codes = FALSE) {
+  guesses <- c("icd.?(9|10)", "icd.?(9|10).?Code", "icd",
+               "diagnos", "diag.?code", "diag", "dx", "i(9|10)", "code")
+  assert_data_frame(x, min.cols = 1, col.names = "named")
+  # if one column exactly has a class like icd9, then we're done.
+  cls <- lapply(x, class)
+  clg <- vapply(cls, function(z) any(z %in% icd_version_classes), logical(1))
+  if (any(clg)) return(names(x)[clg])
+  guessed <- lapply(guesses, grep, x = names(x), ignore.case = TRUE, value = TRUE)
+  guess_counts <- vapply(guessed, length, integer(1))
+  guesses_logical <- as.logical(guess_counts)
+  if (sum(guesses_logical) == 1) {
+    return(unlist(guessed[guesses_logical]))
+  }
+  best_guess <- which(guess_counts == max(guess_counts))
+  if (length(best_guess) == 1)
+    return(guessed[[best_guess]])
+  return(NULL)
 }
 
 #' Latest ICD-9-CM edition
@@ -413,7 +432,7 @@ str_match_all <- function(string, pattern, ...) {
 #' \code{stringr} does this, but here we have a small amount of base R code
 #' @keywords internal
 str_extract <- function(string, pattern, ...) {
-  vapply(regmatches(x = string, m = regexec(pattern = pattern, text = string, ...)),
+  vapply(regmatches(string, m = regexec(pattern = pattern, text = string, ...)),
          FUN = `[[`, 1, FUN.VALUE = character(1L))
 }
 

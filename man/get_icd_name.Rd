@@ -6,7 +6,7 @@
 the ICD codes}
 \usage{
 get_icd_name(x, icd_name = NULL, valid_codes = TRUE,
-  defined_codes = FALSE)
+  defined_codes = FALSE, multi = FALSE)
 }
 \arguments{
 \item{x}{data frame}
@@ -14,6 +14,8 @@ get_icd_name(x, icd_name = NULL, valid_codes = TRUE,
 \item{icd_name}{usually \code{NULL} but if specified, will be checked it is
 valid (i.e. a character vector of length one, which is indeed a name of one
 of \code{x}'s columns) and returned unchanged}
+
+\item{multi}{If \code{TRUE}, allow multiple ICD field names to be returned.}
 }
 \description{
 guess which field contains the (only) ICD code, in order of preference, the

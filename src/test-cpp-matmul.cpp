@@ -10,6 +10,10 @@
 #include "relevant.h"
 #include "mapplus.h"
 
+/*
+ * Rscript -e "devtools::load_all();devtools::test(filter='cpp',reporter='Location')"
+ */
+
 #ifdef ICD_CATCH
 #include <testthat.h>
 using namespace Rcpp;
@@ -110,7 +114,7 @@ context("matmul cpp") {
     //  comorbidMatMulWide(dff1, map, "id", CharacterVector::create("dx0", "dx1"));
   }
 
-  test_that("use rel unordered map test lookup") {
+  test_that("TEMPORARY! use rel unordered map test lookup") {
     Relevant r12(map, df1, CharacterVector::create("dx0", "dx1"));
     RelMap::iterator got;
     got = r12.rel.find("V10");
