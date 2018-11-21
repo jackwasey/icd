@@ -40,21 +40,21 @@ CV raggedToWide(const VecVecStr& ragged, int max_per_pt,
   // optionally default empty strings? NA? User can do this for now.
   CV out(distinct_visits * max_per_pt, NA_STRING);
 #ifdef ICD_DEBUG
-  assert(distinct_visits > 0)
-    assert(distinct_visits == ids.size())
+  assert(distinct_visits > 0);
+  assert(distinct_visits == ids.size());
 #endif
-    for (VecVecStr::size_type row_it = 0; row_it < distinct_visits; ++row_it) {
-      const VecStr& this_row = ragged[row_it];
-      VecStr::size_type this_row_len = this_row.size();
-      for (VecStr::size_type col_it = 0; col_it < this_row_len; ++col_it) {
-        // write in row major format, but this means transpose needed later
-        VecVecStr::size_type out_idx = row_it + (distinct_visits * col_it);
-        out[out_idx] = this_row[col_it];
-      } // end inner for
-      Rcpp::checkUserInterrupt();
-    } // end outer for
-    // set dimensions in reverse (row major for parallel step)
-    out.attr("dim") = Rcpp::Dimension(distinct_visits, max_per_pt);
+  for (VecVecStr::size_type row_it = 0; row_it < distinct_visits; ++row_it) {
+    const VecStr& this_row = ragged[row_it];
+    VecStr::size_type this_row_len = this_row.size();
+    for (VecStr::size_type col_it = 0; col_it < this_row_len; ++col_it) {
+      // write in row major format, but this means transpose needed later
+      VecVecStr::size_type out_idx = row_it + (distinct_visits * col_it);
+      out[out_idx] = this_row[col_it];
+    } // end inner for
+    Rcpp::checkUserInterrupt();
+  } // end outer for
+  // set dimensions in reverse (row major for parallel step)
+  out.attr("dim") = Rcpp::Dimension(distinct_visits, max_per_pt);
   CV nonames;
   rownames(out) = Rcpp::wrap(ids);
   return out;
@@ -111,6 +111,6 @@ CV longToWideCpp(const SEXP& x, const std::string id_name,
   VecStr ids; // may be vector of integers or strings
   max_per_pt = longToRagged(x, ragged, ids, id_name, code_name,
                             aggregate);
-  DEBUG_VEC(ragged);
+  //DEBUG_VEC(ragged);
   return raggedToWide(ragged, max_per_pt, ids);
 }

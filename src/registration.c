@@ -3,13 +3,14 @@
 #include <stdlib.h> // for NULL
 #include <R_ext/Rdynload.h>
 
-/* FIXME:
+/* FIXME: 
    Check these declarations against the C/Fortran source code.
 */
 
 /* .Call calls */
 extern SEXP _icd_categorize_rcpp();
 extern SEXP _icd_comorbidMatMulSimple(SEXP, SEXP, SEXP, SEXP);
+extern SEXP _icd_comorbidMatMulWide(SEXP, SEXP, SEXP, SEXP);
 extern SEXP _icd_factorNoSort(SEXP, SEXP, SEXP);
 extern SEXP _icd_fastIntToStringRcpp(SEXP);
 extern SEXP _icd_guessShortCompleteCpp(SEXP, SEXP, SEXP, SEXP);
@@ -32,7 +33,6 @@ extern SEXP _icd_icd9DecimalToPartsCpp(SEXP, SEXP);
 extern SEXP _icd_icd9DecimalToShort(SEXP);
 extern SEXP _icd_icd9ExpandMinor(SEXP, SEXP);
 extern SEXP _icd_icd9GetMajor(SEXP, SEXP);
-extern SEXP _icd_longToWideCpp(SEXP, SEXP, SEXP, SEXP);
 extern SEXP _icd_icd9MajMinToCode(SEXP, SEXP, SEXP);
 extern SEXP _icd_icd9MajMinToDecimal(SEXP, SEXP);
 extern SEXP _icd_icd9MajMinToParts(SEXP, SEXP);
@@ -43,6 +43,7 @@ extern SEXP _icd_icd9PartsToShort(SEXP);
 extern SEXP _icd_icd9ShortToDecimal(SEXP);
 extern SEXP _icd_icd9ShortToPartsCpp(SEXP, SEXP);
 extern SEXP _icd_inFast(SEXP, SEXP);
+extern SEXP _icd_longToWideCpp(SEXP, SEXP, SEXP, SEXP);
 extern SEXP _icd_matchFast(SEXP, SEXP);
 extern SEXP _icd_refactor(SEXP, SEXP, SEXP);
 extern SEXP _icd_refactor_narm(SEXP, SEXP);
@@ -59,6 +60,7 @@ extern SEXP run_testthat_tests();
 static const R_CallMethodDef CallEntries[] = {
     {"_icd_categorize_rcpp",                    (DL_FUNC) &_icd_categorize_rcpp,                    0},
     {"_icd_comorbidMatMulSimple",               (DL_FUNC) &_icd_comorbidMatMulSimple,               4},
+    {"_icd_comorbidMatMulWide",                 (DL_FUNC) &_icd_comorbidMatMulWide,                 4},
     {"_icd_factorNoSort",                       (DL_FUNC) &_icd_factorNoSort,                       3},
     {"_icd_fastIntToStringRcpp",                (DL_FUNC) &_icd_fastIntToStringRcpp,                1},
     {"_icd_guessShortCompleteCpp",              (DL_FUNC) &_icd_guessShortCompleteCpp,              4},
@@ -81,7 +83,6 @@ static const R_CallMethodDef CallEntries[] = {
     {"_icd_icd9DecimalToShort",                 (DL_FUNC) &_icd_icd9DecimalToShort,                 1},
     {"_icd_icd9ExpandMinor",                    (DL_FUNC) &_icd_icd9ExpandMinor,                    2},
     {"_icd_icd9GetMajor",                       (DL_FUNC) &_icd_icd9GetMajor,                       2},
-    {"_icd_longToWideCpp",                      (DL_FUNC) &_icd_longToWideCpp,                  4},
     {"_icd_icd9MajMinToCode",                   (DL_FUNC) &_icd_icd9MajMinToCode,                   3},
     {"_icd_icd9MajMinToDecimal",                (DL_FUNC) &_icd_icd9MajMinToDecimal,                2},
     {"_icd_icd9MajMinToParts",                  (DL_FUNC) &_icd_icd9MajMinToParts,                  2},
@@ -92,6 +93,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_icd_icd9ShortToDecimal",                 (DL_FUNC) &_icd_icd9ShortToDecimal,                 1},
     {"_icd_icd9ShortToPartsCpp",                (DL_FUNC) &_icd_icd9ShortToPartsCpp,                2},
     {"_icd_inFast",                             (DL_FUNC) &_icd_inFast,                             2},
+    {"_icd_longToWideCpp",                      (DL_FUNC) &_icd_longToWideCpp,                      4},
     {"_icd_matchFast",                          (DL_FUNC) &_icd_matchFast,                          2},
     {"_icd_refactor",                           (DL_FUNC) &_icd_refactor,                           3},
     {"_icd_refactor_narm",                      (DL_FUNC) &_icd_refactor_narm,                      2},

@@ -16,7 +16,7 @@
 /*
  MAKEFLAGS=-j16 R -e 'devtools::load_all(); icd9_comorbid_ahrq(ahrq_test_dat)'
  MAKEFLAGS=-j16 R -e 'devtools::load_all(); test(reporter="Location")'
- MAKEFLAGS=-j16 R -e 'devtools::load_all(); mydf <- data.frame(visit_id = c("a", "a"), icd9 = c("441", "412.93")); icd9_comorbid_quan_deyo(mydf)'
+ MAKEFLAGS=-j16 R -e 'devtools::load_all(); mydf <- data.frame(visit_id = c("a", "a"), "dx1" = c("441", "41293"), "dx2" = c(NA, "1001"), stringsAsFactors = TRUE); comorbidMatMulWide(mydf, icd9_map_charlson, "visit_id", c("dx1", "dx2"))'
  */
 
 using namespace Rcpp;
@@ -68,20 +68,18 @@ void buildVisitCodesSparseSimple(
 ) {
   TRACE("Starting build of visit matrix");
   assert(Rf_length(visits) == Rf_length(codes));
-  const CV relevantKeys = rh.keys;
-  const R_xlen_t relevantSize = rh.size();
   R_xlen_t vlen = Rf_length(visits);
-  DEBUG("relevantSize = " << relevantSize << ", vlen = " << vlen);
+  DEBUG("relevant size = " << rh.relevant.size() << ", vlen = " << vlen);
   std::vector<Triplet> visTriplets;
   visTriplets.reserve(vlen);
   IntegerVector rows, cols;
   if (!Rf_isFactor(codes)) {
     DEBUG("codes are still character...");
-    const CV& codes_cv = (CV) codes;
-    DEBUG_VEC(codes_cv);
-    DEBUG_VEC(relevantKeys);
+    const CV& data_col_cv = (CV) codes;
+    DEBUG_VEC(data_col_cv);
+    DEBUG_VEC(rh.keys);
     DEBUG("rh.keys.size() = " << rh.keys.size());
-    cols = rh.hash.lookup(codes_cv); // C indexed
+    cols = rh.hash.lookup(data_col_cv); // C indexed
   } else {
     DEBUG("codes are still in a factor...");
     CV code_levels = wrap(codes.attr("levels"));
@@ -89,7 +87,7 @@ void buildVisitCodesSparseSimple(
       refactor((IntegerVector) codes, rh.relevant, true); // no NA in output levels, please
     //const CV code_levels_cv = (CV) code_levels;
     //assert(Rf_length(code_relevant.attr("levels")) == relevantSize);
-    //assert(code_levels_cv[0] == relevantKeys[0]); // TODO better checks?
+    //assert(code_levels_cv[0] == rh.keys[0]); // TODO better checks?
     cols = ((IntegerVector) codes_relevant); // keep R indexing
   }
   if (!Rf_isFactor(visits)) {
@@ -120,7 +118,7 @@ void buildVisitCodesSparseSimple(
   DEBUG_VEC(cols);
   DEBUG("n rows: " << rows.size() << ", n cols: " << cols.size());
   assert(rows.size() == cols.size());
-  visMat.resize(visitIds.size(), relevantSize); // unique ids
+  visMat.resize(visitIds.size(), rh.relevant.size()); // unique ids
   visMat.reserve(vlen); // number of triplets is just vlen (for long data)
 
   // now we have rows and columns, just make the triplets and insert.
@@ -136,39 +134,28 @@ void buildVisitCodesSparseSimple(
   TRACE("visMat to be updated, setting visMat from triplets...");
   TRACE("there are " << visTriplets.size() << " triplets");
   visMat.setFromTriplets(visTriplets.begin(), visTriplets.end());
-  visMat.conservativeResize(visitIds.size(), relevantSize);
+  visMat.conservativeResize(visitIds.size(), rh.relevant.size());
   DEBUG("Built visMt, rows:" << visMat.rows() << ", cols: " << visMat.cols());
   PRINTCORNERSP(visMat);
 }
 
 void buildVisitCodesSparseWide(
-    const RObject& visits,
-    const List& data,
+    const DataFrame& data,
+    const std::string id_name,
     const CV code_names,
     Relevant& rh,
     PtsSparse& visMat, // output
     VecStr& visitIds // output: can get this from sparse matrix at end? Needed?
 ) {
-    //assert(Rf_length(visits) == Rf_length(codes));
-  const CV relevantKeys = rh.keys;
-  const R_xlen_t relevantSize = rh.size();
+  DEBUG_VEC(rh.keys);
+  const RObject visits = data[id_name];
   R_xlen_t vlen = Rf_length(visits);
   std::vector<Triplet> visTriplets;
-  // visTriplets is going to be vlen * number of data cols
-  visTriplets.reserve(vlen);
-  IntegerVector rows;
-  IntegerVector cols = IntegerVector::create();
-  // cols is going to be vlen * number of data cols
-  IntegerVector data_col_names = match(code_names, (CV) data.names());
-  for (auto data_col_name : data_col_names) {
-    if (Rf_isFactor(data[data_col_name])) {
-      Rcpp::warning("Working on ", data_col_name);
-      stop("For wide data, currently codes cannot be factors.");
-    }
-    const CV& codes_cv = (CV) data[data_col_name];
-    //cols.insert(cols.end(), rh.hash.lookup(codes_cv)); // C indexed
-  }
+  auto ncol = code_names.size();
+  visTriplets.reserve(vlen * ncol); // upper bound
+  IntegerVector rows = Rcpp::no_init(vlen * ncol);
   if (!Rf_isFactor(visits)) {
+    DEBUG(TYPEOF(visits));
     CV v = (CV) visits; // assume character for now
     CV uv = unique(v);
     visitIds = as<VecStr>(uv);
@@ -177,21 +164,32 @@ void buildVisitCodesSparseWide(
     rows = visits; // can do this without copy using unique_ptr?
     visitIds = as<VecStr>(rows.attr("levels"));
   }
-  // for wide, we need to duplicate the rows to match number of cols
-  auto rows_orig = clone(rows);
-  for (auto cf : code_names) {
-    //rows.insert(rows.end(), rows_orig);
-  }
-  assert(rows.size() == cols.size());
-  visMat.resize(visitIds.size(), relevantSize); // unique ids
-  visMat.reserve(vlen); // number of triplets is just vlen (for long data)
-  // now we have rows and columns, just make the triplets and insert.
-  for (R_xlen_t i = 0; i != rows.size(); ++i) {
-    if (IntegerVector::is_na(cols[i])) continue;
-    visTriplets.push_back(Triplet(rows[i] - 1, cols[i] - 1, true));
-  }
+  for (uint j = 0; j != code_names.size(); ++j) {
+    String data_col_name = code_names[j];
+    const SEXP& data_col = data[data_col_name];
+    if (Rf_isFactor(data_col)) {
+      Rcpp::warning(data_col_name);
+      DEBUG_VEC((IntegerVector) data_col);
+      stop("For wide data, currently codes cannot be factors.");
+    }
+    const CV& data_col_cv = (CV) data_col;
+    DEBUG_VEC(data_col_cv);
+
+    //IntegerVector debugiv = rh.hash.lookup("0930");
+    //if (is_true(any(is_na(debugiv)))) stop("NA!");
+
+    IntegerVector iv = rh.hash.lookup(data_col_cv); // vector of length vlen with NAs
+    DEBUG_VEC(iv);
+    for (R_xlen_t i = 0; i != rows.size(); ++i) {
+      if (IntegerVector::is_na(iv[i])) continue;
+      DEBUG("inserting triplet");
+      visTriplets.push_back(Triplet(rows[i] - 1, iv[i] - 1, true));
+    } // end i loop through rows
+  } // end j loop through data columns
+  visMat.resize(visitIds.size(), rh.relevant.size()); // unique ids
+  visMat.reserve(vlen * ncol); // upper bound
   visMat.setFromTriplets(visTriplets.begin(), visTriplets.end());
-  visMat.conservativeResize(visitIds.size(), relevantSize);
+  visMat.conservativeResize(visitIds.size(), rh.relevant.size());
 }
 
 //' @title Comorbidity calculation as a matrix multiplication
@@ -230,7 +228,6 @@ LogicalMatrix comorbidMatMulWide(const DataFrame& data,
   PtsSparse visMat; // reservation and sizing done within next function
   buildVisitCodesSparseWide(data, id_name, code_names,
                             r, visMat, out_row_names);
-  DEBUG("built visit matrix");
   if (visMat.cols() != m.rows())
     Rcpp::stop("matrix multiplication won't work");
   DenseMap result = visMat * m.mat; // col major result

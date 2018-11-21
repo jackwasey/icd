@@ -26,7 +26,7 @@ extern "C" {
 #include "cutil.h"
 #include <cstdlib>
 }
-// #define ICD_DEBUG
+#define ICD_DEBUG
 // #define ICD_DEBUG_TRACE
 // #define ICD_DEBUG_UTIL
 // #define ICD_DEBUG_SETUP
@@ -99,13 +99,13 @@ inline void printIt(const C& c, int n = 10) {
   Rcpp::Rcout.flush();
 }
 
-template <typename V>
-inline void printIt(const V& v) {
-  std::ostringstream o;
-  o << v << std::endl;
-  Rcpp::Rcout << o.str();
-  Rcpp::Rcout.flush();
-}
+// template <typename V>
+// inline void printIt(const V& v) {
+//   std::ostringstream o;
+//   o << v << std::endl;
+//   Rcpp::Rcout << o.str();
+//   Rcpp::Rcout.flush();
+// }
 
 template <typename C>
 inline void printIt(const Rcpp::Nullable<C>& c, int n = 10) {
@@ -114,6 +114,22 @@ inline void printIt(const Rcpp::Nullable<C>& c, int n = 10) {
     return;
   }
   printIt((C)c, n);
+}
+
+template <typename F, typename S>
+inline void printUm(std::unordered_map<F, S> um) {
+  std::vector<F> keys;
+  keys.reserve(um.size());
+  std::vector<S> vals;
+  vals.reserve(um.size());
+  for(auto kv : um) {
+    keys.push_back(kv.first);
+    vals.push_back(kv.second);
+  }
+  Rcpp::Rcout << "Unordered map keys:" << std::endl;
+  printIt(keys);
+  Rcpp::Rcout << "Unordered map values:" << std::endl;
+  printIt(vals);
 }
 
 #endif // end (defined ICD_DEBUG || defined ICD_DEBUG_SETUP)

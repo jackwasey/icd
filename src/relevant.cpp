@@ -83,3 +83,16 @@ CV Relevant::findRelevant(const List& data, CV code_fields) {
   findRelevant();
   return(wrap(r)); // or keep as STL container?
 }
+
+RelMap Relevant::findRel(const CharacterVector x) {
+  RelMap out;
+  DEBUG("building um using:");
+  DEBUG_VEC(x);
+  for (CV::const_iterator rit = x.cbegin(); rit != x.cend(); ++rit) {
+    const char * code = *rit;
+    DEBUG(std::distance(x.cbegin(), rit));
+    DEBUG(code);
+    out.insert(RelPair(code, std::distance(x.cbegin(), rit)));
+  }
+  return out;
+}

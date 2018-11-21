@@ -22,25 +22,31 @@ void printCornerSparse(PtsSparse x);
 // # nocov end
 
 void buildVisitCodesSparseSimple(
-    const RObject& visits,
-    const RObject& codes, // todo handle factor in parent function
-    Relevant& rh,
-    PtsSparse& visMat, // output
-    VecStr& visitIds // output: can get this from sparse matrix at end? Needed?
+        const RObject& visits,
+        const RObject& codes,
+        Relevant& rh,
+        // output
+        PtsSparse& visMat,
+        // output: can get this from sparse matrix at end? Needed?
+        VecStr& visitIds
 );
 void buildVisitCodesSparseWide(
-    const RObject& visits,
-    const List& data,
-    const CV code_fields,
-    Relevant& rh,
-    PtsSparse& visMat, // output
-    VecStr& visitIds // output: can get this from sparse matrix at end? Needed?
+        const DataFrame& data,
+        const std::string id_name,
+        const CV code_names,
+        Relevant& rh,
+        // output
+        PtsSparse& visMat,
+        // output: can get this from sparse matrix at end? Needed?
+        VecStr& visitIds
 );
-LogicalMatrix comorbidMatMulWide(const DataFrame& data,
-                                 const List& map,
-                                 const std::string id_field,
-                                 const CV code_fields);
-LogicalMatrix comorbidMatMulSimple(const DataFrame& data,
-                                   const List& map,
-                                   const std::string id_field,
-                                   const std::string code_field);
+LogicalMatrix comorbidMatMulWide(
+        const DataFrame& data,
+        const List& map,
+        const std::string id_name,
+        const CV code_name);
+LogicalMatrix comorbidMatMulSimple(
+        const DataFrame& data,
+        const List& map,
+        const std::string id_name,
+        const std::string code_name);
