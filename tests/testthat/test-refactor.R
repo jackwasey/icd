@@ -113,6 +113,37 @@ test_that("new factor has empty levels when necessary", {
   }
 })
 
+test_that("NA anywhere in middle of input levels ok", {
+  # todo: duplicate target levels should fail or drop silenetly?
+  v <- c("a", "b", NA)
+  f_perms <- expand.grid(v, v, v, length(v))
+  l_perms <- unique(apply(f_perms, 1, unique))
+  for (i in nrow(f_perms)) { # orig values
+    for (ii in seq_along(l_perms)) { # new levels
+      for (iii in seq_along(l_perms)) { # old levels
+        w <- factor(f_perms[i, ], levels = l_perms[[iii]], exclude = NULL)
+        l <- l_perms[[ii]]
+        expect_error(regexp = NA,
+                     refactor(w, l, na.rm = TRUE, exclude_na = TRUE),
+                     info = paste("w = ", paste(w, collapse = ", "),
+                                  "; l = ", paste(l, collapse = ", ")))
+        expect_error(regexp = NA,
+                     refactor(w, l, na.rm = FALSE, exclude_na = TRUE),
+                     info = paste("w = ", paste(w, collapse = ", "),
+                                  "; l = ", paste(l, collapse = ", ")))
+        expect_error(regexp = NA,
+                     refactor(w, l, na.rm = TRUE, exclude_na = FALSE),
+                     info = paste("w = ", paste(w, collapse = ", "),
+                                  "; l = ", paste(l, collapse = ", ")))
+        expect_error(regexp = NA,
+                     refactor(w, l, na.rm = FALSE, exclude_na = FALSE),
+                     info = paste("w = ", paste(w, collapse = ", "),
+                                  "; l = ", paste(l, collapse = ", ")))
+      }
+    }
+  }
+})
+
 test_that("no crash with NA levels", {
   for (ena in c(TRUE, FALSE)) {
     for (narm in c(TRUE, FALSE)) {

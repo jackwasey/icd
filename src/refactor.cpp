@@ -84,10 +84,9 @@ Rcpp::IntegerVector refactor(const IntegerVector& x, const CV& new_levels,
     assert(x[i] > 0);
     assert(x[i] <= which_na_old_levels.size()); // R index (to be used in C)
     if (which_na_old_levels[x[i] - 1]) {
-      DEBUG("inserting NA because vec previously referenced NA level. pos " <<
-        i << " with fi=" << fi);
+      DEBUG("inserting NA for NA level ref. pos " << i << " with fi=" << fi);
       if (!exclude_na)
-        Rcpp::stop("TODO: lookup index of NA in new levels, if it exists");
+        Rcpp::stop("TODO: lookup index of NA in new levels");
       else
         DEBUG("no NA levels in target factor, inserting NA value in vector.");
       f[fi++] = NA_INTEGER;
