@@ -11,6 +11,7 @@
 extern SEXP _icd_categorize_rcpp();
 extern SEXP _icd_comorbidMatMulSimple(SEXP, SEXP, SEXP, SEXP);
 extern SEXP _icd_comorbidMatMulWide(SEXP, SEXP, SEXP, SEXP);
+extern SEXP _icd_factorIsValid(SEXP);
 extern SEXP _icd_factorNoSort(SEXP, SEXP, SEXP);
 extern SEXP _icd_fastIntToStringRcpp(SEXP);
 extern SEXP _icd_guessShortCompleteCpp(SEXP, SEXP, SEXP, SEXP);
@@ -61,6 +62,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_icd_categorize_rcpp",                    (DL_FUNC) &_icd_categorize_rcpp,                    0},
     {"_icd_comorbidMatMulSimple",               (DL_FUNC) &_icd_comorbidMatMulSimple,               4},
     {"_icd_comorbidMatMulWide",                 (DL_FUNC) &_icd_comorbidMatMulWide,                 4},
+    {"_icd_factorIsValid",                      (DL_FUNC) &_icd_factorIsValid,                      1},
     {"_icd_factorNoSort",                       (DL_FUNC) &_icd_factorNoSort,                       3},
     {"_icd_fastIntToStringRcpp",                (DL_FUNC) &_icd_fastIntToStringRcpp,                1},
     {"_icd_guessShortCompleteCpp",              (DL_FUNC) &_icd_guessShortCompleteCpp,              4},

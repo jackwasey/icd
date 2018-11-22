@@ -477,6 +477,17 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// factorIsValid
+bool factorIsValid(const IntegerVector& f);
+RcppExport SEXP _icd_factorIsValid(SEXP fSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const IntegerVector& >::type f(fSEXP);
+    rcpp_result_gen = Rcpp::wrap(factorIsValid(f));
+    return rcpp_result_gen;
+END_RCPP
+}
 // trimLeftCpp
 std::string trimLeftCpp(std::string s);
 RcppExport SEXP _icd_trimLeftCpp(SEXP sSEXP) {

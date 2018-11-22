@@ -170,11 +170,11 @@ context("refactor") {
     expect_true(j.size() == 0);
   }
   test_that("empty factor levels") {
-    f = {1};
+    f = IntegerVector();
     f.attr("levels") = empty_levels;
     f.attr("class") = "factor";
     res = refactor(f, empty_levels, false);
-    expect_true(IntegerVector::is_na(res[0]));
+    expect_true(res.size() == 0);
     j = res.attr("levels");
     expect_true(j.size() == 0);
   }

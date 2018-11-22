@@ -28,5 +28,5 @@ IntegerVector factorNoSort(const CharacterVector& x,
 Rcpp::IntegerVector refactor(const IntegerVector& x,
                              const CV& new_levels, bool exclude_na);
 Rcpp::IntegerVector refactor_narm(const IntegerVector& x, const CV& new_levels);
-
+bool factorIsValid(const IntegerVector& f);
 #endif /* REFACTOR_H_ */

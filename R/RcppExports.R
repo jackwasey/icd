@@ -301,6 +301,12 @@ refactor_narm_worker <- function(x, new_levels) {
     .Call(`_icd_refactor_narm`, x, new_levels)
 }
 
+#' @title Check a factor structure is valid
+#' @keywords internal
+factor_is_valid <- function(f) {
+    .Call(`_icd_factorIsValid`, f)
+}
+
 trimLeftCpp <- function(s) {
     .Call(`_icd_trimLeftCpp`, s)
 }
