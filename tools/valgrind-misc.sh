@@ -24,7 +24,5 @@ R -d "$CALLGRIND" -e "library(icd); devnull<-icd:::sc(1000000)"
 
 R -d "$CALLGRIND" -e "library(icd); library(microbenchmark); bench_vary_n()"
 
-R CMD INSTALL ~/icd && Rscript $PKG_ARG -d "$CALLGRIND" -e "pts <- generate_random_ordered_pts(1000, 10); long_to_wide(pts)"
-
 # other useful options: --instr-atstart=no
 # then callgrind_control -i (or prograammatically) start instrumentation

@@ -65,29 +65,32 @@ test_that("basic refactoring", {
     n <- test_cases[tc, 2][[1]]
     p <- unique(test_cases[tc, 3][[1]])
     f <- factor(m, levels = p)
+    f_res <- factor(f, levels = n)
     expect_identical(
-      refactor(f, n),
-      factor(f, levels = n), # exclude NA by default, as factor does
+      refactor(f, n, na.rm = TRUE, exclude_na = TRUE),
+      f_res[!is.na(f_res)], # exclude NA by default, as factor does
       info = paste("m = c('", paste(unlist(m), collapse = "', '"), "')\n",
-                   "n = c('", paste(unlist(n), collapse = "', '"), "')",
-                   "p: ", paste(unlist(p), collapse = " "), sep = "")
+                   "n = c('", paste(unlist(n), collapse = "', '"), "')\n",
+                   "p = c('", paste(p, collapse = "', '"), "')",
+                   sep = "")
     )
     expect_identical(
       refactor(f, n, na.rm = FALSE, exclude_na = FALSE),
       factor(f, levels = n, exclude = NULL),
       info = paste("m = c('", paste(unlist(m), collapse = "', '"), "')\n",
                    "n = c('", paste(unlist(n), collapse = "', '"), "')",
-                   "p: ", paste(unlist(p), collapse = " "), sep = "")
+                   "p = c(", paste(p, collapse = "', '"), "')",
+                   sep = "")
     )
     if (!anyNA(f) && !anyNA(levels(f)))
       expect_identical(
-        refactor(f, n, na.rm = FALSE),
-        factor(f, levels = n),
+        refactor(f, n, na.rm = FALSE, exclude_na = TRUE),
+        f_res,
         info = paste("m = c('", paste(unlist(m), collapse = "', '"), "')\n",
                      "n = c('", paste(unlist(n), collapse = "', '"), "')",
-                     "p: ", paste(unlist(p), collapse = " "), sep = "")
-
-      )
+                     "p = c(", paste(p, collapse = "', '"), "')",
+                     sep = "")
+        )
   }
 })
 
@@ -142,12 +145,15 @@ test_that("NA anywhere in middle of input levels ok", {
               gtt <- factor(w, l, exclude = NULL)
             expect_identical(
               ftt, gtt,
-              info = paste("w = ", paste(w, collapse = ", "),
+              info = paste("i = ", i,
+                           "; ii = ", ii,
+                           "; iii = ", iii,
+                           "; w = ", paste(w, collapse = ", "),
                            "; wlen = ", length(w),
                            "; l = ", paste(l, collapse = ", "),
                            "; llen = ", length(l),
-                           ifelse(narm, "na.rm", "!na.rm"),
-                           ifelse(exna, "exclude_na", "!exclude_na")
+                           ifelse(narm, "; narm=TRUE", "; narm=FALSE"),
+                           ifelse(exna, "; exna=TRUE", "exna=FALSE")
               ))
           }
         }
@@ -327,4 +333,10 @@ test_that("big bad factor frmo github133 test", {
       "Z9981", "I701", "K529", "D631", "B9620", "Z881", "Z96641", "N289",
       "I442", "Z6839", "J449", "K449", "I739", "Z90710", "Z9049", "Z85828"
     ), class = "factor")
+})
+
+test_that("crash case", {
+  f <- factor(c(NA, "a"), levels = c(NA, "a"), exclude = NULL)
+  expect_identical(refactor(f, c("a", "b")),
+                   structure(c(NA, 1L), .Label = c("a", "b"), class = "factor"))
 })

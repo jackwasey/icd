@@ -24,12 +24,12 @@ test_that("simple wide data calc", {
 
 test_that("convert long to wide, then do wide cmb", {
   icd9_dfs <-
-    c("ahrq_test_dat",
+    c("two_pts",
+      "two_pts_fac",
+      "ahrq_test_dat",
       "complex_poa_pts",
       "elix_test_dat",
-      "empty_ahrq_mat",
-      "empty_ahrq_mat_heir",
-      "empty_pts",
+      #"empty_pts",
       "hcc_test_invalid",
       "hcc_test_simple10",
       "hcc_test_simple9",
@@ -43,15 +43,13 @@ test_that("convert long to wide, then do wide cmb", {
       "random_test_patients",
       "simple_poa_pts",
       "simple_pts",
-      "test_twenty",
-      "two_map",
-      "two_map_fac",
-      "two_pts",
-      "two_pts_fac"
+      "test_twenty"
     )
   for (df in icd9_dfs) {
-    by_long <- comorbid_ahrq(get(df))
-    df_wide <- long_to_wide(get(df), return_df = TRUE)
+    expect_error(regexp = NA,
+                 by_long <- comorbid_ahrq(get(df)),
+                 info = df)
+    df_wide <- long_to_wide(get(df))
     icd_names <- names(df_wide)[-1]
     by_wide <- comorbid_ahrq(df_wide, icd_name = icd_names)
     expect_equivalent(by_long, by_wide, info = paste("Wide", df))

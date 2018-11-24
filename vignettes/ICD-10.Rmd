@@ -56,7 +56,7 @@ explain_code("R55")
 ```
 We can convert the date from long to wide format easily, accounting for the most common features of medical coding data. You may be happier using \pkg{dplyr} and friends for this manipulation, and you will find that 'icd' functions work well with \pkg{magrittr} and the 'tidyverse' packages, although none are used internally.
 ```{r uranium-wide}
-uranium_pathology %>% long_to_wide %>% head
+uranium_pathology %>% head
 ```
 
 Now map these diagnoses to disease groups as defined by Quan et al:

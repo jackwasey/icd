@@ -9,7 +9,8 @@ refactor(x, levels, na.rm = FALSE, exclude_na = TRUE)
 \arguments{
 \item{exclude_na}{Simpler equivalent to \code{base::factor} exclude. By default,
 \code{refactor} will not count \code{NA} as a factor level if there are \code{NA} elements
-in the input data.}
+in the input data. As with \code{base::factor}, if \code{exclude_na} is \code{TRUE}, an
+\code{NA} level explicitly requested in the \code{levels} argument is still dropped.}
 }
 \description{
 Slightly slower for small factors, three times faster for one hundred million

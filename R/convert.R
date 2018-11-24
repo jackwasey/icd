@@ -157,10 +157,6 @@ wide_to_long <- function(x,
 #' @param min_width, single integer, if specified, writes out this many columns
 #'   even if no patients have that many codes. Must be greater than or equal to
 #'   the maximum number of codes per patient.
-#' @param aggr single logical value, if TRUE (the default) will take more time
-#'   to find out-of-order visit_names, and combine all the codes for each unique
-#'   visit_name. If \code{FALSE}, then out-of-order visit_names will result in a
-#'   row in the output data per contiguous block of identical visit_names.
 #' @param return_df single logical value, if \code{TRUE}, return a data frame
 #'   with a field for the visit_name. This may be more convenient, but the
 #'   default of \code{FALSE} gives the more natural return data of a matrix with
@@ -177,43 +173,43 @@ long_to_wide <- function(x,
                          visit_name = get_visit_name(x),
                          icd_name = get_icd_name(x),
                          prefix = "icd_",
-                         min_width = 0,
-                         aggr = TRUE,
-                         return_df = FALSE) {
-
+                         min_width = 1L) {
   assert_data_frame(x, col.names = "unique")
   visit_name <- as_char_no_warn(visit_name)
   icd_name <- as_char_no_warn(icd_name)
+  stopifnot(visit_name %in% names(x))
+  stopifnot(icd_name %in% names(x))
   assert_string(prefix, min.chars = 1)
   assert_count(min_width, na.ok = FALSE)
-  assert_flag(aggr)
-  assert_flag(return_df)
 
-  # we're now going to return a matrix
-  icd9_name_was_factor <- is.factor(x[[visit_name]]) # TODO: visit or icd name?
-  if (icd9_name_was_factor) iv_levels <- levels(x[[visit_name]])
-  x[[visit_name]] <- as_char_no_warn(x[[visit_name]])
-  x[[icd_name]] <- as_char_no_warn(x[[icd_name]])
-  mat <- long_to_wide_cpp(x, id_name = visit_name,
-                          code_name = icd_name, aggregate = aggr)
-  if (!return_df)
-    return(as.icd_wide_data(mat))
-  if (icd9_name_was_factor)
-    rownm <- factor(x = rownames(mat), levels = iv_levels)
+  visit_name_f <- is.factor(x[[visit_name]])
+  icd_name_f <-  is.factor(x[[icd_name]])
+  if (icd_name_f) i_levels <- levels(x[[icd_name]])
+  x_order <- order(x[[visit_name]])
+  x <- x[x_order, ]
+  if (visit_name_f)
+    v_levels <- levels(x[[visit_name]])
   else
-    rownm <- rownames(mat)
-  df.out <- cbind(rownm, as.data.frame(unname(mat)),
-                  stringsAsFactors = icd9_name_was_factor)
-  names(df.out)[1] <- visit_name
-  # perhaps leave (duplicated) rownames which came from the matrix:
-  rownames(df.out) <- NULL
-  nc <- ncol(df.out) - 1
+    v_levels <- x[!duplicated(x[[visit_name]]), visit_name]
+  x$seqnum <- sequence(tabulate(factor(x[[visit_name]], levels = v_levels)))
+  out <- reshape(x[c(visit_name, "seqnum", icd_name)],
+                 idvar = visit_name,
+                 timevar = "seqnum",
+                 direction = "wide")
+  if (visit_name_f)
+    out[[visit_name]] <- factor(x = out[[visit_name]], levels = v_levels)
+  if (icd_name_f)
+    out[-which(names(out) == visit_name)] <-
+    lapply(out[-which(names(out) == visit_name)], factor, levels = i_levels)
+  nc = ncol(out) - 1
+  names(out)[-which(names(out) == visit_name)] <-
+    paste(prefix, sprintf("%03d", 1:nc), sep = "")
   if (nc < min_width) {
-    df.out <- cbind(df.out, matrix(rep(NA, min_width - nc), nrow = 1))
+    out <- cbind(out, matrix(NA, ncol = min_width - nc))
     nc <- min_width
   }
-  names(df.out)[-1] <- paste(prefix, sprintf("%03d", 1:nc), sep = "")
-  as.icd_wide_data(df.out)
+  names(out)[-1] <- paste(prefix, sprintf("%03d", 1:nc), sep = "")
+  as.icd_wide_data(out, warn = FALSE)
 }
 
 #' convert comorbidity data frame from matrix

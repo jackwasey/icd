@@ -24,27 +24,6 @@ widedf <- data.frame(visit_id = c("a", "b", "c"),
                      icd9_001 = c("441", "4424", "441"),
                      icd9_002 = c(NA, "443", NA))
 
-test_that("long data to wide data", {
-  longcmp <- data.frame(visit_id = c("a", "b", "c"),
-                        icd_001 = c("441", "4424", "441"),
-                        icd_002 = c(NA, "443", NA))
-  expect_equivalent(res <- icd_long_to_wide(longdf, return_df = TRUE), longcmp)
-  expect_true(is.icd_wide_data(res))
-  longcmp2 <- data.frame(visit_id = c("a", "b", "c"),
-                         icd_001 = c("441", "4424", "441"),
-                         icd_002 = c(NA, "443", NA),
-                         icd_003 = c(NA, NA, NA))
-  expect_equivalent(res <- icd_long_to_wide(longdf, min_width = 3, return_df = TRUE), longcmp2)
-  expect_true(is.icd_wide_data(res))
-  longdf2 <- data.frame(i = c("441", "4424", "443", "441"),
-                        v = c("a", "b", "b", "c"))
-  expect_equal(names(icd_long_to_wide(longdf2,
-                                      visit_name = "v",
-                                      icd_name = "i",
-                                      prefix = "ICD10_", return_df = TRUE)),
-               c("v", "ICD10_001", "ICD10_002"))
-})
-
 test_that("wide data to long data", {
   expect_equivalent(icd_wide_to_long(widedf),
                     longdf)

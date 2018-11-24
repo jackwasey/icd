@@ -213,14 +213,14 @@ icd10cm <- function(x) {
 #'   \code{\link{wide_to_long}}.
 #' @family ICD code conversion
 #' @export
-as.icd_long_data <- function(x) {
+as.icd_long_data <- function(x, warn = TRUE) {
   # Also from Wickham: "When implementing a matrix/array class, you should
   # implement these methods: dim (gets you nrow and ncol), t, dimnames (gets you
   # rownames and colnames), dimnames<- (gets you colnames<-, rownames<-), cbind,
   # rbind."
   stopifnot(is.data.frame(x) || is.matrix(x))
   assert_data_frame(x)
-  if (is.icd_wide_data(x))
+  if (warn && is.icd_wide_data(x))
     warning("Setting 'icd_long_data' on a data.frame or matrix which already",
             " has 'icd_wide_data' class")
   if (is.icd_long_data(x))
@@ -232,11 +232,12 @@ as.icd_long_data <- function(x) {
 #' @describeIn icd_long_data Set class on a matrix or data.frame to
 #'   \code{icd_wide_data}. To convert long to wide data, use
 #'   \code{\link{long_to_wide}}.
+#' @param warn Single logical, if \code{TRUE}, the default, a warning will be shown if changing class between long and wide types.
 #' @family ICD code conversion
 #' @export
-as.icd_wide_data <- function(x) {
+as.icd_wide_data <- function(x, warn = TRUE) {
   stopifnot(is.data.frame(x) || is.matrix(x))
-  if (is.icd_long_data(x))
+  if (warn && is.icd_long_data(x))
     warning("Setting 'icd_wide_data' on a data.frame or matrix which already",
             " has 'icd_long_data' class")
   if (is.icd_wide_data(x))

@@ -288,7 +288,9 @@ factor_nosort_rcpp_worker <- function(x, levels, na_rm) {
 
 #' @title Re-generate a factor with new levels, without doing string matching
 #' @description This is called by an R wrapper. There is an `na.rm` version,
-#' too.
+#'   too. Some work simply to mirror behavior of `base::factor`, e.g. when a
+#'   level is not available, but NA level is available, NA is inserted into the
+#'   integer vector, not an index to the NA level.
 #' @md
 #' @keywords internal manip
 refactor_worker <- function(x, new_levels, exclude_na) {

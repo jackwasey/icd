@@ -9,9 +9,9 @@
 \alias{is.icd_wide_data}
 \title{Convert between and identify 'long' and 'wide' patient data formats}
 \usage{
-as.icd_long_data(x)
+as.icd_long_data(x, warn = TRUE)
 
-as.icd_wide_data(x)
+as.icd_wide_data(x, warn = TRUE)
 
 icd_long_data(...)
 
@@ -23,6 +23,8 @@ is.icd_wide_data(x)
 }
 \arguments{
 \item{x}{\code{data.frame} or \code{matrix} to set class, or convert.}
+
+\item{warn}{Single logical, if \code{TRUE}, the default, a warning will be shown if changing class between long and wide types.}
 
 \item{...}{arguments passed on to create a \code{data.frame}}
 }
