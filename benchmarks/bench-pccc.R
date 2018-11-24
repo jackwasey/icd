@@ -29,8 +29,11 @@ if (FALSE)
 pts_per_code_pos <- as.integer(n / (1:20) ^ 4)
 key_factors = list(paste0("bench-pccc-factors", do_icd9, n))
 key_str = list(paste0("bench-pccc-wide", do_icd9, n))
-dat_wide_factors <- R.cache::loadCache(key_factors)
-dat_wide_str <- R.cache::loadCache(key_str)
+use_cache <- FALSE
+if (use_cache) {
+  dat_wide_factors <- R.cache::loadCache(key_factors)
+  dat_wide_str <- R.cache::loadCache(key_str)
+}
 if (is.null(dat_wide_factors) || nrow(dat_wide_factors) != n) {
   dat_wide_factors <- data.frame(id = dat$id,
                                  dx01 = dat$icd_code,
@@ -39,8 +42,9 @@ if (is.null(dat_wide_factors) || nrow(dat_wide_factors) != n) {
     dx_str <- sprintf("%02i", dx)
     message("building column:", dx_str)
     len <- pts_per_code_pos[dx]
-    f <- as.integer(sample(c(1L + seq_len(len), rep(1L, n - len))))
-    attr(f, "levels") <- c(NA, sample(codes, len, replace = TRUE))
+    l <-  unique(c(NA, sample(codes, len, replace = TRUE)))
+    f <- as.integer(sample(c(seq_along(l), rep(1L, n - length(l)))))
+    attr(f, "levels") <- l
     attr(f, "class") <- "factor"
     dat_wide_factors[[paste0("dx", dx_str)]] <- f
   }
@@ -100,29 +104,31 @@ if (FALSE)
 # calculate comorbidities for each column, then OR? But icd has to work on the
 # generated ID column each time, which is a big time sink
 
-# TODO: try dplyr wide to long
-
-ptm <- proc.time()
-res <- matrix(0L, nrow = n, ncol = 12L)
-for (x in rev(names(dat_wide_factors)[-1])) {
-  message("working on column ", x);
-  #tm <- system.time(
+if (FALSE) {
+  message("icd old way:")
+  ptm <- proc.time()
+  res <- matrix(0L, nrow = n, ncol = 12L)
+  for (x in rev(names(dat_wide_factors)[-1])) {
+    message("working on column ", x);
     if (do_icd9)
       res <- res | icd9_comorbid_pccc_dx( # copies big matrix each update
         dat_wide_factors[c("id", x)], icd_name = x,
-        restore_id_order = FALSE, unique_ids = TRUE)
+        restore_id_order = FALSE)
     else
       res <- res | icd10_comorbid_pccc_dx(
         dat_wide_factors[c("id", x)], icd_name = x,
-        restore_id_order = FALSE, unique_ids = TRUE)
-  #); print(tm)
-  #gc(verbose = TRUE) # there is gc time between each column
+        restore_id_order = FALSE)
+  }
+  message("icd old way:")
+  print(proc.time() - ptm)
 }
-print(proc.time() - ptm)
 
-########
-# pccc #
-########
+message("icd:")
+icdtm2 <- proc.time()
+res_icd2 <- icd::comorbid_pccc_dx(dat_wide_str)
+print(proc.time() - icdtm2)
+
+message("PCCC:")
 pccctm <- proc.time()
 res_pccc <- pccc::ccc(dat_wide_str,
                       "id",

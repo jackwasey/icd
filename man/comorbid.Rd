@@ -43,7 +43,7 @@ icd10_comorbid(x, map, visit_name = NULL, icd_name = NULL,
 icd9_comorbid(x, map, visit_name = NULL, icd_name = NULL,
   short_code = guess_short(x, icd_name = icd_name),
   short_map = guess_short(map), return_df = FALSE,
-  return_binary = FALSE, preclean = TRUE,
+  return_binary = FALSE, preclean = FALSE,
   categorize_fun = categorize_simple,
   comorbid_fun = comorbidMatMulWide, ...)
 

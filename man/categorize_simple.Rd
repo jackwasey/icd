@@ -5,7 +5,7 @@
 \title{Categorize codes according to a mapping}
 \usage{
 categorize_simple(x, map, id_name, code_name, return_df = FALSE,
-  return_binary = FALSE, restore_id_order = TRUE, unique_ids = FALSE,
+  return_binary = FALSE, restore_id_order = TRUE,
   preserve_id_type = FALSE, comorbid_fun = comorbidMatMulWide)
 }
 \arguments{
@@ -36,10 +36,6 @@ of the visit IDs will match the order of visit IDs first encountered in the
 input data. This takes a third of the time in calculations on data with
 tens of millions of rows, so, if the visit IDs will be discarded when
 summarizing data, this can be set to \code{FALSE} for a big speed-up.}
-
-\item{unique_ids}{Single logical value, if \code{TRUE} then the visit IDs in
-column given by \code{id_name} are assumed to be unique. Otherwise, the
-default action is to ensure they are unique.}
 
 \item{preserve_id_type}{Single logical value, if \code{TRUE}, the visit ID
 column will be converted back to its original type. The default of

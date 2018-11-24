@@ -34,9 +34,6 @@
 #'   input data. This takes a third of the time in calculations on data with
 #'   tens of millions of rows, so, if the visit IDs will be discarded when
 #'   summarizing data, this can be set to \code{FALSE} for a big speed-up.
-#' @param unique_ids Single logical value, if \code{TRUE} then the visit IDs in
-#'   column given by \code{id_name} are assumed to be unique. Otherwise, the
-#'   default action is to ensure they are unique.
 #' @param preserve_id_type Single logical value, if \code{TRUE}, the visit ID
 #'   column will be converted back to its original type. The default of
 #'   \code{FALSE} means only \code{factors} and \code{character} types are
@@ -56,7 +53,6 @@
 categorize_simple <- function(x, map, id_name, code_name,
                               return_df = FALSE, return_binary = FALSE,
                               restore_id_order = TRUE,
-                              unique_ids = FALSE,
                               preserve_id_type = FALSE,
                               comorbid_fun = comorbidMatMulWide) {
   assert_data_frame(x, min.cols = 2, col.names = "unique")
@@ -98,10 +94,7 @@ categorize_simple <- function(x, map, id_name, code_name,
                       code_name = code_name) #nolint
   # TODO: move the following into C++ where we have already hashed the vectors
   if (restore_id_order) {
-    uniq_visits <- if (unique_ids)
-      x[[id_name]]
-    else
-      unique(x[[id_name]]) # order if factor vs character?
+    uniq_visits <- unique(x[[id_name]])
     mat_new_row_order <- match(rownames(mat), as_char_no_warn(uniq_visits))
     mat <- mat[order(mat_new_row_order),, drop = FALSE] #nolint
   }

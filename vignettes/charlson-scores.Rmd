@@ -52,11 +52,9 @@ More complicated scoring systems may use lab values, patient demographic informa
 The Vermont data are actually discharge, not admission diagnoses, but can be used to demonstrate generating Charlson scores.
 ```{r vermont-charlson}
 head(icd.data::vermont_dx[1:10])
-v <- wide_to_long(icd.data::vermont_dx)
-head(v)
-charlson(v) %>% summary
-head(charlson(v))
-head(names(charlson(v)))
+charlson(vermont_dx) %>% summary
+head(charlson(vermont_dx))
+head(names(charlson(vermont_dx)))
 ```
 This default result is a numeric vector with the names (top numbers) as the patient identifiers. Those who like working with 'tidy' data frames can use:
 ```{r charlsondf}

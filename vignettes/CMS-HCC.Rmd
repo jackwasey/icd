@@ -39,7 +39,7 @@ pts <- data.frame(patient_id = c("1", "2", "3", "4", "4"),
 pts
 ```
 
-The function `comorbid_hcc` takes as input a data frame in the "long" format (i.e., multiple rows per patients). If the data has one row per patient, but multiple codes in different columns, this is the "wide" format. `wide_to_long` could be used to convert before inputting into `comorbid_hcc`. Doing it this way, instead of with tools like `dplyr` allows some guessing for which columns are codes, and which are identifiers, and is also written specifically to do this task efficiently, given the usual structure of hospital data. `comorbid_hcc` also requires the ICD codes to be in "short" format. If your codes are in "decimal" format, you can easily convert them with the function `decimal_to_short`.
+Unlike the other `icd` comorbidity functions, `comorbid_hcc` requires a data frame in the 'long' format (i.e., multiple rows per patients). If the data has one row per patient, but multiple codes and dates in different columns, this is the 'wide' format. Both codes and dates would have to be gathered together into their own columns, using tools like `dplyr` before passing the data to `comorbid_hcc`. `comorbid_hcc` also requires the ICD codes to be in 'short' format. If your codes are in "decimal" format, you can easily convert them with the function `decimal_to_short`.
 
 Now that our data are in the correct form, we run the mapping function `comorbid_hcc` with our input, specifying the name of the column in our dataset that contains patients' visit dates.
 

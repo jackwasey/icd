@@ -206,7 +206,7 @@ icd9_comorbid <- function(x, map, visit_name = NULL, icd_name = NULL,
                           short_code = guess_short(x, icd_name = icd_name),
                           short_map = guess_short(map),
                           return_df = FALSE, return_binary = FALSE,
-                          preclean = TRUE,
+                          preclean = FALSE,
                           categorize_fun = categorize_simple,
                           comorbid_fun = comorbidMatMulWide,
                           ...) {
@@ -225,11 +225,10 @@ icd9_comorbid <- function(x, map, visit_name = NULL, icd_name = NULL,
   # like 010 and 10 exists, then these get contracted by decimal_to_short,
   # making the results different if icd codes are short or not.
   if (!short_code) {
-    #x[[icd_name]] <- decimal_to_short.icd9(x[[icd_name]])
     x[icd_name] <- lapply(x[icd_name], decimal_to_short.icd9)
   } else if (preclean) {
-    #x[[icd_name]] <- icd9_add_leading_zeroes(x[[icd_name]], short_code = TRUE)
-    x[icd_name] <- lapply(x[icd_name], icd9_add_leading_zeroes, short_code = TRUE)
+    x[icd_name] <- lapply(x[icd_name], icd9_add_leading_zeroes,
+                          short_code = TRUE)
   }
   if (!short_map)
     map <- lapply(map, decimal_to_short)

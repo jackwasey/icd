@@ -1,6 +1,8 @@
 # Version 3.4
  * Handle 'wide' format data much more efficiently, without having to convert to long format first.
  * drop deprecated arguments to 'comorbid': visitId and icd9Field. Use 'visit_name' and 'icd_name' instead.
+ * default not to do (minimal) code cleaning before calculating comorbidities. To re-enable, use `preclean = TRUE`. Decimal-format codes are still converted to the short form used in the maps. For huge data, consider converting the maps to decimal, instead of converting the ICD data to decimal format.
+ * drop `unique_ids` argument to `comorbid` and `categorize` since it no longer provides any optimization opportunity.
 
 # Version 3.3
  * Fixes #160, #161
