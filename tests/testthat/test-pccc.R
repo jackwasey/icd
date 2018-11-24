@@ -51,7 +51,7 @@ test_that("procedure codes work", {
 })
 
 test_that("PCCC dx works", {
-  res <- icd9_comorbid_pccc_dx(wide_to_long(vermont_dx), return_binary = TRUE)
+  res <- icd9_comorbid_pccc_dx(vermont_dx, return_binary = TRUE)
   expect_equivalent(
     colSums(res), c(82, 270, 50, 119, 55, 39, 313, 30, 128, 7, 129, 21))
   expect_equal(colnames(res), pccc_col_names)
