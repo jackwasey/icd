@@ -39,11 +39,6 @@ even if no patients have that many codes. Must be greater than or equal to
 the maximum number of codes per patient.}
 
 \item{...}{arguments passed on to other functions}
-
-\item{return_df}{single logical value, if \code{TRUE}, return a data frame
-with a field for the visit_name. This may be more convenient, but the
-default of \code{FALSE} gives the more natural return data of a matrix with
-row names being the visit IDs from \code{visit_name}s.}
 }
 \description{
 This is more complicated than reshape or \code{reshape2::dcast} allows. This

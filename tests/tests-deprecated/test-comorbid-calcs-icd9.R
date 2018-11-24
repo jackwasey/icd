@@ -41,9 +41,12 @@ test_that("ahrq comorbidity mapping is applied correctly,
           })
 
 test_that("empty data gives back same empty data with or without hierarchy", {
-  expect_warning(res <- icd9_comorbid_ahrq(empty_pts, hierarchy = FALSE))
-  expect_warning(res2 <- dim(icd9_comorbid_ahrq(empty_pts, hierarchy = TRUE)))
-  expect_warning(res3 <- icd9_comorbid_ahrq(empty_pts, hierarchy = TRUE))
+  expect_warning(res <- icd9_comorbid_ahrq(empty_pts, hierarchy = FALSE),
+                 regexp = NA)
+  expect_warning(res2 <- dim(icd9_comorbid_ahrq(empty_pts, hierarchy = TRUE)),
+                 regexp = NA)
+  expect_warning(res3 <- icd9_comorbid_ahrq(empty_pts, hierarchy = TRUE),
+                 regexp = NA)
   expect_identical(res, empty_ahrq_mat)
   expect_identical(res2, dim(empty_ahrq_mat_heir))
   expect_identical(res3, empty_ahrq_mat_heir)

@@ -125,7 +125,7 @@
 #'   assert_factor
 #' @importFrom magrittr "%>%" "%<>%" set_names extract2
 #' @importFrom utils head tail read.fwf
-#' @importFrom stats setNames
+#' @importFrom stats setNames reshape
 "_PACKAGE"
 
 icd.data::assign_icd_data()
