@@ -23,7 +23,7 @@ icd
 ===
 
 [![CRAN](https://www.r-pkg.org/badges/version/icd "CRAN")](https://cran.r-project.org/package=icd)
-[![GitHub](https://img.shields.io/badge/devel%20version-3.2.2-blue.svg?style=flat "GitHub")](https://github.com/jackwasey/icd)
+[![GitHub](https://img.shields.io/badge/devel%20version-3.3.9000-blue.svg?style=flat "GitHub")](https://github.com/jackwasey/icd)
 [![Travis](https://travis-ci.org/jackwasey/icd.svg?branch=master "Travis Build Status")](https://travis-ci.org/jackwasey/icd)
 [![Appveyor](https://ci.appveyor.com/api/projects/status/9ncfgxht3n5i8t60/branch/master?svg=true "Appveyor Build Status")](https://ci.appveyor.com/project/jackwasey/icd/branch/master)
 [![codecov.io](https://codecov.io/github/jackwasey/icd/coverage.svg?branch=master "Core Code Coverage")](https://codecov.io/github/jackwasey/icd?branch=master)
@@ -126,6 +126,7 @@ charlson(patient_data)
 
 # for more examples, see this and other vignettes
 vignette("introduction", package = "icd")
+#> Warning: vignette 'introduction' not found
 ```
 
 Relevance
@@ -202,11 +203,6 @@ suite which exercises all the key functions.
 vignette(package = "icd")
 vignette("pccc", package = "icd")
 ```
-
-Note that reformatting from wide to long and back is not as
-straightforward as using the various Hadley Wickham tools for doing
-this: knowing the more detailed structure of the data let’s us do this
-better for the case of dealing with ICD codes.
 
 Development version
 -------------------

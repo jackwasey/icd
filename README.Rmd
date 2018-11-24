@@ -134,8 +134,6 @@ vignette(package = "icd")
 vignette("pccc", package = "icd")
 ```
 
-Note that reformatting from wide to long and back is not as straightforward as using the various Hadley Wickham tools for doing this: knowing the more detailed structure of the data let's us do this better for the case of dealing with ICD codes.
-
 ## Development version
 
 The latest version is available in [github icd](https://github.com/jackwasey/icd), and can be installed with:
