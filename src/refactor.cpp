@@ -71,7 +71,6 @@ Rcpp::IntegerVector refactor(const IntegerVector& x, const CV& new_levels,
   LogicalVector matched_na_level(fsz, false);
   R_xlen_t i;
   bool new_na_level = is_true(any(is_na_new_levels));
-  bool old_na_level = is_true(any(is_na_old_levels));
   int new_na_level_idx = which_max(is_na_new_levels);
   int old_na_level_idx = which_max(is_na_old_levels);
   for (i = 0; i < fsz; ++i) {

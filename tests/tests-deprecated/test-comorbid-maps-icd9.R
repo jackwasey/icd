@@ -493,7 +493,7 @@ test_that("sample of ICD-9 codes from manually specified Elixhauser mapping exis
 
 test_that("github #34 - short and long custom map give different results", {
   mydf <- data.frame(visit_id = c("a", "b", "b", "c"),
-                     icd9 = c("1", "010", "10", "20"))
+                     icd9 = c("001", "010", "010", "020"))
   mymaps <- list(jack = c("1", "2", "3"), alf = c("010", "20"))
   mymapd <- lapply(mymaps, icd_short_to_decimal.icd9)
   expect_identical(
