@@ -58,6 +58,10 @@ guess_version.factor <- function(x, short_code = NULL, ...) {
 }
 
 get_icd_valid_percent <- function(x, short_code = NULL, n = 100) {
+  if (is.list(x)) {
+    stopifnot(length(x) == 1)
+    x <- x[[1]]
+  }
   assert(check_character(x, min.len = 1), check_factor(x, min.len = 1))
   y <- as_char_no_warn(x)[1:min(n, length(x))]
   if (!is.null(short_code)) {

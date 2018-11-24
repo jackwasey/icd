@@ -229,14 +229,14 @@ get_visit_name.matrix <- function(x, visit_name = NULL)
 #' @keywords internal
 get_icd_name <- function(x, icd_name = NULL, valid_codes = TRUE,
                          defined_codes = FALSE, multi = FALSE) {
-  # TODO: change this error message, no longer true!
-  #if (is.icd_wide_data(x))
   if (!is.null(icd_name)) {
     stopifnot(all(icd_name %in% names(x)))
     return(icd_name)
   }
   if (any(grepl(pattern = "poa", icd_name, ignore.case = TRUE)))
     warning("'POA' Present-on-arrival fields in 'icd_name'.")
+  icd_name <- guess_icd_col_by_class(x)
+  if (!is.null(icd_name)) return(icd_name)
   icd_name <- guess_icd_col_by_name(x, valid_codes = valid_codes,
                         defined_codes = defined_codes)
   if (is.null(icd_name)) {
@@ -251,9 +251,9 @@ get_icd_name <- function(x, icd_name = NULL, valid_codes = TRUE,
   if (nrow(x) < 2 || (!valid_codes && !defined_codes))
     return(icd_name)
   pc <- if (defined_codes)
-    get_icd_defined_percent(x[[icd_name[1]]]) # TODO vectorize this function
+    get_icd_defined_percent(x[icd_name[1]]) # TODO vectorize this function
   else
-    get_icd_valid_percent(x[[icd_name[1]]])
+    get_icd_valid_percent(x[icd_name[1]])
   if (pc$icd9 < 10 && pc$icd10 < 10)
     stop("identified field with ICD codes as: '", icd_name,
          "' but fewer than 10% of codes are valid ICD-9 or ICD-10. ",
@@ -284,20 +284,28 @@ guess_icd_col_by_name <- function(x, valid_codes = TRUE,
                                   defined_codes = FALSE) {
   guesses <- c("icd.?(9|10)", "icd.?(9|10).?Code", "icd",
                "diagnos", "diag.?code", "diag", "dx", "i(9|10)", "code")
-  assert_data_frame(x, min.cols = 1, col.names = "named")
+  assert_data_frame(x, min.cols = 1L, col.names = "named")
   # if one column exactly has a class like icd9, then we're done.
-  cls <- lapply(x, class)
-  clg <- vapply(cls, function(z) any(z %in% icd_version_classes), logical(1))
-  if (any(clg)) return(names(x)[clg])
+  icd_name_by_class <- guess_icd_col_by_class(x)
+  if (!is.null(icd_name_by_class)) return(icd_name_by_class)
   guessed <- lapply(guesses, grep, x = names(x), ignore.case = TRUE, value = TRUE)
   guess_counts <- vapply(guessed, length, integer(1))
   guesses_logical <- as.logical(guess_counts)
-  if (sum(guesses_logical) == 1) {
+  if (sum(guesses_logical) == 1L) {
     return(unlist(guessed[guesses_logical]))
   }
   best_guess <- which(guess_counts == max(guess_counts))
-  if (length(best_guess) > 0)
+  if (any(guess_counts > 0L) && length(best_guess) > 0L)
     return(guessed[[best_guess[1]]])
+  return(NULL)
+}
+
+#' @describeIn guess_icd_col_by_name Just use the class of columns
+#' @keywords internal
+guess_icd_col_by_class <- function(x) {
+  cls <- lapply(x, class)
+  clg <- vapply(cls, function(z) any(z %in% icd_version_classes), logical(1))
+  if (any(clg)) return(names(x)[clg])
   return(NULL)
 }
 

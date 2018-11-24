@@ -43,7 +43,8 @@ test_that("simplest test case for a NA/factor interaction - int", {
 test_that("simplest test case for a NA in codes with matching code", {
   d <- data.frame(visit = c(1L, 1L), icd10 = c("D638", NA),
                   stringsAsFactors = FALSE)
-  res <- icd10_comorbid_ahrq(d, return_df = TRUE)
+  expect_error(regexp = NA,
+               res <- icd10_comorbid_ahrq(d, return_df = TRUE))
   expect_true(res[, "Anemia"])
 })
 test_that("ahrq comorbidities found for test data", {
@@ -200,6 +201,7 @@ test_that("ICD-10 comorbidities from uranium", {
 
 test_that("Alcoholic fatty liver", {
   dat <- data.frame(id = 1:3, icd10 = c("K700", "K7030", "K709"))
-  res <- icd10_comorbid_quan_elix(dat)
+  expect_error(regexp = NA,
+               res <- icd10_comorbid_quan_elix(dat))
   expect_true(all(res[, "Alcohol"]))
 })

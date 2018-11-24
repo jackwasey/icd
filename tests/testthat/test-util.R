@@ -161,6 +161,7 @@ test_that("well structured data frame, ICD & visit guessed", {
 })
 
 test_that("ambiguous icd_name gives warning", {
+  skip("we now accept wide data, but we could still warn if there is a mix")
   two_code_pt <-  data.frame(
     visit_id = "V111111",
     icd9 = "441",
@@ -193,7 +194,7 @@ test_that("icd9 field guessed from data if name fails, any order", {
   names(x)[2] <- "not_helpful"
   names(x10)[2] <- "not_helpful"
   expect_equal(get_icd_name(x), "not_helpful")
-  perms <- matrix(nrow = 3, data = c(
+  perms <- matrix(ncol = 3, byrow = TRUE, data = c(
     1, 2, 3,
     1, 3, 2,
     2, 1, 3,
@@ -201,10 +202,12 @@ test_that("icd9 field guessed from data if name fails, any order", {
     3, 1, 2,
     3, 2, 1)
   )
-  apply(perms, 2, function(y) {
-    expect_equal(get_icd_name(x[y]), "not_helpful")
-    expect_equal(get_icd_name(x10[y]), "not_helpful")
-  })
+  for (i in nrow(perms)) {
+    expect_equal(get_icd_name(x[perms[i, ]]), "not_helpful",
+                 info = paste(perms[i, ], collapse = ", "))
+    expect_equal(get_icd_name(x10[perms[i, ]]), "not_helpful",
+                 info = paste(perms[i, ], collapse = ", "))
+  }
 })
 
 test_that("get_icd_name: icd field not present at all", {

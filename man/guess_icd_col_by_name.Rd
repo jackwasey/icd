@@ -2,9 +2,12 @@
 % Please edit documentation in R/util.R
 \name{guess_icd_col_by_name}
 \alias{guess_icd_col_by_name}
+\alias{guess_icd_col_by_class}
 \title{get candidate column(s) from wide or long data frame frame, using hints}
 \usage{
 guess_icd_col_by_name(x, valid_codes = TRUE, defined_codes = FALSE)
+
+guess_icd_col_by_class(x)
 }
 \value{
 Zero, one or many names of columns likely to contain ICD codes based
@@ -13,6 +16,11 @@ Zero, one or many names of columns likely to contain ICD codes based
 \description{
 get candidate column(s) from wide or long data frame frame, using hints
 }
+\section{Functions}{
+\itemize{
+\item \code{guess_icd_col_by_class}: Just use the class of columns
+}}
+
 \examples{
 wide_df <- data.frame(a = letters,
                       dx0 = icd9_map_elix$CHF[1:26],
