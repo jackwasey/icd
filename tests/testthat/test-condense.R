@@ -246,12 +246,16 @@ vdat <- unique(vermont_dx$DX1)[1:10]
 test_that("condense a factor of codes instead of character vector", {
   # this is not a condensable list
   dat <- as.factor(vdat)
-  expect_equal(dat, condense.icd9(short_code = TRUE, dat))
-
+  dat2 <- condense.icd9(short_code = TRUE, defined = TRUE, dat)
+  expect_true(all(intersect(dat, dat2) == dat))
 })
 
 test_that("levels are preserved from source factor", {
   dat <- factor(vdat, levels = c("plastic", vdat))
-  expect_identical(dat, condense.icd9(short_code = TRUE, dat, keep_factor_levels = TRUE))
-  expect_equivalent(dat, condense.icd9(short_code = TRUE, dat, keep_factor_levels = FALSE))
+  dat3 <- condense.icd9(dat, short_code = TRUE, defined = TRUE,
+                        keep_factor_levels = TRUE)
+  dat4 <- condense.icd9(dat, short_code = TRUE,
+                        defined = TRUE, keep_factor_levels = FALSE)
+  expect_identical(intersect(dat, dat3), vdat)
+  expect_identical(intersect(dat, dat4), vdat)
 })
