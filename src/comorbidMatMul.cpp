@@ -154,7 +154,7 @@ void buildVisitCodesSparseWide(
     rows = visits; // can do this without copy using unique_ptr?
     visitIds = as<VecStr>(rows.attr("levels"));
   }
-  for (uint j = 0; j != code_names.size(); ++j) {
+  for (int j = 0; j != code_names.size(); ++j) {
     String data_col_name = code_names[j];
     const SEXP& data_col = data[data_col_name];
     if (Rf_isFactor(data_col)) {
