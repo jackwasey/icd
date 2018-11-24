@@ -58,7 +58,7 @@ head(names(charlson(vermont_dx)))
 ```
 This default result is a numeric vector with the names (top numbers) as the patient identifiers. Those who like working with 'tidy' data frames can use:
 ```{r charlsondf}
-head(charlson(v, return_df = TRUE))
+head(charlson(vermont_dx, return_df = TRUE))
 ```
 
 Behind the scenes, _icd_ calculates the Charlson comorbidities for those ICD codes, applies the Charlson scoring system, and returns the Charlson score for each patient.
@@ -68,7 +68,7 @@ Behind the scenes, _icd_ calculates the Charlson comorbidities for those ICD cod
 The same principle can be used to calculate the Van Walraven score, which is the Charlson score counterpart for Elixhauser comorbidities.
 
 ```{r vermontvanwalraven}
-`Vermont Van Walraven Scores` <- van_walraven(v)
+`Vermont Van Walraven Scores` <- van_walraven(vermont_dx)
 hist(`Vermont Van Walraven Scores`)
 ```
 
