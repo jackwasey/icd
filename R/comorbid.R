@@ -186,7 +186,7 @@ icd10_comorbid_reduce <- function(x = x, map, visit_name, icd_name, short_code,
   reduced_map <- simplify_map_lex(
     pt_codes = unlist(lapply(x[icd_name], levels)),
     map = map
-    )
+  )
   categorize_fun(x = x, map = reduced_map,
                  id_name = visit_name, code_name = icd_name,
                  return_df = return_df, return_binary = return_binary, ...)
@@ -218,7 +218,6 @@ icd9_comorbid <- function(x, map, visit_name = NULL, icd_name = NULL,
   icd_name <- get_icd_name(x, icd_name)
   stopifnot(is.character(icd_name) || is.null(icd_name))
   assert_string(visit_name)
-  #assert_string(icd_name)
   assert_flag(short_code)
   assert_flag(short_map)
   # confirm class is ICD-9, and add leading zeroes if missing, and if levels

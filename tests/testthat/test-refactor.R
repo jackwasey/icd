@@ -90,7 +90,7 @@ test_that("basic refactoring", {
                      "n = c('", paste(unlist(n), collapse = "', '"), "')",
                      "p = c(", paste(p, collapse = "', '"), "')",
                      sep = "")
-        )
+      )
   }
 })
 
@@ -127,9 +127,12 @@ test_that("NA anywhere in middle of input levels ok", {
   v <- c("a", "b", NA)
   f_perms <- unname(expand.grid(v, v, v))
   l_perms <- unique(apply(f_perms, 1, unique))
-  for (i in nrow(f_perms)) { # orig values
-    for (ii in seq_along(l_perms)) { # new levels
-      for (iii in seq_along(l_perms)) { # old levels
+  # loop orig values
+  for (i in nrow(f_perms)) {
+    # loop new levels
+    for (ii in seq_along(l_perms)) {
+      # loop old levels
+      for (iii in seq_along(l_perms)) {
         for (narm in c(TRUE, FALSE)) {
           for (exna in c(TRUE, FALSE)) {
             w <- factor(f_perms[i, ], levels = l_perms[[iii]], exclude = NULL)

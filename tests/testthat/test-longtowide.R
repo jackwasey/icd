@@ -37,7 +37,7 @@ test_that("disordered rows", {
                    structure(list(visit_id = c("v2", "v3", "v4"),
                                   icd_001 = structure(c("39891", "4151", "0932"),
                                                       class = c("icd9", "character")),
-                                  icd_002 = structure(c("440",NA, "4010"),
+                                  icd_002 = structure(c("440", NA, "4010"),
                                                       class = c("icd9", "character")),
                                   icd_003 = structure(c("4011", NA, NA),
                                                       class = c("icd9", "character"))),

@@ -197,7 +197,7 @@ long_to_wide <- function(x,
   if (icd_name_f)
     out[-which(names(out) == visit_name)] <-
     lapply(out[-which(names(out) == visit_name)], factor, levels = i_levels)
-  nc = ncol(out) - 1
+  nc <- ncol(out) - 1
   names(out)[-which(names(out) == visit_name)] <-
     paste(prefix, sprintf("%03d", 1:nc), sep = "")
   if (nc < min_width) {

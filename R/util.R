@@ -238,9 +238,9 @@ get_icd_name <- function(x, icd_name = NULL, valid_codes = TRUE,
   icd_name <- guess_icd_col_by_class(x)
   if (!is.null(icd_name)) return(icd_name)
   icd_name <- guess_icd_col_by_name(x, valid_codes = valid_codes,
-                        defined_codes = defined_codes)
+                                    defined_codes = defined_codes)
   if (is.null(icd_name)) {
-    icd_name = character()
+    icd_name <- character()
     for (n in names(x)) {
       pc <- get_icd_defined_percent(x[[n]])
       if (pc$icd9 > 25 || pc$icd10 > 25) {

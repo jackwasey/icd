@@ -18,8 +18,8 @@ test_that("simple wide data calc", {
     id_name = "vis",
     code_names = c("dx1", "dx2")
   )
-  expect_equivalent(res["1000",], c(TRUE, FALSE, TRUE, FALSE, FALSE))
-  expect_equivalent(res["1001",], c(FALSE, TRUE, FALSE, TRUE, FALSE))
+  expect_equivalent(res["1000", ], c(TRUE, FALSE, TRUE, FALSE, FALSE))
+  expect_equivalent(res["1001", ], c(FALSE, TRUE, FALSE, TRUE, FALSE))
 })
 
 test_that("convert long to wide, then do wide cmb", {

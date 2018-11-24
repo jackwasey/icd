@@ -63,7 +63,6 @@ categorize_simple <- function(x, map, id_name, code_name,
   stopifnot(id_name %in% names(x))
   stopifnot(all(code_name %in% names(x)))
   for (cd in code_name) stopifnot(is.factor(cd) || is.character(cd))
-  #stopifnot(is.factor(x[[code_name]]) || is.character(x[[code_name]]))
   map <- lapply(map, as_char_no_warn) # TODO: no longer needed with Simple?
   id_was_factor <- is.factor(x[[id_name]])
   visit_class <- class(x[[id_name]])
