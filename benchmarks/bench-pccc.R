@@ -1,3 +1,6 @@
+#!/usr/bin/env Rscript
+args = commandArgs(trailingOnly = TRUE)
+if (length(args)) divisor = as.integer(args[1])
 # valgrind icd10 searching
 # ln -sf ~/.R/Makevars.valgrind Makevars
 # ~/icd/tools/install_full.sh
@@ -6,19 +9,20 @@
 # Run with less garbage collection. e.g.
 #
 # R_GC_MEM_GROW=3 R -e 'devtools::load_all(); pts <- icd:::generate_neds_pts(1e7, icd10 = TRUE); gprofiler::profile(icd::comorbid_pccc_dx(pts), out_format="pdf", out_filename = "/tmp/out7-icd10.pdf")'
-
-library(icd)
-library(dplyr)
-library(magrittr)
-library(R.cache)
-library(pccc)
+suppressPackageStartupMessages({
+  library(icd)
+  library(dplyr)
+  library(magrittr)
+  library(R.cache)
+  library(pccc)
+})
 # simulating NEDS (icd-9) db for size (also need to simulate width, which is 15+4 columns!)
 n_neds <- 28584301L
 if (!exists("divisor")) {
   divisor <- if (interactive())
     as.integer(readline(prompt = "Enter a divisor: "))
   else
-    10
+    10000
 }
 n <- n_neds / divisor
 key = list("bench-pccc-wide", n, icd10 = FALSE, ncol = 20L)
