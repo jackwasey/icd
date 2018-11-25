@@ -57,5 +57,13 @@ test_that("convert long to wide, then do wide cmb", {
                       info = paste("Wide", df))
     skip("should the order of patients also be the same?")
     expect_equivalent(by_long, by_wide, info = paste("Wide", df))
+
+    # double up cols in each long test data set
+    wide_dbl <- cbin(get(df), get(df))
+    nc2 <- ncol(wide_dbl/2)
+    icd_name <- names(wide_dbl)[seq.int(from = nc2 + 1, to = nc2)]
+    expect_error(regexp = NA,
+                 comorbid_charlson(wide_dbl, icd_name = icd_name),
+                 info = paste("Double long", df))
   }
 })
