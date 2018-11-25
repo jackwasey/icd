@@ -43,7 +43,6 @@ extern SEXP _icd_icd9PartsToShort(SEXP);
 extern SEXP _icd_icd9ShortToDecimal(SEXP);
 extern SEXP _icd_icd9ShortToPartsCpp(SEXP, SEXP);
 extern SEXP _icd_inFast(SEXP, SEXP);
-extern SEXP _icd_longToWideCpp(SEXP, SEXP, SEXP, SEXP);
 extern SEXP _icd_matchFast(SEXP, SEXP);
 extern SEXP _icd_refactor(SEXP, SEXP, SEXP);
 extern SEXP _icd_refactor_narm(SEXP, SEXP);
@@ -93,7 +92,6 @@ static const R_CallMethodDef CallEntries[] = {
     {"_icd_icd9ShortToDecimal",                 (DL_FUNC) &_icd_icd9ShortToDecimal,                 1},
     {"_icd_icd9ShortToPartsCpp",                (DL_FUNC) &_icd_icd9ShortToPartsCpp,                2},
     {"_icd_inFast",                             (DL_FUNC) &_icd_inFast,                             2},
-    {"_icd_longToWideCpp",                      (DL_FUNC) &_icd_longToWideCpp,                      4},
     {"_icd_matchFast",                          (DL_FUNC) &_icd_matchFast,                          2},
     {"_icd_refactor",                           (DL_FUNC) &_icd_refactor,                           3},
     {"_icd_refactor_narm",                      (DL_FUNC) &_icd_refactor_narm,                      2},

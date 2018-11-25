@@ -301,20 +301,6 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// longToWideCpp
-CV longToWideCpp(const SEXP& x, const std::string id_name, const std::string code_name, bool aggregate);
-RcppExport SEXP _icd_longToWideCpp(SEXP xSEXP, SEXP id_nameSEXP, SEXP code_nameSEXP, SEXP aggregateSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const SEXP& >::type x(xSEXP);
-    Rcpp::traits::input_parameter< const std::string >::type id_name(id_nameSEXP);
-    Rcpp::traits::input_parameter< const std::string >::type code_name(code_nameSEXP);
-    Rcpp::traits::input_parameter< bool >::type aggregate(aggregateSEXP);
-    rcpp_result_gen = Rcpp::wrap(longToWideCpp(x, id_name, code_name, aggregate));
-    return rcpp_result_gen;
-END_RCPP
-}
 // icd9AddLeadingZeroesMajorSingle
 Rcpp::String icd9AddLeadingZeroesMajorSingle(Rcpp::String mjr);
 RcppExport SEXP _icd_icd9AddLeadingZeroesMajorSingle(SEXP mjrSEXP) {

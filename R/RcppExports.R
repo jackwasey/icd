@@ -223,10 +223,6 @@ icd9_is_e_cpp <- function(sv) {
     .Call(`_icd_icd9_is_e_cpp`, sv)
 }
 
-long_to_wide_cpp <- function(x, id_name, code_name, aggregate = TRUE) {
-    .Call(`_icd_longToWideCpp`, x, id_name, code_name, aggregate)
-}
-
 #' Simpler add leading zeroes without converting to parts and back
 #' @keywords internal manip
 icd9AddLeadingZeroesMajorSingle <- function(mjr) {
