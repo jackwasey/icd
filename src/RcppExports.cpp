@@ -115,20 +115,6 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// comorbidMatMulSimple
-LogicalMatrix comorbidMatMulSimple(const DataFrame& data, const List& map, const std::string id_name, const std::string code_name);
-RcppExport SEXP _icd_comorbidMatMulSimple(SEXP dataSEXP, SEXP mapSEXP, SEXP id_nameSEXP, SEXP code_nameSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const DataFrame& >::type data(dataSEXP);
-    Rcpp::traits::input_parameter< const List& >::type map(mapSEXP);
-    Rcpp::traits::input_parameter< const std::string >::type id_name(id_nameSEXP);
-    Rcpp::traits::input_parameter< const std::string >::type code_name(code_nameSEXP);
-    rcpp_result_gen = Rcpp::wrap(comorbidMatMulSimple(data, map, id_name, code_name));
-    return rcpp_result_gen;
-END_RCPP
-}
 // icd9PartsToShort
 CV icd9PartsToShort(const Rcpp::List parts);
 RcppExport SEXP _icd_icd9PartsToShort(SEXP partsSEXP) {

@@ -325,4 +325,57 @@ do_extra_tests <- function(value = "true") {
   Sys.setenv(ICD_TEST_BUILD_DATA = value)
   Sys.setenv(ICD_TEST_DEPRECATED = value)
 }
+
+#' Generate simulated NEDS data for PCCC and wide-data testing
+#' @param n Integer number of rows of data to generate
+#' @param ncol Integer number of diagnostic code columns, default of 20 matches
+#'   NEDS
+#' @param icd10 Logical, default `TRUE` to sample ICD-10-CM codes. `FALSE` gives
+#'   `ICD-9`
+#' @template verbose
+#' @examples
+#' summary(icd::comorbid_pccc_dx(generate_neds_pts()))
+#' neds <- generate_neds_pts(n = 100, ncol = 10L, icd10 = FALSE)
+#' stopifnot(dim(neds) == c(100L, 11L))
+#' summary(icd::comorbid_pccc_dx(neds))
+#' \dontrun{
+#' # original size data for PCCC benchmarking:
+#' set.seed(1441)
+#' neds <- generate_neds_pts(28584301L)
+#' neds_comorbid <- icd::comorbid_pccc_dx(neds)
+#' }
+#' @keywords internal
+generate_neds_pts <- function(n = 1000L, ncol = 20L, icd10 = TRUE,
+                              verbose = FALSE) {
+  codes <- if (icd10) {
+    unclass(icd:::as_char_no_warn(icd.data::icd10cm2016$code))
+  } else {
+    unclass(icd:::as_char_no_warn(icd.data::icd9cm_hierarchy$code))
+  }
+  dat <- data.frame(id = as.character(n + seq(n)),
+                    icd_code = sample(codes, n, replace = TRUE),
+                    stringsAsFactors = TRUE)
+  pts_per_code_pos <- as.integer(n / (seq(ncol)) ^ 4)
+  dat_wide_factors <- data.frame(id = dat$id,
+                                 dx01 = dat$icd_code,
+                                 stringsAsFactors = TRUE)
+  for (dx in seq(2L, ncol)) {
+    dx_str <- sprintf("%02i", dx)
+    if (verbose) message("building column:", dx_str)
+    len <- pts_per_code_pos[dx]
+    l <-  unique(c(NA, sample(codes, len, replace = TRUE)))
+    f <- as.integer(sample(c(seq_along(l), rep(1L, n - length(l)))))
+    attr(f, "levels") <- l
+    attr(f, "class") <- "factor"
+    dat_wide_factors[[paste0("dx", dx_str)]] <- f
+  }
+  dat_wide_str <- dat_wide_factors[1]
+  for (i in seq_along(dat_wide_factors)) {
+    if (i == 1) next
+    dat_wide_str[names(dat_wide_factors)[i]] <-
+      as.character(dat_wide_factors[[i]])
+  }
+  dat_wide_str
+}
+
 #nocov end

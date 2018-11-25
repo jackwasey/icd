@@ -108,12 +108,6 @@ comorbidMatMulWide <- function(data, map, id_name, code_names) {
     .Call(`_icd_comorbidMatMulWide`, data, map, id_name, code_names)
 }
 
-#' @rdname comorbidMatMulWide
-#' @keywords internal array algebra
-comorbidMatMulSimple <- function(data, map, id_name, code_name) {
-    .Call(`_icd_comorbidMatMulSimple`, data, map, id_name, code_name)
-}
-
 icd9PartsToShort <- function(parts) {
     .Call(`_icd_icd9PartsToShort`, parts)
 }

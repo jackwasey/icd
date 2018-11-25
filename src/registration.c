@@ -9,7 +9,6 @@
 
 /* .Call calls */
 extern SEXP _icd_categorize_rcpp();
-extern SEXP _icd_comorbidMatMulSimple(SEXP, SEXP, SEXP, SEXP);
 extern SEXP _icd_comorbidMatMulWide(SEXP, SEXP, SEXP, SEXP);
 extern SEXP _icd_factorIsValid(SEXP);
 extern SEXP _icd_factorNoSort(SEXP, SEXP, SEXP);
@@ -60,7 +59,6 @@ extern SEXP run_testthat_tests();
 
 static const R_CallMethodDef CallEntries[] = {
     {"_icd_categorize_rcpp",                    (DL_FUNC) &_icd_categorize_rcpp,                    0},
-    {"_icd_comorbidMatMulSimple",               (DL_FUNC) &_icd_comorbidMatMulSimple,               4},
     {"_icd_comorbidMatMulWide",                 (DL_FUNC) &_icd_comorbidMatMulWide,                 4},
     {"_icd_factorIsValid",                      (DL_FUNC) &_icd_factorIsValid,                      1},
     {"_icd_factorNoSort",                       (DL_FUNC) &_icd_factorNoSort,                       3},
