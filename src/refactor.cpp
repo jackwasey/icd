@@ -31,13 +31,12 @@ IntegerVector factorNoSort(const CharacterVector& x,
 //' @keywords internal manip
 // [[Rcpp::export(refactor_worker)]]
 Rcpp::IntegerVector refactor(const IntegerVector& x, const CV& new_levels,
-                             bool exclude_na) {
+                             const bool exclude_na, const bool validate) {
   TRACE("Refactoring, keeping NAs");
-  bool isValid = factorIsValid(x);
 #ifdef ICD_DEBUG
-  assert(isValid);
+  assert(factorIsValid(x));
 #endif
-  if (!isValid) Rcpp::stop("input is not a valid factor");
+  if (validate && !factorIsValid(x)) Rcpp::stop("input is not a valid factor");
   IntegerVector f(x.size());
   CharacterVector lx = x.attr("levels");
   DEBUG_VEC(new_levels);
@@ -123,11 +122,13 @@ Rcpp::IntegerVector refactor(const IntegerVector& x, const CV& new_levels,
 //' @keywords internal
 // [[Rcpp::export(refactor_narm_worker)]]
 Rcpp::IntegerVector refactor_narm(const IntegerVector& x,
-                                  const CV& new_levels) {
+                                  const CV& new_levels,
+                                  const bool validate) {
   TRACE("Refactoring, dropping NA");
-  bool isValid = factorIsValid(x);
-  assert(isValid);
-  if (!isValid) Rcpp::stop("input is not a valid factor");
+#ifdef ICD_DEBUG
+  assert(factorIsValid(x));
+#endif
+  if (validate && !factorIsValid(x)) Rcpp::stop("input is not a valid factor");
   IntegerVector f(x.size()); // too many if we are dropping NA values.
   f.attr("class") = "factor";
   CharacterVector lx = x.attr("levels");

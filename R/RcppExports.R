@@ -104,8 +104,8 @@ simplify_map_lex <- function(pt_codes, map) {
 #' dense matrix is then the comorbidity map
 #' \url{https://eigen.tuxfamily.org/dox/TopicMultiThreading.html}
 #' @keywords internal array algebra
-comorbidMatMulWide <- function(data, map, id_name, code_names) {
-    .Call(`_icd_comorbidMatMulWide`, data, map, id_name, code_names)
+comorbidMatMulWide <- function(data, map, id_name, code_names, validate) {
+    .Call(`_icd_comorbidMatMulWide`, data, map, id_name, code_names, validate)
 }
 
 icd9PartsToShort <- function(parts) {
@@ -283,14 +283,14 @@ factor_nosort_rcpp_worker <- function(x, levels, na_rm) {
 #'   integer vector, not an index to the NA level.
 #' @md
 #' @keywords internal manip
-refactor_worker <- function(x, new_levels, exclude_na) {
-    .Call(`_icd_refactor`, x, new_levels, exclude_na)
+refactor_worker <- function(x, new_levels, exclude_na, validate) {
+    .Call(`_icd_refactor`, x, new_levels, exclude_na, validate)
 }
 
 #' @describeIn refactor_worker Drop all `NA` values from levels and values
 #' @keywords internal
-refactor_narm_worker <- function(x, new_levels) {
-    .Call(`_icd_refactor_narm`, x, new_levels)
+refactor_narm_worker <- function(x, new_levels, validate) {
+    .Call(`_icd_refactor_narm`, x, new_levels, validate)
 }
 
 #' @title Check a factor structure is valid

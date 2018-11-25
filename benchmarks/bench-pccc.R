@@ -23,7 +23,9 @@ if (is.null(dat_wide_str)) {
 message("Benchmarking for ", n, " rows of simulated NEDS data.")
 message("icd:")
 icdtm2 <- proc.time()
-res_icd2 <- icd::comorbid_pccc_dx(dat_wide_str, restore_id_order = FALSE)
+res_icd2 <- icd::comorbid_pccc_dx(dat_wide_str,
+                                  restore_id_order = FALSE, # don't re-sort
+                                  validate = FALSE) # don't check input factors
 print(proc.time() - icdtm2)
 
 message("PCCC:")

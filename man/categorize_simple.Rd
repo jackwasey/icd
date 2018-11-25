@@ -6,7 +6,7 @@
 \usage{
 categorize_simple(x, map, id_name, code_name, return_df = FALSE,
   return_binary = FALSE, restore_id_order = TRUE,
-  preserve_id_type = FALSE, comorbid_fun = comorbidMatMulWide)
+  preserve_id_type = FALSE, comorbid_fun = comorbid_mat_mul_wide, ...)
 }
 \arguments{
 \item{x}{Data frame containing a column for an 'id' and a column for a code,
@@ -45,6 +45,8 @@ necessarily stored as character vectors.}
 
 \item{comorbid_fun}{function i.e. the function symbol (not character string)
 to be called to do the comorbidity calculation}
+
+\item{...}{arguments passed on to other functions}
 }
 \description{
 This is the function which prepares the input data for the categorization,

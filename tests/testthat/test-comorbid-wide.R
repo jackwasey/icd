@@ -12,7 +12,7 @@ wide_dat <- data.frame(
 charlson_minimap <- lapply(icd9_map_charlson[1:5], head)
 
 test_that("simple wide data calc", {
-  res <- icd:::comorbidMatMulWide(
+  res <- icd:::comorbid_mat_mul_wide(
     wide_dat,
     charlson_minimap,
     id_name = "vis",

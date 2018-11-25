@@ -45,7 +45,7 @@ icd9_comorbid(x, map, visit_name = NULL, icd_name = NULL,
   short_map = guess_short(map), return_df = FALSE,
   return_binary = FALSE, preclean = FALSE,
   categorize_fun = categorize_simple,
-  comorbid_fun = comorbidMatMulWide, ...)
+  comorbid_fun = comorbid_mat_mul_wide, ...)
 
 icd9_comorbid_ahrq(x, ..., abbrev_names = TRUE, hierarchy = TRUE)
 

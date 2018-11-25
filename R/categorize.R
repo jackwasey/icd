@@ -41,6 +41,7 @@
 #'   necessarily stored as character vectors.
 #' @param comorbid_fun function i.e. the function symbol (not character string)
 #'   to be called to do the comorbidity calculation
+#' @template dotdotdot
 #' @examples
 #' \dontrun{
 #' u <- uranium_pathology
@@ -54,7 +55,8 @@ categorize_simple <- function(x, map, id_name, code_name,
                               return_df = FALSE, return_binary = FALSE,
                               restore_id_order = TRUE,
                               preserve_id_type = FALSE,
-                              comorbid_fun = comorbidMatMulWide) {
+                              comorbid_fun = comorbid_mat_mul_wide,
+                              ...) {
   assert_data_frame(x, min.cols = 2, col.names = "unique")
   class(x) <- "data.frame"
   assert_list(map, min.len = 1, names = "unique")
@@ -90,7 +92,8 @@ categorize_simple <- function(x, map, id_name, code_name,
   mat <- comorbid_fun(data = x,
                       map = map,
                       id_name = id_name,
-                      code_name = code_name) #nolint
+                      code_name = code_name,
+                      ...)
   # TODO: move the following into C++ where we have already hashed the vectors
   if (restore_id_order) {
     uniq_visits <- unique(x[[id_name]])
@@ -120,3 +123,8 @@ categorize_simple <- function(x, map, id_name, code_name,
 
 comorbid_common <- function(..., visit_name, icd_name)
   categorize_simple(..., id_name = visit_name, code_name = icd_name)
+
+comorbid_mat_mul_wide <- function(data, map, id_name, code_names,
+                                  validate = FALSE) {
+  .Call(`_icd_comorbidMatMulWide`, data, map, id_name, code_names, validate)
+}

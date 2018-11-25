@@ -55,6 +55,7 @@ void buildVisitCodesSparseWide(
     const DataFrame& data,
     const std::string id_name,
     const CV code_names,
+    const bool validate,
     Relevant& rh,
     PtsSparse& visMat, // output
     VecStr& visitIds // output: can get this from sparse matrix at end? Needed?
@@ -84,7 +85,7 @@ void buildVisitCodesSparseWide(
       DEBUG("codes are still in a factor...");
       const CV code_levels = data_col_fc.attr("levels");
       const IntegerVector codes_relevant =
-        refactor(data_col_fc, rh.relevant, true); // no NA in output levels
+        refactor(data_col_fc, rh.relevant, true, validate);
       assert(rows.size() == codes_relevant.size());
       for (R_xlen_t i = 0; i != rows.size(); ++i) {
         DEBUG("add triplet at R idx:" << rows[i] << ", " << codes_relevant[i]);
@@ -134,7 +135,8 @@ void buildVisitCodesSparseWide(
 LogicalMatrix comorbidMatMulWide(const DataFrame& data,
                                  const List& map,
                                  const std::string id_name,
-                                 const CV code_names) {
+                                 const CV code_names,
+                                 const bool validate) {
   VecStr out_row_names; // size is reserved in buildVisitCodesVec
   RObject visits = data[id_name]; // does this copy??? RObject instead?
 
@@ -143,7 +145,7 @@ LogicalMatrix comorbidMatMulWide(const DataFrame& data,
   Relevant r(map, data, code_names);
   MapPlus m(map, r);
   PtsSparse visMat; // reservation and sizing done within next function
-  buildVisitCodesSparseWide(data, id_name, code_names,
+  buildVisitCodesSparseWide(data, id_name, code_names, validate,
                             r, visMat, out_row_names);
   if (visMat.cols() != m.rows())
     Rcpp::stop("matrix multiplication won't work");

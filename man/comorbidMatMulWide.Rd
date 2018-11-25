@@ -4,7 +4,7 @@
 \alias{comorbidMatMulWide}
 \title{Comorbidity calculation as a matrix multiplication}
 \usage{
-comorbidMatMulWide(data, map, id_name, code_names)
+comorbidMatMulWide(data, map, id_name, code_names, validate)
 }
 \description{
 The problem is that the matrices could be huge: the patient-icd matrix would

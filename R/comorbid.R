@@ -208,7 +208,7 @@ icd9_comorbid <- function(x, map, visit_name = NULL, icd_name = NULL,
                           return_df = FALSE, return_binary = FALSE,
                           preclean = FALSE,
                           categorize_fun = categorize_simple,
-                          comorbid_fun = comorbidMatMulWide,
+                          comorbid_fun = comorbid_mat_mul_wide,
                           ...) {
   assert_data_frame(x, min.cols = 2, col.names = "unique")
   assert_list(map, min.len = 1, names = "unique")

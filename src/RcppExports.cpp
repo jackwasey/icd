@@ -102,8 +102,8 @@ BEGIN_RCPP
 END_RCPP
 }
 // comorbidMatMulWide
-LogicalMatrix comorbidMatMulWide(const DataFrame& data, const List& map, const std::string id_name, const CV code_names);
-RcppExport SEXP _icd_comorbidMatMulWide(SEXP dataSEXP, SEXP mapSEXP, SEXP id_nameSEXP, SEXP code_namesSEXP) {
+LogicalMatrix comorbidMatMulWide(const DataFrame& data, const List& map, const std::string id_name, const CV code_names, const bool validate);
+RcppExport SEXP _icd_comorbidMatMulWide(SEXP dataSEXP, SEXP mapSEXP, SEXP id_nameSEXP, SEXP code_namesSEXP, SEXP validateSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -111,7 +111,8 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< const List& >::type map(mapSEXP);
     Rcpp::traits::input_parameter< const std::string >::type id_name(id_nameSEXP);
     Rcpp::traits::input_parameter< const CV >::type code_names(code_namesSEXP);
-    rcpp_result_gen = Rcpp::wrap(comorbidMatMulWide(data, map, id_name, code_names));
+    Rcpp::traits::input_parameter< const bool >::type validate(validateSEXP);
+    rcpp_result_gen = Rcpp::wrap(comorbidMatMulWide(data, map, id_name, code_names, validate));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -425,27 +426,29 @@ BEGIN_RCPP
 END_RCPP
 }
 // refactor
-Rcpp::IntegerVector refactor(const IntegerVector& x, const CV& new_levels, bool exclude_na);
-RcppExport SEXP _icd_refactor(SEXP xSEXP, SEXP new_levelsSEXP, SEXP exclude_naSEXP) {
+Rcpp::IntegerVector refactor(const IntegerVector& x, const CV& new_levels, const bool exclude_na, const bool validate);
+RcppExport SEXP _icd_refactor(SEXP xSEXP, SEXP new_levelsSEXP, SEXP exclude_naSEXP, SEXP validateSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< const IntegerVector& >::type x(xSEXP);
     Rcpp::traits::input_parameter< const CV& >::type new_levels(new_levelsSEXP);
-    Rcpp::traits::input_parameter< bool >::type exclude_na(exclude_naSEXP);
-    rcpp_result_gen = Rcpp::wrap(refactor(x, new_levels, exclude_na));
+    Rcpp::traits::input_parameter< const bool >::type exclude_na(exclude_naSEXP);
+    Rcpp::traits::input_parameter< const bool >::type validate(validateSEXP);
+    rcpp_result_gen = Rcpp::wrap(refactor(x, new_levels, exclude_na, validate));
     return rcpp_result_gen;
 END_RCPP
 }
 // refactor_narm
-Rcpp::IntegerVector refactor_narm(const IntegerVector& x, const CV& new_levels);
-RcppExport SEXP _icd_refactor_narm(SEXP xSEXP, SEXP new_levelsSEXP) {
+Rcpp::IntegerVector refactor_narm(const IntegerVector& x, const CV& new_levels, const bool validate);
+RcppExport SEXP _icd_refactor_narm(SEXP xSEXP, SEXP new_levelsSEXP, SEXP validateSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< const IntegerVector& >::type x(xSEXP);
     Rcpp::traits::input_parameter< const CV& >::type new_levels(new_levelsSEXP);
-    rcpp_result_gen = Rcpp::wrap(refactor_narm(x, new_levels));
+    Rcpp::traits::input_parameter< const bool >::type validate(validateSEXP);
+    rcpp_result_gen = Rcpp::wrap(refactor_narm(x, new_levels, validate));
     return rcpp_result_gen;
 END_RCPP
 }

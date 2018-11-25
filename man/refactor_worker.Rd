@@ -5,9 +5,9 @@
 \alias{refactor_narm_worker}
 \title{Re-generate a factor with new levels, without doing string matching}
 \usage{
-refactor_worker(x, new_levels, exclude_na)
+refactor_worker(x, new_levels, exclude_na, validate)
 
-refactor_narm_worker(x, new_levels)
+refactor_narm_worker(x, new_levels, validate)
 }
 \description{
 This is called by an R wrapper. There is an \code{na.rm} version,

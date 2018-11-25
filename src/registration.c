@@ -9,7 +9,7 @@
 
 /* .Call calls */
 extern SEXP _icd_categorize_rcpp();
-extern SEXP _icd_comorbidMatMulWide(SEXP, SEXP, SEXP, SEXP);
+extern SEXP _icd_comorbidMatMulWide(SEXP, SEXP, SEXP, SEXP, SEXP);
 extern SEXP _icd_factorIsValid(SEXP);
 extern SEXP _icd_factorNoSort(SEXP, SEXP, SEXP);
 extern SEXP _icd_fastIntToStringRcpp(SEXP);
@@ -44,7 +44,7 @@ extern SEXP _icd_icd9ShortToDecimal(SEXP);
 extern SEXP _icd_icd9ShortToPartsCpp(SEXP, SEXP);
 extern SEXP _icd_inFast(SEXP, SEXP);
 extern SEXP _icd_matchFast(SEXP, SEXP);
-extern SEXP _icd_refactor(SEXP, SEXP, SEXP);
+extern SEXP _icd_refactor(SEXP, SEXP, SEXP, SEXP);
 extern SEXP _icd_refactor_narm(SEXP, SEXP);
 extern SEXP _icd_setDecimalDiag(SEXP, SEXP);
 extern SEXP _icd_setShortDiag(SEXP, SEXP);
@@ -58,7 +58,7 @@ extern SEXP run_testthat_tests();
 
 static const R_CallMethodDef CallEntries[] = {
     {"_icd_categorize_rcpp",                    (DL_FUNC) &_icd_categorize_rcpp,                    0},
-    {"_icd_comorbidMatMulWide",                 (DL_FUNC) &_icd_comorbidMatMulWide,                 4},
+    {"_icd_comorbidMatMulWide",                 (DL_FUNC) &_icd_comorbidMatMulWide,                 5},
     {"_icd_factorIsValid",                      (DL_FUNC) &_icd_factorIsValid,                      1},
     {"_icd_factorNoSort",                       (DL_FUNC) &_icd_factorNoSort,                       3},
     {"_icd_fastIntToStringRcpp",                (DL_FUNC) &_icd_fastIntToStringRcpp,                1},
@@ -93,7 +93,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_icd_icd9ShortToPartsCpp",                (DL_FUNC) &_icd_icd9ShortToPartsCpp,                2},
     {"_icd_inFast",                             (DL_FUNC) &_icd_inFast,                             2},
     {"_icd_matchFast",                          (DL_FUNC) &_icd_matchFast,                          2},
-    {"_icd_refactor",                           (DL_FUNC) &_icd_refactor,                           3},
+    {"_icd_refactor",                           (DL_FUNC) &_icd_refactor,                           4},
     {"_icd_refactor_narm",                      (DL_FUNC) &_icd_refactor_narm,                      2},
     {"_icd_setDecimalDiag",                     (DL_FUNC) &_icd_setDecimalDiag,                     2},
     {"_icd_setShortDiag",                       (DL_FUNC) &_icd_setShortDiag,                       2},
