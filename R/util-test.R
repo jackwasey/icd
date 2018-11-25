@@ -334,23 +334,23 @@ do_extra_tests <- function(value = "true") {
 #'   `ICD-9`
 #' @template verbose
 #' @examples
-#' summary(icd::comorbid_pccc_dx(generate_neds_pts()))
-#' neds <- generate_neds_pts(n = 100, ncol = 10L, icd10 = FALSE)
+#' summary(icd::comorbid_pccc_dx(icd:::generate_neds_pts()))
+#' neds <- icd:::generate_neds_pts(n = 100, ncol = 10L, icd10 = FALSE)
 #' stopifnot(dim(neds) == c(100L, 11L))
 #' summary(icd::comorbid_pccc_dx(neds))
 #' \dontrun{
 #' # original size data for PCCC benchmarking:
 #' set.seed(1441)
-#' neds <- generate_neds_pts(28584301L)
+#' neds <- icd:::generate_neds_pts(28584301L)
 #' neds_comorbid <- icd::comorbid_pccc_dx(neds)
 #' }
 #' @keywords internal
 generate_neds_pts <- function(n = 1000L, ncol = 20L, icd10 = TRUE,
                               verbose = FALSE) {
   codes <- if (icd10) {
-    unclass(icd:::as_char_no_warn(icd.data::icd10cm2016$code))
+    unclass(as_char_no_warn(icd.data::icd10cm2016$code))
   } else {
-    unclass(icd:::as_char_no_warn(icd.data::icd9cm_hierarchy$code))
+    unclass(as_char_no_warn(icd.data::icd9cm_hierarchy$code))
   }
   dat <- data.frame(id = as.character(n + seq(n)),
                     icd_code = sample(codes, n, replace = TRUE),

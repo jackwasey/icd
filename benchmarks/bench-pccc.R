@@ -20,7 +20,7 @@ if (is.null(dat_wide_str)) {
     generate_neds_pts(n = n, ncol = 20L, icd10 = FALSE, verbose = TRUE)
   R.cache::saveCache(dat_wide_str, key)
 }
-
+message("Benchmarking for ", n, " rows of simulated NEDS data.")
 message("icd:")
 icdtm2 <- proc.time()
 res_icd2 <- icd::comorbid_pccc_dx(dat_wide_str, restore_id_order = FALSE)
