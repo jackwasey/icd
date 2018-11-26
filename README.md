@@ -18,12 +18,12 @@ along with icd. If not, see <http:#www.gnu.org/licenses/>.
 -->
 <!-- README.md is generated from README.Rmd. Please edit that file and render with rmarkdown::render("README.Rmd")
 -->
-
 icd
 ===
 
 [![CRAN](https://www.r-pkg.org/badges/version/icd "CRAN")](https://cran.r-project.org/package=icd)
-[![GitHub](https://img.shields.io/badge/devel%20version-3.2.2-blue.svg?style=flat "GitHub")](https://github.com/jackwasey/icd)
+[![lifecycle](https://img.shields.io/badge/lifecycle-stable-blue.svg)](https://www.tidyverse.org/lifecycle/#stable)
+[![GitHub](https://img.shields.io/badge/devel%20version-3.4-blue.svg?style=flat "GitHub")](https://github.com/jackwasey/icd)
 [![Travis](https://travis-ci.org/jackwasey/icd.svg?branch=master "Travis Build Status")](https://travis-ci.org/jackwasey/icd)
 [![Appveyor](https://ci.appveyor.com/api/projects/status/9ncfgxht3n5i8t60/branch/master?svg=true "Appveyor Build Status")](https://ci.appveyor.com/project/jackwasey/icd/branch/master)
 [![codecov.io](https://codecov.io/github/jackwasey/icd/coverage.svg?branch=master "Core Code Coverage")](https://codecov.io/github/jackwasey/icd?branch=master)
@@ -31,8 +31,7 @@ icd
 Practices](https://bestpractices.coreinfrastructure.org/projects/2092/badge)](https://bestpractices.coreinfrastructure.org/projects/2092)
 [![CRAN RStudio mirror downloads last calendar
 month](https://cranlogs.r-pkg.org/badges/icd "RStudio Mirror Downloads Last Calendar Month")](https://cran.r-project.org/package=icd)
-[![CRAN RStudio mirror downloads last
-week](https://cranlogs.r-pkg.org/badges/last-week/icd "RStudio Mirror Downloads Last Week")](https://cran.r-project.org/package=icd)
+<!-- [![CRAN RStudio mirror downloads last week](https://cranlogs.r-pkg.org/badges/last-week/icd "RStudio Mirror Downloads Last Week")](https://cran.r-project.org/package=icd) -->
 
 Comorbidities from ICD-9 and ICD-10 codes, manipulation and validation
 ======================================================================
@@ -126,6 +125,7 @@ charlson(patient_data)
 
 # for more examples, see this and other vignettes
 vignette("introduction", package = "icd")
+#> Warning: vignette 'introduction' not found
 ```
 
 Relevance
