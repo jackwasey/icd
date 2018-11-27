@@ -61,3 +61,4 @@ u$icd10 <- decimal_to_short(u$icd10)
 j <- categorize_simple(u, m, id_name = "case", code_name = "icd10")
 }
 }
+\keyword{internal}

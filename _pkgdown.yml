@@ -85,7 +85,7 @@ reference:
 #  - '`poa_choices`'
 #  - '`print.comorbidity_map`'
 #  - '`[[.comorbidity_map`'
-#  - '`subset_icd`'
+  - '`subset_icd`'
 #  - '`unzip_single`'
 
 - title: Data

@@ -24,6 +24,7 @@
 #' @param url URL of a zip file
 #' @param file_name file name of the resource within the zip file
 #' @param save_path file path to save the first file from the zip
+#' @keywords internal
 #' @export
 unzip_single <- function(url, file_name, save_path) {
   checkmate::assert_character(url, len = 1)

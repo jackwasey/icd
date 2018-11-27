@@ -32,6 +32,7 @@
 #' print.list(icd9_map_ahrq)
 #' print(list(icd9_map_ahrq))
 #' }
+#' @keywords internal
 #' @export
 print.comorbidity_map <- function(x, ..., n_comorbidities = 7, n_codes = 7) {
   assert_list(x, min.len = 1, names = "unique", types = "character")

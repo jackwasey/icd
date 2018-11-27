@@ -292,6 +292,7 @@ as.comorbidity_map <- function(x) {
 #' @examples
 #' # show that attributes are preserved when subsetting
 #' stopifnot(is.short_diag(icd10_map_ahrq[[1]]))
+#' @keywords internal
 #' @export
 `[[.comorbidity_map` <- function(x, index, ...) {
   out <- NextMethod()

@@ -50,6 +50,7 @@
 #' j <- categorize_simple(u, m, id_name = "case", code_name = "icd10")
 #' }
 #' @md
+#' @keywords internal
 #' @export
 categorize_simple <- function(x, map, id_name, code_name,
                               return_df = FALSE, return_binary = FALSE,
