@@ -32,7 +32,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Comorbidity calculations and tools for ICD-9 and ICD-10 codes</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">3.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">3.3.9000</span>
       </span>
     </div>
 
@@ -134,30 +134,11 @@
 ## 4 10004 S61320A T475X6A  03SP4ZZ  0BU207Z
 ## 5 10005    S054 S90222A  06104ZP  B41D1ZZ
 ## 6 10006  M12232 V9209XS  0XRL07P  0PUM0JZ</code></pre>
-<p>The data is in ‘wide’ format. Currently <code>icd</code> requires it be in ‘long’ format, which can be achieved as follows:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1">dx &lt;-<span class="st"> </span><span class="kw"><a href="../reference/wide_to_long.html">wide_to_long</a></span>(dat[<span class="dv">1</span><span class="op">:</span><span class="dv">3</span>])</a>
-<a class="sourceLine" id="cb3-2" data-line-number="2">pcs &lt;-<span class="st"> </span><span class="kw"><a href="../reference/wide_to_long.html">wide_to_long</a></span>(dat[<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="dv">1</span>, <span class="dv">4</span><span class="op">:</span><span class="dv">5</span>)], <span class="dt">icd_name =</span> <span class="st">"pcs"</span>, <span class="dt">icd_regex =</span> <span class="st">"icd_pcs"</span>)</a>
-<a class="sourceLine" id="cb3-3" data-line-number="3"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/head">head</a></span>(dx)</a></code></pre></div>
-<pre><code>##      id icd_code
-## 1 10001  S32010B
-## 2 10001  T422X3D
-## 3 10002     D686
-## 4 10002      A42
-## 5 10003  S32021G
-## 6 10003    M4806</code></pre>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/head">head</a></span>(pcs)</a></code></pre></div>
-<pre><code>##      id      pcs
-## 1 10001  0SWJ37Z
-## 2 10001  00QS4ZZ
-## 3 10002  0D124JB
-## 4 10002  03QB4ZZ
-## 5 10003  2W03X6Z
-## 6 10003  D91497Z</code></pre>
-<p>Now the PCCC comorbidity classes can be computed and summarized in a plot:</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1">pccc_dx &lt;-<span class="st"> </span><span class="kw"><a href="../reference/comorbid_pccc_dx.html">comorbid_pccc_dx</a></span>(dx)</a>
-<a class="sourceLine" id="cb7-2" data-line-number="2">pccc_pcs &lt;-<span class="st"> </span><span class="kw"><a href="../reference/comorbid_pccc_dx.html">icd10_comorbid_pccc_pcs</a></span>(pcs, </a>
-<a class="sourceLine" id="cb7-3" data-line-number="3">                                    <span class="dt">visit_name =</span> <span class="st">"id"</span>, <span class="dt">icd_name =</span> <span class="st">"pcs"</span>)</a>
-<a class="sourceLine" id="cb7-4" data-line-number="4">res &lt;-<span class="st"> </span>pccc_dx <span class="op">|</span><span class="st"> </span>pccc_pcs</a></code></pre></div>
+<p>The data is in ‘wide’ format. <code>icd</code> no longer needs the data to be in ‘long’ format. The PCCC comorbidity classes can be computed directly from the source data and summarized in a plot. Here we calculate the PCCC from ICD diagnostic codes and ICD procedure codes separately, and logically combine them to get the result.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1">pccc_dx &lt;-<span class="st"> </span><span class="kw"><a href="../reference/comorbid_pccc_dx.html">comorbid_pccc_dx</a></span>(dat)</a>
+<a class="sourceLine" id="cb3-2" data-line-number="2">pccc_pcs &lt;-<span class="st"> </span><span class="kw"><a href="../reference/comorbid_pccc_dx.html">icd10_comorbid_pccc_pcs</a></span>(dat,</a>
+<a class="sourceLine" id="cb3-3" data-line-number="3">                                    <span class="dt">icd_name =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"icd_pcs1"</span>, <span class="st">"icd_pcs2"</span>))</a>
+<a class="sourceLine" id="cb3-4" data-line-number="4">res &lt;-<span class="st"> </span>pccc_dx <span class="op">|</span><span class="st"> </span>pccc_pcs</a></code></pre></div>
 <p><img src="PCCC_files/figure-html/pcccbarplot-1.png" width="700"></p>
 </div>
 </div>

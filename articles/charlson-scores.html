@@ -32,7 +32,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Comorbidity calculations and tools for ICD-9 and ICD-10 codes</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">3.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">3.3.9000</span>
       </span>
     </div>
 
@@ -150,25 +150,16 @@ along with icd. If not, see <http:#www.gnu.org/licenses/>.
 <a class="sourceLine" id="cb1-6" data-line-number="6"><span class="co">#&gt; 4       16       55-59 female FALSE 470 71535 49390 53081 27800  V140</span></a>
 <a class="sourceLine" id="cb1-7" data-line-number="7"><span class="co">#&gt; 5       37       70-74   male FALSE 462 71536  4241  2859  2720  4414</span></a>
 <a class="sourceLine" id="cb1-8" data-line-number="8"><span class="co">#&gt; 6       41       70-74   male FALSE 462 71536 V1259 V1582  V160  V171</span></a>
-<a class="sourceLine" id="cb1-9" data-line-number="9">v &lt;-<span class="st"> </span><span class="kw"><a href="../reference/wide_to_long.html">wide_to_long</a></span>(icd.data<span class="op">::</span>vermont_dx)</a>
-<a class="sourceLine" id="cb1-10" data-line-number="10"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/head">head</a></span>(v)</a>
-<a class="sourceLine" id="cb1-11" data-line-number="11"><span class="co">#&gt;   visit_id age_group  sex death DRG icd_code</span></a>
-<a class="sourceLine" id="cb1-12" data-line-number="12"><span class="co">#&gt; 1        7     40-44 male  TRUE 640    27801</span></a>
-<a class="sourceLine" id="cb1-13" data-line-number="13"><span class="co">#&gt; 2        7     40-44 male  TRUE 640    03842</span></a>
-<a class="sourceLine" id="cb1-14" data-line-number="14"><span class="co">#&gt; 3        7     40-44 male  TRUE 640    51881</span></a>
-<a class="sourceLine" id="cb1-15" data-line-number="15"><span class="co">#&gt; 4        7     40-44 male  TRUE 640    41519</span></a>
-<a class="sourceLine" id="cb1-16" data-line-number="16"><span class="co">#&gt; 5        7     40-44 male  TRUE 640    99591</span></a>
-<a class="sourceLine" id="cb1-17" data-line-number="17"><span class="co">#&gt; 6        7     40-44 male  TRUE 640    42842</span></a>
-<a class="sourceLine" id="cb1-18" data-line-number="18"><span class="kw"><a href="../reference/charlson.html">charlson</a></span>(v) <span class="op">%&gt;%</span><span class="st"> </span>summary</a>
-<a class="sourceLine" id="cb1-19" data-line-number="19"><span class="co">#&gt;    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. </span></a>
-<a class="sourceLine" id="cb1-20" data-line-number="20"><span class="co">#&gt;   0.000   0.000   1.000   1.573   2.000   9.000</span></a>
-<a class="sourceLine" id="cb1-21" data-line-number="21"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/head">head</a></span>(<span class="kw"><a href="../reference/charlson.html">charlson</a></span>(v))</a>
-<a class="sourceLine" id="cb1-22" data-line-number="22"><span class="co">#&gt;  7 10 13 16 37 41 </span></a>
-<a class="sourceLine" id="cb1-23" data-line-number="23"><span class="co">#&gt;  5  3  0  1  1  0</span></a>
-<a class="sourceLine" id="cb1-24" data-line-number="24"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/head">head</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/names">names</a></span>(<span class="kw"><a href="../reference/charlson.html">charlson</a></span>(v)))</a>
-<a class="sourceLine" id="cb1-25" data-line-number="25"><span class="co">#&gt; [1] "7"  "10" "13" "16" "37" "41"</span></a></code></pre></div>
+<a class="sourceLine" id="cb1-9" data-line-number="9"><span class="kw"><a href="../reference/charlson.html">charlson</a></span>(vermont_dx) <span class="op">%&gt;%</span><span class="st"> </span>summary</a>
+<a class="sourceLine" id="cb1-10" data-line-number="10"><span class="co">#&gt;    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. </span></a>
+<a class="sourceLine" id="cb1-11" data-line-number="11"><span class="co">#&gt;   0.000   0.000   1.000   1.573   2.000   9.000</span></a>
+<a class="sourceLine" id="cb1-12" data-line-number="12"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/head">head</a></span>(<span class="kw"><a href="../reference/charlson.html">charlson</a></span>(vermont_dx))</a>
+<a class="sourceLine" id="cb1-13" data-line-number="13"><span class="co">#&gt;  7 10 13 16 37 41 </span></a>
+<a class="sourceLine" id="cb1-14" data-line-number="14"><span class="co">#&gt;  5  3  0  1  1  0</span></a>
+<a class="sourceLine" id="cb1-15" data-line-number="15"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/head">head</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/names">names</a></span>(<span class="kw"><a href="../reference/charlson.html">charlson</a></span>(vermont_dx)))</a>
+<a class="sourceLine" id="cb1-16" data-line-number="16"><span class="co">#&gt; [1] "7"  "10" "13" "16" "37" "41"</span></a></code></pre></div>
 <p>This default result is a numeric vector with the names (top numbers) as the patient identifiers. Those who like working with ‘tidy’ data frames can use:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/head">head</a></span>(<span class="kw"><a href="../reference/charlson.html">charlson</a></span>(v, <span class="dt">return_df =</span> <span class="ot">TRUE</span>))</a>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/head">head</a></span>(<span class="kw"><a href="../reference/charlson.html">charlson</a></span>(vermont_dx, <span class="dt">return_df =</span> <span class="ot">TRUE</span>))</a>
 <a class="sourceLine" id="cb2-2" data-line-number="2"><span class="co">#&gt;   visit_id Charlson</span></a>
 <a class="sourceLine" id="cb2-3" data-line-number="3"><span class="co">#&gt; 1        7        5</span></a>
 <a class="sourceLine" id="cb2-4" data-line-number="4"><span class="co">#&gt; 2       10        3</span></a>
@@ -182,7 +173,7 @@ along with icd. If not, see <http:#www.gnu.org/licenses/>.
 <h2 class="hasAnchor">
 <a href="#vermont-example-data-van-walraven-scores" class="anchor"></a>Vermont example data, Van Walraven scores</h2>
 <p>The same principle can be used to calculate the Van Walraven score, which is the Charlson score counterpart for Elixhauser comorbidities.</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="st">`</span><span class="dt">Vermont Van Walraven Scores</span><span class="st">`</span> &lt;-<span class="st"> </span><span class="kw"><a href="../reference/van_walraven.html">van_walraven</a></span>(v)</a>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="st">`</span><span class="dt">Vermont Van Walraven Scores</span><span class="st">`</span> &lt;-<span class="st"> </span><span class="kw"><a href="../reference/van_walraven.html">van_walraven</a></span>(vermont_dx)</a>
 <a class="sourceLine" id="cb3-2" data-line-number="2"><span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/hist">hist</a></span>(<span class="st">`</span><span class="dt">Vermont Van Walraven Scores</span><span class="st">`</span>)</a></code></pre></div>
 <p><img src="charlson-scores_files/figure-html/vermontvanwalraven-1.png" width="700"></p>
 </div>

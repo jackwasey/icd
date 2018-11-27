@@ -39,7 +39,9 @@
 <meta property="og:title" content="Re-generate a factor with new levels, without doing string matching — refactor_worker" />
 
 <meta property="og:description" content="This is called by an R wrapper. There is an na.rm version,
-too." />
+too. Some work simply to mirror behavior of base::factor, e.g. when a
+level is not available, but NA level is available, NA is inserted into the
+integer vector, not an index to the NA level." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -70,7 +72,7 @@ too." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Comorbidity calculations and tools for ICD-9 and ICD-10 codes</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">3.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">3.3.9000</span>
       </span>
     </div>
 
@@ -151,13 +153,15 @@ too." />
     <div class="ref-description">
     
     <p>This is called by an R wrapper. There is an <code>na.rm</code> version,
-too.</p>
+too. Some work simply to mirror behavior of <code><a href='https://www.rdocumentation.org/packages/base/topics/factor'>base::factor</a></code>, e.g. when a
+level is not available, but NA level is available, NA is inserted into the
+integer vector, not an index to the NA level.</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>refactor_worker</span>(<span class='no'>x</span>, <span class='no'>new_levels</span>, <span class='no'>exclude_na</span>)
+    <pre class="usage"><span class='fu'>refactor_worker</span>(<span class='no'>x</span>, <span class='no'>new_levels</span>, <span class='no'>exclude_na</span>, <span class='no'>validate</span>)
 
-<span class='fu'>refactor_narm_worker</span>(<span class='no'>x</span>, <span class='no'>new_levels</span>)</pre>
+<span class='fu'>refactor_narm_worker</span>(<span class='no'>x</span>, <span class='no'>new_levels</span>, <span class='no'>validate</span>)</pre>
         
     <h2 class="hasAnchor" id="functions"><a class="anchor" href="#functions"></a>Functions</h2>
 

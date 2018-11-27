@@ -71,7 +71,7 @@ pure data manipulation and generalizable beyond medical data." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Comorbidity calculations and tools for ICD-9 and ICD-10 codes</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">3.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">3.3.9000</span>
       </span>
     </div>
 
@@ -158,8 +158,8 @@ pure data manipulation and generalizable beyond medical data.</p>
     </div>
 
     <pre class="usage"><span class='fu'>categorize_simple</span>(<span class='no'>x</span>, <span class='no'>map</span>, <span class='no'>id_name</span>, <span class='no'>code_name</span>, <span class='kw'>return_df</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>return_binary</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>restore_id_order</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>unique_ids</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>preserve_id_type</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>comorbid_fun</span> <span class='kw'>=</span> <span class='no'>comorbidMatMulSimple</span>)</pre>
+  <span class='kw'>return_binary</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>restore_id_order</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
+  <span class='kw'>preserve_id_type</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>comorbid_fun</span> <span class='kw'>=</span> <span class='no'>comorbid_mat_mul_wide</span>, <span class='no'>...</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -185,7 +185,7 @@ identifier.</p></td>
     </tr>
     <tr>
       <th>code_name</th>
-      <td><p>String with name of column containing the codes.</p></td>
+      <td><p>String with name(s) of column(s) containing the codes.</p></td>
     </tr>
     <tr>
       <th>return_df</th>
@@ -207,12 +207,6 @@ tens of millions of rows, so, if the visit IDs will be discarded when
 summarizing data, this can be set to <code>FALSE</code> for a big speed-up.</p></td>
     </tr>
     <tr>
-      <th>unique_ids</th>
-      <td><p>Single logical value, if <code>TRUE</code> then the visit IDs in
-column given by <code>id_name</code> are assumed to be unique. Otherwise, the
-default action is to ensure they are unique.</p></td>
-    </tr>
-    <tr>
       <th>preserve_id_type</th>
       <td><p>Single logical value, if <code>TRUE</code>, the visit ID
 column will be converted back to its original type. The default of
@@ -224,6 +218,10 @@ necessarily stored as character vectors.</p></td>
       <th>comorbid_fun</th>
       <td><p>function i.e. the function symbol (not character string)
 to be called to do the comorbidity calculation</p></td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td><p>arguments passed on to other functions</p></td>
     </tr>
     </table>
     

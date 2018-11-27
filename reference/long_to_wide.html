@@ -70,7 +70,7 @@ is a reasonably simple solution using built-in functions." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Comorbidity calculations and tools for ICD-9 and ICD-10 codes</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">3.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">3.3.9000</span>
       </span>
     </div>
 
@@ -156,8 +156,7 @@ is a reasonably simple solution using built-in functions.</p>
     </div>
 
     <pre class="usage"><span class='fu'>long_to_wide</span>(<span class='no'>x</span>, <span class='kw'>visit_name</span> <span class='kw'>=</span> <span class='fu'><a href='get_visit_name.html'>get_visit_name</a></span>(<span class='no'>x</span>),
-  <span class='kw'>icd_name</span> <span class='kw'>=</span> <span class='fu'><a href='get_icd_name.html'>get_icd_name</a></span>(<span class='no'>x</span>), <span class='kw'>prefix</span> <span class='kw'>=</span> <span class='st'>"icd_"</span>, <span class='kw'>min_width</span> <span class='kw'>=</span> <span class='fl'>0</span>,
-  <span class='kw'>aggr</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>return_df</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
+  <span class='kw'>icd_name</span> <span class='kw'>=</span> <span class='fu'><a href='get_icd_name.html'>get_icd_name</a></span>(<span class='no'>x</span>), <span class='kw'>prefix</span> <span class='kw'>=</span> <span class='st'>"icd_"</span>, <span class='kw'>min_width</span> <span class='kw'>=</span> <span class='fl'>1L</span>)
 
 <span class='fu'>icd_long_to_wide</span>(<span class='no'>...</span>)</pre>
     
@@ -202,20 +201,6 @@ even if no patients have that many codes. Must be greater than or equal to
 the maximum number of codes per patient.</p></td>
     </tr>
     <tr>
-      <th>aggr</th>
-      <td><p>single logical value, if TRUE (the default) will take more time
-to find out-of-order visit_names, and combine all the codes for each unique
-visit_name. If <code>FALSE</code>, then out-of-order visit_names will result in a
-row in the output data per contiguous block of identical visit_names.</p></td>
-    </tr>
-    <tr>
-      <th>return_df</th>
-      <td><p>single logical value, if <code>TRUE</code>, return a data frame
-with a field for the visit_name. This may be more convenient, but the
-default of <code>FALSE</code> gives the more natural return data of a matrix with
-row names being the visit IDs from <code>visit_name</code>s.</p></td>
-    </tr>
-    <tr>
       <th>...</th>
       <td><p>arguments passed on to other functions</p></td>
     </tr>
@@ -241,17 +226,13 @@ row names being the visit IDs from <code>visit_name</code>s.</p></td>
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'>  <span class='no'>longdf</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/data.frame'>data.frame</a></span>(<span class='kw'>visit_name</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"a"</span>, <span class='st'>"b"</span>, <span class='st'>"b"</span>, <span class='st'>"c"</span>),
     <span class='kw'>icd9</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"441"</span>, <span class='st'>"4424"</span>, <span class='st'>"443"</span>, <span class='st'>"441"</span>))
-  <span class='fu'>long_to_wide</span>(<span class='no'>longdf</span>)</div><div class='output co'>#&gt;   [,1]   [,2] 
-#&gt; a "441"  NA   
-#&gt; b "4424" "443"
-#&gt; c "441"  NA   
-#&gt; attr(,"class")
-#&gt; [1] "icd_wide_data" "matrix"       </div><div class='input'>  <span class='fu'>long_to_wide</span>(<span class='no'>longdf</span>, <span class='kw'>prefix</span> <span class='kw'>=</span> <span class='st'>"ICD10_"</span>)</div><div class='output co'>#&gt;   [,1]   [,2] 
-#&gt; a "441"  NA   
-#&gt; b "4424" "443"
-#&gt; c "441"  NA   
-#&gt; attr(,"class")
-#&gt; [1] "icd_wide_data" "matrix"       </div></pre>
+  <span class='fu'>long_to_wide</span>(<span class='no'>longdf</span>)</div><div class='output co'>#&gt;   visit_name icd_001 icd_002
+#&gt; 1          a     441    &lt;NA&gt;
+#&gt; 2          b    4424     443
+#&gt; 4          c     441    &lt;NA&gt;</div><div class='input'>  <span class='fu'>long_to_wide</span>(<span class='no'>longdf</span>, <span class='kw'>prefix</span> <span class='kw'>=</span> <span class='st'>"ICD10_"</span>)</div><div class='output co'>#&gt;   visit_name ICD10_001 ICD10_002
+#&gt; 1          a       441      &lt;NA&gt;
+#&gt; 2          b      4424       443
+#&gt; 4          c       441      &lt;NA&gt;</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

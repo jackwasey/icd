@@ -49,7 +49,7 @@
     <loc>https://jackwasey.github.io/icd//reference/comorbid.html</loc>
   </url>
   <url>
-    <loc>https://jackwasey.github.io/icd//reference/comorbidMatMulSimple.html</loc>
+    <loc>https://jackwasey.github.io/icd//reference/comorbidMatMulWide.html</loc>
   </url>
   <url>
     <loc>https://jackwasey.github.io/icd//reference/comorbid_df_to_mat.html</loc>
@@ -136,6 +136,9 @@
     <loc>https://jackwasey.github.io/icd//reference/explain_table_worker.html</loc>
   </url>
   <url>
+    <loc>https://jackwasey.github.io/icd//reference/factor_is_valid.html</loc>
+  </url>
+  <url>
     <loc>https://jackwasey.github.io/icd//reference/factor_nosort.html</loc>
   </url>
   <url>
@@ -161,6 +164,9 @@
   </url>
   <url>
     <loc>https://jackwasey.github.io/icd//reference/generate_maps_pccc.html</loc>
+  </url>
+  <url>
+    <loc>https://jackwasey.github.io/icd//reference/generate_neds_pts.html</loc>
   </url>
   <url>
     <loc>https://jackwasey.github.io/icd//reference/generate_random_short_icd10cm_bill.html</loc>
@@ -203,6 +209,9 @@
   </url>
   <url>
     <loc>https://jackwasey.github.io/icd//reference/grapes-eine-grapes.html</loc>
+  </url>
+  <url>
+    <loc>https://jackwasey.github.io/icd//reference/guess_icd_col_by_name.html</loc>
   </url>
   <url>
     <loc>https://jackwasey.github.io/icd//reference/guess_pair_version.html</loc>

@@ -66,7 +66,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Comorbidity calculations and tools for ICD-9 and ICD-10 codes</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">3.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">3.3.9000</span>
       </span>
     </div>
 
@@ -143,6 +143,17 @@
       
     </div>
 
+    <div id="version-3-4" class="section level1">
+<h1 class="page-header">
+<a href="#version-3-4" class="anchor"></a>Version 3.4<small> Unreleased </small>
+</h1>
+<ul>
+<li>Handle ‘wide’ format data much more efficiently, without having to convert to long format first.</li>
+<li>drop deprecated arguments to ‘comorbid’: visitId and icd9Field. Use ‘visit_name’ and ‘icd_name’ instead.</li>
+<li>default not to do (minimal) code cleaning before calculating comorbidities. To re-enable, use <code>preclean = TRUE</code>. Decimal-format codes are still converted to the short form used in the maps. For huge data, consider converting the maps to decimal, instead of converting the ICD data to decimal format.</li>
+<li>drop <code>unique_ids</code> argument to <code>comorbid</code> and <code>categorize</code> since it no longer provides any optimization opportunity.</li>
+</ul>
+</div>
     <div id="version-3-3" class="section level1">
 <h1 class="page-header">
 <a href="#version-3-3" class="anchor"></a>Version 3.3<small> 2018-11-18 </small>
@@ -465,6 +476,7 @@
     <div id="tocnav">
       <h2>Contents</h2>
       <ul class="nav nav-pills nav-stacked">
+        <li><a href="#version-3-4">3.4</a></li>
         <li><a href="#version-3-3">3.3</a></li>
         <li><a href="#version-3-2-1">3.2.1</a></li>
         <li><a href="#version-3-2-0">3.2.0</a></li>

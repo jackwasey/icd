@@ -78,7 +78,7 @@ comorbid_ccs." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Comorbidity calculations and tools for ICD-9 and ICD-10 codes</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">3.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">3.3.9000</span>
       </span>
     </div>
 
@@ -184,9 +184,9 @@ Clinical Classification Software (CCS) rules from AHRQ, see
 <span class='fu'>icd9_comorbid</span>(<span class='no'>x</span>, <span class='no'>map</span>, <span class='kw'>visit_name</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>icd_name</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>short_code</span> <span class='kw'>=</span> <span class='fu'><a href='guess_short.html'>guess_short</a></span>(<span class='no'>x</span>, <span class='kw'>icd_name</span> <span class='kw'>=</span> <span class='no'>icd_name</span>),
   <span class='kw'>short_map</span> <span class='kw'>=</span> <span class='fu'><a href='guess_short.html'>guess_short</a></span>(<span class='no'>map</span>), <span class='kw'>return_df</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>return_binary</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>preclean</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>visitId</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>icd9Field</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>categorize_fun</span> <span class='kw'>=</span> <span class='no'>categorize_simple</span>,
-  <span class='kw'>comorbid_fun</span> <span class='kw'>=</span> <span class='no'>comorbidMatMulSimple</span>, <span class='no'>...</span>)
+  <span class='kw'>return_binary</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>preclean</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>categorize_fun</span> <span class='kw'>=</span> <span class='no'>categorize_simple</span>,
+  <span class='kw'>comorbid_fun</span> <span class='kw'>=</span> <span class='no'>comorbid_mat_mul_wide</span>, <span class='no'>...</span>)
 
 <span class='fu'>icd9_comorbid_ahrq</span>(<span class='no'>x</span>, <span class='no'>...</span>, <span class='kw'>abbrev_names</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>hierarchy</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
 
@@ -332,14 +332,6 @@ ten million rows, this is much slower than the comorbidity calculation. If
 you know that the source ICD-9 codes are already well formed (or have
 already run <code>icd9_add_leading_zeroes</code>), then <code>preclean</code> can be
 set to <code>FALSE</code> to save time.</p></td>
-    </tr>
-    <tr>
-      <th>visitId</th>
-      <td><p>Deprecated. Use <code>visit_name</code> instead.</p></td>
-    </tr>
-    <tr>
-      <th>icd9Field</th>
-      <td><p>Deprecated. Use <code>icd_name</code> instead.</p></td>
     </tr>
     <tr>
       <th>comorbid_fun</th>

@@ -76,7 +76,7 @@ codes in there" />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Comorbidity calculations and tools for ICD-9 and ICD-10 codes</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">3.3</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">3.3.9000</span>
       </span>
     </div>
 
@@ -167,7 +167,7 @@ codes in there</p>
     </div>
 
     <pre class="usage"><span class='fu'>get_icd_name</span>(<span class='no'>x</span>, <span class='kw'>icd_name</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>valid_codes</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-  <span class='kw'>defined_codes</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
+  <span class='kw'>defined_codes</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>multi</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -181,6 +181,10 @@ codes in there</p>
       <td><p>usually <code>NULL</code> but if specified, will be checked it is
 valid (i.e. a character vector of length one, which is indeed a name of one
 of <code>x</code>'s columns) and returned unchanged</p></td>
+    </tr>
+    <tr>
+      <th>multi</th>
+      <td><p>If <code>TRUE</code>, allow multiple ICD field names to be returned.</p></td>
     </tr>
     </table>
     
