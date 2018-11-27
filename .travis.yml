@@ -6,11 +6,19 @@ language: r
 sudo: false
 cache: packages
 
-# only things not in DESCRIPTION
 r_packages:
   - covr
-#  - lintr
-#  - pkgdown
+# following from DESCRIPTION so travis can cache
+  - checkmate
+  - magrittr
+  - Rcpp
+  - knitr
+  - roxygen2
+  - rmarkdown
+  - rticles
+  - testthat
+  - tinytex
+  - xml2
 
 r_github_packages:
   - jimhester/lintr
@@ -50,10 +58,10 @@ matrix:
   - r: release
   - r: oldrel
     r_build_args: --no-build-vignettes --no-manual --resave-data=no
-    r_check_args: -no-build-vignettes --no-vignettes --ignore-vignettes --no-codoc --no-manual
+    r_check_args: --no-build-vignettes --no-vignettes --ignore-vignettes --no-codoc --no-manual
   - r: release
     r_build_args: --no-build-vignettes --no-manual --resave-data=no
-    r_check_args: -no-build-vignettes --no-vignettes --ignore-vignettes --no-codoc --no-manual
+    r_check_args: --no-build-vignettes --no-vignettes --ignore-vignettes --no-codoc --no-manual
     env:
     - ICD_COVERAGE=true
     - ICD_TEST_DEPRECATED=true
@@ -61,14 +69,12 @@ matrix:
     - ICD_TEST_SLOW=true
   allow_failures:
   # temporarily allow failure for lintr run on travis as a dependency of lintr fails to install.
-  - r: devel
-    env: LINTR_COMMENT_BOT=true
   - r: oldrel
     r_build_args: --no-build-vignettes --no-manual --resave-data=no
-    r_check_args: -no-build-vignettes --no-vignettes --ignore-vignettes --no-codoc --no-manual
+    r_check_args: --no-build-vignettes --no-vignettes --ignore-vignettes --no-codoc --no-manual
   - r: release
     r_build_args: --no-build-vignettes --no-manual --resave-data=no
-    r_check_args: -no-build-vignettes --no-vignettes --ignore-vignettes --no-codoc --no-manual
+    r_check_args: --no-build-vignettes --no-vignettes --ignore-vignettes --no-codoc --no-manual
     env:
     - ICD_COVERAGE=true
     - ICD_TEST_DEPRECATED=true
