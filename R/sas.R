@@ -48,16 +48,16 @@ sas_format_extract <- function(sas_lines) {
   sas_lines <- trim(sas_lines)
 
   # drop everything except VALUE statements
-  sas_lines <- grep(pattern = "^VALUE.*", x = sas_lines, ignore.case = TRUE, value = TRUE)
-
+  sas_lines <- grep(pattern = "^VALUE.*", x = sas_lines, ignore.case = TRUE,
+                    value = TRUE)
   # put each VALUE declaration in a vector element
-  all_sas_assignments <- str_match_all(
+  sma1 <- str_match_all(
     string = sas_lines,
-    pattern = "^V(?:ALUE|alue)[[:space:]]+([[:graph:]]+)[[:space:]]+(.+)[[:space:]]*$"
-  ) %>% lapply(`[`, c(2, 3))
-
+    pattern =
+      "^V(?:ALUE|alue)[[:space:]]+([[:graph:]]+)[[:space:]]+(.+)[[:space:]]*$"
+  )
+  all_sas_assignments <- lapply(sma1, `[`, c(2, 3))
   out <- list()
-
   for (m in all_sas_assignments) {
     out[m[[1]]] <- list(sas_parse_assignments(m[[2]]))
   }

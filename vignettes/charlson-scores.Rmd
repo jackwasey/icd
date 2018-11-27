@@ -52,7 +52,7 @@ More complicated scoring systems may use lab values, patient demographic informa
 The Vermont data are actually discharge, not admission diagnoses, but can be used to demonstrate generating Charlson scores.
 ```{r vermont-charlson}
 head(icd.data::vermont_dx[1:10])
-charlson(vermont_dx) %>% summary
+summary(charlson(vermont_dx))
 head(charlson(vermont_dx))
 head(names(charlson(vermont_dx)))
 ```

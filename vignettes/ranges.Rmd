@@ -71,7 +71,7 @@ If a country adds more detail, e.g., a new code `746.60`, we want to capture thi
 Another problem is whether to include broader parent codes when a range does not include all the children: e.g., `"100.99" %i9da% "101.01"` does not include `100` or `100.0`, both of which imply larger subsets than requested by the range command (i.e., every code from `100.00` to `100.99`). The shorter forms `%i9s%` and `%i9d%` return only *real* codes (i.e., listed in the CMS definitions as either three-digit codes or diagnoses), whereas `%i9sa%` and `%i9da%` return all possible syntactically valid ICD-9 codes:
 ```{r ranges, eval = FALSE}
 # get all possible codes
-"003" %i9sa% "0033" %>% head(9) # show first 9 of 111 values
+head("003" %i9sa% "0033", n = 9) # show first 9 of 111 values
 # just get the ones which correspond to diagnoses (keeping the 3-digit chapters)
 "494" %i9s% "4941"
 
@@ -93,8 +93,9 @@ Another way of specifying ranges are to use function calls. These are exactly eq
 icd:::expand_range("4820", "4823") # default, equivalent to %i9s%
 icd:::expand_range("4820", "4823", defined = FALSE)
 # see the first few differences (which are by definition not 'real' codes):
-setdiff(icd:::expand_range("4820", "4823", defined = FALSE),
-        icd:::expand_range("4820", "4823")) %>% head
+head(
+  setdiff(icd:::expand_range("4820", "4823", defined = FALSE),
+          icd:::expand_range("4820", "4823")))
 ```
 
 ## Finding codes in hierarchy

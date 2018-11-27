@@ -13,7 +13,7 @@ unique(gsub("[[:digit:]]", replacement = "", x = alpha_in_tail))
 grep("[[:alpha::]].*J.*", i10)
 
 # find unique characters at each position from 4 to 7
-for (i in 1:7)
+for (i in 1:7) {
   message(i)
-  substring(alpha_in_tail, i, i) %>% unique %>% sort %>% message
+  print(sort(unique(substring(alpha_in_tail, i, i))))
 }

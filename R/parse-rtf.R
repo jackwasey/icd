@@ -75,10 +75,7 @@ rtf_parse_year <- function(year = "2011", ..., save_data = FALSE,
   out <- sort_icd.icd9(out, short_code = FALSE)
   invisible(
     data.frame(
-      code = out %>%
-        unname %>%
-        decimal_to_short.icd9 %>%
-        icd9cm,
+      code = icd9cm(decimal_to_short.icd9(unname(out))),
       desc = names(out),
       stringsAsFactors = FALSE)
   )
@@ -140,9 +137,10 @@ rtf_parse_lines <- function(rtf_lines, verbose = FALSE,
   # at least two examples of "Use 0 as fourth digit for category 672"
   re_fourth_digit_zero <- "Use 0 as fourth digit for category"
   fourth_digit_zero_lines <- grep(re_fourth_digit_zero, filtered, ...)
-  filtered[fourth_digit_zero_lines] %>%
-    str_pair_match("(.*category )([[:digit:]]{3})$", ...) %>%
-    unname -> fourth_digit_zero_categories
+  fourth_digit_zero_categories <- unname(
+    str_pair_match(filtered[fourth_digit_zero_lines],
+                   "(.*category )([[:digit:]]{3})$", ...)
+  )
   # deal with 657 and 672 (in the default RTF), by appending the elements to the
   # end of the input list. argh.
   for (categ in fourth_digit_zero_categories) {
@@ -253,9 +251,9 @@ rtf_make_invalid_qual <- function(filtered, ...) {
   invalid_qual <- c()
   for (ql in qual_subset_lines) {
     # get prior code
-    filtered[ql - 1] %>%
-      str_match_all(paste0("(", re_icd9_decimal_bare, ") (.*)")) %>%
-      unlist %>% extract2(2) -> code
+    m1 <- str_match_all(filtered[ql - 1],
+                        paste0("(", re_icd9_decimal_bare, ") (.*)"))
+    code <- unlist(m1)[[2]]
     sb <- rtf_parse_qualifier_subset(filtered[ql])
     inv_sb <- setdiff(as.character(0:9), sb)
     if (length(inv_sb) == 0)
@@ -365,10 +363,11 @@ rtf_make_lookup_fifth <- function(filtered, re_fifth_range_other, ..., verbose =
   for (f in fifth_rows) {
     if (verbose) message("working on fifth-digit row:", f)
     range <- rtf_parse_fifth_digit_range(filtered[f], verbose = verbose)
-    fifth_suffices <- filtered[seq(f + 1, f + 20)] %>%
-      grep(pattern = "^[[:digit:]][[:space:]].*", value = TRUE, ...) %>%
-      str_pair_match("([[:digit:]])[[:space:]](.*)", ...)
-    re_fifth_defined <- paste(c("\\.[[:digit:]][", names(fifth_suffices), "]$"), collapse = "")
+    f1 <- filtered[seq(f + 1, f + 20)]
+    f2 <- grep(pattern = "^[[:digit:]][[:space:]].*", f1, value = TRUE, ...)
+    fifth_suffices <- str_pair_match(f2, "([[:digit:]])[[:space:]](.*)", ...)
+    re_fifth_defined <- paste(c("\\.[[:digit:]][", names(fifth_suffices), "]$"),
+                              collapse = "")
     # drop members of range which don't have defined fifth digit
     range <- grep(re_fifth_defined, range, value = TRUE, ...)
     # now replace value with the suffix, with name of item being the code itself
@@ -388,9 +387,9 @@ rtf_make_lookup_fifth <- function(filtered, re_fifth_range_other, ..., verbose =
   re_V30V39_fifth <- "V3[[:digit:]]\\.0[01]$"
   lines_V30V39 <- grep(re_fifth_range_V30V39, filtered)
   stopifnot(length(lines_V30V39) == 1)
-  filtered[seq(from = lines_V30V39 + 1, to = lines_V30V39 + 3)] %>%
-    grep(pattern = "^[[:digit:]][[:space:]].*", value = TRUE, ...) %>%
-    str_pair_match("([[:digit:]])[[:space:]](.*)", ...) -> suffices_V30V39
+  f1 <- filtered[seq(from = lines_V30V39 + 1, to = lines_V30V39 + 3)]
+  f2 <- grep(f1, pattern = "^[[:digit:]][[:space:]].*", value = TRUE, ...)
+  suffices_V30V39 <- str_pair_match(f2, "([[:digit:]])[[:space:]](.*)", ...)
   range <- c("V30" %i9da% "V37", children.icd9("V39", short_code = FALSE, defined = FALSE))
   range <- grep(re_V30V39_fifth, range, value = TRUE, ...)
   names(range) <- range
@@ -524,10 +523,8 @@ rtf_parse_fifth_digit_range <- function(row_str, verbose = FALSE) {
   assert_flag(verbose)
   out <- c()
   # get numbers and number ranges
-  row_str %>%
-    strsplit("[, :;]") %>%
-    unlist %>%
-    grep(pattern = "[VvEe]?[0-9]", value = TRUE) -> vals
+  vals <- grep(unlist(strsplit(row_str, "[, :;]")),
+               pattern = "[VvEe]?[0-9]", value = TRUE)
   if (verbose)
     message("vals are:", paste(vals, collapse = ", "))
   # sometimes  we get things like:
@@ -541,7 +538,7 @@ rtf_parse_fifth_digit_range <- function(row_str, verbose = FALSE) {
         message("dotmnr is: ", dotmnr)
       if (grepl("-", dotmnr)) {
         # range of minors
-        strsplit(dotmnr, "-", fixed = TRUE) %>% unlist -> pair
+        pair <- unlist(strsplit(dotmnr, "-", fixed = TRUE))
         first <- paste0(get_major.icd9(base_code, short_code = FALSE), pair[1])
         last <- paste0(get_major.icd9(base_code, short_code = FALSE), pair[2])
         if (verbose)
@@ -557,7 +554,7 @@ rtf_parse_fifth_digit_range <- function(row_str, verbose = FALSE) {
   for (v in vals) {
     # take care of ranges
     if (grepl("-", v)) {
-      pair <- strsplit(v, "-", fixed = TRUE) %>% unlist
+      pair <- unlist(strsplit(v, "-", fixed = TRUE))
       # sanity check
       stopifnot(all(is_valid.icd9(pair, short_code = FALSE)))
       if (verbose)
@@ -584,16 +581,12 @@ rtf_parse_fifth_digit_range <- function(row_str, verbose = FALSE) {
 rtf_parse_qualifier_subset <- function(qual) {
   assert_string(qual) # one at a time
   out <- c()
-  strip(qual) %>%
-    strsplit("[]\\[,]") %>%
-    unlist %>%
-    grep(pattern = "[[:digit:]]", value = TRUE) %>%
-    strsplit(",") %>% unlist -> vals
+  s1 <- strsplit(strip(qual), "[]\\[,]")
+  s2 <- grep(pattern = "[[:digit:]]", unlist(s1), value = TRUE)
+  vals <- unlist(strsplit(s2, ","))
   for (v in vals) {
     if (grepl("-", v)) {
-      strsplit(v, "-") %>%
-        unlist %>%
-        as.integer -> pair
+      pair <- as.integer(unlist(strsplit(v, "-")))
       out <- c(out, seq(pair[1], pair[2]))
       next
     }
