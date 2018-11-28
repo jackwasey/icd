@@ -203,10 +203,13 @@ icd9_parse_leaf_desc_ver <- function(version = icd9cm_latest_edition(),
   on.exit(options(oldwarn))
   if (!is.na(fn_long_orig)) {
     encs <- Encoding(out[["long_desc"]])
-    message("Found labelled encodings in long_desc: ", paste(unique(encs), collapse = ", "))
+    message("Found labelled encodings in long_desc: ",
+            paste(unique(encs), collapse = ", "))
     message("non-ASCII rows of long descriptions are: ",
             paste(get_non_ASCII(out[["long_desc"]]), collapse = ", "))
-    message("Encodings found in long_desc: ", unique(Encoding(out[["long_desc"]][is_non_ASCII(out[["long_desc"]])])))
+    message("Encodings found in long_desc: ",
+            unique(
+              Encoding(out[["long_desc"]][is_non_ASCII(out[["long_desc"]])])))
   }
   invisible(out)
 }
@@ -225,8 +228,9 @@ parse_leaf_desc_icd9cm_v27 <- function(offline = TRUE) {
   message("original v27 file name = '", fn_orig, "'. URL = ", url)
   f27_info <- unzip_to_data_raw(url, fn_orig, offline = offline)
   f <- file(f27_info$file_path, encoding = "latin1")
-  icd9cm_billable27 <- utils::read.csv(f27_info$file_path, stringsAsFactors = FALSE,
-                                       colClasses = "character", encoding = "latin1")
+  icd9cm_billable27 <-
+    utils::read.csv(f27_info$file_path, stringsAsFactors = FALSE,
+                    colClasses = "character", encoding = "latin1")
   close(f)
   names(icd9cm_billable27) <- c("code", "long_desc", "short_desc")
   icd9cm_billable27 <- icd9cm_billable27[c(1, 3, 2)] # reorder columns
@@ -253,8 +257,10 @@ icd9cm_generate_chapters_hierarchy <- function(save_data = FALSE,
   assert_flag(verbose)
   assert_flag(offline)
   icd9_rtf <- rtf_parse_year(year = "2011", perl = perl, useBytes = use_bytes,
-                             save_data = FALSE, verbose = verbose, offline = offline)
-  chaps <- icd9_get_chapters(x = icd9_rtf$code, short_code = TRUE, verbose = verbose)
+                             save_data = FALSE, verbose = verbose,
+                             offline = offline)
+  chaps <- icd9_get_chapters(x = icd9_rtf$code, short_code = TRUE,
+                             verbose = verbose)
   # could also get some long descs from more recent billable lists, but not
   # older ones which only have short descs
   out <- cbind(
@@ -275,7 +281,8 @@ icd9cm_generate_chapters_hierarchy <- function(save_data = FALSE,
   billable_codes <- get_billable.icd9(out[["code"]], short_code = TRUE)
   billable_rows <- which(out[["code"]] %in% billable_codes)
   title_rows <- which(out[["code"]] %nin% billable_codes)
-  stopifnot(setdiff(c(billable_rows, title_rows), seq_along(out$code)) == integer(0))
+  stopifnot(setdiff(c(billable_rows, title_rows),
+                    seq_along(out$code)) == integer(0))
   out[billable_rows, "short_desc"] <- bill32$short_desc
   # for rows without a short description (i.e. titles, non-billable),
   # useexisting long desc
@@ -307,7 +314,7 @@ fixSubchapterNa <- function(x, start, end) {
   congenital <- x[["code"]] %in% (start %i9sa% end)
   # assert all the same:
   stopifnot(all(x[congenital[1], "chapter"] == x[congenital[-1], "chapter"]))
-  # now some work to insert a new level into the sub-chapter factor in the right place
+  # insert a new level into the sub-chapter factor in the right place
   previous_sub <- as_char_no_warn(x[(which(congenital) - 1)[1], "sub_chapter"])
   previous_sub_pos <- which(levels(x$sub_chapter) == previous_sub)
   congenital_title <- as_char_no_warn(x[which(congenital)[1], "chapter"])

@@ -57,9 +57,16 @@ skip_flat_icd9_avail_all <- function() {
     skip_flat_icd9_avail(ver = v)
 }
 
+expect_no_warn <- function(object, expected, ...)
+  expect_warning(object, expected, regexp = NA, ...)
+
+expect_no_error <- function(object, expected, ...)
+  expect_error(object, expected, regexp = NA, ...)
+
 #' expect equal, ignoring any ICD classes
 #'
 #' Strips any \code{icd} classes (but not others) before making comparison
+#' @noRd
 #' @keywords internal debugging
 expect_equal_no_icd <- function(object, expected, ...) {
   class(object) <- class(object)[class(object) %nin% icd_all_classes]
@@ -67,6 +74,7 @@ expect_equal_no_icd <- function(object, expected, ...) {
   testthat::expect_equivalent(object, expected, ...)
 }
 
+#' @noRd
 #' @keywords internal debugging
 expect_equal_no_class_order <- function(object, expected, ...) {
   eval(bquote(testthat::expect_true(all(class(.(object)) %in% class(.(expected))), ...)))

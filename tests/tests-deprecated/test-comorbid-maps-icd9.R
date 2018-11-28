@@ -197,7 +197,8 @@ test_that("ICD-9 codes from SAS source AHRQ exist", {
   expect_true("43850" %in% icd9_map_ahrq$Paralysis)
   expect_true("43852" %in% icd9_map_ahrq$Paralysis)
   expect_true("43853" %in% icd9_map_ahrq$Paralysis)
-  # although 4385 implies an overly broad range, all its children are in the requested range, so it should appear.
+  # although 4385 implies an overly broad range, all its children are in the
+  # requested range, so it should appear.
   expect_true("4383" %in% icd9_map_ahrq$Paralysis)
   expect_true("4384" %in% icd9_map_ahrq$Paralysis)
   expect_true("4385" %in% icd9_map_ahrq$Paralysis)
@@ -385,8 +386,10 @@ test_that("ICD-9 codes from SAS source AHRQ exist", {
   #   "2871 ",
   #   "2873 "-"2875 ", # coag
   expect_true("2871" %in% icd9_map_ahrq$Coagulopathy)
-  expect_true("28710" %in% icd9_map_ahrq$Coagulopathy) # doesn't exist but really should work simply
-  expect_true("28719" %in% icd9_map_ahrq$Coagulopathy) # doesn't exist but really should work simply
+  # doesn't exist but really should work simply
+  expect_true("28710" %in% icd9_map_ahrq$Coagulopathy)
+  # doesn't exist but really should work simply
+  expect_true("28719" %in% icd9_map_ahrq$Coagulopathy)
   expect_false("287" %in% icd9_map_ahrq$Coagulopathy)
   expect_false("2872" %in% icd9_map_ahrq$Coagulopathy)
   expect_false("28720" %in% icd9_map_ahrq$Coagulopathy)
@@ -473,7 +476,7 @@ test_that("ICD-9 codes from SAS source for Quan Deyo Charlson exist", {
 # data, but the numbers were transcribed manually. This is therefore testing a
 # little of the transcription, and also the elobration of codes definied in
 # ranges
-test_that("sample of ICD-9 codes from manually specified Quan Elix mapping exist", {
+test_that("sample of ICD-9 from manually specified Quan Elix mapping exist", {
   expect_true("2500" %in% icd9_map_quan_elix$DM)
   expect_true("2501" %in% icd9_map_quan_elix$DM)
   expect_true("25011" %in% icd9_map_quan_elix$DM)
@@ -484,7 +487,7 @@ test_that("sample of ICD-9 codes from manually specified Quan Elix mapping exist
   expect_false("710" %in% icd9_map_quan_elix[["FluidsLytes"]])
 })
 
-test_that("sample of ICD-9 codes from manually specified Elixhauser mapping exist", {
+test_that("sample of ICD-9 from manually specified Elixhauser mapping exist", {
   expect_true("09320" %in% icd9_map_elix$Valvular)
   expect_true("3971" %in% icd9_map_elix$Valvular)
   expect_true("V560" %in% icd9_map_elix$Renal)
@@ -635,7 +638,7 @@ test_that("comorbidities created from source data frame coded as factors", {
   expect_identical(res, res_nofactor)
 })
 
-test_that("all AHRQ ICD-9 comorbidities are also in the ICD-10 maps, in same order", {
+test_that("all AHRQ ICD-9 comorbidities are in the ICD-10 maps, in order", {
   expect_equal_no_icd(names(icd9_map_ahrq), names(icd10_map_ahrq))
   expect_equal_no_icd(names(icd9_map_elix), names(icd10_map_elix))
   expect_equal_no_icd(names(icd9_map_quan_elix), names(icd10_map_quan_elix))

@@ -21,28 +21,25 @@ context("icd10 fixed width parse")
 
 test_that("icd10 2016 flat file details are okay", {
   skip_icd10cm_flat_avail()
-
   # check cols at a time, so I get better error feedback:
   col_names <- c("code", "billable", "short_desc", "long_desc", "three_digit",
                  "major", "sub_chapter", "chapter")
   expect_error(res <- icd10cm_get_all_defined(save_data = FALSE), regexp = NA)
   expect_identical(colnames(res), col_names)
-
   # checkmate tests worked well here, but don't work with latest testthat
-  checkmate::expect_character(res$code)
-  checkmate::expect_logical(res$billable)
-  checkmate::expect_character(res$short_desc)
-  checkmate::expect_character(res$long_desc)
-
-  checkmate::expect_character(icd10cm2016$code)
-  checkmate::expect_logical(icd10cm2016$billable)
-  checkmate::expect_character(icd10cm2016$short_desc)
-  checkmate::expect_character(icd10cm2016$long_desc)
-
+  expect_is(res$code, "character")
+  expect_is(res$billable, "logical")
+  expect_is(res$short_desc, "character")
+  expect_is(res$long_desc, "character")
+  expect_is(icd10cm2016$code, "character")
+  expect_is(icd10cm2016$billable, "logical")
+  expect_is(icd10cm2016$short_desc, "character")
+  expect_is(icd10cm2016$long_desc, "character")
   for (n in c("three_digit", "major", "sub_chapter", "chapter")) {
     checkmate::expect_factor(res[[n]])
     checkmate::expect_factor(icd10cm2016[[n]])
-    expect_identical(levels(res[[n]]), levels(icd10cm2016[[n]]), info = paste("working on ", n))
+    expect_identical(levels(res[[n]]), levels(icd10cm2016[[n]]),
+                     info = paste("working on ", n))
     expect_identical(res[[n]], icd10cm2016[[n]], info = paste("working on ", n))
   }
   expect_identical(res, icd10cm2016)
@@ -59,23 +56,19 @@ test_that("icd10 sub-chapters are recreated exactly", {
 })
 
 test_that("icd10 sub_chapters were parsed correctly", {
-
-  paste("Persons with potential health hazards related",
-        "to family and personal history and certain",
-        "conditions influencing health status") %>%
-    expect_icd10_sub_chap_equal(start = "Z77", end = "Z99")
-
+  expect_icd10_sub_chap_equal(
+    paste("Persons with potential health hazards related",
+          "to family and personal history and certain",
+          "conditions influencing health status"),
+    start = "Z77", end = "Z99")
   expect_icd10_sub_chap_equal(
     "Persons encountering health services for examinations",
     "Z00", "Z13")
-
   expect_icd10_sub_chap_equal(
     "Occupant of three-wheeled motor vehicle injured in transport accident",
     "V30", "V39")
-
   expect_icd10_sub_chap_equal(
     "Malignant neuroendocrine tumors", "C7A", "C7A")
-
   expect_icd10_sub_chap_equal(
     "Other human herpesviruses", "B10", "B10")
 })
@@ -84,10 +77,8 @@ test_that("ICD-10 chapters and sub-chapters are distinct", {
   # and for good measure, make sure that sub-chapters and chapters are not
   # confused. This was really just a problem with RTF parsing for ICD-9, but
   # there are possible similiar problems with some of the XML hierarchy.
-
   for (chap in names(icd10_chapters))
     expect_icd10_only_chap(chap)
-
   for (subchap in names(icd10_sub_chapters))
     expect_icd10_only_sub_chap(subchap)
 })

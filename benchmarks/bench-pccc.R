@@ -12,7 +12,7 @@ if (length(args)) divisor = as.integer(args[1])
 suppressPackageStartupMessages({
   library(icd)
   library(dplyr)
-  library(magrittr)
+  library(magrittr, warn.conflicts = FALSE)
   library(R.cache)
   library(pccc)
 })

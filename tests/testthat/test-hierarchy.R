@@ -78,10 +78,12 @@ test_that("some sub-chapters are correct", {
 
 test_that("some randomly selected rows are correct", {
   expect_equal(
-    icd9cm_hierarchy[icd9cm_hierarchy[["code"]] == "5060", ]  %>%
-      sapply(as_char_no_warn) %>%
-      unname,
-    c("5060", "TRUE", "Fum/vapor bronc/pneumon", "Bronchitis and pneumonitis due to fumes and vapors",
+    unname(
+      sapply(
+        icd9cm_hierarchy[icd9cm_hierarchy[["code"]] == "5060", ], as_char_no_warn)
+    ),
+    c("5060", "TRUE", "Fum/vapor bronc/pneumon",
+      "Bronchitis and pneumonitis due to fumes and vapors",
       "506", "Respiratory conditions due to chemical fumes and vapors",
       "Pneumoconioses And Other Lung Diseases Due To External Agents",
       "Diseases Of The Respiratory System")

@@ -59,23 +59,19 @@ test_that("icd10 sub-chapters are recreated exactly", {
 })
 
 test_that("icd10 sub_chapters were parsed correctly", {
-
-  paste("Persons with potential health hazards related",
-        "to family and personal history and certain",
-        "conditions influencing health status") %>%
-    expect_icd10_sub_chap_equal(start = "Z77", end = "Z99")
-
+  expect_icd10_sub_chap_equal(
+    paste("Persons with potential health hazards related",
+          "to family and personal history and certain",
+          "conditions influencing health status"),
+    start = "Z77", end = "Z99")
   expect_icd10_sub_chap_equal(
     "Persons encountering health services for examinations",
     "Z00", "Z13")
-
   expect_icd10_sub_chap_equal(
     "Occupant of three-wheeled motor vehicle injured in transport accident",
     "V30", "V39")
-
   expect_icd10_sub_chap_equal(
     "Malignant neuroendocrine tumors", "C7A", "C7A")
-
   expect_icd10_sub_chap_equal(
     "Other human herpesviruses", "B10", "B10")
 })
@@ -84,10 +80,8 @@ test_that("ICD-10 chapters and sub-chapters are distinct", {
   # and for good measure, make sure that sub-chapters and chapters are not
   # confused. This was really just a problem with RTF parsing for ICD-9, but
   # there are possible similiar problems with some of the XML hierarchy.
-
   for (chap in names(icd10_chapters))
     expect_icd10_only_chap(chap)
-
   for (subchap in names(icd10_sub_chapters))
     expect_icd10_only_sub_chap(subchap)
 })

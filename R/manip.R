@@ -27,10 +27,12 @@ icd9_extract_alpha_numeric <- function(x) {
   assert(check_factor(x), check_character(x))
   # generate list, then flip into a matrix with a row for each code, and the
   # alpha part in first column, and numeric part in the second
-  as_char_no_warn(x) %>%
-    str_match_all(pattern = "([VvEe]?)([[:digit:].]+)") %>%
-    vapply(FUN = function(y) matrix(data = y[2:3], nrow = 1, ncol = 2),
-           FUN.VALUE = c(NA_character_, NA_character_)) %>% t
+  t(
+    vapply(
+      as_char_no_warn(
+        str_match_all(x, pattern = "([VvEe]?)([[:digit:].]+)")),
+      FUN = function(y) matrix(data = y[2:3], nrow = 1, ncol = 2),
+      FUN.VALUE = c(NA_character_, NA_character_)))
 }
 
 #' drop zero padding from decimal ICD-9 code.

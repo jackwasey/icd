@@ -33,10 +33,10 @@ test_that("ICD-10 codes in uranium data are okay", {
 test_that("sample data frames have correct class", {
   expect_true(is.icd_long_data(uranium_pathology))
   expect_true(is.icd_wide_data(vermont_dx))
-
   # should not have vector classes on the data frames themselves
   expect_false(any(c("icd9", "icd9cm", "icd9who") %in% class(vermont_dx)))
-  expect_false(any(c("icd10", "icd10cm", "icd10who") %in% class(uranium_pathology)))
+  expect_false(
+    any(c("icd10", "icd10cm", "icd10who") %in% class(uranium_pathology)))
 })
 
 test_that("uranium data looks okay", {
@@ -50,14 +50,11 @@ test_that("uranium data looks okay", {
 test_that("vermont data looks okay", {
   expect_true(is.icd_wide_data(vermont_dx))
   expect_equal(dim(vermont_dx), c(1000, 25))
-
   expect_true(
     all(
       is_valid.icd9(
         wide_to_long(vermont_dx)$icd_code)))
-
   expect_true(
     all(
       wide_to_long(vermont_dx)$icd_code %in% icd9cm_hierarchy$code))
-
 })

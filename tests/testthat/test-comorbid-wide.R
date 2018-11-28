@@ -60,7 +60,7 @@ test_that("convert long to wide, then do wide cmb", {
 
     # double up cols in each long test data set
     wide_dbl <- cbin(get(df), get(df))
-    nc2 <- ncol(wide_dbl/2)
+    nc2 <- ncol(wide_dbl / 2)
     icd_name <- names(wide_dbl)[seq.int(from = nc2 + 1, to = nc2)]
     expect_error(regexp = NA,
                  comorbid_charlson(wide_dbl, icd_name = icd_name),

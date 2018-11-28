@@ -71,12 +71,15 @@ test_that("rtf_strip does what it says on the tin", {
 
   expect_equal(
     rtf_strip(
-      paste(sep = "", "\\lsdsemihidden0 \\lsdunhideused0 \\lsdpriority71 \\lsdlocked0 Colorful Shading Accent 6;",
-            "\\lsdsemihidden0 \\lsdunhideused0 \\lsdpriority72 \\lsdlocked0 Colorful List Accent 6;",
-            "\\lsdsemihidden0 \\lsdunhideused0 \\lsdpriority73 \\lsdlocked0 Colorful Grid Accent 6;")),
+      paste(
+        sep = "",
+        "\\lsdsemihidden0 \\lsdunhideused0 \\lsdpriority71 \\lsdlocked0 Colorful Shading Accent 6;",
+        "\\lsdsemihidden0 \\lsdunhideused0 \\lsdpriority72 \\lsdlocked0 Colorful List Accent 6;",
+        "\\lsdsemihidden0 \\lsdunhideused0 \\lsdpriority73 \\lsdlocked0 Colorful Grid Accent 6;")),
     "")
 
-  # make sure we pick up unusual characters within Rtf expressions, otherwise we spill numbers etc into later parsing:
+  # make sure we pick up unusual characters within Rtf expressions, otherwise we
+  # spill numbers etc into later parsing:
   expect_equal(
     rtf_strip(
       paste(sep = "", "\\par }\\pard\\plain \\ltrpar\\s82\\ql \\fi-1080\\li2160\\ri0",
@@ -106,7 +109,9 @@ test_that("extraction from qualifier subset works", {
     rtf_parse_qualifier_subset("[0]"),
     "0")
 
-  expect_true(all(sapply(all2015, FUN = function(f) length(rtf_parse_qualifier_subset(f)) > 0)))
+  expect_true(
+    all(sapply(all2015,
+               FUN = function(f) length(rtf_parse_qualifier_subset(f)) > 0)))
 })
 
 # The following tests on the RTF parsing get the RTF source over internet, so
@@ -116,7 +121,8 @@ context("RTF tests, sources optionally downloaded when required")
 test_year <- "2011"
 
 # if we are in offline mode, and the data is not available, we can't proceed.
-# test whether the RTF is available offline. N.b. we skip in a 'context' so all subsequent tests are skipped.
+# test whether the RTF is available offline. N.b. we skip in a 'context' so all
+# subsequent tests are skipped.
 if (rtf_year_ok(test_year)) {
 
   rtf_dat <- icd9_sources[icd9_sources$f_year == test_year, ]
@@ -125,7 +131,8 @@ if (rtf_year_ok(test_year)) {
                                     offline = TRUE)
 
   # SOMEDAY, test with and without perl, useBytes
-  rtf <- rtf_parse_lines(readLines(f_info_short$file_path, warn = FALSE), perl = TRUE, useBytes = TRUE)
+  rtf <- rtf_parse_lines(readLines(f_info_short$file_path, warn = FALSE),
+                         perl = TRUE, useBytes = TRUE)
   nrtf <- names(rtf)
 
   test_that("all parsed codes are valid decimals", {
@@ -167,24 +174,26 @@ if (rtf_year_ok(test_year)) {
     skip_flat_icd9_avail(test_ver)
 
     v32 <- icd9_parse_leaf_desc_ver(version = test_ver, save_data = FALSE, offline = TRUE)
-    v32$code %>% short_to_decimal.icd9 -> leaves
+    leaves <- short_to_decimal.icd9(v32$code)
     expect_true(all(leaves %in% nrtf))
 
-    rtf[nrtf %in% short_to_decimal.icd9(v32$code)] %>%
-      swap_names_vals %>%
-      sort -> rtf_leaves
+    rtf_leaves <- sort(
+      swap_names_vals(
+        rtf[nrtf %in% short_to_decimal.icd9(v32$code)]))
     if (FALSE && interactive()) {
       assign("manual_compare_descs",
-             data.frame("From TXT" = v32$long_desc, "From RTF = rtf_leaves" = names(rtf_leaves)),
+             data.frame("From TXT" = v32$long_desc,
+                        "From RTF = rtf_leaves" = names(rtf_leaves)),
              envir = .GlobalEnv)
     }
   })
 
   test_that("RTF extract has no duplicates", {
-    expect_false(anyDuplicated(nrtf) > 0,
-                 info = paste("first few duplicates: ",
-                              paste(nrtf[duplicated(nrtf)][1:10], collapse = ", ")
-                 ))
+    expect_false(
+      anyDuplicated(nrtf) > 0,
+      info = paste("first few duplicates: ",
+                   paste(nrtf[duplicated(nrtf)][1:10], collapse = ", ")
+      ))
   })
 
   test_that("mid-level descriptions are in RTF extract", {
@@ -196,35 +205,39 @@ if (rtf_year_ok(test_year)) {
 
   test_that("at this early stage, hotfix failures are present", {
     expect_identical(rtf[["038.1"]], "Staphylococcal septicemia")
-    expect_identical(rtf[["780.6"]], "Fever and other physiologic disturbances of temperature regulation")
     expect_identical(rtf[["737"]], "Curvature of spine")
     expect_identical(rtf[["345.1"]], "Generalized convulsive epilepsy")
-    expect_identical(rtf[["414"]], "Other forms of chronic ischemic heart disease")
     expect_identical(rtf[["414.0"]], "Coronary atherosclerosis")
     expect_identical(rtf[["414.1"]], "Aneurysm and dissection of heart")
     expect_identical(rtf[["291"]], "Alcohol-induced mental disorders")
     expect_identical(rtf[["361"]], "Retinal detachments and defects")
-    expect_identical(rtf[["294"]], "Persistent mental disorders due to conditions classified elsewhere")
+    expect_identical(rtf[["414"]],
+                     "Other forms of chronic ischemic heart disease")
+    expect_identical(
+      rtf[["780.6"]],
+      "Fever and other physiologic disturbances of temperature regulation")
+    expect_identical(
+      rtf[["294"]],
+      "Persistent mental disorders due to conditions classified elsewhere")
   })
 
-  # in rtf we didn't incorrectly assign fifth (or fourth?) digit codes which are not defined
+  # in rtf we didn't incorrectly assign fifth (or fourth?) digit codes which are
+  # not defined
   test_that("correct assignment of undefined last digit codes", {
-    # e.g. 640.01 exists but 640.02 doesn't, even though fifth-digits are defined for group from 0-4
+    # e.g. 640.01 exists but 640.02 doesn't, even though fifth-digits are
+    # defined for group from 0-4
     expect_false("640.02" %in% nrtf)
-    # grep "\[[[:digit:]],.*\]" Dtab12.rtf
   })
-
 
   test_that("some rtf wierdness single codes should be missing", {
-    # i think this is just because I look for all possible sub-codes while parsing;
-    # I never matched these codes
+    # i think this is just because I look for all possible sub-codes while
+    # parsing; I never matched these codes
     bad_ones <- c(
       paste0("010.", 2:7),
       paste0("854.", 2:7),
       NULL)
     expect_true(all(bad_ones %nin% nrtf))
     expect_true(all(children.icd9(bad_ones) %nin% nrtf))
-
     expect_true("012.4" %nin% nrtf)
     expect_true("012.40" %nin% nrtf)
     expect_true("012.46" %nin% nrtf)

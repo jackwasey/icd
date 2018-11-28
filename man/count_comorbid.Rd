@@ -23,9 +23,10 @@ many matching fields, so to avoid false positives, anything but a single
 match is rejected. If there are no successful guesses, and \code{visit_id}
 was not specified, then the first column of the data frame is used.}
 
-\item{return_df}{single logical value, if \code{TRUE}, return the result as a data frame with the first column being
-the \code{visit_id}, and the second being the count. If \code{visit_id} was a factor or named differently in the
-input, this is preserved.}
+\item{return_df}{single logical value, if \code{TRUE}, return 'tidy' data,
+i.e., the result is a data frame with the first column being the
+\code{visit_id}, and the second being the count. If \code{visit_id} was a
+factor or named differently in the input, this is preserved.}
 }
 \description{
 \code{count_comorbid} differs from the other counting functions in that

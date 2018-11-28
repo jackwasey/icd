@@ -77,6 +77,8 @@ first column is used.
                    icd9_3 = c(NA, NA, "510"))
   count_codes_wide(wide)
   # or:
-  library(magrittr)
+  \dontrun{
+  library(magrittr, warn.conflicts = FALSE)
   wide \%>\% wide_to_long \%>\% count_codes
+  }
 }

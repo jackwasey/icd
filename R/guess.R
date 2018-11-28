@@ -133,7 +133,8 @@ guess_version.character <- function(x, short_code = NULL, ...) {
 #' @template icd_name
 #' @keywords internal
 #' @export
-guess_version.data.frame <- function(x, short_code = NULL, icd_name = NULL, ...) {
+guess_version.data.frame <- function(x, short_code = NULL,
+                                     icd_name = NULL, ...) {
   if (is.null(icd_name))
     icd_name <- get_icd_name(x)
   guess_version(x[[icd_name[1]]])
@@ -171,11 +172,14 @@ guess_version_update <- function(x, short_code = guess_short(x)) {
 #'   error if conflicting results
 #' @keywords internal
 guess_pair_version <- function(start, end, short_code = NULL) {
-  start_guess <- guess_version.character(as_char_no_warn(start), short_code = short_code)
-  end_guess <- guess_version.character(as_char_no_warn(end), short_code = short_code)
+  start_guess <- guess_version.character(
+    as_char_no_warn(start), short_code = short_code)
+  end_guess <- guess_version.character(
+    as_char_no_warn(end), short_code = short_code)
   if (start_guess != end_guess)
-    stop("Cannot expand range because ICD code version cannot be guessed from ", start,
-         " and ", end, ". Either specify the classes, e.g. icd9(\"100.4\"), or call the
+    stop("Cannot expand range because ICD code version cannot be guessed from ",
+         start, " and ", end,
+         ". Either specify the classes, e.g. icd9(\"100.4\"), or call the
        S3 method directly, e.g. expand_range.icd9")
   start_guess
 }
@@ -186,6 +190,7 @@ guess_pair_version <- function(start, end, short_code = NULL) {
 #'   minimum 'icd9' and 'icd10', and 'icd9cm' or 'icd10cm' being used first if
 #'   provided.
 #' @param ... further arguments, perhaps including \code{icd_name}
+#' @noRd
 #' @keywords internal
 switch_ver_cmb <- function(x, funs, ...) {
   dots <- list(...)

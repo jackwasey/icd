@@ -30,7 +30,7 @@ along with icd. If not, see <http:#www.gnu.org/licenses/>.
 ```{r, echo = FALSE}
 suppressPackageStartupMessages({
   library(icd)
-  library(magrittr)
+  library(magrittr, wwarn.conflicts = FALSE)
 })
 knitr::opts_chunk$set(
   collapse = TRUE,

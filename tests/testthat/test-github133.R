@@ -21,7 +21,8 @@ test_that("github #133 minimal example of bug", {
   expect_equal(sum(res), 0)
 })
 test_that("github #133 doesn't crash R", {
-  f <- system.file("tests", "testthat", "github133-b.rds", package = "icd", mustWork = FALSE)
+  f <- system.file("tests", "testthat", "github133-b.rds",
+                   package = "icd", mustWork = FALSE)
   if (f == "")
     skip("cannot load github133-b.rds from tests/testthat")
 

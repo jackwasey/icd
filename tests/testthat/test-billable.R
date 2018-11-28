@@ -22,7 +22,7 @@ test_that("specific known parsing errors", {
   b32 <- icd9cm_billable[["32"]]
   nines <- b32[b32$code == "9999", ]
   expect_equal(nrow(nines), 1)
-  expect_equal(nines$long_desc, "Other and unspecified complications of medical care, not elsewhere classified")
+  expect_equal(nines$long_desc, "Other and unspecified complications of medical care, not elsewhere classified") # nolint
 })
 
 test_that("billable codes for expected versions exist", {

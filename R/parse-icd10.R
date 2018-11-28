@@ -16,7 +16,6 @@
 # along with icd. If not, see <http:#www.gnu.org/licenses/>.
 
 # nocov start
-# nolint start
 #' get all ICD-10-CM codes
 #'
 #' Gets all ICD-10-CM codes from an archive on the CDC web site at Initially,
@@ -31,7 +30,6 @@
 #'   https://www.cms.gov/Medicare/Coding/ICD10/downloads/icd-10quickrefer.pdf
 #' @keywords internal
 icd10cm_get_all_defined <- function(save_data = FALSE, offline = TRUE) {
-  # nolint stop
   f_info <- icd10cm_get_flat_file(offline = offline)
   stopifnot(!is.null(f_info))
   # readLines may muck up encoding, resulting in weird factor order generation
@@ -69,7 +67,8 @@ icd10cm_get_all_defined <- function(save_data = FALSE, offline = TRUE) {
   chap_lookup <- icd10_generate_chap_lookup()
   icd10cm2016[["chapter"]] <-
     merge(icd10cm2016["three_digit"], chap_lookup,
-          by.x = "three_digit", by.y = "chap_major", all.x = TRUE)[["chap_desc"]]
+          by.x = "three_digit", by.y = "chap_major",
+          all.x = TRUE)[["chap_desc"]]
   if (save_data)
     save_in_data_dir(icd10cm2016)
   invisible(icd10cm2016)
@@ -114,7 +113,8 @@ icd10_generate_chap_lookup <- function(lk_majors) {
 
 icd10_parse_ahrq_pcs <- function(save_data = TRUE) {
   f <- unzip_to_data_raw(
-    url = "https://www.hcup-us.ahrq.gov/toolssoftware/procedureicd10/pc_icd10pcs_2018_1.zip",
+    url = paste0("https://www.hcup-us.ahrq.gov/toolssoftware/",
+                 "procedureicd10/pc_icd10pcs_2018_1.zip"),
     file_name = "pc_icd10pcs_2018.csv", offline = !save_data)
   dat <- read.csv(file = f$file_path, skip = 1, stringsAsFactors = FALSE,
                   colClasses = "character", encoding = "latin1")

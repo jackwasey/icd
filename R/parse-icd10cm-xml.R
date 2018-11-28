@@ -40,8 +40,7 @@ icd10cm_extract_sub_chapters <- function(save_data = FALSE, offline = TRUE) {
   # :: will do an implicit requireNamespace.
   xml2::xml_name(xml2::xml_children(j)) == "chapter" -> chapter_indices
   # could do xpath, but harder to loop
-  xml2::xml_children(j) %>%
-    magrittr::extract(chapter_indices) -> chaps
+  chaps <- xml2::xml_children(j)[chapter_indices]
   icd10_sub_chapters <- list()
   for (chap in chaps) {
     c_kids <- xml2::xml_children(chap)

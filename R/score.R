@@ -174,8 +174,10 @@ charlson_from_comorbid <- function(x, visit_name = NULL, hierarchy = FALSE,
 #'                    icd9_3 = c(NA, NA, "510"))
 #'   count_codes_wide(wide)
 #'   # or:
-#'   library(magrittr)
+#'   \dontrun{
+#'   library(magrittr, warn.conflicts = FALSE)
 #'   wide %>% wide_to_long %>% count_codes
+#'   }
 #' @export
 count_codes <- function(x, visit_name = get_visit_name(x), return_df = FALSE) {
   assert_data_frame(x, min.cols = 2, col.names = "named")

@@ -16,16 +16,17 @@
 # along with icd. If not, see <http:#www.gnu.org/licenses/>.
 
 #nocov start
+icd10_url_cdc <- "http://www.cdc.gov/nchs/data/icd/icd10cm/"
 
 icd10cm_get_xml_file <- function(...) {
   unzip_to_data_raw(
-    url = "http://www.cdc.gov/nchs/data/icd/icd10cm/2016/ICD10CM_FY2016_Full_XML.ZIP",
+    url = paste0(icd10_url_cdc, "2016/ICD10CM_FY2016_Full_XML.ZIP"),
     file_name = "Tabular.xml", ...)
 }
 
 icd10cm_get_flat_file <- function(...) {
   unzip_to_data_raw(
-    url = "http://www.cdc.gov/nchs/data/icd/icd10cm/2016/ICD10CM_FY2016_code_descriptions.zip",
+    url = paste0(icd10_url_cdc, "2016/ICD10CM_FY2016_code_descriptions.zip"),
     file_name = "icd10cm_order_2016.txt", ...)
 }
 
@@ -78,6 +79,7 @@ fetch_icd10cm_year <- function(year = "2018", dx = TRUE,
 #'
 #' Following Hadley Wickham recommendations in R Packages, this should be in
 #' \code{inst/extdata}. \pkg{devtools} overrides \code{system.file}.
+#' @noRd
 #' @keywords internal
 get_raw_data_dir <- function()
   system.file("extdata", package = "icd")

@@ -20,7 +20,7 @@ context("explain ICD-9: code to human-readable")
 test_that("explain a large set of ICD-9 codes succinctly", {
   expect_identical(
     explain_code(children.icd9("391", defined = FALSE, short_code = TRUE),
-                condense = FALSE, short_code = TRUE),
+                 condense = FALSE, short_code = TRUE),
     c("Rheumatic fever with heart involvement", "Acute rheumatic pericarditis",
       "Acute rheumatic endocarditis", "Acute rheumatic myocarditis",
       "Other acute rheumatic heart disease",
@@ -28,7 +28,8 @@ test_that("explain a large set of ICD-9 codes succinctly", {
   )
 
   expect_identical(
-    explain_code.icd9(children.icd9(as.short_diag("391")), condense = TRUE, short_code = TRUE),
+    explain_code.icd9(children.icd9(as.short_diag("391")),
+                      condense = TRUE, short_code = TRUE),
     "Rheumatic fever with heart involvement"
   )
 })
@@ -36,7 +37,7 @@ test_that("explain a large set of ICD-9 codes succinctly", {
 test_that("explain a large set of ICD-9 codes succinctly, using factors", {
   expect_identical(
     explain_code(factor(children.icd9("391", defined = FALSE, short_code = TRUE)),
-                condense = FALSE, short_code = TRUE),
+                 condense = FALSE, short_code = TRUE),
     c("Rheumatic fever with heart involvement", "Acute rheumatic pericarditis",
       "Acute rheumatic endocarditis", "Acute rheumatic myocarditis",
       "Other acute rheumatic heart disease",
@@ -44,7 +45,8 @@ test_that("explain a large set of ICD-9 codes succinctly, using factors", {
   )
 
   expect_identical(
-    explain_code.icd9(factor(children.icd9(as.short_diag("391"))), condense = TRUE, short_code = TRUE),
+    explain_code.icd9(factor(children.icd9(as.short_diag("391"))),
+                      condense = TRUE, short_code = TRUE),
     "Rheumatic fever with heart involvement"
   )
 })
@@ -71,7 +73,9 @@ test_that("explain S3 dispatch", {
                     b = "Rheumatic fever without mention of heart involvement"))
   expect_warning(res <- explain_code.icd9(c(a = "not", b = "icd9code"), short_code = TRUE))
   expect_equal(res, NA_character_)
-  expect_warning(res <- explain_code(list(a = icd9("not"), b = icd9("icd9code")), short_code = FALSE))
+  expect_warning(
+    res <- explain_code(list(a = icd9("not"), b = icd9("icd9code")),
+                        short_code = FALSE))
   expect_equal(res, list(a = NA_character_, b = NA_character_))
 
   expect_equal(explain_code.icd9("00321", short_code = TRUE), "Salmonella meningitis")
@@ -91,18 +95,23 @@ test_that("expalin a single top level code without a top level explanation", {
 
 
 test_that("explain a single leaf node", {
-  expect_equal(explain_code.icd9("27800", condense = FALSE), "Obesity, unspecified")
-  expect_equal(explain_code.icd9("27800", condense = TRUE), "Obesity, unspecified")
-  expect_equal(explain_code.icd9("00329"), "Other localized salmonella infections")
+  expect_equal(explain_code.icd9("27800", condense = FALSE),
+               "Obesity, unspecified")
+  expect_equal(explain_code.icd9("27800", condense = TRUE),
+               "Obesity, unspecified")
+  expect_equal(explain_code.icd9("00329"),
+               "Other localized salmonella infections")
 })
 
 test_that("explain handles mix of valid and invalid", {
-  expect_equal(explain_code.icd9(c("radishes", "123"), warn = FALSE), "Other cestode infection")
+  expect_equal(explain_code.icd9(c("radishes", "123"), warn = FALSE),
+               "Other cestode infection")
   expect_warning(explain_code.icd9(c("radishes", "123")))
 })
 
 test_that("explain works when none ICD-9 codes are even valid", {
-  expect_equal(explain_code.icd9(c("radishes", "123123", NA), warn = FALSE), NA_character_)
+  expect_equal(explain_code.icd9(c("radishes", "123123", NA), warn = FALSE),
+               NA_character_)
 })
 
 
@@ -146,15 +155,20 @@ test_that("extract top-level codes from the RTF gives the complete list", {
 
   # all the range limits and majors should be valid majors
   expect_true(
-    all(is_valid_major.icd9(vapply(icd9_chapters, "[[", FUN.VALUE = "", 1))))
+    all(is_valid_major.icd9(vapply(icd9_chapters, "[[",
+                                   FUN.VALUE = "", 1))))
   expect_true(
-    all(is_valid_major.icd9(vapply(icd9_chapters, "[[", FUN.VALUE = "", 2))))
+    all(is_valid_major.icd9(vapply(icd9_chapters, "[[",
+                                   FUN.VALUE = "", 2))))
   expect_true(
-    all(is_valid_major.icd9(vapply(icd9_sub_chapters, "[[", FUN.VALUE = "", 1))))
+    all(is_valid_major.icd9(vapply(icd9_sub_chapters, "[[",
+                                   FUN.VALUE = "", 1))))
   expect_true(
-    all(is_valid_major.icd9(vapply(icd9_sub_chapters, "[[", FUN.VALUE = "", 2))))
+    all(is_valid_major.icd9(vapply(icd9_sub_chapters, "[[",
+                                   FUN.VALUE = "", 2))))
   expect_true(
-    all(is_valid_major.icd9(vapply(icd9_majors, "[[", FUN.VALUE = "", 1))))
+    all(is_valid_major.icd9(vapply(icd9_majors, "[[",
+                                   FUN.VALUE = "", 1))))
 })
 
 test_that("icd9_majors - positive values", {
@@ -196,16 +210,17 @@ for (i in list("icd9_chapters", "icd9_sub_chapters", "icd9_majors")) {
 }
 
 test_that(
-  "parse icd9_majors vs those listed in the other CDC source of the leaf definitions.", {
+  "parse icd9_majors vs other CDC source of the leaf definitions.", {
     # get all the majors from the other list, to compare
-    compare_majors <- unique(get_major.icd9(icd9cm_hierarchy[["code"]], short_code = TRUE))
+    compare_majors <- unique(get_major.icd9(icd9cm_hierarchy[["code"]],
+                                            short_code = TRUE))
     expect_true(all(compare_majors %in% icd9_majors))
     expect_true(all(icd9_majors %in% compare_majors))
   })
 
 test_that("unsorted hierarchy tests", {
   expect_equal(
-    tolower(icd9cm_hierarchy[icd9cm_hierarchy[["code"]] == "00321", "long_desc"]),
+    tolower(icd9cm_hierarchy[icd9cm_hierarchy$code == "00321", "long_desc"]),
     tolower("Salmonella Meningitis"))
 })
 
@@ -252,9 +267,9 @@ test_that("explain icd9GetChapters simple input", {
 })
 
 test_that("working with named lists of codes, decimal is guessed", {
-  expect_warning(explain_code(
-    list(a = c("001"), b = c("001.1", "001.9")), short_code = FALSE), regexp = NA)
-  expect_warning(explain_code(list(a = c("001"), b = c("001.1", "001.9"))), regexp = NA)
+  expect_no_warn(explain_code(
+    list(a = c("001"), b = c("001.1", "001.9")), short_code = FALSE))
+  expect_no_warn(explain_code(list(a = c("001"), b = c("001.1", "001.9"))))
 })
 
 test_that("github #113 for ICD-9 code 038.1", {

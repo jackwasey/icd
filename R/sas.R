@@ -30,23 +30,18 @@
 #' @return list (of lists)
 #' @keywords programming list internal
 sas_format_extract <- function(sas_lines) {
-
   # collapse everything onto one big line, so we can filter multi-line
   # commments. No ability to do multiline regex along a vector.
   sas_lines <- paste(sas_lines, collapse = " \\n")
-
   # sas comments are in the form /* ... */ inline/multiline, or * ... ;
   sas_lines <- gsub(pattern = "/\\*.*?\\*/", replacement = "", x = sas_lines) # nolint
   sas_lines <- gsub(pattern = "\\n\\*.*?;", replacement = "\\n", x = sas_lines) # nolint
-
   sas_lines <- strsplit(sas_lines, split = "\\;")[[1]]
-
   #strip white space and ?undetected newline characters, replace with single
   #spaces.
   sas_lines <- gsub(pattern = "\\\\n", "", sas_lines) # nolint
   sas_lines <- gsub(pattern = "[[:space:]]+", " ", sas_lines)
   sas_lines <- trim(sas_lines)
-
   # drop everything except VALUE statements
   sas_lines <- grep(pattern = "^VALUE.*", x = sas_lines, ignore.case = TRUE,
                     value = TRUE)
@@ -100,7 +95,8 @@ sas_icd10_assignments_to_list <- function(x) {
 #' @return list with each list item containing a matrix of "char ranges",
 #'   "assigned value" pairs
 #' @keywords internal programming list
-sas_parse_assignments <- function(x, strip_whitespace = TRUE, strip_quotes = TRUE) {
+sas_parse_assignments <- function(x, strip_whitespace = TRUE,
+                                  strip_quotes = TRUE) {
   assert_string(x)
   assert_flag(strip_whitespace)
   assert_flag(strip_quotes)
@@ -124,20 +120,19 @@ sas_parse_assignments <- function(x, strip_whitespace = TRUE, strip_quotes = TRU
     out[[halfway[[2]]]] <- unlist(strsplit(x = halfway[[1]], split = ","))
     return(out)
   }
-
+  mid_tmp <- unlist(
+    lapply(
+      str_match_all(
+        halfway[seq(2, length(halfway) - 1)],
+        pattern = '^([^"]|"[^"]*")*? (.*)'),
+      `[`, -1)
+  )
   threequarters <- c(halfway[[1]],
-                     halfway[seq(2, length(halfway) - 1)] %>%
-                       str_match_all(pattern = '^([^"]|"[^"]*")*? (.*)') %>%
-                       lapply(`[`, -1) %>%
-                       unlist,
+                     mid_tmp,
                      halfway[[length(halfway)]])
-
   if (strip_quotes)
     threequarters <- gsub(pattern = '"', replacement = "", threequarters)
-
   #spaces may matter still, so don't randomly strip them?
-
-
   out <- list()
   for (pair in seq(from = 1, to = length(threequarters), by = 2)) {
     if (strip_whitespace) {
@@ -149,9 +144,10 @@ sas_parse_assignments <- function(x, strip_whitespace = TRUE, strip_quotes = TRU
     }
     # combine here in case there are duplicate labels, e.g. RENLFAIL twice in
     # ICD-10 AHRQ
-    out[[threequarters[pair + 1]]] <- c(out[[threequarters[pair + 1]]],
-                                        unlist(strsplit(x = outwhite, split = ","))
-    )
+    out[[threequarters[pair + 1]]] <-
+      c(out[[threequarters[pair + 1]]],
+        unlist(strsplit(x = outwhite, split = ","))
+      )
   }
   out
 }
@@ -186,15 +182,15 @@ sas_expand_range <- function(start, end) {
     end <- start # HIV codes changed
 
   reals <- expand_range.icd9(start, end, short_code = TRUE, defined = TRUE,
-                                 # hmmm, maybe get the diff and test all children of ambigs present later
-                                 ex_ambig_start = FALSE, ex_ambig_end = TRUE)
+                             # hmmm, maybe get the diff and test all children of ambigs present later
+                             ex_ambig_start = FALSE, ex_ambig_end = TRUE)
   real_parents <- condense.icd9(reals, defined = TRUE, short_code = TRUE)
   merged <- unique(c(reals, real_parents))
   real_parents_of_merged <- condense.icd9(merged, defined = TRUE, short_code = TRUE)
   halfway <- children.icd9(real_parents_of_merged, defined = FALSE, short_code = TRUE)
   nonrealrange <- expand_range.icd9(start, end, defined = FALSE, short_code = TRUE,
-                                        ex_ambig_start = TRUE,
-                                        ex_ambig_end = TRUE)
+                                    ex_ambig_start = TRUE,
+                                    ex_ambig_end = TRUE)
   sort_icd.icd9(unique(c(halfway, nonrealrange)), short_code = TRUE)
 }
 

@@ -47,7 +47,8 @@ test_that("hcc 2 pt/visit combos each should have a single HCC assigned", {
 test_that("github 153", {
   hcc_github153_df <- structure(
     list(date = structure(c(16855, 17123, 17008, NA), class = "Date"),
-         visit_id = c("1.98433805210381e-310", "6.92092372368813e-311", "7.85012017519427e-311", NA),
+         visit_id = c("1.98433805210381e-310", "6.92092372368813e-311",
+                      "7.85012017519427e-311", NA),
          icd_code = c("F1020", "G4733", "M1712", NA)),
     row.names = c("1", "2", "3", "NA"),
     class = c("icd_long_data", "data.frame"))

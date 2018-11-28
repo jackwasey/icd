@@ -128,7 +128,7 @@ test_that("independently created list of Quan Elixhauser codes all appear", {
   # for ICD-10, the icd-10-cm children also.
   for (i in 1:30) {
     indep <- quan_elix_independent[[i]]
-    indep_kids <- quan_elix_independent[[i]] %>% children_defined.icd10cm
+    indep_kids <- children_defined.icd10cm(quan_elix_independent[[i]])
     canon <- icd10_map_quan_elix[[i]]
     expect_equal(setdiff(indep, canon), character(),
                  info = paste("checking quan elix canonical in indep: ",

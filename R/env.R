@@ -22,14 +22,16 @@
 #'
 #' create an environment by inserting the value \code{val} with names taken from
 #' \code{x}
+#' @noRd
 #' @keywords internal
-vec_to_env_true <- function(x, val = TRUE, env = new.env(hash = TRUE, parent = baseenv())) {
+vec_to_env_true <- function(x, val = TRUE,
+                            env = new.env(hash = TRUE, parent = baseenv())) {
   lapply(x, function(y) env[[y]] <- val)
   env
 }
 
-vec_to_env_count <- function(x, env = new.env(hash = TRUE,
-                                              parent = baseenv())) {
+vec_to_env_count <- function(x,
+                             env = new.env(hash = TRUE, parent = baseenv())) {
   for (i in seq_along(x))
     env[[x[i]]] <- i
   env
@@ -39,6 +41,7 @@ vec_to_env_count <- function(x, env = new.env(hash = TRUE,
 #'
 #' @param env environment with values being sequence numbers used to fill
 #'   returned vector
+#' @noRd
 #' @keywords internal
 env_to_vec_flip <- function(env) {
   out <- character(length(env))
@@ -58,6 +61,7 @@ vec_to_lookup_pair <- function(x, env = new.env(hash = TRUE,
 #'
 #' \code{x} and \code{table} are identical to match. Lookup is done based on
 #' environment element names; contents are ignored.
+#' @noRd
 #' @keywords internal
 "%eine%" <- function(x, table) {
   vapply(ls(name = x),

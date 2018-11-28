@@ -22,42 +22,46 @@ test_that("specific known parsing errors", {
   b32 <- icd9cm_billable[["32"]]
   nines <- b32[b32$code == "9999", ]
   expect_equal(nrow(nines), 1)
-  expect_equal(nines$long_desc, "Other and unspecified complications of medical care, not elsewhere classified")
+  expect_equal(
+    nines$long_desc,
+    "Other and unspecified complications of medical care, not elsewhere classified")
 })
 
 test_that("ICD-9-CM billable codes package data is recreated", {
-
   skip_on_os(c("windows", "mac", "solaris"))
-  # Do encoding problems on Linux. It is unpredictable at the best of times.
-
-  # we can do this offline if we have all (currently available) versions of the
+  # Do encoding problems on Linux. It is unpredictable at the best of times. We
+  # can do this offline if we have all (currently available) versions of the
   # ICD-9-CM code, otherwise we may have to skip
   skip_flat_icd9_all_avail()
-
-  check_billable <- parse_leaf_descriptions_all(save_data = FALSE, offline = TRUE)
+  check_billable <- parse_leaf_descriptions_all(save_data = FALSE,
+                                                offline = TRUE)
   # check this one thing known to be dodgy
-  expect_identical(check_billable[["28"]][["long_desc"]], icd9cm_billable[["28"]][["long_desc"]])
-
+  expect_identical(check_billable[["28"]][["long_desc"]],
+                   icd9cm_billable[["28"]][["long_desc"]])
   # make specific quick tests for previously known problems:
   b32 <- check_billable[["32"]]
-  expect_data_frame(b32, nrows = 14567L, any.missing = FALSE, ncols = 3L, types = "character")
-  expect_identical(b32[b32$code == "9999", "short_desc"], "Complic med care NEC/NOS")
-  expect_identical(b32[b32$code == "E0000", "short_desc"], "Civilian activity-income")
-  expect_identical(b32[b32$code == "E9991", "short_desc"], "Late effect, terrorism")
-  expect_identical(b32[b32$code == "V9199", "short_desc"], "Mult gest-plac/sac undet")
-
+  expect_data_frame(b32, nrows = 14567L, any.missing = FALSE,
+                    ncols = 3L, types = "character")
+  expect_identical(b32[b32$code == "9999", "short_desc"],
+                   "Complic med care NEC/NOS")
+  expect_identical(b32[b32$code == "E0000", "short_desc"],
+                   "Civilian activity-income")
+  expect_identical(b32[b32$code == "E9991", "short_desc"],
+                   "Late effect, terrorism")
+  expect_identical(b32[b32$code == "V9199", "short_desc"],
+                   "Mult gest-plac/sac undet")
   for (ver in c("27", "28", "29", "30", "31", "32")) {
     v <- icd9cm_billable[[ver]][["long_desc"]]
     cb <- check_billable[[ver]][["long_desc"]]
     diff <- v != cb
-    expect_identical(check_billable[[ver]], icd9cm_billable[[ver]],
-                     info = paste("long_desc differences for version", ver,
-                                  "\noriginal: ", paste(head(v[diff]), collapse = ", "),
-                                  "\nprocess:", paste(head(cb[diff]), collapse = ", ")
-                     ))
+    expect_identical(
+      check_billable[[ver]], icd9cm_billable[[ver]],
+      info = paste("long_desc differences for version", ver,
+                   "\noriginal: ", paste(head(v[diff]), collapse = ", "),
+                   "\nprocess:", paste(head(cb[diff]), collapse = ", ")
+      ))
   }
 })
-
 
 test_that("billable codes for expected versions exist", {
   expect_true(all(as.character(23:32) %in% names(icd9cm_billable)))

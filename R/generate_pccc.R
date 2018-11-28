@@ -27,7 +27,9 @@
 #' required exact matching to avoid overly broad capture of diagnoses.
 #' @template save_data
 #' @examples
+#' \dontrun{
 #' icd:::generate_maps_pccc(save_data = FALSE)
+#' }
 #' @keywords internal
 generate_maps_pccc <- function(save_data = TRUE) {
   icd9_generate_map_pccc_dx(save_data)
@@ -93,8 +95,8 @@ icd9_generate_map_pccc_dx <- function(save_data = TRUE) {
       "7564", "7565", "7566",
       "7567", "758", "7597", "7598", "7599"),
     malignancy = c(
-      expand.grid(c("14", "15", "16", "17", "18", "19", "20",
-                    "23"), 0:9) %>% apply(1, paste, collapse = ""),
+      apply(expand.grid(c("14", "15", "16", "17", "18", "19", "20",
+                          "23"), 0:9), MARGIN = 1, paste, collapse = ""),
       "V4281", "V4282"),
     neonatal = c(
       "76401", "76402", "76411", "76412", "76421", "76422", "76491",
@@ -123,9 +125,12 @@ icd9_generate_map_pccc_dx <- function(save_data = TRUE) {
     icd9_map_pccc_orig_dx,
     children.icd9, short_code = TRUE, defined = FALSE)
   # the following are "fixed", replicating the JAMA Pediatrics Letter
-  icd9_map_pccc_dx[["neuromusc"]] %<>% c("359", "3592")
-  icd9_map_pccc_dx[["cvd"]] %<>% c("416")
-  icd9_map_pccc_dx[["respiratory"]] %<>% c("5163")
+  icd9_map_pccc_dx[["neuromusc"]] <-
+    c(icd9_map_pccc_dx[["neuromusc"]], "359", "3592")
+  icd9_map_pccc_dx[["cvd"]] <-
+    c(icd9_map_pccc_dx[["cvd"]], "416")
+  icd9_map_pccc_dx[["respiratory"]] <-
+    c(icd9_map_pccc_dx[["respiratory"]], "5163")
   # TODO icd_names_pccc etc
   icd9_map_pccc_dx <- as.comorbidity_map(icd9_map_pccc_dx)
   if (save_data)
@@ -186,7 +191,8 @@ icd9_generate_map_pccc_pcs <- function(save_data = TRUE) {
       "5283", "5284", "5285", "5286", "4100", "4101", "4102", "4103", "4104", "4105", "4106", "4107", "4108",
       "4109", "4194", "0091", "0092", "0093")
   )
-  icd9_map_pccc_orig_pc[["metabolic"]] %<>% c("624")
+  icd9_map_pccc_orig_pc[["metabolic"]] <-
+    c(icd9_map_pccc_orig_pc[["metabolic"]], "624")
   icd9_map_pccc_pcs <- as.comorbidity_map(icd9_map_pccc_orig_pc)
   if (save_data)
     save_in_data_dir(icd9_map_pccc_pcs)
@@ -285,7 +291,8 @@ icd10_generate_map_pccc_dx <- function(save_data) {
     icd10_map_pccc_orig_dx,
     children_defined.icd10cm, short_code = TRUE)
   # add the fixed code, per JAMA Pediatrics Letter
-  icd10_map_pccc_dx[["neuromusc"]] %<>% c("G80")
+  icd10_map_pccc_dx[["neuromusc"]] <-
+    c(icd10_map_pccc_dx[["neuromusc"]], "G80")
   icd10_map_pccc_dx <- as.comorbidity_map(icd10_map_pccc_dx)
   if (save_data)
     save_in_data_dir(icd10_map_pccc_dx)

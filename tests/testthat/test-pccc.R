@@ -30,13 +30,15 @@ pccc_pts <- data.frame(encounters = c(10, 11, 12),
                        icd10_pcs = c("0B110Z4", "02YA0Z2", "031209D"))
 
 test_that("procedure codes work", {
-  res9 <- comorbid_pccc_pcs(pccc_pts, icd_name = "icd9_pcs", return_binary = FALSE)
+  res9 <- comorbid_pccc_pcs(pccc_pts, icd_name = "icd9_pcs",
+                            return_binary = FALSE)
   expect_true(res9[1, "neuromusc"])
   expect_true(res9[3, "cvd"])
   expect_true(res9["11", "respiratory"])
   expect_true(res9[3, "tech_dep"])
   expect_equal(sum(res9), 4)
-  res0 <- comorbid_pccc_pcs(pccc_pts, icd_name = "icd10_pcs", return_binary = FALSE)
+  res0 <- comorbid_pccc_pcs(pccc_pts, icd_name = "icd10_pcs",
+                            return_binary = FALSE)
   expect_true(res0["11", "cvd"])
   expect_true(res0["10", "respiratory"])
   expect_true(res0[3, 11])

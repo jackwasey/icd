@@ -43,13 +43,13 @@ Depends:
     icd.data
 Imports:
     checkmate (>= 1.7.0),
-    magrittr,
     methods,
     stats,
     Rcpp (>= 0.12.3),
     utils
 Suggests:
     knitr,
+    magrittr,
     roxygen2 (>= 5.0.0),
     rmarkdown,
     rticles,

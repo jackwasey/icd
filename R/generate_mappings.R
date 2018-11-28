@@ -85,7 +85,7 @@ icd9_generate_map_elix <- function(save_data = TRUE) {
     icd9_map_elix,
     children.icd9, short_code = TRUE, defined = FALSE)
   names(icd9_map_elix) <- icd::names_elix_htn_abbrev
-  icd9_map_elix %<>% as.comorbidity_map
+  icd9_map_elix <- as.comorbidity_map(icd9_map_elix)
   if (save_data)
     save_in_data_dir(icd9_map_elix)
   invisible(icd9_map_elix)
@@ -223,7 +223,7 @@ icd9_generate_map_quan_elix <- function(save_data = TRUE) {
     icd9_map_quan_elix,
     children.icd9, short_code = TRUE, defined = FALSE)
   names(icd9_map_quan_elix) <- icd::names_quan_elix_htn_abbrev
-  icd9_map_quan_elix %<>% as.comorbidity_map
+  icd9_map_quan_elix <- as.comorbidity_map(icd9_map_quan_elix)
   if (save_data)
     save_in_data_dir(icd9_map_quan_elix)
   invisible(icd9_map_quan_elix)
@@ -296,19 +296,16 @@ icd10_generate_map_quan_elix <- function(save_data = TRUE) {
   # children is limited to 'defined' ones, but only as defined in ICD-10-CM, not
   # ICD-10 in general.
   f <- function(x, verbose = TRUE) {
-    if (verbose)
-      message("f working on: ", paste(x, collapse = " "))
+    if (verbose) message("f working on: ", paste(x, collapse = " "))
     kids <- children_defined.icd10cm(x, short_code = TRUE)
-    c(kids, x) %>%
-      unique %>%
-      sort_icd.icd10
+    sort_icd.icd10(unique(c(kids, x)))
   }
   icd10_map_quan_elix <- lapply(quan_elix_raw, f)
   # It does appear that there are numerous codes in the Quan Elixhauser scheme
   # which are not present (?anymore) in the ICD-10-CM 2016 list.
   icd10_map_quan_elix <- lapply(icd10_map_quan_elix, as.short_diag)
   icd10_map_quan_elix <- lapply(icd10_map_quan_elix, as.icd10)
-  icd10_map_quan_elix %<>% as.comorbidity_map
+  icd10_map_quan_elix <- as.comorbidity_map(icd10_map_quan_elix)
   if (save_data)
     save_in_data_dir(icd10_map_quan_elix)
   invisible(icd10_map_quan_elix)
@@ -374,16 +371,12 @@ icd10_generate_map_quan_deyo <- function(save_data = TRUE) {
   # children will likely be needed. Maybe generating a huge structure is still
   # worth it, even for ICD-10-CM, because I do end up cutting it back down to
   # size based on the input data before comorbidity matching.
-  f <- function(x) {
-    children_defined.icd10cm(x, short_code = TRUE) %>%
-      c(x) %>%
-      unique %>%
-      sort_icd.icd10
-  }
+  f <- function(x) sort_icd.icd10(
+    unique(c(children_defined.icd10cm(x, short_code = TRUE), x)))
   icd10_map_quan_deyo <- lapply(quan_charl_raw, f)
   icd10_map_quan_deyo <- lapply(icd10_map_quan_deyo, as.short_diag)
   icd10_map_quan_deyo <- lapply(icd10_map_quan_deyo, as.icd10)
-  icd10_map_quan_deyo %<>% as.comorbidity_map
+  icd10_map_quan_deyo <- as.comorbidity_map(icd10_map_quan_deyo)
   icd10_map_charlson <- icd10_map_quan_deyo
   # It does appear that there are numerous codes in the Quan Elixhauser scheme
   # which are not present (?anymore) in the ICD-10-CM 2016 list.

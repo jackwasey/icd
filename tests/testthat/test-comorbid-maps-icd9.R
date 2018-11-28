@@ -515,9 +515,7 @@ test_that("comorbidities created from source data frame coded as factors", {
   v2$icd_code <- as.factor(v2$icd_code)
 
   res <- icd9_comorbid_ahrq(v2)
-  res_nofactor <- vermont_dx %>%
-    wide_to_long %>%
-    icd9_comorbid_ahrq
+  res_nofactor <- icd9_comorbid_ahrq(wide_to_long(vermont_dx))
   expect_identical(res, res_nofactor)
 })
 

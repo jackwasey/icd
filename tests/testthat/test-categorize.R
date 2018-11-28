@@ -73,7 +73,8 @@ test_that("different ID types are preserved w data frame return", {
     expect_equal(class(ress[["n"]][[1]]), "numeric")
     expect_equal(class(ress[["c"]][[1]]), "character")
     expect_equal(class(ress[["f"]][[1]]), "factor")
-    expect_equal(class(ress[["ei"]][[1]]), "integer", info = paste("fun = ", cat_fun))
+    expect_equal(class(ress[["ei"]][[1]]), "integer",
+                 info = paste("fun = ", cat_fun))
     expect_equal(class(ress[["en"]][[1]]), "numeric")
     expect_equal(class(ress[["ec"]][[1]]), "character")
     expect_equal(class(ress[["ef"]][[1]]), "factor")

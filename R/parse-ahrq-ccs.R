@@ -24,14 +24,15 @@
 icd9_fetch_ahrq_ccs <- function(single = TRUE, offline) {
   assert_flag(single)
   assert_flag(offline)
+  ccs_base <- "https://www.hcup-us.ahrq.gov/toolssoftware/ccs"
   if (single)
     unzip_to_data_raw(
-      url = "https://www.hcup-us.ahrq.gov/toolssoftware/ccs/Single_Level_CCS_2015.zip",
+      url = paste0(ccs_base, "Single_Level_CCS_2015.zip"),
       file_name = "$dxref 2015.csv",
       offline = offline)
   else
     unzip_to_data_raw(
-      url = "https://www.hcup-us.ahrq.gov/toolssoftware/ccs/Multi_Level_CCS_2015.zip",
+      url = paste0(ccs_base, "Multi_Level_CCS_2015.zip"),
       file_name = "ccs_multi_dx_tool_2015.csv",
       offline = offline)
 }
@@ -85,15 +86,15 @@ icd9_parse_ahrq_ccs <- function(single = TRUE, save_data = FALSE,
     lvls <- lvls_names[lvls_names != " "]
     lvls <- strsplit(lvls, ".", fixed = TRUE)
     number_splits <- length(lvls[[1]])
-    lvls <- lvls %>%
-      unlist %>%
-      as.numeric %>%
-      matrix(ncol = number_splits, byrow = TRUE,
-             dimnames  = list(rownames = lvls_names[lvls_names != " "]))
+    lvls <- matrix(
+      as.numeric(unlist(lvls)),
+      ncol = number_splits, byrow = TRUE,
+      dimnames  = list(rownames = lvls_names[lvls_names != " "]))
     # complicated call needed or order using all columns of matrix
     lvls <- lvls[do.call(order, as.data.frame(lvls)), ]
+    # if only looking at lvl1, then this becomes a vector, not a matrix
     if (is.null(dim(lvls)))
-      lvls <- names(lvls) # if only looking at lvl1, then this becomes a vector, not a matrix
+      lvls <- names(lvls)
     else
       lvls <- rownames(lvls)
     if (lvls_has_empty) lvls <- c(lvls, " ")
@@ -120,7 +121,9 @@ icd9_parse_ahrq_ccs <- function(single = TRUE, save_data = FALSE,
     ahrq_df <- read.csv(ahrq_ccs$file_path, quote = "'\"",
                         colClasses = "character", skip = 1)
     icd9_map_single_ccs <-
-      rsrt(tapply(ahrq_df[["ICD.9.CM.CODE"]], trimws(ahrq_df$CCS.CATEGORY), clean_icd9))
+      rsrt(tapply(ahrq_df[["ICD.9.CM.CODE"]],
+                  trimws(ahrq_df$CCS.CATEGORY),
+                  clean_icd9))
     if (save_data)
       save_in_data_dir("icd9_map_single_ccs")
     out <- icd9_map_single_ccs
@@ -161,11 +164,7 @@ icd10_parse_ahrq_ccs <- function(version = "2018.1",
   ahrq_df <- read.csv(ahrq_ccs$file_path,
                       quote = "'\"",
                       colClasses = "character")
-  clean_icd10 <- function(x) {
-    x %>%
-      trimws() %>%
-      as.icd10()
-  }
+  clean_icd10 <- function(x) as.icd10(trimws(x))
   resort_lvls <- function(x) {
     # Function to reorder numbers of CCS
     lvls_names <- names(x)
@@ -173,14 +172,11 @@ icd10_parse_ahrq_ccs <- function(version = "2018.1",
     lvls <- lvls_names[lvls_names != " "]
     lvls <- strsplit(lvls, ".", fixed = TRUE)
     number_splits <- length(lvls[[1]])
-    lvls <- lvls %>%
-      unlist %>%
-      as.numeric %>%
-      matrix(
-        ncol = number_splits,
-        byrow = TRUE,
-        dimnames  = list(rownames = lvls_names[lvls_names != " "])
-      )
+    lvls <- matrix(as.numeric(unlist(lvls)),
+                   ncol = number_splits,
+                   byrow = TRUE,
+                   dimnames  = list(rownames = lvls_names[lvls_names != " "])
+    )
     # complicated call needed or order using all columns of matrix
     lvls <- lvls[do.call(order, as.data.frame(lvls)), ]
     # if only looking at lvl1, then this becomes a vector, not a matrix
@@ -192,11 +188,12 @@ icd10_parse_ahrq_ccs <- function(version = "2018.1",
       lvls <- c(lvls, " ")
     x[lvls]
   }
-  ccs_lvl_map <- function(col_name) {
-    tapply(ahrq_df[["ICD.10.CM.CODE"]], ahrq_df[[col_name]], clean_icd10) %>%
-      resort_lvls %>%
-      comorbidity_map
-  }
+  ccs_lvl_map <- function(col_name)
+    comorbidity_map(
+      resort_lvls(
+        tapply(ahrq_df[["ICD.10.CM.CODE"]],
+               ahrq_df[[col_name]],
+               clean_icd10)))
   #list to define which columns match to which definition
   icd10_map_def <- list(single = "CCS.CATEGORY",
                         lvl1 = "MULTI.CCS.LVL.1",

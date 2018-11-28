@@ -70,7 +70,8 @@ test_that("dataframe to matrix and back", {
   for (pts in list(random_test_patients, test_twenty, multi_comorbid)) {
     df2 <- comorbid_ahrq(pts, return_df = TRUE)
     mat2 <- comorbid_df_to_mat(df2)
-    df3 <- comorbid_mat_to_df(mat2, visit_name = "visit_id", stringsAsFactors = FALSE)
+    df3 <- comorbid_mat_to_df(mat2, visit_name = "visit_id",
+                              stringsAsFactors = FALSE)
     expect_identical(df2, df3)
   }
 })

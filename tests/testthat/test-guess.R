@@ -6,7 +6,8 @@ test_that("tricky ICD-10 codes", {
 })
 
 test_that("default guess of short code if major - ICD-9", {
-  # if major is given, we can't tell if it is short or long. Give warning and pick short.
+  # if major is given, we can't tell if it is short or long. Give warning and
+  # pick short.
   expect_true(guess_short("101"))
   expect_true(guess_short(c("101", "441")))
 })
@@ -35,11 +36,12 @@ test_that("guess type from a data frame with no class set on column", {
   pts <- generate_random_pts(5)
   expect_true(guess_short(pts))
 
-  no_pts <- structure(list(visit_id = integer(0),
-                           code = character(0),
-                           poa = structure(integer(0),
-                                           .Label = character(0), class = "factor")),
-                      .Names = c("visit_id", "code", "poa"), row.names = integer(0), class = "data.frame")
+  no_pts <- structure(
+    list(visit_id = integer(0),
+         code = character(0),
+         poa = structure(integer(0), .Label = character(0), class = "factor")),
+    .Names = c("visit_id", "code", "poa"),
+    row.names = integer(0), class = "data.frame")
 
   # no error?
   guess_short(no_pts)

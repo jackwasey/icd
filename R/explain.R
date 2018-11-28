@@ -41,9 +41,6 @@
 #' explain_code(icd9_map_ahrq$CHF[1:3], brief = TRUE)
 #' # The first three in the ICD-10 equivalent are a little different:
 #' explain_code(icd10_map_ahrq$CHF[1:3], brief = TRUE)
-#' # nice to have magrittr, but not essential
-#' library(magrittr, warn.conflicts = FALSE, quietly = TRUE)
-#' explain_code(icd9_map_ahrq$CHF[1:3] %>% condense)
 #' @return data frame, or list of data frames, with fields for ICD-9 code, name
 #'   and description. There is no guarantee on the order of the returned
 #'   descriptions. \code{explain_table} is designed to provide results in a
@@ -221,8 +218,9 @@ icd9_get_chapters <- function(x, short_code = guess_short(x), verbose = FALSE) {
   out$three_digit[] <- unlist(icd9_majors)[whch]
   # out is based on unique majors of the input codes. Now merge with original
   # inputs to give output
-  out <- merge(y = data.frame(three_digit = all_majors, stringsAsFactors = TRUE),
-               x = out, by = "three_digit", sort = FALSE, all.x = TRUE)
+  out <- merge(out,
+               data.frame(three_digit = all_majors, stringsAsFactors = TRUE),
+               by = "three_digit", sort = FALSE, all.x = TRUE)
   class(out[["three_digit"]]) <- c("icd9cm", "factor")
   # many possible three digit codes don't exist. We should return NA for the
   # whole row. Chapter is coded as a range, so picks up these non-existent codes

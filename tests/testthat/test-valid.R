@@ -59,14 +59,17 @@ test_that("mixed ICD-9 and ICD-10 codes can't all be valid", {
 
 
 test_that("icd9IsValidDecimal - rubbish input", {
-  expect_error(is_valid.icd9(short_code = FALSE, list(1230, c(12323, 2323), c("nonesnseses"))))
+  expect_error(is_valid.icd9(short_code = FALSE,
+                             list(1230, c(12323, 2323), c("nonesnseses"))))
   expect_error(is_valid.icd9(short_code = FALSE, c(10.1, 200)))
   expect_equal(is_valid.icd9(short_code = FALSE, character()), logical())
   expect_false(is_valid.icd9(short_code = FALSE, "."))
-  expect_equal(is_valid.icd9(short_code = FALSE, c("100", "chestnut")), c(TRUE, FALSE))
-  expect_false(is_valid.icd9(short_code = FALSE, "100, 200")) # note this is a string with two numbers in it.
+  expect_equal(is_valid.icd9(short_code = FALSE, c("100", "chestnut")),
+               c(TRUE, FALSE))
+  expect_false(is_valid.icd9(short_code = FALSE, "100, 200"))
   expect_false(is_valid.icd9(short_code = FALSE, NA_character_))
-  expect_equal(is_valid.icd9(short_code = FALSE, c("two", "things")), c(FALSE, FALSE))
+  expect_equal(is_valid.icd9(short_code = FALSE, c("two", "things")),
+               c(FALSE, FALSE))
 })
 
 test_that("icd9IsValidDecimal numeric-only", {
@@ -95,7 +98,8 @@ test_that("icd9IsValidDecimal numeric-only", {
     is_valid.icd9(short_code = FALSE, c("100", "200.55", "V01.11")),
     c(TRUE, TRUE, TRUE))
   expect_equal(
-    is_valid.icd9(short_code = FALSE, as.factor(c("0", "100", "222.22", "100", "1", "0"))),
+    is_valid.icd9(as.factor(c("0", "100", "222.22", "100", "1", "0")),
+                  short_code = FALSE),
     c(TRUE, TRUE, TRUE, TRUE, TRUE, TRUE))
   expect_equal(
     is_valid.icd9(short_code = FALSE, c("10.1", "100", "999.99", "0.01")),
