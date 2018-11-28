@@ -1,3 +1,5 @@
+^Meta$
+^doc$
 ^_config\.yml$
 ^_pkgdown\.yml$
 ^appveyor\.yml$
