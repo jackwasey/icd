@@ -88,6 +88,7 @@ icd9_order_short <- function(x) {
   if (anyNA(x)) {
     warning("can't order NA values, so dropping them")
     x <- x[!is.na(x)]
+    if (length(x) == 0) return(character())
   }
   icd9_order_cpp(x)
 }
