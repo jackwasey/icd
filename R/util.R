@@ -320,6 +320,8 @@ guess_icd_col_by_class <- function(x) {
 #' @keywords internal
 icd9cm_latest_edition <- function() "32"
 
+# nocov start
+
 #' swap names and values of a vector
 #'
 #' Swap names and values of a vector. Non-character values are implicitly
@@ -327,6 +329,7 @@ icd9cm_latest_edition <- function() "32"
 #' @param x named vector
 #' @return vector, with values being the names of the input vector, and names
 #' being the previous values.
+#' @noRd
 #' @keywords internal
 swap_names_vals <- function(x) {
   assert_vector(x, strict = TRUE, any.missing = FALSE, names = "named")
@@ -347,21 +350,26 @@ swap_names_vals <- function(x) {
 #' sapply(icd9cm_billable, icd:::get_non_ASCII)
 #' sapply(icd9cm_billable, icd:::get_encodings)
 #' }
+#' @noRd
 #' @keywords internal
 get_non_ASCII <- function(x)
   x[is_non_ASCII(as_char_no_warn(x))]
 
 #' @rdname get_non_ASCII
+#' @noRd
 #' @keywords internal
 is_non_ASCII <- function(x)
   is.na(iconv(as_char_no_warn(x), from = "latin1", to = "ASCII"))
 
 #' @rdname get_non_ASCII
+#' @noRd
 #' @keywords internal
 get_encodings <- function(x) {
   stopifnot(is.list(x) || is.data.frame(x))
   sapply(x, function(y) unique(Encoding(as_char_no_warn(y))))
 }
+
+# nocov end
 
 #' Parse a (sub)chapter text description with parenthesised range
 #'
@@ -369,6 +377,7 @@ get_encodings <- function(x) {
 #' @return list of two-element character vectors, the elements being named
 #'   'start' and 'end'.
 #' @name chapter_to_desc_range
+#' @noRd
 #' @keywords internal manip
 .chapter_to_desc_range <- function(x, re_major) {
   assert_character(x, min.len = 1L)
@@ -414,12 +423,15 @@ na_to_false <- function(x) {
 #' make a list using input argument names as names
 #' @param ... arguments whose names become list item names, and values become
 #'   the values in the list
+#' @noRd
 #' @keywords internal
 named_list <- function(...) {
   x <- list(...)
   names(x) <- as.character(match.call()[-1])
   x
 }
+
+# nocov start
 
 # allows R 3.1 to work. TODO: obsolete
 dir.exists <- function(paths) {
@@ -444,6 +456,7 @@ str_extract <- function(string, pattern, ...) {
 capitalize_first <- function(x) {
   trim(paste0(toupper(substr(x, 1, 1)), substr(x, 2, nchar(x))))
 }
+# nocov end
 
 to_title_case <- function(x) {
   for (split_char in c(" ", "-", "[")) {

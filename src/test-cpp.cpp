@@ -111,7 +111,7 @@ context("MajMin to code") {
 
 context("add leading zeroes to major") {
   test_that("when major len is 0, result is empty, non-std") {
-    expect_true(icd9AddLeadingZeroesMajorSingle("") == NA_STRING);
+    expect_true(CV::is_na(icd9AddLeadingZeroesMajorSingle("")));
   }
   test_that("when major len is 0, result is empty, std") {
     expect_true(icd9AddLeadingZeroesMajorSingleStd("") == "");
@@ -146,7 +146,7 @@ context("add leading zeroes to major") {
     expect_true(icd9AddLeadingZeroesMajorSingleStd("E2") == "E002");
   }
   test_that("1234 too long major") {
-    expect_true(icd9AddLeadingZeroesMajorSingle("1234") == NA_STRING);
+    expect_true(CV::is_na(icd9AddLeadingZeroesMajorSingle("1234")));
     expect_true(icd9AddLeadingZeroesMajorSingleStd("1234") == "");
   }
 }
@@ -346,5 +346,31 @@ context("refactor") {
     expect_true(is_true(all(((CV) res.attr("levels")) == new_levels)));
   }
 }
+
+context("ICD10 short to parts") {
+  test_that("icd10 short to parts handles NA") {
+    CharacterVector x = CharacterVector::create(NA_STRING);
+    Rcpp::List res = icd10ShortToParts(x);
+    expect_true(CV::is_na(res(0)(0)));
+    expect_true(CV::is_na(res(0)(1)));
+  }
+  test_that("too short, but not empty") {
+    CharacterVector x = CharacterVector::create("V1", "B", "C10");
+    Rcpp::List res = icd10ShortToParts(x);
+    expect_true(res(0)(0) == CV::create("V1"));
+    expect_true(res(1)(0) == CV::create("B"));
+    expect_true(res(2)(0) == CV::create("C10"));
+    expect_true(res(0)(1) == CV::create(""));
+    expect_true(res(1)(1) == CV::create(""));
+    expect_true(res(2)(1) == CV::create(""));
+  }
+  test_that("empty") {
+    CharacterVector x = CharacterVector::create("");
+    Rcpp::List res = icd10ShortToParts(x);
+    expect_true(CV::is_na(res(0)(0)));
+    expect_true(CV::is_na(res(0)(1)));
+  }
+}
+
 // endif have testthat ICD_CATCH
 #endif

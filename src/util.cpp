@@ -122,6 +122,8 @@ IntegerVector matchFastTemplate(const Vector<RTYPE>& x,
   return(match(x, table));
 }
 
+// # nocov start
+
 //' @title Faster match
 //' @name match_rcpp
 //' @keywords internal
@@ -152,3 +154,5 @@ SEXP inFast(SEXP x, SEXP table) {
   }
   return R_NilValue;
 }
+
+// # nocov end

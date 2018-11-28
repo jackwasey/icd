@@ -25,7 +25,7 @@
 //' @keywords internal manip
 // [[Rcpp::export]]
 Rcpp::String icd9AddLeadingZeroesMajorSingle(Rcpp::String mjr) {
-  if (mjr == NA_STRING) {
+  if (is_true(all(is_na(CV::create(mjr))))) {
     return (NA_STRING);
   }
   std::string m(mjr);

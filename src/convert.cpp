@@ -27,6 +27,8 @@ extern "C" {
 #include "manip.h"                           // for icd9AddLeadingZeroesMajor
 #include "util.h"                            // for strimCpp, trimLeftCpp
 
+using namespace Rcpp;
+
 // [[Rcpp::export]]
 CV icd9PartsToShort(const Rcpp::List parts) {
   return icd9MajMinToCode(parts["mjr"], parts["mnr"], true);
@@ -59,7 +61,8 @@ Rcpp::List icd9ShortToPartsCpp(CV icd9Short, Rcpp::String mnrEmpty) {
   CV mnr(icd9Short.size());
   for (int i = 0; i < icd9Short.size(); ++i) {
     Rcpp::String thisShort = icd9Short[i];
-    if (thisShort == NA_STRING) { // .is_na() is private?
+    // .is_na() is private?
+    if (is_true(all(is_na(CV::create(thisShort))))) {
       mnr[i] = NA_STRING; // I think set_na() might be an alternative.
       continue;
     }
@@ -117,7 +120,8 @@ Rcpp::List icd10ShortToPartsCpp(const CV x, const Rcpp::String mnr_empty = "") {
   std::string::size_type sz;
   for (R_xlen_t i = 0; i != i10sz; ++i) {
     Rcpp::String thisShort = x[i];
-    if (thisShort == NA_STRING) {
+    // workaround because String::is_na is private
+    if (is_true(all(is_na(CV::create(thisShort))))) {
       mnr[i] = NA_STRING;
       continue;
     }
@@ -153,7 +157,7 @@ Rcpp::List icd9DecimalToPartsCpp(const CV icd9Decimal, const Rcpp::String mnr_em
   for (CV::const_iterator it = icd9Decimal.begin();
        it != icd9Decimal.end(); ++it) {
     Rcpp::String strna = *it;
-    if (strna == NA_STRING || strna == "") {
+    if (is_true(all(is_na(CV::create(strna)))) || strna == "") {
       mjrs.push_back(NA_STRING);
       mnrs.push_back(NA_STRING);
       continue;
@@ -200,7 +204,7 @@ Rcpp::List icd10DecimalToPartsCpp(const CV x, const Rcpp::String mnr_empty = "")
   for (CV::const_iterator it = x.begin();
        it != x.end(); ++it) {
     Rcpp::String strna = *it;
-    if (strna == NA_STRING || strna == "") {
+    if (is_true(all(is_na(CV::create(strna)))) || strna == "") {
       mjrs.push_back(NA_STRING);
       mnrs.push_back(NA_STRING);
       continue;
@@ -239,7 +243,7 @@ CV icd9DecimalToShort(
     return out;
   for (size_t i = 0; i != ilen; ++i) {
     Rcpp::String strna = x[i]; // need to copy here? does it copy?
-    if (strna == NA_STRING || strna == "")
+    if (is_true(all(is_na(CV::create(strna)))) || strna == "")
       continue;
     const char * thiscode_cstr = strna.get_cstring();
     std::string thiscode(thiscode_cstr);

@@ -62,6 +62,8 @@ CV Relevant::findRelevant() {
   return(wrap(r)); // or keep as STL container?
 }
 
+// # nocov start
+
 // setup find based on a data frame, list or vector
 CV Relevant::findRelevant(const SEXP& codes) {
   buildCodeSet(codes);
@@ -69,14 +71,14 @@ CV Relevant::findRelevant(const SEXP& codes) {
   return(wrap(r)); // or keep as STL container?
 }
 
+// # nocov end
+
 // setup find based on some columns in a data frame
 CV Relevant::findRelevant(const List& data, CV code_fields) {
   IntegerVector cols = match(code_fields, (CV) data.names());
   if (cols.size() == 0) return(CV::create());
   if (any(is_na(cols))) stop("Relevant: column names not found in data frame");
   //r.reserve(1); // TODO: reserve an acceptable size
-  //for (CV::iterator ci = code_fields.begin(); ci != code_fields.end(); ++ci)
-  //std::string code_field = (String) *ci;
   for (auto col : cols) {
     buildCodeSet(data[col - 1]);
   }
