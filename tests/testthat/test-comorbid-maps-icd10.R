@@ -149,3 +149,11 @@ test_that("some hand-picked ICD-10 codes appear in the quan elix map", {
 test_that("some hand-picked ICD-10 codes appear in the quan deyo map", {
   expect_true("I214" %in% icd10_map_quan_deyo$MI)
 })
+
+test_that("we find invalid elements in comorbidity map", {
+  abogus <- comorbidity_map(list(a = "bogus"))
+  expect_equivalent(get_invalid(abogus), abogus)
+  m <- abogus
+  m$b <- c("A10", "M12")
+  expect_equivalent(get_invalid(m), abogus)
+})

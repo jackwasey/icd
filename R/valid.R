@@ -494,6 +494,7 @@ get_invalid.icd10 <- function(x, short_code = guess_short(x), ...) {
 get_invalid.comorbidity_map <- function(x, short_code = guess_short(x), ...) {
   class(x) <- class(x)[class(x) != "comorbidity_map"]
   x <- lapply(x, FUN = get_invalid, short_code = short_code)
+  x <- Filter(length, lapply(x, FUN = get_invalid, short_code = short_code))
   x[lapply(x, length) > 0]
 }
 
