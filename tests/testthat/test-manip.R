@@ -130,17 +130,15 @@ test_that("add leading zeroes to a factor", {
 })
 
 test_that("extracting alphabetic and numeric parts from ICD-9 codes works", {
-
   expect_equal(icd9_extract_alpha_numeric("V12"),
                matrix(data = c("V", "12"), ncol = 2))
   expect_equal(icd9_extract_alpha_numeric(c("V12", 34)),
                t(matrix(data = c("V", "12", "", "34"), ncol = 2)))
-
 })
 
 test_that("strip leading zeroes: errors", {
-
-  expect_equal(icd9_drop_leading_zeroes(short_code = FALSE, NA_character_), NA_character_)
+  expect_equal(icd9_drop_leading_zeroes(short_code = FALSE, NA_character_),
+               NA_character_)
   # no guaranteed behaviour when code is invalid: it may or may not match the
   # regex. If the user wants to get the valid codes first, they can do that.
 })

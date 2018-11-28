@@ -218,9 +218,9 @@ icd9_get_chapters <- function(x, short_code = guess_short(x), verbose = FALSE) {
   out$three_digit[] <- unlist(icd9_majors)[whch]
   # out is based on unique majors of the input codes. Now merge with original
   # inputs to give output
-  out <- merge(out,
-               data.frame(three_digit = all_majors, stringsAsFactors = TRUE),
-               by = "three_digit", sort = FALSE, all.x = TRUE)
+  out <- merge(
+    y = data.frame(three_digit = all_majors, stringsAsFactors = TRUE),
+    x = out, by = "three_digit", sort = FALSE, all.x = TRUE)
   class(out[["three_digit"]]) <- c("icd9cm", "factor")
   # many possible three digit codes don't exist. We should return NA for the
   # whole row. Chapter is coded as a range, so picks up these non-existent codes

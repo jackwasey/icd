@@ -218,7 +218,6 @@ test_that("explain gives appropriate warnings by default", {
 test_that("explain icd9GetChapters simple input", {
   chaps1 <- icd9_get_chapters(c("410", "411", "412"), short_code = TRUE)
   expect_equal(nrow(chaps1), 3)
-
   chaps2 <- icd9_get_chapters("418", short_code = TRUE) # no such code 418
   expect_is(chaps2, "data.frame")
   expect_is(chaps2$three_digit, "factor")

@@ -58,10 +58,10 @@ skip_flat_icd9_avail_all <- function() {
 }
 
 expect_no_warn <- function(object, expected, ...)
-  expect_warning(object, expected, regexp = NA, ...)
+  testthat::expect_warning(object, expected, regexp = NA, ...)
 
 expect_no_error <- function(object, expected, ...)
-  expect_error(object, expected, regexp = NA, ...)
+  testthat::expect_error(object, expected, regexp = NA, ...)
 
 #' expect equal, ignoring any ICD classes
 #'
