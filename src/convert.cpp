@@ -31,12 +31,14 @@ using namespace Rcpp;
 
 // [[Rcpp::export]]
 CV icd9PartsToShort(const Rcpp::List parts) {
-  return icd9MajMinToCode(parts["mjr"], parts["mnr"], true);
+  CV res = icd9MajMinToCode(parts["mjr"], parts["mnr"], true);
+  return res;
 }
 
 // [[Rcpp::export]]
 CV icd9PartsToDecimal(const Rcpp::List parts) {
-  return icd9MajMinToCode(parts["mjr"], parts["mnr"], false);
+  CV res = icd9MajMinToCode(parts["mjr"], parts["mnr"], false);
+  return res;
 }
 
 // [[Rcpp::export]]
@@ -82,9 +84,9 @@ Rcpp::List icd9ShortToPartsCpp(CV icd9Short, Rcpp::String mnrEmpty) {
         mnr[i] = s.substr(4, 1);
         break;
       default:
+        // covr looks like it misses fall-through here, even though tested
         mjr[i] = NA_STRING;
       mnr[i] = NA_STRING;
-      continue;
       }
     } else { // not an E code
       switch (sz) {
@@ -102,7 +104,6 @@ Rcpp::List icd9ShortToPartsCpp(CV icd9Short, Rcpp::String mnrEmpty) {
       default:
         mjr[i] = NA_STRING;
       mnr[i] = NA_STRING;
-      continue;
       }
     }
   } // for

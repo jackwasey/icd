@@ -70,6 +70,7 @@ Rcpp::IntegerVector refactor(const IntegerVector& x, const CV& new_levels,
   LogicalVector matched_na_level(fsz, false);
   R_xlen_t i;
   bool new_na_level = is_true(any(is_na_new_levels));
+  bool old_na_level = is_true(any(is_na_old_levels));
   int new_na_level_idx = which_max(is_na_new_levels);
   int old_na_level_idx = which_max(is_na_old_levels);
   for (i = 0; i < fsz; ++i) {
@@ -84,7 +85,8 @@ Rcpp::IntegerVector refactor(const IntegerVector& x, const CV& new_levels,
       f[i] = NA_INTEGER;
       continue;
     }
-    if (!exclude_na && x[i] == old_na_level_idx) {
+    if (!exclude_na && new_na_level && old_na_level &&
+        (x[i] == old_na_level_idx + 1)) {
       TRACE("matched NA indexed in original levels");
       if (new_na_level) {
         TRACE("NA also in new levels, insert index to that NA");
@@ -95,7 +97,7 @@ Rcpp::IntegerVector refactor(const IntegerVector& x, const CV& new_levels,
       f[i] = NA_INTEGER;
       continue;
     }
-    DEBUG("x[i]  = " << x[i] << ", max is " << new_level_old_idx.size() - 1);
+    DEBUG("x[i]  = " << x[i] << ", max is " << new_level_old_idx.size());
     assert(x[i] > 0);
     assert(x[i] <= new_level_old_idx.size());
     auto cur = new_level_old_idx[x[i] - 1]; // cur is new R index into levels

@@ -343,3 +343,15 @@ test_that("crash case", {
   expect_identical(refactor(f, c("a", "b")),
                    structure(c(NA, 1L), .Label = c("a", "b"), class = "factor"))
 })
+
+test_that("refactor NA to different level", {
+  f <- factor(NA, exclude = NULL)
+  expect_identical(refactor(f, levels = NA, na.rm = FALSE, exclude_na = FALSE),
+                   f)
+  f <- factor(c(NA, "a"), exclude = NULL)
+  expect_identical(refactor(f, levels = NA, na.rm = FALSE, exclude_na = FALSE),
+                   factor(f, levels = NA, exclude = NULL))
+  expect_identical(
+    refactor(f, levels = c("a", NA), na.rm = FALSE, exclude_na = FALSE),
+    factor(c(NA, "a"), levels = c("a", NA), exclude = NULL))
+})
