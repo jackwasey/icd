@@ -29,14 +29,3 @@ as_char_no_warn <- function(x) {
     return(levels(x)[x])
   as.character(x)
 }
-
-#' @describeIn as_char_no_warn If the argument is a factor, return the levels
-#'   instead
-#' @keywords internal
-as_char_or_levels <- function(x) {
-  if (is.character(x))
-    return(x)
-  if (is.factor(x))
-    return(levels(x))
-  as_char_no_warn(x)
-}

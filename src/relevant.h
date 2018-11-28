@@ -46,6 +46,7 @@ public:
 
   }
   void buildCodeSetCV(const CV& codes);
+  void buildCodeSetInt(const IntegerVector& codes);
   void buildCodeSet(const SEXP& codes);
   CV findRelevant();
   CV findRelevant(const SEXP& codes);

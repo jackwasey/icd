@@ -62,7 +62,6 @@ get_icd_valid_percent <- function(x, short_code = NULL, n = 100) {
     stopifnot(length(x) == 1)
     x <- x[[1]]
   }
-  assert(check_character(x, min.len = 1), check_factor(x, min.len = 1))
   y <- as_char_no_warn(x)[1:min(n, length(x))]
   if (!is.null(short_code)) {
     if (short_code) {
@@ -87,7 +86,6 @@ get_icd_valid_percent <- function(x, short_code = NULL, n = 100) {
 }
 
 get_icd_defined_percent <- function(x, short_code = NULL, n = 100) {
-  assert(check_character(x, min.len = 1), check_factor(x, min.len = 1))
   y <- as_char_no_warn(x)[1:min(n, length(x))]
   if (!is.null(short_code)) {
     if (short_code) {

@@ -15,9 +15,22 @@ void Relevant::buildCodeSetCV(const CV& codes) {
   // over-reserve (and maybe expand), target is unique number
   allCodesSet.reserve(allCodesSet.size() + codes.size());
   DEBUG_VEC(codes);
-  for (String c : (CV) codes) {
+  for (String c : codes) {
     if (c != NA_STRING) {
       allCodesSet.insert(c.get_cstring());
+    }
+  }
+}
+
+void Relevant::buildCodeSetInt(const IntegerVector& codes) {
+  // over-reserve (and maybe expand), target is unique number
+  allCodesSet.reserve(allCodesSet.size() + codes.size());
+  DEBUG_VEC(codes);
+  for (R_xlen_t i = 0; i != codes.size(); ++i) {
+  auto ci = codes[i];
+  auto cs = std::to_string(ci);
+    if (!IntegerVector::is_na(ci)) {
+      allCodesSet.insert(cs);
     }
   }
 }
@@ -26,7 +39,8 @@ void Relevant::buildCodeSet(const SEXP& codes) {
   switch (TYPEOF(codes)) {
   case INTSXP: {
     if (!Rf_isFactor(codes)) {
-    stop("Integer vector, but not factor in Relevant.");
+    buildCodeSetInt(codes);
+    break;
   }
     CV code_levs = ((IntegerVector) codes).attr("levels");
     DEBUG_VEC(code_levs);
