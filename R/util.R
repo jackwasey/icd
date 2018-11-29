@@ -45,7 +45,7 @@ trim <- function(x) {
 }
 
 "%nin%" <- function(x, table)
-  match(x, table, nomatch = 0) == 0
+  match(x, table, nomatch = 0L) == 0L
 
 #' @describeIn match_rcpp Use faster matching for %in%
 #' @keywords internal
@@ -59,11 +59,8 @@ trim <- function(x) {
 
 #' Strip character(s) from character vector
 #'
-#' \code{gsub} is probably quicker than \code{stringr}/\code{stringi}. For
-#' comorbidity processing, this package prefers the faster \link{base}
-#' functions, whereas \code{stringr} is used for tasks which are not time
-#' critical, e.g. parsing source data to be included in the distributed
-#' \code{icd} package.
+#' After benchmarking, \code{gsub} is probably quicker than
+#' \code{stringr}/\code{stringi}. For comorbidity processing.
 #' @param x character vector
 #' @param pattern passed to \code{gsub} default is " "
 #' @param use_bytes single logical passed to \code{base::gsub}, default is the
@@ -143,6 +140,7 @@ binary_to_logical <- function(x) {
 #'   desired matches, when multiple matches are made by the regular expression
 #' @param swap logical scalar, whether to swap the names and values. Default is
 #'   not to swap, so the first match becomes the name.
+#' @noRd
 #' @keywords internal
 str_pair_match <- function(string, pattern, pos, swap = FALSE, ...) {
   assert_character(string, min.len = 1L)
@@ -179,13 +177,15 @@ str_pair_match <- function(string, pattern, pos, swap = FALSE, ...) {
 #' this function, but if unavoidable, using the \code{visit_name} parameter.
 #' @param x input data, typically a data frame
 #' @template visit_name
+#' @noRd
 #' @keywords internal
 get_visit_name <- function(x, visit_name = NULL) {
   UseMethod("get_visit_name")
 }
 
+#' @describeIn get_visit_name Guess or get visit/patient column from data frame
 #' @keywords internal
-#' @export
+#' @noRd
 get_visit_name.data.frame <- function(x, visit_name = NULL) {
   assert_data_frame(x, min.cols = 1, col.names = "named")
   visit_name_guesses <- c("visit.?Id", "patcom", "encounter.?id", "enc.?id",
@@ -206,8 +206,9 @@ get_visit_name.data.frame <- function(x, visit_name = NULL) {
   visit_name
 }
 
+#' @describeIn get_visit_name Give useful error message if matrix passed.
 #' @keywords internal
-#' @export
+#' @noRd
 get_visit_name.matrix <- function(x, visit_name = NULL)
   stop("matrices of comorbidity data are expected to be of logical type, ",
        "and have row names corresponding to the visit or patient.")
@@ -364,10 +365,8 @@ is_non_ASCII <- function(x)
 #' @rdname get_non_ASCII
 #' @noRd
 #' @keywords internal
-get_encodings <- function(x) {
-  stopifnot(is.list(x) || is.data.frame(x))
+get_encodings <- function(x)
   sapply(x, function(y) unique(Encoding(as_char_no_warn(y))))
-}
 
 # nocov end
 
@@ -392,7 +391,6 @@ get_encodings <- function(x) {
   ms <- str_match_all(x, re_code_single)
   okr <- vapply(mr, length, integer(1)) == 4L
   oks <- vapply(ms, length, integer(1)) == 3L
-
   if (!all(okr || oks))
     stop("Problem matching\n", x[!(okr || oks)], call. = FALSE)
   m <- ifelse(okr, mr, ms)
@@ -402,14 +400,10 @@ get_encodings <- function(x) {
   out
 }
 
-#' @rdname chapter_to_desc_range
-#' @keywords internal
 chapter_to_desc_range.icd9 <- function(x) {
   .chapter_to_desc_range(x, re_major = re_icd9_major_bare)
 }
 
-#' @rdname chapter_to_desc_range
-#' @keywords internal
 chapter_to_desc_range.icd10 <- function(x) {
   .chapter_to_desc_range(x, re_major = re_icd10_major_bare)
 }
@@ -421,8 +415,16 @@ na_to_false <- function(x) {
 }
 
 #' make a list using input argument names as names
-#' @param ... arguments whose names become list item names, and values become
-#'   the values in the list
+#' @param ... arguments whose names become list item names, and whose values
+#'   become the values in the list
+#' @examples
+#' a <- c(1, 2)
+#' b <- c("c", "d")
+#' stopifnot(
+#'  identical(named_list(a, b),
+#'            list(a = a, b = b)
+#'  )
+#' )
 #' @noRd
 #' @keywords internal
 named_list <- function(...) {
@@ -433,13 +435,8 @@ named_list <- function(...) {
 
 # nocov start
 
-# allows R 3.1 to work. TODO: obsolete
-dir.exists <- function(paths) {
-  x <- file.info(paths)$isdir
-  !is.na(x) & x
-}
-
 #' return all matches for regular expression
+#' @noRd
 #' @keywords internal manip
 str_match_all <- function(string, pattern, ...) {
   string <- as.character(string)
@@ -447,15 +444,14 @@ str_match_all <- function(string, pattern, ...) {
 }
 
 #' \code{stringr} does this, but here we have a small amount of base R code
+#' @noRd
 #' @keywords internal
-str_extract <- function(string, pattern, ...) {
+str_extract <- function(string, pattern, ...)
   vapply(regmatches(string, m = regexec(pattern = pattern, text = string, ...)),
          FUN = `[[`, 1, FUN.VALUE = character(1L))
-}
 
-capitalize_first <- function(x) {
+capitalize_first <- function(x)
   trim(paste0(toupper(substr(x, 1, 1)), substr(x, 2, nchar(x))))
-}
 # nocov end
 
 to_title_case <- function(x) {

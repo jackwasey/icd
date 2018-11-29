@@ -18,10 +18,7 @@ slightly quicker \code{TRUE}}
 character vector of same length as input
 }
 \description{
-\code{gsub} is probably quicker than \code{stringr}/\code{stringi}. For
-comorbidity processing, this package prefers the faster \link{base}
-functions, whereas \code{stringr} is used for tasks which are not time
-critical, e.g. parsing source data to be included in the distributed
-\code{icd} package.
+After benchmarking, \code{gsub} is probably quicker than
+\code{stringr}/\code{stringi}. For comorbidity processing.
 }
 \keyword{internal}

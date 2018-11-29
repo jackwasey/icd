@@ -470,10 +470,12 @@ is.comorbidity_map <- function(x) inherits(x, "comorbidity_map")
 #'   c("40201", "2258", "7208", "25001", "34400", "4011", "4011", NA),
 #'   class = c("icd9cm", "icd9", "character"),
 #'   icd_short_diag = TRUE)
+#' \dontrun{
 #' print(x)
 #' print(x, verbose = TRUE)
 #' # as.factor drops any 'icd' classes
 #' print(as.factor(x), verbose = TRUE)
+#' }
 #' @param x ICD codes to be printed
 #' @param verbose Annotate based on code attributes, e.g., decimal versus short
 #'   codes.

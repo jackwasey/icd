@@ -67,8 +67,8 @@ utils::globalVariables(
 # Update regular expression to limit by start and end, with or without white
 # space
 justify_re <- function(x, whitespace_ok = FALSE) {
-  assert_string(x)
-  assert_flag(whitespace_ok)
+  stopifnot(is.character(x), length(x) == 1)
+  stopifnot(is.logical(whitespace_ok), length(whitespace_ok) == 1)
   if (whitespace_ok)
     paste0("^[[:space:]]*", x, "[[:space:]]*$")
   else
@@ -493,9 +493,7 @@ get_invalid.icd10 <- function(x, short_code = guess_short(x), ...) {
 #' @keywords internal
 get_invalid.comorbidity_map <- function(x, short_code = guess_short(x), ...) {
   class(x) <- class(x)[class(x) != "comorbidity_map"]
-  x <- lapply(x, FUN = get_invalid, short_code = short_code)
-  x <- Filter(length, lapply(x, FUN = get_invalid, short_code = short_code))
-  x[lapply(x, length) > 0]
+  Filter(length, lapply(x, FUN = get_invalid, short_code = short_code))
 }
 
 #' Get major part of an ICD code

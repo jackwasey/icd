@@ -97,7 +97,7 @@ sas_icd10_assignments_to_list <- function(x) {
 #' @keywords internal programming list
 sas_parse_assignments <- function(x, strip_whitespace = TRUE,
                                   strip_quotes = TRUE) {
-  assert_string(x)
+  stopifnot(is.character(x), length(x) == 1)
   assert_flag(strip_whitespace)
   assert_flag(strip_quotes)
   # splitting with clever regex to separate each pair of assignments seems
