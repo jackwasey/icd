@@ -68,9 +68,9 @@ update_everything <- function() {
 # quick sanity checks - full tests of x in test-parse.R
 icd9cm_hierarchy_sanity <- function(x) {
   stopifnot(all(is_valid.icd9(x[["code"]], short_code = TRUE)))
-  if (!any(sapply(x, is.na)))
+  if (!any(vapply(x, is.na, logical(1))))
     return()
-  print(colSums(sapply(x, is.na)))
+  print(colSums(vapply(x, is.na, logical(1))))
   print(x[which(is.na(x$major)), ])
   print(x[which(is.na(x$three_digit)), ])
   print(x[which(is.na(x$sub_chapter))[1:10], ]) # just top ten

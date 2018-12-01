@@ -73,7 +73,7 @@ icd9_parse_ahrq_sas <- function(save_data = FALSE, offline = TRUE) {
     message("parsing AHRQ SAS codes for '", cmb, "'")
     some_pairs <- strsplit(x = icd9_map_ahrq_working[[cmb]], split = "-")
     # non-range values (and their children) just go on list
-    unpaired_items <- sapply(some_pairs, length) == 1
+    unpaired_items <- vapply(some_pairs, length, integer(1)) == 1
     out <- c()
     if (any(unpaired_items))
       out <- children.icd9(unlist(some_pairs[unpaired_items]), defined = FALSE,

@@ -309,7 +309,7 @@ random_string <- function(n, max_chars = 4) {
 #'   expression in \code{microbenchmark::microbenchmark}
 #' @keywords internal
 all_identical <- function(x)
-  all(sapply(x[-1], function(y) identical(x[[1]], y)))
+  all(vapply(x[-1], function(y) identical(x[[1]], y), FUN.VALUE = logical(1)))
 
 get_one_of_each <- function()
   c("002.3", "140.25", "245", "285", "290.01", "389.00",
