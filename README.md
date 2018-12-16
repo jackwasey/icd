@@ -23,6 +23,9 @@ icd
 ===
 
 [![CRAN](https://www.r-pkg.org/badges/version/icd "CRAN")](https://cran.r-project.org/package=icd)
+[![Project Status: Active – The project has reached a stable, usable
+state and is being actively
+developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
 [![GitHub](https://img.shields.io/badge/devel%20version-3.3.9000-blue.svg?style=flat "GitHub")](https://github.com/jackwasey/icd)
 [![Travis](https://travis-ci.org/jackwasey/icd.svg?branch=master "Travis Build Status")](https://travis-ci.org/jackwasey/icd)
 [![Appveyor](https://ci.appveyor.com/api/projects/status/9ncfgxht3n5i8t60/branch/master?svg=true "Appveyor Build Status")](https://ci.appveyor.com/project/jackwasey/icd/branch/master)
@@ -123,10 +126,40 @@ comorbid_charlson(patient_data)
 charlson(patient_data)
 #> 1000 1001 1002 
 #>    2    2    0
+```
 
-# for more examples, see this and other vignettes
+How to get help
+---------------
+
+Look at the help files for details and examples of almost every function
+in this package. There are several vignettes showing the main features:
+
+-   [Introduction](introduction.html)
+-   [Charlson scores](charlson-scores.html)
+-   [Examples using ICD-10 codes](ICD-10.html)
+-   [CMS Hierarchical Condition Codes (HCC)](CMS-HCC.html)
+-   [Pediatric Complex Chronic Conditions (PCCC)](PCCC.html)
+-   [Working with ICD code ranges](ranges.html)
+-   [Comparing comorbidity maps](compare-maps.html)
+-   [Paper detailing efficient matrix method of
+    comorbidities](efficiency.html)
+
+Many users have emailed me directly for help, and I’ll do what I can,
+but it is often better to examine or add to the list of
+[issues](https://github.com/jackwasey/icd) so we can help each other.
+Advanced users may look at the [source
+code](https://github.com/jackwasey/icd), particularly the extensive test
+suite which exercises all the key functions.
+
+``` r
+?comorbid
+?comorbid_hcc
+?explain_code
+?is_valid
+
+# first show the list
+vignette(package = "icd")
 vignette("introduction", package = "icd")
-#> Warning: vignette 'introduction' not found
 ```
 
 Relevance
@@ -181,29 +214,6 @@ ICD-10, but comorbidities can be generated from older ICD-9 codes and
 newer ICD-10 codes in parallel, and the comorbidities can then be
 compared.
 
-How to get help
----------------
-
-Look at the help files for details and examples of almost every function
-in this package. There are several vignettes showing the main features.
-Many users have emailed me directly for help, and I’ll do what I can,
-but it is often better to examine or add to the list of
-[issues](https://github.com/jackwasey/icd) so we can help each other.
-Advanced users may look at the [source
-code](https://github.com/jackwasey/icd), particularly the extensive test
-suite which exercises all the key functions.
-
-``` r
-?comorbid
-?comorbid_hcc
-?explain_code
-?is_valid
-
-# first show the list
-vignette(package = "icd")
-vignette("pccc", package = "icd")
-```
-
 Development version
 -------------------
 
@@ -211,26 +221,6 @@ The latest version is available in [github
 icd](https://github.com/jackwasey/icd), and can be installed with:
 
 ``` r
-    install.packages("devtools")
-    devtools::install_github("jackwasey/icd")
-```
-
-Contributing and Building
--------------------------
-
-A substantial amount of code has now been contributed to the package.
-Contributions of any kind to `icd` are very welcome. See the \[GitHub
-issues
-page\]\](<a href="https://github.com/jackwasey/icd/issues" class="uri">https://github.com/jackwasey/icd/issues</a>)
-to see open issues and feature requests. Documentation, vignettes and
-examples are very welcome, especially if accompanied by some real-world
-data.
-
-To build `icd`, `Rcpp` must be compiled from source. This happens
-automatically on Linux, but on Mac and Windows, the following may
-sometimes be required, especially after upgrading R itself. This is a
-limitation of the R build system.
-
-``` r
-install.packages("Rcpp", type = "source")
+    #install.packages("remotes")
+    remotes::install_github("jackwasey/icd")
 ```
