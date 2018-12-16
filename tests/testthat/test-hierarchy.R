@@ -21,7 +21,8 @@ context("icd9cm_hierarchy was parsed as expected")
 # another text file parsing.`
 
 test_that("no NA or zero-length values", {
-  expect_false(any(sapply(icd9cm_hierarchy, is.na)))
+  expect_false(any(vapply(icd9cm_hierarchy,
+                          function(x) any(is.na(x)), FUN.VALUE = logical(1))))
   expect_false(any(nchar(unlist(icd9cm_hierarchy)) == 0))
 })
 
@@ -79,8 +80,8 @@ test_that("some sub-chapters are correct", {
 test_that("some randomly selected rows are correct", {
   expect_equal(
     unname(
-      sapply(
-        icd9cm_hierarchy[icd9cm_hierarchy[["code"]] == "5060", ], as_char_no_warn)
+      vapply(icd9cm_hierarchy[icd9cm_hierarchy[["code"]] == "5060", ],
+             FUN = as_char_no_warn, FUN.VALUE = character(1))
     ),
     c("5060", "TRUE", "Fum/vapor bronc/pneumon",
       "Bronchitis and pneumonitis due to fumes and vapors",

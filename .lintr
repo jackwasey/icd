@@ -1,3 +1,3 @@
-linters: with_defaults(object_name_linter = NULL, object_usage_linter = NULL, line_length_linter(120), object_length_linter(length = 36L))
+linters: with_defaults(object_name_linter = NULL, object_usage_linter = NULL, line_length_linter(120), object_length_linter(length = 36L), undesirable_function_linter("sapply"))
 exclusions: c(list("R/z-deprecated.R", "R/RcppExports.R", "R/benchmark.R"), list.files(path = "inst/doc", recursive = TRUE, full.names = TRUE))
 cache: TRUE

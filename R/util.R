@@ -365,9 +365,10 @@ is_non_ASCII <- function(x)
 #' @rdname get_non_ASCII
 #' @noRd
 #' @keywords internal
-get_encodings <- function(x)
-  sapply(x, function(y) unique(Encoding(as_char_no_warn(y))))
-
+get_encodings <- function(x) {
+  vapply(x, FUN = function(y) unique(Encoding(as_char_no_warn(y))),
+         FUN.VALUE = character(1))
+}
 # nocov end
 
 #' Parse a (sub)chapter text description with parenthesised range

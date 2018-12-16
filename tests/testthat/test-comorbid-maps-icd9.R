@@ -25,16 +25,15 @@ test_that("try to induce c++ segfault bug", {
 test_that("icd9 comorbidities correct, logical to binary ok", {
   ptdf <- icd9_comorbid(simple_pts, map = icd9_map_ahrq, short_code = TRUE,
                         visit_name = "visit_id", return_df = TRUE)
-
   expect_equal(names(ptdf), c("visit_id", names(icd9_map_ahrq)))
-
-  expect_true(all(sapply(names(icd9_map_ahrq),
-                         function(x)
-                           class(ptdf[, x])) == "logical"))
+  expect_true(all(vapply(names(icd9_map_ahrq),
+                         FUN = function(x) is.logical(ptdf[, x]),
+                         FUN.VALUE = logical(1))))
   ptdflogical <- logical_to_binary(ptdf)
-  expect_true(all(sapply(names(icd9_map_ahrq),
+  expect_true(all(vapply(names(icd9_map_ahrq),
                          function(x)
-                           class(ptdflogical[, x])) == "integer"))
+                           is.integer(ptdflogical[, x]),
+                         FUN.VALUE = logical(1))))
   # do not expect all the rest of patient data to be returned - we
   # aren't responsible for aggregating other fields by visit_id!
   expect_equal(dim(ptdf),

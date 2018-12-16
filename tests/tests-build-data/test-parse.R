@@ -100,18 +100,16 @@ test_that("extraction from qualifier subset works", {
   expect_equal(
     rtf_parse_qualifier_subset("[0-6]"),
     as.character(c(0, 1, 2, 3, 4, 5, 6)))
-
   expect_equal(
     rtf_parse_qualifier_subset("[0,2-4,8,9]"),
     as.character(c(0, 2, 3, 4, 8, 9)))
-
   expect_equal(
     rtf_parse_qualifier_subset("[0]"),
     "0")
-
   expect_true(
-    all(sapply(all2015,
-               FUN = function(f) length(rtf_parse_qualifier_subset(f)) > 0)))
+    all(vapply(all2015,
+               FUN = function(f) length(rtf_parse_qualifier_subset(f)) > 0,
+               FUN.VALUE = logical(1))))
 })
 
 # The following tests on the RTF parsing get the RTF source over internet, so
