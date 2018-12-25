@@ -105,7 +105,7 @@
       <h1>Ranges of ICD codes</h1>
                         <h4 class="author">Jack O. Wasey</h4>
             
-            <h4 class="date">2018-11-27</h4>
+            <h4 class="date">2018-12-25</h4>
       
       
       <div class="hidden name"><code>ranges.Rmd</code></div>
@@ -150,7 +150,7 @@ along with icd. If not, see <http:#www.gnu.org/licenses/>.
 <a href="#ranges-spanning-higher-level-codes" class="anchor"></a>Ranges spanning higher-level codes</h2>
 <p>Another problem is whether to include broader parent codes when a range does not include all the children: e.g., <code>"100.99" %i9da% "101.01"</code> does not include <code>100</code> or <code>100.0</code>, both of which imply larger subsets than requested by the range command (i.e., every code from <code>100.00</code> to <code>100.99</code>). The shorter forms <code>%i9s%</code> and <code>%i9d%</code> return only <em>real</em> codes (i.e., listed in the CMS definitions as either three-digit codes or diagnoses), whereas <code>%i9sa%</code> and <code>%i9da%</code> return all possible syntactically valid ICD-9 codes:</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="co"># get all possible codes</span></a>
-<a class="sourceLine" id="cb3-2" data-line-number="2"><span class="st">"003"</span> <span class="op">%i9sa%</span><span class="st"> "0033"</span> <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/head">head</a></span>(<span class="dv">9</span>) <span class="co"># show first 9 of 111 values</span></a>
+<a class="sourceLine" id="cb3-2" data-line-number="2"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/head">head</a></span>(<span class="st">"003"</span> <span class="op">%i9sa%</span><span class="st"> "0033"</span>, <span class="dt">n =</span> <span class="dv">9</span>) <span class="co"># show first 9 of 111 values</span></a>
 <a class="sourceLine" id="cb3-3" data-line-number="3"><span class="co"># just get the ones which correspond to diagnoses (keeping the 3-digit chapters)</span></a>
 <a class="sourceLine" id="cb3-4" data-line-number="4"><span class="st">"494"</span> <span class="op">%i9s%</span><span class="st"> "4941"</span></a>
 <a class="sourceLine" id="cb3-5" data-line-number="5"></a>
@@ -176,9 +176,10 @@ along with icd. If not, see <http:#www.gnu.org/licenses/>.
 <a class="sourceLine" id="cb4-8" data-line-number="8"><span class="co">#&gt; [33] "48229" "4823"  "48230" "48231" "48232" "48233" "48234" "48235"</span></a>
 <a class="sourceLine" id="cb4-9" data-line-number="9"><span class="co">#&gt; [41] "48236" "48237" "48238" "48239"</span></a>
 <a class="sourceLine" id="cb4-10" data-line-number="10"><span class="co"># see the first few differences (which are by definition not 'real' codes):</span></a>
-<a class="sourceLine" id="cb4-11" data-line-number="11"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/sets">setdiff</a></span>(icd<span class="op">:::</span><span class="kw"><a href="../reference/expand_range.html">expand_range</a></span>(<span class="st">"4820"</span>, <span class="st">"4823"</span>, <span class="dt">defined =</span> <span class="ot">FALSE</span>),</a>
-<a class="sourceLine" id="cb4-12" data-line-number="12">        icd<span class="op">:::</span><span class="kw"><a href="../reference/expand_range.html">expand_range</a></span>(<span class="st">"4820"</span>, <span class="st">"4823"</span>)) <span class="op">%&gt;%</span><span class="st"> </span>head</a>
-<a class="sourceLine" id="cb4-13" data-line-number="13"><span class="co">#&gt; [1] "48200" "48201" "48202" "48203" "48204" "48205"</span></a></code></pre></div>
+<a class="sourceLine" id="cb4-11" data-line-number="11"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/head">head</a></span>(</a>
+<a class="sourceLine" id="cb4-12" data-line-number="12">  <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/sets">setdiff</a></span>(icd<span class="op">:::</span><span class="kw"><a href="../reference/expand_range.html">expand_range</a></span>(<span class="st">"4820"</span>, <span class="st">"4823"</span>, <span class="dt">defined =</span> <span class="ot">FALSE</span>),</a>
+<a class="sourceLine" id="cb4-13" data-line-number="13">          icd<span class="op">:::</span><span class="kw"><a href="../reference/expand_range.html">expand_range</a></span>(<span class="st">"4820"</span>, <span class="st">"4823"</span>)))</a>
+<a class="sourceLine" id="cb4-14" data-line-number="14"><span class="co">#&gt; [1] "48200" "48201" "48202" "48203" "48204" "48205"</span></a></code></pre></div>
 </div>
 <div id="finding-codes-in-hierarchy" class="section level2">
 <h2 class="hasAnchor">

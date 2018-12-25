@@ -144,7 +144,10 @@
 
 <div id="contributing-to-icd" class="section level1">
 
-<p>I’m delighted to welcome code, documentation, tests and bug report from the many <code>icd</code> package users. I get intermittent feedback on how people are using the package, so feel free to email me or write soemthing in github. If you want it to work differently, or do new things, then the best way is to file a <a href="https://github.com/jackwasey/icd/issues">github issue</a>: there are probably others who have the same or similar needs, and they, or I, may have already thought about them.</p>
+<p>I’m delighted to welcome code, documentation, tests and bug report from the many <code>icd</code> package users. I love feedback on how people are using the package. Feel free to email me or write soemthing in github. If you want <code>icd</code> to work differently, or do new things, then the best way is to file a <a href="https://github.com/jackwasey/icd/issues">github issue</a>: there are probably others who have the same or similar needs, and they, or I, may have already thought about them.</p>
+<p>A substantial amount of code has now been contributed to the package. Contributions of any kind to <code>icd</code> are very welcome. See the [GitHub issues page]](<a href="https://github.com/jackwasey/icd/issues" class="uri">https://github.com/jackwasey/icd/issues</a>) to see open issues and feature requests. Documentation, vignettes and examples are very welcome, especially if accompanied by real-world data.</p>
+<p>To build <code>icd</code>, <code>Rcpp</code> must be compiled from source. This happens automatically on Linux, but on Mac and Windows, the following may sometimes be required, especially after upgrading R itself. This is a limitation of the R build system.</p>
+<p><code>{r eval = FALSE, echo = TRUE} install.packages("Rcpp", type = "source")</code></p>
 <div id="issues" class="section level2">
 <h2 class="hasAnchor">
 <a href="#issues" class="anchor"></a>Issues</h2>
@@ -154,7 +157,7 @@
 <div id="coding-standards" class="section level2">
 <h2 class="hasAnchor">
 <a href="#coding-standards" class="anchor"></a>Coding standards</h2>
-<p>Contributions should follow the coding standard seen elsewhere in the package, which is defined by both the <a href="http://adv-r.had.co.nz/Style.html">general recommendations</a> of Hadley Wickham, and the <code>.lintr</code> file in the project root directory. I’d prefer that new dependencies aren’t included unless absolutely necessary.</p>
+<p>Contributions should follow the coding standard seen elsewhere in the package, which is defined by both the <a href="http://adv-r.had.co.nz/Style.html">general recommendations</a> of Hadley Wickham, and the <code>.lintr</code> file in the project root directory. I’d prefer that <a href="http://www.tinyverse.org">new dependencies</a> aren’t included unless absolutely necessary.</p>
 </div>
 <div id="testing" class="section level2">
 <h2 class="hasAnchor">

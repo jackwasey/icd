@@ -25,9 +25,6 @@
     <loc>https://jackwasey.github.io/icd//reference/categorize_simple.html</loc>
   </url>
   <url>
-    <loc>https://jackwasey.github.io/icd//reference/chapter_to_desc_range.html</loc>
-  </url>
-  <url>
     <loc>https://jackwasey.github.io/icd//reference/charlson.html</loc>
   </url>
   <url>
@@ -103,9 +100,6 @@
     <loc>https://jackwasey.github.io/icd//reference/do_extra_tests.html</loc>
   </url>
   <url>
-    <loc>https://jackwasey.github.io/icd//reference/env_to_vec_flip.html</loc>
-  </url>
-  <url>
     <loc>https://jackwasey.github.io/icd//reference/expand_minor.html</loc>
   </url>
   <url>
@@ -122,9 +116,6 @@
   </url>
   <url>
     <loc>https://jackwasey.github.io/icd//reference/expect_chap_present.html</loc>
-  </url>
-  <url>
-    <loc>https://jackwasey.github.io/icd//reference/expect_equal_no_icd.html</loc>
   </url>
   <url>
     <loc>https://jackwasey.github.io/icd//reference/explain_code.html</loc>
@@ -196,19 +187,7 @@
     <loc>https://jackwasey.github.io/icd//reference/get_major.html</loc>
   </url>
   <url>
-    <loc>https://jackwasey.github.io/icd//reference/get_non_ASCII.html</loc>
-  </url>
-  <url>
-    <loc>https://jackwasey.github.io/icd//reference/get_raw_data_dir.html</loc>
-  </url>
-  <url>
     <loc>https://jackwasey.github.io/icd//reference/get_valid.html</loc>
-  </url>
-  <url>
-    <loc>https://jackwasey.github.io/icd//reference/get_visit_name.html</loc>
-  </url>
-  <url>
-    <loc>https://jackwasey.github.io/icd//reference/grapes-eine-grapes.html</loc>
   </url>
   <url>
     <loc>https://jackwasey.github.io/icd//reference/guess_icd_col_by_name.html</loc>
@@ -415,9 +394,6 @@
     <loc>https://jackwasey.github.io/icd//reference/match_rcpp.html</loc>
   </url>
   <url>
-    <loc>https://jackwasey.github.io/icd//reference/named_list.html</loc>
-  </url>
-  <url>
     <loc>https://jackwasey.github.io/icd//reference/names_elix.html</loc>
   </url>
   <url>
@@ -514,15 +490,6 @@
     <loc>https://jackwasey.github.io/icd//reference/sort_icd.html</loc>
   </url>
   <url>
-    <loc>https://jackwasey.github.io/icd//reference/str_extract.html</loc>
-  </url>
-  <url>
-    <loc>https://jackwasey.github.io/icd//reference/str_match_all.html</loc>
-  </url>
-  <url>
-    <loc>https://jackwasey.github.io/icd//reference/str_pair_match.html</loc>
-  </url>
-  <url>
     <loc>https://jackwasey.github.io/icd//reference/strim.html</loc>
   </url>
   <url>
@@ -533,12 +500,6 @@
   </url>
   <url>
     <loc>https://jackwasey.github.io/icd//reference/subset_icd.html</loc>
-  </url>
-  <url>
-    <loc>https://jackwasey.github.io/icd//reference/swap_names_vals.html</loc>
-  </url>
-  <url>
-    <loc>https://jackwasey.github.io/icd//reference/switch_ver_cmb.html</loc>
   </url>
   <url>
     <loc>https://jackwasey.github.io/icd//reference/test_env.html</loc>
@@ -560,9 +521,6 @@
   </url>
   <url>
     <loc>https://jackwasey.github.io/icd//reference/van_walraven.html</loc>
-  </url>
-  <url>
-    <loc>https://jackwasey.github.io/icd//reference/vec_to_env_true.html</loc>
   </url>
   <url>
     <loc>https://jackwasey.github.io/icd//reference/vermont_dx.html</loc>

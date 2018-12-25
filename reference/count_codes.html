@@ -157,7 +157,7 @@ patient.</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>count_codes</span>(<span class='no'>x</span>, <span class='kw'>visit_name</span> <span class='kw'>=</span> <span class='fu'><a href='get_visit_name.html'>get_visit_name</a></span>(<span class='no'>x</span>), <span class='kw'>return_df</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
+    <pre class="usage"><span class='fu'>count_codes</span>(<span class='no'>x</span>, <span class='kw'>visit_name</span> <span class='kw'>=</span> <span class='fu'>get_visit_name</span>(<span class='no'>x</span>), <span class='kw'>return_df</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
 
 <span class='fu'>icd_count_codes</span>(<span class='no'>...</span>)
 
@@ -237,9 +237,12 @@ first column is used.</p>
                    <span class='kw'>icd9_2</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>NA</span>, <span class='st'>"442"</span>, <span class='fl'>NA</span>),
                    <span class='kw'>icd9_3</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>NA</span>, <span class='fl'>NA</span>, <span class='st'>"510"</span>))
   <span class='fu'><a href='count_codes_wide.html'>count_codes_wide</a></span>(<span class='no'>wide</span>)</div><div class='output co'>#&gt; r s t 
-#&gt; 1 2 2 </div><div class='input'>  <span class='co'># or:</span>
-  <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>library</a></span>(<span class='no'>magrittr</span>)
-  <span class='no'>wide</span> <span class='kw'>%&gt;%</span> <span class='no'>wide_to_long</span> <span class='kw'>%&gt;%</span> <span class='no'>count_codes</span></div><div class='output co'>#&gt; [1] 1 2 2</div></pre>
+#&gt; 1 2 2 </div><div class='input'>  # or:
+  </div><span class='co'># NOT RUN {</span>
+  <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>library</a></span>(<span class='no'>magrittr</span>, <span class='kw'>warn.conflicts</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
+  <span class='no'>wide</span> <span class='kw'>%&gt;%</span> <span class='no'>wide_to_long</span> <span class='kw'>%&gt;%</span> <span class='no'>count_codes</span>
+
+<span class='co'># }</span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

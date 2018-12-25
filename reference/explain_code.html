@@ -284,11 +284,7 @@ ICD-10 WHO copyright workaround is available</p></li>
 #&gt; [3] "Benign hyp ht dis w hf" </div><div class='input'><span class='co'># The first three in the ICD-10 equivalent are a little different:</span>
 <span class='fu'>explain_code</span>(<span class='no'>icd10_map_ahrq</span>$<span class='no'>CHF</span>[<span class='fl'>1</span>:<span class='fl'>3</span>], <span class='kw'>brief</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; [1] "Rheumatic heart failure"                        
 #&gt; [2] "Left ventricular failure"                       
-#&gt; [3] "Unspecified systolic (congestive) heart failure"</div><div class='input'><span class='co'># nice to have magrittr, but not essential</span>
-<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>library</a></span>(<span class='no'>magrittr</span>, <span class='kw'>warn.conflicts</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>quietly</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
-<span class='fu'>explain_code</span>(<span class='no'>icd9_map_ahrq</span>$<span class='no'>CHF</span>[<span class='fl'>1</span>:<span class='fl'>3</span>] <span class='kw'>%&gt;%</span> <span class='no'>condense</span>)</div><div class='output co'>#&gt; <span class='message'>'defined' not given, but all codes are indeed defined</span></div><div class='output co'>#&gt; [1] "Rheumatic heart failure (congestive)"                   
-#&gt; [2] "Malignant hypertensive heart disease with heart failure"
-#&gt; [3] "Benign hypertensive heart disease with heart failure"   </div></pre>
+#&gt; [3] "Unspecified systolic (congestive) heart failure"</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

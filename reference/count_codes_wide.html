@@ -157,7 +157,7 @@ visit_names are repeated as given and aggregated." />
     
     </div>
 
-    <pre class="usage"><span class='fu'>count_codes_wide</span>(<span class='no'>x</span>, <span class='kw'>visit_name</span> <span class='kw'>=</span> <span class='fu'><a href='get_visit_name.html'>get_visit_name</a></span>(<span class='no'>x</span>), <span class='kw'>return_df</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+    <pre class="usage"><span class='fu'>count_codes_wide</span>(<span class='no'>x</span>, <span class='kw'>visit_name</span> <span class='kw'>=</span> <span class='fu'>get_visit_name</span>(<span class='no'>x</span>), <span class='kw'>return_df</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
   <span class='kw'>aggr</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
 
 <span class='fu'>icd_count_codes_wide</span>(<span class='no'>...</span>)</pre>
@@ -187,9 +187,10 @@ was not specified, then the first column of the data frame is used.</p></td>
     </tr>
     <tr>
       <th>return_df</th>
-      <td><p>single logical value, if <code>TRUE</code>, return the result as a data frame with the first column being
-the <code>visit_id</code>, and the second being the count. If <code>visit_id</code> was a factor or named differently in the
-input, this is preserved.</p></td>
+      <td><p>single logical value, if <code>TRUE</code>, return 'tidy' data,
+i.e., the result is a data frame with the first column being the
+<code>visit_id</code>, and the second being the count. If <code>visit_id</code> was a
+factor or named differently in the input, this is preserved.</p></td>
     </tr>
     <tr>
       <th>aggr</th>
