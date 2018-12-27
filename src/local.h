@@ -99,14 +99,6 @@ inline void printIt(const C& c, int n = 10) {
   Rcpp::Rcout.flush();
 }
 
-// template <typename V>
-// inline void printIt(const V& v) {
-//   std::ostringstream o;
-//   o << v << std::endl;
-//   Rcpp::Rcout << o.str();
-//   Rcpp::Rcout.flush();
-// }
-
 template <typename C>
 inline void printIt(const Rcpp::Nullable<C>& c, int n = 10) {
   if (c.isNull()) {

@@ -414,14 +414,14 @@ apply_hier_elix <- function(x, abbrev_names = TRUE, hierarchy = TRUE) {
     # drop HTNcx without converting to vector if matrix only has one row
     x <- x[, -which(colnames(x) == "HTNcx"), drop = FALSE]
     colnames(x)[cr(x)] <- if (abbrev_names)
-      names_elix_abbrev
+      icd::names_elix_abbrev
     else
-      names_elix
+      icd::names_elix
   } else {
     colnames(x)[cr(x)] <- if (abbrev_names)
-      names_elix_htn_abbrev
+      icd::names_elix_htn_abbrev
     else
-      names_elix_htn
+      icd::names_elix_htn
   }
   x
 }
@@ -446,14 +446,14 @@ apply_hier_quan_elix <- function(cbd, abbrev_names = TRUE, hierarchy = TRUE) {
     # these are just dropped, leaving the fields for visit_name and all the
     # comorbidities:
     colnames(cbd)[cr(cbd)] <- if (abbrev_names)
-      names_quan_elix_abbrev
+      icd::names_quan_elix_abbrev
     else
-      names_quan_elix
+      icd::names_quan_elix
   } else {
     colnames(cbd)[cr(cbd)] <- if (abbrev_names)
-      names_quan_elix_htn_abbrev
+      icd::names_quan_elix_htn_abbrev
     else
-      names_quan_elix_htn
+      icd::names_quan_elix_htn
   }
   cbd
 }
@@ -469,9 +469,9 @@ apply_hier_quan_deyo <- function(cbd, abbrev_names = TRUE, hierarchy = TRUE) {
     cbd[cbd[, "LiverSevere"] > 0, "LiverMild"] <- FALSE
   }
   colnames(cbd)[cr(cbd)] <- if (abbrev_names)
-    names_charlson_abbrev
+    icd::names_charlson_abbrev
   else
-    names_charlson
+    icd::names_charlson
 
   cbd
 }
@@ -492,14 +492,14 @@ apply_hier_ahrq <- function(cbd, abbrev_names = TRUE, hierarchy = TRUE) {
     # drop HTNcx without converting to vector if matrix only has one row
     cbd <- cbd[, -which(colnames(cbd) == "HTNcx"), drop = FALSE]
     colnames(cbd)[cr(cbd)] <- if (abbrev_names)
-      names_ahrq_abbrev
+      icd::names_ahrq_abbrev
     else
-      names_ahrq
+      icd::names_ahrq
   } else {
     colnames(cbd)[cr(cbd)] <- if (abbrev_names)
-      names_ahrq_htn_abbrev
+      icd::names_ahrq_htn_abbrev
     else
-      names_ahrq_htn
+      icd::names_ahrq_htn
   }
   cbd
 }
