@@ -116,32 +116,16 @@ icd9PartsToDecimal <- function(parts) {
     .Call(`_icd_icd9PartsToDecimal`, parts)
 }
 
-icd9MajMinToParts <- function(mjr, mnr) {
-    .Call(`_icd_icd9MajMinToParts`, mjr, mnr)
+majMinToParts <- function(mjr, mnr) {
+    .Call(`_icd_majMinToParts`, mjr, mnr)
 }
 
-icd9ShortToPartsCpp <- function(icd9Short, mnrEmpty) {
-    .Call(`_icd_icd9ShortToPartsCpp`, icd9Short, mnrEmpty)
+icd9ShortToParts <- function(icd9Short, mnrEmpty) {
+    .Call(`_icd_icd9ShortToParts`, icd9Short, mnrEmpty)
 }
 
-#' @describeIn decimal_to_parts Convert short ICD-10 code to parts
-#' @export
-#' @keywords internal manip
-short_to_parts.icd10 <- function(x, mnr_empty = "") {
-    .Call(`_icd_icd10ShortToPartsCpp`, x, mnr_empty)
-}
-
-icd9DecimalToPartsCpp <- function(icd9Decimal, mnr_empty) {
-    .Call(`_icd_icd9DecimalToPartsCpp`, icd9Decimal, mnr_empty)
-}
-
-#' @describeIn decimal_to_parts Convert decimal ICD-10 code to parts. This
-#'   shares almost 100% code with the ICD-9 version: someday combine the common
-#'   code.
-#' @export
-#' @keywords internal manip
-decimal_to_parts.icd10 <- function(x, mnr_empty = "") {
-    .Call(`_icd_icd10DecimalToPartsCpp`, x, mnr_empty)
+icd9DecimalToParts <- function(icd9Decimal, mnrEmpty) {
+    .Call(`_icd_icd9DecimalToParts`, icd9Decimal, mnrEmpty)
 }
 
 icd9_short_to_decimal_cpp <- function(x) {
@@ -159,6 +143,14 @@ icd9_decimal_to_short_cpp <- function(x) {
 #' @export
 get_major.icd9 <- function(x, short_code) {
     .Call(`_icd_icd9GetMajor`, x, short_code)
+}
+
+icd10ShortToParts <- function(x, mnrEmpty) {
+    .Call(`_icd_icd10ShortToParts`, x, mnrEmpty)
+}
+
+icd10DecimalToParts <- function(x, mnrEmpty = "") {
+    .Call(`_icd_icd10DecimalToParts`, x, mnrEmpty)
 }
 
 #' @title Convert integers to strings as quickly as possible

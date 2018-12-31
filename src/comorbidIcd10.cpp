@@ -46,14 +46,14 @@ using namespace Rcpp;
 //'                              id_name = "case", code_name = "icd10"))
 //' @keywords internal
 // [[Rcpp::export(simplify_map_lex)]]
-Rcpp::List simplifyMapLexicographic(const CV& pt_codes, const Rcpp::List map) {
+Rcpp::List simplifyMapLexicographic(const CV& pt_codes, const List map) {
   std::string ptCode;
   size_t searchLen;
   size_t pos;
   size_t cmb_len;
   // hmm, would be nice to only scan the pt_codes once, but I don't want to
   // write my own hash map code....
-  CV icd_codes = Rcpp::unique(pt_codes);
+  CV icd_codes = unique(pt_codes);
   DEBUG_VEC(icd_codes);
   std::vector<std::unordered_set<std::string> > newMapStd(map.length());
   for (R_xlen_t i = 0; i != icd_codes.size(); ++i) {
@@ -101,7 +101,7 @@ Rcpp::List simplifyMapLexicographic(const CV& pt_codes, const Rcpp::List map) {
     } // each comorbidity
     DEBUG("finished a comorbidity");
   } // each row of input data
-  Rcpp::List newMap = Rcpp::List::create();
+  List newMap = List::create();
   for (auto cmbSet : newMapStd) {
     CV cmbOut;
     for (auto cmbCode : cmbSet) {

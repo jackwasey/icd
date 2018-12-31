@@ -23,6 +23,8 @@
 #include <string>                            // for basic_string, operator!=
 #include <vector>                            // for vector, vector<>::iterator
 
+using namespace Rcpp;
+
 //' Convert \code{mjr} and \code{mnr} vectors to single code
 //'
 //' In debug mode, will check that \code{mjr} and \code{mnr} are same length.
@@ -34,17 +36,17 @@
 // [[Rcpp::export]]
 CV icd9MajMinToCode(const CV mjr, const CV mnr, bool isShort) {
 #ifdef ICD_DEBUG_TRACE
-  Rcpp::Rcout << "icd9MajMinToCode: mjr.size() = " << mjr.size()
-              << " and mnr.size() = " << mnr.size() << "\n";
+  Rcout << "icd9MajMinToCode: mjr.size() = " << mjr.size()
+        << " and mnr.size() = " << mnr.size() << "\n";
 #endif
   if (mjr.size() != mnr.size())
-    Rcpp::stop("mjr and mnr lengths differ");
+    stop("mjr and mnr lengths differ");
   VecStr out(mjr.size());
   VecChar out_is_na(mjr.size()); // boolean in char
   CV::const_iterator j = mjr.begin();
   CV::const_iterator n = mnr.begin();
   for (; j != mjr.end() && n != mnr.end(); ++j, ++n) {
-    Rcpp::String mjrelem = *j;
+    String mjrelem = *j;
     if (CV::is_na(*j)) {
       out_is_na[std::distance(mjr.begin(), j)] = 1;
       continue;
@@ -68,7 +70,7 @@ CV icd9MajMinToCode(const CV mjr, const CV mnr, bool isShort) {
       }
       // default: // mjr is 3 (or more) chars already
     }
-    Rcpp::String mnrelem = *n;
+    String mnrelem = *n;
     if (CV::is_na(*n)) {
       mnrelem = "";
     }
@@ -78,13 +80,13 @@ CV icd9MajMinToCode(const CV mjr, const CV mnr, bool isShort) {
     smj.append(mnrelem);
     out[std::distance(mjr.begin(), j)] = smj;
   }
-  CV r_out = Rcpp::wrap(out);
+  CV r_out = wrap(out);
 #ifdef ICD_DEBUG_TRACE
-  Rcpp::Rcout << "NA loop size: " << out_is_na.size() << "\n";
+  Rcout << "NA loop size: " << out_is_na.size() << "\n";
 #endif
   for (VecCharIt i = out_is_na.begin(); i != out_is_na.end(); ++i) {
 #ifdef ICD_DEBUG_TRACE
-    Rcpp::Rcout << "NA loop: " << std::distance(out_is_na.begin(), i) << "\n";
+    Rcout << "NA loop: " << std::distance(out_is_na.begin(), i) << "\n";
 #endif
     if (*i == 0)
       continue;
@@ -97,17 +99,17 @@ CV icd9MajMinToCode(const CV mjr, const CV mnr, bool isShort) {
 CV icd9MajMinToShort(const CV mjr,
                      const CV mnr) {
 #ifdef ICD_DEBUG_TRACE
-  Rcpp::Rcout << "icd9MajMinToShort: mjr.size() = " << mjr.size()
-              << " and mnr.size() = " << mnr.size() << "\n";
+  Rcout << "icd9MajMinToShort: mjr.size() = " << mjr.size()
+        << " and mnr.size() = " << mnr.size() << "\n";
 #endif
   if ((mjr.size() != 1 && mjr.size() != mnr.size())
         || (mjr.size() == 1 && mnr.size() == 0)) {
-    Rcpp::stop(
+    stop(
       "Length of mjrs and mnrs must be equal, unless mjrs length is one.");
   }
   if (mjr.size() == 1) {
 #ifdef ICD_DEBUG_TRACE
-    Rcpp::Rcout << "icd9MajMinToShort: mjr.size() = 1\n";
+    Rcout << "icd9MajMinToShort: mjr.size() = 1\n";
 #endif
     CV newmjr(mnr.size(), mjr[0]);
     return icd9MajMinToCode(newmjr, mnr, true);

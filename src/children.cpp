@@ -17,17 +17,19 @@
 
 #include "icd_types.h"                   // for CV, VecStr
 #include <iterator>                      // for advance
-#include <vector>                        // for vector
+#include <vector>
+using namespace Rcpp;
 
 // [[Rcpp::export(icd10cm_children_defined_cpp)]]
-CV icd10cmChildrenDefined(CV &x, Rcpp::List icd10cm2016, Rcpp::IntegerVector nc) {
+CV icd10cmChildrenDefined(CV &x, List icd10cm2016, IntegerVector nc) {
   CV allCodes = icd10cm2016["code"];
-  Rcpp::IntegerVector matchesNa = Rcpp::match(x, allCodes);
-  Rcpp::IntegerVector matches = matchesNa[!is_na(matchesNa)]; // 1-based index (R style)
+  IntegerVector matchesNa = match(x, allCodes);
+  IntegerVector matches = matchesNa[!is_na(matchesNa)]; // R indexing
   VecStr kids;
   if (matches.length() == 0) {
     if (x.length() > 0) {
-      Rcpp::warning("None of the provided ICD-10 codes matched the master ICD-10-CM list (currently 2016)");
+      warning("None of the provided ICD-10 codes matched the master ICD-10-CM \
+                list (currently 2016)");
     }
     return(CV(0));
   }
@@ -37,7 +39,7 @@ CV icd10cmChildrenDefined(CV &x, Rcpp::List icd10cm2016, Rcpp::IntegerVector nc)
   int check_row; // zero-based index
   int parent_len; // number of characters in original parent code
   for (int i = 0; i != matches.length(); ++i) {
-    check_row = matches[i] + 1 - 1; // check the row after the parent (may be off end of vector)
+    check_row = matches[i] + 1 - 1; // check the row after the parent
     parent_len = nc[matches[i] - 1];
     while (check_row < last_row && nc[check_row] > parent_len)
       ++check_row;
@@ -48,5 +50,5 @@ CV icd10cmChildrenDefined(CV &x, Rcpp::List icd10cm2016, Rcpp::IntegerVector nc)
     std::advance(it2, check_row);
     kids.insert(kids.end(), it, it2);
   }
-  return Rcpp::wrap(kids);
+  return wrap(kids);
 }

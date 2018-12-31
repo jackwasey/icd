@@ -44,9 +44,9 @@ void printCornerSparse(PtsSparse x) {
   DEBUG("converting visMat to dense for debugging only:");
   Eigen::MatrixXi dense = Eigen::MatrixXi(x);
   if (x.rows() >= 4 && x.cols() >= 4)
-    Rcpp::Rcout << dense.block<4, 4>(0, 0) << std::endl;
+    Rcout << dense.block<4, 4>(0, 0) << std::endl;
   else
-    Rcpp::Rcout << dense << std::endl;
+    Rcout << dense << std::endl;
 }
 #endif
 // # nocov end
@@ -66,7 +66,7 @@ void buildVisitCodesSparseWide(
   std::vector<Triplet> visTriplets;
   auto ncol = code_names.size();
   visTriplets.reserve(vlen * ncol); // upper bound
-  IntegerVector rows = Rcpp::no_init(vlen * ncol);
+  IntegerVector rows =no_init(vlen * ncol);
   if (!Rf_isFactor(visits)) {
     DEBUG(TYPEOF(visits));
     CV v = (CV) visits; // assume character for now
@@ -148,13 +148,13 @@ LogicalMatrix comorbidMatMulWide(const DataFrame& data,
   buildVisitCodesSparseWide(data, id_name, code_names, validate,
                             r, visMat, out_row_names);
   if (visMat.cols() != m.rows())
-    Rcpp::stop("matrix multiplication won't work");
+    stop("matrix multiplication won't work");
   DenseMap result = visMat * m.mat; // col major result
   DEBUG("Result rows: " << result.rows() << ", cols: " << result.cols());
   PRINTCORNERMAP(result);
-  Rcpp::IntegerMatrix mat_out_int = Rcpp::wrap(result);
-  Rcpp::LogicalMatrix mat_out_bool = Rcpp::wrap(mat_out_int);
-  List dimnames = Rcpp::List::create(out_row_names, map.names());
+  IntegerMatrix mat_out_int = wrap(result);
+  LogicalMatrix mat_out_bool = wrap(mat_out_int);
+  List dimnames = List::create(out_row_names, map.names());
   mat_out_bool.attr("dimnames") = dimnames;
   return mat_out_bool;
 }

@@ -23,7 +23,7 @@ MapPlus::MapPlus(const List& mapList, const Relevant& r) {
     String cmb_name = cmbs[i];
     TRACE("remapping: " << cmb_name.get_cstring());
     if (TYPEOF(mapList[0]) != STRSXP)
-      Rcpp::stop("maps should be lists of character vectors, not factors");
+      stop("maps should be lists of character vectors, not factors");
     TRACE("character vector in input map");
     CV this_map_cmb = mapList[i];
     // make factor using existing hash, so R-indexed numbers.

@@ -23,21 +23,11 @@
 #include <string.h>                            // for strcmp
 #include <algorithm>                           // for copy, sort, transform
 #include <iterator>                            // for back_insert_iterator
-#include <ostream>                             // for size_t, operator<<
-#include <string>                              // for string, basic_string
-#include <vector>                              // for vector, vector<>::size...
+#include <ostream>
+#include <string>
+#include <vector>
 
-using Rcpp::List;
-using Rcpp::Vector;
-using Rcpp::LogicalVector;
-using Rcpp::IntegerVector;
-using Rcpp::CharacterVector;
-using Rcpp::DataFrame;
-using Rcpp::String;
-using Rcpp::Rcout;
-using Rcpp::as;
-using Rcpp::any;
-using Rcpp::is_na;
+using namespace Rcpp;
 
 // trim one string from right
 std::string trimRightCpp(std::string s) {

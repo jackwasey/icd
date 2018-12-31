@@ -3,12 +3,18 @@
 \name{short_to_parts}
 \alias{short_to_parts}
 \alias{short_to_parts.icd9}
+\alias{short_to_parts.icd10}
+\alias{short_to_parts.icd10cm}
 \alias{short_to_parts.character}
 \title{Convert short format ICD codes to component parts}
 \usage{
 short_to_parts(x, mnr_empty = "")
 
 \method{short_to_parts}{icd9}(x, mnr_empty = "")
+
+\method{short_to_parts}{icd10}(x, mnr_empty = "")
+
+\method{short_to_parts}{icd10cm}(x, mnr_empty = "")
 
 \method{short_to_parts}{character}(x, mnr_empty = "")
 }
@@ -17,7 +23,11 @@ Convert short format ICD codes to component parts
 }
 \section{Methods (by class)}{
 \itemize{
-\item \code{icd9}: Convert short format ICD-9 code to parts
+\item \code{icd9}: Convert short format ICD-9 codes to parts
+
+\item \code{icd10}: Convert short format ICD-10 codes to parts
+
+\item \code{icd10cm}: Convert short format ICD-10-CM codes to parts
 
 \item \code{character}: Convert short format ICD code to parts,
 guessing whether ICD-9 or ICD-10

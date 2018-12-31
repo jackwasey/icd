@@ -17,17 +17,17 @@
 
 #include "Rcpp.h"
 #include "manip.h"
-#include <string.h>                       // for strlen
-#include "convert.h"                      // for icd9DecimalToPartsCpp, icd9...
-#include "is.h"                           // for icd9IsASingleV, icd9IsASingleE
+#include <string.h> // for strlen
+#include "convert.h"
+#include "is.h"
+
+using namespace Rcpp;
 
 //' Simpler add leading zeroes without converting to parts and back
 //' @keywords internal manip
 // [[Rcpp::export]]
-Rcpp::String icd9AddLeadingZeroesMajorSingle(Rcpp::String mjr) {
-  if (is_true(all(is_na(CV::create(mjr))))) {
-    return (NA_STRING);
-  }
+String icd9AddLeadingZeroesMajorSingle(String mjr) {
+  if (mjr == NA_STRING) return (NA_STRING);
   std::string m(mjr);
   if (!icd9IsASingleVE(mjr.get_cstring())) {
     switch (strlen(mjr.get_cstring())) {
@@ -64,7 +64,7 @@ Rcpp::String icd9AddLeadingZeroesMajorSingle(Rcpp::String mjr) {
         return (m);
       // # nocov start
     default:
-      Rcpp::stop("Major length invalid");
+      stop("Major length invalid");
     // # nocov end
     }
   }
@@ -115,7 +115,7 @@ std::string icd9AddLeadingZeroesMajorSingleStd(std::string m) {
 
 // [[Rcpp::export(icd9_add_leading_zeroes_major)]]
 CV icd9AddLeadingZeroesMajor(CV mjr) {
-  return Rcpp::sapply(mjr, icd9AddLeadingZeroesMajorSingle);
+  return sapply(mjr, icd9AddLeadingZeroesMajorSingle);
 }
 
 //' @title Add leading zeroes to incomplete ICD-9 codes
@@ -132,12 +132,12 @@ CV icd9AddLeadingZeroes(CV x, bool short_code) {
     // a shortcut for when short codes is just to add the appropriate leading
     // zeros when the total length is <3. Even then decimal may be quicker by
     // converting from short than calculating by parts.
-    Rcpp::List parts = icd9ShortToPartsCpp(x, "");
+    List parts = icd9ShortToParts(x, "");
     parts["mjr"] = icd9AddLeadingZeroesMajor(parts["mjr"]);
     return icd9PartsToShort(parts);
   }
   else {
-    Rcpp::List parts = icd9DecimalToPartsCpp(x);
+    List parts = icd9DecimalToParts(x);
     parts["mjr"] = icd9AddLeadingZeroesMajor(parts["mjr"]);
     return icd9PartsToDecimal(parts);
   }

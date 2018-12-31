@@ -27,6 +27,8 @@
 #include "convert.h"                        // for icd9DecimalToShort, icd9S...
 #include "is.h"                             // for icd9IsASingleE
 
+using namespace Rcpp;
+
 //const std::vector<std::string> allMinorsStd{
 CV allMinors = {
   "", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9",
@@ -71,14 +73,14 @@ CV icd9ExpandMinor(const Str& mnr, bool isE) {
       case '9':
         return v9;
       default:
-        Rcpp::stop("unrecognized minor character");
+        stop("unrecognized minor character");
       return CV::create();
       }
       break;
     case 2:
-      return Rcpp::wrap(mnr);
+      return wrap(mnr);
     default:
-      Rcpp::stop("minor of more than two characters");
+      stop("minor of more than two characters");
     return CV::create();
     }
   } else {
@@ -90,7 +92,7 @@ CV icd9ExpandMinor(const Str& mnr, bool isE) {
     case 1:
       return mnr;
     default:
-      Rcpp::stop("too many characters for an E code minor\n");
+      stop("too many characters for an E code minor\n");
     }
   }
   return (NA_STRING); // should never get here
@@ -105,16 +107,16 @@ CV icd9ChildrenShort(CV icd9Short,
     icd9Short.attr("icd_short_diag") = true;
     return icd9Short;
   }
-  Rcpp::List parts = icd9ShortToPartsCpp(icd9Short, "");
+  List parts = icd9ShortToParts(icd9Short, "");
   CV mjr = parts[0];
   CV mnr = parts[1];
   CV::iterator itmjr = mjr.begin();
   CV::iterator itmnr = mnr.begin();
   for (; itmjr != mjr.end(); ++itmjr, ++itmnr) {
-    Str thismjr = Rcpp::as<Str>(*itmjr);
-    Str thismnr = Rcpp::as<Str>(*itmnr);
+    Str thismjr = as<Str>(*itmjr);
+    Str thismnr = as<Str>(*itmnr);
     const CV newminors = icd9ExpandMinor(thismnr, icd9IsASingleE(thismjr.c_str()));
-    VecStr newshort = Rcpp::as<VecStr >(icd9MajMinToShort(thismjr, newminors));
+    VecStr newshort = as<VecStr >(icd9MajMinToShort(thismjr, newminors));
     out.insert(newshort.begin(), newshort.end());
   }
   if (onlyReal) {
@@ -125,7 +127,7 @@ CV icd9ChildrenShort(CV icd9Short,
                           std::inserter(out_real, out_real.begin()));
     out = out_real;
   }
-  CV rcppOut = Rcpp::wrap(out);
+  CV rcppOut = wrap(out);
   rcppOut.attr("icd_short_diag") = true;
   return rcppOut;
 }
@@ -141,16 +143,16 @@ CV icd9ChildrenShortUnordered(CV icd9Short,
     icd9Short.attr("icd_short_diag") = true;
     return icd9Short;
   }
-  Rcpp::List parts = icd9ShortToPartsCpp(icd9Short, "");
+  List parts = icd9ShortToParts(icd9Short, "");
   CV mjr = parts[0];
   CV mnr = parts[1];
   CV::iterator itmjr = mjr.begin();
   CV::iterator itmnr = mnr.begin();
   for (; itmjr != mjr.end(); ++itmjr, ++itmnr) {
-    Str thismjr = Rcpp::as<Str>(*itmjr);
-    Str thismnr = Rcpp::as<Str>(*itmnr);
+    Str thismjr = as<Str>(*itmjr);
+    Str thismnr = as<Str>(*itmnr);
     const CV newminors = icd9ExpandMinor(thismnr, icd9IsASingleE(thismjr.c_str()));
-    VecStr newshort = Rcpp::as<VecStr>(icd9MajMinToShort(thismjr, newminors));
+    VecStr newshort = as<VecStr>(icd9MajMinToShort(thismjr, newminors));
     out.insert(newshort.begin(), newshort.end());
   }
   if (onlyReal) {
@@ -162,7 +164,7 @@ CV icd9ChildrenShortUnordered(CV icd9Short,
     }
     out = out_real;
   }
-  CV rcppOut = Rcpp::wrap(out);
+  CV rcppOut = wrap(out);
   rcppOut.attr("icd_short_diag") = true;
   return rcppOut;
 }

@@ -30,25 +30,24 @@ extern "C" {
 using namespace Rcpp;
 
 // [[Rcpp::export]]
-CV icd9PartsToShort(const Rcpp::List parts) {
+CV icd9PartsToShort(const List& parts) {
   CV res = icd9MajMinToCode(parts["mjr"], parts["mnr"], true);
   return res;
 }
 
 // [[Rcpp::export]]
-CV icd9PartsToDecimal(const Rcpp::List parts) {
+CV icd9PartsToDecimal(const List& parts) {
   CV res = icd9MajMinToCode(parts["mjr"], parts["mnr"], false);
   return res;
 }
 
 // [[Rcpp::export]]
-Rcpp::List icd9MajMinToParts(const CV mjr,
-                             const CV mnr) {
-  Rcpp::List returned_frame = Rcpp::List::create(Rcpp::_["mjr"] = mjr,
-                                                 Rcpp::_["mnr"] = mnr);
+List majMinToParts(const CV& mjr, const CV& mnr) {
+  List returned_frame = List::create(_["mjr"] = mjr,
+                                     _["mnr"] = mnr);
 
-  Rcpp::StringVector sample_row = returned_frame(0);
-  Rcpp::IntegerVector row_names = seq_along(sample_row);
+  StringVector sample_row = returned_frame(0);
+  IntegerVector row_names = seq_along(sample_row);
   returned_frame.attr("row.names") = row_names;
   // doesn't actually need a data frame, although it is barely distinguishable
   // from a list, and not costly to construct in this manner.
@@ -58,11 +57,11 @@ Rcpp::List icd9MajMinToParts(const CV mjr,
 }
 
 // [[Rcpp::export]]
-Rcpp::List icd9ShortToPartsCpp(CV icd9Short, Rcpp::String mnrEmpty) {
+List icd9ShortToParts(const CV& icd9Short, String mnrEmpty) {
   CV mjr(icd9Short.size());
   CV mnr(icd9Short.size());
   for (int i = 0; i < icd9Short.size(); ++i) {
-    Rcpp::String thisShort = icd9Short[i];
+    String thisShort = icd9Short[i];
     // .is_na() is private?
     if (is_true(all(is_na(CV::create(thisShort))))) {
       mnr[i] = NA_STRING; // I think set_na() might be an alternative.
@@ -107,143 +106,65 @@ Rcpp::List icd9ShortToPartsCpp(CV icd9Short, Rcpp::String mnrEmpty) {
       }
     }
   } // for
-  return icd9MajMinToParts(icd9AddLeadingZeroesMajor(mjr), mnr);
-}
-
-//' @describeIn decimal_to_parts Convert short ICD-10 code to parts
-//' @export
-//' @keywords internal manip
-// [[Rcpp::export(short_to_parts.icd10)]]
-Rcpp::List icd10ShortToPartsCpp(const CV x, const Rcpp::String mnr_empty = "") {
-  R_xlen_t i10sz = x.size();
-  CV mjr(i10sz);
-  CV mnr(i10sz);
-  std::string::size_type sz;
-  for (R_xlen_t i = 0; i != i10sz; ++i) {
-    Rcpp::String thisShort = x[i];
-    // workaround because String::is_na is private
-    if (is_true(all(is_na(CV::create(thisShort))))) {
-      mnr[i] = NA_STRING;
-      continue;
-    }
-    std::string s(thisShort.get_cstring()); // maybe faster to use as?
-    s = strimCpp(s); // in place or rewrite? do this at all?
-    sz = s.size();
-    if (sz <= 3 && sz > 0) {
-      mjr[i] = s.substr(0, sz);
-      mnr[mnr_empty];
-    } else if (sz > 3) {
-      mjr[i] = s.substr(0, 3);
-      mnr[i] = s.substr(3, sz - 3);
-    } else {
-      mjr[i] = NA_STRING;
-      mnr[i] = NA_STRING;
-    }
-  } // for
-  return icd9MajMinToParts(mjr, mnr);
+  return majMinToParts(icd9AddLeadingZeroesMajor(mjr), mnr);
 }
 
 // [[Rcpp::export]]
-Rcpp::List icd9DecimalToPartsCpp(const CV icd9Decimal, const Rcpp::String mnr_empty) {
+List icd9DecimalToParts(const CV& icd9Decimal, const String mnrEmpty) {
   CV mjrs;
   CV mnrs;
   int ilen = icd9Decimal.length();
 
   if (ilen == 0) {
-    return Rcpp::List::create(Rcpp::_["mjr"] =
-                              CV::create(), Rcpp::_["mnr"] =
-                              CV::create());
+    return List::create(_["mjr"] =
+                        CV::create(), _["mnr"] =
+                        CV::create());
   }
 
   for (CV::const_iterator it = icd9Decimal.begin();
        it != icd9Decimal.end(); ++it) {
-    Rcpp::String strna = *it;
+    String strna = *it;
     if (is_true(all(is_na(CV::create(strna)))) || strna == "") {
       mjrs.push_back(NA_STRING);
       mnrs.push_back(NA_STRING);
       continue;
     }
-    // SOMEDAY, a faster way might be to use Rcpp::String's function
+    // SOMEDAY, a faster way might be to use String's function
     // get_cstring, and recode the trim functions to take const char *. This
     // would avoid the type change AND may trim faster.
-    std::string thiscode = Rcpp::as<std::string>(*it);
+    std::string thiscode = as<std::string>(*it);
     thiscode = strimCpp(thiscode); // This updates 'thisccode' by reference, no copy
     std::size_t pos = thiscode.find(".");
     // substring parts
     std::string mjrin;
-    Rcpp::String mnrout;
+    String mnrout;
     if (pos != std::string::npos) {
       mjrin = thiscode.substr(0, pos);
       mnrout = thiscode.substr(pos + 1);
     } else {
       mjrin = thiscode;
-      mnrout = mnr_empty;
+      mnrout = mnrEmpty;
     }
     mjrs.push_back(icd9AddLeadingZeroesMajorSingle(mjrin));
     mnrs.push_back(mnrout);
   }
-  return Rcpp::List::create(Rcpp::_["mjr"] = mjrs, Rcpp::_["mnr"] =
-                            mnrs);
-}
-
-//' @describeIn decimal_to_parts Convert decimal ICD-10 code to parts. This
-//'   shares almost 100% code with the ICD-9 version: someday combine the common
-//'   code.
-//' @export
-//' @keywords internal manip
-// [[Rcpp::export(decimal_to_parts.icd10)]]
-Rcpp::List icd10DecimalToPartsCpp(const CV x, const Rcpp::String mnr_empty = "") {
-  CV mjrs;
-  CV mnrs;
-  R_xlen_t ilen = x.length();
-  if (ilen == 0) {
-    return Rcpp::List::create(Rcpp::_["mjr"] =
-                              CV::create(), Rcpp::_["mnr"] =
-                              CV::create());
-  }
-
-  for (CV::const_iterator it = x.begin();
-       it != x.end(); ++it) {
-    Rcpp::String strna = *it;
-    if (is_true(all(is_na(CV::create(strna)))) || strna == "") {
-      mjrs.push_back(NA_STRING);
-      mnrs.push_back(NA_STRING);
-      continue;
-    }
-    std::string thiscode = Rcpp::as<std::string>(*it);
-    thiscode = strimCpp(thiscode); // This updates 'thisccode' by reference, no copy
-    std::size_t pos = thiscode.find(".");
-    // substring parts
-    std::string mjrin;
-    Rcpp::String mnrout;
-    if (pos != std::string::npos) {
-      mjrin = thiscode.substr(0, pos);
-      mnrout = thiscode.substr(pos + 1);
-    } else {
-      mjrin = thiscode;
-      mnrout = mnr_empty;
-    }
-    mjrs.push_back(mjrin);
-    mnrs.push_back(mnrout);
-  }
-  return Rcpp::List::create(Rcpp::_["mjr"] = mjrs, Rcpp::_["mnr"] =
-                            mnrs);
+  return List::create(_["mjr"] = mjrs, _["mnr"] =
+                      mnrs);
 }
 
 // [[Rcpp::export(name = "icd9_short_to_decimal_cpp")]]
-CV icd9ShortToDecimal(const CV x) {
-  return icd9PartsToDecimal(icd9ShortToPartsCpp(x, ""));
+CV icd9ShortToDecimal(const CV& x) {
+  return icd9PartsToDecimal(icd9ShortToParts(x, ""));
 }
 
 // [[Rcpp::export(name="icd9_decimal_to_short_cpp")]]
-CV icd9DecimalToShort(
-    const CV x) {
+CV icd9DecimalToShort(const CV& x) {
   CV out = clone(x); // clone instead of pushing back thousands of times
   size_t ilen = x.length();
   if (ilen == 0)
     return out;
   for (size_t i = 0; i != ilen; ++i) {
-    Rcpp::String strna = x[i]; // need to copy here? does it copy?
+    String strna = x[i]; // need to copy here? does it copy?
     if (is_true(all(is_na(CV::create(strna)))) || strna == "")
       continue;
     const char * thiscode_cstr = strna.get_cstring();
@@ -265,7 +186,7 @@ CV icd9DecimalToShort(
       // otherwise leave the code alone
       out[i] = thiscode;
     } else {
-      out[i] = Rcpp::String(icd9AddLeadingZeroesMajorSingleStd(thiscode));
+      out[i] = String(icd9AddLeadingZeroesMajorSingleStd(thiscode));
     }
   }
   return out;
@@ -277,16 +198,16 @@ CV icd9DecimalToShort(
 //' @keywords internal manip
 //' @export
 //[[Rcpp::export(name="get_major.icd9")]]
-CV icd9GetMajor(const CV x, const bool short_code) {
+CV icd9GetMajor(const CV& x, const bool short_code) {
   if (short_code) {
     // am I casting (or just compiler/syntax checker hinting?) SEXP may be
     // costly, or is it just encapsulating a pointer to some fixed data somewhere?
 
     // I don't think i need to PROTECT here, because I immediately return the
     // result via Rcpp
-    SEXP mjrs = icd9ShortToPartsCpp(x, "")[0]; // actually wants to be an Rcpp::List
-    return Rcpp::as<CV>(mjrs);
+    SEXP mjrs = icd9ShortToParts(x, "")[0]; // actually wants to be an List
+    return as<CV>(mjrs);
   }
-  SEXP mjrs = icd9DecimalToPartsCpp(x, "")[0];
-  return Rcpp::as<CV>(mjrs);
+  SEXP mjrs = icd9DecimalToParts(x, "")[0];
+  return as<CV>(mjrs);
 }

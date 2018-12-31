@@ -1,0 +1,100 @@
+// Copyright (C) 2014 - 2018  Jack O. Wasey
+//
+// This file is part of icd.
+//
+// icd is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// icd is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with icd. If not, see <http://www.gnu.org/licenses/>.
+
+#include "icd_types.h"
+#include "convert10.h"
+#include "convert.h"
+extern "C" {
+#include <cstddef>                           // for size_t
+}
+#include <string>                            // for string
+#include "Rcpp.h"                            // for wrap
+#include "appendMinor.h"                     // for icd9MajMinToCode
+#include "is.h"                              // for icd9IsASingleE, icd9IsAS...
+#include "manip.h"                           // for icd9AddLeadingZeroesMajor
+#include "util.h"                            // for strimCpp, trimLeftCpp
+
+using namespace Rcpp;
+
+// [[Rcpp::export]]
+List icd10ShortToParts(const CV& x, const String mnrEmpty) {
+  R_xlen_t i10sz = x.size();
+  CV mjr(i10sz);
+  CV mnr(i10sz);
+  std::string::size_type sz;
+  for (R_xlen_t i = 0; i != i10sz; ++i) {
+    String thisShort = x[i];
+    // workaround because String::is_na is private
+    if (is_true(all(is_na(CV::create(thisShort))))) {
+      mnr[i] = NA_STRING;
+      continue;
+    }
+    std::string s(thisShort.get_cstring()); // maybe faster to use as?
+    s = strimCpp(s); // in place or rewrite? do this at all?
+    sz = s.size();
+    if (sz <= 3 && sz > 0) {
+      mjr[i] = s.substr(0, sz);
+      mnr[mnrEmpty];
+    } else if (sz > 3) {
+      mjr[i] = s.substr(0, 3);
+      mnr[i] = s.substr(3, sz - 3);
+    } else {
+      mjr[i] = NA_STRING;
+      mnr[i] = NA_STRING;
+    }
+  } // for
+  return majMinToParts(mjr, mnr);
+}
+
+// [[Rcpp::export]]
+List icd10DecimalToParts(const CV x, const String mnrEmpty = "") {
+  CV mjrs;
+  CV mnrs;
+  R_xlen_t ilen = x.length();
+  if (ilen == 0) {
+    return List::create(_["mjr"] =
+                        CV::create(), _["mnr"] =
+                        CV::create());
+  }
+
+  for (CV::const_iterator it = x.begin();
+       it != x.end(); ++it) {
+    String strna = *it;
+    if (is_true(all(is_na(CV::create(strna)))) || strna == "") {
+      mjrs.push_back(NA_STRING);
+      mnrs.push_back(NA_STRING);
+      continue;
+    }
+    std::string thiscode = as<std::string>(*it);
+    thiscode = strimCpp(thiscode); // Updates 'thisccode' by reference, no copy
+    std::size_t pos = thiscode.find(".");
+    // substring parts
+    std::string mjrin;
+    String mnrout;
+    if (pos != std::string::npos) {
+      mjrin = thiscode.substr(0, pos);
+      mnrout = thiscode.substr(pos + 1);
+    } else {
+      mjrin = thiscode;
+      mnrout = mnrEmpty;
+    }
+    mjrs.push_back(mjrin);
+    mnrs.push_back(mnrout);
+  }
+  return List::create(_["mjr"] = mjrs, _["mnr"] =
+                      mnrs);
+}

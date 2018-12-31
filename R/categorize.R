@@ -127,5 +127,5 @@ comorbid_common <- function(..., visit_name, icd_name)
 
 comorbid_mat_mul_wide <- function(data, map, id_name, code_names,
                                   validate = FALSE) {
-  .Call(`_icd_comorbidMatMulWide`, data, map, id_name, code_names, validate)
+  comorbidMatMulWide(data, map, id_name, code_names, validate)
 }

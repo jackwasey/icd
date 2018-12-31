@@ -17,6 +17,7 @@
 
 #include "icd_types.h"
 #include "attr.h"
+using namespace Rcpp;
 
 //' Set ICD short-form diagnosis code attribute
 //'
@@ -33,7 +34,7 @@
 //' # if pryr is installed, use address and refs to see what is going on
 //' @keywords internal attribute
 // [[Rcpp::export(attr_decimal_diag)]]
-void setDecimalDiag(Rcpp::RObject& x, bool value = true) {
+void setDecimalDiag(RObject& x, bool value = true) {
   x.attr("icd_short_diag") = !value;
 }
 
@@ -42,25 +43,6 @@ void setDecimalDiag(Rcpp::RObject& x, bool value = true) {
 //' @param value \code{TRUE} or \code{FALSE}
 //' @keywords internal attribute
 // [[Rcpp::export(attr_short_diag)]]
-void setShortDiag(Rcpp::RObject& x, bool value = true) {
+void setShortDiag(RObject& x, bool value = true) {
   x.attr("icd_short_diag") = value;
 }
-// modification in-place is supposedly a bug (email from Tomas Kalibera)
-//
-// //' @rdname as.short_diag
-// //' @keywords attribute
-// //' @export
-// // [[Rcpp::export(as.short_diag)]]
-// Rcpp::RObject asShortDiag(Rcpp::RObject& x, bool value = true) {
-//   x.attr("icd_short_diag") = value;
-//   return x;
-// }
-//
-// //' @rdname as.short_diag
-// //' @keywords attribute
-// //' @export
-// // [[Rcpp::export(as.decimal_diag)]]
-// Rcpp::RObject asDecimalDiag(Rcpp::RObject& x, bool value = true) {
-//   x.attr("icd_short_diag") = !value;
-//   return x;
-// }

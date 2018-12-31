@@ -27,7 +27,7 @@
 strim <- function(x) {
   assert_string(x, na.ok = TRUE)
   if (!is.na(x[1]))
-    .Call("_icd_strimCpp", PACKAGE = "icd", as.character(x))
+    strimCpp(as.character(x))
   else
     return(NA_character_)
 }
