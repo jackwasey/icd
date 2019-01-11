@@ -35,7 +35,7 @@ suppressPackageStartupMessages({
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
-  fig.path = "README-"
+  fig.path = "man/figures/README-"
 )
 patient_data <- data.frame(
   visit_id = c(1000, 1000, 1000, 1000, 1001, 1001, 1002, 1000),
@@ -99,6 +99,9 @@ comorbid_charlson(patient_data)
 
 # or go straight to the Charlson scores:
 charlson(patient_data)
+
+# plot summary of Uranium Cancer Registry sample data using AHRQ comorbidities
+plot_comorbid(uranium_pathology)
 ```
 
 ## How to get help

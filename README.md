@@ -126,7 +126,12 @@ comorbid_charlson(patient_data)
 charlson(patient_data)
 #> 1000 1001 1002 
 #>    2    2    0
+
+# plot summary of Uranium Cancer Registry sample data using AHRQ comorbidities
+plot_comorbid(uranium_pathology)
 ```
+
+![](man/figures/README-example-1.png)
 
 How to get help
 ---------------
