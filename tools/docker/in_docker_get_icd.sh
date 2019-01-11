@@ -33,6 +33,7 @@ mkdir -p "$GITHUB_REPO"
 ls "$zipdir"
 ls "$GITHUB_REPO"
 ls
+rm -rf "$GITHUB_REPO"
 mv "$zipdir" "$GITHUB_REPO"
 rmdir "$tempdest"
 

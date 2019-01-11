@@ -51,6 +51,7 @@ docker run \
 	-v "${TOOLS_DIR}/in_docker_base.sh":/root/in_docker_base.sh \
 	-v "${TOOLS_DIR}/in_docker_get_icd.sh":/root/in_docker_get_icd.sh \
 	-v "${TOOLS_DIR}/in_docker_build_check.sh":/root/in_docker_build_check.sh \
+	-v "${TOOLS_DIR}/in_docker_ldpreload_asan.sh":/root/in_docker_ldpreload_asan.sh \
 	-e "ICD_PROJECT_NAME=${ICD_PROJECT_NAME:=icd}" \
 	-e "R_PKG_NAME=${R_PKG_NAME:=$ICD_PROJECT_NAME}" \
 	-e "GITHUB_URL=${GITHUB_URL:=https://github.com}" \

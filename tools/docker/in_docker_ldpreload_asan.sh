@@ -22,23 +22,16 @@ set -x
 
 # This is in in_docker_base.sh but apparently the environment is not remembered (or the test didn't work in that script)
 
+## R_CMD_ERR is defined in in_docker_base
+
 # which libasan library?
-if [ -e /usr/lib/llvm-4.0/lib/clang/4.0.1/lib/linux/libclang_rt.asan-x86_64.so ]; then
-  if LD_PRELOAD="/usr/lib/llvm-4.0/lib/clang/4.0.1/lib/linux/libclang_rt.asan-x86_64.so" ${R_CMD_ERR}; then
-    export LD_PRELOAD="/usr/lib/llvm-4.0/lib/clang/4.0.1/lib/linux/libclang_rt.asan-x86_64.so"
+for tryasanlib in /usr/lib/llvm-7/lib/clang/7.0.0//lib/linux/libclang_rt.asan-x86_64.so /usr/lib/x86_64-linux-gnu/libasan.so.5 /usr/lib/x86_64-linux-gnu/libasan.so.4 /usr/lib/x86_64-linux-gnu/libasan.so.3 /usr/lib/x86_64-linux-gnu/libasan.so.2; do
+  if [ -e "$tryasanlib" ]; then
+    if LD_PRELOAD="$tryasanlib" ${R_CMD_ERR}; then
+      export LD_PRELOAD="$tryasanlib"
+      exit 0
+    fi
   fi
-elif [ -e /usr/lib/x86_64-linux-gnu/libasan.so.4 ]; then
-  if LD_PRELOAD="/usr/lib/x86_64-linux-gnu/libasan.so.4" ${R_CMD_ERR}; then
-    export LD_PRELOAD="/usr/lib/x86_64-linux-gnu/libasan.so.4"
-  fi
-elif [ -e /usr/lib/x86_64-linux-gnu/libasan.so.3 ]; then
-  if LD_PRELOAD="/usr/lib/x86_64-linux-gnu/libasan.so.3" ${R_CMD_ERR}; then
-    export LD_PRELOAD="/usr/lib/x86_64-linux-gnu/libasan.so.3"
-  fi
-elif [ -e /usr/lib/x86_64-linux-gnu/libasan.so.2 ]; then
-  if LD_PRELOAD="/usr/lib/x86_64-linux-gnu/libasan.so.2" ${R_CMD_ERR}; then
-    export LD_PRELOAD="/usr/lib/x86_64-linux-gnu/libasan.so.2"
-  fi
-else
-  echo "Cannot find libasan in /usr/lib/x86_64-linux-gnu"
-fi
+done
+echo "Cannot find libasan."
+exit 1
