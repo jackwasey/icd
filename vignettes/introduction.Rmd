@@ -114,9 +114,11 @@ vermont_cmb <- vermont_dx %>%
   apply(2, as.integer) # convert logical to integer
 
 head(vermont_cmb)
-
 barplot(colSums(vermont_cmb[, 1:5]),
-        main = "Incidence of Elixhauser Comorbidities in Vermont data")
+        main = "Incidence of five Elixhauser comorbidities in Vermont data")
+# Use built-in summary plot, this time for AHRQ comorbidities
+plot_comorbid(vermont_dx, comorbid_fun = comorbid_ahrq,
+        main = "Incidence of all AHRQ Comorbidities in Vermont data")
 ```
 
 The above can also be written in classic R with many parentheses:

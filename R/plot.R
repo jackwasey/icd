@@ -13,6 +13,7 @@
 #' plot_comorbid(vermont_dx)
 #' plot_comorbid(uranium_pathology)
 #' @md
+#' @export
 plot_comorbid <- function(
   x,
   sort = TRUE,
@@ -22,8 +23,9 @@ plot_comorbid <- function(
   ...)
 {
   comorbid_fun <- match.fun(comorbid_fun)
+  d <- comorbid_fun(x)
   barplot(
     sort(
-      colSums(comorbid_fun(x, ...)), decreasing = TRUE),
+      colSums(d), decreasing = TRUE),
     las = las, cex.names = cex, ...)
 }
