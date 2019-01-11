@@ -119,7 +119,6 @@ wide_to_long <- function(x,
          check_character(icd_labels, min.len = 1))
   assert_string(icd_name)
   assert_character(icd_regex, min.chars = 1, any.missing = FALSE, min.len = 1)
-
   if (is.null(icd_labels)) {
     re <- length(icd_regex)
     while (re > 0) {
