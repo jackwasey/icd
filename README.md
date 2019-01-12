@@ -125,7 +125,6 @@ charlson(patient_data)
 
 # for more examples, see this and other vignettes
 vignette("introduction", package = "icd")
-#> Warning: vignette 'introduction' not found
 ```
 
 Relevance
@@ -223,12 +222,10 @@ Contributing and Building
 -------------------------
 
 A substantial amount of code has now been contributed to the package.
-Contributions of any kind to `icd` are very welcome. See the \[GitHub
-issues
-page\]\](<a href="https://github.com/jackwasey/icd/issues" class="uri">https://github.com/jackwasey/icd/issues</a>)
-to see open issues and feature requests. Documentation, vignettes and
-examples are very welcome, especially if accompanied by some real-world
-data.
+Contributions of any kind to `icd` are very welcome. See the [GitHub
+issues page](https://github.com/jackwasey/icd/issues) to see open issues
+and feature requests. Documentation, vignettes and examples are very
+welcome, especially if accompanied by some real-world data.
 
 To build `icd`, `Rcpp` must be compiled from source. This happens
 automatically on Linux, but on Mac and Windows, the following may
