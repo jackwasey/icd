@@ -219,7 +219,8 @@ NULL
 #'   icd_names_quan_elix_abbrev icd_names_quan_elix_htn
 #'   icd_names_quan_elix_htn_abbrev icd_names_ahrq icd_names_ahrq_abbrev
 #'   icd_names_ahrq_htn icd_names_ahrq_htn_abbrev icd_names_charlson
-#'   icd_names_charlson_abbrev icd_names_cc
+#'   icd_names_charlson_abbrev icd_names_cc icd9_names_multi_ccs
+#'   icd9_names_single_ccs icd10_names_ccs
 #' @keywords datasets
 #' @docType data
 NULL
