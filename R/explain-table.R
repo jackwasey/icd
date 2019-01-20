@@ -128,7 +128,7 @@ explain_table_worker <- function(x, hierarchy, short_code, condense,
 explain_table.icd9cm <- function(x, short_code = guess_short(x),
                                  condense = FALSE, brief = TRUE,
                                  warn = TRUE, ...)
-  explain_table_worker(x = x, hierarchy = icd9cm_hierarchy,
+  explain_table_worker(x = x, hierarchy = icd.data::icd9cm_hierarchy,
                        short_code = short_code, condense = condense,
                        brief = brief, warn = warn, ...)
 
@@ -139,7 +139,7 @@ explain_table.icd9cm <- function(x, short_code = guess_short(x),
 explain_table.icd10cm <- function(x, short_code = guess_short(x),
                                   condense = FALSE, brief = TRUE,
                                   warn = TRUE, ...)
-  explain_table_worker(x = x, hierarchy = icd10cm2016,
+  explain_table_worker(x = x, hierarchy = icd.data::icd10cm2016,
                        short_code = short_code, condense = condense,
                        brief = brief, warn = warn, ...)
 
@@ -154,6 +154,7 @@ explain_table.icd10cm <- function(x, short_code = guess_short(x),
 #' the input. Size of the output will also be different if any condensing was
 #' done.
 #' @keywords internal
+#' @noRd
 condense_explain_table <- function(x) {
   condensed_majors <- condense_explain_table_worker(x)
   if (nrow(condensed_majors) == 0) {
@@ -179,6 +180,7 @@ condense_explain_table <- function(x) {
 #'
 #' @return details for rows which can be condensed
 #' @keywords internal
+#' @noRd
 condense_explain_table_worker <- function(x) {
   # we can only condense when we have three_digit major
   x <- x[!is.na(x[["three_digit"]]), ]

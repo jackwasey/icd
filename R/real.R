@@ -1,20 +1,3 @@
-# Copyright (C) 2014 - 2018  Jack O. Wasey
-#
-# This file is part of icd.
-#
-# icd is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-#
-# icd is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with icd. If not, see <http:#www.gnu.org/licenses/>.
-
 #' Check whether ICD-9 codes exist
 #'
 #' This is different from syntactic validity: it looks up codes in the canonical
@@ -37,18 +20,14 @@ is_defined <- function(x, short_code = guess_short(x), ...) {
 #' @export
 #' @keywords internal
 is_defined.icd9 <- function(x, short_code = guess_short(x),
-                                billable = FALSE, ...) {
-  assert(check_factor(x), check_character(x))
-  assert_flag(short_code)
-  assert_flag(billable)
-
-  if (!short_code)
-    x <- decimal_to_short.icd9(x)
-
+                            billable = FALSE, ...) {
+  stopifnot(is.factor(x) || is.character(x))
+  stopifnot(is.logical(short_code), is.logical(billable))
+  if (!short_code) x <- decimal_to_short.icd9(x)
   if (billable)
     is_billable.icd9cm(short_code = TRUE, as_char_no_warn(x))
   else
-    x %in% icd9cm_hierarchy[["code"]]
+    x %in% icd.data::icd9cm_hierarchy[["code"]]
 }
 
 #' @describeIn is_defined Same for ICD-10-CM
@@ -57,7 +36,7 @@ is_defined.icd9 <- function(x, short_code = guess_short(x),
 #' @export
 #' @keywords internal
 is_defined.icd10cm <- function(x, short_code = guess_short(x),
-                                   billable = FALSE, nomatch = 0L, ...) {
+                               billable = FALSE, nomatch = 0L, ...) {
   assert(check_factor(x), check_character(x))
   if (!short_code)
     x <- decimal_to_short(x)
@@ -65,7 +44,7 @@ is_defined.icd10cm <- function(x, short_code = guess_short(x),
   if (billable)
     is_billable.icd10cm(x, short_code = short_code)
   else
-    match(x, icd10cm2016[["code"]], nomatch = nomatch, ...) > 0L
+    match(x, icd.data::icd10cm2016[["code"]], nomatch = nomatch, ...) > 0L
 }
 
 #' @describeIn is_defined Same for ICD-10, temporarily using ICD-10-CM until
@@ -73,7 +52,7 @@ is_defined.icd10cm <- function(x, short_code = guess_short(x),
 #' @export
 #' @keywords internal
 is_defined.icd10 <- function(x, short_code = guess_short(x),
-                                 billable = FALSE, ...) {
+                             billable = FALSE, ...) {
   is_defined.icd10cm(x = x, short_code = short_code, billable = billable, ...)
 }
 
@@ -141,7 +120,7 @@ is_billable <- function(x, short_code = guess_short(x), ...) {
 #' @export
 #' @keywords internal
 is_billable.icd9 <- function(x, short_code = guess_short(x),
-                                 icd9cm_edition = icd9cm_latest_edition(), ...) {
+                             icd9cm_edition = icd9cm_latest_edition(), ...) {
   is_billable.icd9cm(x = x, short_code = short_code, icd9cm_edition = icd9cm_edition)
 }
 
@@ -157,7 +136,7 @@ is_billable.icd10cm <- function(x, short_code = guess_short(x), icd10cm_edition 
   if (!short_code)
     x <- decimal_to_short(x)
 
-  x %in% icd10cm2016[icd10cm2016[["billable"]] == 1, "code"]
+  x %in% icd.data::icd10cm2016[icd.data::icd10cm2016[["billable"]] == 1, "code"]
 }
 
 #' @describeIn is_billable Which of the given ICD-10 codes are leaf nodes in
@@ -173,14 +152,17 @@ is_billable.icd10 <- function(x, short_code = guess_short(x), icd10cm_edition = 
 #' @param nomatch integer value, passed to \code{match} default is 0.
 #' @export
 #' @keywords internal
-is_billable.icd9cm <- function(x, short_code = guess_short(x),
-                                   icd9cm_edition = icd9cm_latest_edition(), nomatch = 0L, ...) {
+is_billable.icd9cm <- function(x,
+                               short_code = guess_short(x),
+                               icd9cm_edition = icd9cm_latest_edition(),
+                               nomatch = 0L, ...) {
   assert_vector(x)
   assert_flag(short_code)
   assert_string(icd9cm_edition)
   if (!short_code)
     x <- decimal_to_short.icd9(x)
-  match(x, icd9cm_billable[[icd9cm_edition]][["code"]], nomatch = nomatch, ...) > 0L
+  match(x, icd.data::icd9cm_billable[[icd9cm_edition]][["code"]],
+        nomatch = nomatch, ...) > 0L
 }
 
 #' @describeIn is_billable Which of the given ICD codes are leaf nodes in
@@ -227,7 +209,7 @@ get_billable.default <- function(x, short_code = guess_short(x), ...) {
 #' @export
 #' @keywords internal
 get_billable.icd9cm <- function(x, short_code = guess_short(x),
-                                    invert = FALSE, icd9cm_edition = icd9cm_latest_edition(), ...) {
+                                invert = FALSE, icd9cm_edition = icd9cm_latest_edition(), ...) {
   assert_flag(short_code)
   assert_flag(invert)
   assert_string(icd9cm_edition)
@@ -269,7 +251,7 @@ icd9cm_get_billable <- function(x, short_code = guess_short(x),
 #' @export
 #' @keywords internal
 get_billable.icd10cm <- function(x, short_code = guess_short(x),
-                                     invert = FALSE, icd10cm_edition = "2016",
+                                 invert = FALSE, icd10cm_edition = "2016",
                                  ...) {
   assert_vector(x)
   assert_flag(short_code)
@@ -284,6 +266,6 @@ get_billable.icd10cm <- function(x, short_code = guess_short(x),
 #' @export
 #' @keywords internal
 get_billable.icd10 <- function(x, short_code = guess_short(x),
-                                   invert = FALSE, icd10cm_edition = "2016", ...) {
+                               invert = FALSE, icd10cm_edition = "2016", ...) {
   get_billable.icd10cm(x = x, short_code = short_code, invert = invert, icd10cm_edition = icd10cm_edition)
 }

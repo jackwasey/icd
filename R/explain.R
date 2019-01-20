@@ -142,11 +142,35 @@ explain_code.icd10cm <- function(x, short_code = guess_short(x),
     .NotYetUsed("warn", error = FALSE)
   if (!short_code)
     x <- decimal_to_short.icd10(x)
-  # this is a linear lookup, but usually only
+  # this is a alow linear lookup, but usually only
   # "explaining" one or a few codes at a time.
   icd.data::icd10cm2016[
     icd.data::icd10cm2016[["code"]] %in% unique(as_char_no_warn(x)),
     ifelse(brief, "short_desc", "long_desc")
+    ]
+}
+
+#' @describeIn explain_code WHO ICD-10 explanation
+#' @export
+explain_code.icd10who <- function(x, short_code = guess_short(x),
+                                 condense = TRUE, brief = NULL,
+                                 warn = TRUE, ...) {
+  if (!is.null(brief))
+    message("WHO ICD-10 does not have short or long descriptions, ",
+            "so the argument `brief` is redundant")
+  assert_vector(x)
+  assert_flag(short_code)
+  if (!missing(condense))
+    .NotYetUsed("condense", error = FALSE)
+  if (!missing(warn))
+    .NotYetUsed("warn", error = FALSE)
+  if (!short_code)
+    x <- decimal_to_short.icd10(x)
+  # this is a alow linear lookup, but usually only
+  # "explaining" one or a few codes at a time.
+  icd.data::icd10who2016[
+    icd.data::icd10who2016[["code"]] %in% unique(as_char_no_warn(x)),
+    "desc"
     ]
 }
 
@@ -230,14 +254,14 @@ icd9_get_chapters <- function(x, short_code = guess_short(x), verbose = FALSE) {
 
 icd9_expand_chapter_majors <- function(chap) {
   expand_range_major.icd9(
-    icd9_chapters[[chap]]["start"],
-    icd9_chapters[[chap]]["end"],
+    icd.data::icd9_chapters[[chap]]["start"],
+    icd.data::icd9_chapters[[chap]]["end"],
     defined = FALSE)
 }
 
 icd9_expand_sub_chapter_majors <- function(subchap) {
   expand_range_major.icd9(
-    icd9_sub_chapters[[subchap]]["start"],
-    icd9_sub_chapters[[subchap]]["end"],
+    icd.data::icd9_sub_chapters[[subchap]]["start"],
+    icd.data::icd9_sub_chapters[[subchap]]["end"],
     defined = FALSE)
 }

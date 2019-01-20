@@ -10,8 +10,10 @@
 #'   appropriately
 #' @param ... Passed to both `comorbid_fun` and `graphics::barplot`
 #' @examples
-#' plot_comorbid(vermont_dx)
-#' plot_comorbid(uranium_pathology)
+#' \dontrun{
+#' plot_comorbid(icd.data::vermont_dx)
+#' plot_comorbid(icd.data::uranium_pathology)
+#' }
 #' @md
 #' @export
 plot_comorbid <- function(
@@ -24,7 +26,7 @@ plot_comorbid <- function(
 {
   comorbid_fun <- match.fun(comorbid_fun)
   d <- comorbid_fun(x)
-  barplot(
+  graphics::barplot(
     sort(
       colSums(d), decreasing = TRUE),
     las = las, cex.names = cex, ...)

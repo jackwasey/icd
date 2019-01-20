@@ -113,7 +113,6 @@
 #' @keywords misc utilities
 #' @concept ICD-9 ICD-10 comorbidity comorbidities
 #' @useDynLib icd, .registration=TRUE
-#' @importFrom icd.data assign_icd_data
 #' @importFrom Rcpp cppFunction
 #' @importFrom methods setLoadAction
 #' @importFrom checkmate assert assert_flag assert_list assert_data_frame
@@ -125,6 +124,8 @@
 #'   assert_factor
 #' @importFrom utils head tail read.fwf
 #' @importFrom stats setNames reshape
+#' @importFrom graphics barplot
 "_PACKAGE"
 
-icd.data::assign_icd_data()
+# taken from above @importFrom icd.data assign_icd_data
+#icd.data::assign_icd_data()

@@ -1,26 +1,7 @@
-1# Copyright (C) 2014 - 2018  Jack O. Wasey
-#
-# This file is part of icd.
-#
-# icd is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-#
-# icd is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with icd. If not, see <http:#www.gnu.org/licenses/>.
-
 context("PCCC")
-
 pccc_col_names <- c("neuromusc", "cvd", "respiratory", "renal", "gi",
                     "hemato_immu", "metabolic", "congeni_genetic",
                     "malignancy", "neonatal", "tech_dep", "transplant")
-
 # Six random codes from each PCCC procedure code map. 'icd' will use
 # an heuristic to guess whether ICD-9 or ICD-10:
 pccc_pts <- data.frame(encounters = c(10, 11, 12),
@@ -53,9 +34,10 @@ test_that("procedure codes work", {
 })
 
 test_that("PCCC dx works", {
-  res <- icd9_comorbid_pccc_dx(vermont_dx, return_binary = TRUE)
+  res <- icd9_comorbid_pccc_dx(icd.data::vermont_dx, return_binary = TRUE)
   expect_equivalent(
-    colSums(res), c(82, 270, 50, 119, 55, 39, 313, 30, 128, 7, 129, 21))
+    colSums(res[1:1000, ]),
+    c(82, 270, 50, 119, 55, 39, 313, 30, 128, 7, 129, 21))
   expect_equal(colnames(res), pccc_col_names)
 })
 

@@ -34,6 +34,7 @@ suppressWarnings({
   suppressPackageStartupMessages({
     loadNamespace("knitr") # for opts_chunk only
     library("icd")
+    library("icd.data")
     library("magrittr")
     library("utils")
     })
@@ -56,6 +57,7 @@ patients_icd9 <- data.frame(
 
 ```{r quickstart}
 library(icd)
+library(icd.data)
 head(uranium_pathology, 10)
 head(comorbid_charlson(uranium_pathology))
 comorbid_charlson(uranium_pathology, 

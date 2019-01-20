@@ -1,30 +1,13 @@
-# Copyright (C) 2014 - 2018  Jack O. Wasey
-#
-# This file is part of icd.
-#
-# icd is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-#
-# icd is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with icd. If not, see <http:#www.gnu.org/licenses/>.
-
-utils::globalVariables(c(
-  "icd9_map_ahrq", "icd9_map_elix", "icd9_map_quan_deyo", "icd9_map_quan_elix",
-  "icd10_map_ahrq", "icd10_map_elix", "icd10_map_quan_deyo",
-  "icd10_map_quan_elix", "icd9_map_single_ccs", "icd9_map_multi_ccs",
-  "icd10_map_ccs",
-  "names_ahrq", "names_ahrq_abbrev", "names_ahrq_htn", "names_ahrq_htn_abbrev",
-  "names_charlson", "names_charlson_abbrev", "names_elix", "names_elix_abbrev",
-  "names_elix_htn", "names_elix_htn_abbrev", "names_quan_elix",
-  "names_quan_elix_abbrev", "names_quan_elix_htn", "names_quan_elix_htn_abbrev"
-))
+# utils::globalVariables(c(
+#   "icd9_map_ahrq", "icd9_map_elix", "icd9_map_quan_deyo", "icd9_map_quan_elix",
+#   "icd10_map_ahrq", "icd10_map_elix", "icd10_map_quan_deyo",
+#   "icd10_map_quan_elix", "icd9_map_single_ccs", "icd9_map_multi_ccs",
+#   "icd10_map_ccs",
+#   "names_ahrq", "names_ahrq_abbrev", "names_ahrq_htn", "names_ahrq_htn_abbrev",
+#   "names_charlson", "names_charlson_abbrev", "names_elix", "names_elix_abbrev",
+#   "names_elix_htn", "names_elix_htn_abbrev", "names_quan_elix",
+#   "names_quan_elix_abbrev", "names_quan_elix_htn", "names_quan_elix_htn_abbrev"
+# ))
 
 #' Present-on-admission flags
 #'
@@ -49,8 +32,8 @@ poa_choices <- c("yes", "no", "notYes", "notNo")
 #' \code{\link{comorbid_ccs}}.
 #' @param x \code{data.frame} containing a column of patient-visit identifiers
 #'   and a column of ICD codes. The \code{data.frame} should be in \sQuote{long}
-#'   format, like the example \code{vermont_dx} data. If it is in \sQuote{wide}
-#'   format, it must be converted to \sQuote{long} using
+#'   format, like the example \code{icd.data::vermont_dx} data. If it is in
+#'   \sQuote{wide} format, it must be converted to \sQuote{long} using
 #'   \code{\link{wide_to_long}} before calling any comorbidity functions.
 #' @param map list of the comorbidities with each list item containing a vector
 #'   of decimal ICD-9 codes. This is in the form of a list, with the names of
@@ -80,6 +63,7 @@ poa_choices <- c("yes", "no", "notYes", "notNo")
 #' @family comorbidity computations
 #' @family comorbidities
 #' @examples
+#' library(icd.data) # for Vermont data
 #' vermont_dx[1:5, 1:10]
 #' vd <- wide_to_long(vermont_dx)
 #' # get first few rows and columns of Charlson comorbidities using Quan's mapping

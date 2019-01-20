@@ -99,8 +99,8 @@ icd_comorbid_quan_elix(...)
 \arguments{
 \item{x}{\code{data.frame} containing a column of patient-visit identifiers
 and a column of ICD codes. The \code{data.frame} should be in \sQuote{long}
-format, like the example \code{vermont_dx} data. If it is in \sQuote{wide}
-format, it must be converted to \sQuote{long} using
+format, like the example \code{icd.data::vermont_dx} data. If it is in
+\sQuote{wide} format, it must be converted to \sQuote{long} using
 \code{\link{wide_to_long}} before calling any comorbidity functions.}
 
 \item{map}{list of the comorbidities with each list item containing a vector
@@ -273,6 +273,7 @@ according to Quan/Deyo ICD categories. Synonymous with
 }
 
 \examples{
+library(icd.data) # for Vermont data
 vermont_dx[1:5, 1:10]
 vd <- wide_to_long(vermont_dx)
 # get first few rows and columns of Charlson comorbidities using Quan's mapping

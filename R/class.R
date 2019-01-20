@@ -1,23 +1,6 @@
-# Copyright (C) 2014 - 2018  Jack O. Wasey
-#
-# This file is part of icd.
-#
-# icd is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-#
-# icd is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with icd. If not, see <http:#www.gnu.org/licenses/>.
-
 icd9_sub_classes <- c("icd9cm")
 icd9_classes <- c(icd9_sub_classes, "icd9")
-icd10_sub_classes <- c("icd10cm")
+icd10_sub_classes <- c("icd10cm", "icd10who")
 icd10_classes <- c(icd10_sub_classes, "icd10")
 icd_version_classes <- c(icd9_classes, icd10_classes)
 icd_data_classes <- c("icd_long_data", "icd_wide_data")
@@ -27,18 +10,28 @@ icd_system_classes <- c("data.frame", "list", "numeric", "character", "factor")
 icd_conflicts_with_icd9 <- function(x) inherits(x, icd10_classes)
 icd_conflicts_with_icd10 <- function(x) inherits(x, icd9_classes)
 icd_conflicts_with_icd9cm <- icd_conflicts_with_icd9
-
+icd_conflicts_with_icd10cm <- function(x) {
+  icd_conflicts_with_icd10(x) || inherits(x, "icd10who")
+}
+icd_conflicts_with_icd10who <- function(x) {
+  icd_conflicts_with_icd9(x) || inherits(x, "icd10cm")
+}
 icd_check_conflict_with_icd10 <- function(x)
   if (icd_conflicts_with_icd10(x))
     stop("Cannot set ICD-10 class when object already has an ICD-9 class")
-
 icd_check_conflict_with_icd9 <- function(x)
   if (icd_conflicts_with_icd9(x))
     stop("Cannot set ICD-9 class when object already has an ICD-10 class")
-
 # for now, but could be refined:
 icd_check_conflict_with_icd9cm <- icd_check_conflict_with_icd9
-icd_check_conflict_with_icd10cm <- icd_check_conflict_with_icd10
+icd_check_conflict_with_icd10cm <- function(x)
+  if (icd_conflicts_with_icd10cm(x))
+    stop("Cannot set ICD-10 WHO when data has an ICD-9 or ICD-10-CM class. ",
+         "If you really want to do this, remove the old class and try again.")
+icd_check_conflict_with_icd10who <- function(x)
+  if (icd_conflicts_with_icd10who(x))
+    stop("Cannot set ICD-10 WHO when data has an ICD-9 or ICD-10-CM class. ",
+         "If you really want to do this, remove the old class and try again.")
 
 #' Check whether there are any ICD class conflicts
 #'
@@ -113,6 +106,9 @@ classes_ordered <- function(x) {
 #' j[[1]] <- "D44001"
 #' stopifnot(is.short_diag(j))
 #' stopifnot(is.icd10(j), is.icd10(j[2]), is.icd10(j[[2]]))
+NULL
+
+#' @noRd
 #' @keywords internal
 icd9 <- function(x) {
   # SOMEDAY: From Wickham: "When implementing a vector class, you should
@@ -125,7 +121,8 @@ icd9 <- function(x) {
   x
 }
 
-#' @rdname set_icd_class
+#' @describeIn set_icd_class Use generic ICD-9 class for this data. Ideally, use
+#'   the more specific `icd9cm` or other subclasses (when available).
 #' @export
 as.icd9 <- function(x) {
   stopifnot(is.atomic(x))
@@ -136,7 +133,7 @@ as.icd9 <- function(x) {
   x
 }
 
-#' @rdname set_icd_class
+#' @noRd
 #' @keywords internal
 icd9cm <- function(x) {
   cl <- class(x)
@@ -145,7 +142,7 @@ icd9cm <- function(x) {
   x
 }
 
-#' @rdname set_icd_class
+#' @describeIn set_icd_class Use ICD-9-CM
 #' @export
 as.icd9cm <- function(x) {
   stopifnot(is.atomic(x))
@@ -160,7 +157,8 @@ as.icd9cm <- function(x) {
   x
 }
 
-#' @rdname set_icd_class
+#' @describeIn  set_icd_class Use generic ICD-10 class for this data. If
+#'   possible, use the more specific `icd10who` or `icd10cm`.
 #' @export
 as.icd10 <- function(x) {
   stopifnot(is.atomic(x))
@@ -171,7 +169,7 @@ as.icd10 <- function(x) {
   x
 }
 
-#' @rdname set_icd_class
+#' @noRd
 #' @keywords internal
 icd10 <- function(x) {
   cl <- class(x)
@@ -180,7 +178,7 @@ icd10 <- function(x) {
   x
 }
 
-#' @rdname set_icd_class
+#' @describeIn set_icd_class Use ICD-10-CM (USA) class for the given data
 #' @export
 as.icd10cm <- function(x, short_code = NULL) {
   stopifnot(is.atomic(x))
@@ -196,7 +194,7 @@ as.icd10cm <- function(x, short_code = NULL) {
   x
 }
 
-#' @rdname set_icd_class
+#' @noRd
 #' @keywords internal
 icd10cm <- function(x) {
   cl <- class(x)
@@ -205,6 +203,34 @@ icd10cm <- function(x) {
     class(x) <- c("icd10cm", cl)
   else
     class(x) <- c("icd10cm", "icd10", cl)
+  x
+}
+
+#' @describeIn set_icd_class Use WHO ICD-10 class for the given data
+#' @export
+as.icd10who <- function(x, short_code = NULL) {
+  stopifnot(is.atomic(x))
+  icd_check_conflict_with_icd10who(x)
+  if (inherits(x, "icd10who")) return(x)
+  icd10_pos <- match("icd10", class(x))
+  if (!is.na(icd10_pos))
+    class(x) <- append(class(x), "icd10who", after = icd10_pos - 1)
+  else
+    class(x) <- append(class(x), c("icd10who", "icd10"), after = 0)
+  if (!is.null(short_code))
+    attr(x, "icd_short_diag") <- short_code
+  x
+}
+
+#' @noRd
+#' @keywords internal
+icd10who <- function(x) {
+  cl <- class(x)
+  if ("icd10who" %in% cl) return(x)
+  if ("icd10" %in% cl)
+    class(x) <- c("icd10who", cl)
+  else
+    class(x) <- c("icd10who", "icd10", cl)
   x
 }
 
@@ -488,7 +514,7 @@ print.icd9 <- function(x, verbose = FALSE, ...)
 
 #' @rdname print.icd9
 #' @examples
-#' u <- uranium_pathology[1:10, "icd10"]
+#' u <- icd.data::uranium_pathology[1:10, "icd10"]
 #' print(u)
 #' print(u, verbose = TRUE)
 #' # as.character will unclass the 'icd' classes

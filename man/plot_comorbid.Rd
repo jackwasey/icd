@@ -28,6 +28,8 @@ appropriately}
 Basic bar plot showing counts of each comorbidity
 }
 \examples{
-plot_comorbid(vermont_dx)
-plot_comorbid(uranium_pathology)
+\dontrun{
+plot_comorbid(icd.data::vermont_dx)
+plot_comorbid(icd.data::uranium_pathology)
+}
 }

@@ -396,8 +396,10 @@ test_that("dispatch from column class when not specified", {
 })
 
 test_that("if we try to do comorbidity calc on wide data, it works!", {
-  expect_error(comorbid_elix(vermont_dx), regexp = NA)
-  expect_error(comorbid_charlson(long_to_wide(uranium_pathology)), regexp = NA)
+  expect_error(comorbid_elix(icd.data::vermont_dx),
+               regexp = NA)
+  expect_error(comorbid_charlson(long_to_wide(icd.data::uranium_pathology)),
+               regexp = NA)
 })
 
 test_that("code appearing in two icd9 comorbidities", {

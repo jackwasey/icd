@@ -241,7 +241,7 @@ test_that("condense single major and its children", {
   expect_equal(explain_code.icd9(children.icd9("391", short_code = TRUE, defined = TRUE)), rheum_fever)
 })
 
-vdat <- unique(vermont_dx$DX1)[1:10]
+vdat <- unique(icd.data::vermont_dx$DX1)[1:10]
 
 test_that("condense a factor of codes instead of character vector", {
   # this is not a condensable list

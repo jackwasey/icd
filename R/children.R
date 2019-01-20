@@ -70,19 +70,19 @@ children.character <- function(x, ...) {
 #' @export
 children.icd9cm <- function(x, short_code = guess_short(x),
                             defined = TRUE, billable = FALSE, ...) {
-  assert(check_factor(x), check_character(x))
-  assert_flag(short_code)
-  assert_flag(defined)
-  assert_flag(billable)
+  stopifnot(is.factor(x) || is.character(x))
+  stopifnot(is.logical(short_code))
+  stopifnot(is.logical(defined))
+  stopifnot(is.logical(billable))
   res <- if (short_code)
     .Call("_icd_icd9ChildrenShortUnordered",
           icd9Decimal = toupper(x),
-          icd9cmReal = icd9cm_hierarchy$code,
+          icd9cmReal = icd.data::icd9cm_hierarchy$code,
           onlyReal = defined)
   else
     .Call("_icd_icd9ChildrenDecimalCpp",
           icd9Decimal = toupper(x),
-          icd9cmReal = icd9cm_hierarchy$code,
+          icd9cmReal = icd.data::icd9cm_hierarchy$code,
           onlyReal = defined)
   res <- sort_icd.icd9(res)
   res <- if (billable)
@@ -124,8 +124,7 @@ children.icd10cm <- function(x, short_code = guess_short(x), defined, billable =
   if (!missing(defined) && !defined)
     stop("Finding children of anything but defined ICD-10-CM codes is current not supported.")
   res <- children_defined.icd10cm(x = x, short_code = short_code)
-  if (is.icd10cm(x))
-    as.icd10cm(res)
+  #if (is.icd10cm(x)) return(as.icd10cm(res))
   res
 }
 
@@ -152,6 +151,6 @@ children_defined.icd10cm <- function(x, short_code = guess_short(x), warn = FALS
   x <- toupper(x)
   if (!short_code)
     x <- decimal_to_short.icd10cm(x)
-  kids <- icd10cm_children_defined_cpp(x, icd10cm2016, .nc)
+  kids <- icd10cm_children_defined_cpp(x, icd.data::icd10cm2016, .nc)
   as.icd10cm(kids, short_code)
 }

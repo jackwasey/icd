@@ -1,20 +1,3 @@
-// Copyright (C) 2014 - 2018  Jack O. Wasey
-//
-// This file is part of icd.
-//
-// icd is free software: you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
-//
-// icd is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-// GNU General Public License for more details.
-//
-// You should have received a copy of the GNU General Public License
-// along with icd. If not, see <http://www.gnu.org/licenses/>.
-
 #include "icd_types.h"
 #include "local.h"
 #include <string>                           // for string
@@ -39,10 +22,10 @@ using namespace Rcpp;
 //' stopifnot(simple_map$CHF == "I0981")
 //' stopifnot(simple_map$PHTN != character(0))
 //' stopifnot(simple_map$PVD == "I26019")
-//' umap <- icd:::simplify_map_lex(uranium_pathology$icd10, icd10_map_ahrq)
-//' head(icd:::categorize_simple(uranium_pathology, icd10_map_ahrq,
+//' umap <- icd:::simplify_map_lex(icd.data::uranium_pathology$icd10, icd10_map_ahrq)
+//' head(icd:::categorize_simple(icd.data::uranium_pathology, icd10_map_ahrq,
 //'                       id_name = "case", code_name = "icd10"))
-//' head(icd:::categorize_simple(uranium_pathology, umap,
+//' head(icd:::categorize_simple(icd.data::uranium_pathology, umap,
 //'                              id_name = "case", code_name = "icd10"))
 //' @keywords internal
 // [[Rcpp::export(simplify_map_lex)]]

@@ -120,7 +120,8 @@ test_that("cmb from a ICD-10, no infinite recursion with Elix", {
 })
 
 test_that("ICD-10 map reduction is sane", {
-  uranium_short_codes <- as_char_no_warn(decimal_to_short.icd10(uranium_pathology$icd10))
+  uranium_short_codes <- as_char_no_warn(
+    decimal_to_short.icd10(icd.data::uranium_pathology$icd10))
   red_map <- simplify_map_lex(uranium_short_codes, icd10_map_ahrq)
   # the map should not have its original contents, but only those codes which
   # were in the pt data. Converse is not true, as some patient codes do not fall
@@ -193,10 +194,14 @@ test_that("NA example which crashed during devel", {
 })
 
 test_that("ICD-10 comorbidities from uranium", {
-  expect_error(regexp = NA, comorbid(uranium_pathology, icd10_map_quan_elix))
-  expect_error(regexp = NA, comorbid(uranium_pathology, icd10_map_quan_deyo))
-  expect_error(regexp = NA, comorbid(uranium_pathology, icd10_map_elix))
-  expect_error(regexp = NA, comorbid(uranium_pathology, icd10_map_ahrq))
+  expect_error(regexp = NA,
+               comorbid(icd.data::uranium_pathology, icd10_map_quan_elix))
+  expect_error(regexp = NA,
+               comorbid(icd.data::uranium_pathology, icd10_map_quan_deyo))
+  expect_error(regexp = NA,
+               comorbid(icd.data::uranium_pathology, icd10_map_elix))
+  expect_error(regexp = NA,
+               comorbid(icd.data::uranium_pathology, icd10_map_ahrq))
 })
 
 test_that("Alcoholic fatty liver", {

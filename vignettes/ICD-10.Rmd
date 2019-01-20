@@ -48,6 +48,7 @@ The [icd package](https://cran.r-project.org/package=icd) for R includes ICD-10-
 
 The sample data is in the 'long' format, i.e., multiple rows per case.
 ```{r uranium-long}
+library(icd.data)
 uranium_pathology[1:10, ]
 ```
 Pick a code, and see what it means.
