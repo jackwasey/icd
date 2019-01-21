@@ -124,7 +124,7 @@ children.icd10cm <- function(x, short_code = guess_short(x), defined, billable =
   if (!missing(defined) && !defined)
     stop("Finding children of anything but defined ICD-10-CM codes is current not supported.")
   res <- children_defined.icd10cm(x = x, short_code = short_code)
-  #if (is.icd10cm(x)) return(as.icd10cm(res))
+  if (is.icd10cm(x)) return(as.icd10cm(res))
   res
 }
 

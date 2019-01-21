@@ -22,8 +22,8 @@ plot_comorbid <- function(
   comorbid_fun = icd::comorbid_ahrq,
   las = 2,
   cex = 0.75,
-  ...)
-{
+  ...
+) {
   comorbid_fun <- match.fun(comorbid_fun)
   d <- comorbid_fun(x)
   graphics::barplot(

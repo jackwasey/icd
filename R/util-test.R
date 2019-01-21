@@ -1,45 +1,5 @@
 #nocov start
 
-rtf_year_ok <- function(year)
-  !is.null(rtf_fetch_year(year, offline = TRUE))
-
-skip_on_no_rtf <- function(test_year) {
-  if (!rtf_year_ok(test_year))
-    testthat::skip(paste(test_year,
-                         "ICD-9-CM codes unavailable offline for testsing"))
-}
-
-skip_flat_icd9_avail <- function(ver = "31") {
-  msg <- paste("skipping test because flat file ICD-9-CM",
-               "sources not available for version: ", ver)
-  dat <- icd9_sources[icd9_sources$version == ver, ]
-  fn_orig <- dat$short_filename
-  if (is.na(fn_orig))
-    fn_orig <- dat$other_filename
-  # don't try to download the file, just check it is there:
-  f_info_short <- unzip_to_data_raw(dat$url,
-                                    file_name = fn_orig,
-                                    offline = TRUE)
-  if (is.null(f_info_short)) testthat::skip(msg)
-}
-
-skip_flat_icd9_all_avail <- function()
-  for (v in icd9_sources$version) skip_flat_icd9_avail(v)
-
-skip_icd10cm_flat_avail <- function(
-  msg = "skipping test because flat file ICD-10-CM source not available")
-  if (is.null(icd10cm_get_flat_file(offline = TRUE)))
-    testthat::skip(msg)
-
-skip_icd10cm_xml_avail <- function(
-  msg = "skipping test because XML file ICD-10-CM source not available")
-  if (is.null(icd10cm_get_xml_file(offline = TRUE))) testthat::skip(msg)
-
-skip_flat_icd9_avail_all <- function() {
-  for (v in icd9_sources$version)
-    skip_flat_icd9_avail(ver = v)
-}
-
 expect_no_warn <- function(object, expected, ...)
   testthat::expect_warning(object, regexp = NA, ...)
 

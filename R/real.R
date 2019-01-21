@@ -37,10 +37,9 @@ is_defined.icd9 <- function(x, short_code = guess_short(x),
 #' @keywords internal
 is_defined.icd10cm <- function(x, short_code = guess_short(x),
                                billable = FALSE, nomatch = 0L, ...) {
-  assert(check_factor(x), check_character(x))
-  if (!short_code)
-    x <- decimal_to_short(x)
-
+  stopifnot(is.factor(x) || is.character(x))
+  stopifnot(is.logical(short_code), is.logical(billable))
+  if (!short_code) x <- decimal_to_short(x)
   if (billable)
     is_billable.icd10cm(x, short_code = short_code)
   else
@@ -152,13 +151,15 @@ is_billable.icd10 <- function(x, short_code = guess_short(x), icd10cm_edition = 
 #' @param nomatch integer value, passed to \code{match} default is 0.
 #' @export
 #' @keywords internal
-is_billable.icd9cm <- function(x,
-                               short_code = guess_short(x),
-                               icd9cm_edition = icd9cm_latest_edition(),
-                               nomatch = 0L, ...) {
-  assert_vector(x)
-  assert_flag(short_code)
-  assert_string(icd9cm_edition)
+is_billable.icd9cm <- function(
+  x,
+  short_code = guess_short(x),
+  icd9cm_edition = icd9cm_latest_edition(),
+  nomatch = 0L,
+  ...) {
+  stopifnot(is.atomic(x), is.logical(short_code))
+  stopifnot(is.character(icd9cm_edition), length(icd9cm_edition) == 1L)
+  stopifnot(is.integer(nomatch))
   if (!short_code)
     x <- decimal_to_short.icd9(x)
   match(x, icd.data::icd9cm_billable[[icd9cm_edition]][["code"]],
@@ -208,13 +209,20 @@ get_billable.default <- function(x, short_code = guess_short(x), ...) {
 #' @describeIn get_billable Get billable ICD-9-CM codes
 #' @export
 #' @keywords internal
-get_billable.icd9cm <- function(x, short_code = guess_short(x),
-                                invert = FALSE, icd9cm_edition = icd9cm_latest_edition(), ...) {
-  assert_flag(short_code)
-  assert_flag(invert)
-  assert_string(icd9cm_edition)
+get_billable.icd9cm <- function(
+  x,
+  short_code = guess_short(x),
+  invert = FALSE,
+  icd9cm_edition = icd9cm_latest_edition(),
+  ...
+) {
+  stopifnot(is.atomic(x), is.logical(short_code), is.logical(invert))
+  stopifnot(is.character(icd9cm_edition), length(icd9cm_edition) == 1L)
   # would be nicer to dispatch on short_code type here.
-  icd9cm_get_billable(x = x, short_code = short_code, invert = invert, icd9cm_edition = icd9cm_edition)
+  icd9cm_get_billable(x = x,
+                      short_code = short_code,
+                      invert = invert,
+                      icd9cm_edition = icd9cm_edition)
 }
 
 #' @describeIn get_billable Get billable ICD-9 codes, which is currently
@@ -236,27 +244,28 @@ get_billable.icd9 <- function(...)
 #' @template short_code
 #' @template invert
 #' @keywords internal
-icd9cm_get_billable <- function(x, short_code = guess_short(x),
-                                invert = FALSE, icd9cm_edition = icd9cm_latest_edition()) {
-  assert_vector(x)
-  assert_flag(short_code)
-  assert_flag(invert)
-  assert_string(icd9cm_edition)
+#' @noRd
+icd9cm_get_billable <- function(
+  x,
+  short_code = guess_short(x),
+  invert = FALSE,
+  icd9cm_edition = icd9cm_latest_edition()
+) {
+  stopifnot(is.atomic(x), is.logical(short_code), is.logical(invert))
+  stopifnot(is.character(icd9cm_edition), length(icd9cm_edition) == 1L)
   x <- as.short_diag(as.icd9cm(x), short_code)
-
   x[is_billable.icd9cm(x, short_code = short_code, icd9cm_edition = icd9cm_edition) != invert]
 }
 
 #' @describeIn get_billable Get billable, i.e. leaf nodes from ICD-10-CM
 #' @export
 #' @keywords internal
+#' @noRd
 get_billable.icd10cm <- function(x, short_code = guess_short(x),
                                  invert = FALSE, icd10cm_edition = "2016",
                                  ...) {
-  assert_vector(x)
-  assert_flag(short_code)
-  assert_flag(invert)
-  assert_string(icd10cm_edition)
+  stopifnot(is.atomic(x), is.logical(short_code), is.logical(invert))
+  stopifnot(is.character(icd10cm_edition), length(icd10cm_edition) == 1L)
   x <- as.short_diag(as.icd10cm(x), short_code)
   x[is_billable.icd10cm(unclass(x), short_code = short_code,
                         icd10cm_edition = icd10cm_edition) != invert]
@@ -265,6 +274,7 @@ get_billable.icd10cm <- function(x, short_code = guess_short(x),
 #' @describeIn get_billable Get billable, i.e. leaf nodes from ICD-10-CM
 #' @export
 #' @keywords internal
+#' @noRd
 get_billable.icd10 <- function(x, short_code = guess_short(x),
                                invert = FALSE, icd10cm_edition = "2016", ...) {
   get_billable.icd10cm(x = x, short_code = short_code, invert = invert, icd10cm_edition = icd10cm_edition)

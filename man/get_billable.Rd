@@ -5,8 +5,6 @@
 \alias{get_billable.default}
 \alias{get_billable.icd9cm}
 \alias{get_billable.icd9}
-\alias{get_billable.icd10cm}
-\alias{get_billable.icd10}
 \alias{icd_get_billable}
 \alias{icd_get_billable.icd9}
 \alias{icd_get_billable.icd9cm}
@@ -22,12 +20,6 @@ get_billable(...)
   invert = FALSE, icd9cm_edition = icd9cm_latest_edition(), ...)
 
 \method{get_billable}{icd9}(...)
-
-\method{get_billable}{icd10cm}(x, short_code = guess_short(x),
-  invert = FALSE, icd10cm_edition = "2016", ...)
-
-\method{get_billable}{icd10}(x, short_code = guess_short(x),
-  invert = FALSE, icd10cm_edition = "2016", ...)
 
 icd_get_billable(...)
 
@@ -75,10 +67,6 @@ or ICD-10, and code short vs decimal type.
 
 \item \code{icd9}: Get billable ICD-9 codes, which is currently
 implemented assuming ICD-9-CM
-
-\item \code{icd10cm}: Get billable, i.e. leaf nodes from ICD-10-CM
-
-\item \code{icd10}: Get billable, i.e. leaf nodes from ICD-10-CM
 }}
 
 \section{Deprecated function names}{

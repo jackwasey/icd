@@ -463,3 +463,12 @@ to_title_case <- function(x) {
   }
   x
 }
+
+#' Get the raw data directory
+#'
+#' Following Hadley Wickham recommendations in R Packages, this should be in
+#' \code{inst/extdata}. \pkg{devtools} overrides \code{system.file}.
+#' @noRd
+#' @keywords internal
+get_raw_data_dir <- function()
+  system.file("extdata", package = "icd")

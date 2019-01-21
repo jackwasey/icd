@@ -1,20 +1,3 @@
-# Copyright (C) 2014 - 2018  Jack O. Wasey
-#
-# This file is part of icd.
-#
-# icd is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-#
-# icd is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with icd. If not, see <http:#www.gnu.org/licenses/>.
-
 #nocov start
 
 #' Extract assignments from a SAS FORMAT definition
@@ -180,15 +163,17 @@ sas_extract_let_strings <- function(x) {
 sas_expand_range <- function(start, end) {
   if (end == "0449")
     end <- start # HIV codes changed
-
+  # hmmm, maybe get the diff and test all children of ambigs present later
   reals <- expand_range.icd9(start, end, short_code = TRUE, defined = TRUE,
-                             # hmmm, maybe get the diff and test all children of ambigs present later
                              ex_ambig_start = FALSE, ex_ambig_end = TRUE)
   real_parents <- condense.icd9(reals, defined = TRUE, short_code = TRUE)
   merged <- unique(c(reals, real_parents))
-  real_parents_of_merged <- condense.icd9(merged, defined = TRUE, short_code = TRUE)
-  halfway <- children.icd9(real_parents_of_merged, defined = FALSE, short_code = TRUE)
-  nonrealrange <- expand_range.icd9(start, end, defined = FALSE, short_code = TRUE,
+  real_parents_of_merged <- condense.icd9(merged, defined = TRUE,
+                                          short_code = TRUE)
+  halfway <- children.icd9(real_parents_of_merged, defined = FALSE,
+                           short_code = TRUE)
+  nonrealrange <- expand_range.icd9(start, end, defined = FALSE,
+                                    short_code = TRUE,
                                     ex_ambig_start = TRUE,
                                     ex_ambig_end = TRUE)
   sort_icd.icd9(unique(c(halfway, nonrealrange)), short_code = TRUE)

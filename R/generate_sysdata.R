@@ -43,7 +43,6 @@ generate_sysdata <- function(save_data = TRUE) {
     icd9_short_v_defined$vec, short_code = TRUE, icd9cm_edition = "32")) # nolint
   icd9_short_e_leaf <- vec_to_lookup_pair(icd9cm_get_billable(
     icd9_short_e_defined$vec, short_code = TRUE, icd9cm_edition = "32")) # nolint
-  icd9_sources <- icd9_generate_sources()
   # minimal data sources validation
   long_fns <- icd9_sources[["long_filename"]]
   short_fns <- icd9_sources[["long_filename"]]
@@ -100,6 +99,27 @@ icd9_generate_all_v <- function(...) {
 
 icd9_generate_all_e <- function(...) {
   icd9_generate_all_(major_fun = icd9_generate_all_major_e, ...)
+}
+
+#' generate lookup data for each class of ICD-9 code
+#'
+#' This is a little painful but the data is small enough, with huge speed gains
+#' in common operations
+#' @return list with two items, the first being an environment, the second being
+#'   a vector. The environment has short ICD-9 codes as the names, and the
+#'   sequence number as the contents. The vector contains the codes in order.
+#' @keywords internal
+#' @noRd
+icd9_generate_all_ <- function(major_fun,
+                               short_code = TRUE,
+                               env = new.env(hash = TRUE, baseenv())) {
+  vec <- character()
+  for (i in major_fun()) {
+    kids <- children.icd9(i, short_code = short_code, defined = FALSE)
+    vec <- c(vec, kids)
+  }
+  vec_to_env_count(vec, env = env)
+  invisible(list(env = env, vec = env_to_vec_flip(env)))
 }
 
 #nocov end

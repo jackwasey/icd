@@ -205,18 +205,18 @@ icd9_get_chapters <- function(x, short_code = guess_short(x), verbose = FALSE) {
   majors <- unique(all_majors)
   lenm <- length(majors)
   out <- data.frame(
-    three_digit = factor(rep(NA, lenm), levels = c(icd9_majors, NA)),
-    major = factor(rep(NA, lenm), levels = c(names(icd9_majors), NA)),
+    three_digit = factor(rep(NA, lenm), levels = c(icd.data::icd9_majors, NA)),
+    major = factor(rep(NA, lenm), levels = c(names(icd.data::icd9_majors), NA)),
     sub_chapter =
-      factor(rep(NA, lenm), levels = c(names(icd9_sub_chapters), NA)),
-    chapter = factor(rep(NA, lenm), levels = c(names(icd9_chapters), NA))
+      factor(rep(NA, lenm), levels = c(names(icd.data::icd9_sub_chapters), NA)),
+    chapter = factor(rep(NA, lenm), levels = c(names(icd.data::icd9_chapters), NA))
   )
-  chap_lookup <- lapply(icd9_chapters, function(y)
+  chap_lookup <- lapply(icd.data::icd9_chapters, function(y)
     vec_to_env_true(
       expand_range_major.icd9(y[["start"]], y[["end"]], defined = FALSE)
     )
   )
-  subchap_lookup <- lapply(icd9_sub_chapters, function(y)
+  subchap_lookup <- lapply(icd.data::icd9_sub_chapters, function(y)
     vec_to_env_true(
       expand_range_major.icd9(y[["start"]], y[["end"]], defined = FALSE)
     )
@@ -224,22 +224,22 @@ icd9_get_chapters <- function(x, short_code = guess_short(x), verbose = FALSE) {
   for (i in seq_along(majors)) {
     if (verbose)
       message("icd9_get_chapters: working on major ", majors[i], ", row ", i)
-    for (chap_num in seq_along(icd9_chapters)) {
+    for (chap_num in seq_along(icd.data::icd9_chapters)) {
       if (majors[i] %ine% chap_lookup[[chap_num]]) {
-        out[i, "chapter"] <- names(icd9_chapters)[chap_num]
+        out[i, "chapter"] <- names(icd.data::icd9_chapters)[chap_num]
         break
       }
     }
-    for (subchap_num in seq_along(icd9_sub_chapters)) {
+    for (subchap_num in seq_along(icd.data::icd9_sub_chapters)) {
       if (majors[i] %ine% subchap_lookup[[subchap_num]]) {
-        out[i, "sub_chapter"] <- names(icd9_sub_chapters)[subchap_num]
+        out[i, "sub_chapter"] <- names(icd.data::icd9_sub_chapters)[subchap_num]
         break
       }
     }
   }
-  whch <- match(majors, icd9_majors, nomatch = NA)
-  out$major[] <- names(icd9_majors)[whch]
-  out$three_digit[] <- unlist(icd9_majors)[whch]
+  whch <- match(majors, icd.data::icd9_majors, nomatch = NA)
+  out$major[] <- names(icd.data::icd9_majors)[whch]
+  out$three_digit[] <- unlist(icd.data::icd9_majors)[whch]
   # out is based on unique majors of the input codes. Now merge with original
   # inputs to give output
   out <- merge(

@@ -126,6 +126,3 @@
 #' @importFrom stats setNames reshape
 #' @importFrom graphics barplot
 "_PACKAGE"
-
-# taken from above @importFrom icd.data assign_icd_data
-#icd.data::assign_icd_data()

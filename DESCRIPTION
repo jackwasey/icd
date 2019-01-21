@@ -47,6 +47,7 @@ Imports:
     Rcpp (>= 0.12.3),
     utils
 Suggests:
+    graphics,
     icd.data (>= 1.1),
     knitr,
     magrittr,
