@@ -1,20 +1,3 @@
-# Copyright (C) 2014 - 2018  Jack O. Wasey
-#
-# This file is part of icd.
-#
-# icd is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-#
-# icd is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with icd. If not, see <http:#www.gnu.org/licenses/>.
-
 # save this in package environment so it doesn't need to be done on the fly
 .have_regexec_perl <- "perl" %in% names(as.list(regexec))
 
@@ -24,6 +7,7 @@
 #' @param x character vector of length one
 #' @return character vector of length one
 #' @keywords internal character
+#' @noRd
 strim <- function(x) {
   assert_string(x, na.ok = TRUE)
   if (!is.na(x[1]))
@@ -38,6 +22,7 @@ strim <- function(x) {
 #' @param x character vector
 #' @return character vector
 #' @keywords internal manip
+#' @noRd
 trim <- function(x) {
   nax <- is.na(x)
   x[!nax] <- .Call("_icd_trimCpp", PACKAGE = "icd", as.character(x[!nax]))
@@ -67,6 +52,7 @@ trim <- function(x) {
 #'   slightly quicker \code{TRUE}
 #' @return character vector of same length as input
 #' @keywords internal
+#' @noRd
 strip <- function(x, pattern = " ", use_bytes = TRUE)
   gsub(pattern = pattern, replacement = "", x = x,
        fixed = TRUE, useBytes = use_bytes)
@@ -126,48 +112,6 @@ binary_to_logical <- function(x) {
       FUN.VALUE = logical(length = dim(x)[1])
     )
   x
-}
-
-#' Match pairs of strings to get named vector
-#'
-#' Match a character vector against a regular expression with at least two
-#' parenthetic groupings, returning named vector.
-#' @param string vector of strings
-#' @param pattern vector of regular expression which should match exactly two
-#'   strings for each element in \code{stringr}. If \code{pos} is specified,
-#'   this rule is relaxed.
-#' @param pos optional pair of integers with positions of the first and second
-#'   desired matches, when multiple matches are made by the regular expression
-#' @param swap logical scalar, whether to swap the names and values. Default is
-#'   not to swap, so the first match becomes the name.
-#' @noRd
-#' @keywords internal
-str_pair_match <- function(string, pattern, pos, swap = FALSE, ...) {
-  assert_character(string, min.len = 1L)
-  assert_string(pattern, min.chars = 5L)
-  assert_flag(swap)
-  pos_missing <- missing(pos)
-  if (pos_missing)
-    pos <- c(1L, 2L)
-  else
-    assert_integerish(pos, len = 2L, lower = 1L, any.missing = FALSE)
-  res <- lapply(string,
-                function(x) unlist(
-                  regmatches(x, m = regexec(pattern = pattern, text = x, ...))
-                )[-1]
-  )
-  res <- res[vapply(res, function(x) length(x) != 0, logical(1))]
-  res <- do.call(rbind, res)
-  if (pos_missing && ncol(res) > max(pos))
-    stop("the pair matching has three or more ress but needed two.
-          Use (?: to have a non-grouping regular expression parenthesis")
-  out_names <- res[, ifelse(swap, 2L, 1L)]
-  if (any(is.na(out_names)))
-    stop("didn't match some rows:", string[is.na(out_names)],
-         call. = FALSE)
-  out <- res[, ifelse(swap, 1L, 2L)]
-  stopifnot(all(!is.na(out)))
-  setNames(out, out_names)
 }
 
 #' Get or guess the name of the visit ID column
@@ -436,14 +380,6 @@ named_list <- function(...) {
 
 # nocov start
 
-#' return all matches for regular expression
-#' @noRd
-#' @keywords internal manip
-str_match_all <- function(string, pattern, ...) {
-  string <- as.character(string)
-  regmatches(x = string, m = regexec(pattern = pattern, text = string, ...))
-}
-
 #' \code{stringr} does this, but here we have a small amount of base R code
 #' @noRd
 #' @keywords internal
@@ -472,3 +408,11 @@ to_title_case <- function(x) {
 #' @keywords internal
 get_raw_data_dir <- function()
   system.file("extdata", package = "icd")
+
+#' return all matches for regular expression
+#' @noRd
+#' @keywords internal manip
+str_match_all <- function(string, pattern, ...) {
+  string <- as.character(string)
+  regmatches(x = string, m = regexec(pattern = pattern, text = string, ...))
+}

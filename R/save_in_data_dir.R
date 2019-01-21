@@ -33,6 +33,7 @@
 #' @param envir environment in which to look for the variable to save
 #' @return invisibly returns the data
 #' @keywords internal
+#' @noRd
 save_in_data_dir <- function(var_name, suffix = "", data_path = "data",
                              package_dir = getwd(), envir = parent.frame()) {
   checkmate::assertString(suffix)

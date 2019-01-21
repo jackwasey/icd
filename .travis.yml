@@ -22,6 +22,8 @@ r_packages:
 
 r_github_packages:
   - jimhester/lintr
+  # for testing against icd.data which is not yet updated in CRAN
+  - jackwasey/icd.data
 
 cran: https://cloud.r-project.org
 

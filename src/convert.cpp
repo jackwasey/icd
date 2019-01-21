@@ -197,6 +197,7 @@ CV icd9DecimalToShort(const CV& x) {
 //'   part before the decimal, when a decimal point is used.
 //' @keywords internal manip
 //' @export
+//' @noRd
 //[[Rcpp::export(name="get_major.icd9")]]
 CV icd9GetMajor(const CV& x, const bool short_code) {
   if (short_code) {
@@ -205,7 +206,7 @@ CV icd9GetMajor(const CV& x, const bool short_code) {
 
     // I don't think i need to PROTECT here, because I immediately return the
     // result via Rcpp
-    SEXP mjrs = icd9ShortToParts(x, "")[0]; // actually wants to be an List
+    SEXP mjrs = icd9ShortToParts(x, "")[0]; // actually wants to be a List
     return as<CV>(mjrs);
   }
   SEXP mjrs = icd9DecimalToParts(x, "")[0];

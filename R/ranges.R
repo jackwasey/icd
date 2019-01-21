@@ -124,14 +124,15 @@ expand_range.icd10cm <- function(start, end, short_code = guess_short(c(start, e
   icd.data::icd10cm2016[pos[1]:pos[2], "code"]
 }
 
-#' Expand major codes to range
+#' Expand two major codes to a range
 #'
-#' Expand a pair of major codes into a range of major codes. This was previously
-#' exported, but is now going to be available only with \code{:::}, and
-#' \code{expand_range} will follow. This was never supposed to be a user
-#' facing function.
-#' @keywords internal
-expand_range_major <- function(start, end) {
+#' Expand a pair of major codes into a range of major codes. Primarily for use
+#' by `icd.data`.
+#' @examples
+#' expand_range_major("100", "102")
+#' @template dotdotdot
+#' @export
+expand_range_major <- function(start, end, defined) {
   UseMethod("expand_range_major")
 }
 
@@ -139,7 +140,7 @@ expand_range_major <- function(start, end) {
 #'   of unknown type
 #' @keywords internal
 #' @export
-expand_range_major.default <- function(start, end) {
+expand_range_major.default <- function(start, end, defined) {
   icd_ver <- guess_pair_version(start, end, short_code = TRUE)
   if (icd_ver == "icd9")
     expand_range_major.icd9(start, end)
@@ -150,7 +151,7 @@ expand_range_major.default <- function(start, end) {
 #' @describeIn expand_range_major Expand range of top-level ICD-10 codes
 #' @keywords internal
 #' @export
-expand_range_major.icd10cm <- function(start, end) {
+expand_range_major.icd10cm <- function(start, end, defined) {
   # codes may have alphabetic characters in 3rd position, so can't just do
   # numeric. This may make ICD-10-CM different from ICD-10 WHO. It also makes
   # generating the lookup table of ICD-10-CM codes potentially circular, since
@@ -206,6 +207,7 @@ expand_range.icd9 <- function(start, end,
 #'   are only so many ways for parent codes to appear (assuming the input vector
 #'   is ordered)
 #' @keywords internal
+#' @noRd
 icd9_expand_range_worker <- function(start, end, lookup, defined,
                                      ex_ambig_start, ex_ambig_end) {
   stopifnot(length(start) == 1)

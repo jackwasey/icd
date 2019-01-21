@@ -501,6 +501,7 @@ get_invalid.comorbidity_map <- function(x, short_code = guess_short(x), ...) {
 #' Returns major component of codes, i.e. the part before the decimal,
 #' or where the decimal would be.
 #' @keywords internal
+#' @noRd
 get_major <- function(x)
   UseMethod("get_major")
 
@@ -510,18 +511,21 @@ get_major <- function(x)
 #'   after all, and this is much easier in ICD-10 then ICD-9
 #' @keywords internal
 #' @export
+#' @noRd
 get_major.icd10 <- function(x)
   substr(trim(x), 1L, 3L)
 
 #' Check whether a code is major
 #' @param icd character vector of ICD codes.
 #' @keywords internal
+#' @noRd
 is_major <- function(x)
   UseMethod("is_major")
 
 #' @describeIn is_major Default method which guesses version
 #' @keywords internal
 #' @export
+#' @noRd
 is_major.default <- function(x) {
   switch(
     guess_version(x),
@@ -536,6 +540,7 @@ is_major.default <- function(x) {
 #' @describeIn is_major check whether a code is an ICD-10 major
 #' @keywords internal
 #' @export
+#' @noRd
 is_major.icd10 <- function(x) {
   assert_character(x)
   # if not know whether ICD-10-CM, then use broader definition
@@ -547,6 +552,7 @@ is_major.icd10 <- function(x) {
 #'   quite fast, but does suffer from handling Unicode, locales, etc.
 #' @keywords internal
 #' @export
+#' @noRd
 is_major.icd10cm <- function(x) {
   assert_character(x)
   grepl(jws(re_icd10cm_major), trim(x), perl = TRUE)
@@ -555,6 +561,7 @@ is_major.icd10cm <- function(x) {
 #' @describeIn is_major check whether a code is an ICD-9 major
 #' @keywords internal
 #' @export
+#' @noRd
 is_major.icd9 <- function(x) {
   x <- trim(x)
   nchar(x) - icd9_is_e(x) < 4
@@ -567,15 +574,18 @@ is_major.icd9 <- function(x) {
 #' @param x vector of strings or factor to test
 #' @return logical vector
 #' @keywords internal
+#' @noRd
 icd9_is_n <- function(x)
   icd9_is_n_cpp(as_char_no_warn(x))
 
 #' @describeIn icd9_is_n are the given codes V type?
 #' @keywords internal
+#' @noRd
 icd9_is_v <- function(x)
   icd9_is_v_cpp(as_char_no_warn(x))
 
 #' @describeIn icd9_is_n are the given codes E type?
 #' @keywords internal
+#' @noRd
 icd9_is_e <- function(x)
   icd9_is_e_cpp(as_char_no_warn(x))
