@@ -567,7 +567,7 @@ my_kable(
 The US State of Vermont offers anonymized public hospital discharge data [@VermontDepartmentofHealth_VermontHospitalDischarge_2016]. A sample is included in \pkg{icd} and is used here to illustrate a real-world comorbidity calculation.[^disclaimer]
 
 ```{r vermonthead}
-head(vermont_dx[1:10])
+head(icd.data::vermont_dx[1:10])
 ```
 
 The data is in 'wide' format. ICD codes have the 'short' structure, without the decimal divider. Diagnoses are spread of the `DX` columns.

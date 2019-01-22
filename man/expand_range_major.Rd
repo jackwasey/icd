@@ -7,11 +7,11 @@
 \alias{expand_range_major.icd9}
 \title{Expand two major codes to a range}
 \usage{
-expand_range_major(start, end, ...)
+expand_range_major(start, end, defined)
 
-\method{expand_range_major}{default}(start, end, ...)
+\method{expand_range_major}{default}(start, end, defined)
 
-\method{expand_range_major}{icd10cm}(start, end, ...)
+\method{expand_range_major}{icd10cm}(start, end, defined)
 
 \method{expand_range_major}{icd9}(start, end, defined = TRUE)
 }
