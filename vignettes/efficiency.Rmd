@@ -745,7 +745,7 @@ Note that 497 -- 499 are undefined in ICD-9. What should be done if 497 appears 
 ```{r pulmonaryproblem}
 sc <- c("Chronic Obstructive Pulmonary Disease And Allied Conditions",
         "Pneumoconioses And Other Lung Diseases Due To External Agents")
-icd9_sub_chapters[sc]
+icd.data::icd9_sub_chapters[sc]
 ```
 
 497 is not a valid code itself. It could be a typo for any of the other combinations, of which four are completely different, yet valid codes:
