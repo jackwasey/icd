@@ -573,7 +573,7 @@ head(icd.data::vermont_dx[1:10])
 The data is in 'wide' format. ICD codes have the 'short' structure, without the decimal divider. Diagnoses are spread of the `DX` columns.
 
 ```{r vermontlong}
-v <- wide_to_long(vermont_dx)[c("visit_id", "icd_code")]
+v <- wide_to_long(icd.data::vermont_dx)[c("visit_id", "icd_code")]
 head(v)
 ```
 
