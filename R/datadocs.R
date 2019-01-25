@@ -207,15 +207,6 @@ NULL
 #' @docType data
 NULL
 
-#' ICD-9 and ICD-10 data sources
-#'
-#' List of ICD-9 data sources for different versions of ICD-9-CM
-#' @name icd9_sources
-#' @aliases icd10_sources
-#' @docType data
-#' @keywords datasets internal
-NULL
-
 #' Pediatric Complex Chronic Conditions
 #'
 #' There are seven comorbidity maps which represent the combinations of
