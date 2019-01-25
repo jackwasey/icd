@@ -1,20 +1,3 @@
-# Copyright (C) 2014 - 2018  Jack O. Wasey
-#
-# This file is part of icd.
-#
-# icd is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or.
-# (at your option) any later version.
-#
-# icd is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with icd. If not, see <http:#www.gnu.org/licenses/>.
-
 #' @details \describe{ \item{Comorbidities}{ \code{\link{comorbid}} determines
 #'   comorbidities for a set of patients with one or more ICD codes each. All
 #'   the comorbidity functions attempt to guess which are your identifier and
@@ -113,7 +96,6 @@
 #' @keywords misc utilities
 #' @concept ICD-9 ICD-10 comorbidity comorbidities
 #' @useDynLib icd, .registration=TRUE
-#' @importFrom icd.data assign_icd_data
 #' @importFrom Rcpp cppFunction
 #' @importFrom methods setLoadAction
 #' @importFrom checkmate assert assert_flag assert_list assert_data_frame
@@ -123,9 +105,7 @@
 #'   assert_environment assert_vector assert_matrix assert_integer
 #'   expect_scalar_na expect_logical assert_integerish expect_character
 #'   assert_factor
-#' @importFrom magrittr "%>%" "%<>%" set_names extract2
 #' @importFrom utils head tail read.fwf
-#' @importFrom stats setNames
+#' @importFrom stats setNames reshape
+#' @importFrom graphics barplot
 "_PACKAGE"
-
-icd.data::assign_icd_data()

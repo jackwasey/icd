@@ -1,20 +1,3 @@
-# Copyright (C) 2014 - 2018  Jack O. Wasey
-#
-# This file is part of icd.
-#
-# icd is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-#
-# icd is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with icd. If not, see <http:#www.gnu.org/licenses/>.
-
 #' extract alphabetic, and numeric part of ICD-9 code prefix
 #'
 #' removes white space and separates V or E if present.
@@ -27,10 +10,12 @@ icd9_extract_alpha_numeric <- function(x) {
   assert(check_factor(x), check_character(x))
   # generate list, then flip into a matrix with a row for each code, and the
   # alpha part in first column, and numeric part in the second
-  as_char_no_warn(x) %>%
-    str_match_all(pattern = "([VvEe]?)([[:digit:].]+)") %>%
-    vapply(FUN = function(y) matrix(data = y[2:3], nrow = 1, ncol = 2),
-           FUN.VALUE = c(NA_character_, NA_character_)) %>% t
+  t(
+    vapply(
+      str_match_all(as_char_no_warn(x),
+                    pattern = "([VvEe]?)([[:digit:].]+)"),
+      FUN = function(y) matrix(data = y[2:3], nrow = 1, ncol = 2),
+      FUN.VALUE = c(NA_character_, NA_character_)))
 }
 
 #' drop zero padding from decimal ICD-9 code.

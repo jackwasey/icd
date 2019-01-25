@@ -1,22 +1,5 @@
 #!/bin/bash
 
-# Copyright (C) 2014 - 2018  Jack O. Wasey
-#
-# This file is part of icd.
-#
-# icd is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-#
-# icd is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with icd. If not, see <http:#www.gnu.org/licenses/>.
-
 # http://redsymbol.net/articles/unofficial-bash-strict-mode/
 set -euo pipefail
 IFS=$'\n\t'
@@ -51,6 +34,7 @@ docker run \
 	-v "${TOOLS_DIR}/in_docker_base.sh":/root/in_docker_base.sh \
 	-v "${TOOLS_DIR}/in_docker_get_icd.sh":/root/in_docker_get_icd.sh \
 	-v "${TOOLS_DIR}/in_docker_build_check.sh":/root/in_docker_build_check.sh \
+	-v "${TOOLS_DIR}/in_docker_ldpreload_asan.sh":/root/in_docker_ldpreload_asan.sh \
 	-e "ICD_PROJECT_NAME=${ICD_PROJECT_NAME:=icd}" \
 	-e "R_PKG_NAME=${R_PKG_NAME:=$ICD_PROJECT_NAME}" \
 	-e "GITHUB_URL=${GITHUB_URL:=https://github.com}" \

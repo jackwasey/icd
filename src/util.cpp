@@ -1,20 +1,3 @@
-// Copyright (C) 2014 - 2018  Jack O. Wasey
-//
-// This file is part of icd.
-//
-// icd is free software: you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
-//
-// icd is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-// GNU General Public License for more details.
-//
-// You should have received a copy of the GNU General Public License
-// along with icd. If not, see <http://www.gnu.org/licenses/>.
-
 #include "local.h"
 #include "util.h"
 #include <stdlib.h>
@@ -23,21 +6,11 @@
 #include <string.h>                            // for strcmp
 #include <algorithm>                           // for copy, sort, transform
 #include <iterator>                            // for back_insert_iterator
-#include <ostream>                             // for size_t, operator<<
-#include <string>                              // for string, basic_string
-#include <vector>                              // for vector, vector<>::size...
+#include <ostream>
+#include <string>
+#include <vector>
 
-using Rcpp::List;
-using Rcpp::Vector;
-using Rcpp::LogicalVector;
-using Rcpp::IntegerVector;
-using Rcpp::CharacterVector;
-using Rcpp::DataFrame;
-using Rcpp::String;
-using Rcpp::Rcout;
-using Rcpp::as;
-using Rcpp::any;
-using Rcpp::is_na;
+using namespace Rcpp;
 
 // trim one string from right
 std::string trimRightCpp(std::string s) {
@@ -122,6 +95,8 @@ IntegerVector matchFastTemplate(const Vector<RTYPE>& x,
   return(match(x, table));
 }
 
+// # nocov start
+
 //' @title Faster match
 //' @name match_rcpp
 //' @keywords internal
@@ -152,3 +127,5 @@ SEXP inFast(SEXP x, SEXP table) {
   }
   return R_NilValue;
 }
+
+// # nocov end

@@ -6,8 +6,7 @@
 \title{Convert ICD data from long to wide format}
 \usage{
 long_to_wide(x, visit_name = get_visit_name(x),
-  icd_name = get_icd_name(x), prefix = "icd_", min_width = 0,
-  aggr = TRUE, return_df = FALSE)
+  icd_name = get_icd_name(x), prefix = "icd_", min_width = 1L)
 
 icd_long_to_wide(...)
 }
@@ -38,16 +37,6 @@ the column using this argument avoids the guesswork.}
 \item{min_width, }{single integer, if specified, writes out this many columns
 even if no patients have that many codes. Must be greater than or equal to
 the maximum number of codes per patient.}
-
-\item{aggr}{single logical value, if TRUE (the default) will take more time
-to find out-of-order visit_names, and combine all the codes for each unique
-visit_name. If \code{FALSE}, then out-of-order visit_names will result in a
-row in the output data per contiguous block of identical visit_names.}
-
-\item{return_df}{single logical value, if \code{TRUE}, return a data frame
-with a field for the visit_name. This may be more convenient, but the
-default of \code{FALSE} gives the more natural return data of a matrix with
-row names being the visit IDs from \code{visit_name}s.}
 
 \item{...}{arguments passed on to other functions}
 }

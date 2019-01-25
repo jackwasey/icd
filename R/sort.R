@@ -1,20 +1,3 @@
-# Copyright (C) 2014 - 2018  Jack O. Wasey
-#
-# This file is part of icd.
-#
-# icd is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-#
-# icd is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with icd. If not, see <http:#www.gnu.org/licenses/>.
-
 #' Sort short-form ICD-9 codes
 #'
 #' Sorts lists of numeric only, V or E codes. Note that a simple numeric sort
@@ -83,11 +66,14 @@ sort_icd.icd9 <- function(x, short_code = guess_short(x), ...) {
 #' with a warning if found.
 #' @param x vector or factor of ICD-9 codes
 #' @return vector of integers with length of the non-NA values in \code{x}
-#' @keywords internal
-icd9_order_short <- function(x) {
+#' @export
+order.icd9 <- function(x) {
+  cl <- class(x)
   if (anyNA(x)) {
     warning("can't order NA values, so dropping them")
     x <- x[!is.na(x)]
+    if (length(x) == 0) return(character())
   }
-  icd9_order_cpp(x)
+  res <- icd9_order_cpp(x)
+  class(res) <- cl
 }

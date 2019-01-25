@@ -1,20 +1,3 @@
-# Copyright (C) 2014 - 2018  Jack O. Wasey
-#
-# This file is part of icd.
-#
-# icd is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-#
-# icd is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with icd. If not, see <http:#www.gnu.org/licenses/>.
-
 message("loading helper-base.R")
 set.seed(1441)
 n <- 500
@@ -33,7 +16,8 @@ empty_pts <- data.frame(
 empty_ahrq_mat <- matrix(nrow = 0, ncol = length(icd9_map_ahrq),
                          dimnames = list(character(0), names(icd9_map_ahrq)))
 empty_ahrq_mat_heir <- matrix(nrow = 0, ncol = length(icd9_map_ahrq),
-                              dimnames = list(character(0), names(icd9_map_ahrq)))
+                              dimnames = list(character(0),
+                                              names(icd9_map_ahrq)))
 # according to
 # https://www.hcup-us.ahrq.gov/toolssoftware/comorbidity/comorbidity.jsp
 # diabetes with complications is NOT foldeded into one new category, just
@@ -106,22 +90,25 @@ ahrq_test_dat <- as.icd_long_data(
     stringsAsFactors = FALSE
   )
 )
-elix_end_codes <- unlist(unname(c(lapply(icd9_map_elix, head, n = 1),
-                                  lapply(icd9_map_elix, tail, n = 1))))
+elix_end_codes <- unlist(
+  unname(c(lapply(icd9_map_elix, head, n = 1),
+           lapply(icd9_map_elix, tail, n = 1))))
 elix_test_dat <- data.frame(
   visit_id = rep("visit1", times = length(elix_end_codes)),
   icd9 = elix_end_codes,
   stringsAsFactors = FALSE
 )
-quan_elix_end_codes <- unlist(unname(c(lapply(icd9_map_quan_elix, head, n = 1),
-                                       lapply(icd9_map_quan_elix, tail, n = 1))))
+quan_elix_end_codes <- unlist(
+  unname(c(lapply(icd9_map_quan_elix, head, n = 1),
+           lapply(icd9_map_quan_elix, tail, n = 1))))
 quan_elix_test_dat <- data.frame(
   visit_id = rep("visit1", times = length(quan_elix_end_codes)),
   icd9 = quan_elix_end_codes,
   stringsAsFactors = FALSE
 )
-quan_deyo_end_codes <- unlist(unname(c(lapply(icd9_map_quan_deyo, head, n = 1),
-                                       lapply(icd9_map_quan_deyo, tail, n = 1))))
+quan_deyo_end_codes <- unlist(
+  unname(c(lapply(icd9_map_quan_deyo, head, n = 1),
+           lapply(icd9_map_quan_deyo, tail, n = 1))))
 quan_deyo_test_dat <- data.frame(
   visit_id = rep("visit1", times = length(quan_deyo_end_codes)),
   icd9 = quan_deyo_end_codes,

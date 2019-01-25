@@ -5,21 +5,22 @@
 \alias{expand_range_major.default}
 \alias{expand_range_major.icd10cm}
 \alias{expand_range_major.icd9}
-\title{Expand major codes to range}
+\title{Expand two major codes to a range}
 \usage{
-expand_range_major(start, end)
+expand_range_major(start, end, defined)
 
-\method{expand_range_major}{default}(start, end)
+\method{expand_range_major}{default}(start, end, defined)
 
-\method{expand_range_major}{icd10cm}(start, end)
+\method{expand_range_major}{icd10cm}(start, end, defined)
 
 \method{expand_range_major}{icd9}(start, end, defined = TRUE)
 }
+\arguments{
+\item{...}{arguments passed on to other functions}
+}
 \description{
-Expand a pair of major codes into a range of major codes. This was previously
-exported, but is now going to be available only with \code{:::}, and
-\code{expand_range} will follow. This was never supposed to be a user
-facing function.
+Expand a pair of major codes into a range of major codes. Primarily for use
+by `icd.data`.
 }
 \section{Methods (by class)}{
 \itemize{
@@ -32,4 +33,7 @@ of unknown type
 major codes
 }}
 
+\examples{
+expand_range_major("100", "102")
+}
 \keyword{internal}

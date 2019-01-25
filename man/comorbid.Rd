@@ -43,9 +43,9 @@ icd10_comorbid(x, map, visit_name = NULL, icd_name = NULL,
 icd9_comorbid(x, map, visit_name = NULL, icd_name = NULL,
   short_code = guess_short(x, icd_name = icd_name),
   short_map = guess_short(map), return_df = FALSE,
-  return_binary = FALSE, preclean = TRUE, visitId = NULL,
-  icd9Field = NULL, categorize_fun = categorize_simple,
-  comorbid_fun = comorbidMatMulSimple, ...)
+  return_binary = FALSE, preclean = FALSE,
+  categorize_fun = categorize_simple,
+  comorbid_fun = comorbid_mat_mul_wide, ...)
 
 icd9_comorbid_ahrq(x, ..., abbrev_names = TRUE, hierarchy = TRUE)
 
@@ -99,8 +99,8 @@ icd_comorbid_quan_elix(...)
 \arguments{
 \item{x}{\code{data.frame} containing a column of patient-visit identifiers
 and a column of ICD codes. The \code{data.frame} should be in \sQuote{long}
-format, like the example \code{vermont_dx} data. If it is in \sQuote{wide}
-format, it must be converted to \sQuote{long} using
+format, like the example \code{icd.data::vermont_dx} data. If it is in
+\sQuote{wide} format, it must be converted to \sQuote{long} using
 \code{\link{wide_to_long}} before calling any comorbidity functions.}
 
 \item{map}{list of the comorbidities with each list item containing a vector
@@ -138,9 +138,10 @@ Where reasonable, this is guessed from the input data.}
 frame of ICD codes, \code{x}. All the codes in a mapping should be of the
 same type, i.e. short or decimal.}
 
-\item{return_df}{single logical value, if \code{TRUE}, return the result as a data frame with the first column being
-the \code{visit_id}, and the second being the count. If \code{visit_id} was a factor or named differently in the
-input, this is preserved.}
+\item{return_df}{single logical value, if \code{TRUE}, return 'tidy' data,
+i.e., the result is a data frame with the first column being the
+\code{visit_id}, and the second being the count. If \code{visit_id} was a
+factor or named differently in the input, this is preserved.}
 
 \item{return_binary}{Single logical value, if \code{TRUE}, the returned
 \code{matrix} or \code{data.frame} will be composed of \code{1} and
@@ -165,10 +166,6 @@ ten million rows, this is much slower than the comorbidity calculation. If
 you know that the source ICD-9 codes are already well formed (or have
 already run \code{icd9_add_leading_zeroes}), then \code{preclean} can be
 set to \code{FALSE} to save time.}
-
-\item{visitId}{Deprecated. Use \code{visit_name} instead.}
-
-\item{icd9Field}{Deprecated. Use \code{icd_name} instead.}
 
 \item{comorbid_fun}{Internal. Function used inside categorization.}
 
@@ -276,6 +273,7 @@ according to Quan/Deyo ICD categories. Synonymous with
 }
 
 \examples{
+library(icd.data) # for Vermont data
 vermont_dx[1:5, 1:10]
 vd <- wide_to_long(vermont_dx)
 # get first few rows and columns of Charlson comorbidities using Quan's mapping

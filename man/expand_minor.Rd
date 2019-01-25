@@ -44,7 +44,8 @@ no obvious need, and ICD-10 children can be very complex.
 \dontrun{
   # return all possible decimal parts of ICD9 codes (111 in total)
   length(icd:::expand_minor(as.icd9(""), is_e = FALSE))
-  icd:::expand_minor(as.icd9("1")) # "1"  "10" "11" "12" "13" "14" "15" "16" "17" "18" "19"
+  icd:::expand_minor(as.icd9("1"))
+  "1" "10" "11" "12" "13" "14" "15" "16" "17" "18" "19"
 }
 }
 \seealso{

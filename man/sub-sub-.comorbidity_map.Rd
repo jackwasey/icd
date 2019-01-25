@@ -20,3 +20,4 @@ Equivalent to a list, but preserves class of extracted vector.
 # show that attributes are preserved when subsetting
 stopifnot(is.short_diag(icd10_map_ahrq[[1]]))
 }
+\keyword{internal}

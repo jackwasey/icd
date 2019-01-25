@@ -1,20 +1,3 @@
-# Copyright (C) 2014 - 2018  Jack O. Wasey
-#
-# This file is part of icd.
-#
-# icd is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-#
-# icd is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with icd. If not, see <http:#www.gnu.org/licenses/>.
-
 context("sub-types of ICD-9 code")
 
 vs <- c("V1", "V99", " V05", "v19x", " v200 ")
@@ -57,9 +40,12 @@ test_that("'is' works for factors", {
 
 test_that("'is' mixed values, factors and vectors", {
   v <- c("E100.1", "V234", "12", "V34.2", "61523", "10.2", "E9991", " V45XX ")
-  expect_equal(icd9_is_n(v), c(FALSE, FALSE, TRUE, FALSE, TRUE, TRUE, FALSE, FALSE))
-  expect_equal(icd9_is_v(v), c(FALSE, TRUE, FALSE, TRUE, FALSE, FALSE, FALSE, TRUE))
-  expect_equal(icd9_is_e(v), c(TRUE, FALSE, FALSE, FALSE, FALSE, FALSE, TRUE, FALSE))
+  expect_equal(icd9_is_n(v),
+               c(FALSE, FALSE, TRUE, FALSE, TRUE, TRUE, FALSE, FALSE))
+  expect_equal(icd9_is_v(v),
+               c(FALSE, TRUE, FALSE, TRUE, FALSE, FALSE, FALSE, TRUE))
+  expect_equal(icd9_is_e(v),
+               c(TRUE, FALSE, FALSE, FALSE, FALSE, FALSE, TRUE, FALSE))
 })
 
 test_that("ICD-10 majors identified", {

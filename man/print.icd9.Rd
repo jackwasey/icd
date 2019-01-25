@@ -23,11 +23,13 @@ x <- structure(
   c("40201", "2258", "7208", "25001", "34400", "4011", "4011", NA),
   class = c("icd9cm", "icd9", "character"),
   icd_short_diag = TRUE)
+\dontrun{
 print(x)
 print(x, verbose = TRUE)
 # as.factor drops any 'icd' classes
 print(as.factor(x), verbose = TRUE)
-u <- uranium_pathology[1:10, "icd10"]
+}
+u <- icd.data::uranium_pathology[1:10, "icd10"]
 print(u)
 print(u, verbose = TRUE)
 # as.character will unclass the 'icd' classes

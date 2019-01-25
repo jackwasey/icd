@@ -1,20 +1,3 @@
-1# Copyright (C) 2014 - 2018  Jack O. Wasey
-#
-# This file is part of icd.
-#
-# icd is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-#
-# icd is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with icd. If not, see <http:#www.gnu.org/licenses/>.
-
 context("comorbidity maps")
 
 test_that("try to induce c++ segfault bug", {
@@ -25,16 +8,15 @@ test_that("try to induce c++ segfault bug", {
 test_that("icd9 comorbidities correct, logical to binary ok", {
   ptdf <- icd9_comorbid(simple_pts, map = icd9_map_ahrq, short_code = TRUE,
                         visit_name = "visit_id", return_df = TRUE)
-
   expect_equal(names(ptdf), c("visit_id", names(icd9_map_ahrq)))
-
-  expect_true(all(sapply(names(icd9_map_ahrq),
-                         function(x)
-                           class(ptdf[, x])) == "logical"))
+  expect_true(all(vapply(names(icd9_map_ahrq),
+                         FUN = function(x) is.logical(ptdf[, x]),
+                         FUN.VALUE = logical(1))))
   ptdflogical <- logical_to_binary(ptdf)
-  expect_true(all(sapply(names(icd9_map_ahrq),
+  expect_true(all(vapply(names(icd9_map_ahrq),
                          function(x)
-                           class(ptdflogical[, x])) == "integer"))
+                           is.integer(ptdflogical[, x]),
+                         FUN.VALUE = logical(1))))
   # do not expect all the rest of patient data to be returned - we
   # aren't responsible for aggregating other fields by visit_id!
   expect_equal(dim(ptdf),
@@ -62,22 +44,34 @@ test_that("condense big lists of comorbidities", {
   for (defined_codes in c(TRUE, FALSE)) {
     if (defined_codes) {
       expect_warning(ahrq <- lapply(icd9_map_ahrq[c(1, 30)],
-                                    condense.icd9, short_code = TRUE, defined = defined_codes))
+                                    condense.icd9, short_code = TRUE,
+                                    defined = defined_codes))
       expect_warning(qd <- lapply(icd9_map_quan_deyo[c(1, 17)],
-                                  condense.icd9, short_code = TRUE, defined = defined_codes))
+                                  condense.icd9, short_code = TRUE,
+                                  defined = defined_codes))
       expect_warning(qe <- lapply(icd9_map_quan_elix[c(1, 31)],
-                                  condense.icd9, short_code = TRUE, defined = defined_codes))
+                                  condense.icd9, short_code = TRUE,
+                                  defined = defined_codes))
       expect_warning(elix <- lapply(icd9_map_elix[c(1, 31)],
-                                    condense.icd9, defined = defined_codes))
+                                    condense.icd9,
+                                    defined = defined_codes))
     } else {
       expect_warning(ahrq <- lapply(icd9_map_ahrq[c(1, 30)],
-                                    condense.icd9, short_code = TRUE, defined = defined_codes), regexp = NA)
+                                    condense.icd9, short_code = TRUE,
+                                    defined = defined_codes),
+                     regexp = NA)
       expect_warning(qd <- lapply(icd9_map_quan_deyo[c(1, 17)],
-                                  condense.icd9, short_code = TRUE, defined = defined_codes), regexp = NA)
+                                  condense.icd9, short_code = TRUE,
+                                  defined = defined_codes),
+                     regexp = NA)
       expect_warning(qe <- lapply(icd9_map_quan_elix[c(1, 30)],
-                                  condense.icd9, short_code = TRUE, defined = defined_codes), regexp = NA)
+                                  condense.icd9, short_code = TRUE,
+                                  defined = defined_codes),
+                     regexp = NA)
       expect_warning(elix <- lapply(icd9_map_elix[c(1, 30)],
-                                    condense.icd9, short_code = TRUE, defined = defined_codes), regexp = NA)
+                                    condense.icd9, short_code = TRUE,
+                                    defined = defined_codes),
+                     regexp = NA)
     }
     expect_is(ahrq, class = "list")
     expect_is(elix, class = "list")
@@ -433,7 +427,7 @@ test_that("ICD-9 codes from manually specified Elixhauser mapping exist", {
 
 test_that("github #34 - short and long custom map give different results", {
   mydf <- data.frame(visit_id = c("a", "b", "b", "c"),
-                     icd9 = c("1", "010", "10", "20"))
+                     icd9 = c("001", "010", "010", "020"))
   mymaps <- list(jack = c("1", "2", "3"), alf = c("010", "20"))
   mymapd <- lapply(mymaps, icd:::short_to_decimal.icd9)
   expect_identical(
@@ -510,14 +504,12 @@ ac <-  lapply(icd9_map_ahrq, function(x) {
 })
 
 test_that("comorbidities created from source data frame coded as factors", {
-  v2 <- wide_to_long(vermont_dx)
+  v2 <- wide_to_long(icd.data::vermont_dx)
   v2$visit_id <- as.factor(v2$visit_id)
   v2$icd_code <- as.factor(v2$icd_code)
 
   res <- icd9_comorbid_ahrq(v2)
-  res_nofactor <- vermont_dx %>%
-    wide_to_long %>%
-    icd9_comorbid_ahrq
+  res_nofactor <- icd9_comorbid_ahrq(wide_to_long(icd.data::vermont_dx))
   expect_identical(res, res_nofactor)
 })
 

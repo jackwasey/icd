@@ -1,20 +1,3 @@
-# Copyright (C) 2014 - 2018  Jack O. Wasey
-#
-# This file is part of icd.
-#
-# icd is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-#
-# icd is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with icd. If not, see <http:#www.gnu.org/licenses/>.
-
 #' AHRQ comorbidities
 #'
 #' These mappings of comorbidities to ICD-9 and ICD-10 codes are derived
@@ -222,15 +205,6 @@ NULL
 #'   icd_names_charlson_abbrev icd_names_cc
 #' @keywords datasets
 #' @docType data
-NULL
-
-#' ICD-9 and ICD-10 data sources
-#'
-#' List of ICD-9 data sources for different versions of ICD-9-CM
-#' @name icd9_sources
-#' @aliases icd10_sources
-#' @docType data
-#' @keywords datasets internal
 NULL
 
 #' Pediatric Complex Chronic Conditions

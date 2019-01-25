@@ -1,0 +1,25 @@
+---
+title: "Working with World Health Organization ICD codes"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Working with World Health Organization ICD codes}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(icd)
+library(icd.data)
+```
+
+```{r}
+
+
+```

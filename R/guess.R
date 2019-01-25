@@ -1,20 +1,3 @@
-# Copyright (C) 2014 - 2018  Jack O. Wasey
-#
-# This file is part of icd.
-#
-# icd is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-#
-# icd is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with icd. If not, see <http:#www.gnu.org/licenses/>.
-
 #' Guess version of ICD codes
 #'
 #' The guess is indeed a guess and can be wrong. There are some codes which
@@ -58,7 +41,10 @@ guess_version.factor <- function(x, short_code = NULL, ...) {
 }
 
 get_icd_valid_percent <- function(x, short_code = NULL, n = 100) {
-  assert(check_character(x, min.len = 1), check_factor(x, min.len = 1))
+  if (is.list(x)) {
+    stopifnot(length(x) == 1)
+    x <- x[[1]]
+  }
   y <- as_char_no_warn(x)[1:min(n, length(x))]
   if (!is.null(short_code)) {
     if (short_code) {
@@ -83,7 +69,6 @@ get_icd_valid_percent <- function(x, short_code = NULL, n = 100) {
 }
 
 get_icd_defined_percent <- function(x, short_code = NULL, n = 100) {
-  assert(check_character(x, min.len = 1), check_factor(x, min.len = 1))
   y <- as_char_no_warn(x)[1:min(n, length(x))]
   if (!is.null(short_code)) {
     if (short_code) {
@@ -129,10 +114,11 @@ guess_version.character <- function(x, short_code = NULL, ...) {
 #' @template icd_name
 #' @keywords internal
 #' @export
-guess_version.data.frame <- function(x, short_code = NULL, icd_name = NULL, ...) {
+guess_version.data.frame <- function(x, short_code = NULL,
+                                     icd_name = NULL, ...) {
   if (is.null(icd_name))
     icd_name <- get_icd_name(x)
-  guess_version(x[[icd_name]])
+  guess_version(x[[icd_name[1]]])
 }
 
 #' Guess version of ICD and update class
@@ -167,11 +153,14 @@ guess_version_update <- function(x, short_code = guess_short(x)) {
 #'   error if conflicting results
 #' @keywords internal
 guess_pair_version <- function(start, end, short_code = NULL) {
-  start_guess <- guess_version.character(as_char_no_warn(start), short_code = short_code)
-  end_guess <- guess_version.character(as_char_no_warn(end), short_code = short_code)
+  start_guess <- guess_version.character(
+    as_char_no_warn(start), short_code = short_code)
+  end_guess <- guess_version.character(
+    as_char_no_warn(end), short_code = short_code)
   if (start_guess != end_guess)
-    stop("Cannot expand range because ICD code version cannot be guessed from ", start,
-         " and ", end, ". Either specify the classes, e.g. icd9(\"100.4\"), or call the
+    stop("Cannot expand range because ICD code version cannot be guessed from ",
+         start, " and ", end,
+         ". Either specify the classes, e.g. icd9(\"100.4\"), or call the
        S3 method directly, e.g. expand_range.icd9")
   start_guess
 }
@@ -182,6 +171,7 @@ guess_pair_version <- function(start, end, short_code = NULL) {
 #'   minimum 'icd9' and 'icd10', and 'icd9cm' or 'icd10cm' being used first if
 #'   provided.
 #' @param ... further arguments, perhaps including \code{icd_name}
+#' @noRd
 #' @keywords internal
 switch_ver_cmb <- function(x, funs, ...) {
   dots <- list(...)

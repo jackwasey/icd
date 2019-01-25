@@ -73,10 +73,10 @@ icd10cm_children_defined_cpp <- function(x, icd10cm2016, nc) {
 #' stopifnot(simple_map$CHF == "I0981")
 #' stopifnot(simple_map$PHTN != character(0))
 #' stopifnot(simple_map$PVD == "I26019")
-#' umap <- icd:::simplify_map_lex(uranium_pathology$icd10, icd10_map_ahrq)
-#' head(icd:::categorize_simple(uranium_pathology, icd10_map_ahrq,
+#' umap <- icd:::simplify_map_lex(icd.data::uranium_pathology$icd10, icd10_map_ahrq)
+#' head(icd:::categorize_simple(icd.data::uranium_pathology, icd10_map_ahrq,
 #'                       id_name = "case", code_name = "icd10"))
-#' head(icd:::categorize_simple(uranium_pathology, umap,
+#' head(icd:::categorize_simple(icd.data::uranium_pathology, umap,
 #'                              id_name = "case", code_name = "icd10"))
 #' @keywords internal
 simplify_map_lex <- function(pt_codes, map) {
@@ -104,8 +104,8 @@ simplify_map_lex <- function(pt_codes, map) {
 #' dense matrix is then the comorbidity map
 #' \url{https://eigen.tuxfamily.org/dox/TopicMultiThreading.html}
 #' @keywords internal array algebra
-comorbidMatMulSimple <- function(icd9df, icd9Mapping, visitId, icd9Field) {
-    .Call(`_icd_comorbidMatMulSimple`, icd9df, icd9Mapping, visitId, icd9Field)
+comorbidMatMulWide <- function(data, map, id_name, code_names, validate) {
+    .Call(`_icd_comorbidMatMulWide`, data, map, id_name, code_names, validate)
 }
 
 icd9PartsToShort <- function(parts) {
@@ -116,32 +116,16 @@ icd9PartsToDecimal <- function(parts) {
     .Call(`_icd_icd9PartsToDecimal`, parts)
 }
 
-icd9MajMinToParts <- function(mjr, mnr) {
-    .Call(`_icd_icd9MajMinToParts`, mjr, mnr)
+majMinToParts <- function(mjr, mnr) {
+    .Call(`_icd_majMinToParts`, mjr, mnr)
 }
 
-icd9ShortToPartsCpp <- function(icd9Short, mnrEmpty) {
-    .Call(`_icd_icd9ShortToPartsCpp`, icd9Short, mnrEmpty)
+icd9ShortToParts <- function(icd9Short, mnrEmpty) {
+    .Call(`_icd_icd9ShortToParts`, icd9Short, mnrEmpty)
 }
 
-#' @describeIn decimal_to_parts Convert short ICD-10 code to parts
-#' @export
-#' @keywords internal manip
-short_to_parts.icd10 <- function(x, mnr_empty = "") {
-    .Call(`_icd_icd10ShortToPartsCpp`, x, mnr_empty)
-}
-
-icd9DecimalToPartsCpp <- function(icd9Decimal, mnr_empty) {
-    .Call(`_icd_icd9DecimalToPartsCpp`, icd9Decimal, mnr_empty)
-}
-
-#' @describeIn decimal_to_parts Convert decimal ICD-10 code to parts. This
-#'   shares almost 100% code with the ICD-9 version: someday combine the common
-#'   code.
-#' @export
-#' @keywords internal manip
-decimal_to_parts.icd10 <- function(x, mnr_empty = "") {
-    .Call(`_icd_icd10DecimalToPartsCpp`, x, mnr_empty)
+icd9DecimalToParts <- function(icd9Decimal, mnrEmpty) {
+    .Call(`_icd_icd9DecimalToParts`, icd9Decimal, mnrEmpty)
 }
 
 icd9_short_to_decimal_cpp <- function(x) {
@@ -157,8 +141,17 @@ icd9_decimal_to_short_cpp <- function(x) {
 #'   part before the decimal, when a decimal point is used.
 #' @keywords internal manip
 #' @export
+#' @noRd
 get_major.icd9 <- function(x, short_code) {
     .Call(`_icd_icd9GetMajor`, x, short_code)
+}
+
+icd10ShortToParts <- function(x, mnrEmpty) {
+    .Call(`_icd_icd10ShortToParts`, x, mnrEmpty)
+}
+
+icd10DecimalToParts <- function(x, mnrEmpty = "") {
+    .Call(`_icd_icd10DecimalToParts`, x, mnrEmpty)
 }
 
 #' @title Convert integers to strings as quickly as possible
@@ -223,10 +216,6 @@ icd9_is_e_cpp <- function(sv) {
     .Call(`_icd_icd9_is_e_cpp`, sv)
 }
 
-long_to_wide_cpp <- function(icd9df, visitId, icd9Field, aggregate = TRUE) {
-    .Call(`_icd_longToWideCpp`, icd9df, visitId, icd9Field, aggregate)
-}
-
 #' Simpler add leading zeroes without converting to parts and back
 #' @keywords internal manip
 icd9AddLeadingZeroesMajorSingle <- function(mjr) {
@@ -282,17 +271,25 @@ factor_nosort_rcpp_worker <- function(x, levels, na_rm) {
 
 #' @title Re-generate a factor with new levels, without doing string matching
 #' @description This is called by an R wrapper. There is an `na.rm` version,
-#' too.
+#'   too. Some work simply to mirror behavior of `base::factor`, e.g. when a
+#'   level is not available, but NA level is available, NA is inserted into the
+#'   integer vector, not an index to the NA level.
 #' @md
 #' @keywords internal manip
-refactor_worker <- function(x, new_levels, exclude_na) {
-    .Call(`_icd_refactor`, x, new_levels, exclude_na)
+refactor_worker <- function(x, new_levels, exclude_na, validate) {
+    .Call(`_icd_refactor`, x, new_levels, exclude_na, validate)
 }
 
 #' @describeIn refactor_worker Drop all `NA` values from levels and values
 #' @keywords internal
-refactor_narm_worker <- function(x, new_levels) {
-    .Call(`_icd_refactor_narm`, x, new_levels)
+refactor_narm_worker <- function(x, new_levels, validate) {
+    .Call(`_icd_refactor_narm`, x, new_levels, validate)
+}
+
+#' @title Check a factor structure is valid
+#' @keywords internal
+factor_is_valid <- function(f) {
+    .Call(`_icd_factorIsValid`, f)
 }
 
 trimLeftCpp <- function(s) {

@@ -567,13 +567,13 @@ my_kable(
 The US State of Vermont offers anonymized public hospital discharge data [@VermontDepartmentofHealth_VermontHospitalDischarge_2016]. A sample is included in \pkg{icd} and is used here to illustrate a real-world comorbidity calculation.[^disclaimer]
 
 ```{r vermonthead}
-head(vermont_dx[1:10])
+head(icd.data::vermont_dx[1:10])
 ```
 
 The data is in 'wide' format. ICD codes have the 'short' structure, without the decimal divider. Diagnoses are spread of the `DX` columns.
 
 ```{r vermontlong}
-v <- wide_to_long(vermont_dx)[c("visit_id", "icd_code")]
+v <- wide_to_long(icd.data::vermont_dx)[c("visit_id", "icd_code")]
 head(v)
 ```
 
@@ -745,7 +745,7 @@ Note that 497 -- 499 are undefined in ICD-9. What should be done if 497 appears 
 ```{r pulmonaryproblem}
 sc <- c("Chronic Obstructive Pulmonary Disease And Allied Conditions",
         "Pneumoconioses And Other Lung Diseases Due To External Agents")
-icd9_sub_chapters[sc]
+icd.data::icd9_sub_chapters[sc]
 ```
 
 497 is not a valid code itself. It could be a typo for any of the other combinations, of which four are completely different, yet valid codes:

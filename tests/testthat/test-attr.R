@@ -1,4 +1,3 @@
-
 context("attributes")
 
 test_that("attribute is set by different mechanisms", {

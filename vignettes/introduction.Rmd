@@ -12,7 +12,7 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 <!--
-Copyright (C) 2014 - 2018  Jack O. Wasey
+Copyright (C) 2014 - 2019  Jack O. Wasey
 
 This file is part of icd.
 
@@ -34,6 +34,7 @@ suppressWarnings({
   suppressPackageStartupMessages({
     loadNamespace("knitr") # for opts_chunk only
     library("icd")
+    library("icd.data")
     library("magrittr")
     library("utils")
     })
@@ -56,6 +57,7 @@ patients_icd9 <- data.frame(
 
 ```{r quickstart}
 library(icd)
+library(icd.data)
 head(uranium_pathology, 10)
 head(comorbid_charlson(uranium_pathology))
 comorbid_charlson(uranium_pathology, 
@@ -74,7 +76,7 @@ cat(utils::packageDescription("icd")$Description)
 
 **This package is what you need to generate data for 'Table 1' of your prospective or retrospective study.**
 
-When calculating which patients have which comorbidities, the data are typically structured in long or wide formats:
+When calculating which patients have which comorbidities, the data are typically structured in long (one column of diagnostic codes, multiple codes per patient) or wide (multiple diagnostic code columns, one row per patient) formats -- 'icd' comorbidity calculation handles either transparently.
 ```{r show data formats, echo=TRUE}
 # long format ICD-9-CM codes, with present-on-arrival flags
 patients_icd9
@@ -91,6 +93,8 @@ In real life, there are often problems with the data, such as `NA` values, out-o
 ```{r getcomorbidities}
 # use AHRQ revision of Elixhauser comorbidities, show only first eight columns
 comorbid_ahrq(patients_icd9)[, 1:8]
+# use Elixhauser (Quan revision) comorbidities, show first few results
+comorbid_quan_elix(vermont_dx)[1:5, 1:8]
 ```
 
 Things work beautifully using [magrittr](https://cran.r-project.org/package=magrittr) `%>%` to chain functions together. `magrittr` is useful for chains of commands, such as the following:
@@ -105,23 +109,23 @@ patients_icd9 %>%
   extract(, 5:10) %>%
   colSums
 
-# convert vermont discharge data to wide format, 
+# Take Vermont discharge data (wide to long conversion no longer needed)
 # find comorbidities, convert TRUE to 1 and show first few
-vermont_cmb <- vermont_dx %>% wide_to_long %>% 
-  icd9_comorbid_quan_deyo %>%
+vermont_cmb <- vermont_dx %>% 
+  icd9_comorbid_quan_elix %>%
   apply(2, as.integer) # convert logical to integer
 
 head(vermont_cmb)
-
 barplot(colSums(vermont_cmb[, 1:5]),
-        main = "Incidence of Elixhauser Comorbidities in Vermont data")
-
-
+        main = "Incidence of five Elixhauser comorbidities in Vermont data")
+# Use built-in summary plot, this time for AHRQ comorbidities
+plot_comorbid(vermont_dx, comorbid_fun = comorbid_ahrq,
+        main = "Incidence of all AHRQ Comorbidities in Vermont data")
 ```
 
-The above can be rewritten in classic R with many parentheses:
+The above can also be written in classic R with many parentheses:
 ```{r lots of brackets, eval = FALSE}
-head(apply(icd9_comorbid_quan_deyo(wide_to_long(vermont_dx)), 2, as.integer))
+head(apply(icd9_comorbid_quan_deyo(vermont_dx), 2, as.integer))
 ```
 
 ## Specifying data types

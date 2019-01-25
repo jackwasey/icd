@@ -1,30 +1,13 @@
-# Copyright (C) 2014 - 2018  Jack O. Wasey
-#
-# This file is part of icd.
-#
-# icd is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-#
-# icd is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with icd. If not, see <http:#www.gnu.org/licenses/>.
-
-utils::globalVariables(c(
-  "icd9_map_ahrq", "icd9_map_elix", "icd9_map_quan_deyo", "icd9_map_quan_elix",
-  "icd10_map_ahrq", "icd10_map_elix", "icd10_map_quan_deyo",
-  "icd10_map_quan_elix", "icd9_map_single_ccs", "icd9_map_multi_ccs",
-  "icd10_map_ccs",
-  "names_ahrq", "names_ahrq_abbrev", "names_ahrq_htn", "names_ahrq_htn_abbrev",
-  "names_charlson", "names_charlson_abbrev", "names_elix", "names_elix_abbrev",
-  "names_elix_htn", "names_elix_htn_abbrev", "names_quan_elix",
-  "names_quan_elix_abbrev", "names_quan_elix_htn", "names_quan_elix_htn_abbrev"
-))
+# utils::globalVariables(c(
+#   "icd9_map_ahrq", "icd9_map_elix", "icd9_map_quan_deyo", "icd9_map_quan_elix",
+#   "icd10_map_ahrq", "icd10_map_elix", "icd10_map_quan_deyo",
+#   "icd10_map_quan_elix", "icd9_map_single_ccs", "icd9_map_multi_ccs",
+#   "icd10_map_ccs",
+#   "names_ahrq", "names_ahrq_abbrev", "names_ahrq_htn", "names_ahrq_htn_abbrev",
+#   "names_charlson", "names_charlson_abbrev", "names_elix", "names_elix_abbrev",
+#   "names_elix_htn", "names_elix_htn_abbrev", "names_quan_elix",
+#   "names_quan_elix_abbrev", "names_quan_elix_htn", "names_quan_elix_htn_abbrev"
+# ))
 
 #' Present-on-admission flags
 #'
@@ -49,8 +32,8 @@ poa_choices <- c("yes", "no", "notYes", "notNo")
 #' \code{\link{comorbid_ccs}}.
 #' @param x \code{data.frame} containing a column of patient-visit identifiers
 #'   and a column of ICD codes. The \code{data.frame} should be in \sQuote{long}
-#'   format, like the example \code{vermont_dx} data. If it is in \sQuote{wide}
-#'   format, it must be converted to \sQuote{long} using
+#'   format, like the example \code{icd.data::vermont_dx} data. If it is in
+#'   \sQuote{wide} format, it must be converted to \sQuote{long} using
 #'   \code{\link{wide_to_long}} before calling any comorbidity functions.
 #' @param map list of the comorbidities with each list item containing a vector
 #'   of decimal ICD-9 codes. This is in the form of a list, with the names of
@@ -61,9 +44,7 @@ poa_choices <- c("yes", "no", "notYes", "notNo")
 #'   \code{comorbid_ahrq}, since these also name the fields correctly, apply any
 #'   hierarchical rules (see \code{hierarchy} below)
 #' @template visit_name
-#' @param visitId Deprecated. Use \code{visit_name} instead.
 #' @template icd_name
-#' @param icd9Field Deprecated. Use \code{icd_name} instead.
 #' @template short_code
 #' @template short_map
 #' @template abbrev_names
@@ -82,6 +63,7 @@ poa_choices <- c("yes", "no", "notYes", "notNo")
 #' @family comorbidity computations
 #' @family comorbidities
 #' @examples
+#' library(icd.data) # for Vermont data
 #' vermont_dx[1:5, 1:10]
 #' vd <- wide_to_long(vermont_dx)
 #' # get first few rows and columns of Charlson comorbidities using Quan's mapping
@@ -152,7 +134,7 @@ icd10_comorbid <- function(x,
   assert_data_frame(x, min.cols = 2, col.names = "unique")
   assert_list(map, min.len = 1, names = "unique")
   assert(check_string(visit_name), check_null(visit_name))
-  assert(check_string(icd_name), check_null(icd_name))
+  assert(check_character(icd_name), check_null(icd_name))
   visit_name <- get_visit_name(x, visit_name)
   icd_name <- get_icd_name(x, icd_name)
   assert_string(visit_name)
@@ -161,7 +143,7 @@ icd10_comorbid <- function(x,
   if (is.null(icd_name))
     icd_name <- get_icd_name(x)
   if (is.null(short_code))
-    short_code <- guess_short(x[[icd_name]])
+    short_code <- guess_short(x[[icd_name[1]]])
   icd10_comorbid_fun(x = x, map = map, visit_name = visit_name,
                      icd_name = icd_name, short_code = short_code,
                      short_map = short_map, return_df = return_df,
@@ -181,11 +163,14 @@ icd10_comorbid_reduce <- function(x = x, map, visit_name, icd_name, short_code,
                                   return_binary = FALSE,
                                   categorize_fun = categorize_simple, ...) {
   if (!short_code)
-    x[[icd_name]] <- decimal_to_short.icd10(x[[icd_name]])
+    x[icd_name] <- lapply(x[icd_name], decimal_to_short.icd10)
   # TODO: could  reduce list of input visits here, as we are scanning the codes
   # TODO: must we factor here?
-  x[icd_name] <- factor_nosort_rcpp(x[[icd_name]], na.rm = FALSE)
-  reduced_map <- simplify_map_lex(levels(x[[icd_name]]), map)
+  x[icd_name] <- lapply(x[icd_name], factor_nosort_rcpp, na.rm = FALSE)
+  reduced_map <- simplify_map_lex(
+    pt_codes = unlist(lapply(x[icd_name], levels)),
+    map = map
+  )
   categorize_fun(x = x, map = reduced_map,
                  id_name = visit_name, code_name = icd_name,
                  return_df = return_df, return_binary = return_binary, ...)
@@ -205,38 +190,29 @@ icd9_comorbid <- function(x, map, visit_name = NULL, icd_name = NULL,
                           short_code = guess_short(x, icd_name = icd_name),
                           short_map = guess_short(map),
                           return_df = FALSE, return_binary = FALSE,
-                          preclean = TRUE,
-                          visitId = NULL, icd9Field = NULL, #nolint
+                          preclean = FALSE,
                           categorize_fun = categorize_simple,
-                          comorbid_fun = comorbidMatMulSimple,
+                          comorbid_fun = comorbid_mat_mul_wide,
                           ...) {
-  if (!missing(visitId)) { #nolint
-    warning("Use visit_name instead of visit_id.")
-    if (is.null(visit_name))
-      visit_name <- visitId #nolint
-  }
-  if (!missing(icd9Field)) {
-    warning("Use icd_name instead of icd9Field.")
-    if (is.null(icd_name))
-      icd_name <- icd9Field #nolint
-  }
   assert_data_frame(x, min.cols = 2, col.names = "unique")
   assert_list(map, min.len = 1, names = "unique")
   assert(check_string(visit_name), check_null(visit_name))
-  assert(check_string(icd_name), check_null(icd_name))
+  assert(check_character(icd_name), check_null(icd_name))
   visit_name <- get_visit_name(x, visit_name)
   icd_name <- get_icd_name(x, icd_name)
+  stopifnot(is.character(icd_name) || is.null(icd_name))
   assert_string(visit_name)
-  assert_string(icd_name)
   assert_flag(short_code)
   assert_flag(short_map)
   # confirm class is ICD-9, and add leading zeroes if missing, and if levels
   # like 010 and 10 exists, then these get contracted by decimal_to_short,
   # making the results different if icd codes are short or not.
-  if (!short_code)
-    x[[icd_name]] <- decimal_to_short.icd9(x[[icd_name]])
-  else if (preclean)
-    x[[icd_name]] <- icd9_add_leading_zeroes(x[[icd_name]], short_code = TRUE)
+  if (!short_code) {
+    x[icd_name] <- lapply(x[icd_name], decimal_to_short.icd9)
+  } else if (preclean) {
+    x[icd_name] <- lapply(x[icd_name], icd9_add_leading_zeroes,
+                          short_code = TRUE)
+  }
   if (!short_map)
     map <- lapply(map, decimal_to_short)
   categorize_fun(x = x, map = map, id_name = visit_name,
@@ -422,14 +398,14 @@ apply_hier_elix <- function(x, abbrev_names = TRUE, hierarchy = TRUE) {
     # drop HTNcx without converting to vector if matrix only has one row
     x <- x[, -which(colnames(x) == "HTNcx"), drop = FALSE]
     colnames(x)[cr(x)] <- if (abbrev_names)
-      names_elix_abbrev
+      icd::names_elix_abbrev
     else
-      names_elix
+      icd::names_elix
   } else {
     colnames(x)[cr(x)] <- if (abbrev_names)
-      names_elix_htn_abbrev
+      icd::names_elix_htn_abbrev
     else
-      names_elix_htn
+      icd::names_elix_htn
   }
   x
 }
@@ -454,14 +430,14 @@ apply_hier_quan_elix <- function(cbd, abbrev_names = TRUE, hierarchy = TRUE) {
     # these are just dropped, leaving the fields for visit_name and all the
     # comorbidities:
     colnames(cbd)[cr(cbd)] <- if (abbrev_names)
-      names_quan_elix_abbrev
+      icd::names_quan_elix_abbrev
     else
-      names_quan_elix
+      icd::names_quan_elix
   } else {
     colnames(cbd)[cr(cbd)] <- if (abbrev_names)
-      names_quan_elix_htn_abbrev
+      icd::names_quan_elix_htn_abbrev
     else
-      names_quan_elix_htn
+      icd::names_quan_elix_htn
   }
   cbd
 }
@@ -477,9 +453,9 @@ apply_hier_quan_deyo <- function(cbd, abbrev_names = TRUE, hierarchy = TRUE) {
     cbd[cbd[, "LiverSevere"] > 0, "LiverMild"] <- FALSE
   }
   colnames(cbd)[cr(cbd)] <- if (abbrev_names)
-    names_charlson_abbrev
+    icd::names_charlson_abbrev
   else
-    names_charlson
+    icd::names_charlson
 
   cbd
 }
@@ -500,14 +476,14 @@ apply_hier_ahrq <- function(cbd, abbrev_names = TRUE, hierarchy = TRUE) {
     # drop HTNcx without converting to vector if matrix only has one row
     cbd <- cbd[, -which(colnames(cbd) == "HTNcx"), drop = FALSE]
     colnames(cbd)[cr(cbd)] <- if (abbrev_names)
-      names_ahrq_abbrev
+      icd::names_ahrq_abbrev
     else
-      names_ahrq
+      icd::names_ahrq
   } else {
     colnames(cbd)[cr(cbd)] <- if (abbrev_names)
-      names_ahrq_htn_abbrev
+      icd::names_ahrq_htn_abbrev
     else
-      names_ahrq_htn
+      icd::names_ahrq_htn
   }
   cbd
 }

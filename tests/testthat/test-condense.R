@@ -1,20 +1,3 @@
-# Copyright (C) 2014 - 2018  Jack O. Wasey
-#
-# This file is part of icd.
-#
-# icd is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-#
-# icd is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with icd. If not, see <http:#www.gnu.org/licenses/>.
-
 context("condense ranges of codes to parents and orphans")
 
 test_that("five digit to five digit code range condenses", {
@@ -74,15 +57,19 @@ test_that("condense ranges which do consense", {
         "V1221", info = paste("or1,2 are: ", or1, ", ", or2))
     }
   }
-  expect_equal(condense.icd9(children.icd9("V12", short_code = TRUE, defined = TRUE),
-                             defined = TRUE), "V12")
-  expect_equal(condense.icd9(children.icd9("V12", short_code = TRUE, defined = FALSE),
-                             defined = FALSE), "V12")
+  expect_equal(
+    condense.icd9(children.icd9("V12", short_code = TRUE, defined = TRUE),
+                  defined = TRUE), "V12")
+  expect_equal(
+    condense.icd9(children.icd9("V12", short_code = TRUE, defined = FALSE),
+                  defined = FALSE), "V12")
 })
 
 test_that("condense ranges that don't condense at all", {
-  expect_equal(sort(condense.icd9(c("1230", "1232", "1236"), defined = FALSE)), c("1230", "1232", "1236"))
-  expect_equal(sort(condense.icd9(c("1230", "1232", "1236"), defined = TRUE)), c("1230", "1232", "1236"))
+  expect_equal(sort(condense.icd9(c("1230", "1232", "1236"), defined = FALSE)),
+               c("1230", "1232", "1236"))
+  expect_equal(sort(condense.icd9(c("1230", "1232", "1236"), defined = TRUE)),
+               c("1230", "1232", "1236"))
   # missing 10009
   expect_equal(sort(condense.icd9(c("1000", as.character(10000:10008)),
                                   defined = FALSE)),
@@ -127,7 +114,8 @@ test_that("condense short range", {
   expect_equal(explain_code.icd9(othersalmonella), "Other salmonella infections")
 
   expect_equal(condense.icd9(short_code = TRUE, othersalmonella, defined = TRUE), "003")
-  expect_warning(res <- condense.icd9(short_code = TRUE, othersalmonella, defined = FALSE), regexp = NA)
+  expect_warning(
+    res <- condense.icd9(short_code = TRUE, othersalmonella, defined = FALSE), regexp = NA)
   expect_equal(res, othersalmonella)
   # missing this leaf node, we can't condense at all
   expect_equal(condense.icd9(short_code = TRUE, othersalmonella[-3], defined = TRUE),
@@ -142,11 +130,15 @@ test_that("condense short range", {
   expect_equal_no_icd(sort(children.icd9(short_code = TRUE, x = "001", defined = TRUE)),
                       c("001", "0010", "0011", "0019"))
 
-  expect_equal(condense.icd9(short_code = TRUE,
-                             children.icd9(short_code = TRUE, "00320", defined = TRUE), defined = TRUE), "00320")
+  expect_equal(
+    condense.icd9(short_code = TRUE,
+                  children.icd9(short_code = TRUE, "00320", defined = TRUE),
+                  defined = TRUE), "00320")
   # majors should be okay, even if not 'real'
-  expect_warning(dup_res <- condense.icd9(short_code = TRUE,
-                                          children.icd9(short_code = TRUE, "003", defined = TRUE)), regexp = NA)
+  expect_warning(
+    dup_res <- condense.icd9(short_code = TRUE,
+                             children.icd9(short_code = TRUE, "003", defined = TRUE)),
+    regexp = NA)
 
   expect_equal(condense.icd9(short_code = TRUE, c("003", "003"), defined = TRUE), "003")
   expect_equal(condense.icd9(short_code = TRUE, c("003", "003"), defined = FALSE), "003")
@@ -156,16 +148,31 @@ test_that("condense full ranges", {
   # condensing to "real" means we don't get a lot of majors, which are often not
   # themselves defined.
   # majors:
-  expect_equal(condense.icd9(short_code = TRUE,
-                             children.icd9(short_code = TRUE, "003", defined = FALSE), defined = FALSE), "003")
-  expect_equal(condense.icd9(short_code = TRUE,
-                             children.icd9(short_code = TRUE, "3", defined = FALSE), defined = FALSE), "003")
-  expect_equal(condense.icd9(short_code = TRUE,
-                             children.icd9(short_code = TRUE, "410", defined = FALSE), defined = FALSE), "410")
-  expect_equal(condense.icd9(short_code = TRUE,
-                             children.icd9(short_code = TRUE, "V12", defined = FALSE), defined = FALSE), "V12")
-  expect_equal(condense.icd9(short_code = TRUE,
-                             children.icd9(short_code = TRUE, "E800", defined = FALSE), defined = FALSE), "E800")
+  expect_equal(
+    condense.icd9(short_code = TRUE,
+                  children.icd9(short_code = TRUE, "003", defined = FALSE),
+                  defined = FALSE),
+    "003")
+  expect_equal(
+    condense.icd9(short_code = TRUE,
+                  children.icd9(short_code = TRUE, "3", defined = FALSE),
+                  defined = FALSE),
+    "003")
+  expect_equal(
+    condense.icd9(short_code = TRUE,
+                  children.icd9(short_code = TRUE, "410", defined = FALSE),
+                  defined = FALSE),
+    "410")
+  expect_equal(
+    condense.icd9(short_code = TRUE,
+                  children.icd9(short_code = TRUE, "V12", defined = FALSE),
+                  defined = FALSE),
+    "V12")
+  expect_equal(
+    condense.icd9(short_code = TRUE,
+                  children.icd9(short_code = TRUE, "E800", defined = FALSE),
+                  defined = FALSE),
+    "E800")
   # repeat some tests with decimals instead
   expect_equal_no_icd(condense.icd9(
     short_code = FALSE,
@@ -191,8 +198,11 @@ test_that("condense full ranges", {
     children.icd9("003.2", short_code = FALSE, defined = FALSE),
     defined = FALSE),
     "003.2")
-  expect_equal_no_icd(condense.icd9(
-    children.icd9(short_code = FALSE, "3.2", defined = FALSE), short_code = FALSE, defined = FALSE),
+  expect_equal_no_icd(
+    condense.icd9(
+      children.icd9(short_code = FALSE, "3.2", defined = FALSE),
+      short_code = FALSE,
+      defined = FALSE),
     "003.2")
   expect_equal_no_icd(condense.icd9(
     short_code = FALSE,
@@ -210,25 +220,38 @@ test_that("condense full ranges", {
   expect_equal(condense.icd9(short_code = TRUE,
                              children.icd9(short_code = TRUE, "0031", defined = FALSE),
                              defined = FALSE), "0031")
-  expect_equal(condense.icd9(short_code = TRUE, othersalmonella, defined = FALSE), othersalmonella)
+  expect_equal(
+    condense.icd9(short_code = TRUE, othersalmonella, defined = FALSE),
+    othersalmonella)
   # now do we fining major if all chilren present?
   almostall003 <- children.icd9(short_code = TRUE, "003", defined = FALSE)
   almostall003 <- almostall003[almostall003 != "003"] # drop the major
   expect_equal(condense.icd9(short_code = TRUE, almostall003, defined = FALSE), "003")
 
-  expect_equal(condense.icd9(short_code = TRUE, children.icd9(short_code = TRUE, "0031", defined = FALSE),
-                             defined = FALSE), "0031")
+  expect_equal(
+    condense.icd9(short_code = TRUE, children.icd9(short_code = TRUE, "0031",
+                                                   defined = FALSE),
+                  defined = FALSE), "0031")
   # gives nothing back if a non-billable code provided, but billable requested
 
-  expect_equal(condense.icd9(short_code = TRUE, c("003", othersalmonella), defined = TRUE),
-               "003") # billable describes input, it doesn't make any sense to describe output when condensing.
+  # billable describes input, it doesn't make any sense to describe output when
+  # condensing.
+  expect_equal(
+    condense.icd9(short_code = TRUE, c("003", othersalmonella), defined = TRUE),
+    "003")
   # major is returned
-  expect_equal(condense.icd9(short_code = TRUE, othersalmonella, defined = TRUE), "003")
-  expect_equal(condense.icd9(short_code = TRUE, othersalmonella, defined = FALSE), othersalmonella)
+  expect_equal(
+    condense.icd9(short_code = TRUE, othersalmonella, defined = TRUE),
+    "003")
+  expect_equal(
+    condense.icd9(short_code = TRUE, othersalmonella, defined = FALSE),
+    othersalmonella)
   # now do we find a missing major if all chilren present?
   almostall003 <- children.icd9("003", short_code = TRUE, defined = FALSE)
   almostall003 <- almostall003[almostall003 != "003"] # drop the major
-  expect_equal(condense.icd9(short_code = TRUE, almostall003, defined = FALSE), "003")
+  expect_equal(
+    condense.icd9(short_code = TRUE, almostall003, defined = FALSE),
+    "003")
 
 })
 
@@ -237,26 +260,28 @@ test_that("condense single major and its children", {
 
   rheum_fever <- "Rheumatic fever with heart involvement"
   expect_equal(explain_code.icd9("391"), rheum_fever)
-  expect_equal(explain_code.icd9(children.icd9("391", short_code = TRUE)), rheum_fever)
-  expect_equal(explain_code.icd9(children.icd9("391", short_code = TRUE, defined = TRUE)), rheum_fever)
+  expect_equal(
+    explain_code.icd9(children.icd9("391", short_code = TRUE)), rheum_fever)
+  expect_equal(
+    explain_code.icd9(children.icd9("391", short_code = TRUE, defined = TRUE)),
+    rheum_fever)
 })
 
-vermont_dx %>%
-  wide_to_long  %>%
-  extract2("icd_code")  %>%
-  sort_icd.icd9(short_code = TRUE) %>%
-  unique %>%
-  head(10) -> vdat
+vdat <- unique(icd.data::vermont_dx$DX1)[1:10]
 
 test_that("condense a factor of codes instead of character vector", {
   # this is not a condensable list
   dat <- as.factor(vdat)
-  expect_equal(dat, condense.icd9(short_code = TRUE, dat))
-
+  dat2 <- condense.icd9(short_code = TRUE, defined = TRUE, dat)
+  expect_true(all(intersect(dat, dat2) == dat))
 })
 
 test_that("levels are preserved from source factor", {
   dat <- factor(vdat, levels = c("plastic", vdat))
-  expect_identical(dat, condense.icd9(short_code = TRUE, dat, keep_factor_levels = TRUE))
-  expect_equivalent(dat, condense.icd9(short_code = TRUE, dat, keep_factor_levels = FALSE))
+  dat3 <- condense.icd9(dat, short_code = TRUE, defined = TRUE,
+                        keep_factor_levels = TRUE)
+  dat4 <- condense.icd9(dat, short_code = TRUE,
+                        defined = TRUE, keep_factor_levels = FALSE)
+  expect_identical(intersect(dat, dat3), vdat)
+  expect_identical(intersect(dat, dat4), vdat)
 })

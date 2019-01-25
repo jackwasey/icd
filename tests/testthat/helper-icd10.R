@@ -20,7 +20,8 @@ icd10_each_quan_elix_cmb <- icd:::icd10cm(c(
   "N19", # N19.x in Quan, yet N19 is leaf node in CM
   "B18.9", # liver
   "K26.9", #PUD
-  "B22", # actually B22 not defined in ICD-10-CM, B20 covers all HIV, but Quan uses B20-22,24
+  # B22 not defined in ICD-10-CM, B20 covers all HIV, but Quan uses B20-22,24
+  "B22",
   "C82.28",
   "C77.9",
   "C00.8",
@@ -51,7 +52,8 @@ icd10_each_ahrq_cmb <- icd:::icd10cm(c(
   "N19", # N19.x in Quan, yet N19 is leaf node in CM
   "B18.2", # liver http://www.icd10data.com/ICD10CM/Codes/A00-B99/B15-B19/B18-
   "K26.9", #PUD
-  "B20", # HIV/AIDS actually B22 not defined in ICD-10-CM, B20 covers all HIV, but Quan uses B20-22,24
+  # B22 not defined in ICD-10-CM, B20 covers all HIV, but Quan uses B20-22,24
+  "B20", # HIV or AIDS
   "C82.28",
   "C77.9",
   "C00.8",
@@ -66,15 +68,22 @@ icd10_each_ahrq_cmb <- icd:::icd10cm(c(
   "F11.988",
   "F29",
   "F43.21")) # depression F31.31 not in AHRQ, but appears in Quan Elix
-icd10_all_quan_elix <- data.frame(pt_id = 1:31, icd10_code = icd10_each_quan_elix_cmb, stringsAsFactors = FALSE)
-icd10_all_quan_elix_one_pt <- data.frame(pt_id = rep(1, 31), icd10_code = icd10_each_quan_elix_cmb)
+icd10_all_quan_elix <- data.frame(pt_id = 1:31,
+                                  icd10_code = icd10_each_quan_elix_cmb,
+                                  stringsAsFactors = FALSE)
+icd10_all_quan_elix_one_pt <- data.frame(pt_id = rep(1, 31),
+                                         icd10_code = icd10_each_quan_elix_cmb)
 
-icd10_all_ahrq <- data.frame(pt_id = 1:30, icd10_code = icd10_each_ahrq_cmb, stringsAsFactors = FALSE)
-icd10_all_ahrq_one_pt <- data.frame(pt_id = rep(1, 30), icd10_code = icd10_each_ahrq_cmb)
+icd10_all_ahrq <- data.frame(pt_id = 1:30,
+                             icd10_code = icd10_each_ahrq_cmb,
+                             stringsAsFactors = FALSE)
+icd10_all_ahrq_one_pt <- data.frame(pt_id = rep(1, 30),
+                                    icd10_code = icd10_each_ahrq_cmb)
 
-icd10_tricky <- icd:::icd10cm(c("V97.33XD", "W51.XXXA", "V00.01XD", "Y93.D", "Z99.89", "Y92.146",
-                                "S10.87XA", "W55.41XA", "W61.62XD", "Z63.1", "Y93.D", "V91.07XD",
-                                "W55.29XA", "V95.43XS", "W61.12XA", "R46.1"))
+icd10_tricky <- icd:::icd10cm(
+  c("V97.33XD", "W51.XXXA", "V00.01XD", "Y93.D", "Z99.89", "Y92.146",
+    "S10.87XA", "W55.41XA", "W61.62XD", "Z63.1", "Y93.D", "V91.07XD",
+    "W55.29XA", "V95.43XS", "W61.12XA", "R46.1"))
 n <- 500
 set.seed(1441)
 random_short_icd10_codes <-

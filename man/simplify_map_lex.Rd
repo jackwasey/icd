@@ -48,10 +48,10 @@ simple_map <- icd:::simplify_map_lex(icd10, icd10_map_ahrq)
 stopifnot(simple_map$CHF == "I0981")
 stopifnot(simple_map$PHTN != character(0))
 stopifnot(simple_map$PVD == "I26019")
-umap <- icd:::simplify_map_lex(uranium_pathology$icd10, icd10_map_ahrq)
-head(icd:::categorize_simple(uranium_pathology, icd10_map_ahrq,
+umap <- icd:::simplify_map_lex(icd.data::uranium_pathology$icd10, icd10_map_ahrq)
+head(icd:::categorize_simple(icd.data::uranium_pathology, icd10_map_ahrq,
                       id_name = "case", code_name = "icd10"))
-head(icd:::categorize_simple(uranium_pathology, umap,
+head(icd:::categorize_simple(icd.data::uranium_pathology, umap,
                              id_name = "case", code_name = "icd10"))
 }
 \seealso{

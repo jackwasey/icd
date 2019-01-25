@@ -37,7 +37,8 @@ Given vector of short_code or decimal ICD-9 codes, return (in the
 }
 \section{Methods (by class)}{
 \itemize{
-\item \code{character}: get valid ICD codes from character vector, guessing ICD version
+\item \code{character}: get valid ICD codes from character vector, guessing ICD
+version
 
 \item \code{icd9}: Get valid ICD-9 codes
 

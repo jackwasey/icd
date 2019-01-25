@@ -1,20 +1,3 @@
-# Copyright (C) 2014 - 2018  Jack O. Wasey
-#
-# This file is part of icd.
-#
-# icd is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-#
-# icd is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with icd. If not, see <http:#www.gnu.org/licenses/>.
-
 context("ICD-10 comorbidity calculations")
 test_that("simplest test case for a NA/factor interaction - factor", {
   d <- data.frame(visit = c("1", "1"), icd10 = c("not_in_map", "D638"),
@@ -43,7 +26,8 @@ test_that("simplest test case for a NA/factor interaction - int", {
 test_that("simplest test case for a NA in codes with matching code", {
   d <- data.frame(visit = c(1L, 1L), icd10 = c("D638", NA),
                   stringsAsFactors = FALSE)
-  res <- icd10_comorbid_ahrq(d, return_df = TRUE)
+  expect_error(regexp = NA,
+               res <- icd10_comorbid_ahrq(d, return_df = TRUE))
   expect_true(res[, "Anemia"])
 })
 test_that("ahrq comorbidities found for test data", {
@@ -119,7 +103,8 @@ test_that("cmb from a ICD-10, no infinite recursion with Elix", {
 })
 
 test_that("ICD-10 map reduction is sane", {
-  uranium_short_codes <- as_char_or_levels(decimal_to_short.icd10(uranium_pathology$icd10))
+  uranium_short_codes <- as_char_no_warn(
+    decimal_to_short.icd10(icd.data::uranium_pathology$icd10))
   red_map <- simplify_map_lex(uranium_short_codes, icd10_map_ahrq)
   # the map should not have its original contents, but only those codes which
   # were in the pt data. Converse is not true, as some patient codes do not fall
@@ -192,14 +177,19 @@ test_that("NA example which crashed during devel", {
 })
 
 test_that("ICD-10 comorbidities from uranium", {
-  expect_error(regexp = NA, comorbid(uranium_pathology, icd10_map_quan_elix))
-  expect_error(regexp = NA, comorbid(uranium_pathology, icd10_map_quan_deyo))
-  expect_error(regexp = NA, comorbid(uranium_pathology, icd10_map_elix))
-  expect_error(regexp = NA, comorbid(uranium_pathology, icd10_map_ahrq))
+  expect_error(regexp = NA,
+               comorbid(icd.data::uranium_pathology, icd10_map_quan_elix))
+  expect_error(regexp = NA,
+               comorbid(icd.data::uranium_pathology, icd10_map_quan_deyo))
+  expect_error(regexp = NA,
+               comorbid(icd.data::uranium_pathology, icd10_map_elix))
+  expect_error(regexp = NA,
+               comorbid(icd.data::uranium_pathology, icd10_map_ahrq))
 })
 
 test_that("Alcoholic fatty liver", {
   dat <- data.frame(id = 1:3, icd10 = c("K700", "K7030", "K709"))
-  res <- icd10_comorbid_quan_elix(dat)
+  expect_error(regexp = NA,
+               res <- icd10_comorbid_quan_elix(dat))
   expect_true(all(res[, "Alcohol"]))
 })

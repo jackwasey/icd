@@ -1,22 +1,6 @@
-// Copyright (C) 2014 - 2018  Jack O. Wasey
-//
-// This file is part of icd.
-//
-// icd is free software: you can redistribute it and/or modify
-// it under the terms of the GNU General Public License as published by
-// the Free Software Foundation, either version 3 of the License, or
-// (at your option) any later version.
-//
-// icd is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-// GNU General Public License for more details.
-//
-// You should have received a copy of the GNU General Public License
-// along with icd. If not, see <http://www.gnu.org/licenses/>.
-
 #include "icd_types.h"
 #include "attr.h"
+using namespace Rcpp;
 
 //' Set ICD short-form diagnosis code attribute
 //'
@@ -33,7 +17,7 @@
 //' # if pryr is installed, use address and refs to see what is going on
 //' @keywords internal attribute
 // [[Rcpp::export(attr_decimal_diag)]]
-void setDecimalDiag(Rcpp::RObject& x, bool value = true) {
+void setDecimalDiag(RObject& x, bool value = true) {
   x.attr("icd_short_diag") = !value;
 }
 
@@ -42,25 +26,6 @@ void setDecimalDiag(Rcpp::RObject& x, bool value = true) {
 //' @param value \code{TRUE} or \code{FALSE}
 //' @keywords internal attribute
 // [[Rcpp::export(attr_short_diag)]]
-void setShortDiag(Rcpp::RObject& x, bool value = true) {
+void setShortDiag(RObject& x, bool value = true) {
   x.attr("icd_short_diag") = value;
 }
-// modification in-place is supposedly a bug (email from Tomas Kalibera)
-//
-// //' @rdname as.short_diag
-// //' @keywords attribute
-// //' @export
-// // [[Rcpp::export(as.short_diag)]]
-// Rcpp::RObject asShortDiag(Rcpp::RObject& x, bool value = true) {
-//   x.attr("icd_short_diag") = value;
-//   return x;
-// }
-//
-// //' @rdname as.short_diag
-// //' @keywords attribute
-// //' @export
-// // [[Rcpp::export(as.decimal_diag)]]
-// Rcpp::RObject asDecimalDiag(Rcpp::RObject& x, bool value = true) {
-//   x.attr("icd_short_diag") = !value;
-//   return x;
-// }

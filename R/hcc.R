@@ -1,20 +1,3 @@
-# Copyright (C) 2014 - 2018  Jack O. Wasey
-#
-# This file is part of icd.
-#
-# icd is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-#
-# icd is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with icd. If not, see <http:#www.gnu.org/licenses/>.
-
 globalVariables(c("icd10_map_cc", "icd9_map_cc", "icd_map_cc_hcc"))
 
 #' Get Hierarchical Condition Codes (HCC)
@@ -78,7 +61,7 @@ comorbid_hcc_worker <- function(x,
                                 icd_name) {
   assert_data_frame(x, min.cols = 3, col.names = "unique")
   assert(check_string(visit_name), check_null(visit_name))
-  assert(check_string(icd_name), check_null(icd_name))
+  assert(check_character(icd_name), check_null(icd_name))
   visit_name <- get_visit_name(x, visit_name)
   icd_name <- get_icd_name(x, icd_name)
   assert_string(date_name)

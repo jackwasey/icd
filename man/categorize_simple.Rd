@@ -5,8 +5,8 @@
 \title{Categorize codes according to a mapping}
 \usage{
 categorize_simple(x, map, id_name, code_name, return_df = FALSE,
-  return_binary = FALSE, restore_id_order = TRUE, unique_ids = FALSE,
-  preserve_id_type = FALSE, comorbid_fun = comorbidMatMulSimple)
+  return_binary = FALSE, restore_id_order = TRUE,
+  preserve_id_type = FALSE, comorbid_fun = comorbid_mat_mul_wide, ...)
 }
 \arguments{
 \item{x}{Data frame containing a column for an 'id' and a column for a code,
@@ -22,11 +22,12 @@ c("3004", "30112", "3090", "3091", "311"))} amongst other longer groups.}
 \item{id_name}{The name of the \code{data.frame} field which is the unique
 identifier.}
 
-\item{code_name}{String with name of column containing the codes.}
+\item{code_name}{String with name(s) of column(s) containing the codes.}
 
-\item{return_df}{single logical value, if \code{TRUE}, return the result as a data frame with the first column being
-the \code{visit_id}, and the second being the count. If \code{visit_id} was a factor or named differently in the
-input, this is preserved.}
+\item{return_df}{single logical value, if \code{TRUE}, return 'tidy' data,
+i.e., the result is a data frame with the first column being the
+\code{visit_id}, and the second being the count. If \code{visit_id} was a
+factor or named differently in the input, this is preserved.}
 
 \item{return_binary}{Logical value, if \code{TRUE}, the output will be in 0s
 and 1s instead of TRUE and FALSE.}
@@ -37,10 +38,6 @@ input data. This takes a third of the time in calculations on data with
 tens of millions of rows, so, if the visit IDs will be discarded when
 summarizing data, this can be set to \code{FALSE} for a big speed-up.}
 
-\item{unique_ids}{Single logical value, if \code{TRUE} then the visit IDs in
-column given by \code{id_name} are assumed to be unique. Otherwise, the
-default action is to ensure they are unique.}
-
 \item{preserve_id_type}{Single logical value, if \code{TRUE}, the visit ID
 column will be converted back to its original type. The default of
 \code{FALSE} means only \code{factors} and \code{character} types are
@@ -49,6 +46,8 @@ necessarily stored as character vectors.}
 
 \item{comorbid_fun}{function i.e. the function symbol (not character string)
 to be called to do the comorbidity calculation}
+
+\item{...}{arguments passed on to other functions}
 }
 \description{
 This is the function which prepares the input data for the categorization,
@@ -63,3 +62,4 @@ u$icd10 <- decimal_to_short(u$icd10)
 j <- categorize_simple(u, m, id_name = "case", code_name = "icd10")
 }
 }
+\keyword{internal}

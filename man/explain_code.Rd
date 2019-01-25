@@ -8,6 +8,7 @@
 \alias{explain_code.icd9}
 \alias{explain_code.icd9cm}
 \alias{explain_code.icd10cm}
+\alias{explain_code.icd10who}
 \alias{explain_code.icd10}
 \alias{icd_explain}
 \alias{icd_explain.default}
@@ -34,6 +35,9 @@ explain_icd(...)
 
 \method{explain_code}{icd10cm}(x, short_code = guess_short(x),
   condense = TRUE, brief = FALSE, warn = TRUE, ...)
+
+\method{explain_code}{icd10who}(x, short_code = guess_short(x),
+  condense = TRUE, brief = NULL, warn = TRUE, ...)
 
 \method{explain_code}{icd10}(x, short_code = guess_short(x),
   condense = TRUE, brief = FALSE, warn = TRUE, ...)
@@ -104,6 +108,8 @@ ICD version
 \item \code{icd10cm}: ICD-10-CM explanation, current a minimal
 implementation
 
+\item \code{icd10who}: WHO ICD-10 explanation
+
 \item \code{icd10}: ICD-10 explanation, falls back on ICD-10-CM until
 ICD-10 WHO copyright workaround is available
 }}
@@ -127,8 +133,5 @@ explain_code(icd9_map_ahrq$CHF[1:3])
 explain_code(icd9_map_ahrq$CHF[1:3], brief = TRUE)
 # The first three in the ICD-10 equivalent are a little different:
 explain_code(icd10_map_ahrq$CHF[1:3], brief = TRUE)
-# nice to have magrittr, but not essential
-library(magrittr, warn.conflicts = FALSE, quietly = TRUE)
-explain_code(icd9_map_ahrq$CHF[1:3] \%>\% condense)
 }
 \keyword{internal}

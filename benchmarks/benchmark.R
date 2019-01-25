@@ -23,18 +23,6 @@ slow_tests <- function(...) {
   invisible(res)
 }
 
-bench_long_to_wide <- function(n = 10000, np = 7, times = 10) {
-  pts <- generate_random_ordered_pts(n, np)
-  #   microbenchmark::microbenchmark(icd9LongToWideMatrixByMap(pts),
-  #                  icd9LongToWideMatrixAggregate(pts),
-  #                  icd9LongToWideMatrixNoAggregate(pts),
-  #                  times = times)
-  microbenchmark::microbenchmark(icd9LongToWide(pts, aggregate = FALSE),
-                                 icd9LongToWide(pts, aggregate = TRUE),
-                                 times = times
-  )
-}
-
 my_check <- function(values) {
   sapply(values, function(x) message("dims: ", nrow(x), " by ", ncol(x)))
   sapply(values, function(x) message("digest: ", digest::digest(x)))

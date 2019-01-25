@@ -1,20 +1,3 @@
-# Copyright (C) 2014 - 2018  Jack O. Wasey
-#
-# This file is part of icd.
-#
-# icd is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-#
-# icd is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with icd. If not, see <http:#www.gnu.org/licenses/>.
-
 context("content of icd-10 to comorbidity maps")
 
 test_that("the classes of the ICD-10 maps are correct", {
@@ -128,7 +111,7 @@ test_that("independently created list of Quan Elixhauser codes all appear", {
   # for ICD-10, the icd-10-cm children also.
   for (i in 1:30) {
     indep <- quan_elix_independent[[i]]
-    indep_kids <- quan_elix_independent[[i]] %>% children_defined.icd10cm
+    indep_kids <- children_defined.icd10cm(quan_elix_independent[[i]])
     canon <- icd10_map_quan_elix[[i]]
     expect_equal(setdiff(indep, canon), character(),
                  info = paste("checking quan elix canonical in indep: ",
@@ -148,4 +131,12 @@ test_that("some hand-picked ICD-10 codes appear in the quan elix map", {
 
 test_that("some hand-picked ICD-10 codes appear in the quan deyo map", {
   expect_true("I214" %in% icd10_map_quan_deyo$MI)
+})
+
+test_that("we find invalid elements in comorbidity map", {
+  abogus <- comorbidity_map(list(a = "bogus"))
+  expect_equivalent(get_invalid(abogus), abogus)
+  m <- abogus
+  m$b <- c("A10", "M12")
+  expect_equivalent(get_invalid(m), abogus)
 })

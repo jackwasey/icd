@@ -1,20 +1,3 @@
-# Copyright (C) 2014 - 2018  Jack O. Wasey
-#
-# This file is part of icd.
-#
-# icd is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-#
-# icd is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with icd. If not, see <http:#www.gnu.org/licenses/>.
-
 # nocov start
 
 #' Generate ICD to HCC Crosswalks from CMS
@@ -138,7 +121,8 @@ icd_parse_cc_hierarchy <- function(save_data = FALSE) {
   assert_flag(save_data)
   # Define Hierarchy
   # import raw hierarchy files from CMS
-  hierarchy_path <- system.file(get_raw_data_dir(), "icd_hcc_rawdata", "hierarchy",
+  hierarchy_path <- system.file(get_raw_data_dir(),
+                                "icd_hcc_rawdata", "hierarchy",
                                 package = "icd")
   hierarchy_files <- list.files(hierarchy_path)
   hierarchy_file_paths <- list.files(hierarchy_path, full.names = TRUE)
@@ -146,10 +130,12 @@ icd_parse_cc_hierarchy <- function(save_data = FALSE) {
   # Create a vector of year names based on the file names in the icd folders
   years <- substr(hierarchy_files, 0, 4)
   # Add year variable to each dataframe
-  icd_map_cc_hcc <- mapply(cbind, icd_map_cc_hcc, "year" = years, SIMPLIFY = FALSE)
+  icd_map_cc_hcc <- mapply(cbind, icd_map_cc_hcc, "year" = years,
+                           SIMPLIFY = FALSE)
   # Convert each item in the list of 'icd_map_cc_hcc' objects into a dataframe
   # and combine into a single DF
-  icd_map_cc_hcc <- lapply(icd_map_cc_hcc, as.data.frame, stringsAsFactors = FALSE)
+  icd_map_cc_hcc <- lapply(icd_map_cc_hcc, as.data.frame,
+                           stringsAsFactors = FALSE)
   icd_map_cc_hcc <- do.call(rbind, icd_map_cc_hcc)
   # convert years to numeric
   #
@@ -172,7 +158,7 @@ icd_parse_cc_hierarchy <- function(save_data = FALSE) {
   # convert it to a dataframe and bind it with the original icd_map_cc_ data
   # identify the maximum number of CC hierarchy rules
   longest <- max(vapply(strsplit(todrop, " ,"), length, integer(1))) + 1
-  # split list of CCs, which are separated by comma, and convert into a dataframe
+  # split list of CCs, which are separated by comma, and convert into dataframe
   todrop <- strsplit(todrop, ",")
   todrop <- do.call(rbind, lapply(todrop, function(x) {
     length(x) <- longest

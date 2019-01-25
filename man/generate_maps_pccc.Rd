@@ -32,6 +32,8 @@ The 'fixed' data are those identified in the JAMA Pediatrics letter which
 required exact matching to avoid overly broad capture of diagnoses.
 }
 \examples{
+\dontrun{
 icd:::generate_maps_pccc(save_data = FALSE)
+}
 }
 \keyword{internal}
