@@ -19,7 +19,7 @@
 #' @noRd
 save_in_data_dir <- function(var_name, suffix = "", data_path = "data",
                              package_dir = getwd(), envir = parent.frame()) {
-  checkmate::assertString(suffix)
+  stopifnot(is.character(suffix), is.character(data_path))
   if (!is.character(var_name))
     var_name <- as.character(substitute(var_name))
   stopifnot(exists(var_name, envir = envir))

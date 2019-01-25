@@ -85,30 +85,53 @@ icd9_parse_ahrq_ccs <- function(single = TRUE, save_data = FALSE,
   }
   rsrt <- function(x) comorbidity_map(resort_lvls(x))
   if (!single) {
-    ahrq_df <- read.csv(ahrq_ccs$file_path, quote = "'\"",
-                        colClasses = "character")
-    lvl1 <- rsrt(tapply(ahrq_df[["ICD.9.CM.CODE"]],
-                        ahrq_df[["CCS.LVL.1"]], clean_icd9))
-    lvl2 <- rsrt(tapply(ahrq_df[["ICD.9.CM.CODE"]],
-                        ahrq_df[["CCS.LVL.2"]], clean_icd9))
-    lvl3 <- rsrt(tapply(ahrq_df[["ICD.9.CM.CODE"]],
-                        ahrq_df[["CCS.LVL.3"]], clean_icd9))
-    lvl4 <- rsrt(tapply(ahrq_df[["ICD.9.CM.CODE"]],
-                        ahrq_df[["CCS.LVL.4"]], clean_icd9))
-    icd9_map_multi_ccs <- list(lvl1 = lvl1, lvl2 = lvl2,
-                               lvl3 = lvl3, lvl4 = lvl4)
-    if (save_data)
-      save_in_data_dir("icd9_map_multi_ccs")
+    ahrq_df <- read.csv(ahrq_ccs$file_path, quote = "'\"", colClasses = "character")
+    lvl1 <- rsrt(tapply(ahrq_df[["ICD.9.CM.CODE"]], ahrq_df[["CCS.LVL.1"]], clean_icd9))
+    lvl2 <- rsrt(tapply(ahrq_df[["ICD.9.CM.CODE"]], ahrq_df[["CCS.LVL.2"]], clean_icd9))
+    lvl3 <- rsrt(tapply(ahrq_df[["ICD.9.CM.CODE"]], ahrq_df[["CCS.LVL.3"]], clean_icd9))
+    lvl4 <- rsrt(tapply(ahrq_df[["ICD.9.CM.CODE"]], ahrq_df[["CCS.LVL.4"]], clean_icd9))
+    icd9_map_multi_ccs <- list(lvl1 = lvl1, lvl2 = lvl2, lvl3 = lvl3, lvl4 = lvl4)
+    make_labels <- function(lvl = 1){
+      values_col <- paste0("CCS.LVL.",lvl)
+      label_col <- paste0("CCS.LVL.",lvl,".LABEL")
+
+      lkp_chr <- trimws(ahrq_df[[label_col]])
+      names(lkp_chr) <- trimws(ahrq_df[[values_col]])
+      lkp_chr <- lkp_chr[nchar(names(lkp_chr)) != 0]
+      lkp_chr[!duplicated(names(lkp_chr))]
+    }
+    icd9_names_multi_ccs <- list(
+      lvl1 = make_labels(1),
+      lvl2 = make_labels(2),
+      lvl3 = make_labels(3),
+      lvl4 = make_labels(4)
+    )
+    if (save_data) {
+      save_in_data_dir(icd9_map_multi_ccs)
+      save_in_data_dir(icd9_names_multi_ccs)
+    }
     out <- icd9_map_multi_ccs
   } else {
     ahrq_df <- read.csv(ahrq_ccs$file_path, quote = "'\"",
                         colClasses = "character", skip = 1)
+
+
+    icd9_names_single_ccs <- trimws(ahrq_df$CCS.CATEGORY.DESCRIPTION)
+    names(icd9_names_single_ccs) <- trimws(ahrq_df$CCS.CATEGORY)
+    # look for duplicated lkps because there may be different spellings
+    # in the labels
+    duplicated_rows <- duplicated(names(icd9_names_single_ccs))
+    icd9_names_single_ccs <- icd9_names_single_ccs[!duplicated_rows]
+
     icd9_map_single_ccs <-
       rsrt(tapply(ahrq_df[["ICD.9.CM.CODE"]],
-                  trimws(ahrq_df$CCS.CATEGORY),
-                  clean_icd9))
-    if (save_data)
-      save_in_data_dir("icd9_map_single_ccs")
+                 trimws(ahrq_df$CCS.CATEGORY),
+                 clean_icd9)
+           )
+    if (save_data) {
+      save_in_data_dir(icd9_map_single_ccs)
+      save_in_data_dir(icd9_names_single_ccs)
+    }
     out <- icd9_map_single_ccs
   }
   invisible(out)
@@ -147,6 +170,8 @@ icd10_parse_ahrq_ccs <- function(version = "2018.1",
   ahrq_df <- read.csv(ahrq_ccs$file_path,
                       quote = "'\"",
                       colClasses = "character")
+  # rename columsn to make it easier later to create lookups
+  names(ahrq_df) <- gsub(".DESCRIPTION", ".LABEL", names(ahrq_df))
   clean_icd10 <- function(x) as.icd10(trimws(x))
   resort_lvls <- function(x) {
     # Function to reorder numbers of CCS
@@ -183,8 +208,22 @@ icd10_parse_ahrq_ccs <- function(version = "2018.1",
                         lvl2 = "MULTI.CCS.LVL.2")
   # Because data is in one file, only have one mapping file to save
   icd10_map_ccs <- lapply(icd10_map_def, ccs_lvl_map)
-  if (save_data)
-    save_in_data_dir("icd10_map_ccs")
+
+  ccs_lvl_name <- function(values_col){
+    label_col <- paste0(values_col,".LABEL")
+
+    lkp_chr <- trimws(ahrq_df[[label_col]])
+    names(lkp_chr) <- trimws(ahrq_df[[values_col]])
+    lkp_chr <- lkp_chr[nchar(names(lkp_chr)) != 0]
+    lkp_chr[!duplicated(names(lkp_chr))]
+  }
+
+  icd10_names_ccs <- lapply(icd10_map_def,ccs_lvl_name)
+
+  if (save_data) {
+    save_in_data_dir(icd10_map_ccs)
+    save_in_data_dir(icd10_names_ccs)
+  }
   invisible(icd10_map_ccs)
 }
 
