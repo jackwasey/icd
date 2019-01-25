@@ -136,13 +136,14 @@ explain_code.icd10cm <- function(x, short_code = guess_short(x),
 #' @describeIn explain_code WHO ICD-10 explanation
 #' @export
 explain_code.icd10who <- function(x, short_code = guess_short(x),
-                                 condense = TRUE, brief = NULL,
-                                 warn = TRUE, ...) {
+                                  condense = TRUE, brief = NULL,
+                                  warn = TRUE, ...) {
+  req_icd_data()
   if (!is.null(brief))
     message("WHO ICD-10 does not have short or long descriptions, ",
             "so the argument `brief` is redundant")
-  assert_vector(x)
-  assert_flag(short_code)
+  stopifnot(is.atomic(x))
+  stopifnot(is.logical(short_code), length(short_code) == 1)
   if (!missing(condense))
     .NotYetUsed("condense", error = FALSE)
   if (!missing(warn))

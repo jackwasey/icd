@@ -265,94 +265,6 @@ guess_icd_col_by_class <- function(x) {
 #' @keywords internal
 icd9cm_latest_edition <- function() "32"
 
-# nocov start
-
-#' swap names and values of a vector
-#'
-#' Swap names and values of a vector. Non-character values are implicitly
-#' converted to names.
-#' @param x named vector
-#' @return vector, with values being the names of the input vector, and names
-#' being the previous values.
-#' @noRd
-#' @keywords internal
-swap_names_vals <- function(x) {
-  assert_vector(x, strict = TRUE, any.missing = FALSE, names = "named")
-  new_names <- unname(x)
-  x <- names(x)
-  names(x) <- new_names
-  x
-}
-
-#' mimic the \code{R CMD check} test
-#'
-#' \code{R CMD check} is quick to tell you where \code{UTF-8} characters are not
-#' encoded, but gives no way of finding out which or where
-#' @examples
-#' \dontrun{
-#' sapply(icd9cm_hierarchy, icd:::get_non_ASCII)
-#' icd:::get_encodings(icd9cm_hierarchy)
-#' sapply(icd9cm_billable, icd:::get_non_ASCII)
-#' sapply(icd9cm_billable, icd:::get_encodings)
-#' }
-#' @noRd
-#' @keywords internal
-get_non_ASCII <- function(x)
-  x[is_non_ASCII(as_char_no_warn(x))]
-
-#' @rdname get_non_ASCII
-#' @noRd
-#' @keywords internal
-is_non_ASCII <- function(x)
-  is.na(iconv(as_char_no_warn(x), from = "latin1", to = "ASCII"))
-
-#' @rdname get_non_ASCII
-#' @noRd
-#' @keywords internal
-get_encodings <- function(x) {
-  vapply(x, FUN = function(y) unique(Encoding(as_char_no_warn(y))),
-         FUN.VALUE = character(1))
-}
-# nocov end
-
-#' Parse a (sub)chapter text description with parenthesised range
-#'
-#' @param x vector of descriptions followed by ICD code ranges
-#' @return list of two-element character vectors, the elements being named
-#'   'start' and 'end'.
-#' @name chapter_to_desc_range
-#' @noRd
-#' @keywords internal manip
-.chapter_to_desc_range <- function(x, re_major) {
-  assert_character(x, min.len = 1L)
-  assert_string(re_major)
-
-  re_code_range <- paste0("(.*)[[:space:]]?\\((",
-                          re_major, ")-(",
-                          re_major, ")\\)"
-  )
-  re_code_single <- paste0("(.*)[[:space:]]?\\((", re_major, ")\\)")
-  mr <- str_match_all(x, re_code_range)
-  ms <- str_match_all(x, re_code_single)
-  okr <- vapply(mr, length, integer(1)) == 4L
-  oks <- vapply(ms, length, integer(1)) == 3L
-  if (!all(okr || oks))
-    stop("Problem matching\n", x[!(okr || oks)], call. = FALSE)
-  m <- ifelse(okr, mr, ms)
-  out <- lapply(m, function(y) c(start = y[[3]], end = y[[length(y)]]))
-  names(out) <- vapply(m, function(y) trim(to_title_case(y[[2]])),
-                       FUN.VALUE = character(1))
-  out
-}
-
-chapter_to_desc_range.icd9 <- function(x) {
-  .chapter_to_desc_range(x, re_major = re_icd9_major_bare)
-}
-
-chapter_to_desc_range.icd10 <- function(x) {
-  .chapter_to_desc_range(x, re_major = re_icd10_major_bare)
-}
-
 na_to_false <- function(x) {
   assert_logical(x)
   x[is.na(x)] <- FALSE
@@ -391,15 +303,6 @@ capitalize_first <- function(x)
   trim(paste0(toupper(substr(x, 1, 1)), substr(x, 2, nchar(x))))
 # nocov end
 
-to_title_case <- function(x) {
-  for (split_char in c(" ", "-", "[")) {
-    s <- strsplit(x, split_char, fixed = TRUE)[[1]]
-    x <- paste(toupper(substring(s, 1L, 1L)), substring(s, 2L),
-               sep = "", collapse = split_char)
-  }
-  x
-}
-
 #' Get the raw data directory
 #'
 #' Following Hadley Wickham recommendations in R Packages, this should be in
@@ -415,4 +318,12 @@ get_raw_data_dir <- function()
 str_match_all <- function(string, pattern, ...) {
   string <- as.character(string)
   regmatches(x = string, m = regexec(pattern = pattern, text = string, ...))
+}
+
+# optional nice error message, could just fall back on icd.data::
+req_icd_data <- function() {
+  if (!requireNamespace("icd.data"))
+    stop("Please install the 'icd.data' package to explain ICD codes.",
+         call. = FALSE)
+
 }

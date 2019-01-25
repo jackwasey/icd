@@ -48,7 +48,7 @@ Imports:
     utils
 Suggests:
     graphics,
-    icd.data (>= 2.0),
+    icd.data (>= 1.1),
     knitr,
     magrittr,
     roxygen2 (>= 5.0.0),

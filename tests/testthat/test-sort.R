@@ -41,7 +41,7 @@ test_that("sorting of icd10 object", {
 })
 
 test_that("warn if NA when ordering ICD-9 codes", {
-  expect_warning(icd9_order_short(c("a", NA)))
+  expect_warning(order.icd9(c("a", NA)))
   expect_identical(
-    expect_warning(icd9_order_short(NA)), character())
+    expect_warning(order.icd9(NA)), character())
 })

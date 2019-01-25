@@ -1,21 +1,43 @@
-# Copyright (C) 2014 - 2018  Jack O. Wasey
-#
-# This file is part of icd.
-#
-# icd is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-#
-# icd is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with icd. If not, see <http:#www.gnu.org/licenses/>.
 
 #nocov start
+
+
+#' generate all package data
+#'
+#' Parses (and downloads if necessary) CDC annual revisions of ICD-9-CM to get
+#' the 'billable' codes. Also parses the AHRQ, Quan/Deyo, and CMS HCC
+#' comorbidity mappings from the source SAS data. Elixhauser and Quan/Elixhauser
+#' mappings are generated from transcribed codes.
+#' @keywords internal datagen
+#' @noRd
+update_everything <- function() {
+  # this is not strictly a parsing step, but is quite slow. It relies on picking
+  # up already saved files from previous steps. It can take hours to complete,
+  # but only needs to be done rarely. This is only intended to be run from
+  # development tree, not as installed package
+  generate_sysdata()
+  load(file.path("R", "sysdata.rda"))
+  generate_spelling()
+  message("Parsing comorbidity mappings from SAS and text sources.
+                       (Make sure lookup files are updated first.)
+                       Depends on icd9cm_hierarchy being updated.")
+  # ICD 9
+  icd9_parse_ahrq_sas(save_data = TRUE, offline = FALSE)
+  icd9_parse_quan_deyo_sas(save_data = TRUE, offline = FALSE)
+  icd9_parse_cc(save_data = TRUE)
+  icd9_parse_ahrq_ccs(single = TRUE, save_data = TRUE, offline = FALSE)
+  icd9_parse_ahrq_ccs(single = FALSE, save_data = TRUE, offline = FALSE)
+  icd10_parse_ahrq_ccs(version = "2018.1", save_data = TRUE, offline = FALSE)
+  icd9_generate_map_quan_elix(save_data = TRUE)
+  icd9_generate_map_elix(save_data = TRUE)
+  # ICD 10
+  icd10_parse_ahrq_sas(save_data = TRUE, offline = FALSE)
+  icd10_parse_cc(save_data = TRUE)
+  icd10_generate_map_quan_elix(save_data = TRUE)
+  icd10_generate_map_quan_deyo(save_data = TRUE)
+  icd10_generate_map_elix(save_data = TRUE)
+  generate_maps_pccc(save_data = TRUE)
+}
 
 #' Generate \code{sysdata.rda}
 #'
