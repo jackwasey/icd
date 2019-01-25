@@ -22,6 +22,8 @@ along with icd. If not, see <http:#www.gnu.org/licenses/>.
 
 # icd
 
+<!-- badges: start -->
+
 [![CRAN](https://www.r-pkg.org/badges/version/icd
 "CRAN")](https://cran.r-project.org/package=icd)
 [![lifecycle](https://img.shields.io/badge/lifecycle-stable-blue.svg)](https://www.tidyverse.org/lifecycle/#stable)
@@ -41,9 +43,10 @@ Practices](https://bestpractices.coreinfrastructure.org/projects/2092/badge)](ht
 [![CRAN RStudio mirror downloads last calendar
 month](https://cranlogs.r-pkg.org/badges/icd
 "RStudio Mirror Downloads Last Calendar Month")](https://cran.r-project.org/package=icd)
+<!-- badges: end -->
 <!-- [![CRAN RStudio mirror downloads last week](https://cranlogs.r-pkg.org/badges/last-week/icd "RStudio Mirror Downloads Last Week")](https://cran.r-project.org/package=icd) -->
-
-# Comorbidities from ICD-9 and ICD-10 codes, manipulation and validation
+\# Comorbidities from ICD-9 and ICD-10 codes, manipulation and
+validation
 
 ## Introduction
 

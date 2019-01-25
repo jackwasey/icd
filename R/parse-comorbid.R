@@ -21,21 +21,23 @@ ahrq_order_all <- c("CHF", "VALVE", "PULMCIRC", "PERIVASC", "HTN", "HTNCX",
                     "TUMOR", "ARTH", "COAG", "OBESE", "WGHTLOSS", "LYTES",
                     "BLDLOSS", "ANEMDEF", "ALCOHOL", "DRUG", "PSYCH", "DEPRESS")
 
+
+.ahrq_url_base <- "http://www.hcup-us.ahrq.gov/toolssoftware/"
+
 #' get the SAS code from AHRQ
 #'
 #' Get the SAS code from AHRQ and save in raw data directory, if not already
 #' there.
 #' @keywords internal
 icd9_fetch_ahrq_sas <- function(offline) {
-  url_base <- "http://www.hcup-us.ahrq.gov/toolssoftware/"
   download_to_data_raw(
-    url = paste0(url_base, "comorbidity/comformat2012-2013.txt"),
+    url = paste0(.ahrq_url_base, "comorbidity/comformat2012-2013.txt"),
     offline = offline)
 }
 
 icd10_fetch_ahrq_sas <- function(offline) {
   download_to_data_raw(
-    url = paste0(url_base, "comorbidityicd10/comformat_icd10cm_2016.txt"),
+    url = paste0(.ahrq_url_base, "comorbidityicd10/comformat_icd10cm_2016.txt"),
     offline = offline)
 }
 
