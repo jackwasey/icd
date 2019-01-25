@@ -1,20 +1,3 @@
-# Copyright (C) 2014 - 2018  Jack O. Wasey
-#
-# This file is part of icd.
-#
-# icd is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-#
-# icd is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with icd. If not, see <http:#www.gnu.org/licenses/>.
-
 #' Get children of ICD codes
 #'
 #' Expand ICD codes to all possible sub-codes, optionally limiting to those
@@ -105,7 +88,10 @@ children.icd9 <- function(x, short_code = guess_short(x),
 #' @describeIn children Get children of ICD-10 codes (warns because this
 #'   only applies to ICD-10-CM for now).
 #' @export
-children.icd10 <- function(x, short_code = guess_short(x), defined, billable = FALSE, ...) {
+children.icd10 <- function(x,
+                           short_code = guess_short(x),
+                           defined,
+                           billable = FALSE, ...) {
   res <- children.icd10cm(x, short_code, defined, billable, ...)
   if (!is.icd10cm(x)) {
     cl <- class(res)
@@ -117,12 +103,17 @@ children.icd10 <- function(x, short_code = guess_short(x), defined, billable = F
 
 #' @describeIn children Get children of ICD-10-CM codes
 #' @export
-children.icd10cm <- function(x, short_code = guess_short(x), defined, billable = FALSE, ...) {
+children.icd10cm <- function(x,
+                             short_code = guess_short(x),
+                             defined,
+                             billable = FALSE,
+                             ...) {
   assert(check_factor(x), check_character(unclass(x)))
   assert_flag(short_code)
   assert_flag(billable)
   if (!missing(defined) && !defined)
-    stop("Finding children of anything but defined ICD-10-CM codes is current not supported.")
+    stop("Finding children of anything but defined ICD-10-CM codes is ",
+         "currently not supported.")
   res <- children_defined.icd10cm(x = x, short_code = short_code)
   if (is.icd10cm(x)) return(as.icd10cm(res))
   res
@@ -143,7 +134,9 @@ children_defined <- function(x)
 #'   some input codes are not known ICD-10-CM codes
 #' @param use_cpp single logical flag, whether to use C++ version
 #' @export
-children_defined.icd10cm <- function(x, short_code = guess_short(x), warn = FALSE) {
+children_defined.icd10cm <- function(x,
+                                     short_code = guess_short(x),
+                                     warn = FALSE) {
   assert_character(x)
   assert_flag(short_code)
   assert_flag(warn)

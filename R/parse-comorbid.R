@@ -1,41 +1,25 @@
-# Copyright (C) 2014 - 2018  Jack O. Wasey
-#
-# This file is part of icd.
-#
-# icd is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-#
-# icd is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with icd. If not, see <http:#www.gnu.org/licenses/>.
-
 # nocov start
 
 ahrq_htn <- c("HTNCX", "HTNPREG", "OHTNPREG", "HTNWOCHF", "HTNWCHF", "HRENWORF",
               "HRENWRF", "HHRWOHRF", "HHRWCHF", "HHRWRF", "HHRWHRF")
 ahrq_chf <- c("CHF", "HTNWCHF", "HHRWCHF", "HHRWHRF")
 ahrq_renal <- c("RENLFAIL", "HRENWRF", "HHRWRF", "HHRWHRF")
-ahrq_unused <- c("HTNPREG", "OHTNPREG", "HTNWOCHF", "HTNWCHF", "HRENWORF", "HRENWRF",
-                 "HHRWOHRF", "HHRWCHF", "HHRWRF", "HHRWHRF")
+ahrq_unused <- c("HTNPREG", "OHTNPREG", "HTNWOCHF", "HTNWCHF", "HRENWORF",
+                 "HRENWRF", "HHRWOHRF", "HHRWCHF", "HHRWRF", "HHRWHRF")
 
 ahrq_order <- c("CHF", "VALVE", "PULMCIRC", "PERIVASC", "HTN", "HTNCX", "PARA",
-                "NEURO", "CHRNLUNG", "DM", "DMCX", "HYPOTHY", "RENLFAIL", "LIVER",
-                "ULCER", "AIDS", "LYMPH", "METS", "TUMOR", "ARTH", "COAG", "OBESE",
-                "WGHTLOSS", "LYTES", "BLDLOSS", "ANEMDEF", "ALCOHOL", "DRUG",
-                "PSYCH", "DEPRESS")
+                "NEURO", "CHRNLUNG", "DM", "DMCX", "HYPOTHY", "RENLFAIL",
+                "LIVER", "ULCER", "AIDS", "LYMPH", "METS", "TUMOR", "ARTH",
+                "COAG", "OBESE", "WGHTLOSS", "LYTES", "BLDLOSS", "ANEMDEF",
+                "ALCOHOL", "DRUG", "PSYCH", "DEPRESS")
 
-ahrq_order_all <- c("CHF", "VALVE", "PULMCIRC", "PERIVASC", "HTN", "HTNCX", "HTNPREG",
-                    "HTNWOCHF", "HTNWCHF", "HRENWORF", "HRENWRF", "HHRWOHRF", "HHRWCHF",
-                    "HHRWRF", "HHRWHRF", "OHTNPREG", "PARA", "NEURO", "CHRNLUNG",
-                    "DM", "DMCX", "HYPOTHY", "RENLFAIL", "LIVER", "ULCER", "AIDS",
-                    "LYMPH", "METS", "TUMOR", "ARTH", "COAG", "OBESE", "WGHTLOSS",
-                    "LYTES", "BLDLOSS", "ANEMDEF", "ALCOHOL", "DRUG", "PSYCH", "DEPRESS")
+ahrq_order_all <- c("CHF", "VALVE", "PULMCIRC", "PERIVASC", "HTN", "HTNCX",
+                    "HTNPREG", "HTNWOCHF", "HTNWCHF", "HRENWORF", "HRENWRF",
+                    "HHRWOHRF", "HHRWCHF", "HHRWRF", "HHRWHRF", "OHTNPREG",
+                    "PARA", "NEURO", "CHRNLUNG", "DM", "DMCX", "HYPOTHY",
+                    "RENLFAIL", "LIVER", "ULCER", "AIDS", "LYMPH", "METS",
+                    "TUMOR", "ARTH", "COAG", "OBESE", "WGHTLOSS", "LYTES",
+                    "BLDLOSS", "ANEMDEF", "ALCOHOL", "DRUG", "PSYCH", "DEPRESS")
 
 #' get the SAS code from AHRQ
 #'
@@ -43,14 +27,15 @@ ahrq_order_all <- c("CHF", "VALVE", "PULMCIRC", "PERIVASC", "HTN", "HTNCX", "HTN
 #' there.
 #' @keywords internal
 icd9_fetch_ahrq_sas <- function(offline) {
+  url_base <- "http://www.hcup-us.ahrq.gov/toolssoftware/"
   download_to_data_raw(
-    url = "http://www.hcup-us.ahrq.gov/toolssoftware/comorbidity/comformat2012-2013.txt",
+    url = paste0(url_base, "comorbidity/comformat2012-2013.txt"),
     offline = offline)
 }
 
 icd10_fetch_ahrq_sas <- function(offline) {
   download_to_data_raw(
-    url = "http://www.hcup-us.ahrq.gov/toolssoftware/comorbidityicd10/comformat_icd10cm_2016.txt",
+    url = paste0(url_base, "comorbidityicd10/comformat_icd10cm_2016.txt"),
     offline = offline)
 }
 

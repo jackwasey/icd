@@ -277,5 +277,8 @@ get_billable.icd10cm <- function(x, short_code = guess_short(x),
 #' @noRd
 get_billable.icd10 <- function(x, short_code = guess_short(x),
                                invert = FALSE, icd10cm_edition = "2016", ...) {
-  get_billable.icd10cm(x = x, short_code = short_code, invert = invert, icd10cm_edition = icd10cm_edition)
+  get_billable.icd10cm(x = x,
+                       short_code = short_code,
+                       invert = invert,
+                       icd10cm_edition = icd10cm_edition)
 }

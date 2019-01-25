@@ -129,16 +129,22 @@ test_that("subsetting a comorbidity map gives the right class", {
 })
 
 test_that("constructing wide data works", {
-  expect_equal(as.icd_wide_data(icd.data::vermont_dx), icd.data::vermont_dx)
-  expect_equivalent(as.icd_wide_data(icd.data::vermont_dx), icd.data::vermont_dx)
-  expect_equivalent(as.icd_wide_data(as.data.frame(icd.data::vermont_dx)), icd.data::vermont_dx)
+  expect_equal(
+    as.icd_wide_data(icd.data::vermont_dx),
+    icd.data::vermont_dx)
+  expect_equivalent(
+    as.icd_wide_data(icd.data::vermont_dx),
+    icd.data::vermont_dx)
+  expect_equivalent(
+    as.icd_wide_data(as.data.frame(icd.data::vermont_dx)),
+    icd.data::vermont_dx)
 })
 
 test_that("constructing long data works", {
   l <- data.frame(id = c(1, 1), code = c("A10", "B10"))
   expect_true(is.icd_long_data(as.icd_long_data(l)))
   expect_identical(as.icd_long_data(icd.data::uranium_pathology),
-               icd.data::uranium_pathology)
+                   icd.data::uranium_pathology)
   expect_equivalent(as.icd_long_data(icd.data::uranium_pathology),
                     icd.data::uranium_pathology)
   expect_identical(as.icd_long_data(as.data.frame(icd.data::uranium_pathology)),
@@ -227,14 +233,38 @@ test_that("no conflict for built-in data", {
 })
 
 test_that("conflicting ICD type classes can be found", {
-  expect_true(icd_classes_conflict(structure("V10", class = c("icd9cm", "icd10", "character"))))
-  expect_true(icd_classes_conflict(structure("V10", class = c("icd9", "icd10", "character"))))
-  expect_true(icd_classes_conflict(structure("V10", class = c("icd9cm", "icd10cm", "character"))))
-  expect_true(icd_classes_conflict(structure("V10", class = c("icd10cm", "icd9", "character"))))
-  expect_true(icd_classes_conflict(structure("V10", class = c("icd10cm", "icd9cm", "character"))))
-  expect_true(icd_classes_conflict(structure("V10", class = c("icd10", "icd9", "character"))))
-  expect_true(icd_classes_conflict(structure("V10", class = c("icd10", "icd9cm", "character"))))
-  expect_true(icd_classes_conflict(structure(list("V10", "A20"), class = c("icd9cm", "icd10", "list"))))
+  expect_true(
+    icd_classes_conflict(
+      structure("V10",
+                class = c("icd9cm", "icd10", "character"))))
+  expect_true(
+    icd_classes_conflict(
+      structure("V10",
+                class = c("icd9", "icd10", "character"))))
+  expect_true(
+    icd_classes_conflict(
+      structure("V10",
+                class = c("icd9cm", "icd10cm", "character"))))
+  expect_true(
+    icd_classes_conflict(
+      structure("V10",
+                class = c("icd10cm", "icd9", "character"))))
+  expect_true(
+    icd_classes_conflict(
+      structure("V10",
+                class = c("icd10cm", "icd9cm", "character"))))
+  expect_true(
+    icd_classes_conflict(
+      structure("V10",
+                class = c("icd10", "icd9", "character"))))
+  expect_true(
+    icd_classes_conflict(
+      structure("V10",
+                class = c("icd10", "icd9cm", "character"))))
+  expect_true(
+    icd_classes_conflict(
+      structure(list("V10", "A20"),
+                class = c("icd9cm", "icd10", "list"))))
 })
 
 test_that("we can't set a data.frame to have a vector class", {
@@ -260,12 +290,9 @@ test_that("long vs wide data conflict identified", {
   expect_true(icd_classes_conflict(u_bad))
 })
 
-
-context("class updates")
-
 test_that("can create NA valued ICD code types", {
-  checkmate::expect_scalar_na(as.icd9(NA))
-  checkmate::expect_scalar_na(as.icd9cm(NA))
-  checkmate::expect_scalar_na(as.icd10(NA))
-  checkmate::expect_scalar_na(as.icd10cm(NA))
+  expect_true(is.na(as.icd9(NA)))
+  expect_true(is.na(as.icd9cm(NA)))
+  expect_true(is.na(as.icd10(NA)))
+  expect_true(is.na(as.icd10cm(NA)))
 })

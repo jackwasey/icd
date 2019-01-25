@@ -1,5 +1,3 @@
-
-
 context("test direct wide data comorbidity calcs")
 
 wide_dat <- data.frame(

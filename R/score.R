@@ -1,20 +1,3 @@
-# Copyright (C) 2014 - 2018  Jack O. Wasey
-#
-# This file is part of icd.
-#
-# icd is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation, either version 3 of the License, or
-# (at your option) any later version.
-#
-# icd is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with icd. If not, see <http:#www.gnu.org/licenses/>.
-
 #' Calculate Charlson Comorbidity Index (Charlson Score)
 #'
 #' Charlson score is calculated in the basis of the Quan revision of Deyo's
@@ -106,8 +89,12 @@ charlson.data.frame <- function(x, visit_name = NULL,
 #'   \code{TRUE}, will drop \code{DM} if \code{DMcx} is present, etc.
 #' @template scoring-system
 #' @export
-charlson_from_comorbid <- function(x, visit_name = NULL, hierarchy = FALSE,
-                                   scoring_system = c("original", "charlson", "quan")) {
+charlson_from_comorbid <- function(
+  x,
+  visit_name = NULL,
+  hierarchy = FALSE,
+  scoring_system = c("original", "charlson", "quan")
+) {
   assert(
     check_data_frame(x, min.rows = 0, min.cols = 2, col.names = "named"),
     check_matrix(x, min.rows = 0, min.cols = 2, col.names = "named")
@@ -184,8 +171,8 @@ count_codes <- function(x, visit_name = get_visit_name(x), return_df = FALSE) {
   assert_string(visit_name)
   assert_flag(return_df)
   res <- stats::aggregate(x[names(x) %nin% visit_name],
-                   by = x[visit_name],
-                   FUN = length)
+                          by = x[visit_name],
+                          FUN = length)
   names(res)[names(res) %nin% visit_name] <- "icd_count"
   if (return_df)
     res
@@ -208,7 +195,11 @@ count_codes <- function(x, visit_name = get_visit_name(x), return_df = FALSE) {
 #' @template visit_name
 #' @template return_df
 #' @export
-count_comorbid <- function(x, visit_name = get_visit_name(x), return_df = FALSE) {
+count_comorbid <- function(
+  x,
+  visit_name = get_visit_name(x),
+  return_df = FALSE
+) {
   assert_string(visit_name)
   assert_flag(return_df)
   assert(check_data_frame(x), check_matrix(x))
@@ -238,10 +229,12 @@ count_comorbid <- function(x, visit_name = get_visit_name(x), return_df = FALSE)
 #'   duplicate \code{visit_name}s will be counted together.
 #' @importFrom stats aggregate
 #' @export
-count_codes_wide <- function(x,
-                             visit_name = get_visit_name(x),
-                             return_df = FALSE,
-                             aggr = FALSE) {
+count_codes_wide <- function(
+  x,
+  visit_name = get_visit_name(x),
+  return_df = FALSE,
+  aggr = FALSE
+) {
   assert_data_frame(x)
   assert_string(visit_name)
   assert_flag(return_df)
@@ -299,24 +292,37 @@ count_codes_wide <- function(x,
 #'   Hospital Death Using Administrative Data. Med Care. 2009; 47(6):626-633.
 #'   \url{http://www.ncbi.nlm.nih.gov/pubmed/19433995}
 #' @export
-van_walraven <- function(x, visit_name = NULL, return_df = FALSE,
-                         stringsAsFactors = getOption("stringsAsFactors"), # nolint
-                         ...)
+van_walraven <- function(
+  x,
+  visit_name = NULL,
+  return_df = FALSE,
+  stringsAsFactors = getOption("stringsAsFactors"), # nolint
+  ...) {
   UseMethod("van_walraven")
+}
 
 #' @describeIn van_walraven van Walraven scores from data frame of visits
 #'   and ICD-9 codes
 #' @export
-van_walraven.data.frame <- function(x, visit_name = NULL, return_df = FALSE,
-                                    stringsAsFactors = getOption("stringsAsFactors"), # nolint
-                                    ...) {
+van_walraven.data.frame <- function(
+  x,
+  visit_name = NULL,
+  return_df = FALSE,
+  stringsAsFactors = getOption("stringsAsFactors"), # nolint
+  ...
+) {
   assert_data_frame(x, min.rows = 0, min.cols = 2, col.names = "named")
   assert(check_null(visit_name), check_string(visit_name))
   assert_flag(return_df)
   assert_flag(stringsAsFactors) # nolint
   visit_name <- get_visit_name(x, visit_name)
-  tmp <- icd9_comorbid_quan_elix(x, visit_name, hierarchy = TRUE, return_df = TRUE, ...)
-  res <- van_walraven_from_comorbid(tmp, visit_name = visit_name, hierarchy = FALSE)
+  tmp <- icd9_comorbid_quan_elix(x,
+                                 visit_name,
+                                 hierarchy = TRUE,
+                                 return_df = TRUE, ...)
+  res <- van_walraven_from_comorbid(tmp,
+                                    visit_name = visit_name,
+                                    hierarchy = FALSE)
   if (!return_df) return(res)
   out <- cbind(names(res),
                data.frame("vanWalraven" = unname(res)),
@@ -331,7 +337,11 @@ van_walraven.data.frame <- function(x, visit_name = NULL, return_df = FALSE,
 #'   Elixhauser, you can't have uncomplicated and complicated diabetes both
 #'   flagged.
 #' @export
-van_walraven_from_comorbid <- function(x, visit_name = NULL, hierarchy = FALSE) {
+van_walraven_from_comorbid <- function(
+  x,
+  visit_name = NULL,
+  hierarchy = FALSE
+) {
   assert(check_data_frame(x), check_matrix(x))
   assert(check_null(visit_name), check_string(visit_name))
   assert_flag(hierarchy)

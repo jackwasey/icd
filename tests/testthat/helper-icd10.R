@@ -20,7 +20,7 @@ icd10_each_quan_elix_cmb <- icd:::icd10cm(c(
   "N19", # N19.x in Quan, yet N19 is leaf node in CM
   "B18.9", # liver
   "K26.9", #PUD
-  # actually B22 not defined in ICD-10-CM, B20 covers all HIV, but Quan uses B20-22,24
+  # B22 not defined in ICD-10-CM, B20 covers all HIV, but Quan uses B20-22,24
   "B22",
   "C82.28",
   "C77.9",
@@ -52,7 +52,8 @@ icd10_each_ahrq_cmb <- icd:::icd10cm(c(
   "N19", # N19.x in Quan, yet N19 is leaf node in CM
   "B18.2", # liver http://www.icd10data.com/ICD10CM/Codes/A00-B99/B15-B19/B18-
   "K26.9", #PUD
-  "B20", # HIV/AIDS actually B22 not defined in ICD-10-CM, B20 covers all HIV, but Quan uses B20-22,24
+  # B22 not defined in ICD-10-CM, B20 covers all HIV, but Quan uses B20-22,24
+  "B20", # HIV or AIDS
   "C82.28",
   "C77.9",
   "C00.8",
