@@ -2,7 +2,7 @@
 
 I'm delighted to welcome code, documentation, tests and bug report from the many `icd` package users. I love feedback on how people are using the package. Feel free to email me or write soemthing in github. If you want `icd` to work differently, or do new things, then the best way is to file a [github issue](https://github.com/jackwasey/icd/issues): there are probably others who have the same or similar needs, and they, or I, may have already thought about them.
 
-A substantial amount of code has now been contributed to the package. Contributions of any kind to `icd` are very welcome. See the [GitHub issues page]](https://github.com/jackwasey/icd/issues) to see open issues and feature requests. Documentation, vignettes and examples are very welcome, especially if accompanied by real-world data.
+A substantial amount of code has now been contributed to the package. Contributions of any kind to `icd` are very welcome. See the [GitHub issues page](https://github.com/jackwasey/icd/issues) to see open issues and feature requests. Documentation, vignettes and examples are very welcome, especially if accompanied by real-world data.
 
 To build `icd`, `Rcpp` must be compiled from source. This happens automatically on Linux, but on Mac and Windows, the following may sometimes be required, especially after upgrading R itself. This is a limitation of the R build system.
 
