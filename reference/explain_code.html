@@ -71,7 +71,7 @@ conversion to decimal notation, but to the textual format." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Comorbidity calculations and tools for ICD-9 and ICD-10 codes</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">3.3.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">3.4</span>
       </span>
     </div>
 
@@ -116,6 +116,9 @@ conversion to decimal notation, but to the textual format." />
     </li>
     <li>
       <a href="../articles/ranges.html">Ranges of ICD codes</a>
+    </li>
+    <li>
+      <a href="../articles/who.html">Working with World Health Organization ICD codes</a>
     </li>
   </ul>
 </li>
@@ -178,6 +181,10 @@ conversion to decimal notation, but to the textual format.</p>
 <span class='co'># S3 method for icd10cm</span>
 <span class='fu'>explain_code</span>(<span class='no'>x</span>, <span class='kw'>short_code</span> <span class='kw'>=</span> <span class='fu'><a href='guess_short.html'>guess_short</a></span>(<span class='no'>x</span>),
   <span class='kw'>condense</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>brief</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>warn</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='no'>...</span>)
+
+<span class='co'># S3 method for icd10who</span>
+<span class='fu'>explain_code</span>(<span class='no'>x</span>, <span class='kw'>short_code</span> <span class='kw'>=</span> <span class='fu'><a href='guess_short.html'>guess_short</a></span>(<span class='no'>x</span>),
+  <span class='kw'>condense</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>brief</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>warn</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='no'>...</span>)
 
 <span class='co'># S3 method for icd10</span>
 <span class='fu'>explain_code</span>(<span class='no'>x</span>, <span class='kw'>short_code</span> <span class='kw'>=</span> <span class='fu'><a href='guess_short.html'>guess_short</a></span>(<span class='no'>x</span>),
@@ -258,6 +265,7 @@ ICD version</p></li>
 <li><p><code>icd9cm</code>: explain character vector of ICD-9-CM codes</p></li>
 <li><p><code>icd10cm</code>: ICD-10-CM explanation, current a minimal
 implementation</p></li>
+<li><p><code>icd10who</code>: WHO ICD-10 explanation</p></li>
 <li><p><code>icd10</code>: ICD-10 explanation, falls back on ICD-10-CM until
 ICD-10 WHO copyright workaround is available</p></li>
 </ul>

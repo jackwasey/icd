@@ -71,7 +71,7 @@ then an ICD-9 class (icd9) is also set." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Comorbidity calculations and tools for ICD-9 and ICD-10 codes</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">3.3.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">3.4</span>
       </span>
     </div>
 
@@ -117,6 +117,9 @@ then an ICD-9 class (icd9) is also set." />
     <li>
       <a href="../articles/ranges.html">Ranges of ICD codes</a>
     </li>
+    <li>
+      <a href="../articles/who.html">Working with World Health Organization ICD codes</a>
+    </li>
   </ul>
 </li>
 <li>
@@ -157,21 +160,15 @@ then an ICD-9 class (<code>icd9</code>) is also set.</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>icd9</span>(<span class='no'>x</span>)
-
-<span class='fu'>as.icd9</span>(<span class='no'>x</span>)
-
-<span class='fu'>icd9cm</span>(<span class='no'>x</span>)
+    <pre class="usage"><span class='fu'>as.icd9</span>(<span class='no'>x</span>)
 
 <span class='fu'>as.icd9cm</span>(<span class='no'>x</span>)
 
 <span class='fu'>as.icd10</span>(<span class='no'>x</span>)
 
-<span class='fu'>icd10</span>(<span class='no'>x</span>)
-
 <span class='fu'>as.icd10cm</span>(<span class='no'>x</span>, <span class='kw'>short_code</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)
 
-<span class='fu'>icd10cm</span>(<span class='no'>x</span>)
+<span class='fu'>as.icd10who</span>(<span class='no'>x</span>, <span class='kw'>short_code</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)
 
 <span class='fu'>comorbidity_map</span>(<span class='no'>x</span>)
 
@@ -210,6 +207,18 @@ be better.</p>
   the data. It simplifies S3 dispatch, and appears to be very fast to get or
   set using the built-in R functions.</p>
     
+    <h2 class="hasAnchor" id="functions"><a class="anchor" href="#functions"></a>Functions</h2>
+
+    <ul>
+<li><p><code>as.icd9</code>: Use generic ICD-9 class for this data. Ideally, use
+the more specific `icd9cm` or other subclasses (when available).</p></li>
+<li><p><code>as.icd9cm</code>: Use ICD-9-CM</p></li>
+<li><p><code>as.icd10</code>: Use generic ICD-10 class for this data. If
+possible, use the more specific `icd10who` or `icd10cm`.</p></li>
+<li><p><code>as.icd10cm</code>: Use ICD-10-CM (USA) class for the given data</p></li>
+<li><p><code>as.icd10who</code>: Use WHO ICD-10 class for the given data</p></li>
+</ul>
+    
     <h2 class="hasAnchor" id="deprecated-function-names"><a class="anchor" href="#deprecated-function-names"></a>Deprecated function names</h2>
 
     <p>Future versions of <span class="pkg">icd</span> will drop
@@ -247,6 +256,8 @@ be better.</p>
       <li><a href="#arguments">Arguments</a></li>
       
       <li><a href="#details">Details</a></li>
+
+      <li><a href="#functions">Functions</a></li>
 
       <li><a href="#deprecated-function-names">Deprecated function names</a></li>
 

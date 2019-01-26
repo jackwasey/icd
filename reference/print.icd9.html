@@ -69,7 +69,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Comorbidity calculations and tools for ICD-9 and ICD-10 codes</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">3.3.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">3.4</span>
       </span>
     </div>
 
@@ -114,6 +114,9 @@
     </li>
     <li>
       <a href="../articles/ranges.html">Ranges of ICD codes</a>
+    </li>
+    <li>
+      <a href="../articles/who.html">Working with World Health Organization ICD codes</a>
     </li>
   </ul>
 </li>
@@ -183,7 +186,7 @@ codes.</p></td>
 <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/print'>print</a></span>(<span class='no'>x</span>, <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
 <span class='co'># as.factor drops any 'icd' classes</span>
 <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/print'>print</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/factor'>as.factor</a></span>(<span class='no'>x</span>), <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
-<span class='co'># }</span><div class='input'><span class='no'>u</span> <span class='kw'>&lt;-</span> <span class='no'>uranium_pathology</span>[<span class='fl'>1</span>:<span class='fl'>10</span>, <span class='st'>"icd10"</span>]
+<span class='co'># }</span><div class='input'><span class='no'>u</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>icd.data</span><span class='kw ns'>::</span><span class='no'><a href='https://www.rdocumentation.org/packages/icd.data/topics/uranium_pathology'>uranium_pathology</a></span>[<span class='fl'>1</span>:<span class='fl'>10</span>, <span class='st'>"icd10"</span>]
 <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/print'>print</a></span>(<span class='no'>u</span>)</div><div class='output co'>#&gt;  [1] F17.9 I21.9 K75.9 R55   I25.1 I35.8 I63.9 I64   J43.9 J84.1
 #&gt; 500 Levels: A04.7 A16.2 A16.9 A40.3 A40.9 A41.5 A41.9 B35.1 B38.7 B49 ... Y86</div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/print'>print</a></span>(<span class='no'>u</span>, <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; Decimal-form ICD-10 codes:
 #&gt;  [1] F17.9 I21.9 K75.9 R55   I25.1 I35.8 I63.9 I64   J43.9 J84.1

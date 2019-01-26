@@ -10,6 +10,7 @@ articles:
   efficiency: efficiency.html
   introduction: introduction.html
   ranges: ranges.html
+  who: who.html
 urls:
   reference: https://jackwasey.github.io/icd//reference
   article: https://jackwasey.github.io/icd//articles

@@ -32,7 +32,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Comorbidity calculations and tools for ICD-9 and ICD-10 codes</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">3.3.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">3.4</span>
       </span>
     </div>
 
@@ -78,6 +78,9 @@
     <li>
       <a href="../articles/ranges.html">Ranges of ICD codes</a>
     </li>
+    <li>
+      <a href="../articles/who.html">Working with World Health Organization ICD codes</a>
+    </li>
   </ul>
 </li>
 <li>
@@ -106,7 +109,7 @@
                         <h4 class="author">Andrew Cooper (original)</h4>
                         <h4 class="author">Jack Wasey (minor updates)</h4>
             
-            <h4 class="date">2018-12-25</h4>
+            <h4 class="date">2019-01-26</h4>
       
       
       <div class="hidden name"><code>CMS-HCC.Rmd</code></div>
@@ -119,9 +122,8 @@
 <p>HCC is designed to categorize the risk level of a patient with chronic or serious illness using diagnoses and demographic information. Healthcare providers implement HCC in payment models for patients, as it can help predict the amount of services a patient will need in the future. HCC can be a useful tool in analysis with ICD codes, and the ICD package provides methods to use them.</p>
 <p>HCC first assigns ICD codes to Condition Categories (CC). Condition categories are numeric values ranked based on severity/risk. If an ICD code belongs to more than one CC, the most severe CC is assigned. In other words, HCC classifies patients based on their most severe conditions.</p>
 <p>We can see the mapping of ICD-9 and ICD-10 codes to HCC with the <code>icd9_map_cc</code> and <code>icd10_map_cc</code> data.</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(<span class="st">"icd"</span>)</a></code></pre></div>
-<pre><code>## Loading required package: icd.data</code></pre>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/head">head</a></span>(icd9_map_cc)</a></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(<span class="st">"icd"</span>)</a>
+<a class="sourceLine" id="cb1-2" data-line-number="2"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/head">head</a></span>(icd9_map_cc)</a></code></pre></div>
 <pre><code>##   icd_code  cc year
 ## 1     0031   2 2007
 ## 2    00322 112 2007
@@ -131,11 +133,11 @@
 ## 6     0074   5 2007</code></pre>
 <p>The method returns a table with each ICD-9 code and its corresponding CC. The third column labeled “year” specifies the year that a ICD-9 code was assigned to a corresponding CC. This is needed because HCC has been changed and updated over the years, so the CC assigned to a code in one year might be different from the CC assigned to that same code in another year.</p>
 <p>ICD also provides a method for mapping specific ICD codes to HCCs. The method <code>comorbid_hcc</code> takes as input a list of ICD-9 or ICD-10 codes and outputs a mapping of those codes to their corresponding CCs. For this example, we have an arbitrary table of five ICD-9 codes along with their corresponding patient identifiers and dates of visit.</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1">pts &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/data.frame">data.frame</a></span>(<span class="dt">patient_id =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"1"</span>, <span class="st">"2"</span>, <span class="st">"3"</span>, <span class="st">"4"</span>, <span class="st">"4"</span>),</a>
-<a class="sourceLine" id="cb5-2" data-line-number="2">                  <span class="dt">icd_code =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"20084"</span>, <span class="st">"1742"</span>, <span class="st">"30410"</span>, <span class="st">"41514"</span>, <span class="st">"95893"</span>), </a>
-<a class="sourceLine" id="cb5-3" data-line-number="3">                  <span class="dt">date =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/as.Date">as.Date</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"2011-01-01"</span>, <span class="st">"2011-01-02"</span>, <span class="st">"2011-01-03"</span>, <span class="st">"2011-01-04"</span>, <span class="st">"2011-01-04"</span>)))</a>
-<a class="sourceLine" id="cb5-4" data-line-number="4"></a>
-<a class="sourceLine" id="cb5-5" data-line-number="5">pts</a></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1">pts &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/data.frame">data.frame</a></span>(<span class="dt">patient_id =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"1"</span>, <span class="st">"2"</span>, <span class="st">"3"</span>, <span class="st">"4"</span>, <span class="st">"4"</span>),</a>
+<a class="sourceLine" id="cb3-2" data-line-number="2">                  <span class="dt">icd_code =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"20084"</span>, <span class="st">"1742"</span>, <span class="st">"30410"</span>, <span class="st">"41514"</span>, <span class="st">"95893"</span>), </a>
+<a class="sourceLine" id="cb3-3" data-line-number="3">                  <span class="dt">date =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/as.Date">as.Date</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"2011-01-01"</span>, <span class="st">"2011-01-02"</span>, <span class="st">"2011-01-03"</span>, <span class="st">"2011-01-04"</span>, <span class="st">"2011-01-04"</span>)))</a>
+<a class="sourceLine" id="cb3-4" data-line-number="4"></a>
+<a class="sourceLine" id="cb3-5" data-line-number="5">pts</a></code></pre></div>
 <pre><code>##   patient_id icd_code       date
 ## 1          1    20084 2011-01-01
 ## 2          2     1742 2011-01-02
@@ -144,7 +146,7 @@
 ## 5          4    95893 2011-01-04</code></pre>
 <p>Unlike the other <code>icd</code> comorbidity functions, <code>comorbid_hcc</code> requires a data frame in the ‘long’ format (i.e., multiple rows per patients). If the data has one row per patient, but multiple codes and dates in different columns, this is the ‘wide’ format. Both codes and dates would have to be gathered together into their own columns, using tools like <code>dplyr</code> before passing the data to <code>comorbid_hcc</code>. <code>comorbid_hcc</code> also requires the ICD codes to be in ‘short’ format. If your codes are in “decimal” format, you can easily convert them with the function <code>decimal_to_short</code>.</p>
 <p>Now that our data are in the correct form, we run the mapping function <code>comorbid_hcc</code> with our input, specifying the name of the column in our dataset that contains patients’ visit dates.</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1"><span class="kw"><a href="../reference/comorbid_hcc.html">comorbid_hcc</a></span>(pts)</a></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1"><span class="kw"><a href="../reference/comorbid_hcc.html">comorbid_hcc</a></span>(pts)</a></code></pre></div>
 <pre><code>##   patient_id       date hcc
 ## 1          1 2011-01-01   9
 ## 2          2 2011-01-02  10

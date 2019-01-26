@@ -67,12 +67,6 @@
     <loc>https://jackwasey.github.io/icd//reference/condense.html</loc>
   </url>
   <url>
-    <loc>https://jackwasey.github.io/icd//reference/condense_explain_table.html</loc>
-  </url>
-  <url>
-    <loc>https://jackwasey.github.io/icd//reference/condense_explain_table_worker.html</loc>
-  </url>
-  <url>
     <loc>https://jackwasey.github.io/icd//reference/convert.html</loc>
   </url>
   <url>
@@ -112,12 +106,6 @@
     <loc>https://jackwasey.github.io/icd//reference/expand_range_major.html</loc>
   </url>
   <url>
-    <loc>https://jackwasey.github.io/icd//reference/expect_chap_equal.html</loc>
-  </url>
-  <url>
-    <loc>https://jackwasey.github.io/icd//reference/expect_chap_present.html</loc>
-  </url>
-  <url>
     <loc>https://jackwasey.github.io/icd//reference/explain_code.html</loc>
   </url>
   <url>
@@ -136,22 +124,10 @@
     <loc>https://jackwasey.github.io/icd//reference/fastIntToStringRcpp.html</loc>
   </url>
   <url>
-    <loc>https://jackwasey.github.io/icd//reference/fetch_icd10cm_all.html</loc>
-  </url>
-  <url>
     <loc>https://jackwasey.github.io/icd//reference/filter_poa.html</loc>
   </url>
   <url>
     <loc>https://jackwasey.github.io/icd//reference/filter_valid.html</loc>
-  </url>
-  <url>
-    <loc>https://jackwasey.github.io/icd//reference/fixSubchapterNa.html</loc>
-  </url>
-  <url>
-    <loc>https://jackwasey.github.io/icd//reference/generate_icd10_sources.html</loc>
-  </url>
-  <url>
-    <loc>https://jackwasey.github.io/icd//reference/generate_icd_chapters.html</loc>
   </url>
   <url>
     <loc>https://jackwasey.github.io/icd//reference/generate_maps_pccc.html</loc>
@@ -182,9 +158,6 @@
   </url>
   <url>
     <loc>https://jackwasey.github.io/icd//reference/get_invalid.html</loc>
-  </url>
-  <url>
-    <loc>https://jackwasey.github.io/icd//reference/get_major.html</loc>
   </url>
   <url>
     <loc>https://jackwasey.github.io/icd//reference/get_valid.html</loc>
@@ -241,12 +214,6 @@
     <loc>https://jackwasey.github.io/icd//reference/icd10cm2016.html</loc>
   </url>
   <url>
-    <loc>https://jackwasey.github.io/icd//reference/icd10cm_extract_sub_chapters.html</loc>
-  </url>
-  <url>
-    <loc>https://jackwasey.github.io/icd//reference/icd10cm_get_all_defined.html</loc>
-  </url>
-  <url>
     <loc>https://jackwasey.github.io/icd//reference/icd9AddLeadingZeroesMajorSingle.html</loc>
   </url>
   <url>
@@ -265,9 +232,6 @@
     <loc>https://jackwasey.github.io/icd//reference/icd9_drop_leading_zeroes.html</loc>
   </url>
   <url>
-    <loc>https://jackwasey.github.io/icd//reference/icd9_expand_range_worker.html</loc>
-  </url>
-  <url>
     <loc>https://jackwasey.github.io/icd//reference/icd9_extract_alpha_numeric.html</loc>
   </url>
   <url>
@@ -277,22 +241,10 @@
     <loc>https://jackwasey.github.io/icd//reference/icd9_fetch_ahrq_sas.html</loc>
   </url>
   <url>
-    <loc>https://jackwasey.github.io/icd//reference/icd9_generate_all_.html</loc>
-  </url>
-  <url>
     <loc>https://jackwasey.github.io/icd//reference/icd9_generate_map_elix.html</loc>
   </url>
   <url>
     <loc>https://jackwasey.github.io/icd//reference/icd9_generate_map_quan_elix.html</loc>
-  </url>
-  <url>
-    <loc>https://jackwasey.github.io/icd//reference/icd9_generate_sources.html</loc>
-  </url>
-  <url>
-    <loc>https://jackwasey.github.io/icd//reference/icd9_get_chapters.html</loc>
-  </url>
-  <url>
-    <loc>https://jackwasey.github.io/icd//reference/icd9_is_n.html</loc>
   </url>
   <url>
     <loc>https://jackwasey.github.io/icd//reference/icd9_is_n_cpp.html</loc>
@@ -319,9 +271,6 @@
     <loc>https://jackwasey.github.io/icd//reference/icd9_map_single_ccs.html</loc>
   </url>
   <url>
-    <loc>https://jackwasey.github.io/icd//reference/icd9_order_short.html</loc>
-  </url>
-  <url>
     <loc>https://jackwasey.github.io/icd//reference/icd9_parse_ahrq_ccs.html</loc>
   </url>
   <url>
@@ -331,22 +280,10 @@
     <loc>https://jackwasey.github.io/icd//reference/icd9_parse_cc.html</loc>
   </url>
   <url>
-    <loc>https://jackwasey.github.io/icd//reference/icd9_parse_leaf_desc_ver.html</loc>
-  </url>
-  <url>
     <loc>https://jackwasey.github.io/icd//reference/icd9_parse_quan_deyo_sas.html</loc>
   </url>
   <url>
-    <loc>https://jackwasey.github.io/icd//reference/icd9_sources.html</loc>
-  </url>
-  <url>
     <loc>https://jackwasey.github.io/icd//reference/icd9cm_billable.html</loc>
-  </url>
-  <url>
-    <loc>https://jackwasey.github.io/icd//reference/icd9cm_generate_chapters_hierarchy.html</loc>
-  </url>
-  <url>
-    <loc>https://jackwasey.github.io/icd//reference/icd9cm_get_billable.html</loc>
   </url>
   <url>
     <loc>https://jackwasey.github.io/icd//reference/icd9cm_hierarchy.html</loc>
@@ -376,9 +313,6 @@
     <loc>https://jackwasey.github.io/icd//reference/is_defined.html</loc>
   </url>
   <url>
-    <loc>https://jackwasey.github.io/icd//reference/is_major.html</loc>
-  </url>
-  <url>
     <loc>https://jackwasey.github.io/icd//reference/is_valid.html</loc>
   </url>
   <url>
@@ -397,10 +331,10 @@
     <loc>https://jackwasey.github.io/icd//reference/names_elix.html</loc>
   </url>
   <url>
-    <loc>https://jackwasey.github.io/icd//reference/parse_leaf_desc_icd9cm_v27.html</loc>
+    <loc>https://jackwasey.github.io/icd//reference/order.icd9.html</loc>
   </url>
   <url>
-    <loc>https://jackwasey.github.io/icd//reference/parse_leaf_descriptions_all.html</loc>
+    <loc>https://jackwasey.github.io/icd//reference/plot_comorbid.html</loc>
   </url>
   <url>
     <loc>https://jackwasey.github.io/icd//reference/poa_choices.html</loc>
@@ -421,42 +355,6 @@
     <loc>https://jackwasey.github.io/icd//reference/refactor_worker.html</loc>
   </url>
   <url>
-    <loc>https://jackwasey.github.io/icd//reference/rtf_fetch_year.html</loc>
-  </url>
-  <url>
-    <loc>https://jackwasey.github.io/icd//reference/rtf_filter_excludes.html</loc>
-  </url>
-  <url>
-    <loc>https://jackwasey.github.io/icd//reference/rtf_fix_duplicates.html</loc>
-  </url>
-  <url>
-    <loc>https://jackwasey.github.io/icd//reference/rtf_fix_quirks_2015.html</loc>
-  </url>
-  <url>
-    <loc>https://jackwasey.github.io/icd//reference/rtf_fix_unicode.html</loc>
-  </url>
-  <url>
-    <loc>https://jackwasey.github.io/icd//reference/rtf_generate_fourth_lookup.html</loc>
-  </url>
-  <url>
-    <loc>https://jackwasey.github.io/icd//reference/rtf_lookup_fourth.html</loc>
-  </url>
-  <url>
-    <loc>https://jackwasey.github.io/icd//reference/rtf_main_filter.html</loc>
-  </url>
-  <url>
-    <loc>https://jackwasey.github.io/icd//reference/rtf_parse_fifth_digit_range.html</loc>
-  </url>
-  <url>
-    <loc>https://jackwasey.github.io/icd//reference/rtf_parse_lines.html</loc>
-  </url>
-  <url>
-    <loc>https://jackwasey.github.io/icd//reference/rtf_parse_year.html</loc>
-  </url>
-  <url>
-    <loc>https://jackwasey.github.io/icd//reference/rtf_strip.html</loc>
-  </url>
-  <url>
     <loc>https://jackwasey.github.io/icd//reference/sas_extract_let_strings.html</loc>
   </url>
   <url>
@@ -464,9 +362,6 @@
   </url>
   <url>
     <loc>https://jackwasey.github.io/icd//reference/sas_parse_assignments.html</loc>
-  </url>
-  <url>
-    <loc>https://jackwasey.github.io/icd//reference/save_in_data_dir.html</loc>
   </url>
   <url>
     <loc>https://jackwasey.github.io/icd//reference/set_icd_class.html</loc>
@@ -490,12 +385,6 @@
     <loc>https://jackwasey.github.io/icd//reference/sort_icd.html</loc>
   </url>
   <url>
-    <loc>https://jackwasey.github.io/icd//reference/strim.html</loc>
-  </url>
-  <url>
-    <loc>https://jackwasey.github.io/icd//reference/strip.html</loc>
-  </url>
-  <url>
     <loc>https://jackwasey.github.io/icd//reference/sub-sub-.comorbidity_map.html</loc>
   </url>
   <url>
@@ -505,16 +394,7 @@
     <loc>https://jackwasey.github.io/icd//reference/test_env.html</loc>
   </url>
   <url>
-    <loc>https://jackwasey.github.io/icd//reference/trim.html</loc>
-  </url>
-  <url>
     <loc>https://jackwasey.github.io/icd//reference/unzip_single.html</loc>
-  </url>
-  <url>
-    <loc>https://jackwasey.github.io/icd//reference/unzip_to_data_raw.html</loc>
-  </url>
-  <url>
-    <loc>https://jackwasey.github.io/icd//reference/update_everything.html</loc>
   </url>
   <url>
     <loc>https://jackwasey.github.io/icd//reference/uranium_pathology.html</loc>
@@ -551,5 +431,8 @@
   </url>
   <url>
     <loc>https://jackwasey.github.io/icd//articles/ranges.html</loc>
+  </url>
+  <url>
+    <loc>https://jackwasey.github.io/icd//articles/who.html</loc>
   </url>
 </urlset>

@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Convert decimal ICD codes to component parts — short_to_parts.icd10 • Comorbidity calculations and tools for ICD-9 and ICD-10 codes</title>
+<title>Convert decimal ICD codes to component parts — decimal_to_parts • Comorbidity calculations and tools for ICD-9 and ICD-10 codes</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -36,7 +36,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/jquery.mark.min.js" integrity="sha256-4HLtjeVgH0eIB3aZ9mLYF6E8oU5chNdjU6p6rrXpl9U=" crossorigin="anonymous"></script>
 
 
-<meta property="og:title" content="Convert decimal ICD codes to component parts — short_to_parts.icd10" />
+<meta property="og:title" content="Convert decimal ICD codes to component parts — decimal_to_parts" />
 
 <meta property="og:description" content="Convert decimal ICD codes to component parts" />
 <meta name="twitter:card" content="summary" />
@@ -69,7 +69,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Comorbidity calculations and tools for ICD-9 and ICD-10 codes</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">3.3.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">3.4</span>
       </span>
     </div>
 
@@ -115,6 +115,9 @@
     <li>
       <a href="../articles/ranges.html">Ranges of ICD codes</a>
     </li>
+    <li>
+      <a href="../articles/who.html">Working with World Health Organization ICD codes</a>
+    </li>
   </ul>
 </li>
 <li>
@@ -153,18 +156,15 @@
     
     </div>
 
-    <pre class="usage"><span class='co'># S3 method for icd10</span>
-<span class='fu'><a href='short_to_parts.html'>short_to_parts</a></span>(<span class='no'>x</span>, <span class='kw'>mnr_empty</span> <span class='kw'>=</span> <span class='st'>""</span>)
-
-<span class='co'># S3 method for icd10</span>
-<span class='fu'>decimal_to_parts</span>(<span class='no'>x</span>, <span class='kw'>mnr_empty</span> <span class='kw'>=</span> <span class='st'>""</span>)
-
-<span class='fu'>decimal_to_parts</span>(<span class='no'>x</span>, <span class='kw'>mnr_empty</span> <span class='kw'>=</span> <span class='st'>""</span>)
+    <pre class="usage"><span class='fu'>decimal_to_parts</span>(<span class='no'>x</span>, <span class='kw'>mnr_empty</span> <span class='kw'>=</span> <span class='st'>""</span>)
 
 <span class='co'># S3 method for icd9</span>
 <span class='fu'>decimal_to_parts</span>(<span class='no'>x</span>, <span class='kw'>mnr_empty</span> <span class='kw'>=</span> <span class='st'>""</span>)
 
 <span class='co'># S3 method for character</span>
+<span class='fu'>decimal_to_parts</span>(<span class='no'>x</span>, <span class='kw'>mnr_empty</span> <span class='kw'>=</span> <span class='st'>""</span>)
+
+<span class='co'># S3 method for icd10</span>
 <span class='fu'>decimal_to_parts</span>(<span class='no'>x</span>, <span class='kw'>mnr_empty</span> <span class='kw'>=</span> <span class='st'>""</span>)
 
 <span class='fu'>icd_decimal_to_parts.icd9</span>(<span class='no'>...</span>)
@@ -174,13 +174,12 @@
     <h2 class="hasAnchor" id="methods-by-class-"><a class="anchor" href="#methods-by-class-"></a>Methods (by class)</h2>
 
     <ul>
-<li><p><code>icd10</code>: Convert short ICD-10 code to parts</p></li>
-<li><p><code>icd10</code>: Convert decimal ICD-10 code to parts. This
-shares almost 100<!-- % code with the ICD-9 version: someday combine the common -->
-code.</p></li>
 <li><p><code>icd9</code>: Convert decimal ICD-9 code to parts</p></li>
 <li><p><code>character</code>: Convert decimal ICD code to parts, guessing
 ICD version</p></li>
+<li><p><code>icd10</code>: Convert decimal ICD-10 code to parts. This
+shares almost 100<!-- % code with the ICD-9 version: someday combine the common -->
+code.</p></li>
 </ul>
     
 

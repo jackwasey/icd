@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Expand major codes to range — expand_range_major • Comorbidity calculations and tools for ICD-9 and ICD-10 codes</title>
+<title>Expand two major codes to a range — expand_range_major • Comorbidity calculations and tools for ICD-9 and ICD-10 codes</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -36,12 +36,10 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/jquery.mark.min.js" integrity="sha256-4HLtjeVgH0eIB3aZ9mLYF6E8oU5chNdjU6p6rrXpl9U=" crossorigin="anonymous"></script>
 
 
-<meta property="og:title" content="Expand major codes to range — expand_range_major" />
+<meta property="og:title" content="Expand two major codes to a range — expand_range_major" />
 
-<meta property="og:description" content="Expand a pair of major codes into a range of major codes. This was previously
-exported, but is now going to be available only with :::, and
-expand_range will follow. This was never supposed to be a user
-facing function." />
+<meta property="og:description" content="Expand a pair of major codes into a range of major codes. Primarily for use
+by `icd.data`." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -72,7 +70,7 @@ facing function." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Comorbidity calculations and tools for ICD-9 and ICD-10 codes</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">3.3.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">3.4</span>
       </span>
     </div>
 
@@ -118,6 +116,9 @@ facing function." />
     <li>
       <a href="../articles/ranges.html">Ranges of ICD codes</a>
     </li>
+    <li>
+      <a href="../articles/who.html">Working with World Health Organization ICD codes</a>
+    </li>
   </ul>
 </li>
 <li>
@@ -145,31 +146,38 @@ facing function." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Expand major codes to range</h1>
+    <h1>Expand two major codes to a range</h1>
     
     <div class="hidden name"><code>expand_range_major.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Expand a pair of major codes into a range of major codes. This was previously
-exported, but is now going to be available only with <code>:::</code>, and
-<code>expand_range</code> will follow. This was never supposed to be a user
-facing function.</p>
+    <p>Expand a pair of major codes into a range of major codes. Primarily for use
+by `icd.data`.</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>expand_range_major</span>(<span class='no'>start</span>, <span class='no'>end</span>)
+    <pre class="usage"><span class='fu'>expand_range_major</span>(<span class='no'>start</span>, <span class='no'>end</span>, <span class='no'>defined</span>)
 
 <span class='co'># S3 method for default</span>
-<span class='fu'>expand_range_major</span>(<span class='no'>start</span>, <span class='no'>end</span>)
+<span class='fu'>expand_range_major</span>(<span class='no'>start</span>, <span class='no'>end</span>, <span class='no'>defined</span>)
 
 <span class='co'># S3 method for icd10cm</span>
-<span class='fu'>expand_range_major</span>(<span class='no'>start</span>, <span class='no'>end</span>)
+<span class='fu'>expand_range_major</span>(<span class='no'>start</span>, <span class='no'>end</span>, <span class='no'>defined</span>)
 
 <span class='co'># S3 method for icd9</span>
 <span class='fu'>expand_range_major</span>(<span class='no'>start</span>, <span class='no'>end</span>, <span class='kw'>defined</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
-        
+    
+    <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
+    <table class="ref-arguments">
+    <colgroup><col class="name" /><col class="desc" /></colgroup>
+    <tr>
+      <th>...</th>
+      <td><p>arguments passed on to other functions</p></td>
+    </tr>
+    </table>
+    
     <h2 class="hasAnchor" id="methods-by-class-"><a class="anchor" href="#methods-by-class-"></a>Methods (by class)</h2>
 
     <ul>
@@ -181,13 +189,18 @@ major codes</p></li>
 </ul>
     
 
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='fu'>expand_range_major</span>(<span class='st'>"100"</span>, <span class='st'>"102"</span>)</div><div class='output co'>#&gt; [1] "100" "101" "102"</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
+      <li><a href="#arguments">Arguments</a></li>
       
       <li><a href="#methods-by-class-">Methods (by class)</a></li>
-          </ul>
+      
+      <li><a href="#examples">Examples</a></li>
+    </ul>
 
   </div>
 </div>

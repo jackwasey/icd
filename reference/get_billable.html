@@ -71,7 +71,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Comorbidity calculations and tools for ICD-9 and ICD-10 codes</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">3.3.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">3.4</span>
       </span>
     </div>
 
@@ -116,6 +116,9 @@
     </li>
     <li>
       <a href="../articles/ranges.html">Ranges of ICD codes</a>
+    </li>
+    <li>
+      <a href="../articles/who.html">Working with World Health Organization ICD codes</a>
     </li>
   </ul>
 </li>
@@ -168,14 +171,6 @@
 
 <span class='co'># S3 method for icd9</span>
 <span class='fu'>get_billable</span>(<span class='no'>...</span>)
-
-<span class='co'># S3 method for icd10cm</span>
-<span class='fu'>get_billable</span>(<span class='no'>x</span>, <span class='kw'>short_code</span> <span class='kw'>=</span> <span class='fu'><a href='guess_short.html'>guess_short</a></span>(<span class='no'>x</span>),
-  <span class='kw'>invert</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>icd10cm_edition</span> <span class='kw'>=</span> <span class='st'>"2016"</span>, <span class='no'>...</span>)
-
-<span class='co'># S3 method for icd10</span>
-<span class='fu'>get_billable</span>(<span class='no'>x</span>, <span class='kw'>short_code</span> <span class='kw'>=</span> <span class='fu'><a href='guess_short.html'>guess_short</a></span>(<span class='no'>x</span>),
-  <span class='kw'>invert</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>icd10cm_edition</span> <span class='kw'>=</span> <span class='st'>"2016"</span>, <span class='no'>...</span>)
 
 <span class='fu'>icd_get_billable</span>(<span class='no'>...</span>)
 
@@ -239,8 +234,6 @@ or ICD-10, and code short vs decimal type.</p></li>
 <li><p><code>icd9cm</code>: Get billable ICD-9-CM codes</p></li>
 <li><p><code>icd9</code>: Get billable ICD-9 codes, which is currently
 implemented assuming ICD-9-CM</p></li>
-<li><p><code>icd10cm</code>: Get billable, i.e. leaf nodes from ICD-10-CM</p></li>
-<li><p><code>icd10</code>: Get billable, i.e. leaf nodes from ICD-10-CM</p></li>
 </ul>
     
     <h2 class="hasAnchor" id="deprecated-function-names"><a class="anchor" href="#deprecated-function-names"></a>Deprecated function names</h2>
