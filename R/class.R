@@ -229,9 +229,9 @@ as.icd9cm_pc <- function(x) {
     stop("and ICD-9 diagnostic code class is already set")
   icd9_pos <- match("icd9", class(x))
   if (!is.na(icd9_pos))
-    class(x) <- append(class(x), "icd9pc", after = icd9_pos - 1)
+    class(x) <- append(class(x), "icd9cm_pc", after = icd9_pos - 1)
   else
-    class(x) <- append(class(x), c("icd9pc", "icd9"))
+    class(x) <- append(class(x), c("icd9cm_pc", "icd9"), after = 0)
   icd_conflicts(x, do_stop = TRUE)
   x
 }
@@ -309,7 +309,7 @@ as.icd10cm_pc <- function(x) {
   if (!is.na(icd9_pos))
     class(x) <- append(class(x), "icd10cm_pc", after = icd10_pos - 1)
   else
-    class(x) <- append(class(x), c("icd10cm_pc", "icd10"))
+    class(x) <- append(class(x), c("icd10cm_pc", "icd10"), after = 0)
   icd_conflicts(x, do_stop = TRUE)
   x
 }
