@@ -2,9 +2,7 @@
 #' 'decimal' format
 #'
 #' @section Getting the attribute: \code{is.short_diag} tests for presence of an
-#'   attribute, not whether the code is a valid ICD code. If \code{must_work} is
-#'   \code{TRUE} then \code{NULL} (i.e. no attribute set) returns \code{FALSE},
-#'   otherwise \code{NULL} is returned. To test validity, see
+#'   attribute, not whether the code is a valid ICD code. To test validity, see
 #'   \code{\link{is_valid}}.
 #' @section Setting the attribute: Similarly, \code{as.icd_short_diag} and
 #'   \code{as.icd_decimal_diag} set the attribute, but do not convert the codes
@@ -17,19 +15,12 @@
 #' @param x ICD data
 #' @param value \code{TRUE} or \code{FALSE}, default is \code{TRUE} which sets
 #'   the attribute to whatever is indicated in the function name. See examples.
-#' @param must_work single logical value, if \code{FALSE} (the default) this may
-#'   return \code{NULL} if the attribute is not present. If \code{TRUE}, then
-#'   either \code{TRUE} or \code{FALSE} is returned.
 #' @examples
 #' as.icd_short_diag("6670")
-#'
 #' as.icd_short_diag("667.0") # no warning or error!
-#'
 #' is.icd_short_diag(decimal_to_short("667.0"))
-#'
 #' decimal_type_code <- as.icd_short_diag("667.0", FALSE)
 #' stopifnot(is.icd_decimal_diag(decimal_type_code))
-#'
 #' codes <- as.icd9(c("100.1", "441.3"))
 #' codes <- as.decimal_diag(codes)
 #' codes
@@ -60,32 +51,24 @@ as.icd_short_diag <- function(x, value = TRUE) {
 
 #' @rdname as.decimal_diag
 #' @export
-is.decimal_diag <- function(x, must_work = FALSE)
-  is.icd_decimal_diag(x, must_work = must_work)
+is.decimal_diag <- function(x)
+  is.icd_decimal_diag(x)
 
 #' @rdname as.decimal_diag
 #' @export
-is.icd_decimal_diag <- function(x, must_work = FALSE) {
-  res <- attr(x, "icd_short_diag", exact = TRUE)
-  if (!must_work && is.null(res))
-    NULL
-  else
-    identical(res, FALSE)
+is.icd_decimal_diag <- function(x) {
+  isFALSE(attr(x, "icd_short_diag", exact = TRUE))
 }
 
 #' @rdname as.decimal_diag
 #' @export
-is.short_diag <- function(x, must_work = FALSE)
-  is.icd_short_diag(x, must_work = must_work)
+is.short_diag <- function(x)
+  is.icd_short_diag(x)
 
 #' @rdname as.decimal_diag
 #' @export
-is.icd_short_diag <- function(x, must_work = FALSE) {
-  res <- attr(x, "icd_short_diag", exact = TRUE)
-  if (!must_work)
-    res
-  else
-    isTRUE(res)
+is.icd_short_diag <- function(x) {
+  isTRUE(attr(x, "icd_short_diag", exact = TRUE))
 }
 
 #' Remove any attributes set by 'icd'

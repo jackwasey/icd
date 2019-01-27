@@ -2,10 +2,8 @@ context("attributes")
 
 test_that("attribute is set by different mechanisms", {
   j <- "100"
-  expect_false(is.short_diag(j, must_work = TRUE))
-  expect_false(is.decimal_diag(j, must_work = TRUE))
-  expect_null(is.short_diag(j))
-  expect_null(is.decimal_diag(j))
+  expect_false(is.short_diag(j))
+  expect_false(is.decimal_diag(j))
   attr(j, "icd_short_diag") <- TRUE
   expect_true(is.short_diag(j))
   expect_false(is.decimal_diag(j))
@@ -29,10 +27,8 @@ test_that("attribute is set by different mechanisms", {
 
 test_that("attribute is set by different mechanisms with icd_ functions", {
   j <- "100"
-  expect_false(is.icd_short_diag(j, must_work = TRUE))
-  expect_false(is.icd_decimal_diag(j, must_work = TRUE))
-  expect_null(is.icd_short_diag(j))
-  expect_null(is.icd_decimal_diag(j))
+  expect_false(is.icd_short_diag(j))
+  expect_false(is.icd_decimal_diag(j))
   attr(j, "icd_short_diag") <- TRUE
   expect_true(is.icd_short_diag(j))
   expect_false(is.icd_decimal_diag(j))

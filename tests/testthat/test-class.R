@@ -76,7 +76,7 @@ test_that("attributes set and queried", {
   attr(y, "icd_short_diag") <- TRUE
   attr(z, "icd_short_diag") <- FALSE
   expect_true(is.short_diag(x))
-  expect_null(is.short_diag(no_short_code))
+  expect_false(is.short_diag(no_short_code))
 })
 
 test_that("ICD version supertype set", {
@@ -101,13 +101,12 @@ test_that("constructing a comorbidity map with unnamed list, etc. fails", {
 })
 
 test_that("subsetting a comorbidity map gives the right class", {
-
   wonky_map <- comorbidity_map(list(a = as.icd9cm("100"), b = as.icd9cm("V22")))
   attr(wonky_map$a, "icd_short_diag") <- TRUE
   attr(wonky_map$b, "icd_short_diag") <- TRUE
 
   expect_is(wonky_map, "comorbidity_map")
-  expect_null(is.short_diag(wonky_map))
+  expect_false(is.short_diag(wonky_map))
 
   expect_true(!inherits(wonky_map[[1]], "comorbidity_map"))
   expect_true(is.short_diag(wonky_map[[1]]))

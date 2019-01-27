@@ -4,10 +4,11 @@
 \alias{set_icd_class}
 \alias{as.icd9}
 \alias{as.icd9cm}
+\alias{as.icd9cm_pc}
 \alias{as.icd10}
 \alias{as.icd10cm}
+\alias{as.icd10cm_pc}
 \alias{as.icd10who}
-\alias{comorbidity_map}
 \alias{as.comorbidity_map}
 \alias{as.icd_comorbidity_map}
 \title{Construct ICD-9 and ICD-10 data types}
@@ -16,13 +17,15 @@ as.icd9(x)
 
 as.icd9cm(x)
 
+as.icd9cm_pc(x)
+
 as.icd10(x)
 
 as.icd10cm(x, short_code = NULL)
 
-as.icd10who(x, short_code = NULL)
+as.icd10cm_pc(x)
 
-comorbidity_map(x)
+as.icd10who(x, short_code = NULL)
 
 as.comorbidity_map(x)
 
@@ -50,10 +53,6 @@ be better.
 
 Some features make more sense as attributes. E.g. setting code type to
 \code{short} or \code{decimal}.
-
-Using \code{attributes} instead of \code{class} is a better fit for
-  the data. It simplifies S3 dispatch, and appears to be very fast to get or
-  set using the built-in R functions.
 }
 \section{Functions}{
 \itemize{
@@ -62,10 +61,14 @@ the more specific `icd9cm` or other subclasses (when available).
 
 \item \code{as.icd9cm}: Use ICD-9-CM
 
+\item \code{as.icd9cm_pc}: Indicate the data are ICD-9-CM procedure codes.
+
 \item \code{as.icd10}: Use generic ICD-10 class for this data. If
 possible, use the more specific `icd10who` or `icd10cm`.
 
 \item \code{as.icd10cm}: Use ICD-10-CM (USA) class for the given data
+
+\item \code{as.icd10cm_pc}: Indicate the data are ICD-10-CM procedure codes.
 
 \item \code{as.icd10who}: Use WHO ICD-10 class for the given data
 }}
@@ -103,4 +106,3 @@ stopifnot(is.icd10(j), is.icd10(j[2]), is.icd10(j[[2]]))
 \seealso{
 \code{\link{icd_long_data}}
 }
-\keyword{internal}
