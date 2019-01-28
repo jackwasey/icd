@@ -21,8 +21,8 @@ install_jss3447_deps <- function() {
     "Rcpp",
     "RcppEigen",
     "tidyr",
-#    "comorbidity", # CRAN version has incompatible updates
-#    "medicalrisk", # CRAN version from 2016 unchanged at time of submission
+    #    "comorbidity", # CRAN version has incompatible updates
+    #    "medicalrisk", # CRAN version from 2016 unchanged at time of submission
     "icd.data"
   )) {
     if (!require(p, character.only = TRUE,
@@ -34,13 +34,16 @@ install_jss3447_deps <- function() {
   }
   install.packages("medicalrisk_1.2.tar.gz", repos = NULL)
   install.packages("comorbidity_0.1.1.tar.gz", repos = NULL)
-  if (!require("icd", quietly = TRUE)) {
+  if (!requireNamespace("icd",
+                        quietly = TRUE,
+                        versionCheck = list(version = "3.2.2",
+                                            op = ">="))) {
     message("icd not yet installed, so installing from CRAN")
     install.packages("icd", repos = repos)
-    library("icd", quietly = TRUE)
   }
-
-  if (!file.exists(".deps")) file.create(".deps", showWarnings = FALSE)
+  library("icd", quietly = TRUE)
+  if (!file.exists(".deps"))
+    file.create(".deps", showWarnings = FALSE)
   return(invisible())
 }
 
