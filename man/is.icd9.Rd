@@ -2,20 +2,32 @@
 % Please edit documentation in R/class.R, R/z-deprecated.R
 \name{is.icd9}
 \alias{is.icd9}
-\alias{is.icd10}
 \alias{is.icd9cm}
+\alias{is.icd9cm_pc}
+\alias{is.icd9who}
+\alias{is.icd10}
 \alias{is.icd10cm}
+\alias{is.icd10cm_pc}
+\alias{is.icd10who}
 \alias{is.comorbidity_map}
 \alias{is.icd_comorbidity_map}
 \title{test ICD-related classes}
 \usage{
 is.icd9(x)
 
-is.icd10(x)
-
 is.icd9cm(x)
 
+is.icd9cm_pc(x)
+
+is.icd9who(x)
+
+is.icd10(x)
+
 is.icd10cm(x)
+
+is.icd10cm_pc(x)
+
+is.icd10who(x)
 
 is.comorbidity_map(x)
 
@@ -27,7 +39,8 @@ is.icd_comorbidity_map(...)
 \item{...}{arguments passed on to other functions}
 }
 \description{
-currently no checks on correctness of the classes for these functions
+This merely checks whether the given object is a certain type of ICD code, it
+does no validation of any kind.
 }
 \section{Deprecated function names}{
  Future versions of \pkg{icd} will drop

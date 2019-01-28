@@ -27,6 +27,7 @@ expect_equal_no_class_order <- function(object, expected, ...) {
 #' @describeIn classes_ordered \code{testthat} \code{expect} function
 #'   for ICD classes to be in correct order.
 #' @keywords internal debugging
+#' @noRd
 expect_classes_ordered <- function(x)
   eval(bquote(testthat::expect_true(classes_ordered(.(x)))))
 
@@ -150,7 +151,9 @@ do_extra_tests <- function(value = "true") {
 #' neds_comorbid <- icd::comorbid_pccc_dx(neds)
 #' }
 #' @keywords internal
-generate_neds_pts <- function(n = 1000L, ncol = 20L, icd10 = TRUE,
+generate_neds_pts <- function(n = 1000L,
+                              ncol = 20L,
+                              icd10 = TRUE,
                               verbose = FALSE) {
   codes <- if (icd10) {
     unclass(as_char_no_warn(icd.data::icd10cm2016$code))

@@ -1,37 +1,87 @@
-icd9_sub_classes <- c("icd9cm")
+icd9_sub_classes <- c("icd9cm", "icd9cm_pc", "icd9who")
 icd9_classes <- c(icd9_sub_classes, "icd9")
-icd10_sub_classes <- c("icd10cm", "icd10who")
+icd10_sub_classes <- c("icd10cm", "icd10cm_pc", "icd10who")
 icd10_classes <- c(icd10_sub_classes, "icd10")
 icd_version_classes <- c(icd9_classes, icd10_classes)
 icd_data_classes <- c("icd_long_data", "icd_wide_data")
 icd_other_classes <- c("comorbidity_map")
 icd_all_classes <- c(icd_version_classes, icd_data_classes, icd_other_classes)
 icd_system_classes <- c("data.frame", "list", "numeric", "character", "factor")
-icd_conflicts_with_icd9 <- function(x) inherits(x, icd10_classes)
-icd_conflicts_with_icd10 <- function(x) inherits(x, icd9_classes)
-icd_conflicts_with_icd9cm <- icd_conflicts_with_icd9
-icd_conflicts_with_icd10cm <- function(x) {
-  icd_conflicts_with_icd10(x) || inherits(x, "icd10who")
+
+#' Check for class conflict
+#' @param x Data to test
+#' @param do_stop logical, if `TRUE`, execution will stop with an error
+#' @keywords internal
+#' @noRd
+icd_conflicts <- function(x, do_stop = FALSE)
+  UseMethod("icd_conflicts")
+
+stop_conflict <- function(x)
+  stop("Cannot set requested class as the current data already has the ",
+       "following incompatible classes: ", paste(class(x), sep = ", "),
+       ". If you really wish to do this, use unclass, then set the desired ",
+       "icd class",
+       call. = FALSE)
+
+icd_conflicts.icd9 <- function(x, do_stop = FALSE) {
+  res <- inherits(x, icd10_classes)
+  if (res && do_stop) stop_conflict(x)
+  res
 }
-icd_conflicts_with_icd10who <- function(x) {
-  icd_conflicts_with_icd9(x) || inherits(x, "icd10cm")
+
+icd_conflicts.icd9cm <- function(x, do_stop = FALSE) {
+  res <- icd_conflicts.icd9(x, do_stop) ||
+    inherits(x, "icd9who") ||
+    inherits(x, "icd9cm_pc")
+  if (res && do_stop) stop_conflict(x)
+  res
 }
-icd_check_conflict_with_icd10 <- function(x)
-  if (icd_conflicts_with_icd10(x))
-    stop("Cannot set ICD-10 class when object already has an ICD-9 class")
-icd_check_conflict_with_icd9 <- function(x)
-  if (icd_conflicts_with_icd9(x))
-    stop("Cannot set ICD-9 class when object already has an ICD-10 class")
-# for now, but could be refined:
-icd_check_conflict_with_icd9cm <- icd_check_conflict_with_icd9
-icd_check_conflict_with_icd10cm <- function(x)
-  if (icd_conflicts_with_icd10cm(x))
-    stop("Cannot set ICD-10 WHO when data has an ICD-9 or ICD-10-CM class. ",
-         "If you really want to do this, remove the old class and try again.")
-icd_check_conflict_with_icd10who <- function(x)
-  if (icd_conflicts_with_icd10who(x))
-    stop("Cannot set ICD-10 WHO when data has an ICD-9 or ICD-10-CM class. ",
-         "If you really want to do this, remove the old class and try again.")
+
+icd_conflicts.icd9cm_pc <- function(x, do_stop = FALSE) {
+  res <- icd_conflicts.icd9(x, do_stop) ||
+    inherits(x, "icd9who") ||
+    inherits(x, "icd9cm")
+  if (res && do_stop) stop_conflict(x)
+  res
+}
+
+icd_conflicts.icd9who <- function(x, do_stop = FALSE) {
+  res <- icd_conflicts.icd10(x) ||
+    inherits(x, "icd9cm") ||
+    inherits(x, "icd9cm_pc")
+  if (res && do_stop) stop_conflict(x)
+  res
+}
+
+icd_conflicts.icd10 <- function(x, do_stop = FALSE) {
+  res <- inherits(x, icd9_classes)
+  if (res && do_stop) stop_conflict(x)
+  res
+}
+
+icd_conflicts.icd10cm <- function(x, do_stop = FALSE) {
+  res <- icd_conflicts.icd10(x, do_stop) ||
+    inherits(x, "icd10who") ||
+    inherits(x, "icd10cm_pc")
+  if (res && do_stop) stop_conflict(x)
+  res
+}
+
+icd_conflicts.icd10cm_pc <- function(x, do_stop = FALSE) {
+  res <- icd_conflicts.icd10(x, do_stop) ||
+    inherits(x, "icd10who") ||
+    inherits(x, "icd10cm")
+  if (res && do_stop) stop_conflict(x)
+  res
+}
+
+icd_conflicts.icd10who <- function(x, do_stop = FALSE) {
+  res <- icd_conflicts.icd10(x) ||
+    inherits(x, "icd10cm") ||
+    inherits(x, "icd10cm_pc")
+  if (res && do_stop) stop_conflict(x)
+  res
+}
 
 #' Check whether there are any ICD class conflicts
 #'
@@ -46,20 +96,22 @@ icd_check_conflict_with_icd10who <- function(x)
 #' class(bad_codes) <- c("icd9", "icd10cm")
 #' stopifnot(icd:::icd_classes_conflict(bad_codes))
 #' @keywords internal
-icd_classes_conflict <- function(x)
+#' @noRd
+icd_classes_conflict <- function(x) {
   is.icd9(x) && is.icd10(x) ||
+  is.icd9cm(x) && is.icd9cm_pc(x) ||
+  is.icd10cm(x) && is.icd10cm_pc(x) ||
   is.icd_long_data(x) && is.icd_wide_data(x)
+}
 
-#' prefer an order of classes
+#' Prefer an order of classes
 #'
-#' The order of classes can matter because, for some functions, we'd prefer to
-#' decide what to do based on a higher level structure, e.g. whether the
-#' structure is a comorbidity map before caring if it is ICD-9 or ICD-10. I
-#' can't see how it matters whether we prioritize long/wide and short/decimal
-#' yet, so won't test.
+#' The order of classes can matter because, for some functions, we would prefer
+#' to decide what to do based on a higher level structure, e.g., whether the
+#' structure is a comorbidity map before caring if it is ICD-9 or ICD-10.
 #' @param x any object which may or may not have classes from this package
-
 #' @keywords internal
+#' @noRd
 classes_ordered <- function(x) {
   m <- match(class(x), c(icd_other_classes,
                          icd_version_classes,
@@ -84,8 +136,7 @@ classes_ordered <- function(x) {
 #' \code{short} or \code{decimal}.
 #'
 #' @param x object to set class \code{icd9}
-#' @param warn single logical value, if \code{TRUE} will gives warning when
-#'   converting between types. ICD-9 to ICD-10 will cause an error regardless.
+#' @template short_code
 #' @name set_icd_class
 #' @seealso \code{\link{icd_long_data}}
 #' @examples
@@ -126,10 +177,11 @@ icd9 <- function(x) {
 #' @export
 as.icd9 <- function(x) {
   stopifnot(is.atomic(x))
-  icd_check_conflict_with_icd9(x)
   if (is.icd9(x)) return(x)
   after <- match("icd9cm", class(x), nomatch = 0L)
   class(x) <- append(class(x), "icd9", after = after)
+  # set the class then allow dispatch to confirm okay
+  icd_conflicts(x, do_stop = TRUE)
   x
 }
 
@@ -146,7 +198,6 @@ icd9cm <- function(x) {
 #' @export
 as.icd9cm <- function(x) {
   stopifnot(is.atomic(x))
-  icd_check_conflict_with_icd9cm(x)
   if (inherits(x, "icd9") && inherits(x, "icd9cm")) return(x)
   icd9_pos <- match("icd9", class(x))
   if (!is.na(icd9_pos))
@@ -154,18 +205,33 @@ as.icd9cm <- function(x) {
   else
     # put the more specific type at beginning
     class(x) <- append(class(x), c("icd9cm", "icd9"), after = 0)
+  icd_conflicts(x, do_stop = TRUE)
   x
 }
 
-#' @describeIn  set_icd_class Use generic ICD-10 class for this data. If
-#'   possible, use the more specific `icd10who` or `icd10cm`.
+#' @noRd
+#' @keywords internal
+icd9cm_pc <- function(x) {
+  cl <- class(x)
+  if ("icd9cm_pc" %in% cl) return(x)
+  class(x) <- c("icd9cm_pc", cl)
+  x
+}
+
+#' @describeIn set_icd_class Indicate the data are ICD-9-CM procedure codes.
 #' @export
-as.icd10 <- function(x) {
+as.icd9cm_pc <- function(x) {
   stopifnot(is.atomic(x))
-  icd_check_conflict_with_icd10(x)
-  if (inherits(x, "icd10")) return(x)
-  icd10cm_pos <- match("icd10cm", class(x), nomatch = 0L)
-  class(x) <- append(class(x), "icd10", after = icd10cm_pos)
+  if ("icd10" %in% class(x))
+    stop("icd10 class already set on this variable")
+  if (any(c("icd9cm", "icd9who") %in% class(x)))
+    stop("and ICD-9 diagnostic code class is already set")
+  icd9_pos <- match("icd9", class(x))
+  if (!is.na(icd9_pos))
+    class(x) <- append(class(x), "icd9cm_pc", after = icd9_pos - 1)
+  else
+    class(x) <- append(class(x), c("icd9cm_pc", "icd9"), after = 0)
+  icd_conflicts(x, do_stop = TRUE)
   x
 }
 
@@ -178,19 +244,15 @@ icd10 <- function(x) {
   x
 }
 
-#' @describeIn set_icd_class Use ICD-10-CM (USA) class for the given data
+#' @describeIn  set_icd_class Use generic ICD-10 class for this data. If
+#'   possible, use the more specific `icd10who` or `icd10cm`.
 #' @export
-as.icd10cm <- function(x, short_code = NULL) {
+as.icd10 <- function(x) {
   stopifnot(is.atomic(x))
-  icd_check_conflict_with_icd10cm(x)
-  if (inherits(x, "icd10cm")) return(x)
-  icd10_pos <- match("icd10", class(x))
-  if (!is.na(icd10_pos))
-    class(x) <- append(class(x), "icd10cm", after = icd10_pos - 1)
-  else
-    class(x) <- append(class(x), c("icd10cm", "icd10"), after = 0)
-  if (!is.null(short_code))
-    attr(x, "icd_short_diag") <- short_code
+  if (inherits(x, "icd10")) return(x)
+  icd10cm_pos <- match("icd10cm", class(x), nomatch = 0L)
+  class(x) <- append(class(x), "icd10", after = icd10cm_pos)
+  icd_conflicts(x, do_stop = TRUE)
   x
 }
 
@@ -206,11 +268,67 @@ icd10cm <- function(x) {
   x
 }
 
+#' @describeIn set_icd_class Use ICD-10-CM (USA) class for the given data
+#' @export
+as.icd10cm <- function(x, short_code = NULL) {
+  stopifnot(is.atomic(x))
+  if (inherits(x, "icd10cm")) return(x)
+  icd10_pos <- match("icd10", class(x))
+  if (!is.na(icd10_pos))
+    class(x) <- append(class(x), "icd10cm", after = icd10_pos - 1)
+  else
+    class(x) <- append(class(x), c("icd10cm", "icd10"), after = 0)
+  if (!is.null(short_code))
+    attr(x, "icd_short_diag") <- short_code
+  icd_conflicts(x, do_stop = TRUE)
+  x
+}
+
+#' @noRd
+#' @keywords internal
+icd10cm_pc <- function(x) {
+  cl <- class(x)
+  if ("icd10cm_pc" %in% cl) return(x)
+  if ("icd10" %in% cl)
+    class(x) <- c("icd10cm_pc", cl)
+  else
+    class(x) <- c("icd10cm_pc", "icd10", cl)
+  x
+}
+
+#' @describeIn set_icd_class Indicate the data are ICD-10-CM procedure codes.
+#' @export
+as.icd10cm_pc <- function(x) {
+  stopifnot(is.atomic(x))
+  if ("icd9" %in% class(x))
+    stop("icd9 class already set on this variable")
+  if (any(c("icd10cm", "icd10who") %in% class(x)))
+    stop("and ICD-10 diagnostic code class is already set")
+  icd10_pos <- match("icd10", class(x))
+  if (!is.na(icd10_pos))
+    class(x) <- append(class(x), "icd10cm_pc", after = icd10_pos - 1)
+  else
+    class(x) <- append(class(x), c("icd10cm_pc", "icd10"), after = 0)
+  icd_conflicts(x, do_stop = TRUE)
+  x
+}
+
+#' @noRd
+#' @keywords internal
+icd10cm_pc <- function(x) {
+  cl <- class(x)
+  if ("icd10who" %in% cl) return(x)
+  if ("icd10" %in% cl)
+    class(x) <- c("icd10who", cl)
+  else
+    class(x) <- c("icd10who", "icd10", cl)
+  x
+}
+
 #' @describeIn set_icd_class Use WHO ICD-10 class for the given data
 #' @export
 as.icd10who <- function(x, short_code = NULL) {
   stopifnot(is.atomic(x))
-  icd_check_conflict_with_icd10who(x)
   if (inherits(x, "icd10who")) return(x)
   icd10_pos <- match("icd10", class(x))
   if (!is.na(icd10_pos))
@@ -219,6 +337,7 @@ as.icd10who <- function(x, short_code = NULL) {
     class(x) <- append(class(x), c("icd10who", "icd10"), after = 0)
   if (!is.null(short_code))
     attr(x, "icd_short_diag") <- short_code
+  icd_conflicts(x, do_stop = TRUE)
   x
 }
 
@@ -284,12 +403,11 @@ icd_long_data <- function(...)
 icd_wide_data <- function(...)
   as.icd_wide_data(data.frame(...))
 
-#' @rdname set_icd_class
 #' @details Using \code{attributes} instead of \code{class} is a better fit for
 #'   the data. It simplifies S3 dispatch, and appears to be very fast to get or
 #'   set using the built-in R functions.
-#' @rdname set_icd_class
 #' @keywords internal
+#' @noRd
 comorbidity_map <- function(x) {
   assert_list(x, min.len = 1, names = "unique")
   cl <- class(x)
@@ -298,7 +416,8 @@ comorbidity_map <- function(x) {
   x
 }
 
-#' @rdname set_icd_class
+#' @describeIn set_icd_class Set the class of a named list to show it is a
+#'   comorbidity map.
 #' @export
 as.comorbidity_map <- function(x) {
   assert_list(x, min.len = 1, names = "unique")
@@ -346,7 +465,7 @@ as.comorbidity_map <- function(x) {
 c.icd9 <- function(..., warn = FALSE) {
   dots <- list(...)
   if (warn &&
-      any(vapply(dots, icd_conflicts_with_icd9, FUN.VALUE = logical(1))))
+      any(vapply(dots, icd_conflicts.icd9, FUN.VALUE = logical(1))))
     stop("Do you really want to combine ICD-9 codes (first argument) ",
          " with ICD-9 codes (subsequent arguments)? If so, use 'unclass'",
          " on some or all the arguments")
@@ -375,7 +494,7 @@ c.icd10 <- function(..., warn = FALSE) {
   dots <- list(...)
   base_class <- class(.subset2(dots, 1))
   if (warn &&
-      any(vapply(dots, icd_conflicts_with_icd10, FUN.VALUE = logical(1))))
+      any(vapply(dots, icd_conflicts.icd10, FUN.VALUE = logical(1))))
     stop("Do you really want to combine ICD-10 codes (first argument) ",
          " with ICD-9 codes (subsequent arguments)? If so, use 'unclass'",
          " on some or all the arguments.")
@@ -458,15 +577,12 @@ c.icd10 <- function(..., warn = FALSE) {
 
 #' test ICD-related classes
 #'
-#' currently no checks on correctness of the classes for these functions
+#' This merely checks whether the given object is a certain type of ICD code, it
+#' does no validation of any kind.
 #'
 #' @param x Any object which may have ICD-related classes set
 #' @export
-is.icd9 <- function(x) inherits(x, c("icd9", "icd9cm"))
-
-#' @rdname is.icd9
-#' @export
-is.icd10 <- function(x) inherits(x, c("icd10", "icd10cm"))
+is.icd9 <- function(x) inherits(x, icd9_classes)
 
 #' @rdname is.icd9
 #' @export
@@ -474,7 +590,27 @@ is.icd9cm <- function(x) inherits(x, "icd9cm")
 
 #' @rdname is.icd9
 #' @export
+is.icd9cm_pc <- function(x) inherits(x, "icd9cm_pc")
+
+#' @rdname is.icd9
+#' @export
+is.icd9who <- function(x) inherits(x, "icd9who")
+
+#' @rdname is.icd9
+#' @export
+is.icd10 <- function(x) inherits(x, icd10_classes)
+
+#' @rdname is.icd9
+#' @export
 is.icd10cm <- function(x) inherits(x, "icd10cm")
+
+#' @rdname is.icd9
+#' @export
+is.icd10cm_pc <- function(x) inherits(x, "icd10cm_pc")
+
+#' @rdname is.icd9
+#' @export
+is.icd10who <- function(x) inherits(x, "icd10who")
 
 #' @describeIn icd_long_data Return \code{TRUE} if \code{x} has the
 #'   \code{icd_long_data} class.
@@ -519,12 +655,23 @@ print.icd9 <- function(x, verbose = FALSE, ...)
 #' print(u, verbose = TRUE)
 #' # as.character will unclass the 'icd' classes
 #' print(as.character(u), verbose = TRUE)
+#'
+#' a <- structure(c("R21", "Z21"),
+#'                class = c("icd10cm", "icd10", "character"))
+#' print(a, verbose = TRUE)
 #' @keywords internal
 #' @export
-print.icd10 <- function(x, verbose = FALSE, ...)
-  print_codes(x,
-              ifelse(is.icd10cm(x), "ICD-10-CM", "ICD-10"),
-              verbose = verbose, ...)
+print.icd10 <- function(x, verbose = FALSE, ...) {
+  icd10cl <- grep("icd10.+", class(x), value = TRUE)
+  if (length(icd10cl) == 0)
+    icd10cl <- "default"
+  sub_class <- switch(icd10cl,
+                      icd10cm = "ICD-10-CM Diagnostic Codes",
+                      icd10cm_pc = "ICD-10-CM Procedure Codes",
+                      icd10who = "WHO ICD-10 (Diagnostic Codes)",
+                      "ICD-10 Codes (Subtype not set)")
+  print_codes(x, sub_class, verbose = verbose, ...)
+}
 
 print_codes <- function(x, code_str, verbose = FALSE, ...) {
   if (verbose) {

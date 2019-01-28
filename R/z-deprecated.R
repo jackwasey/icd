@@ -377,7 +377,7 @@ icd_van_walraven.data.frame <-
 print.icd_comorbidity_map <-
   function(...) { d("print.comorbidity_map"); print.comorbidity_map(...) }
 
-#' @rdname set_icd_class
+#' @describeIn set_icd_class Deprecated. Use as.comorbidity_map instead.
 #' @template deprecated-icd3
 #' @template dotdotdot
 #' @export

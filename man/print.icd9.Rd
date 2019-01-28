@@ -34,5 +34,9 @@ print(u)
 print(u, verbose = TRUE)
 # as.character will unclass the 'icd' classes
 print(as.character(u), verbose = TRUE)
+
+a <- structure(c("R21", "Z21"),
+               class = c("icd10cm", "icd10", "character"))
+print(a, verbose = TRUE)
 }
 \keyword{internal}
