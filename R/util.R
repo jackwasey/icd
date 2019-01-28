@@ -266,7 +266,7 @@ guess_icd_col_by_class <- function(x) {
 icd9cm_latest_edition <- function() "32"
 
 na_to_false <- function(x) {
-  assert_logical(x)
+  stopifnot(is.logical(x))
   x[is.na(x)] <- FALSE
   x
 }

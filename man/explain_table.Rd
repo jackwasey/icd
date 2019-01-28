@@ -7,6 +7,7 @@
 \alias{explain_table.icd10}
 \alias{explain_table.icd9cm}
 \alias{explain_table.icd10cm}
+\alias{explain_table.icd10who}
 \alias{icd_explain_table.default}
 \alias{icd_explain_table.icd10}
 \alias{icd_explain_table.icd10cm}
@@ -29,6 +30,9 @@ explain_table(...)
   condense = FALSE, brief = TRUE, warn = TRUE, ...)
 
 \method{explain_table}{icd10cm}(x, short_code = guess_short(x),
+  condense = FALSE, brief = TRUE, warn = TRUE, ...)
+
+\method{explain_table}{icd10who}(x, short_code = guess_short(x),
   condense = FALSE, brief = TRUE, warn = TRUE, ...)
 
 icd_explain_table.default(...)
@@ -98,6 +102,8 @@ guessing ICD version
 \item \code{icd9cm}: explain character vector of ICD1-10-CM codes
 
 \item \code{icd10cm}: explain character vector of ICD1-10-CM codes
+
+\item \code{icd10who}: explain character vector of ICD1-10-CM codes
 }}
 
 \section{Deprecated function names}{

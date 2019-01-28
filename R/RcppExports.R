@@ -51,8 +51,8 @@ categorize_rcpp <- function() {
     .Call(`_icd_categorize_rcpp`)
 }
 
-icd10cm_children_defined_cpp <- function(x, icd10cm2016, nc) {
-    .Call(`_icd_icd10cmChildrenDefined`, x, icd10cm2016, nc)
+icd10_children_defined_cpp <- function(x, lookup, nc) {
+    .Call(`_icd_icd10ChildrenDefined`, x, lookup, nc)
 }
 
 #' @title Internal function to simplify a comorbidity map by only including
