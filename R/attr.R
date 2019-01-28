@@ -57,7 +57,7 @@ is.decimal_diag <- function(x)
 #' @rdname as.decimal_diag
 #' @export
 is.icd_decimal_diag <- function(x) {
-  isFALSE(attr(x, "icd_short_diag", exact = TRUE))
+  !isTRUE(attr(x, "icd_short_diag", exact = TRUE))
 }
 
 #' @rdname as.decimal_diag
