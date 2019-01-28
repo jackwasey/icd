@@ -34,10 +34,11 @@ as.icd_comorbidity_map(...)
 \arguments{
 \item{x}{object to set class \code{icd9}}
 
-\item{...}{arguments passed on to other functions}
+\item{short_code}{single logical value which determines whether the ICD-9
+code provided is in short (\code{TRUE}) or decimal (\code{FALSE}) form.
+Where reasonable, this is guessed from the input data.}
 
-\item{warn}{single logical value, if \code{TRUE} will gives warning when
-converting between types. ICD-9 to ICD-10 will cause an error regardless.}
+\item{...}{arguments passed on to other functions}
 }
 \description{
 Takes an R structure and sets class to an ICD type. In the case of ICD-9 and
@@ -71,6 +72,11 @@ possible, use the more specific `icd10who` or `icd10cm`.
 \item \code{as.icd10cm_pc}: Indicate the data are ICD-10-CM procedure codes.
 
 \item \code{as.icd10who}: Use WHO ICD-10 class for the given data
+
+\item \code{as.comorbidity_map}: Set the class of a named list to show it is a
+comorbidity map.
+
+\item \code{as.icd_comorbidity_map}: Deprecated. Use as.comorbidity_map instead.
 }}
 
 \section{Deprecated function names}{

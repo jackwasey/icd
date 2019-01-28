@@ -136,8 +136,7 @@ classes_ordered <- function(x) {
 #' \code{short} or \code{decimal}.
 #'
 #' @param x object to set class \code{icd9}
-#' @param warn single logical value, if \code{TRUE} will gives warning when
-#'   converting between types. ICD-9 to ICD-10 will cause an error regardless.
+#' @template short_code
 #' @name set_icd_class
 #' @seealso \code{\link{icd_long_data}}
 #' @examples
@@ -306,7 +305,7 @@ as.icd10cm_pc <- function(x) {
   if (any(c("icd10cm", "icd10who") %in% class(x)))
     stop("and ICD-10 diagnostic code class is already set")
   icd10_pos <- match("icd10", class(x))
-  if (!is.na(icd9_pos))
+  if (!is.na(icd10_pos))
     class(x) <- append(class(x), "icd10cm_pc", after = icd10_pos - 1)
   else
     class(x) <- append(class(x), c("icd10cm_pc", "icd10"), after = 0)
@@ -417,7 +416,8 @@ comorbidity_map <- function(x) {
   x
 }
 
-#' @rdname set_icd_class
+#' @describeIn set_icd_class Set the class of a named list to show it is a
+#'   comorbidity map.
 #' @export
 as.comorbidity_map <- function(x) {
   assert_list(x, min.len = 1, names = "unique")
