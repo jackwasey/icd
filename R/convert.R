@@ -74,14 +74,13 @@ wide_to_long <- function(x,
                          icd_labels = NULL,
                          icd_name = "icd_code",
                          icd_regex = c("icd", "diag", "dx_", "dx")) {
-  assert_data_frame(x, min.rows = 1, min.cols = 2)
+  stopifnot(is.data.frame(x), nrow(x) > 0, ncol(x) >= 2)
   # explicitly make a data frame so tibble works (and maybe data.table, too?)
   x <- as.data.frame(x)
   assert_string(visit_name)
-  assert(check_null(icd_labels),
-         check_character(icd_labels, min.len = 1))
+  stopifnot(is.null(icd_labels) || is.character(icd_labels))
   assert_string(icd_name)
-  assert_character(icd_regex, min.chars = 1, any.missing = FALSE, min.len = 1)
+  stopifnot(is.character(icd_regex), nchar(icd_regex) > 0)
   if (is.null(icd_labels)) {
     re <- length(icd_regex)
     while (re > 0) {
@@ -137,9 +136,8 @@ long_to_wide <- function(x,
   icd_name <- as_char_no_warn(icd_name)
   stopifnot(visit_name %in% names(x))
   stopifnot(icd_name %in% names(x))
-  assert_string(prefix, min.chars = 1)
+  stopifnot(is.character(prefix), length(prefix) == 1, nchar(prefix) > 0)
   assert_count(min_width, na.ok = FALSE)
-
   visit_name_f <- is.factor(x[[visit_name]])
   icd_name_f <-  is.factor(x[[icd_name]])
   if (icd_name_f) i_levels <- levels(x[[icd_name]])

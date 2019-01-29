@@ -452,7 +452,7 @@ comorbidity_map <- function(x) {
 as.comorbidity_map <- function(x) {
   stopifnot(is.list(x),
             !is.null(names(x)),
-            !(any(names(x)) == ""),
+            !any(names(x) == ""),
             !anyDuplicated(names(x)))
   if (inherits(x, "comorbidity_map"))
     return(x)

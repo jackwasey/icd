@@ -187,3 +187,28 @@ generate_neds_pts <- function(n = 1000L,
 }
 
 #nocov end
+
+assert_flag <- function(x) {
+  stopifnot(is.logical(x), length(x) == 1L)
+}
+
+assert_string <- function(x) {
+  stopifnot(is.character(x), length(x) == 1L)
+}
+
+assert_character <- function(x, ...) {
+  stopifnot(is.character(x))
+}
+
+assert_integer <- function(x, len = NULL) {
+  stopifnot(is.integer(x))
+  if (!is.null(len)) stopifnot(length(x) == len)
+}
+
+assert_scalar <- function(x) {
+  stopifnot(length(x) == 1L)
+}
+
+assert_fac_or_char <- function(x) {
+  stopifnot(is.factor(x) || is.character(x))
+}

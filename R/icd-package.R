@@ -98,13 +98,6 @@
 #' @useDynLib icd, .registration=TRUE
 #' @importFrom Rcpp cppFunction
 #' @importFrom methods setLoadAction
-#' @importFrom checkmate assert assert_flag assert_list assert_data_frame
-#'   assert_string check_string check_null check_factor check_character
-#'   assert_int expect_numeric check_flag assert_logical assert_character
-#'   check_data_frame check_matrix assert_count expect_data_frame assert_scalar
-#'   assert_environment assert_vector assert_matrix assert_integer
-#'   expect_scalar_na expect_logical assert_integerish expect_character
-#'   assert_factor
 #' @importFrom utils head tail read.fwf
 #' @importFrom stats setNames reshape
 #' @importFrom graphics barplot

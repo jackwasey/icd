@@ -59,16 +59,17 @@ comorbid_hcc_worker <- function(x,
                                 date_name,
                                 visit_name,
                                 icd_name) {
-  assert_data_frame(x, min.cols = 3, col.names = "unique")
-  assert(check_string(visit_name), check_null(visit_name))
-  assert(check_character(icd_name), check_null(icd_name))
+  stopifnot(is.data.frame(x))
+  stopifnot(ncol(x) >= 3L)
+  stopifnot(!anyDuplicated(names(x)))
+  stopifnot(is.null(visit_name) ||
+              (is.character(visit_name) && length(visit_name) == 1L))
+  stopifnot(is.null(icd_name) || is.character(icd_name))
   visit_name <- get_visit_name(x, visit_name)
   icd_name <- get_icd_name(x, icd_name)
   assert_string(date_name)
   assert_string(visit_name)
   assert_string(icd_name)
-
-  # Add column for year
   x$year <- as.numeric(format(x[[date_name]], "%Y"))
   # merge CCs to patient data based on ICD and year drop ICD info
   x <- merge(x, map, all.x = TRUE,

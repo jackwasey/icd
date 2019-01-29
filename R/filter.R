@@ -142,7 +142,7 @@ filter_poa <- function(x, poa_name = "poa", poa = poa_choices) {
 
 .filter_poa <- function(x, poa_name, choice, invert = FALSE) {
   assert_data_frame(x, min.cols = 1, col.names = "named")
-  assert_string(poa_name, na.ok = FALSE)
+  stopifnot(is.character(poa_name), length(poa_name) == 1L, !is.na(poa_name))
   assert_character(choice, min.chars = 1, min.len = 1, any.missing = FALSE)
   assert_flag(invert)
   stopifnot(poa_name %in% names(x))

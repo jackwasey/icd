@@ -122,12 +122,14 @@ icd10_comorbid <- function(x,
                            icd10_comorbid_fun = icd10_comorbid_reduce, ...) {
   assert_data_frame(x, min.cols = 2, col.names = "unique")
   assert_list(map, min.len = 1, names = "unique")
-  assert(check_string(visit_name), check_null(visit_name))
-  assert(check_character(icd_name), check_null(icd_name))
+  stopifnot(is.null(visit_name) ||
+              (is.character(visit_name) && length(visit_name) == 1L))
+  stopifnot(is.null(icd_name) || is.character(icd_name))
   visit_name <- get_visit_name(x, visit_name)
   icd_name <- get_icd_name(x, icd_name)
   assert_string(visit_name)
-  assert(check_flag(short_code), check_null(short_code))
+  stopifnot(is.null(short_code) ||
+              (is.logical(short_code) && length(short_code) == 1L))
   assert_flag(short_map)
   if (is.null(icd_name))
     icd_name <- get_icd_name(x)
@@ -185,8 +187,9 @@ icd9_comorbid <- function(x, map, visit_name = NULL, icd_name = NULL,
                           ...) {
   assert_data_frame(x, min.cols = 2, col.names = "unique")
   assert_list(map, min.len = 1, names = "unique")
-  assert(check_string(visit_name), check_null(visit_name))
-  assert(check_character(icd_name), check_null(icd_name))
+  stopifnot(is.null(visit_name) ||
+              (is.character(visit_name) && length(visit_name) == 1L))
+  stopifnot(is.null(icd_name) || is.character(icd_name))
   visit_name <- get_visit_name(x, visit_name)
   icd_name <- get_icd_name(x, icd_name)
   stopifnot(is.character(icd_name) || is.null(icd_name))

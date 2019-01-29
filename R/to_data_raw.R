@@ -24,9 +24,9 @@ unzip_to_data_raw <- function(url, file_name, force = FALSE,
                               verbose = FALSE, offline = TRUE,
                               data_raw_path = get_raw_data_dir(),
                               save_name = file_name) {
-  checkmate::assert_string(url, na.ok = FALSE)
-  checkmate::assert_string(file_name, na.ok = FALSE)
-  checkmate::assert_flag(offline)
+  assert_string(url, na.ok = FALSE)
+  assert_string(file_name, na.ok = FALSE)
+  assert_flag(offline)
   # TODO: This temporary directory should be cleaned up if run during testing.
   if (!dir.exists(data_raw_path)) data_raw_path <- tempdir()
   file_path <- file.path(data_raw_path, make.names(save_name))
@@ -49,9 +49,9 @@ download_to_data_raw <- function(
   file_name = regmatches(url, regexpr("[^/]*$", url)),
   offline = TRUE,
   data_raw_path = get_raw_data_dir()) {
-  checkmate::assert_string(url)
-  checkmate::assert_string(file_name)
-  checkmate::assert_flag(offline)
+  assert_string(url)
+  assert_string(file_name)
+  assert_flag(offline)
   if (!dir.exists(data_raw_path)) data_raw_path <- tempdir()
   save_path <- file.path(data_raw_path, file_name)
   f_info <- list(file_path = save_path, file_name = file_name)

@@ -34,7 +34,7 @@ as.decimal_diag <- function(x, value = TRUE)
 #' @rdname as.decimal_diag
 #' @export
 as.icd_decimal_diag <- function(x, value = TRUE) {
-  checkmate::assert_flag(value)
+  assert_flag(value)
   attr(x, "icd_short_diag") <- !value
   x
 }
@@ -47,7 +47,7 @@ as.short_diag <- function(x, value = TRUE)
 #' @rdname as.decimal_diag
 #' @export
 as.icd_short_diag <- function(x, value = TRUE) {
-  checkmate::assert_flag(value)
+  assert_flag(value)
   attr(x, "icd_short_diag") <- value
   x
 }

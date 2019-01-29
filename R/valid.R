@@ -254,9 +254,8 @@ is_valid <- function(x, ...)
 
 icd_valid_worker <- function(x, whitespace_ok, regex, regex_no_ws = regex) {
   assert_flag(whitespace_ok)
-  if (length(x) == 0)
-    return(logical())
-  assert(check_factor(x), check_character(x))
+  if (length(x) == 0) return(logical())
+  assert_fac_or_char(x)
   if (whitespace_ok)
     na_to_false(grepl(jws(regex), x, perl = TRUE))
   else

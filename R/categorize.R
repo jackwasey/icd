@@ -44,7 +44,8 @@ categorize_simple <- function(x, map, id_name, code_name,
   assert_data_frame(x, min.cols = 2, col.names = "unique")
   class(x) <- "data.frame"
   assert_list(map, min.len = 1, names = "unique")
-  assert(check_string(id_name), check_null(id_name))
+  stopifnot(is.null(id_name) ||
+              (is.character(id_name) && length(id_name) == 1L))
   assert_character(code_name)
   stopifnot(id_name %in% names(x))
   stopifnot(all(code_name %in% names(x)))

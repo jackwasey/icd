@@ -54,19 +54,30 @@ charlson <- function(x, visit_name = NULL,
 #'   (e.g. Quan Deyo) comorbidities, then calling
 #'   \code{charlson_from_comorbid}.
 #' @export
-charlson.data.frame <- function(x, visit_name = NULL,
-                                scoring_system = c("original", "charlson", "quan"),
-                                return_df = FALSE,
-                                stringsAsFactors = getOption("stringsAsFactors"), # nolint
-                                ...) {
-  assert_data_frame(x, min.rows = 0, min.cols = 2, col.names = "named")
-  assert(check_null(visit_name), check_string(visit_name))
+charlson.data.frame <- function(
+  x,
+  visit_name = NULL,
+  scoring_system = c("original", "charlson", "quan"),
+  return_df = FALSE,
+  stringsAsFactors = getOption("stringsAsFactors"), # nolint
+  ...
+) {
+  stopifnot(is.data.frame(x), ncol(x) >= 2, !is.null(colnames(x)))
+  stopifnot(is.null(visit_name) ||
+              (is.character(visit_name) && length(visit_name) == 1L))
+  stopifnot(is.null(visit_name) ||
+              (is.character(visit_name) && length(visit_name) == 1L))
   assert_flag(return_df)
   assert_flag(stringsAsFactors) # nolint
   visit_name <- get_visit_name(x, visit_name)
   res <- charlson_from_comorbid(
-    comorbid_quan_deyo(x, visit_name = visit_name, hierarchy = TRUE, return_df = TRUE, ...),
-    visit_name = visit_name, hierarchy = FALSE, scoring_system = scoring_system)
+    comorbid_quan_deyo(x,
+                       visit_name = visit_name,
+                       hierarchy = TRUE,
+                       return_df = TRUE, ...),
+    visit_name = visit_name,
+    hierarchy = FALSE,
+    scoring_system = scoring_system)
   if (!return_df) return(res)
   out <- cbind(names(res),
                data.frame("Charlson" = unname(res)),
@@ -95,10 +106,9 @@ charlson_from_comorbid <- function(
   hierarchy = FALSE,
   scoring_system = c("original", "charlson", "quan")
 ) {
-  assert(
-    check_data_frame(x, min.rows = 0, min.cols = 2, col.names = "named"),
-    check_matrix(x, min.rows = 0, min.cols = 2, col.names = "named")
-  )
+  stopifnot(is.data.frame(x) || is.matrix(x))
+  stopifnot(nrow(x) > 0, ncol(x) >= 2)
+  stopifnot(!is.null(colnames(x)))
   stopifnot(ncol(x) - is.data.frame(x) == 17)
   if (match.arg(scoring_system) == "quan")
     weights <- c(0, 2, 0, 0, 2, 1, 1, 0, 2, 0,
@@ -106,7 +116,6 @@ charlson_from_comorbid <- function(
   else
     weights <- c(1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
                  2, 2, 2, 2, 3, 6, 6)
-
   if (hierarchy) {
     x[, "DM"] <- x[, "DM"] & !x[, "DMcx"]
     x[, "LiverMild"] <- x[, "LiverMild"] & !x[, "LiverSevere"]
@@ -166,8 +175,12 @@ charlson_from_comorbid <- function(
 #'   wide %>% wide_to_long %>% count_codes
 #'   }
 #' @export
-count_codes <- function(x, visit_name = get_visit_name(x), return_df = FALSE) {
-  assert_data_frame(x, min.cols = 2, col.names = "named")
+count_codes <- function(
+  x,
+  visit_name = get_visit_name(x),
+  return_df = FALSE
+) {
+  stopifnot(is.data.frame(x), ncol(x) >= 2, !is.null(colnames(x)))
   assert_string(visit_name)
   assert_flag(return_df)
   res <- stats::aggregate(x[names(x) %nin% visit_name],
@@ -202,7 +215,7 @@ count_comorbid <- function(
 ) {
   assert_string(visit_name)
   assert_flag(return_df)
-  assert(check_data_frame(x), check_matrix(x))
+  stopifnot(is.data.frame(x) || is.matrix(x))
   res <- apply(x[, names(x) %nin% visit_name],
                MARGIN = 1,
                FUN = sum)
@@ -235,7 +248,7 @@ count_codes_wide <- function(
   return_df = FALSE,
   aggr = FALSE
 ) {
-  assert_data_frame(x)
+  stopifnot(is.data.frame(x))
   assert_string(visit_name)
   assert_flag(return_df)
   assert_flag(aggr)
@@ -311,8 +324,9 @@ van_walraven.data.frame <- function(
   stringsAsFactors = getOption("stringsAsFactors"), # nolint
   ...
 ) {
-  assert_data_frame(x, min.rows = 0, min.cols = 2, col.names = "named")
-  assert(check_null(visit_name), check_string(visit_name))
+  stopifnot(is.data.frame(x), ncol(x) >= 2, !is.null(colnames(x)))
+  stopifnot(is.null(visit_name) ||
+              (is.character(visit_name) && length(visit_name) == 1L))
   assert_flag(return_df)
   assert_flag(stringsAsFactors) # nolint
   visit_name <- get_visit_name(x, visit_name)
@@ -342,8 +356,9 @@ van_walraven_from_comorbid <- function(
   visit_name = NULL,
   hierarchy = FALSE
 ) {
-  assert(check_data_frame(x), check_matrix(x))
-  assert(check_null(visit_name), check_string(visit_name))
+  stopifnot(is.data.frame(x) || is.matrix(x))
+  stopifnot(is.null(visit_name) ||
+              (is.character(visit_name) && length(visit_name) == 1L))
   assert_flag(hierarchy)
   stopifnot(ncol(x) - is.data.frame(x) == 30)
   weights <- c(7, 5, -1, 4, 2, 0, 7, 6, 3, 0, 0, 0, 5, 11, 0, 0,

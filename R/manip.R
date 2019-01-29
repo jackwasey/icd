@@ -7,7 +7,7 @@
 #'   code, which may include a decimal point.
 #' @keywords internal manip
 icd9_extract_alpha_numeric <- function(x) {
-  assert(check_factor(x), check_character(x))
+  assert_fac_or_char(x)
   # generate list, then flip into a matrix with a row for each code, and the
   # alpha part in first column, and numeric part in the second
   t(
@@ -31,9 +31,9 @@ icd9_extract_alpha_numeric <- function(x) {
 #'   part
 #' @keywords internal manip
 icd9_drop_leading_zeroes <- function(x, short_code = guess_short(x)) {
-  assert(check_factor(x), check_character(x))
-  assert(check_null(short_code), check_flag(short_code))
-
+  assert_fac_or_char(x)
+  stopifnot(is.null(short_code) ||
+              (is.logical(short_code) && length(short_code) == 1L))
   if (short_code) {
     parts <- short_to_parts.icd9(x = x, mnr_empty = "")
     # very important: only drop the zero in V codes if the minor part is empty.
@@ -46,7 +46,7 @@ icd9_drop_leading_zeroes <- function(x, short_code = guess_short(x)) {
 }
 
 icd9_add_leading_zeroes <- function(x, short_code = guess_short(x)) {
-  assert(check_factor(x), check_character(x))
+  assert_fac_or_char(x)
   assert_flag(short_code)
   if (is.factor(x)) {
     levels(x) <- icd9_add_leading_zeroes_cpp(levels(x), short_code)

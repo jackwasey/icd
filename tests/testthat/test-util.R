@@ -20,16 +20,12 @@ test_that("trim with acceptable inputs", {
   expect_equal(trim("ja ck "), "ja ck")
   expect_equal(trim(" ja ck "), "ja ck")
   expect_equal(trim(" ja ck"), "ja ck")
-
-  expect_equal(trim(c(" ja ck\t", "hayley ")),
-               c("ja ck", "hayley"))
-
+  expect_equal(trim(c(" ja ck\t", "wasey ")),
+               c("ja ck", "wasey"))
   # trim and trimCpp should do the same thing, for non-NA
   expect_identical(trim(c("123", " a s d f ")),
                    trimCpp(c("123", " a s d f ")))
-
   # strim (trim a single string)
-  expect_equal(strim(NA_integer_), NA_character_)
   expect_equal(strim(NA_character_), NA_character_)
   expect_equal(strim("jack"), "jack")
   expect_equal(strim("jack "), "jack")
@@ -46,7 +42,6 @@ test_that("trim with acceptable inputs", {
   expect_error(strim(c("jack", " an other ")))
   # strim and strimCpp should do the same thing, for non-NA input
   expect_identical(strim(" a s d f "), strimCpp(" a s d f "))
-
 })
 
 test_that("get visit name from a matrix should fail", {
@@ -84,7 +79,8 @@ test_that("icd name heuristic works for various", {
   guesses <- c("icd.?(9|10)", "icd.?(9|10).?Code", "icd",
                "diagnos", "diag.?code", "diag", "i(9|10)", "code")
   x <- simple_pts
-  for (n in c("icd-10", "icd9", "diag", "diag1", "DIAGCODE", "i9code", "code", "diagnosis")) {
+  for (n in c("icd-10", "icd9", "diag", "diag1",
+              "DIAGCODE", "i9code", "code", "diagnosis")) {
     names(x)[2] <- n
     expect_equal(get_icd_name(x), n)
   }

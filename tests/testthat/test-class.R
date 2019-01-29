@@ -95,9 +95,6 @@ test_that("constructing a comorbidity map works", {
 
 test_that("constructing a comorbidity map with unnamed list, etc. fails", {
   expect_error(as.comorbidity_map(unname(unclass(x))))
-  # and data frames should definitely fail
-  expect_error(as.comorbidity_map(icd.data::vermont_dx))
-  expect_error(as.comorbidity_map(uranium_pathology))
 })
 
 test_that("subsetting a comorbidity map gives the right class", {

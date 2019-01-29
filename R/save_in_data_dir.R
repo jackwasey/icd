@@ -23,7 +23,7 @@ save_in_data_dir <- function(var_name, suffix = "", data_path = "data",
   if (!is.character(var_name))
     var_name <- as.character(substitute(var_name))
   stopifnot(exists(var_name, envir = envir))
-  checkmate::assertString(var_name)
+  assert_string(var_name)
   stopifnot(exists(var_name, envir = envir))
   save(list = var_name,
        envir = envir,

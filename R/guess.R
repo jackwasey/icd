@@ -101,7 +101,8 @@ get_icd_defined_percent <- function(x, short_code = NULL, n = 100) {
 #' @keywords internal
 guess_version.character <- function(x, short_code = NULL, ...) {
   assert_character(x)
-  assert(check_flag(short_code), check_null(short_code))
+  stopifnot(is.null(short_code) ||
+              (is.logical(short_code) && length(short_code) == 1L))
   dots <- list(...)
   n <- dots[["n"]]
   if (is.null(n))

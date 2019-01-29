@@ -9,7 +9,7 @@
 #' @keywords internal character
 #' @noRd
 strim <- function(x) {
-  assert_string(x, na.ok = TRUE)
+  assert_string(x)
   if (!is.na(x[1]))
     strimCpp(as.character(x))
   else
@@ -322,7 +322,7 @@ str_match_all <- function(string, pattern, ...) {
 
 # optional nice error message, could just fall back on icd.data::
 req_icd_data <- function() {
-  if (requireNamespace("icd.data",
+  if (!requireNamespace("icd.data",
                        versionCheck = list(version = 1.1,
                                            op = ">=")))
     stop("Please install the 'icd.data' package to explain ICD codes.",

@@ -10,9 +10,9 @@
 #' @keywords internal
 #' @export
 unzip_single <- function(url, file_name, save_path) {
-  checkmate::assert_character(url, len = 1)
-  checkmate::assert_character(file_name, len = 1)
-  checkmate::assert_character(save_path, len = 1)
+  assert_character(url, len = 1)
+  assert_character(file_name, len = 1)
+  assert_character(save_path, len = 1)
   zipfile <- tempfile()
   dl_code <- utils::download.file(url = url, destfile = zipfile,
                                   quiet = TRUE, method = "libcurl", mode = "wb")

@@ -34,7 +34,8 @@ test_that("ahrq icd9 map recreated", {
   # same but from source data. Should be absolutely identical.
   expect_identical(
     result <- icd9_parse_ahrq_sas(save_data = FALSE), icd9_map_ahrq)
-  checkmate::expect_list(result, len = 30)
+  expect_is(result, "list")
+  expect_equal(length(result), 30)
   expect_equivalent(get_invalid.comorbidity_map(icd9_map_ahrq), list())
 })
 

@@ -41,9 +41,10 @@ condense <- function(x, short_code = guess_short(x),
 #' @keywords internal
 condense.icd9 <- function(x, short_code = guess_short(x),
                           defined = NULL, warn = TRUE, ...) {
-  assert(check_factor(x), check_character(x))
+  assert_fac_or_char(x)
   assert_flag(short_code)
-  assert(check_null(defined), check_flag(defined))
+  stopifnot(is.null(defined) ||
+              (is.logical(defined) && length(defined) == 1L))
   assert_flag(warn)
   if (short_code)
     icd9_condense_short(x, defined = defined, warn = warn, ...)
@@ -89,7 +90,8 @@ icd9_condense_decimal <- function(x, defined = NULL, warn = TRUE,
 #' @keywords internal manip
 icd9_condense_short <- function(x, defined = NULL, warn = TRUE,
                                 keep_factor_levels = FALSE) {
-  assert(check_null(defined), check_flag(defined))
+  stopifnot(is.null(defined) ||
+              (is.logical(defined) && length(defined) == 1L))
   assert_flag(warn)
   assert_flag(keep_factor_levels)
   icd9Levels <- levels(x) # NULL if not a factor
