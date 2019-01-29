@@ -27,7 +27,6 @@ plot_comorbid <- function(
   comorbid_fun <- match.fun(comorbid_fun)
   d <- comorbid_fun(x)
   graphics::barplot(
-    sort(
-      colSums(d), decreasing = TRUE),
+    sort(colSums(d), decreasing = TRUE),
     las = las, cex.names = cex, ...)
 }

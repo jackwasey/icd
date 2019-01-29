@@ -48,12 +48,34 @@ Default is \code{c("icd", "diag", "dx_", "dx")}}
   codes found in the wide input data.
 }
 \description{
-Reshaping data is a common task, and is made easier here by knowing more
-about the underlying structure of the data. This function wraps the
-\code{\link[stats]{reshape}} function with specific behavior and checks
-related to ICD codes. Empty strings and NA values will be dropped, and
-everything else kept. No validation of the ICD codes is done.
+Convert ICD data from wide to long format
+
+Note the distinction between labelling existing data with any classes which
+\code{icd} provides, and actually converting the structure of the data.
 }
+\details{
+Reshaping data is a common task, and is made easier here by knowing
+  more about the underlying structure of the data. This function wraps the
+  \code{\link[stats]{reshape}} function with specific behavior and checks
+  related to ICD codes. Empty strings and NA values will be dropped, and
+  everything else kept. No validation of the ICD codes is done.
+}
+\section{Long and Wide Formats}{
+ As is common with many data sets, key
+  variables can be concentrated in one column or spread over several. Tools
+  format of clinical and administrative hospital data, we can perform the
+  conversion efficiently and accurately, while keeping some metadata about
+  the codes intact, e.g. whether they are ICD-9 or ICD-10.
+}
+
+\section{Data structure}{
+ Long or wide format ICD data are all expected to be
+  in a data frame. The \code{data.frame} itself does not carry any ICD
+  classes at the top level, even if it only contains one type of code;
+  whereas its constituent columns may have a class specified, e.g.
+  \code{icd9} or \code{icd10who}.
+}
+
 \section{Deprecated function names}{
  Future versions of \pkg{icd} will drop
   the \code{icd_} prefix. For example, \code{charlson} should be used in
@@ -73,7 +95,10 @@ widedf <- data.frame(visit_name = c("a", "b", "c"),
 wide_to_long(widedf)
 }
 \seealso{
-Other ICD code conversion: \code{\link{as.icd_long_data}},
-  \code{\link{convert}}, \code{\link{long_to_wide}}
+Other ICD data conversion: \code{\link{comorbid_df_to_mat}},
+  \code{\link{comorbid_mat_to_df}}, \code{\link{convert}},
+  \code{\link{decimal_to_short}},
+  \code{\link{long_to_wide}},
+  \code{\link{short_to_decimal}}
 }
-\concept{ICD code conversion}
+\concept{ICD data conversion}

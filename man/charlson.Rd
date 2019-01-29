@@ -57,7 +57,7 @@ e.g. \code{name}}
 }
 \description{
 Charlson score is calculated in the basis of the Quan revision of Deyo's
-ICD-9 mapping. (peptic ulcer disease no longer warrants a point.) Quan
+ICD-9 mapping. (Peptic ulcer disease no longer warrants a point.) Quan
 published an updated set of scores, but it seems most people use the original
 scores for easier comparison between studies, even though Quan's were more
 predictive.

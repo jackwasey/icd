@@ -2,9 +2,9 @@
 % Please edit documentation in R/convert.R
 \name{convert}
 \alias{convert}
-\title{Convert ICD9 codes between formats and structures.}
+\title{Convert ICD data between formats and structures.}
 \description{
-ICD-9 codes are represented in \emph{short} and \emph{decimal} forms. The
+ICD codes are represented in \emph{short} and \emph{decimal} forms. The
 short form has up to 5 digits, or V or E followed by up to four digits. The
 decimal form has a decimal point to delimit the top-level (henceforth
 \emph{major}) category, and the \emph{minor} part containing the subsidiary
@@ -18,7 +18,11 @@ For conversions of ICD-9 or ICD-10 codes between the \emph{short} and
 \pkg{icd} does not covert ICD-9 to ICD-10 codes yet.
 }
 \seealso{
-Other ICD code conversion: \code{\link{as.icd_long_data}},
-  \code{\link{long_to_wide}}, \code{\link{wide_to_long}}
+Other ICD data conversion: \code{\link{comorbid_df_to_mat}},
+  \code{\link{comorbid_mat_to_df}},
+  \code{\link{decimal_to_short}},
+  \code{\link{long_to_wide}},
+  \code{\link{short_to_decimal}},
+  \code{\link{wide_to_long}}
 }
-\concept{ICD code conversion}
+\concept{ICD data conversion}

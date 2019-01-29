@@ -53,9 +53,6 @@ icd_condense.character <-
 icd_condense.icd9 <-
   function(...) { d("condense.icd9"); condense.icd9(...) }
 
-#' @rdname decimal_to_parts
-#' @export
-#' @keywords internal
 icd_decimal_to_parts.icd9 <-
   function(...) { d("decimal_to_parts.icd9"); decimal_to_parts.icd9(...) }
 
@@ -474,9 +471,6 @@ icd_count_codes_wide <-
 icd_count_comorbid <-
   function(...) { d("count_comorbid"); count_comorbid(...) }
 
-#' @rdname decimal_to_parts
-#' @export
-#' @keywords internal
 icd_decimal_to_parts <-
   function(...) { d("decimal_to_parts"); decimal_to_parts(...) }
 

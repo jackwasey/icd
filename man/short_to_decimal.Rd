@@ -74,5 +74,12 @@ format
   the prefix, e.g., \code{\link{icd_wide_data}}.
 }
 
+\seealso{
+Other ICD data conversion: \code{\link{comorbid_df_to_mat}},
+  \code{\link{comorbid_mat_to_df}}, \code{\link{convert}},
+  \code{\link{decimal_to_short}},
+  \code{\link{long_to_wide}}, \code{\link{wide_to_long}}
+}
+\concept{ICD data conversion}
 \keyword{internal}
 \keyword{manip}

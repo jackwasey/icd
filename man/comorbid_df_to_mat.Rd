@@ -62,3 +62,13 @@ mat.out <- comorbid_df_to_mat(cmbdf)
 stopifnot(is.matrix(mat.out))
 mat.out[, 1:4]
 }
+\seealso{
+\code{\link{comorbid_mat_to_df}}
+
+Other ICD data conversion: \code{\link{comorbid_mat_to_df}},
+  \code{\link{convert}}, \code{\link{decimal_to_short}},
+  \code{\link{long_to_wide}},
+  \code{\link{short_to_decimal}},
+  \code{\link{wide_to_long}}
+}
+\concept{ICD data conversion}

@@ -11,7 +11,7 @@
 \alias{is.icd10who}
 \alias{is.comorbidity_map}
 \alias{is.icd_comorbidity_map}
-\title{test ICD-related classes}
+\title{test ICD classes}
 \usage{
 is.icd9(x)
 
@@ -53,3 +53,9 @@ does no validation of any kind.
   the prefix, e.g., \code{\link{icd_wide_data}}.
 }
 
+\examples{
+# A character string is not itself an ICD code
+is.icd9("100.1")
+is_valid("100.1")
+is.icd9(as.icd9cm("100.1"))
+}

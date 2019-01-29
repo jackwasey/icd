@@ -1,25 +1,6 @@
-#' @title Convert between and identify 'long' and 'wide' patient data formats
-#' @description Long and Wide Formats: As is common with many data sets, key
-#'   variables can be concentrated in one column or spread over several. Tools
-#'   format of clinical and administrative hospital data, we can perform the
-#'   conversion efficiently and accurately, while keeping some metadata about
-#'   the codes intact, e.g. whether they are ICD-9 or ICD-10.
-#' @details Long or wide format ICD data is expected to be in a data frame. It
-#'   does not carry any ICD classes at the top level, even if it only contains
-#'   one type of code, but its constituent columns may have a class specified,
-#'   e.g. 'icd9'.
-#' @param x \code{data.frame} or \code{matrix} to set class, or convert.
-#' @param ... arguments passed on to create a \code{data.frame}
-#' @description \code{icd_long_data} and \code{icd_wide_data} create
-#'   \code{data.frame}s using all the arguments, and sets the class, whereas
-#'   \code{as.icd_long_data} and \code{as.icd_wide_data} just set the class of
-#'   an existing \code{data.frame}.
-#' @name icd_long_data
-NULL
-
-#' Convert ICD9 codes between formats and structures.
+#' Convert ICD data between formats and structures.
 #'
-#' ICD-9 codes are represented in \emph{short} and \emph{decimal} forms. The
+#' ICD codes are represented in \emph{short} and \emph{decimal} forms. The
 #' short form has up to 5 digits, or V or E followed by up to four digits. The
 #' decimal form has a decimal point to delimit the top-level (henceforth
 #' \emph{major}) category, and the \emph{minor} part containing the subsidiary
@@ -31,7 +12,7 @@ NULL
 #'
 #' \pkg{icd} does not covert ICD-9 to ICD-10 codes yet.
 #'
-#' @family ICD code conversion
+#' @family ICD data conversion
 #' @name convert
 NULL
 
@@ -61,13 +42,12 @@ icd9_chapters_to_map <- function(x, defined = FALSE) {
 }
 
 #' Convert ICD data from wide to long format
-#'
-#' Reshaping data is a common task, and is made easier here by knowing more
-#' about the underlying structure of the data. This function wraps the
-#' \code{\link[stats]{reshape}} function with specific behavior and checks
-#' related to ICD codes. Empty strings and NA values will be dropped, and
-#' everything else kept. No validation of the ICD codes is done.
-#'
+#' @template wide_vs_long
+#' @details Reshaping data is a common task, and is made easier here by knowing
+#'   more about the underlying structure of the data. This function wraps the
+#'   \code{\link[stats]{reshape}} function with specific behavior and checks
+#'   related to ICD codes. Empty strings and NA values will be dropped, and
+#'   everything else kept. No validation of the ICD codes is done.
 #' @param x \code{data.frame} in wide format, i.e. one row per patient, and
 #'   multiple columns containing ICD codes, empty strings or NA.
 #' @template visit_name
@@ -87,7 +67,7 @@ icd9_chapters_to_map <- function(x, defined = FALSE) {
 #'   icd9_02 = c(NA, "443", NA)
 #'   )
 #' wide_to_long(widedf)
-#' @family ICD code conversion
+#' @family ICD data conversion
 #' @export
 wide_to_long <- function(x,
                          visit_name = get_visit_name(x),
@@ -128,9 +108,10 @@ wide_to_long <- function(x,
 }
 
 #' Convert ICD data from long to wide format
-#'
-#' This is more complicated than reshape or \code{reshape2::dcast} allows. This
-#' is a reasonably simple solution using built-in functions.
+#' @template wide_vs_long
+#' @details This is more complicated than expected using \code{base::reshape} or
+#'   \code{reshape2::dcast} allows. This is a reasonably simple solution using
+#'   built-in functions.
 #' @param x data.frame of long-form data, one column for visit_name and one for
 #'   ICD code
 #' @template visit_name
@@ -144,8 +125,7 @@ wide_to_long <- function(x,
 #'     icd9 = c("441", "4424", "443", "441"))
 #'   long_to_wide(longdf)
 #'   long_to_wide(longdf, prefix = "ICD10_")
-#' @family ICD-9 convert
-#' @family ICD code conversion
+#' @family ICD data conversion
 #' @export
 long_to_wide <- function(x,
                          visit_name = get_visit_name(x),
@@ -216,6 +196,8 @@ long_to_wide <- function(x,
 #' # the system-wide option you may have set e.g. with
 #' # options("stringsAsFactors" = FALSE).
 #' is.factor(df.out[["visit_id"]])
+#' @family ICD data conversion
+#' @seealso \code{\link{comorbid_df_to_mat}}
 #' @export
 comorbid_mat_to_df <- function(x, visit_name = "visit_id",
                                stringsAsFactors = getOption("stringsAsFactors")) { # nolint
@@ -249,6 +231,8 @@ comorbid_mat_to_df <- function(x, visit_name = "visit_id",
 #' mat.out <- comorbid_df_to_mat(cmbdf)
 #' stopifnot(is.matrix(mat.out))
 #' mat.out[, 1:4]
+#' @family ICD data conversion
+#' @seealso \code{\link{comorbid_mat_to_df}}
 #' @export
 comorbid_df_to_mat <- function(x, visit_name = get_visit_name(x),
                                stringsAsFactors = getOption("stringsAsFactors")) { # nolint
@@ -266,9 +250,11 @@ comorbid_df_to_mat <- function(x, visit_name = get_visit_name(x),
 #' Convert codes between short and decimal forms
 #' @param x ICD codes
 #' @export
-#' @keywords internal
-short_to_decimal <- function(x)
+#' @keywords manip
+#' @family ICD data conversion
+short_to_decimal <- function(x) {
   UseMethod("short_to_decimal")
+}
 
 #' @describeIn short_to_decimal convert ICD codes of unknown type from short
 #'   to decimal format
@@ -287,8 +273,9 @@ short_to_decimal.default <- function(x) {
 #'   format
 #' @export
 #' @keywords internal manip
-short_to_decimal.icd9 <- function(x)
+short_to_decimal.icd9 <- function(x) {
   icd9(as.decimal_diag(icd9_short_to_decimal_cpp(x)))
+}
 
 #' @describeIn short_to_decimal convert ICD-10 codes from short to decimal
 #'   format
@@ -306,8 +293,9 @@ short_to_decimal.icd10 <- function(x) {
 #'   format
 #' @export
 #' @keywords internal manip
-short_to_decimal.icd10cm <- function(x)
+short_to_decimal.icd10cm <- function(x) {
   as.icd10cm(short_to_decimal.icd10(x))
+}
 
 #' Convert Decimal format ICD codes to short format
 #'
@@ -316,7 +304,8 @@ short_to_decimal.icd10cm <- function(x)
 #'
 #' @param x ICD codes
 #' @export
-#' @keywords internal manip
+#' @keywords manip
+#' @family ICD data conversion
 decimal_to_short <- function(x) {
   UseMethod("decimal_to_short")
 }
@@ -365,21 +354,17 @@ decimal_to_short.default <- function(x) {
   )
 }
 
-#' Convert decimal ICD codes to component parts
-#' @export
-#' @keywords internal
-decimal_to_parts <- function(x, mnr_empty = "")
-  UseMethod("decimal_to_parts")
-
 #' Convert short format ICD codes to component parts
-#' @export
 #' @keywords internal manip
-short_to_parts <- function(x, mnr_empty = "")
+#' @noRd
+short_to_parts <- function(x, mnr_empty = "") {
   UseMethod("short_to_parts")
+}
 
 #' @describeIn short_to_parts Convert short format ICD-9 codes to parts
 #' @export
 #' @keywords internal manip
+#' @noRd
 short_to_parts.icd9 <- function(x, mnr_empty = "") {
   # Cannot specify default values in both header and C++ function body, so use a
   # shim here.
@@ -389,6 +374,7 @@ short_to_parts.icd9 <- function(x, mnr_empty = "") {
 #' @describeIn short_to_parts Convert short format ICD-10 codes to parts
 #' @export
 #' @keywords internal manip
+#' @noRd
 short_to_parts.icd10 <- function(x, mnr_empty = "") {
   icd10ShortToParts(x, mnrEmpty = mnr_empty)
 }
@@ -396,20 +382,16 @@ short_to_parts.icd10 <- function(x, mnr_empty = "") {
 #' @describeIn short_to_parts Convert short format ICD-10-CM codes to parts
 #' @export
 #' @keywords internal manip
+#' @noRd
 short_to_parts.icd10cm <- function(x, mnr_empty = "") {
   icd10ShortToParts(x, mnrEmpty = mnr_empty)
 }
-
-#' @describeIn decimal_to_parts Convert decimal ICD-9 code to parts
-#' @export
-#' @keywords internal manip
-decimal_to_parts.icd9 <- function(x, mnr_empty = "")
-  icd9DecimalToParts(x, mnrEmpty = mnr_empty)
 
 #' @describeIn short_to_parts Convert short format ICD code to parts,
 #'   guessing whether ICD-9 or ICD-10
 #' @export
 #' @keywords internal manip
+#' @noRd
 short_to_parts.character <- function(x, mnr_empty = "")
   # No default values in header plus C++ function body, so shim here.
   switch(
@@ -419,23 +401,41 @@ short_to_parts.character <- function(x, mnr_empty = "")
     stop("Unknown ICD version guessed from input")
   )
 
+#' Convert decimal ICD codes to component parts
+#' @keywords internal manip
+#' @noRd
+decimal_to_parts <- function(x, mnr_empty = "") {
+  UseMethod("decimal_to_parts")
+}
+
+#' @describeIn decimal_to_parts Convert decimal ICD-9 code to parts
+#' @export
+#' @keywords internal manip
+#' @noRd
+decimal_to_parts.icd9 <- function(x, mnr_empty = "") {
+  icd9DecimalToParts(x, mnrEmpty = mnr_empty)
+}
+
 #' @describeIn decimal_to_parts Convert decimal ICD code to parts, guessing
 #'   ICD version
 #' @export
 #' @keywords internal manip
-decimal_to_parts.character <- function(x, mnr_empty = "")
+#' @noRd
+decimal_to_parts.character <- function(x, mnr_empty = "") {
   switch(
     guess_version(x, short_code = FALSE),
     "icd9" = icd9DecimalToParts(x, mnr_empty),
     "icd10" = decimal_to_parts.icd10(x, mnr_empty = mnr_empty),
     stop("Unknown ICD version guessed from input")
   )
+}
 
 #' @describeIn decimal_to_parts Convert decimal ICD-10 code to parts. This
 #'   shares almost 100% code with the ICD-9 version: someday combine the common
 #'   code.
 #' @export
 #' @keywords internal manip
+#' @noRd
 decimal_to_parts.icd10 <- function(x, mnr_empty = "") {
   icd10DecimalToParts(x, mnrEmpty = mnr_empty)
 }

@@ -99,9 +99,9 @@ icd_conflicts.icd10who <- function(x, do_stop = FALSE) {
 #' @noRd
 icd_classes_conflict <- function(x) {
   is.icd9(x) && is.icd10(x) ||
-  is.icd9cm(x) && is.icd9cm_pc(x) ||
-  is.icd10cm(x) && is.icd10cm_pc(x) ||
-  is.icd_long_data(x) && is.icd_wide_data(x)
+    is.icd9cm(x) && is.icd9cm_pc(x) ||
+    is.icd10cm(x) && is.icd10cm_pc(x) ||
+    is.icd_long_data(x) && is.icd_wide_data(x)
 }
 
 #' Prefer an order of classes
@@ -126,11 +126,10 @@ classes_ordered <- function(x) {
 #' ICD-10 codes, if a particular sub-type is set, e.g. ICD-9-CM (\code{icd9cm}),
 #' then an ICD-9 class (\code{icd9}) is also set.
 #'
-#' The \code{as.} function e.g. \code{as.icd9}, do checking and try to put
-#' multiple classes in a nice order. Calling the bare constructor, e.g.
-#' \code{icd9} just prepends the new class and returns without any checks. The
-#' latter is much faster, but for most uses, \code{as.icd9} and siblings would
-#' be better.
+#' The \code{as.*} functions e.g. \code{as.icd9}, do checking and try to put
+#' multiple classes in a nice order. Calling the internal bare constructor, e.g.
+#' \code{icd:::icd9} just prepends the new class and returns without any checks,
+#' which is much faster.
 #'
 #' Some features make more sense as attributes. E.g. setting code type to
 #' \code{short} or \code{decimal}.
@@ -138,7 +137,7 @@ classes_ordered <- function(x) {
 #' @param x object to set class \code{icd9}
 #' @template short_code
 #' @name set_icd_class
-#' @seealso \code{\link{icd_long_data}}
+#' @family ICD data types
 #' @examples
 #' x = as.icd10("A1009")
 #' attr(x, "icd_short_diag") <- TRUE
@@ -244,7 +243,7 @@ icd10 <- function(x) {
   x
 }
 
-#' @describeIn  set_icd_class Use generic ICD-10 class for this data. If
+#' @describeIn set_icd_class Use generic ICD-10 class for this data. If
 #'   possible, use the more specific `icd10who` or `icd10cm`.
 #' @export
 as.icd10 <- function(x) {
@@ -353,10 +352,34 @@ icd10who <- function(x) {
   x
 }
 
-#' @describeIn icd_long_data Set class on a matrix or data.frame to
+#' Set the ICD data structure class of a \code{matrix} or \code{data.frame}.
+#'
+#' These functions take your patient data, and allow you to describe whether it
+#' is wide or long. \code{icd} never requires you do this, but it may help avoid
+#' errors, especially if you have aytpical data that might confuse \code{icd}'s
+#' heuristics.
+#' @name wide_vs_long
+#' @template wide_vs_long
+#' @section Conversion: To convert between long and wide data, use
+#'   \code{\link{long_to_wide}} or \code{\link{wide_to_long}}. Conversion
+#'   functions in other packages, such as \code{ddplyr} will work, too, but will
+#'   need some work to account for the typical structure of patient data and
+#'   diagnostic codes. This is not done with \code{ddplyr}, \code{data.table}
+#'   etc because it would add a big dependency burden. This package aims to be
+#'   agnostic and use base R as much as possible.
+#' @param warn Single logical, if \code{TRUE}, the default, a warning will be
+#'   shown if changing class between long and wide types.
+#' @family ICD data types
+#' @examples
+#' class(icd.data::uranium_pathology)
+#' class(icd.data::vermont_dx)
+#' @seealso \code{\link{long_to_wide}} and \code{\link{wide_to_long}}
+NULL
+
+#' @describeIn wide_vs_long Set class on a matrix or data.frame to
 #'   \code{icd_long_data}. To convert wide to long data, use
 #'   \code{\link{wide_to_long}}.
-#' @family ICD code conversion
+#' @family ICD data types
 #' @export
 as.icd_long_data <- function(x, warn = TRUE) {
   # Also from Wickham: "When implementing a matrix/array class, you should
@@ -374,11 +397,8 @@ as.icd_long_data <- function(x, warn = TRUE) {
   x
 }
 
-#' @describeIn icd_long_data Set class on a matrix or data.frame to
-#'   \code{icd_wide_data}. To convert long to wide data, use
-#'   \code{\link{long_to_wide}}.
-#' @param warn Single logical, if \code{TRUE}, the default, a warning will be shown if changing class between long and wide types.
-#' @family ICD code conversion
+#' @describeIn wide_vs_long Construct a \code{data.frame}, adding the
+#'   \code{icd_long_data} class.
 #' @export
 as.icd_wide_data <- function(x, warn = TRUE) {
   stopifnot(is.data.frame(x) || is.matrix(x))
@@ -391,13 +411,14 @@ as.icd_wide_data <- function(x, warn = TRUE) {
   x
 }
 
-#' @describeIn icd_long_data Construct a \code{data.frame}, adding the
+#' @describeIn wide_vs_long Construct a \code{data.frame}, adding the
 #'   \code{icd_long_data} class.
+#' @family ICD data types
 #' @export
 icd_long_data <- function(...)
   as.icd_long_data(data.frame(...))
 
-#' @describeIn icd_long_data Construct a \code{data.frame}, adding the
+#' @describeIn wide_vs_long Construct a \code{data.frame}, adding the
 #'   \code{icd_wide_data} class.
 #' @export
 icd_wide_data <- function(...)
@@ -416,8 +437,8 @@ comorbidity_map <- function(x) {
   x
 }
 
-#' @describeIn set_icd_class Set the class of a named list to show it is a
-#'   comorbidity map.
+#' Set the class of a named list to show it is a comorbidity map.
+#' @family ICD data types
 #' @export
 as.comorbidity_map <- function(x) {
   assert_list(x, min.len = 1, names = "unique")
@@ -460,7 +481,7 @@ as.comorbidity_map <- function(x) {
 #' # Care with the following:
 #' c(as.icd9("E998"), as.icd10("A10"))
 #' # which results in both codes sharing the 'icd9' class.
-#' @name combine
+#' @seealso \link[=set_icd_class]{ICD data types}
 #' @export
 c.icd9 <- function(..., warn = FALSE) {
   dots <- list(...)
@@ -475,8 +496,9 @@ c.icd9 <- function(..., warn = FALSE) {
   # attributes.
 }
 
-#' @rdname combine
+#' @rdname c.icd9
 #' @examples
+#' # ICD-10 codes
 #' (a <- as.icd10("A100SSX"))
 #' (b <- as.icd10("Z999A"))
 #' c(a, b)
@@ -516,10 +538,10 @@ c.icd10 <- function(..., warn = FALSE) {
   out
 }
 
-#' extract subset from ICD data
+#' extract subset(s) from ICD data
 #'
-#' exactly the same as using x[n] or x[[n]] but preserves the ICD classes in
-#' result
+#' exactly the same as using \code{x[n]} or \code{x[[n]]} but preserves the ICD
+#' classes in result
 #' @param x input data with list, vector, factor, and class set to an ICD type.
 #' @template dotdotdot
 #' @examples
@@ -537,7 +559,10 @@ c.icd10 <- function(..., warn = FALSE) {
 #' y[[2]]
 #' stopifnot(inherits(y[2], "icd10"))
 #' stopifnot(inherits(y[[2]], "icd10"))
-#' @name subset_icd
+#' @name subset
+NULL
+
+#' @describeIn subset Extract ICD-9 codes
 #' @export
 `[.icd9` <- function(x, ...) {
   y <- NextMethod()
@@ -546,7 +571,7 @@ c.icd10 <- function(..., warn = FALSE) {
   y
 }
 
-#' @rdname subset_icd
+#' @describeIn subset Extract ICD-9 codes
 #' @export
 `[[.icd9` <- function(x, ...) {
   y <- NextMethod()
@@ -556,7 +581,7 @@ c.icd10 <- function(..., warn = FALSE) {
   y
 }
 
-#' @rdname subset_icd
+#' @describeIn subset Extract ICD-10 codes
 #' @export
 `[.icd10` <- function(x, ...) {
   y <- NextMethod()
@@ -565,7 +590,7 @@ c.icd10 <- function(..., warn = FALSE) {
   y
 }
 
-#' @rdname subset_icd
+#' @describeIn subset Extract ICD-10 codes
 #' @export
 `[[.icd10` <- function(x, ...) {
   y <- NextMethod()
@@ -575,12 +600,17 @@ c.icd10 <- function(..., warn = FALSE) {
   y
 }
 
-#' test ICD-related classes
+#' test ICD classes
 #'
 #' This merely checks whether the given object is a certain type of ICD code, it
 #' does no validation of any kind.
 #'
 #' @param x Any object which may have ICD-related classes set
+#' @examples
+#' # A character string is not itself an ICD code
+#' is.icd9("100.1")
+#' is_valid("100.1")
+#' is.icd9(as.icd9cm("100.1"))
 #' @export
 is.icd9 <- function(x) inherits(x, icd9_classes)
 
@@ -612,13 +642,13 @@ is.icd10cm_pc <- function(x) inherits(x, "icd10cm_pc")
 #' @export
 is.icd10who <- function(x) inherits(x, "icd10who")
 
-#' @describeIn icd_long_data Return \code{TRUE} if \code{x} has the
-#'   \code{icd_long_data} class.
+#' Return \code{TRUE} if \code{x} has the
+#'   \code{icd_long_data} or \code{icd_wide_data} class.
+#' @seealso \code{\link{icd_long_data}}
 #' @export
 is.icd_long_data <- function(x) inherits(x, "icd_long_data")
 
-#' @describeIn icd_long_data Return \code{TRUE} if \code{x} has the
-#'   \code{icd_wide_data} class.
+#' @rdname is.icd_long_data
 #' @export
 is.icd_wide_data <- function(x) inherits(x, "icd_wide_data")
 

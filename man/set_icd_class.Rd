@@ -9,7 +9,6 @@
 \alias{as.icd10cm}
 \alias{as.icd10cm_pc}
 \alias{as.icd10who}
-\alias{as.comorbidity_map}
 \alias{as.icd_comorbidity_map}
 \title{Construct ICD-9 and ICD-10 data types}
 \usage{
@@ -26,8 +25,6 @@ as.icd10cm(x, short_code = NULL)
 as.icd10cm_pc(x)
 
 as.icd10who(x, short_code = NULL)
-
-as.comorbidity_map(x)
 
 as.icd_comorbidity_map(...)
 }
@@ -46,11 +43,10 @@ ICD-10 codes, if a particular sub-type is set, e.g. ICD-9-CM (\code{icd9cm}),
 then an ICD-9 class (\code{icd9}) is also set.
 }
 \details{
-The \code{as.} function e.g. \code{as.icd9}, do checking and try to put
-multiple classes in a nice order. Calling the bare constructor, e.g.
-\code{icd9} just prepends the new class and returns without any checks. The
-latter is much faster, but for most uses, \code{as.icd9} and siblings would
-be better.
+The \code{as.*} functions e.g. \code{as.icd9}, do checking and try to put
+multiple classes in a nice order. Calling the internal bare constructor, e.g.
+\code{icd:::icd9} just prepends the new class and returns without any checks,
+which is much faster.
 
 Some features make more sense as attributes. E.g. setting code type to
 \code{short} or \code{decimal}.
@@ -72,9 +68,6 @@ possible, use the more specific `icd10who` or `icd10cm`.
 \item \code{as.icd10cm_pc}: Indicate the data are ICD-10-CM procedure codes.
 
 \item \code{as.icd10who}: Use WHO ICD-10 class for the given data
-
-\item \code{as.comorbidity_map}: Set the class of a named list to show it is a
-comorbidity map.
 
 \item \code{as.icd_comorbidity_map}: Deprecated. Use as.comorbidity_map instead.
 }}
@@ -110,5 +103,7 @@ stopifnot(is.short_diag(j))
 stopifnot(is.icd10(j), is.icd10(j[2]), is.icd10(j[[2]]))
 }
 \seealso{
-\code{\link{icd_long_data}}
+Other ICD data types: \code{\link{as.comorbidity_map}},
+  \code{\link{wide_vs_long}}
 }
+\concept{ICD data types}

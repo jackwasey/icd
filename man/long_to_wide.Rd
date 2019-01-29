@@ -41,9 +41,32 @@ the maximum number of codes per patient.}
 \item{...}{arguments passed on to other functions}
 }
 \description{
-This is more complicated than reshape or \code{reshape2::dcast} allows. This
-is a reasonably simple solution using built-in functions.
+Convert ICD data from long to wide format
+
+Note the distinction between labelling existing data with any classes which
+\code{icd} provides, and actually converting the structure of the data.
 }
+\details{
+This is more complicated than expected using \code{base::reshape} or
+  \code{reshape2::dcast} allows. This is a reasonably simple solution using
+  built-in functions.
+}
+\section{Long and Wide Formats}{
+ As is common with many data sets, key
+  variables can be concentrated in one column or spread over several. Tools
+  format of clinical and administrative hospital data, we can perform the
+  conversion efficiently and accurately, while keeping some metadata about
+  the codes intact, e.g. whether they are ICD-9 or ICD-10.
+}
+
+\section{Data structure}{
+ Long or wide format ICD data are all expected to be
+  in a data frame. The \code{data.frame} itself does not carry any ICD
+  classes at the top level, even if it only contains one type of code;
+  whereas its constituent columns may have a class specified, e.g.
+  \code{icd9} or \code{icd10who}.
+}
+
 \section{Deprecated function names}{
  Future versions of \pkg{icd} will drop
   the \code{icd_} prefix. For example, \code{charlson} should be used in
@@ -62,8 +85,10 @@ is a reasonably simple solution using built-in functions.
   long_to_wide(longdf, prefix = "ICD10_")
 }
 \seealso{
-Other ICD code conversion: \code{\link{as.icd_long_data}},
-  \code{\link{convert}}, \code{\link{wide_to_long}}
+Other ICD data conversion: \code{\link{comorbid_df_to_mat}},
+  \code{\link{comorbid_mat_to_df}}, \code{\link{convert}},
+  \code{\link{decimal_to_short}},
+  \code{\link{short_to_decimal}},
+  \code{\link{wide_to_long}}
 }
-\concept{ICD code conversion}
-\concept{ICD-9 convert}
+\concept{ICD data conversion}

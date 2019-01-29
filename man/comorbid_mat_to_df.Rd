@@ -40,3 +40,13 @@ df.out[, 1:4]
 # options("stringsAsFactors" = FALSE).
 is.factor(df.out[["visit_id"]])
 }
+\seealso{
+\code{\link{comorbid_df_to_mat}}
+
+Other ICD data conversion: \code{\link{comorbid_df_to_mat}},
+  \code{\link{convert}}, \code{\link{decimal_to_short}},
+  \code{\link{long_to_wide}},
+  \code{\link{short_to_decimal}},
+  \code{\link{wide_to_long}}
+}
+\concept{ICD data conversion}
