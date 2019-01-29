@@ -1,6 +1,6 @@
 #source("install-dependencies.R")
-if (!require("icd")) {
-  yn <- readline("'icd' not installed. Installing from CRAN? (y/n)")
+if (!require("icd", versionCheck(version = "3.2", op = ">="))) {
+  yn <- readline("'icd' >= 3.2 not installed. Install from CRAN? (y/n)")
   if (tolower(yn) == "y") install.packages("icd")
 }
 args <- commandArgs(trailingOnly = TRUE)

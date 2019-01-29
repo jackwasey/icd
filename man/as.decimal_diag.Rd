@@ -40,8 +40,8 @@ Get or set whether ICD codes have have an attribute indicating 'short' or
 }
 \section{Getting the attribute}{
  \code{is.short_diag} tests for presence of an
-  attribute, not whether the code is a valid ICD code. To test validity, see
-  \code{\link{is_valid}}.
+  attribute, not whether the code is a valid ICD code. To test validity of
+  the codes themselves, see \code{\link{is_valid}}.
 }
 
 \section{Setting the attribute}{
@@ -52,7 +52,10 @@ Get or set whether ICD codes have have an attribute indicating 'short' or
 
   The attribute \code{icd_short_code} should be either \code{TRUE} or
   \code{FALSE}. There is no attribute named \code{icd_decimal_code}. These
-  functions set and get the attribute safely.
+  functions set and get the attribute safely. If the attribute is not
+  present, both \code{is.icd_short_diag} and \code{is.icd_decimal_diag} (or
+  their synonyms \code{is.short_diag} and \code{is.decimal_diag}) will return
+  \code{FALSE}.
 }
 
 \examples{

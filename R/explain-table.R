@@ -84,12 +84,12 @@ shortcode_icd10 <- function(x, short_code = guess_short(x))
 #' @keywords internal
 explain_table_worker <- function(x, hierarchy, short_code, condense,
                                  brief, warn, ...) {
-  assert(check_character(x), check_factor(x))
-  assert(check_data_frame(hierarchy))
-  assert_flag(short_code)
-  assert_flag(condense)
-  assert_flag(brief)
-  assert_flag(warn)
+  stopifnot(is.character(x) || is.factor(x))
+  stopifnot(is.data.frame(hierarchy))
+  stopifnot(is.logical(short_code))
+  stopifnot(is.logical(condense))
+  stopifnot(is.logical(brief))
+  stopifnot(is.logical(warn))
   x <- as_char_no_warn(x)
   xs <- if (!short_code) decimal_to_short.icd9(x) else x
   exptable <- merge(data.frame(code = xs, stringsAsFactors = FALSE),
@@ -110,10 +110,11 @@ explain_table_worker <- function(x, hierarchy, short_code, condense,
 #' @keywords internal
 explain_table.icd9cm <- function(x, short_code = guess_short(x),
                                  condense = FALSE, brief = TRUE,
-                                 warn = TRUE, ...)
+                                 warn = TRUE, ...) {
   explain_table_worker(x = x, hierarchy = icd.data::icd9cm_hierarchy,
                        short_code = short_code, condense = condense,
                        brief = brief, warn = warn, ...)
+}
 
 #' @describeIn explain_table explain character vector of ICD1-10-CM codes
 #' @author Ed Lee
@@ -121,10 +122,22 @@ explain_table.icd9cm <- function(x, short_code = guess_short(x),
 #' @keywords internal
 explain_table.icd10cm <- function(x, short_code = guess_short(x),
                                   condense = FALSE, brief = TRUE,
-                                  warn = TRUE, ...)
+                                  warn = TRUE, ...) {
   explain_table_worker(x = x, hierarchy = icd.data::icd10cm2016,
                        short_code = short_code, condense = condense,
                        brief = brief, warn = warn, ...)
+}
+
+#' @describeIn explain_table explain character vector of ICD1-10-CM codes
+#' @export
+#' @keywords internal
+explain_table.icd10who <- function(x, short_code = guess_short(x),
+                                   condense = FALSE, brief = TRUE,
+                                   warn = TRUE, ...) {
+  explain_table_worker(x = x, hierarchy = icd.data::icd10who2016,
+                       short_code = short_code, condense = condense,
+                       brief = brief, warn = warn, ...)
+}
 
 #' condense \code{explain_table} output down to major codes
 #'

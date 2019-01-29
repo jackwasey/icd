@@ -266,7 +266,7 @@ guess_icd_col_by_class <- function(x) {
 icd9cm_latest_edition <- function() "32"
 
 na_to_false <- function(x) {
-  assert_logical(x)
+  stopifnot(is.logical(x))
   x[is.na(x)] <- FALSE
   x
 }
@@ -322,7 +322,9 @@ str_match_all <- function(string, pattern, ...) {
 
 # optional nice error message, could just fall back on icd.data::
 req_icd_data <- function() {
-  if (!requireNamespace("icd.data"))
+  if (requireNamespace("icd.data",
+                       versionCheck = list(version = 1.1,
+                                           op = ">=")))
     stop("Please install the 'icd.data' package to explain ICD codes.",
          call. = FALSE)
 

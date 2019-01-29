@@ -7,6 +7,7 @@
 \alias{children.icd9}
 \alias{children.icd10}
 \alias{children.icd10cm}
+\alias{children.icd10who}
 \alias{icd_children.character}
 \alias{icd_children.icd10}
 \alias{icd_children.icd10cm}
@@ -30,6 +31,9 @@ children(x, ...)
   billable = FALSE, ...)
 
 \method{children}{icd10cm}(x, short_code = guess_short(x), defined,
+  billable = FALSE, ...)
+
+\method{children}{icd10who}(x, short_code = guess_short(x), defined,
   billable = FALSE, ...)
 
 icd_children.character(...)
@@ -86,6 +90,8 @@ ICD-9-CM at present
 only applies to ICD-10-CM for now).
 
 \item \code{icd10cm}: Get children of ICD-10-CM codes
+
+\item \code{icd10who}: Get children of ICD-10-CM codes
 }}
 
 \section{Deprecated function names}{

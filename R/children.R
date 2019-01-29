@@ -108,42 +108,73 @@ children.icd10cm <- function(x,
                              defined,
                              billable = FALSE,
                              ...) {
-  assert(check_factor(x), check_character(unclass(x)))
-  assert_flag(short_code)
-  assert_flag(billable)
   if (!missing(defined) && !defined)
-    stop("Finding children of anything but defined ICD-10-CM codes is ",
-         "currently not supported.")
-  res <- children_defined.icd10cm(x = x, short_code = short_code)
-  if (is.icd10cm(x)) return(as.icd10cm(res))
-  res
+    stop("Only finding children of 'defined' ICD-10-CM codes is supported.")
+  children_defined.icd10cm(x = x, short_code = short_code)
 }
 
-#' defined children of ICD codes
+#' @describeIn children Get children of ICD-10-CM codes
+#' @export
+children.icd10who <- function(x,
+                             short_code = guess_short(x),
+                             defined,
+                             billable = FALSE,
+                             ...) {
+  if (!missing(defined) && !defined)
+    stop("Only finding children of 'defined' ICD-10-CM codes is supported.")
+  children_defined.icd10who(x = x, short_code = short_code)
+}
+
+#' Find only the defined children of ICD codes
 #'
 #' Find defined ICD-10 children based on 2016 ICD-10-CM list. "defined" may be a
 #' three digit code, or a leaf node. This is distinct from 'billable'.
 #'
 #' @keywords internal
+#' @noRd
 children_defined <- function(x)
   UseMethod("children_defined")
 
 #' @describeIn children_defined Internal function to get the children of
-#'   ICD-10 code(s)
+#'   ICD-10-CM code(s)
 #' @param warn single logical value, if \code{TRUE} will generate warnings when
 #'   some input codes are not known ICD-10-CM codes
 #' @param use_cpp single logical flag, whether to use C++ version
 #' @export
+#' @keywords internal
+#' @noRd
 children_defined.icd10cm <- function(x,
                                      short_code = guess_short(x),
                                      warn = FALSE) {
-  assert_character(x)
-  assert_flag(short_code)
-  assert_flag(warn)
+  stopifnot(is.factor(x) || is.character(unclass(x)))
+  stopifnot(is.logical(short_code))
+  stopifnot(is.logical(warn))
   x <- trim(x)
   x <- toupper(x)
   if (!short_code)
     x <- decimal_to_short.icd10cm(x)
-  kids <- icd10cm_children_defined_cpp(x, icd.data::icd10cm2016, .nc)
+  kids <- icd10_children_defined_cpp(x, icd.data::icd10cm2016, .nc)
   as.icd10cm(kids, short_code)
+}
+
+#' @describeIn children_defined Internal function to get the children of
+#'   WHO ICD-10 code(s)
+#' @param warn single logical value, if \code{TRUE} will generate warnings when
+#'   some input codes are not known ICD-10-CM codes
+#' @param use_cpp single logical flag, whether to use C++ version
+#' @export
+#' @keywords internal
+#' @noRd
+children_defined.icd10who <- function(x,
+                                     short_code = guess_short(x),
+                                     warn = FALSE) {
+  stopifnot(is.factor(x) || is.character(unclass(x)))
+  stopifnot(is.logical(short_code))
+  stopifnot(is.logical(warn))
+  x <- trim(x)
+  x <- toupper(x)
+  if (!short_code)
+    x <- decimal_to_short.icd10cm(x)
+  kids <- icd10_children_defined_cpp(x, icd.data::icd10who2016, .nc)
+  as.icd10who(kids, short_code = short_code)
 }

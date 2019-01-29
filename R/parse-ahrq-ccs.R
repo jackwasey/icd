@@ -92,8 +92,8 @@ icd9_parse_ahrq_ccs <- function(single = TRUE, save_data = FALSE,
     lvl4 <- rsrt(tapply(ahrq_df[["ICD.9.CM.CODE"]], ahrq_df[["CCS.LVL.4"]], clean_icd9))
     icd9_map_multi_ccs <- list(lvl1 = lvl1, lvl2 = lvl2, lvl3 = lvl3, lvl4 = lvl4)
     make_labels <- function(lvl = 1){
-      values_col <- paste0("CCS.LVL.",lvl)
-      label_col <- paste0("CCS.LVL.",lvl,".LABEL")
+      values_col <- paste0("CCS.LVL.", lvl)
+      label_col <- paste0("CCS.LVL.", lvl, ".LABEL")
 
       lkp_chr <- trimws(ahrq_df[[label_col]])
       names(lkp_chr) <- trimws(ahrq_df[[values_col]])
@@ -210,7 +210,7 @@ icd10_parse_ahrq_ccs <- function(version = "2018.1",
   icd10_map_ccs <- lapply(icd10_map_def, ccs_lvl_map)
 
   ccs_lvl_name <- function(values_col){
-    label_col <- paste0(values_col,".LABEL")
+    label_col <- paste0(values_col, ".LABEL")
 
     lkp_chr <- trimws(ahrq_df[[label_col]])
     names(lkp_chr) <- trimws(ahrq_df[[values_col]])
@@ -218,7 +218,7 @@ icd10_parse_ahrq_ccs <- function(version = "2018.1",
     lkp_chr[!duplicated(names(lkp_chr))]
   }
 
-  icd10_names_ccs <- lapply(icd10_map_def,ccs_lvl_name)
+  icd10_names_ccs <- lapply(icd10_map_def, ccs_lvl_name)
 
   if (save_data) {
     save_in_data_dir(icd10_map_ccs)
