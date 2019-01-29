@@ -45,8 +45,8 @@ month](https://cranlogs.r-pkg.org/badges/icd
 "RStudio Mirror Downloads Last Calendar Month")](https://cran.r-project.org/package=icd)
 <!-- badges: end -->
 <!-- [![CRAN RStudio mirror downloads last week](https://cranlogs.r-pkg.org/badges/last-week/icd "RStudio Mirror Downloads Last Week")](https://cran.r-project.org/package=icd) -->
-\# Comorbidities from ICD-9 and ICD-10 codes, manipulation and
-validation
+
+# Comorbidities from ICD-9 and ICD-10 codes, manipulation and validation
 
 ## Introduction
 
@@ -137,6 +137,64 @@ plot_comorbid(icd.data::uranium_pathology)
 ```
 
 ![](man/figures/README-example-1.png)<!-- -->
+
+## Make “Table 1” summary data
+
+Here we are using the US National Hospital Discharge Survey 2010 data
+from the [nhds](https://github.com/jackwasey/nhds) package. For the sake
+of example, let us compare emergency to other admissions. A real table
+would have more patient features; this primarily demonstrates how to get
+ICD codes into your Table One.
+
+N.b., this requires ‘nhds’ to be installed to generate the example.
+
+``` r
+# First make sure nhds exists
+if (requireNamespace("nhds", quietly = TRUE)) {
+  nhds <- nhds::nhds2010
+  # skip infants and young children
+  nhds$newborn <- NULL
+  nhds <- nhds[nhds$age_unit == "years", ]
+  # get the comorbidities using the Quan-Deyo version of the Charlson categories
+  cmb <- icd::comorbid_quan_deyo(nhds, abbrev_names = FALSE)
+  nhds <- cbind(nhds, cmb, stringsAsFactors = FALSE)
+  Y <- nhds$adm_type == "emergency"
+  tab_dat <- vapply(
+    unname(unlist(icd_names_charlson)),
+    function(x) {
+      c(sprintf("%i (%.2f%%)", 
+                sum(nhds[Y, x]), 
+                100 * mean(nhds[Y, x])),
+        sprintf("%i (%.2f%%)",
+                sum(nhds[!Y, x]),
+                100 * mean(nhds[!Y, x])))
+    },
+    character(2)
+  )
+  knitr::kable(t(tab_dat),
+               col.names = c("Emergency", "Not emergency"))
+}
+```
+
+|                                             | Emergency      | Not emergency |
+| ------------------------------------------- | :------------- | :------------ |
+| Myocardial Infarction                       | 2708 (3.75%)   | 1113 (1.76%)  |
+| Congestive Heart Failure                    | 12346 (17.08%) | 5632 (8.92%)  |
+| Periphral Vascular Disease                  | 3842 (5.32%)   | 3317 (5.25%)  |
+| Cerebrovascular Disease                     | 5761 (7.97%)   | 3126 (4.95%)  |
+| Dementia                                    | 2175 (3.01%)   | 729 (1.15%)   |
+| Chronic Pulmonary Disease                   | 12122 (16.77%) | 7012 (11.11%) |
+| Connective Tissue Disease-Rheumatic Disease | 1529 (2.12%)   | 1143 (1.81%)  |
+| Peptic Ulcer Disease                        | 1142 (1.58%)   | 621 (0.98%)   |
+| Mild Liver Disease                          | 2169 (3.00%)   | 1143 (1.81%)  |
+| Diabetes without complications              | 14398 (19.92%) | 9130 (14.46%) |
+| Diabetes with complications                 | 2719 (3.76%)   | 1449 (2.29%)  |
+| Paraplegia and Hemiplegia                   | 1443 (2.00%)   | 966 (1.53%)   |
+| Renal Disease                               | 9384 (12.98%)  | 4667 (7.39%)  |
+| Cancer                                      | 2778 (3.84%)   | 3986 (6.31%)  |
+| Moderate or Severe Liver Disease            | 1076 (1.49%)   | 507 (0.80%)   |
+| Metastatic Carcinoma                        | 2098 (2.90%)   | 1663 (2.63%)  |
+| HIV/AIDS                                    | 25 (0.03%)     | 63 (0.10%)    |
 
 ## How to get help
 

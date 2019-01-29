@@ -51,6 +51,7 @@ Suggests:
     icd.data (>= 1.1),
     knitr,
     magrittr,
+    nhds,
     roxygen2 (>= 5.0.0),
     rmarkdown,
     rticles,
