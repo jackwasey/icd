@@ -205,10 +205,35 @@ assert_integer <- function(x, len = NULL) {
   if (!is.null(len)) stopifnot(length(x) == len)
 }
 
+assert_int <- function(x, len = NULL, ...) {
+  stopifnot(is.integer(x) || floor(x) == x)
+  if (!is.null(len)) stopifnot(length(x) == 1L)
+}
+
+assert_list <- function(x, ...) {
+  stopifnot(is.list(x))
+}
+
 assert_scalar <- function(x) {
   stopifnot(length(x) == 1L)
 }
 
 assert_fac_or_char <- function(x) {
   stopifnot(is.factor(x) || is.character(x))
+}
+
+assert_data_frame <- function(x, ...) {
+  stopifnot(is.data.frame(x))
+}
+
+assert_matrix <- function(x, ...) {
+  stopifnot(is.matrix(x))
+}
+
+expect_logical <- function(x, ...) {
+  testthat::expect_true(is.logical(x))
+}
+
+expect_character <- function(x, ...) {
+  testthat::expect_true(is.character(x))
 }

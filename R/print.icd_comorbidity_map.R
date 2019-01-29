@@ -18,7 +18,7 @@
 #' @keywords internal
 #' @export
 print.comorbidity_map <- function(x, ..., n_comorbidities = 7, n_codes = 7) {
-  assert_list(x, min.len = 1, names = "unique", types = "character")
+  stopifnot(is.list(x))
   assert_int(n_comorbidities)
   assert_int(n_codes)
   get_n_or_len <- function(x, n) {

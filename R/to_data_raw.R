@@ -20,12 +20,15 @@
 #' @return path of unzipped file in the raw data directory
 #' @keywords internal
 #' @noRd
-unzip_to_data_raw <- function(url, file_name, force = FALSE,
-                              verbose = FALSE, offline = TRUE,
+unzip_to_data_raw <- function(url,
+                              file_name,
+                              force = FALSE,
+                              verbose = FALSE,
+                              offline = TRUE,
                               data_raw_path = get_raw_data_dir(),
                               save_name = file_name) {
-  assert_string(url, na.ok = FALSE)
-  assert_string(file_name, na.ok = FALSE)
+  stopifnot(is.character(url))
+  stopifnot(is.character(file_name))
   assert_flag(offline)
   # TODO: This temporary directory should be cleaned up if run during testing.
   if (!dir.exists(data_raw_path)) data_raw_path <- tempdir()

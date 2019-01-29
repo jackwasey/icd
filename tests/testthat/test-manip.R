@@ -226,8 +226,8 @@ test_that("drop leading zeroes from majors: invalid input", {
   # this is a little dangerous. dropping zeroes from a major is only valid for
   # short codes if the minor is empty, but this function is unaware of this.
   expect_equal(icd9_drop_leading_zeroes_major(""), "")
-  expect_scalar_na(icd9_drop_leading_zeroes_major(NA_character_))
-  expect_scalar_na(icd9_drop_leading_zeroes_major(NA))
+  expect_equal(length(icd9_drop_leading_zeroes_major(NA_character_)), 1L)
+  expect_equal(length(icd9_drop_leading_zeroes_major(NA)), 1L)
   # dropping leading zeroes from an invalid code is undefined, so no tests.
 })
 

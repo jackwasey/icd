@@ -50,9 +50,8 @@ test_that("read LET string declarations from SAS code", {
   res_list <- sas_extract_let_strings(
     "\t%LET DC16=%STR('196','197','198','199');      ")
   expect_is(res_list, "list")
-  expect_false(any(vapply(res_list, length)))
-  expect_true(all(vapply(res_list, is.character)))
-  expect_false(anyDuplicated(names(res_list)))
+  expect_true(all(vapply(res_list, length, integer(1))))
+  expect_true(all(vapply(res_list, is.character, logical(1))))
   expect_true(names(res_list) == "DC16")
   expect_equal(res_list[[1]], c("196", "197", "198", "199"))
   res_list <- sas_extract_let_strings(c(

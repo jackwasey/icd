@@ -137,7 +137,7 @@ long_to_wide <- function(x,
   stopifnot(visit_name %in% names(x))
   stopifnot(icd_name %in% names(x))
   stopifnot(is.character(prefix), length(prefix) == 1, nchar(prefix) > 0)
-  assert_count(min_width, na.ok = FALSE)
+  stopifnot(min_width > 0)
   visit_name_f <- is.factor(x[[visit_name]])
   icd_name_f <-  is.factor(x[[icd_name]])
   if (icd_name_f) i_levels <- levels(x[[icd_name]])

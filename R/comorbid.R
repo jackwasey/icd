@@ -305,7 +305,6 @@ icd9_comorbid_ccs <- function(x, ...,
                               map = icd::icd9_map_single_ccs,
                               short_map = TRUE) {
   assert_flag(single)
-  assert_int(lvl, lower = 1, upper = 4, null.ok = TRUE, na.ok = FALSE)
   if (!single) {
     if (!is.null(lvl))
       map <- icd::icd9_map_multi_ccs[[paste0("lvl", lvl)]]
@@ -320,7 +319,6 @@ icd9_comorbid_ccs <- function(x, ...,
 #' @export
 icd10_comorbid_ccs <- function(x, ..., single = TRUE, lvl = NULL) {
   assert_flag(single)
-  assert_int(lvl, lower = 1, upper = 2, null.ok = TRUE, na.ok = FALSE)
   m <- icd::icd10_map_ccs$single
   if (!single) {
     if (!is.null(lvl))

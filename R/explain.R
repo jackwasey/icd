@@ -116,7 +116,7 @@ explain_code.icd9cm <- function(x, short_code = guess_short(x),
 explain_code.icd10cm <- function(x, short_code = guess_short(x),
                                  condense = TRUE, brief = FALSE,
                                  warn = TRUE, ...) {
-  assert_vector(x)
+  stopifnot(is.atomic(x))
   assert_flag(short_code)
   assert_flag(brief)
   if (!missing(condense))
