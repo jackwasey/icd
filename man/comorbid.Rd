@@ -276,10 +276,10 @@ according to Quan/Deyo ICD categories. Synonymous with
 library(icd.data) # for Vermont data
 vermont_dx[1:5, 1:10]
 vd <- wide_to_long(vermont_dx)
-# get first few rows and columns of Charlson comorbidities using Quan's mapping
+# get first few rows and columns of Charlson comorbidities using Quan mapping
 comorbid_quan_deyo(vd)[1:5, 1:14]
 
-# get summary AHRQ (based on Elixhauser) comorbidities for ICD-10 Uranium data:
+# get summary AHRQ (based on Elixhauser) comorbidities for the Uranium data:
 summary(comorbid_ahrq(uranium_pathology))
 
 pts <- icd_long_data(visit_name = c("2", "1", "2", "3", "3"),

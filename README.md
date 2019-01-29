@@ -146,55 +146,49 @@ of example, let us compare emergency to other admissions. A real table
 would have more patient features; this primarily demonstrates how to get
 ICD codes into your Table One.
 
-N.b., this requires ‘nhds’ to be installed to generate the example.
+NHDS 2010 comorbidities to demonstrate Table One creation. Presented as
+counts (percentage prevalence in group).
 
 ``` r
-# First make sure nhds exists
-if (requireNamespace("nhds", quietly = TRUE)) {
-  nhds <- nhds::nhds2010
-  # skip infants and young children
-  nhds$newborn <- NULL
-  nhds <- nhds[nhds$age_unit == "years", ]
-  # get the comorbidities using the Quan-Deyo version of the Charlson categories
-  cmb <- icd::comorbid_quan_deyo(nhds, abbrev_names = FALSE)
-  nhds <- cbind(nhds, cmb, stringsAsFactors = FALSE)
-  Y <- nhds$adm_type == "emergency"
-  tab_dat <- vapply(
-    unname(unlist(icd_names_charlson)),
-    function(x) {
-      c(sprintf("%i (%.2f%%)", 
-                sum(nhds[Y, x]), 
-                100 * mean(nhds[Y, x])),
-        sprintf("%i (%.2f%%)",
-                sum(nhds[!Y, x]),
-                100 * mean(nhds[!Y, x])))
-    },
-    character(2)
-  )
-  knitr::kable(t(tab_dat),
-               col.names = c("Emergency", "Not emergency"))
-}
+nhds <- nhds::nhds2010
+# get the comorbidities using the Quan-Deyo version of the Charlson categories
+cmb <- icd::comorbid_quan_deyo(nhds, abbrev_names = FALSE)
+nhds <- cbind(nhds, cmb, stringsAsFactors = FALSE)
+Y <- nhds$adm_type == "emergency"
+tab_dat <- vapply(
+  unname(unlist(icd_names_charlson)),
+  function(x) {
+    c(sprintf("%i (%.2f%%)", 
+              sum(nhds[Y, x]), 
+              100 * mean(nhds[Y, x])),
+      sprintf("%i (%.2f%%)",
+              sum(nhds[!Y, x]),
+              100 * mean(nhds[!Y, x])))
+  },
+  character(2)
+)
+knitr::kable(t(tab_dat), col.names = c("Emergency", "Not emergency"))
 ```
 
 |                                             | Emergency      | Not emergency |
 | ------------------------------------------- | :------------- | :------------ |
-| Myocardial Infarction                       | 2708 (3.75%)   | 1113 (1.76%)  |
-| Congestive Heart Failure                    | 12346 (17.08%) | 5632 (8.92%)  |
-| Periphral Vascular Disease                  | 3842 (5.32%)   | 3317 (5.25%)  |
-| Cerebrovascular Disease                     | 5761 (7.97%)   | 3126 (4.95%)  |
-| Dementia                                    | 2175 (3.01%)   | 729 (1.15%)   |
-| Chronic Pulmonary Disease                   | 12122 (16.77%) | 7012 (11.11%) |
-| Connective Tissue Disease-Rheumatic Disease | 1529 (2.12%)   | 1143 (1.81%)  |
-| Peptic Ulcer Disease                        | 1142 (1.58%)   | 621 (0.98%)   |
-| Mild Liver Disease                          | 2169 (3.00%)   | 1143 (1.81%)  |
-| Diabetes without complications              | 14398 (19.92%) | 9130 (14.46%) |
-| Diabetes with complications                 | 2719 (3.76%)   | 1449 (2.29%)  |
-| Paraplegia and Hemiplegia                   | 1443 (2.00%)   | 966 (1.53%)   |
-| Renal Disease                               | 9384 (12.98%)  | 4667 (7.39%)  |
-| Cancer                                      | 2778 (3.84%)   | 3986 (6.31%)  |
-| Moderate or Severe Liver Disease            | 1076 (1.49%)   | 507 (0.80%)   |
-| Metastatic Carcinoma                        | 2098 (2.90%)   | 1663 (2.63%)  |
-| HIV/AIDS                                    | 25 (0.03%)     | 63 (0.10%)    |
+| Myocardial Infarction                       | 2709 (3.70%)   | 1113 (1.42%)  |
+| Congestive Heart Failure                    | 12349 (16.85%) | 5644 (7.21%)  |
+| Periphral Vascular Disease                  | 3843 (5.25%)   | 3318 (4.24%)  |
+| Cerebrovascular Disease                     | 5788 (7.90%)   | 3177 (4.06%)  |
+| Dementia                                    | 2176 (2.97%)   | 729 (0.93%)   |
+| Chronic Pulmonary Disease                   | 12216 (16.67%) | 7058 (9.02%)  |
+| Connective Tissue Disease-Rheumatic Disease | 1529 (2.09%)   | 1143 (1.46%)  |
+| Peptic Ulcer Disease                        | 1143 (1.56%)   | 636 (0.81%)   |
+| Mild Liver Disease                          | 2171 (2.96%)   | 1149 (1.47%)  |
+| Diabetes without complications              | 14399 (19.65%) | 9133 (11.67%) |
+| Diabetes with complications                 | 2719 (3.71%)   | 1449 (1.85%)  |
+| Paraplegia and Hemiplegia                   | 1446 (1.97%)   | 968 (1.24%)   |
+| Renal Disease                               | 9387 (12.81%)  | 4669 (5.96%)  |
+| Cancer                                      | 2780 (3.79%)   | 4008 (5.12%)  |
+| Moderate or Severe Liver Disease            | 1080 (1.47%)   | 521 (0.67%)   |
+| Metastatic Carcinoma                        | 2100 (2.87%)   | 1665 (2.13%)  |
+| HIV/AIDS                                    | 25 (0.03%)     | 63 (0.08%)    |
 
 ## How to get help
 

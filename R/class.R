@@ -359,7 +359,7 @@ icd10who <- function(x) {
 #' errors, especially if you have aytpical data that might confuse \code{icd}'s
 #' heuristics.
 #' @name wide_vs_long
-#' @template wide_vs_long
+#' @template widevlong
 #' @section Conversion: To convert between long and wide data, use
 #'   \code{\link{long_to_wide}} or \code{\link{wide_to_long}}. Conversion
 #'   functions in other packages, such as \code{ddplyr} will work, too, but will
@@ -367,12 +367,19 @@ icd10who <- function(x) {
 #'   diagnostic codes. This is not done with \code{ddplyr}, \code{data.table}
 #'   etc because it would add a big dependency burden. This package aims to be
 #'   agnostic and use base R as much as possible.
+#' @param x Input data is a \code{matrix}, \code{data.frame}, or a class that
+#'   inherits one of these base structures, such as a \code{tibble}.
 #' @param warn Single logical, if \code{TRUE}, the default, a warning will be
 #'   shown if changing class between long and wide types.
+#' @param ... Data used to construct data frame before setting the appropriate
+#'   class.
 #' @family ICD data types
 #' @examples
 #' class(icd.data::uranium_pathology)
 #' class(icd.data::vermont_dx)
+#' icd_wide_data(id = c(1, 2, 3),
+#'               dx01 = c("100", "441", "V20"),
+#'               dx02 = c("E9981", "V10", "44004"))
 #' @seealso \code{\link{long_to_wide}} and \code{\link{wide_to_long}}
 NULL
 
@@ -415,14 +422,14 @@ as.icd_wide_data <- function(x, warn = TRUE) {
 #'   \code{icd_long_data} class.
 #' @family ICD data types
 #' @export
-icd_long_data <- function(...)
-  as.icd_long_data(data.frame(...))
+icd_long_data <- function(..., warn = TRUE)
+  as.icd_long_data(data.frame(...), warn = warn)
 
 #' @describeIn wide_vs_long Construct a \code{data.frame}, adding the
 #'   \code{icd_wide_data} class.
 #' @export
-icd_wide_data <- function(...)
-  as.icd_wide_data(data.frame(...))
+icd_wide_data <- function(x, ..., warn = TRUE)
+  as.icd_wide_data(data.frame(...), warn = warn)
 
 #' @details Using \code{attributes} instead of \code{class} is a better fit for
 #'   the data. It simplifies S3 dispatch, and appears to be very fast to get or
@@ -438,11 +445,15 @@ comorbidity_map <- function(x) {
 }
 
 #' Set the class of a named list to show it is a comorbidity map.
+#' @param x A list of depth one, with unique names, and elements that are
+#'   character vectors.
 #' @family ICD data types
 #' @export
 as.comorbidity_map <- function(x) {
-  assert_list(x, min.len = 1, names = "unique")
-  # avoid copying the data if class is already correct.
+  stopifnot(is.list(x),
+            !is.null(names(x)),
+            !(any(names(x)) == ""),
+            !anyDuplicated(names(x)))
   if (inherits(x, "comorbidity_map"))
     return(x)
   class(x) <- c("comorbidity_map", class(x))
@@ -642,8 +653,11 @@ is.icd10cm_pc <- function(x) inherits(x, "icd10cm_pc")
 #' @export
 is.icd10who <- function(x) inherits(x, "icd10who")
 
-#' Return \code{TRUE} if \code{x} has the
-#'   \code{icd_long_data} or \code{icd_wide_data} class.
+#' Test for class describing patient data
+#'
+#' This function does not examine the data itself; it just checks whether one of
+#' the classes \code{icd_long_data} or \code{icd_wide_data} class is set.
+#' @param x Typically a \code{data.frame}
 #' @seealso \code{\link{icd_long_data}}
 #' @export
 is.icd_long_data <- function(x) inherits(x, "icd_long_data")

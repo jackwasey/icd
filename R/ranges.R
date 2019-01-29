@@ -1,20 +1,13 @@
-#' take two ICD-9 codes and expand range to include all child codes
+#' Generate a set of codes between two ICD codes including encompassed children
 #'
-#' this is cumbersome code, covering a whole load of edge cases relating to the
-#' fact that ICD-9 codes are \strong{not} in numeric order. An alternative
-#' strategy would be to list all the ICD9 codes, then a range would just pick
-#' out start and finish positions, and return subset of the list. Not all ICD-9
-#' codes are valid, including some parent codes which have valid children.
-#' However, I expect at least some of these have been used in some billing
-#' databases.
+#' Great care is taken not to include codes which have children not in the
+#' range. E.g., \code{100.9} to \code{101.1} would _not_ include code "101". See
+#' the extensive tests covering this area for much more detail.
 #'
-#' As with \code{link{icd9ExpandRangeShort}} great care is taken not to include
-#' codes which have children not in the range. E.g. "100.9" to "101.1" would
-#' _not_ include code "101".
-#'
-#' \code{onlyReal} default is \code{TRUE} (a change from previous versions)
-#' since this is far more likely to be useful to the end user.
+#' The default for the argument \code{defined} is \code{TRUE} since this is far
+#' more likely to be useful to the end user, dealing with real ICD codes.
 #' @examples
+#' expand_range("428.0", "428.9")
 #' "4280" %i9s% "4289"
 #' "4280" %i9s% "42821"
 #' "42799" %i9sa% "42802" # doesn't include 428 or 4280
@@ -22,7 +15,7 @@
 #' "V80" %i9s% "V810"
 #' @templateVar icd9ShortName start,end
 #' @template icd9-short
-#' @template onlyReal
+#' @template defined
 #' @template short_code
 #' @param ex_ambig_start single logical value, if \code{TRUE} the range returned
 #'   will not include codes which are explicitly listed in the range, but would
@@ -48,18 +41,31 @@ expand_range <- function(start, end, ...) {
 #'   called.
 #' @export
 #' @keywords internal
-expand_range.character <- function(start, end, short_code = NULL, defined = TRUE, ...) {
-
-  icd_ver <- guess_pair_version(start = start, end = end, short_code = short_code)
+expand_range.character <- function(
+  start,
+  end,
+  short_code = NULL,
+  defined = TRUE, ...
+) {
+  icd_ver <- guess_pair_version(start = start,
+                                end = end,
+                                short_code = short_code)
   if (icd_ver == "icd9") {
     if (is.null(short_code))
       short_code <- guess_short(c(start, end))
-    expand_range.icd9(start, end, short_code = short_code, defined = defined, ...)
-  } else {
-    # if not ICD-9, must be ICD-10 (for now)
+    expand_range.icd9(start,
+                      end,
+                      short_code = short_code,
+                      defined = defined, ...)
+  } else if (icd_ver == "icd10") {
     if (is.null(short_code))
       short_code <- guess_short(c(start, end))
-    expand_range.icd10cm(start, end, short_code = short_code, defined = defined, ...)
+    expand_range.icd10cm(start,
+                         end,
+                         short_code = short_code,
+                         defined = defined, ...)
+  } else {
+    stop("Unknown ICD code version: ", icd_ver)
   }
 }
 
@@ -73,12 +79,20 @@ expand_range.character <- function(start, end, short_code = NULL, defined = TRUE
 #' @param end  character vector of length one containing an ICD code
 #' @export
 #' @keywords internal
-expand_range.icd10cm <- function(start, end, short_code = guess_short(c(start, end)),
-                                 defined = TRUE, ...) {
-  if (!defined)
-    stop("expanding ranges of possible (versus defined) ICD-10-CM codes is not yet implemented.
-         It will produce a very large number of codes because of permutations of the many
-         alphabetic and numeric possibilities after the decimal place.")
+expand_range.icd10cm <- function(
+  start,
+  end,
+  short_code = guess_short(c(start, end)),
+  defined,
+  ...
+) {
+  if (!missing(defined) && !defined)
+    stop(
+      "expanding ranges of possible (versus defined) " ,
+      "ICD-10-CM codes is not yet implemented. ",
+      "It will produce a very large number of ",
+      "codes because of permutations of the many ",
+      "alphabetic and numeric possibilities after the decimal place.")
 
   # check whether valid?
   # minimal check for type:
@@ -128,7 +142,7 @@ expand_range_major.default <- function(start, end, defined) {
   if (icd_ver == "icd9")
     expand_range_major.icd9(start, end)
   else
-    expand_range_major.icd10cm(start, end)
+    expand_range_major.icd10cm(start, end, defined)
 }
 
 #' @describeIn expand_range_major Expand range of top-level ICD-10 codes
@@ -139,6 +153,8 @@ expand_range_major.icd10cm <- function(start, end, defined) {
   # numeric. This may make ICD-10-CM different from ICD-10 WHO. It also makes
   # generating the lookup table of ICD-10-CM codes potentially circular, since
   # we expand the start to end range of chapter and sub-chapter definitions.
+  if (!missing(defined))
+    warning("Argument 'defined' given but not relevant for major expansion")
   se <- toupper(trim(as_char_no_warn(c(start, end))))
   unique_mjrs <- unique(icd.data::icd10cm2016$three_digit)
   if (!is_major.icd10cm(se[[1]]))

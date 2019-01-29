@@ -12,13 +12,19 @@ as.icd_long_data(x, warn = TRUE)
 
 as.icd_wide_data(x, warn = TRUE)
 
-icd_long_data(...)
+icd_long_data(..., warn = TRUE)
 
-icd_wide_data(...)
+icd_wide_data(x, ..., warn = TRUE)
 }
 \arguments{
+\item{x}{Input data is a \code{matrix}, \code{data.frame}, or a class that
+inherits one of these base structures, such as a \code{tibble}.}
+
 \item{warn}{Single logical, if \code{TRUE}, the default, a warning will be
 shown if changing class between long and wide types.}
+
+\item{...}{Data used to construct data frame before setting the appropriate
+class.}
 }
 \description{
 These functions take your patient data, and allow you to describe whether it
@@ -71,6 +77,9 @@ heuristics.
 \examples{
 class(icd.data::uranium_pathology)
 class(icd.data::vermont_dx)
+icd_wide_data(id = c(1, 2, 3),
+              dx01 = c("100", "441", "V20"),
+              dx02 = c("E9981", "V10", "44004"))
 }
 \seealso{
 \code{\link{long_to_wide}} and \code{\link{wide_to_long}}

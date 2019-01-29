@@ -34,7 +34,7 @@ code provided is in short (\code{TRUE}) or decimal (\code{FALSE}) form.
 Where reasonable, this is guessed from the input data.}
 
 \item{warn}{single logical value, if \code{TRUE}, give warnings when
-there is discrepancy between \code{onlyReal} being \code{TRUE} yet data
+there is discrepancy between \code{defined} being \code{TRUE} yet data
 containing undefined codes.}
 
 \item{...}{arguments passed on to other functions}

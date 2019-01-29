@@ -113,34 +113,26 @@ plot_comorbid(icd.data::uranium_pathology)
 
 Here we are using the US National Hospital Discharge Survey 2010 data from the [nhds](https://github.com/jackwasey/nhds) package. For the sake of example, let us compare emergency to other admissions. A real table would have more patient features; this primarily demonstrates how to get ICD codes into your Table One.
 
-N.b., this requires 'nhds' to be installed to generate the example.
-
-```{r tableone, fig.cap="NHDS 2010 comorbidities to demonstrate Table One creation. Presented as counts (percentage prevalence in group)"}
-# First make sure nhds exists
-if (requireNamespace("nhds", quietly = TRUE)) {
-  nhds <- nhds::nhds2010
-  # skip infants and young children
-  nhds$newborn <- NULL
-  nhds <- nhds[nhds$age_unit == "years", ]
-  # get the comorbidities using the Quan-Deyo version of the Charlson categories
-  cmb <- icd::comorbid_quan_deyo(nhds, abbrev_names = FALSE)
-  nhds <- cbind(nhds, cmb, stringsAsFactors = FALSE)
-  Y <- nhds$adm_type == "emergency"
-  tab_dat <- vapply(
-    unname(unlist(icd_names_charlson)),
-    function(x) {
-      c(sprintf("%i (%.2f%%)", 
-                sum(nhds[Y, x]), 
-                100 * mean(nhds[Y, x])),
-        sprintf("%i (%.2f%%)",
-                sum(nhds[!Y, x]),
-                100 * mean(nhds[!Y, x])))
-    },
-    character(2)
-  )
-  knitr::kable(t(tab_dat),
-               col.names = c("Emergency", "Not emergency"))
-}
+NHDS 2010 comorbidities to demonstrate Table One creation. Presented as counts (percentage prevalence in group).
+```{r tableone}
+nhds <- nhds::nhds2010
+# get the comorbidities using the Quan-Deyo version of the Charlson categories
+cmb <- icd::comorbid_quan_deyo(nhds, abbrev_names = FALSE)
+nhds <- cbind(nhds, cmb, stringsAsFactors = FALSE)
+Y <- nhds$adm_type == "emergency"
+tab_dat <- vapply(
+  unname(unlist(icd_names_charlson)),
+  function(x) {
+    c(sprintf("%i (%.2f%%)", 
+              sum(nhds[Y, x]), 
+              100 * mean(nhds[Y, x])),
+      sprintf("%i (%.2f%%)",
+              sum(nhds[!Y, x]),
+              100 * mean(nhds[!Y, x])))
+  },
+  character(2)
+)
+knitr::kable(t(tab_dat), col.names = c("Emergency", "Not emergency"))
 ```
 
 ## How to get help

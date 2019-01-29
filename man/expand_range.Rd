@@ -16,7 +16,7 @@
 \alias{icd_expand_range.icd9}
 \alias{icd_expand_range_major.icd9}
 \alias{icd_expand_range}
-\title{take two ICD-9 codes and expand range to include all child codes}
+\title{Generate a set of codes between two ICD codes including encompassed children}
 \usage{
 expand_range(start, end, ...)
 
@@ -65,6 +65,13 @@ tens, then units, before the decimal parts. E.g. "10" becomes "010", not
 code provided is in short (\code{TRUE}) or decimal (\code{FALSE}) form.
 Where reasonable, this is guessed from the input data.}
 
+\item{defined}{single logical value, if \code{TRUE}, will limit the search
+to those codes which appear in the master list, not just syntactically
+valid codes. Since nearly valid, out-dated or new codes may be missed, not
+limiting to officially defined values will be useful. Ultimately, there
+will need to be annual (and all-time) master lists of codes and the ability
+to test against a given master list given the year of the ICD-9 coding.}
+
 \item{ex_ambig_start}{single logical value, if \code{TRUE} the range returned
 will not include codes which are explicitly listed in the range, but would
 imply a broader range than specified. E.g. \code{V10 \%i9sa\% V1009} would
@@ -74,30 +81,15 @@ is parent to everything up to \code{V11}.}
 \item{ex_ambig_end}{single logical, same as \code{ex_ambig_start} but affects
 codes at the end of the range. E.g. 99.99 to 101.01 would by default
 exclude 101 and 101.0}
-
-\item{onlyReal}{single logical value, if \code{TRUE}, will limit the search
-to those codes which appear in the master list, not just syntactically
-valid codes. Since nearly valid, out-dated or new codes may be missed, not
-limiting to officially defined values will be useful. Ultimately, there
-will need to be annual (and all-time) master lists of codes and the ability
-to test against a given master list given the year of the ICD-9 coding.}
 }
 \description{
-this is cumbersome code, covering a whole load of edge cases relating to the
-fact that ICD-9 codes are \strong{not} in numeric order. An alternative
-strategy would be to list all the ICD9 codes, then a range would just pick
-out start and finish positions, and return subset of the list. Not all ICD-9
-codes are valid, including some parent codes which have valid children.
-However, I expect at least some of these have been used in some billing
-databases.
+Great care is taken not to include codes which have children not in the
+range. E.g., \code{100.9} to \code{101.1} would _not_ include code "101". See
+the extensive tests covering this area for much more detail.
 }
 \details{
-As with \code{link{icd9ExpandRangeShort}} great care is taken not to include
-codes which have children not in the range. E.g. "100.9" to "101.1" would
-_not_ include code "101".
-
-\code{onlyReal} default is \code{TRUE} (a change from previous versions)
-since this is far more likely to be useful to the end user.
+The default for the argument \code{defined} is \code{TRUE} since this is far
+more likely to be useful to the end user, dealing with real ICD codes.
 
 When the class is not known, it must be guessed from the start and
   end codes. If this guessing fails, e.g. start is ICD-9 whereas end is
@@ -126,6 +118,7 @@ class is not known
 }
 
 \examples{
+expand_range("428.0", "428.9")
 "4280" \%i9s\% "4289"
 "4280" \%i9s\% "42821"
 "42799" \%i9sa\% "42802" # doesn't include 428 or 4280

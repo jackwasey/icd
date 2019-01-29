@@ -570,14 +570,12 @@ The US State of Vermont offers anonymized public hospital discharge data [@Vermo
 head(icd.data::vermont_dx[1:10])
 ```
 
-The data is in 'wide' format. ICD codes have the 'short' structure, without the decimal divider. Diagnoses are spread of the `DX` columns.
+The data is in 'wide' format. ICD codes have the 'short' structure, without the decimal divider. Diagnoses are spread across the `DX` columns.
 
 ```{r vermontlong}
-v <- wide_to_long(icd.data::vermont_dx)[c("visit_id", "icd_code")]
-head(v)
+v <- icd.data::vermont_dx[-c(2:5)]
+v[1:5, 1:5]
 ```
-
-This 'long' format is the structure required as input for the comorbidity functions, which can now be done:
 
 ```{r vermontcompute}
 v_cmb <- comorbid_charlson(v, return_df = TRUE)

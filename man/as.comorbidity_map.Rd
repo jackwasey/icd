@@ -6,6 +6,10 @@
 \usage{
 as.comorbidity_map(x)
 }
+\arguments{
+\item{x}{A list of depth one, with unique names, and elements that are
+character vectors.}
+}
 \description{
 Set the class of a named list to show it is a comorbidity map.
 }

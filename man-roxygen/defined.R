@@ -1,4 +1,4 @@
-#' @param onlyReal single logical value, if \code{TRUE}, will limit the search
+#' @param defined single logical value, if \code{TRUE}, will limit the search
 #'   to those codes which appear in the master list, not just syntactically
 #'   valid codes. Since nearly valid, out-dated or new codes may be missed, not
 #'   limiting to officially defined values will be useful. Ultimately, there

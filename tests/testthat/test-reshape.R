@@ -1,12 +1,9 @@
 context("reshaping wide to long")
-
 longdf <- data.frame(visit_id = c("a", "b", "b", "c"),
                      icd9 = c("441", "4424", "443", "441"))
-
 widedf <- data.frame(visit_id = c("a", "b", "c"),
                      icd9_001 = c("441", "4424", "441"),
                      icd9_002 = c(NA, "443", NA))
-
 test_that("long data to wide data", {
   longcmp <- data.frame(visit_id = c("a", "b", "c"),
                         icd_001 = c("441", "4424", "441"),
@@ -31,12 +28,10 @@ test_that("long data to wide data", {
 test_that("wide data to long data", {
   expect_equivalent(wide_to_long(widedf),
                     longdf)
-
   # same with "" instead of NA.
   widedfempty <- data.frame(visit_id = c("a", "b", "c"),
                             icd9_001 = c("441", "4424", "441"),
                             icd9_002 = c("", "443", ""))
-
   expect_equivalent(wide_to_long(widedfempty),
                     longdf)
 })

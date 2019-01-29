@@ -42,7 +42,7 @@ icd9_chapters_to_map <- function(x, defined = FALSE) {
 }
 
 #' Convert ICD data from wide to long format
-#' @template wide_vs_long
+#' @template widevlong
 #' @details Reshaping data is a common task, and is made easier here by knowing
 #'   more about the underlying structure of the data. This function wraps the
 #'   \code{\link[stats]{reshape}} function with specific behavior and checks
@@ -108,7 +108,7 @@ wide_to_long <- function(x,
 }
 
 #' Convert ICD data from long to wide format
-#' @template wide_vs_long
+#' @template widevlong
 #' @details This is more complicated than expected using \code{base::reshape} or
 #'   \code{reshape2::dcast} allows. This is a reasonably simple solution using
 #'   built-in functions.
