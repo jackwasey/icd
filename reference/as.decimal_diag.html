@@ -169,13 +169,13 @@
 
 <span class='fu'>as.icd_short_diag</span>(<span class='no'>x</span>, <span class='kw'>value</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
 
-<span class='fu'>is.decimal_diag</span>(<span class='no'>x</span>, <span class='kw'>must_work</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
+<span class='fu'>is.decimal_diag</span>(<span class='no'>x</span>)
 
-<span class='fu'>is.icd_decimal_diag</span>(<span class='no'>x</span>, <span class='kw'>must_work</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
+<span class='fu'>is.icd_decimal_diag</span>(<span class='no'>x</span>)
 
-<span class='fu'>is.short_diag</span>(<span class='no'>x</span>, <span class='kw'>must_work</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
+<span class='fu'>is.short_diag</span>(<span class='no'>x</span>)
 
-<span class='fu'>is.icd_short_diag</span>(<span class='no'>x</span>, <span class='kw'>must_work</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
+<span class='fu'>is.icd_short_diag</span>(<span class='no'>x</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -189,21 +189,13 @@
       <td><p><code>TRUE</code> or <code>FALSE</code>, default is <code>TRUE</code> which sets
 the attribute to whatever is indicated in the function name. See examples.</p></td>
     </tr>
-    <tr>
-      <th>must_work</th>
-      <td><p>single logical value, if <code>FALSE</code> (the default) this may
-return <code>NULL</code> if the attribute is not present. If <code>TRUE</code>, then
-either <code>TRUE</code> or <code>FALSE</code> is returned.</p></td>
-    </tr>
     </table>
     
     <h2 class="hasAnchor" id="getting-the-attribute"><a class="anchor" href="#getting-the-attribute"></a>Getting the attribute</h2>
 
     <p><code>is.short_diag</code> tests for presence of an
-  attribute, not whether the code is a valid ICD code. If <code>must_work</code> is
-  <code>TRUE</code> then <code>NULL</code> (i.e. no attribute set) returns <code>FALSE</code>,
-  otherwise <code>NULL</code> is returned. To test validity, see
-  <code><a href='is_valid.html'>is_valid</a></code>.</p>
+  attribute, not whether the code is a valid ICD code. To test validity of
+  the codes themselves, see <code><a href='is_valid.html'>is_valid</a></code>.</p>
     
     <h2 class="hasAnchor" id="setting-the-attribute"><a class="anchor" href="#setting-the-attribute"></a>Setting the attribute</h2>
 
@@ -213,20 +205,19 @@ either <code>TRUE</code> or <code>FALSE</code> is returned.</p></td>
   <code><a href='decimal_to_short.html'>decimal_to_short</a></code> and <code><a href='short_to_decimal.html'>short_to_decimal</a></code>.</p>
 <p>The attribute <code>icd_short_code</code> should be either <code>TRUE</code> or
   <code>FALSE</code>. There is no attribute named <code>icd_decimal_code</code>. These
-  functions set and get the attribute safely.</p>
+  functions set and get the attribute safely. If the attribute is not
+  present, both <code>is.icd_short_diag</code> and <code>is.icd_decimal_diag</code> (or
+  their synonyms <code>is.short_diag</code> and <code>is.decimal_diag</code>) will return
+  <code>FALSE</code>.</p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='fu'>as.icd_short_diag</span>(<span class='st'>"6670"</span>)</div><div class='output co'>#&gt; [1] "6670"
 #&gt; attr(,"icd_short_diag")
-#&gt; [1] TRUE</div><div class='input'>
-<span class='fu'>as.icd_short_diag</span>(<span class='st'>"667.0"</span>) <span class='co'># no warning or error!</span></div><div class='output co'>#&gt; [1] "667.0"
+#&gt; [1] TRUE</div><div class='input'><span class='fu'>as.icd_short_diag</span>(<span class='st'>"667.0"</span>) <span class='co'># no warning or error!</span></div><div class='output co'>#&gt; [1] "667.0"
 #&gt; attr(,"icd_short_diag")
-#&gt; [1] TRUE</div><div class='input'>
-<span class='fu'>is.icd_short_diag</span>(<span class='fu'><a href='decimal_to_short.html'>decimal_to_short</a></span>(<span class='st'>"667.0"</span>))</div><div class='output co'>#&gt; [1] TRUE</div><div class='input'>
-<span class='no'>decimal_type_code</span> <span class='kw'>&lt;-</span> <span class='fu'>as.icd_short_diag</span>(<span class='st'>"667.0"</span>, <span class='fl'>FALSE</span>)
+#&gt; [1] TRUE</div><div class='input'><span class='fu'>is.icd_short_diag</span>(<span class='fu'><a href='decimal_to_short.html'>decimal_to_short</a></span>(<span class='st'>"667.0"</span>))</div><div class='output co'>#&gt; [1] TRUE</div><div class='input'><span class='no'>decimal_type_code</span> <span class='kw'>&lt;-</span> <span class='fu'>as.icd_short_diag</span>(<span class='st'>"667.0"</span>, <span class='fl'>FALSE</span>)
 <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/stopifnot'>stopifnot</a></span>(<span class='fu'>is.icd_decimal_diag</span>(<span class='no'>decimal_type_code</span>))
-
 <span class='no'>codes</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='set_icd_class.html'>as.icd9</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"100.1"</span>, <span class='st'>"441.3"</span>))
 <span class='no'>codes</span> <span class='kw'>&lt;-</span> <span class='fu'>as.decimal_diag</span>(<span class='no'>codes</span>)
 <span class='no'>codes</span></div><div class='output co'>#&gt; [1] "100.1" "441.3"</div></pre>

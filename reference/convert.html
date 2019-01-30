@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Convert ICD9 codes between formats and structures. — convert • Comorbidity calculations and tools for ICD-9 and ICD-10 codes</title>
+<title>Convert ICD data between formats and structures. — convert • Comorbidity calculations and tools for ICD-9 and ICD-10 codes</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -36,9 +36,9 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/jquery.mark.min.js" integrity="sha256-4HLtjeVgH0eIB3aZ9mLYF6E8oU5chNdjU6p6rrXpl9U=" crossorigin="anonymous"></script>
 
 
-<meta property="og:title" content="Convert ICD9 codes between formats and structures. — convert" />
+<meta property="og:title" content="Convert ICD data between formats and structures. — convert" />
 
-<meta property="og:description" content="ICD-9 codes are represented in short and decimal forms. The
+<meta property="og:description" content="ICD codes are represented in short and decimal forms. The
 short form has up to 5 digits, or V or E followed by up to four digits. The
 decimal form has a decimal point to delimit the top-level (henceforth
 major) category, and the minor part containing the subsidiary
@@ -149,14 +149,14 @@ classifications." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Convert ICD9 codes between formats and structures.</h1>
+    <h1>Convert ICD data between formats and structures.</h1>
     
     <div class="hidden name"><code>convert.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>ICD-9 codes are represented in <em>short</em> and <em>decimal</em> forms. The
+    <p>ICD codes are represented in <em>short</em> and <em>decimal</em> forms. The
 short form has up to 5 digits, or V or E followed by up to four digits. The
 decimal form has a decimal point to delimit the top-level (henceforth
 <em>major</em>) category, and the <em>minor</em> part containing the subsidiary
@@ -174,8 +174,12 @@ classifications.</p>
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p>Other ICD code conversion: <code><a href='icd_long_data.html'>as.icd_long_data</a></code>,
-  <code><a href='long_to_wide.html'>long_to_wide</a></code>, <code><a href='wide_to_long.html'>wide_to_long</a></code></p></div>
+    <div class='dont-index'><p>Other ICD data conversion: <code><a href='comorbid_df_to_mat.html'>comorbid_df_to_mat</a></code>,
+  <code><a href='comorbid_mat_to_df.html'>comorbid_mat_to_df</a></code>,
+  <code><a href='decimal_to_short.html'>decimal_to_short</a></code>,
+  <code><a href='long_to_wide.html'>long_to_wide</a></code>,
+  <code><a href='short_to_decimal.html'>short_to_decimal</a></code>,
+  <code><a href='wide_to_long.html'>wide_to_long</a></code></p></div>
     
 
   </div>

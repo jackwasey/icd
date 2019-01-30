@@ -10,6 +10,9 @@
     <loc>https://jackwasey.github.io/icd//reference/apply_hier.html</loc>
   </url>
   <url>
+    <loc>https://jackwasey.github.io/icd//reference/as.comorbidity_map.html</loc>
+  </url>
+  <url>
     <loc>https://jackwasey.github.io/icd//reference/as.decimal_diag.html</loc>
   </url>
   <url>
@@ -22,6 +25,9 @@
     <loc>https://jackwasey.github.io/icd//reference/attr_short_diag.html</loc>
   </url>
   <url>
+    <loc>https://jackwasey.github.io/icd//reference/c.icd9.html</loc>
+  </url>
+  <url>
     <loc>https://jackwasey.github.io/icd//reference/categorize_simple.html</loc>
   </url>
   <url>
@@ -32,15 +38,6 @@
   </url>
   <url>
     <loc>https://jackwasey.github.io/icd//reference/children.html</loc>
-  </url>
-  <url>
-    <loc>https://jackwasey.github.io/icd//reference/children_defined.html</loc>
-  </url>
-  <url>
-    <loc>https://jackwasey.github.io/icd//reference/classes_ordered.html</loc>
-  </url>
-  <url>
-    <loc>https://jackwasey.github.io/icd//reference/combine.html</loc>
   </url>
   <url>
     <loc>https://jackwasey.github.io/icd//reference/comorbid.html</loc>
@@ -80,9 +77,6 @@
   </url>
   <url>
     <loc>https://jackwasey.github.io/icd//reference/cr.html</loc>
-  </url>
-  <url>
-    <loc>https://jackwasey.github.io/icd//reference/decimal_to_parts.html</loc>
   </url>
   <url>
     <loc>https://jackwasey.github.io/icd//reference/decimal_to_short.html</loc>
@@ -295,16 +289,13 @@
     <loc>https://jackwasey.github.io/icd//reference/icd_attr_clean.html</loc>
   </url>
   <url>
-    <loc>https://jackwasey.github.io/icd//reference/icd_classes_conflict.html</loc>
-  </url>
-  <url>
-    <loc>https://jackwasey.github.io/icd//reference/icd_long_data.html</loc>
-  </url>
-  <url>
     <loc>https://jackwasey.github.io/icd//reference/icd_parse_cc_hierarchy.html</loc>
   </url>
   <url>
     <loc>https://jackwasey.github.io/icd//reference/is.icd9.html</loc>
+  </url>
+  <url>
+    <loc>https://jackwasey.github.io/icd//reference/is.icd_long_data.html</loc>
   </url>
   <url>
     <loc>https://jackwasey.github.io/icd//reference/is_billable.html</loc>
@@ -373,9 +364,6 @@
     <loc>https://jackwasey.github.io/icd//reference/short_to_decimal.html</loc>
   </url>
   <url>
-    <loc>https://jackwasey.github.io/icd//reference/short_to_parts.html</loc>
-  </url>
-  <url>
     <loc>https://jackwasey.github.io/icd//reference/shortcode_icd9.html</loc>
   </url>
   <url>
@@ -388,7 +376,7 @@
     <loc>https://jackwasey.github.io/icd//reference/sub-sub-.comorbidity_map.html</loc>
   </url>
   <url>
-    <loc>https://jackwasey.github.io/icd//reference/subset_icd.html</loc>
+    <loc>https://jackwasey.github.io/icd//reference/subset.html</loc>
   </url>
   <url>
     <loc>https://jackwasey.github.io/icd//reference/test_env.html</loc>
@@ -407,6 +395,9 @@
   </url>
   <url>
     <loc>https://jackwasey.github.io/icd//reference/wide_to_long.html</loc>
+  </url>
+  <url>
+    <loc>https://jackwasey.github.io/icd//reference/wide_vs_long.html</loc>
   </url>
   <url>
     <loc>https://jackwasey.github.io/icd//articles/CMS-HCC.html</loc>

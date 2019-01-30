@@ -422,7 +422,7 @@ according to Quan/Deyo ICD categories. Synonymous with
   Functions which specifically operate on either ICD-9 or ICD-10 codes or
   their sub-types will retain the prefix. E.g.
   <code>icd9_comorbid_ahrq</code>. <span class="pkg">icd</span> specific classes also retain
-  the prefix, e.g., <code><a href='icd_long_data.html'>icd_wide_data</a></code>.</p>
+  the prefix, e.g., <code><a href='wide_vs_long.html'>icd_wide_data</a></code>.</p>
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
@@ -450,7 +450,7 @@ according to Quan/Deyo ICD categories. Synonymous with
 #&gt; 3       13 75 and over female FALSE 470 71535 59651 78052 27800 V8537
 #&gt; 4       16       55-59 female FALSE 470 71535 49390 53081 27800  V140
 #&gt; 5       37       70-74   male FALSE 462 71536  4241  2859  2720  4414</div><div class='input'><span class='no'>vd</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='wide_to_long.html'>wide_to_long</a></span>(<span class='no'>vermont_dx</span>)
-<span class='co'># get first few rows and columns of Charlson comorbidities using Quan's mapping</span>
+<span class='co'># get first few rows and columns of Charlson comorbidities using Quan mapping</span>
 <span class='fu'>comorbid_quan_deyo</span>(<span class='no'>vd</span>)[<span class='fl'>1</span>:<span class='fl'>5</span>, <span class='fl'>1</span>:<span class='fl'>14</span>]</div><div class='output co'>#&gt;       MI   CHF   PVD Stroke Dementia Pulmonary Rheumatic   PUD LiverMild    DM
 #&gt; 7  FALSE  TRUE FALSE  FALSE    FALSE     FALSE     FALSE FALSE     FALSE FALSE
 #&gt; 10 FALSE  TRUE FALSE  FALSE    FALSE      TRUE     FALSE FALSE     FALSE  TRUE
@@ -463,7 +463,7 @@ according to Quan/Deyo ICD categories. Synonymous with
 #&gt; 13 FALSE     FALSE FALSE  FALSE
 #&gt; 16 FALSE     FALSE FALSE  FALSE
 #&gt; 37 FALSE     FALSE FALSE  FALSE</div><div class='input'>
-<span class='co'># get summary AHRQ (based on Elixhauser) comorbidities for ICD-10 Uranium data:</span>
+<span class='co'># get summary AHRQ (based on Elixhauser) comorbidities for the Uranium data:</span>
 <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/summary'>summary</a></span>(<span class='fu'>comorbid_ahrq</span>(<span class='no'>uranium_pathology</span>))</div><div class='output co'>#&gt;     CHF           Valvular          PHTN            PVD         
 #&gt;  Mode :logical   Mode :logical   Mode :logical   Mode :logical  
 #&gt;  FALSE:331       FALSE:305       FALSE:330       FALSE:264      
@@ -496,7 +496,7 @@ according to Quan/Deyo ICD categories. Synonymous with
 #&gt;  Mode :logical  
 #&gt;  FALSE:334      
 #&gt;                 </div><div class='input'>
-<span class='no'>pts</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='icd_long_data.html'>icd_long_data</a></span>(<span class='kw'>visit_name</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"2"</span>, <span class='st'>"1"</span>, <span class='st'>"2"</span>, <span class='st'>"3"</span>, <span class='st'>"3"</span>),
+<span class='no'>pts</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='wide_vs_long.html'>icd_long_data</a></span>(<span class='kw'>visit_name</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"2"</span>, <span class='st'>"1"</span>, <span class='st'>"2"</span>, <span class='st'>"3"</span>, <span class='st'>"3"</span>),
                  <span class='kw'>icd9</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"39891"</span>, <span class='st'>"40110"</span>, <span class='st'>"09322"</span>, <span class='st'>"41514"</span>, <span class='st'>"39891"</span>))
 <span class='fu'>comorbid</span>(<span class='no'>pts</span>, <span class='no'>icd9_map_ahrq</span>, <span class='kw'>short_code</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>) <span class='co'># visit_name is now sorted</span></div><div class='output co'>#&gt;     CHF Valvular  PHTN   PVD   HTN HTNcx Paralysis NeuroOther Pulmonary    DM
 #&gt; 2  TRUE     TRUE FALSE FALSE FALSE FALSE     FALSE      FALSE     FALSE FALSE
@@ -513,7 +513,7 @@ according to Quan/Deyo ICD categories. Synonymous with
 #&gt;   Psychoses Depression
 #&gt; 2     FALSE      FALSE
 #&gt; 1     FALSE      FALSE
-#&gt; 3     FALSE      FALSE</div><div class='input'><span class='no'>pts</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='icd_long_data.html'>icd_long_data</a></span>(
+#&gt; 3     FALSE      FALSE</div><div class='input'><span class='no'>pts</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='wide_vs_long.html'>icd_long_data</a></span>(
            <span class='kw'>visit_name</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"1"</span>, <span class='st'>"2"</span>, <span class='st'>"3"</span>, <span class='st'>"4"</span>, <span class='st'>"4"</span>),
            <span class='kw'>icd_name</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"20084"</span>, <span class='st'>"1742"</span>, <span class='st'>"30410"</span>, <span class='st'>"41514"</span>, <span class='st'>"95893"</span>),
            <span class='kw'>date</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/as.Date'>as.Date</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"2011-01-01"</span>, <span class='st'>"2011-01-02"</span>, <span class='st'>"2011-01-03"</span>,
@@ -525,7 +525,7 @@ according to Quan/Deyo ICD categories. Synonymous with
 #&gt; 2          2 2011-01-02  10
 #&gt; 3          3 2011-01-03  52
 #&gt; 4          4 2011-01-04 164</div><div class='input'>
-<span class='no'>pts10</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='icd_long_data.html'>icd_long_data</a></span>(
+<span class='no'>pts10</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='wide_vs_long.html'>icd_long_data</a></span>(
   <span class='kw'>visit_name</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"a"</span>, <span class='st'>"b"</span>, <span class='st'>"c"</span>, <span class='st'>"d"</span>, <span class='st'>"e"</span>),
   <span class='kw'>icd_name</span> <span class='kw'>=</span><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"I058"</span>, <span class='fl'>NA</span>, <span class='st'>"T82817A"</span>, <span class='st'>""</span>, <span class='st'>"I69369"</span>),
   <span class='kw'>date</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/as.Date'>as.Date</a></span>(

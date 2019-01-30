@@ -188,11 +188,15 @@ codes.</p></td>
 <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/print'>print</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/factor'>as.factor</a></span>(<span class='no'>x</span>), <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
 <span class='co'># }</span><div class='input'><span class='no'>u</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>icd.data</span><span class='kw ns'>::</span><span class='no'><a href='https://www.rdocumentation.org/packages/icd.data/topics/uranium_pathology'>uranium_pathology</a></span>[<span class='fl'>1</span>:<span class='fl'>10</span>, <span class='st'>"icd10"</span>]
 <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/print'>print</a></span>(<span class='no'>u</span>)</div><div class='output co'>#&gt;  [1] F17.9 I21.9 K75.9 R55   I25.1 I35.8 I63.9 I64   J43.9 J84.1
-#&gt; 500 Levels: A04.7 A16.2 A16.9 A40.3 A40.9 A41.5 A41.9 B35.1 B38.7 B49 ... Y86</div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/print'>print</a></span>(<span class='no'>u</span>, <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; Decimal-form ICD-10 codes:
+#&gt; 500 Levels: A04.7 A16.2 A16.9 A40.3 A40.9 A41.5 A41.9 B35.1 B38.7 B49 ... Y86</div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/print'>print</a></span>(<span class='no'>u</span>, <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; Decimal-form ICD-10 Codes (Subtype not set) codes:
 #&gt;  [1] F17.9 I21.9 K75.9 R55   I25.1 I35.8 I63.9 I64   J43.9 J84.1
 #&gt; 500 Levels: A04.7 A16.2 A16.9 A40.3 A40.9 A41.5 A41.9 B35.1 B38.7 B49 ... Y86</div><div class='input'><span class='co'># as.character will unclass the 'icd' classes</span>
 <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/print'>print</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/character'>as.character</a></span>(<span class='no'>u</span>), <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt;  [1] "F17.9" "I21.9" "K75.9" "R55"   "I25.1" "I35.8" "I63.9" "I64"   "J43.9"
-#&gt; [10] "J84.1"</div></pre>
+#&gt; [10] "J84.1"</div><div class='input'>
+<span class='no'>a</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/structure'>structure</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"R21"</span>, <span class='st'>"Z21"</span>),
+               <span class='kw'>class</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"icd10cm"</span>, <span class='st'>"icd10"</span>, <span class='st'>"character"</span>))
+<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/print'>print</a></span>(<span class='no'>a</span>, <span class='kw'>verbose</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; ICD-10-CM Diagnostic Codes codes (short/decimal attribute not set):
+#&gt; [1] "R21" "Z21"</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

@@ -181,6 +181,10 @@ Tabulates the decimal format alongside converted non-decimal format.</h1>
 <span class='fu'>explain_table</span>(<span class='no'>x</span>, <span class='kw'>short_code</span> <span class='kw'>=</span> <span class='fu'><a href='guess_short.html'>guess_short</a></span>(<span class='no'>x</span>),
   <span class='kw'>condense</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>brief</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>warn</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='no'>...</span>)
 
+<span class='co'># S3 method for icd10who</span>
+<span class='fu'>explain_table</span>(<span class='no'>x</span>, <span class='kw'>short_code</span> <span class='kw'>=</span> <span class='fu'><a href='guess_short.html'>guess_short</a></span>(<span class='no'>x</span>),
+  <span class='kw'>condense</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>brief</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>warn</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='no'>...</span>)
+
 <span class='fu'>icd_explain_table.default</span>(<span class='no'>...</span>)
 
 <span class='fu'>icd_explain_table.icd10</span>(<span class='no'>...</span>)
@@ -259,6 +263,7 @@ guessing ICD version</p></li>
 <li><p><code>icd10</code>: from vector of ICD-10 codes.</p></li>
 <li><p><code>icd9cm</code>: explain character vector of ICD1-10-CM codes</p></li>
 <li><p><code>icd10cm</code>: explain character vector of ICD1-10-CM codes</p></li>
+<li><p><code>icd10who</code>: explain character vector of ICD1-10-CM codes</p></li>
 </ul>
     
     <h2 class="hasAnchor" id="deprecated-function-names"><a class="anchor" href="#deprecated-function-names"></a>Deprecated function names</h2>
@@ -270,7 +275,7 @@ guessing ICD version</p></li>
   Functions which specifically operate on either ICD-9 or ICD-10 codes or
   their sub-types will retain the prefix. E.g.
   <code><a href='comorbid.html'>icd9_comorbid_ahrq</a></code>. <span class="pkg">icd</span> specific classes also retain
-  the prefix, e.g., <code><a href='icd_long_data.html'>icd_wide_data</a></code>.</p>
+  the prefix, e.g., <code><a href='wide_vs_long.html'>icd_wide_data</a></code>.</p>
     
 
   </div>

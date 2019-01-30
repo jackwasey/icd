@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>test ICD-related classes — is.icd9 • Comorbidity calculations and tools for ICD-9 and ICD-10 codes</title>
+<title>test ICD classes — is.icd9 • Comorbidity calculations and tools for ICD-9 and ICD-10 codes</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -36,9 +36,10 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/jquery.mark.min.js" integrity="sha256-4HLtjeVgH0eIB3aZ9mLYF6E8oU5chNdjU6p6rrXpl9U=" crossorigin="anonymous"></script>
 
 
-<meta property="og:title" content="test ICD-related classes — is.icd9" />
+<meta property="og:title" content="test ICD classes — is.icd9" />
 
-<meta property="og:description" content="currently no checks on correctness of the classes for these functions" />
+<meta property="og:description" content="This merely checks whether the given object is a certain type of ICD code, it
+does no validation of any kind." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -145,24 +146,33 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>test ICD-related classes</h1>
+    <h1>test ICD classes</h1>
     
     <div class="hidden name"><code>is.icd9.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>currently no checks on correctness of the classes for these functions</p>
+    <p>This merely checks whether the given object is a certain type of ICD code, it
+does no validation of any kind.</p>
     
     </div>
 
     <pre class="usage"><span class='fu'>is.icd9</span>(<span class='no'>x</span>)
 
-<span class='fu'>is.icd10</span>(<span class='no'>x</span>)
-
 <span class='fu'>is.icd9cm</span>(<span class='no'>x</span>)
 
+<span class='fu'>is.icd9cm_pc</span>(<span class='no'>x</span>)
+
+<span class='fu'>is.icd9who</span>(<span class='no'>x</span>)
+
+<span class='fu'>is.icd10</span>(<span class='no'>x</span>)
+
 <span class='fu'>is.icd10cm</span>(<span class='no'>x</span>)
+
+<span class='fu'>is.icd10cm_pc</span>(<span class='no'>x</span>)
+
+<span class='fu'>is.icd10who</span>(<span class='no'>x</span>)
 
 <span class='fu'>is.comorbidity_map</span>(<span class='no'>x</span>)
 
@@ -190,9 +200,12 @@
   Functions which specifically operate on either ICD-9 or ICD-10 codes or
   their sub-types will retain the prefix. E.g.
   <code><a href='comorbid.html'>icd9_comorbid_ahrq</a></code>. <span class="pkg">icd</span> specific classes also retain
-  the prefix, e.g., <code><a href='icd_long_data.html'>icd_wide_data</a></code>.</p>
+  the prefix, e.g., <code><a href='wide_vs_long.html'>icd_wide_data</a></code>.</p>
     
 
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='co'># A character string is not itself an ICD code</span>
+<span class='fu'>is.icd9</span>(<span class='st'>"100.1"</span>)</div><div class='output co'>#&gt; [1] FALSE</div><div class='input'><span class='fu'><a href='is_valid.html'>is_valid</a></span>(<span class='st'>"100.1"</span>)</div><div class='output co'>#&gt; [1] TRUE</div><div class='input'><span class='fu'>is.icd9</span>(<span class='fu'><a href='set_icd_class.html'>as.icd9cm</a></span>(<span class='st'>"100.1"</span>))</div><div class='output co'>#&gt; [1] TRUE</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
@@ -200,7 +213,9 @@
       <li><a href="#arguments">Arguments</a></li>
       
       <li><a href="#deprecated-function-names">Deprecated function names</a></li>
-          </ul>
+      
+      <li><a href="#examples">Examples</a></li>
+    </ul>
 
   </div>
 </div>

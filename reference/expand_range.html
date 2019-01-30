@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>take two ICD-9 codes and expand range to include all child codes — expand_range • Comorbidity calculations and tools for ICD-9 and ICD-10 codes</title>
+<title>Generate a set of codes between two ICD codes including encompassed children — expand_range • Comorbidity calculations and tools for ICD-9 and ICD-10 codes</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -36,15 +36,11 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/jquery.mark.min.js" integrity="sha256-4HLtjeVgH0eIB3aZ9mLYF6E8oU5chNdjU6p6rrXpl9U=" crossorigin="anonymous"></script>
 
 
-<meta property="og:title" content="take two ICD-9 codes and expand range to include all child codes — expand_range" />
+<meta property="og:title" content="Generate a set of codes between two ICD codes including encompassed children — expand_range" />
 
-<meta property="og:description" content="this is cumbersome code, covering a whole load of edge cases relating to the
-fact that ICD-9 codes are not in numeric order. An alternative
-strategy would be to list all the ICD9 codes, then a range would just pick
-out start and finish positions, and return subset of the list. Not all ICD-9
-codes are valid, including some parent codes which have valid children.
-However, I expect at least some of these have been used in some billing
-databases." />
+<meta property="og:description" content="Great care is taken not to include codes which have children not in the
+range. E.g., 100.9 to 101.1 would _not_ include code &quot;101&quot;. See
+the extensive tests covering this area for much more detail." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -151,20 +147,16 @@ databases." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>take two ICD-9 codes and expand range to include all child codes</h1>
+    <h1>Generate a set of codes between two ICD codes including encompassed children</h1>
     
     <div class="hidden name"><code>expand_range.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>this is cumbersome code, covering a whole load of edge cases relating to the
-fact that ICD-9 codes are <strong>not</strong> in numeric order. An alternative
-strategy would be to list all the ICD9 codes, then a range would just pick
-out start and finish positions, and return subset of the list. Not all ICD-9
-codes are valid, including some parent codes which have valid children.
-However, I expect at least some of these have been used in some billing
-databases.</p>
+    <p>Great care is taken not to include codes which have children not in the
+range. E.g., <code>100.9</code> to <code>101.1</code> would _not_ include code "101". See
+the extensive tests covering this area for much more detail.</p>
     
     </div>
 
@@ -226,6 +218,15 @@ code provided is in short (<code>TRUE</code>) or decimal (<code>FALSE</code>) fo
 Where reasonable, this is guessed from the input data.</p></td>
     </tr>
     <tr>
+      <th>defined</th>
+      <td><p>single logical value, if <code>TRUE</code>, will limit the search
+to those codes which appear in the master list, not just syntactically
+valid codes. Since nearly valid, out-dated or new codes may be missed, not
+limiting to officially defined values will be useful. Ultimately, there
+will need to be annual (and all-time) master lists of codes and the ability
+to test against a given master list given the year of the ICD-9 coding.</p></td>
+    </tr>
+    <tr>
       <th>ex_ambig_start</th>
       <td><p>single logical value, if <code>TRUE</code> the range returned
 will not include codes which are explicitly listed in the range, but would
@@ -239,24 +240,12 @@ is parent to everything up to <code>V11</code>.</p></td>
 codes at the end of the range. E.g. 99.99 to 101.01 would by default
 exclude 101 and 101.0</p></td>
     </tr>
-    <tr>
-      <th>onlyReal</th>
-      <td><p>single logical value, if <code>TRUE</code>, will limit the search
-to those codes which appear in the master list, not just syntactically
-valid codes. Since nearly valid, out-dated or new codes may be missed, not
-limiting to officially defined values will be useful. Ultimately, there
-will need to be annual (and all-time) master lists of codes and the ability
-to test against a given master list given the year of the ICD-9 coding.</p></td>
-    </tr>
     </table>
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>As with <code>link{icd9ExpandRangeShort}</code> great care is taken not to include
-codes which have children not in the range. E.g. "100.9" to "101.1" would
-_not_ include code "101".</p>
-<p><code>onlyReal</code> default is <code>TRUE</code> (a change from previous versions)
-since this is far more likely to be useful to the end user.</p>
+    <p>The default for the argument <code>defined</code> is <code>TRUE</code> since this is far
+more likely to be useful to the end user, dealing with real ICD codes.</p>
 <p>When the class is not known, it must be guessed from the start and
   end codes. If this guessing fails, e.g. start is ICD-9 whereas end is
   ICD-10, then an error is thrown. Otherwise, the appropriate S3 method is
@@ -280,7 +269,7 @@ class is not known</p></li>
   Functions which specifically operate on either ICD-9 or ICD-10 codes or
   their sub-types will retain the prefix. E.g.
   <code><a href='comorbid.html'>icd9_comorbid_ahrq</a></code>. <span class="pkg">icd</span> specific classes also retain
-  the prefix, e.g., <code><a href='icd_long_data.html'>icd_wide_data</a></code>.</p>
+  the prefix, e.g., <code><a href='wide_vs_long.html'>icd_wide_data</a></code>.</p>
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
@@ -289,7 +278,9 @@ class is not known</p></li>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='st'>"4280"</span> <span class='kw'>%i9s%</span> <span class='st'>"4289"</span></div><div class='output co'>#&gt;  [1] "4280"  "4281"  "4282"  "42820" "42821" "42822" "42823" "4283"  "42830"
+    <pre class="examples"><div class='input'><span class='fu'>expand_range</span>(<span class='st'>"428.0"</span>, <span class='st'>"428.9"</span>)</div><div class='output co'>#&gt;  [1] "428.0"  "428.1"  "428.2"  "428.20" "428.21" "428.22" "428.23" "428.3" 
+#&gt;  [9] "428.30" "428.31" "428.32" "428.33" "428.4"  "428.40" "428.41" "428.42"
+#&gt; [17] "428.43" "428.9" </div><div class='input'><span class='st'>"4280"</span> <span class='kw'>%i9s%</span> <span class='st'>"4289"</span></div><div class='output co'>#&gt;  [1] "4280"  "4281"  "4282"  "42820" "42821" "42822" "42823" "4283"  "42830"
 #&gt; [10] "42831" "42832" "42833" "4284"  "42840" "42841" "42842" "42843" "4289" </div><div class='input'><span class='st'>"4280"</span> <span class='kw'>%i9s%</span> <span class='st'>"42821"</span></div><div class='output co'>#&gt; [1] "4280"  "4281"  "42820" "42821"</div><div class='input'><span class='st'>"42799"</span> <span class='kw'>%i9sa%</span> <span class='st'>"42802"</span> <span class='co'># doesn't include 428 or 4280</span></div><div class='output co'>#&gt; [1] "42799" "42800" "42801" "42802"</div><div class='input'><span class='st'>"427.99"</span> <span class='kw'>%i9da%</span> <span class='st'>"428.02"</span></div><div class='output co'>#&gt; [1] "427.99" "428.00" "428.01" "428.02"</div><div class='input'><span class='st'>"V80"</span> <span class='kw'>%i9s%</span> <span class='st'>"V810"</span></div><div class='output co'>#&gt; [1] "V80"   "V800"  "V8001" "V8009" "V801"  "V802"  "V803"  "V810" </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">

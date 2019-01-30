@@ -164,15 +164,15 @@ then an ICD-9 class (<code>icd9</code>) is also set.</p>
 
 <span class='fu'>as.icd9cm</span>(<span class='no'>x</span>)
 
+<span class='fu'>as.icd9cm_pc</span>(<span class='no'>x</span>)
+
 <span class='fu'>as.icd10</span>(<span class='no'>x</span>)
 
 <span class='fu'>as.icd10cm</span>(<span class='no'>x</span>, <span class='kw'>short_code</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)
 
+<span class='fu'>as.icd10cm_pc</span>(<span class='no'>x</span>)
+
 <span class='fu'>as.icd10who</span>(<span class='no'>x</span>, <span class='kw'>short_code</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)
-
-<span class='fu'>comorbidity_map</span>(<span class='no'>x</span>)
-
-<span class='fu'>as.comorbidity_map</span>(<span class='no'>x</span>)
 
 <span class='fu'>as.icd_comorbidity_map</span>(<span class='no'>...</span>)</pre>
     
@@ -184,28 +184,25 @@ then an ICD-9 class (<code>icd9</code>) is also set.</p>
       <td><p>object to set class <code>icd9</code></p></td>
     </tr>
     <tr>
-      <th>...</th>
-      <td><p>arguments passed on to other functions</p></td>
+      <th>short_code</th>
+      <td><p>single logical value which determines whether the ICD-9
+code provided is in short (<code>TRUE</code>) or decimal (<code>FALSE</code>) form.
+Where reasonable, this is guessed from the input data.</p></td>
     </tr>
     <tr>
-      <th>warn</th>
-      <td><p>single logical value, if <code>TRUE</code> will gives warning when
-converting between types. ICD-9 to ICD-10 will cause an error regardless.</p></td>
+      <th>...</th>
+      <td><p>arguments passed on to other functions</p></td>
     </tr>
     </table>
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>The <code>as.</code> function e.g. <code>as.icd9</code>, do checking and try to put
-multiple classes in a nice order. Calling the bare constructor, e.g.
-<code>icd9</code> just prepends the new class and returns without any checks. The
-latter is much faster, but for most uses, <code>as.icd9</code> and siblings would
-be better.</p>
+    <p>The <code>as.*</code> functions e.g. <code>as.icd9</code>, do checking and try to put
+multiple classes in a nice order. Calling the internal bare constructor, e.g.
+<code>icd:::icd9</code> just prepends the new class and returns without any checks,
+which is much faster.</p>
 <p>Some features make more sense as attributes. E.g. setting code type to
 <code>short</code> or <code>decimal</code>.</p>
-<p>Using <code>attributes</code> instead of <code>class</code> is a better fit for
-  the data. It simplifies S3 dispatch, and appears to be very fast to get or
-  set using the built-in R functions.</p>
     
     <h2 class="hasAnchor" id="functions"><a class="anchor" href="#functions"></a>Functions</h2>
 
@@ -213,10 +210,13 @@ be better.</p>
 <li><p><code>as.icd9</code>: Use generic ICD-9 class for this data. Ideally, use
 the more specific `icd9cm` or other subclasses (when available).</p></li>
 <li><p><code>as.icd9cm</code>: Use ICD-9-CM</p></li>
+<li><p><code>as.icd9cm_pc</code>: Indicate the data are ICD-9-CM procedure codes.</p></li>
 <li><p><code>as.icd10</code>: Use generic ICD-10 class for this data. If
 possible, use the more specific `icd10who` or `icd10cm`.</p></li>
 <li><p><code>as.icd10cm</code>: Use ICD-10-CM (USA) class for the given data</p></li>
+<li><p><code>as.icd10cm_pc</code>: Indicate the data are ICD-10-CM procedure codes.</p></li>
 <li><p><code>as.icd10who</code>: Use WHO ICD-10 class for the given data</p></li>
+<li><p><code>as.icd_comorbidity_map</code>: Deprecated. Use as.comorbidity_map instead.</p></li>
 </ul>
     
     <h2 class="hasAnchor" id="deprecated-function-names"><a class="anchor" href="#deprecated-function-names"></a>Deprecated function names</h2>
@@ -228,11 +228,12 @@ possible, use the more specific `icd10who` or `icd10cm`.</p></li>
   Functions which specifically operate on either ICD-9 or ICD-10 codes or
   their sub-types will retain the prefix. E.g.
   <code><a href='comorbid.html'>icd9_comorbid_ahrq</a></code>. <span class="pkg">icd</span> specific classes also retain
-  the prefix, e.g., <code><a href='icd_long_data.html'>icd_wide_data</a></code>.</p>
+  the prefix, e.g., <code><a href='wide_vs_long.html'>icd_wide_data</a></code>.</p>
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p><code><a href='icd_long_data.html'>icd_long_data</a></code></p></div>
+    <div class='dont-index'><p>Other ICD data types: <code><a href='as.comorbidity_map.html'>as.comorbidity_map</a></code>,
+  <code><a href='wide_vs_long.html'>wide_vs_long</a></code></p></div>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>

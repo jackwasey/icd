@@ -179,6 +179,10 @@ codes which are <em>defined</em> or <em>billable</em> (leaf nodes).</p>
 <span class='fu'>children</span>(<span class='no'>x</span>, <span class='kw'>short_code</span> <span class='kw'>=</span> <span class='fu'><a href='guess_short.html'>guess_short</a></span>(<span class='no'>x</span>), <span class='no'>defined</span>,
   <span class='kw'>billable</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='no'>...</span>)
 
+<span class='co'># S3 method for icd10who</span>
+<span class='fu'>children</span>(<span class='no'>x</span>, <span class='kw'>short_code</span> <span class='kw'>=</span> <span class='fu'><a href='guess_short.html'>guess_short</a></span>(<span class='no'>x</span>), <span class='no'>defined</span>,
+  <span class='kw'>billable</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='no'>...</span>)
+
 <span class='fu'>icd_children.character</span>(<span class='no'>...</span>)
 
 <span class='fu'>icd_children.icd10</span>(<span class='no'>...</span>)
@@ -241,6 +245,7 @@ ICD-9-CM at present</p></li>
 <li><p><code>icd10</code>: Get children of ICD-10 codes (warns because this
 only applies to ICD-10-CM for now).</p></li>
 <li><p><code>icd10cm</code>: Get children of ICD-10-CM codes</p></li>
+<li><p><code>icd10who</code>: Get children of ICD-10-CM codes</p></li>
 </ul>
     
     <h2 class="hasAnchor" id="deprecated-function-names"><a class="anchor" href="#deprecated-function-names"></a>Deprecated function names</h2>
@@ -252,7 +257,7 @@ only applies to ICD-10-CM for now).</p></li>
   Functions which specifically operate on either ICD-9 or ICD-10 codes or
   their sub-types will retain the prefix. E.g.
   <code><a href='comorbid.html'>icd9_comorbid_ahrq</a></code>. <span class="pkg">icd</span> specific classes also retain
-  the prefix, e.g., <code><a href='icd_long_data.html'>icd_wide_data</a></code>.</p>
+  the prefix, e.g., <code><a href='wide_vs_long.html'>icd_wide_data</a></code>.</p>
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 

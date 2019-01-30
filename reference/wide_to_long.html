@@ -38,11 +38,9 @@
 
 <meta property="og:title" content="Convert ICD data from wide to long format — wide_to_long" />
 
-<meta property="og:description" content="Reshaping data is a common task, and is made easier here by knowing more
-about the underlying structure of the data. This function wraps the
-reshape function with specific behavior and checks
-related to ICD codes. Empty strings and NA values will be dropped, and
-everything else kept. No validation of the ICD codes is done." />
+<meta property="og:description" content="Convert ICD data from wide to long format
+Note the distinction between labelling existing data with any classes which
+icd provides, and actually converting the structure of the data." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -156,11 +154,9 @@ everything else kept. No validation of the ICD codes is done." />
 
     <div class="ref-description">
     
-    <p>Reshaping data is a common task, and is made easier here by knowing more
-about the underlying structure of the data. This function wraps the
-<code><a href='https://www.rdocumentation.org/packages/stats/topics/reshape'>reshape</a></code> function with specific behavior and checks
-related to ICD codes. Empty strings and NA values will be dropped, and
-everything else kept. No validation of the ICD codes is done.</p>
+    <p>Convert ICD data from wide to long format</p>
+<p>Note the distinction between labelling existing data with any classes which
+<code>icd</code> provides, and actually converting the structure of the data.</p>
     
     </div>
 
@@ -223,6 +219,30 @@ Default is <code><a href='https://www.rdocumentation.org/packages/base/topics/c'
   a column named by <code>icd.name</code> containing all the non-NA and non-empty
   codes found in the wide input data.</p>
     
+    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+
+    <p>Reshaping data is a common task, and is made easier here by knowing
+  more about the underlying structure of the data. This function wraps the
+  <code><a href='https://www.rdocumentation.org/packages/stats/topics/reshape'>reshape</a></code> function with specific behavior and checks
+  related to ICD codes. Empty strings and NA values will be dropped, and
+  everything else kept. No validation of the ICD codes is done.</p>
+    
+    <h2 class="hasAnchor" id="long-and-wide-formats"><a class="anchor" href="#long-and-wide-formats"></a>Long and Wide Formats</h2>
+
+    <p>As is common with many data sets, key
+  variables can be concentrated in one column or spread over several. Tools
+  format of clinical and administrative hospital data, we can perform the
+  conversion efficiently and accurately, while keeping some metadata about
+  the codes intact, e.g. whether they are ICD-9 or ICD-10.</p>
+    
+    <h2 class="hasAnchor" id="data-structure"><a class="anchor" href="#data-structure"></a>Data structure</h2>
+
+    <p>Long or wide format ICD data are all expected to be
+  in a data frame. The <code>data.frame</code> itself does not carry any ICD
+  classes at the top level, even if it only contains one type of code;
+  whereas its constituent columns may have a class specified, e.g.
+  <code>icd9</code> or <code>icd10who</code>.</p>
+    
     <h2 class="hasAnchor" id="deprecated-function-names"><a class="anchor" href="#deprecated-function-names"></a>Deprecated function names</h2>
 
     <p>Future versions of <span class="pkg">icd</span> will drop
@@ -232,12 +252,15 @@ Default is <code><a href='https://www.rdocumentation.org/packages/base/topics/c'
   Functions which specifically operate on either ICD-9 or ICD-10 codes or
   their sub-types will retain the prefix. E.g.
   <code><a href='comorbid.html'>icd9_comorbid_ahrq</a></code>. <span class="pkg">icd</span> specific classes also retain
-  the prefix, e.g., <code><a href='icd_long_data.html'>icd_wide_data</a></code>.</p>
+  the prefix, e.g., <code><a href='wide_vs_long.html'>icd_wide_data</a></code>.</p>
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p>Other ICD code conversion: <code><a href='icd_long_data.html'>as.icd_long_data</a></code>,
-  <code><a href='convert.html'>convert</a></code>, <code><a href='long_to_wide.html'>long_to_wide</a></code></p></div>
+    <div class='dont-index'><p>Other ICD data conversion: <code><a href='comorbid_df_to_mat.html'>comorbid_df_to_mat</a></code>,
+  <code><a href='comorbid_mat_to_df.html'>comorbid_mat_to_df</a></code>, <code><a href='convert.html'>convert</a></code>,
+  <code><a href='decimal_to_short.html'>decimal_to_short</a></code>,
+  <code><a href='long_to_wide.html'>long_to_wide</a></code>,
+  <code><a href='short_to_decimal.html'>short_to_decimal</a></code></p></div>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
@@ -257,6 +280,12 @@ Default is <code><a href='https://www.rdocumentation.org/packages/base/topics/c'
       <li><a href="#arguments">Arguments</a></li>
       
       <li><a href="#value">Value</a></li>
+
+      <li><a href="#details">Details</a></li>
+
+      <li><a href="#long-and-wide-formats">Long and Wide Formats</a></li>
+
+      <li><a href="#data-structure">Data structure</a></li>
 
       <li><a href="#deprecated-function-names">Deprecated function names</a></li>
 
