@@ -54,6 +54,7 @@ icd.*\.Rnw$
 icd.*tar\.gz
 ^bench-versus-result.*rds$
 .*include-dependencies(\.d)?$
+^lib-bench$
 \.lintr$
 .*\.log$
 ^man-roxygen$

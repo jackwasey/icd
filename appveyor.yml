@@ -40,14 +40,7 @@ environment:
   matrix:
     - R_VERSION: release
       MINI_BENCH: "yes"
-    - R_VERSION: release
-      ICD_TEST_DEPRECATED: true
-      ICD_TEST_BUILD_DATA: true
-      ICD_TEST_SLOW: true
     - R_VERSION: devel
-      ICD_TEST_DEPRECATED: true
-      ICD_TEST_BUILD_DATA: true
-      ICD_TEST_SLOW: true
 
 matrix:
   fast_finish: true

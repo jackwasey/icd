@@ -9,10 +9,6 @@ ${ICD_HOME:-$HOME/rprojects/icd}/tools/build.sh --no-build-vignettes --no-manual
 # for all environment variable options see here:
 # https://cran.r-project.org/doc/manuals/r-release/R-ints.html#Tools
 MAKEFLAGS=-j$(getconf _NPROCESSORS_ONLN) \
-  ICD_TEST_ALL=false \
-  ICD_TEST_SLOW=true \
-  ICD_TEST_BUILD_DATA=true \
-  ICD_TEST_DEPRECATED=true \
   _R_CHECK_ALL_NON_ISO_C_=TRUE \
   _R_CHECK_CODE_ASSIGN_TO_GLOBALENV_=TRUE \
   _R_CHECK_CODETOOLS_PROFILE_="suppressLocalUnused=FALSE" \

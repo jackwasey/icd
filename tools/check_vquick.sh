@@ -16,9 +16,6 @@ ${ICD_HOME:-$HOME/rprojects/icd}/tools/build.sh --no-build-vignettes --no-manual
 
 R_MAKEVARS_USER=${HOME}/.R/Makevars.quick \
   MAKEFLAGS=-j$(getconf _NPROCESSORS_ONLN) \
-  ICD_TEST_SLOW=false \
-  ICD_TEST_BUILD_DATA=false \
-  ICD_TEST_DEPRECATED=false \
   _R_CHECK_ALL_NON_ISO_C_=TRUE \
   _R_CHECK_CODE_ASSIGN_TO_GLOBALENV_=TRUE \
   _R_CHECK_CODETOOLS_PROFILE_="suppressLocalUnused=FALSE" \

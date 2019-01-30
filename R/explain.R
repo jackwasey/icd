@@ -152,10 +152,11 @@ explain_code.icd10who <- function(x, short_code = guess_short(x),
     x <- decimal_to_short.icd10(x)
   # this is a alow linear lookup, but usually only
   # "explaining" one or a few codes at a time.
-  icd.data::icd10who2016[
-    icd.data::icd10who2016[["code"]] %in% unique(as_char_no_warn(x)),
-    "desc"
-    ]
+  if (!is.null(get_icd10who2016()))
+    get_icd10who2016()[
+      get_icd10who2016()[["code"]] %in% unique(as_char_no_warn(x)),
+      "desc"
+      ]
 }
 
 #' @describeIn explain_code ICD-10 explanation, falls back on ICD-10-CM until

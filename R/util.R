@@ -323,9 +323,21 @@ str_match_all <- function(string, pattern, ...) {
 # optional nice error message, could just fall back on icd.data::
 req_icd_data <- function() {
   if (!requireNamespace("icd.data",
-                       versionCheck = list(version = 1.1,
-                                           op = ">=")))
+                        versionCheck = list(version = 1.1,
+                                            op = ">=")))
     stop("Please install the 'icd.data' package to explain ICD codes.",
          call. = FALSE)
 
+}
+
+# do this careful so we don't use :: - CRAN doesn't like this when the target
+# doesn't exist in the previous CRAN version of icd.data (1.0)
+get_icd10who2016 <- function() {
+  f <- NULL
+  try({
+    f <- get("get_icd10who2016",
+             envir = asNamespace("icd.data"),
+             mode = "list")
+  })
+  if (!is.null(f)) f else NULL
 }

@@ -120,18 +120,6 @@ test_env <- function() {
   list2env(as.list(ns, all.names = TRUE), parent = parent.env(ns))
 }
 
-#' Set system environment to do extra tests
-#'
-#' These extra tests are not run except for one CI job, and locally as needed.
-#' The frequently run tests cover the core code, whereas the extra tests cover
-#' things like parsing the ICD and comorbidity definitions.
-#' @keywords internal debugging
-do_extra_tests <- function(value = "true") {
-  Sys.setenv(ICD_TEST_SLOW = value)
-  Sys.setenv(ICD_TEST_BUILD_DATA = value)
-  Sys.setenv(ICD_TEST_DEPRECATED = value)
-}
-
 #' Generate simulated NEDS data for PCCC and wide-data testing
 #' @param n Integer number of rows of data to generate
 #' @param ncol Integer number of diagnostic code columns, default of 20 matches

@@ -175,6 +175,6 @@ children_defined.icd10who <- function(x,
   x <- toupper(x)
   if (!short_code)
     x <- decimal_to_short.icd10cm(x)
-  kids <- icd10_children_defined_cpp(x, icd.data::icd10who2016, .nc)
+  kids <- icd10_children_defined_cpp(x, get_icd10who2016(), .nc)
   as.icd10who(kids, short_code = short_code)
 }

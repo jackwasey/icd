@@ -49,9 +49,6 @@ env:
     - _R_CHECK_FORCE_SUGGESTS_=FALSE
     - LINTR_COMMENT_BOT=false
     - ICD_COVERAGE=false
-    - ICD_TEST_DEPRECATED=false
-    - ICD_TEST_BUILD_DATA=false
-    - ICD_TEST_SLOW=false
 
 matrix:
   fast_finish: true
@@ -67,9 +64,6 @@ matrix:
     r_check_args: --no-build-vignettes --no-vignettes --ignore-vignettes --no-codoc --no-manual
     env:
     - ICD_COVERAGE=true
-    - ICD_TEST_DEPRECATED=true
-    - ICD_TEST_BUILD_DATA=true
-    - ICD_TEST_SLOW=true
   allow_failures:
   # temporarily allow failure for lintr run on travis as a dependency of lintr fails to install.
   - r: oldrel
@@ -80,9 +74,6 @@ matrix:
     r_check_args: --no-build-vignettes --no-vignettes --ignore-vignettes --no-codoc --no-manual
     env:
     - ICD_COVERAGE=true
-    - ICD_TEST_DEPRECATED=true
-    - ICD_TEST_BUILD_DATA=true
-    - ICD_TEST_SLOW=true
 
 before_script:
  - rm .Rinstignore  # do install everything for testing

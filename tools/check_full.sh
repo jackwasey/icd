@@ -17,9 +17,6 @@ ${ICD_HOME:-$HOME/rprojects/icd}/tools/build.sh
 # https://cran.r-project.org/doc/manuals/r-release/R-ints.html#Tools
 # R_MAKEVARS_USER="$HOME/.R/Makevars.mac.quick" \
 MAKEFLAGS=-j$(getconf _NPROCESSORS_ONLN) \
-  ICD_TEST_SLOW=true \
-  ICD_TEST_BUILD_DATA=true \
-  ICD_TEST_DEPRECATED=true \
   _R_CHECK_ALL_NON_ISO_C_=TRUE \
   _R_CHECK_ALWAYS_LOG_VIGNETTE_OUTPUT_=TRUE \
   _R_CHECK_CODE_ASSIGN_TO_GLOBALENV_=TRUE \
