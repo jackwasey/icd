@@ -1,6 +1,7 @@
 Please note that a pandoc version error prevents the automated CRAN checks from passing on some platforms. The Pandoc version dependency for building the vignettes is in the DESCRIPTION.
 
-This version of icd depends on version 1.1 of icd.data which I am submitting at the same time.
+This version of icd Suggests: version 1.1 of icd.data which I am also submitting.
+It also Suggests: a new package 'nhds' which I am submitting.
 
 # Test environments
 
@@ -8,7 +9,6 @@ This version of icd depends on version 1.1 of icd.data which I am submitting at 
   * Ubuntu 14.04 (Travis) R-devel, gcc
   * Windows Server 2012 R2 x64 (Appveyor), R devel 32 and 64 bit
   * MacOS High Sierra, brew clang 7.0
-  * winbuilder fails due to pandoc version error
 
 # CRAN checks
  
