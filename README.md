@@ -144,7 +144,7 @@ Here we are using the US National Hospital Discharge Survey 2010 data
 from the [nhds](https://github.com/jackwasey/nhds) package. For the sake
 of example, let us compare emergency to other admissions. A real table
 would have more patient features; this primarily demonstrates how to get
-ICD codes into your Table One.
+ICD codes into your Table 1.
 
 NHDS 2010 comorbidities to demonstrate Table One creation. Presented as
 counts (percentage prevalence in group).
@@ -195,15 +195,18 @@ knitr::kable(t(tab_dat), col.names = c("Emergency", "Not emergency"))
 Look at the help files for details and examples of almost every function
 in this package. There are several vignettes showing the main features:
 
-  - [Introduction](introduction.html)
-  - [Charlson scores](charlson-scores.html)
-  - [Examples using ICD-10 codes](ICD-10.html)
-  - [CMS Hierarchical Condition Codes (HCC)](CMS-HCC.html)
-  - [Pediatric Complex Chronic Conditions (PCCC)](PCCC.html)
-  - [Working with ICD code ranges](ranges.html)
-  - [Comparing comorbidity maps](compare-maps.html)
-  - [Paper detailing efficient matrix method of
-    comorbidities](efficiency.html)
+  - Introduction `vignette("introduction", package = "icd")`
+  - Charlson scores `vignette("charlson-scores", package = "icd")`
+  - Examples using ICD-10 codes `vignette("ICD-10", package = "icd")`
+  - CMS Hierarchical Condition Codes (HCC) `vignette("CMS-HCC", package
+    = "icd")`
+  - Pediatric Complex Chronic Conditions (PCCC) `vignette("PCCC",
+    package = "icd")`
+  - Working with ICD code ranges `vignette("ranges", package = "icd")`
+  - Comparing comorbidity maps `vignette("compare-maps", package =
+    "icd")`
+  - Paper detailing efficient matrix method of comorbidities
+    `vignette("efficiency", package = "icd")`
 
 Many users have emailed me directly for help, and I’ll do what I can,
 but it is often better to examine or add to the list of

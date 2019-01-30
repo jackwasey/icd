@@ -27,6 +27,7 @@ before_build:
   # temporarily used while latest icd.data is not on CRAN
   #- Rscript -e "remotes::install_github(\"jackwasey/icd.data\", ref = \"WHO\")"
   - Rscript -e "remotes::install_github(\"jackwasey/icd.data\")"
+  - Rscript -e "remotes::install_github(\"jackwasey/nhds\")"
 
 build_script:
   - travis-tool.sh install_deps
