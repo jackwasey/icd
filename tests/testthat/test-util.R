@@ -48,6 +48,16 @@ test_that("get visit name from a matrix should fail", {
   expect_error(get_visit_name(matrix(c(1, 2, 3, 4), nrow = 2)))
 })
 
+test_that("get visit name works for this failure case", {
+  nms <- c("id", "newborn", "age", "dx01", "dx02", "dx03", "dx04", "dx05",
+           "dx06", "dx07", "dx08", "dx09", "dx10", "dx11", "dx12", "dx13",
+           "dx14", "dx15", "pc01", "pc02", "pc03", "pc04", "pc05", "pc06",
+           "pc07", "pc08", "dx_adm", "emergency")
+  df <- as.data.frame(matrix(nrow = 2, ncol = length(nms)))
+  names(df) <- nms
+  expect_equal(get_visit_name(df), "id")
+})
+
 test_that("logical to binary for a matrix works", {
   expect_identical(logical_to_binary(matrix(c(T, F, T, F), nrow = 2)),
                    matrix(c(1L, 0L, 1L, 0L), nrow = 2))

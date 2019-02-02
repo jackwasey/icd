@@ -131,9 +131,12 @@ get_visit_name <- function(x, visit_name = NULL) {
 #' @keywords internal
 #' @noRd
 get_visit_name.data.frame <- function(x, visit_name = NULL) {
-  assert_data_frame(x, min.cols = 1, col.names = "named")
+  stopifnot(is.data.frame(x))
+  stopifnot(is.null(visit_name) ||
+              (is.character(visit_name) && length(visit_name) == 1L))
   visit_name_guesses <- c("visit.?Id", "patcom", "encounter.?id", "enc.?id",
-                          "in.*enc", "out.*enc", "encounter", "visit", "enc")
+                          "in.*enc", "out.*enc", "encounter", "visit", "^id$",
+                          "^enc")
   if (is.null(visit_name)) {
     for (guess in visit_name_guesses) {
       guess_matched <- grep(guess, names(x), ignore.case = TRUE, value = TRUE)
@@ -150,7 +153,10 @@ get_visit_name.data.frame <- function(x, visit_name = NULL) {
   visit_name
 }
 
-#' @describeIn get_visit_name Give useful error message if matrix passed.
+#' @describeIn get_visit_name Give useful error message if matrix passed, as we
+#'   assume it is a comorbidity matrix. It is possible you have a character
+#'   matrix with all your patient data, and if so, please convert it to a
+#'   `data.frame` and file an issue on github.
 #' @keywords internal
 #' @noRd
 get_visit_name.matrix <- function(x, visit_name = NULL)
