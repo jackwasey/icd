@@ -109,4 +109,3 @@ icd::comorbid(one_pt, map = my_map)
   )
 }
 ```
-<!-- https://stackoverflow.com/questions/23999196/matrix-diagram-in-r/24036477#24036477 -->

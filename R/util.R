@@ -335,15 +335,3 @@ req_icd_data <- function() {
          call. = FALSE)
 
 }
-
-# do this careful so we don't use :: - CRAN doesn't like this when the target
-# doesn't exist in the previous CRAN version of icd.data (1.0)
-get_icd10who2016 <- function() {
-  f <- NULL
-  try({
-    f <- get("get_icd10who2016",
-             envir = asNamespace("icd.data"),
-             mode = "list")
-  })
-  if (!is.null(f)) f else NULL
-}

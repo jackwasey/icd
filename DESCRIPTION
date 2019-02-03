@@ -1,7 +1,7 @@
 Package: icd
 Title: Comorbidity Calculations and Tools for ICD-9 and ICD-10
     Codes
-Version: 3.4
+Version: 3.4.1
 Authors@R: 
     c(person(given = "Jack O.",
              family = "Wasey",
@@ -41,18 +41,18 @@ BugReports: https://github.com/jackwasey/icd/issues
 Depends:
     R (>= 3.4)
 Imports:
+    icd.data,
     methods,
-    stats,
     Rcpp (>= 0.12.3),
+    stats,
     utils
 Suggests:
     graphics,
-    icd.data,
     knitr,
     magrittr,
     nhds,
-    roxygen2 (>= 5.0.0),
     rmarkdown,
+    roxygen2 (>= 5.0.0),
     rticles,
     testthat (>= 0.11.1),
     tinytex,

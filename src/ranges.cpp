@@ -118,13 +118,16 @@ CV icd9ChildrenShort(CV icd9Short,
 // TODO: icd9ChildrenShortUnordered no NA version
 
 // [[Rcpp::export]]
-CV icd9ChildrenShortUnordered(CV icd9Short,
-                              const VecStr& icd9cmReal,
-                              bool onlyReal) {
+CV icd9ChildrenShortUnordered(
+    const CV& icd9Short,
+    const VecStr& icd9cmReal,
+    const bool onlyReal
+) {
   icd_set out;
   if (icd9Short.size() == 0) {
-    icd9Short.attr("icd_short_diag") = true;
-    return icd9Short;
+    CV out;
+    out.attr("icd_short_diag") = true;
+    return out;
   }
   List parts = icd9ShortToParts(icd9Short, "");
   CV mjr = parts[0];

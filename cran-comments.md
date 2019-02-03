@@ -1,4 +1,4 @@
-I am submitting icd 3.4, icd.data 1.1 and a new pacakge nhds 1.0 simultaneously.
+Thank you for comments on previous submission, all of which have been addressed. I am submitting icd 3.4, icd.data 1.1 and a new pacakge nhds 1.0 simultaneously.
 
 Please note that a pandoc version error prevents the automated CRAN checks from passing on some platforms. The Pandoc version dependency for building the vignettes is in the DESCRIPTION.
 

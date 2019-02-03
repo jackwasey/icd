@@ -7,7 +7,8 @@
  * drop deprecated arguments to 'comorbid': visitId and icd9Field. Use 'visit_name' and 'icd_name' instead.
  * default not to do (minimal) code cleaning before calculating comorbidities. To re-enable, use `preclean = TRUE`. Decimal-format codes are still converted to the short form used in the maps. For huge data with decimal format codes, converting the maps to decimal will be more efficient than converting the ICD data to decimal format.
  * drop `unique_ids` argument to `comorbid` and `categorize` since it no longer provides any optimization opportunity.
- * Let `icd` work better when not lodaded with `library`, so `icd::comorbid_ahrq` etc. should work with just `requireNamespace`
+ * Let `icd` work better when not lodaded with `library`, so `icd::comorbid_ahrq` etc. should work with just `requireNamespace` or using `icd::function()`
+ * Prefere 'leaf' over 'billable' to indicate a leaf node. Most coding systems are _not_ all about money, and 'icd' should reflect this. 'billable' as an argument to functions such as `is_defined()` and `get_defined()`. Functions named like `is_billable()` are left in place for ICD-9-CM and ICD-10-CM, but in general, `is_leaf()` and that family of functions is prefered.
  * Drop dependency on magrittr, although it may still be used nicely with icd functions
  * Increased test coverage with resulting fixes in corner cases
  * Accept integer identifiers in patient data

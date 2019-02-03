@@ -3,9 +3,9 @@
 \name{is_billable}
 \alias{is_billable}
 \alias{is_billable.icd9}
-\alias{is_billable.icd10cm}
-\alias{is_billable.icd10}
 \alias{is_billable.icd9cm}
+\alias{is_billable.icd10}
+\alias{is_billable.icd10cm}
 \alias{is_billable.default}
 \alias{icd_is_billable.default}
 \alias{icd_is_billable.icd10}
@@ -13,21 +13,21 @@
 \alias{icd_is_billable.icd9}
 \alias{icd_is_billable.icd9cm}
 \alias{icd_is_billable}
-\title{Determine whether codes are billable leaf-nodes}
+\title{Check whether a code is billable according to ICD-9-CM or ICD-10-CM}
 \usage{
 is_billable(x, short_code = guess_short(x), ...)
 
 \method{is_billable}{icd9}(x, short_code = guess_short(x),
-  icd9cm_edition = icd9cm_latest_edition(), ...)
+  icd9cm_edition = icd9cm_latest_edition(), nomatch = 0L, ...)
 
-\method{is_billable}{icd10cm}(x, short_code = guess_short(x),
-  icd10cm_edition = "2016", ...)
+\method{is_billable}{icd9cm}(x, short_code = guess_short(x),
+  icd9cm_edition = icd9cm_latest_edition(), nomatch = 0L, ...)
 
 \method{is_billable}{icd10}(x, short_code = guess_short(x),
   icd10cm_edition = "2016", ...)
 
-\method{is_billable}{icd9cm}(x, short_code = guess_short(x),
-  icd9cm_edition = icd9cm_latest_edition(), nomatch = 0L, ...)
+\method{is_billable}{icd10cm}(x, short_code = guess_short(x),
+  icd10cm_edition = "2016", ...)
 
 \method{is_billable}{default}(x, short_code = guess_short(x), ...)
 
@@ -57,37 +57,25 @@ latest release from CMS. Currently anything from "23" to "32" is accepted.
 Not numeric because there are possible cases with non-numeric names, e.g.
 revisions within one year, although none currently implemented.}
 
-\item{icd10cm_edition}{single character string. ICD-10-CM editions are
-currently just the year of release.}
-
 \item{nomatch}{integer value, passed to \code{match} default is 0.}
 
 \item{icd10cm_edition}{single character string. ICD-10-CM editions are
 currently just the year of release.}
 }
-\value{
-logical vector of same length as input
-}
 \description{
-Codes provided are compared to the most recent edition of the CMS list of
-billable codes, or another edition if specified.
+Using the equivalent \code{\link[=is_leaf]{is_leaf()}} is preferred.
 }
 \section{Methods (by class)}{
 \itemize{
-\item \code{icd9}: Which of the given ICD-9 codes are leaf nodes in
-ICD-9-CM. Currently assumes ICD-9 codes are ICD-9-CM
+\item \code{icd9}: Prefer 'leaf' to 'billable' for generality.
 
-\item \code{icd10cm}: Which of the given ICD-10 codes are leaf nodes in
-ICD-10-CM. Currently assumes ICD-10 codes are ICD-10-CM
+\item \code{icd9cm}: Prefer 'leaf' to 'billable' for generality.
 
-\item \code{icd10}: Which of the given ICD-10 codes are leaf nodes in
-ICD-10-CM. Currently assumes ICD-10 codes are ICD-10-CM
+\item \code{icd10}: Prefer 'leaf' to 'billable' for generality.
 
-\item \code{icd9cm}: Which of the given ICD-9 codes are leaf nodes in
-ICD-9-CM
+\item \code{icd10cm}: Prefer 'leaf' to 'billable' for generality.
 
-\item \code{default}: Which of the given ICD codes are leaf nodes in
-ICD version (9 vs 10) guessed from the codes themselves.
+\item \code{default}: Prefer 'leaf' to 'billable' for generality.
 }}
 
 \section{Deprecated function names}{
@@ -101,4 +89,6 @@ ICD version (9 vs 10) guessed from the codes themselves.
   the prefix, e.g., \code{\link{icd_wide_data}}.
 }
 
-\keyword{internal}
+\seealso{
+\code{\link[=get_leaf]{get_leaf()}}
+}

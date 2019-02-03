@@ -2,24 +2,33 @@
 % Please edit documentation in R/real.R, R/z-deprecated.R
 \name{get_billable}
 \alias{get_billable}
-\alias{get_billable.default}
-\alias{get_billable.icd9cm}
 \alias{get_billable.icd9}
+\alias{get_billable.icd9cm}
+\alias{get_billable.icd10}
+\alias{get_billable.icd10cm}
+\alias{get_billable.default}
 \alias{icd_get_billable}
 \alias{icd_get_billable.icd9}
 \alias{icd_get_billable.icd9cm}
 \alias{icd_get_billable.icd10}
 \alias{icd_get_billable.icd10cm}
-\title{Get billable ICD codes}
+\title{Get the subset of codes that are billable according to ICD-9-CM or ICD-10-CM}
 \usage{
 get_billable(...)
 
-\method{get_billable}{default}(x, short_code = guess_short(x), ...)
+\method{get_billable}{icd9}(x, short_code = guess_short(x),
+  invert = FALSE, icd9cm_edition = icd9cm_latest_edition(), ...)
 
 \method{get_billable}{icd9cm}(x, short_code = guess_short(x),
   invert = FALSE, icd9cm_edition = icd9cm_latest_edition(), ...)
 
-\method{get_billable}{icd9}(...)
+\method{get_billable}{icd10}(x, short_code = guess_short(x),
+  invert = FALSE, icd10cm_edition = "2016", ...)
+
+\method{get_billable}{icd10cm}(x, short_code = guess_short(x),
+  invert = FALSE, icd10cm_edition = "2016", ...)
+
+\method{get_billable}{default}(x, short_code = guess_short(x), ...)
 
 icd_get_billable(...)
 
@@ -45,28 +54,23 @@ if seeking valid ICD-9 codes, the invalid ones are returned.}
 
 \item{icd9cm_edition}{e.g. "32", not ICD-9 vs ICD-10}
 
-\item{...}{arguments passed on to other functions}
-
-\item{...}{arguments passed on to other functions}
-
-\item{...}{arguments passed on to other functions}
-
-\item{...}{arguments passed on to other functions}
+\item{icd10cm_edition}{single character string. ICD-10-CM editions are
+currently just the year of release.}
 }
 \description{
-Get billable ICD codes, implicitly, this refers to an ICD
-  implementation which is specialized for a country, typically for billing,
-  e.g. ICD-9-CM in the USA.
+Using the equivalent \code{\link[=get_leaf]{get_leaf()}} is preferred.
 }
 \section{Methods (by class)}{
 \itemize{
-\item \code{default}: Get billable ICD codes, guessing whether ICD-9
-or ICD-10, and code short vs decimal type.
+\item \code{icd9}: Prefer 'leaf' to 'billable' for generality.
 
-\item \code{icd9cm}: Get billable ICD-9-CM codes
+\item \code{icd9cm}: Prefer 'leaf' to 'billable' for generality.
 
-\item \code{icd9}: Get billable ICD-9 codes, which is currently
-implemented assuming ICD-9-CM
+\item \code{icd10}: Prefer 'leaf' to 'billable' for generality.
+
+\item \code{icd10cm}: Prefer 'leaf' to 'billable' for generality.
+
+\item \code{default}: Prefer 'leaf' to 'billable' for generality.
 }}
 
 \section{Deprecated function names}{
@@ -80,4 +84,6 @@ implemented assuming ICD-9-CM
   the prefix, e.g., \code{\link{icd_wide_data}}.
 }
 
-\keyword{internal}
+\seealso{
+\code{\link[=is_leaf]{is_leaf()}}
+}

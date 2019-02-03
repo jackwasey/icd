@@ -131,10 +131,14 @@ explain_table.icd10cm <- function(x, short_code = guess_short(x),
 #' @describeIn explain_table explain character vector of ICD1-10-CM codes
 #' @export
 #' @keywords internal
-explain_table.icd10who <- function(x, short_code = guess_short(x),
-                                   condense = FALSE, brief = TRUE,
-                                   warn = TRUE, ...) {
-  explain_table_worker(x = x, hierarchy = get_icd10who2016(),
+explain_table.icd10who <- function(x,
+                                   short_code = guess_short(x),
+                                   condense = FALSE,
+                                   brief = TRUE,
+                                   warn = TRUE,
+                                   ...
+) {
+  explain_table_worker(x = x, hierarchy = icd.data::get_icd10who2016(),
                        short_code = short_code, condense = condense,
                        brief = brief, warn = warn, ...)
 }

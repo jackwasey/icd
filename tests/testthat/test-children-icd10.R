@@ -70,7 +70,6 @@ test_that("icd10cm children with one of several missing should not segfault", {
     children.icd10cm(c("I790", "I792")),
     children.icd10cm(c("I790"))
   )
-
 })
 
 test_that("class of children same as input class", {
@@ -82,4 +81,11 @@ test_that("class of children same as input class", {
                    class(children(as.icd10("T27.6XXD"))))
   expect_identical(class(as.icd10cm("T27.6XXD")),
                    class(children(as.icd10cm("T27.6XXD"))))
+})
+
+context("WHO ICD-10 children")
+
+test_that("basic", {
+  skip_missing_icd10who2016()
+  children(as.icd10who("A01"))
 })

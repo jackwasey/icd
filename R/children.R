@@ -115,11 +115,14 @@ children.icd10cm <- function(x,
 
 #' @describeIn children Get children of ICD-10-CM codes
 #' @export
-children.icd10who <- function(x,
-                             short_code = guess_short(x),
-                             defined,
-                             billable = FALSE,
-                             ...) {
+children.icd10who <- function(
+  x,
+  short_code = guess_short(x),
+  defined,
+  billable = NULL,
+  leaf = NULL,
+  ...
+) {
   if (!missing(defined) && !defined)
     stop("Only finding children of 'defined' ICD-10-CM codes is supported.")
   children_defined.icd10who(x = x, short_code = short_code)
@@ -162,12 +165,20 @@ children_defined.icd10cm <- function(x,
 #' @param warn single logical value, if \code{TRUE} will generate warnings when
 #'   some input codes are not known ICD-10-CM codes
 #' @param use_cpp single logical flag, whether to use C++ version
+#' @examples
+#' \dontrun{
+#' icd:::children_defined.icd10who("H16")
+#' icd:::children_defined.icd10who("A01")
+#' icd:::children_defined.icd10who("XYZ")
+#' }
 #' @export
 #' @keywords internal
 #' @noRd
-children_defined.icd10who <- function(x,
-                                     short_code = guess_short(x),
-                                     warn = FALSE) {
+children_defined.icd10who <- function(
+  x,
+  short_code = guess_short(x),
+  warn = FALSE
+) {
   stopifnot(is.factor(x) || is.character(unclass(x)))
   stopifnot(is.logical(short_code))
   stopifnot(is.logical(warn))
@@ -175,6 +186,8 @@ children_defined.icd10who <- function(x,
   x <- toupper(x)
   if (!short_code)
     x <- decimal_to_short.icd10cm(x)
-  kids <- icd10_children_defined_cpp(x, get_icd10who2016(), .nc)
+  d <- icd.data::get_icd10who2016()
+  kids <- icd10_children_defined_cpp(x, d, nchar(d$code))
   as.icd10who(kids, short_code = short_code)
 }
+

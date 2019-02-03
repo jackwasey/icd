@@ -556,25 +556,21 @@ icd_get_billable <-
   function(...) { d("get_billable"); get_billable(...) }
 
 #' @rdname get_billable
-#' @template dotdotdot
 #' @export
 icd_get_billable.icd9 <-
   function(...) { d("get_billable.icd9"); get_billable.icd9(...) }
 
 #' @rdname get_billable
-#' @template dotdotdot
 #' @export
 icd_get_billable.icd9cm <-
   function(...) { d("get_billable.icd9cm"); get_billable.icd9cm(...) }
 
 #' @rdname get_billable
-#' @template dotdotdot
 #' @export
 icd_get_billable.icd10 <-
   function(...) { d("get_billable.icd10"); get_billable.icd10(...) }
 
 #' @rdname get_billable
-#' @template dotdotdot
 #' @export
 icd_get_billable.icd10cm <-
   function(...) { d("get_billable.icd10cm"); get_billable.icd10cm(...) }

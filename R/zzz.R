@@ -1,5 +1,26 @@
 # nocov start
 
+.onLoad <- function(libname, pkgname) {
+  # this is annoying. Difficult to get contents of lazy data in unattached
+  # package. Also, we do need these look-up tables (or possibly memoisation)
+  # because these data are used in children.R, which are sometimes called
+  # frequently.
+  .chars_in_icd10cm <- lapply(
+    list(
+      icd.data::icd10cm2014,
+      icd.data::icd10cm2015,
+      icd.data::icd10cm2016,
+      icd.data::icd10cm2017,
+      icd.data::icd10cm2018,
+      icd.data::icd10cm2019
+    ), function(v) nchar(v[["code"]])
+  )
+  names(.chars_in_icd10cm) <- 2014:2019
+  assign(".chars_in_icd10cm",
+         .chars_in_icd10cm,
+         envir = parent.env(environment()))
+}
+
 .onAttach <- function(libname, pkgname) {
   if (system.file(package = "icd9") != "")
     packageStartupMessage(paste(

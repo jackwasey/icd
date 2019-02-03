@@ -373,14 +373,14 @@ BEGIN_RCPP
 END_RCPP
 }
 // icd9ChildrenShortUnordered
-CV icd9ChildrenShortUnordered(CV icd9Short, const VecStr& icd9cmReal, bool onlyReal);
+CV icd9ChildrenShortUnordered(const CV& icd9Short, const VecStr& icd9cmReal, const bool onlyReal);
 RcppExport SEXP _icd_icd9ChildrenShortUnordered(SEXP icd9ShortSEXP, SEXP icd9cmRealSEXP, SEXP onlyRealSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< CV >::type icd9Short(icd9ShortSEXP);
+    Rcpp::traits::input_parameter< const CV& >::type icd9Short(icd9ShortSEXP);
     Rcpp::traits::input_parameter< const VecStr& >::type icd9cmReal(icd9cmRealSEXP);
-    Rcpp::traits::input_parameter< bool >::type onlyReal(onlyRealSEXP);
+    Rcpp::traits::input_parameter< const bool >::type onlyReal(onlyRealSEXP);
     rcpp_result_gen = Rcpp::wrap(icd9ChildrenShortUnordered(icd9Short, icd9cmReal, onlyReal));
     return rcpp_result_gen;
 END_RCPP
