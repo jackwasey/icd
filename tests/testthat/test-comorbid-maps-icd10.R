@@ -15,7 +15,6 @@ test_that("the classes of the ICD-10 maps are correct", {
     }
   }
 })
-
 test_that("the class of each element of the quan elix map is correct", {
   for (i in names(icd10_map_quan_elix)) {
     expect_is(
@@ -32,7 +31,6 @@ test_that("the class of each element of the quan elix map is correct", {
       inherits(icd10_map_quan_elix[[i]], "comorbidity_map"), info = i)
   }
 })
-
 test_that("independently created list of Quan Elixhauser codes all appear", {
   quan_elix_independent <- list(
     chf = c("I099", "I110", "I130", "I132", "I255", "I420", "I425", "I426",
@@ -122,17 +120,13 @@ test_that("independently created list of Quan Elixhauser codes all appear", {
     # yes, there are non-ICD-10-CM codes which are not in the ICD-10-CM children
     # (without including the codes themselves)
   }
-
 })
-
-test_that("some hand-picked ICD-10 codes appear in the quan elix map", {
+test_that("some hand-picked ICD-10 codes appear in the ICD-10 quan elix map", {
   expect_true("M12019" %in% icd10_map_quan_elix$Rheumatic)
 })
-
-test_that("some hand-picked ICD-10 codes appear in the quan deyo map", {
+test_that("some hand-picked ICD-10 codes appear in the ICD-10 quan deyo map", {
   expect_true("I214" %in% icd10_map_quan_deyo$MI)
 })
-
 test_that("we find invalid elements in comorbidity map", {
   abogus <- comorbidity_map(list(a = "bogus"))
   expect_equivalent(get_invalid(abogus), abogus)

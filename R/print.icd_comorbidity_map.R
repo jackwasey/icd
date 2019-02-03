@@ -25,8 +25,8 @@ print.comorbidity_map <- function(x, ..., n_comorbidities = 7, n_codes = 7) {
     x[1:ifelse(length(x) < n, length(x), n)]
   }
   message("Showing first ",
-          n_comorbidities, "comorbidities, and first",
-          n_codes, "of each.")
+          n_comorbidities, " comorbidities, and first ",
+          n_codes, " of each.")
   print(get_n_or_len(lapply(x, get_n_or_len, n_codes), n_comorbidities), ...)
   if (length(x) > n_comorbidities)
     writeLines("...")

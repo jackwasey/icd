@@ -33,14 +33,21 @@ is_defined.icd9 <- function(x, short_code = guess_short(x),
 #' @describeIn is_defined Same for ICD-10-CM
 #' @param nomatch integer value, passed to \code{match} default is 0. Setting
 #'   this to \code{NA_integer_} would stop NA values being treated as undefined.
+#' @param leaf New synonym for 'billable', which will be deprecated.
 #' @export
 #' @keywords internal
-is_defined.icd10cm <- function(x, short_code = guess_short(x),
-                               billable = FALSE, nomatch = 0L, ...) {
+is_defined.icd10cm <- function(
+  x,
+  short_code = guess_short(x),
+  billable = FALSE,
+  leaf = billable,
+  nomatch = 0L,
+  ...
+) {
   stopifnot(is.factor(x) || is.character(x))
-  stopifnot(is.logical(short_code), is.logical(billable))
+  stopifnot(is.logical(short_code), is.logical(leaf))
   if (!short_code) x <- decimal_to_short(x)
-  if (billable)
+  if (leaf)
     is_billable.icd10cm(x, short_code = short_code)
   else
     match(x, icd.data::icd10cm2016[["code"]], nomatch = nomatch, ...) > 0L

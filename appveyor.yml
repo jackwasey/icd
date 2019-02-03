@@ -26,7 +26,7 @@ before_build:
   - Rscript -e "install.packages(c('remotes', 'Rcpp', 'knitr'), repos = 'https://cloud.r-project.org/'); Rcpp::compileAttributes()" # make sure Rcpp generated code is made, if not checked in to repo
   # temporarily used while latest icd.data is not on CRAN
   #- Rscript -e "remotes::install_github(\"jackwasey/icd.data\", ref = \"WHO\")"
-  - Rscript -e "remotes::install_github(\"jackwasey/icd.data\")"
+#  - Rscript -e "remotes::install_github(\"jackwasey/icd.data\")"
   - Rscript -e "remotes::install_github(\"jackwasey/nhds\")"
 
 build_script:

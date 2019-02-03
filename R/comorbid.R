@@ -1,3 +1,18 @@
+utils::globalVariables(c(
+  "names_ahrq",
+  "names_ahrq_abbrev",
+  "names_ahrq_htn",
+  "names_ahrq_htn_abbrev",
+  "names_elix",
+  "names_elix_abbrev",
+  "names_elix_htn",
+  "names_elix_htn_abbrev",
+  "names_quan_elix",
+  "names_quan_elix_abbrev",
+  "names_quan_elix_htn",
+  "names_quan_elix_htn_abbrev",
+  "names_charlson"))
+
 #' Present-on-admission flags
 #'
 #' See \link{filter_poa} for more details.
@@ -250,29 +265,51 @@ icd10_comorbid_elix <- function(x, ..., abbrev_names = TRUE, hierarchy = TRUE) {
 
 #' @describeIn comorbid Quan's Elixhauser comorbidities for ICD-9 codes
 #' @export
-icd9_comorbid_quan_elix <- function(x, ..., abbrev_names = TRUE, hierarchy = TRUE) {
+icd9_comorbid_quan_elix <- function(x,
+                                    ...,
+                                    abbrev_names = TRUE,
+                                    hierarchy = TRUE
+) {
   cbd <- icd9_comorbid(x, map = icd::icd9_map_quan_elix, short_map = TRUE, ...)
   apply_hier_quan_elix(cbd, abbrev_names = abbrev_names, hierarchy = hierarchy)
 }
 
 #' @describeIn comorbid Quan's Elixhauser comorbidities for ICD-10 codes
 #' @export
-icd10_comorbid_quan_elix <- function(x, ..., abbrev_names = TRUE, hierarchy = TRUE) {
-  cbd <- icd10_comorbid(x, map = icd::icd10_map_quan_elix, short_map = TRUE, ...)
+icd10_comorbid_quan_elix <- function(x,
+                                     ...,
+                                     abbrev_names = TRUE,
+                                     hierarchy = TRUE
+) {
+  cbd <- icd10_comorbid(x,
+                        map = icd::icd10_map_quan_elix,
+                        short_map = TRUE,
+                        ...)
   apply_hier_quan_elix(cbd, abbrev_names = abbrev_names, hierarchy = hierarchy)
 }
 
 #' @describeIn comorbid Quan's Deyo (Charlson) comorbidities for ICD-9 codes
 #' @export
-icd9_comorbid_quan_deyo <- function(x, ..., abbrev_names = TRUE, hierarchy = TRUE) {
+icd9_comorbid_quan_deyo <- function(x,
+                                    ...,
+                                    abbrev_names = TRUE,
+                                    hierarchy = TRUE
+) {
   cbd <- icd9_comorbid(x, map = icd::icd9_map_quan_deyo, short_map = TRUE, ...)
   apply_hier_quan_deyo(cbd, abbrev_names = abbrev_names, hierarchy = hierarchy)
 }
 
 #' @describeIn comorbid Quan's Deyo (Charlson) comorbidities for ICD-10 codes
 #' @export
-icd10_comorbid_quan_deyo <- function(x, ..., abbrev_names = TRUE, hierarchy = TRUE) {
-  cbd <- icd10_comorbid(x, map = icd::icd10_map_quan_deyo, short_map = TRUE, ...)
+icd10_comorbid_quan_deyo <- function(x,
+                                     ...,
+                                     abbrev_names = TRUE,
+                                     hierarchy = TRUE
+) {
+  cbd <- icd10_comorbid(x,
+                        map = icd::icd10_map_quan_deyo,
+                        short_map = TRUE,
+                        ...)
   apply_hier_quan_deyo(cbd, abbrev_names = abbrev_names, hierarchy = hierarchy)
 }
 
@@ -388,14 +425,14 @@ apply_hier_elix <- function(x, abbrev_names = TRUE, hierarchy = TRUE) {
     # drop HTNcx without converting to vector if matrix only has one row
     x <- x[, -which(colnames(x) == "HTNcx"), drop = FALSE]
     colnames(x)[cr(x)] <- if (abbrev_names)
-      icd::names_elix_abbrev
+      names_elix_abbrev
     else
-      icd::names_elix
+      names_elix
   } else {
     colnames(x)[cr(x)] <- if (abbrev_names)
-      icd::names_elix_htn_abbrev
+      names_elix_htn_abbrev
     else
-      icd::names_elix_htn
+      names_elix_htn
   }
   x
 }
@@ -420,14 +457,14 @@ apply_hier_quan_elix <- function(cbd, abbrev_names = TRUE, hierarchy = TRUE) {
     # these are just dropped, leaving the fields for visit_name and all the
     # comorbidities:
     colnames(cbd)[cr(cbd)] <- if (abbrev_names)
-      icd::names_quan_elix_abbrev
+      names_quan_elix_abbrev
     else
-      icd::names_quan_elix
+      names_quan_elix
   } else {
     colnames(cbd)[cr(cbd)] <- if (abbrev_names)
-      icd::names_quan_elix_htn_abbrev
+      names_quan_elix_htn_abbrev
     else
-      icd::names_quan_elix_htn
+      names_quan_elix_htn
   }
   cbd
 }
@@ -443,9 +480,9 @@ apply_hier_quan_deyo <- function(cbd, abbrev_names = TRUE, hierarchy = TRUE) {
     cbd[cbd[, "LiverSevere"] > 0, "LiverMild"] <- FALSE
   }
   colnames(cbd)[cr(cbd)] <- if (abbrev_names)
-    icd::names_charlson_abbrev
+    names_charlson_abbrev
   else
-    icd::names_charlson
+    names_charlson
 
   cbd
 }
@@ -466,14 +503,14 @@ apply_hier_ahrq <- function(cbd, abbrev_names = TRUE, hierarchy = TRUE) {
     # drop HTNcx without converting to vector if matrix only has one row
     cbd <- cbd[, -which(colnames(cbd) == "HTNcx"), drop = FALSE]
     colnames(cbd)[cr(cbd)] <- if (abbrev_names)
-      icd::names_ahrq_abbrev
+      names_ahrq_abbrev
     else
-      icd::names_ahrq
+      names_ahrq
   } else {
     colnames(cbd)[cr(cbd)] <- if (abbrev_names)
-      icd::names_ahrq_htn_abbrev
+      names_ahrq_htn_abbrev
     else
-      icd::names_ahrq_htn
+      names_ahrq_htn
   }
   cbd
 }
