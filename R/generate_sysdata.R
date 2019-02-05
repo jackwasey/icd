@@ -35,6 +35,7 @@ update_everything <- function() {
   icd10_generate_map_quan_deyo(save_data = TRUE)
   icd10_generate_map_elix(save_data = TRUE)
   generate_maps_pccc(save_data = TRUE)
+  icd10_parse_ahrq_pcs(save_data = TRUE)
 }
 
 #' Generate \code{sysdata.rda}
