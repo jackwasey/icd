@@ -33,6 +33,8 @@ build_script:
   - travis-tool.sh install_deps
 
 environment:
+  # temporarily work around a cache problem for old github version of icd.data
+  APPVEYOR_CACHE_SKIP_RESTORE: true
   WARNINGS_ARE_ERRORS: 1
   USE_RTOOLS: true
   R_BUILD_ARGS: ""
