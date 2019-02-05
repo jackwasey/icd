@@ -28,3 +28,10 @@ test_that("warn if NA when ordering ICD-9 codes", {
   expect_identical(
     expect_warning(order.icd9(NA)), character())
 })
+
+test_that("order some icd-9 codes", {
+  expect_equal(
+    order.icd9(c("1002", "1001")),
+    c(2L, 1L)
+    )
+})

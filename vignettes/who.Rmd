@@ -18,7 +18,7 @@ Surprisingly, there are potential copyright restrictions on redistributing the W
 
 `icd` now includes the ability to work with these codes more easily via the companion `icd.data` package. The data is not available in the package so `icd.data` asks the user whether they wish to download the data from the WHO web site, whereupon it is made available just like any other R data, but the name `icd.data::icd10who2016`, which is the latest ICD-10 release from the WHO at the time of writing.
 
-```{r quicklook eval=FALSE}
+```{r quicklook, eval=FALSE}
 icd.data::icd10who2016[1:5, 1:5]
 library(icd.data)
 summary(icd10who2016)

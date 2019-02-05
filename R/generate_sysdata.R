@@ -58,11 +58,11 @@ generate_sysdata <- function(save_data = TRUE) {
   icd9_short_e_defined <- vec_to_lookup_pair(grep("^E", codes, perl = TRUE, value = TRUE))
   # also consider doing this in the ranging functions, even though slower, so
   # version can be chosen each time.
-  icd9_short_n_leaf <- vec_to_lookup_pair(icd9cm_get_billable(
+  icd9_short_n_leaf <- vec_to_lookup_pair(get_billable.icd10cm(
     icd9_short_n_defined$vec, short_code = TRUE, icd9cm_edition = "32")) # nolint
-  icd9_short_v_leaf <- vec_to_lookup_pair(icd9cm_get_billable(
+  icd9_short_v_leaf <- vec_to_lookup_pair(get_billable.icd10cm(
     icd9_short_v_defined$vec, short_code = TRUE, icd9cm_edition = "32")) # nolint
-  icd9_short_e_leaf <- vec_to_lookup_pair(icd9cm_get_billable(
+  icd9_short_e_leaf <- vec_to_lookup_pair(get_billable.icd10cm(
     icd9_short_e_defined$vec, short_code = TRUE, icd9cm_edition = "32")) # nolint
   # minimal data sources validation
   long_fns <- icd9_sources[["long_filename"]]
@@ -84,10 +84,15 @@ generate_sysdata <- function(save_data = TRUE) {
   icd9_short_n_leaf
   icd9_short_v_leaf
   icd9_short_e_leaf
-  sysdata_names <- c("icd9_short_n", "icd9_short_v", "icd9_short_e",
-                     "icd9_short_n_defined", "icd9_short_v_defined", "icd9_short_e_defined",
-                     "icd9_short_n_leaf", "icd9_short_v_leaf", "icd9_short_e_leaf",
-                     ".nc")
+  sysdata_names <- c("icd9_short_n",
+                     "icd9_short_v",
+                     "icd9_short_e",
+                     "icd9_short_n_defined",
+                     "icd9_short_v_defined",
+                     "icd9_short_e_defined",
+                     "icd9_short_n_leaf",
+                     "icd9_short_v_leaf",
+                     "icd9_short_e_leaf")
   # we assume we are in the root of the package directory. Save to sysdata.rda
   # because these are probably not of interest to a user and would clutter an
   # already busy namespace.

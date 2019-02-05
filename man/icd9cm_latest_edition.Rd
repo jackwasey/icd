@@ -12,6 +12,6 @@ currently \strong{32}.
 }
 \details{
 Implemented as a function to give flexibility to calculate this, or use an
-option override.
+option override. Duplicated in \code{icd.data} package.
 }
 \keyword{internal}

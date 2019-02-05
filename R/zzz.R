@@ -5,17 +5,20 @@
   # package. Also, we do need these look-up tables (or possibly memoisation)
   # because these data are used in children.R, which are sometimes called
   # frequently.
-  .chars_in_icd10cm <- lapply(
-    list(
-      icd.data::icd10cm2014,
-      icd.data::icd10cm2015,
-      icd.data::icd10cm2016,
-      icd.data::icd10cm2017,
-      icd.data::icd10cm2018,
-      icd.data::icd10cm2019
-    ), function(v) nchar(v[["code"]])
+  work <- list()
+  for (ver in as.character(2014:2019)) {
+    e <- try(
+      eval(parse(text = paste0("icd.data::icd10cm", ver))),
+      silent = TRUE
+    )
+    if (!inherits(e, "try-error")) {
+      work[[length(work) + 1]] <- e
+      names(work)[length(work)] <- ver
+    }
+  }
+  .chars_in_icd10cm <- lapply(work, function(v) nchar(v[["code"]])
   )
-  names(.chars_in_icd10cm) <- 2014:2019
+  names(.chars_in_icd10cm) <- names(work)
   assign(".chars_in_icd10cm",
          .chars_in_icd10cm,
          envir = parent.env(environment()))

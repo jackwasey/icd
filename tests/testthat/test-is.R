@@ -8,10 +8,12 @@ test_that("find codes", {
   expect_true(icd9_is_v(" V10 "))
   expect_true(icd9_is_e(" E800"))
   expect_true(icd9_is_n(" 10.1"))
-  expect_true(is_major.icd9(" 100"))
-  expect_true(is_major.icd9(" E900"))
-  expect_false(is_major.icd9(" V90.3 "))
-  expect_false(is_major.icd9(" E900.3 "))
+  expect_true(is_major.icd9("100"))
+  expect_true(is_major.icd9("E900"))
+  expect_false(is_major.icd9("V90.3"))
+  expect_false(is_major.icd9("E900.3"))
+  expect_false(is_major.icd9("V903"))
+  expect_false(is_major.icd9("E9003"))
   # todo, what about "E800." or "100." ?
   expect_false(icd9_is_v(" E900.3 "))
   expect_false(icd9_is_e(" 80.2"))
@@ -62,18 +64,4 @@ test_that("ICD-10 majors identified", {
   expect_false(is_major.icd10("V100"))
   expect_false(is_major.icd10("10"))
   expect_false(is_major.icd10("1"))
-})
-
-test_that("class dispatch for major types", {
-  expect_true(is_major(icd9("100")))
-  expect_true(is_major(as.icd9cm("E999")))
-  expect_true(is_major(icd9cm("E999")))
-
-  expect_false(is_major(icd9("1001")))
-  expect_false(is_major(icd9cm("E9999")))
-  expect_false(is_major(icd9("100.1")))
-  expect_false(is_major(icd9cm("E999.9")))
-
-  expect_true(is_major(icd10("I10")))
-  expect_false(is_major(icd10cm("I110")))
 })

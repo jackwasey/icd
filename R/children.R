@@ -156,7 +156,17 @@ children_defined.icd10cm <- function(x,
   x <- toupper(x)
   if (!short_code)
     x <- decimal_to_short.icd10cm(x)
-  kids <- icd10_children_defined_cpp(x, icd.data::icd10cm2016, .nc)
+  dat <- get_get_icd10cm_version()
+  if (is.null(dat)) {
+    dat <- icd.data::icd10cm2016
+    nc <- .chars_in_icd10cm[["2016"]]
+  } else {
+    nc <- .chars_in_icd10cm[[get_get_icd10cm_active_ver()]]
+  }
+  kids <- icd10_children_defined_cpp(
+    x,
+    dat,
+    nc)
   as.icd10cm(kids, short_code)
 }
 
@@ -186,7 +196,7 @@ children_defined.icd10who <- function(
   x <- toupper(x)
   if (!short_code)
     x <- decimal_to_short.icd10cm(x)
-  d <- icd.data::get_icd10who2016()
+  d <- get_get_icd10who2016()
   kids <- icd10_children_defined_cpp(x, d, nchar(d$code))
   as.icd10who(kids, short_code = short_code)
 }

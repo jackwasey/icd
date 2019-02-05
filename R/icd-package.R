@@ -97,7 +97,6 @@
 #' @concept ICD-9 ICD-10 comorbidity comorbidities
 #' @useDynLib icd, .registration=TRUE
 #' @importFrom Rcpp cppFunction
-#' @importFrom methods setLoadAction
 #' @importFrom utils head tail read.fwf
 #' @importFrom stats setNames reshape
 #' @importFrom graphics barplot

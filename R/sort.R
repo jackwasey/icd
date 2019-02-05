@@ -47,12 +47,10 @@ sort_icd.icd9 <- function(x, short_code = guess_short(x), ...) {
     x
   else
     decimal_to_short.icd9(x)
-
   res <- if (is.factor(x))
     x[icd9_order_cpp(as_char_no_warn(y))]
   else
     x[icd9_order_cpp(y)]
-
   class(res) <- class(x)
   keep_names <- names(res)
   attributes(res) <- attributes(x)
@@ -68,12 +66,10 @@ sort_icd.icd9 <- function(x, short_code = guess_short(x), ...) {
 #' @return vector of integers with length of the non-NA values in \code{x}
 #' @export
 order.icd9 <- function(x) {
-  cl <- class(x)
   if (anyNA(x)) {
     warning("can't order NA values, so dropping them")
     x <- x[!is.na(x)]
     if (length(x) == 0) return(character())
   }
-  res <- icd9_order_cpp(x)
-  class(res) <- cl
+  icd9_order_cpp(x)
 }

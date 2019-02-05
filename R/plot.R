@@ -15,6 +15,7 @@
 #' plot_comorbid(icd.data::uranium_pathology)
 #' }
 #' @md
+#' @keywords hplot
 #' @export
 plot_comorbid <- function(
   x,

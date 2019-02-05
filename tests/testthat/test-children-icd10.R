@@ -32,6 +32,10 @@ expect_icd10cm_child_is_self <- function(...) {
   }
 }
 
+test_that("errors found in development", {
+  expect_error(regexp = NA, children_defined.icd10cm("C17"))
+})
+
 test_that("children of a leaf node returns itself", {
   expect_icd10cm_child_is_self("O9A119", "O9A53", "S0000XA", "T3299", "P150",
                                "P159", "Z9981", "Z9989", "Z950", "C7A098",
@@ -86,6 +90,7 @@ test_that("class of children same as input class", {
 context("WHO ICD-10 children")
 
 test_that("basic", {
-  skip_missing_icd10who2016()
+  skip_if_not_installed("icd.data", 1.1)
+  skip_missing_icd10who(ver = "2016")
   children(as.icd10who("A01"))
 })

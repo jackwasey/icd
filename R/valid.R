@@ -545,7 +545,6 @@ is_major.icd10cm <- function(x) {
 #' @export
 #' @noRd
 is_major.icd9 <- function(x) {
-  x <- trim(x)
   nchar(x) - icd9_is_e(x) < 4
 }
 

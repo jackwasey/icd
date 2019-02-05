@@ -11,7 +11,8 @@ utils::globalVariables(c(
   "names_quan_elix_abbrev",
   "names_quan_elix_htn",
   "names_quan_elix_htn_abbrev",
-  "names_charlson"))
+  "names_charlson",
+  "names_charlson_abbrev"))
 
 #' Present-on-admission flags
 #'

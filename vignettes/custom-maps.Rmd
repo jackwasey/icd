@@ -69,18 +69,19 @@ icd::icd10_comorbid_quan_elix(
 Sometimes there are a large number of ICD codes, and they can be defined more succintly with ranges, then by specifying every single code. In addition, as new codes are added to ICD-10-CM, (especially ICD-10-CM -- it moves much faster than ICD-10 from the WHO) having specific hard-coded ICD-10 codes will miss closely related codes in the future. Using the ranges functions from `icd` helps with both these problems.
 
 Again, using a [Stackoverflow question](https://stackoverflow.com/questions/54245282/how-to-compare-icd-10-character-string-or-search-whether-a-diagnosis-fall-into-t/54277842#54277842):
-```{r so2}
+
+```{r sotwo}
 library(icd)
 diagnoses <- c("C349", "A219", "B003", "C509", "B700", "A090")
 one_pt <- data.frame(id = rep("patient1", length(diagnoses)),
                      diagnoses)
 dif_pt <- data.frame(id = paste0("patient", seq_along(diagnoses)),
                      diagnoses)
-my_map <- list(c01to17 = icd::expand_range("C01", "C17"),
-               a74to75 = icd::expand_range("A748", "A759"),
-               b00to33 = icd::expand_range("B001", "B331"),
-               b69to72 = icd::expand_range("B69", "B72"),
-               c00to94 = icd::expand_range("C000", "C942"))
+my_map <- list(c01to17 = expand_range("C01", "C17"),
+               a74to75 = expand_range("A748", "A759"),
+               b00to33 = expand_range("B001", "B331"),
+               b69to72 = expand_range("B69", "B72"),
+               c00to94 = expand_range("C000", "C942"))
 # optionally use as.comorbidity_map which ensures it is valid, and let's it
 # print more pleasantly
 my_map <- as.comorbidity_map(my_map)

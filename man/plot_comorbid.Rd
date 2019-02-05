@@ -33,3 +33,4 @@ plot_comorbid(icd.data::vermont_dx)
 plot_comorbid(icd.data::uranium_pathology)
 }
 }
+\keyword{hplot}

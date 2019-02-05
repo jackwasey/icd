@@ -266,7 +266,7 @@ guess_icd_col_by_class <- function(x) {
 #' currently \strong{32}.
 #'
 #' Implemented as a function to give flexibility to calculate this, or use an
-#' option override.
+#' option override. Duplicated in \code{icd.data} package.
 #'
 #' @keywords internal
 icd9cm_latest_edition <- function() "32"
@@ -334,4 +334,26 @@ req_icd_data <- function() {
     stop("Please install the 'icd.data' package to explain ICD codes.",
          call. = FALSE)
 
+}
+
+get_from_unattached <- function(var_name, pkg = "icd.data") {
+  eval(parse(text = paste0(pkg, "::", var_name)))
+}
+
+get_fun_from_icd.data <- function(fun_name) {
+  if (exists(fun_name, envir = asNamespace("icd.data")))
+    return(get(fun_name, envir = asNamespace("icd.data")))
+  invisible()
+}
+
+get_get_icd10who2016 <- function() {
+  get_fun_from_icd.data("get_icd10who2016")
+}
+
+get_get_icd10cm_version <- function() {
+  get_fun_from_icd.data("get_icd10cm_version")
+}
+
+get_get_icd10cm_active_ver <- function() {
+  get_fun_from_icd.data("get_icd10cm_active_ver")
 }

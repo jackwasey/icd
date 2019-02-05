@@ -225,3 +225,11 @@ expect_logical <- function(x, ...) {
 expect_character <- function(x, ...) {
   testthat::expect_true(is.character(x))
 }
+
+skip_missing_icd10who <- function(ver) {
+  if (exists("skip_missing_icd10who", envir = asNamespace("icd.data"))) {
+    get("skip_missing_icd10who", envir = asNamespace("icd.data"))()
+  } else {
+    testthat::skip("No skip_missing_icd10who function, so no data")
+  }
+}
