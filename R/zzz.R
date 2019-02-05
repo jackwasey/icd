@@ -7,12 +7,12 @@
   # frequently.
   work <- list()
   for (ver in as.character(2014:2019)) {
-    e <- try(
-      eval(parse(text = paste0("icd.data::icd10cm", ver))),
-      silent = TRUE
-    )
-    if (!inherits(e, "try-error")) {
-      work[[length(work) + 1]] <- e
+    dat <- try(silent = TRUE, {
+      base::getExportedValue(asNamespace("icd.data"),
+                             paste0("icd10cm", ver))
+    })
+    if (!inherits(dat, "try-error")) {
+      work[[length(work) + 1]] <- dat
       names(work)[length(work)] <- ver
     }
   }

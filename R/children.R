@@ -157,12 +157,8 @@ children_defined.icd10cm <- function(x,
   if (!short_code)
     x <- decimal_to_short.icd10cm(x)
   dat <- get_get_icd10cm_version()()
-  if (is.null(dat)) {
-    dat <- icd.data::icd10cm2016
-    nc <- .chars_in_icd10cm[["2016"]]
-  } else {
-    nc <- .chars_in_icd10cm[[get_get_icd10cm_active_ver()()]]
-  }
+  ver <- get_get_icd10cm_active_ver()()
+  nc <- .chars_in_icd10cm[[ver]]
   kids <- icd10_children_defined_cpp(
     x,
     dat,

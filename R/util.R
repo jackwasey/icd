@@ -336,24 +336,40 @@ req_icd_data <- function() {
 
 }
 
-get_from_unattached <- function(var_name, pkg = "icd.data") {
-  eval(parse(text = paste0(pkg, "::", var_name)))
-}
-
 get_fun_from_icd.data <- function(fun_name) {
   if (exists(fun_name, envir = asNamespace("icd.data")))
-    return(get(fun_name, envir = asNamespace("icd.data")))
-  invisible()
+    get(fun_name, envir = asNamespace("icd.data"))
+  else
+    NULL
 }
 
 get_get_icd10who2016 <- function() {
-  get_fun_from_icd.data("get_icd10who2016")
+  f <- get_fun_from_icd.data("get_icd10who2016")
+  if (is.null(f)) stop_data_lt_1dot1()
 }
 
 get_get_icd10cm_version <- function() {
-  get_fun_from_icd.data("get_icd10cm_version")
+  f <- get_fun_from_icd.data("get_icd10cm_version")
+  if (is.null(f))
+    function() icd.data::icd10cm2016
+  else
+    f
 }
 
 get_get_icd10cm_active_ver <- function() {
-  get_fun_from_icd.data("get_icd10cm_active_ver")
+  f <- get_fun_from_icd.data("get_icd10cm_active_ver")
+  if (is.null(f))
+    function() "2016"
+  else
+    f
+}
+
+stop_data_lt_1dot1 <- function() {
+  stop("WHO and 2014, 2015, 2017, 2018 and 2019 ICD-CM data are only ",
+       "available with icd.data >= 1.1 . Use
+       install.packages(\"icd.data\")
+       to install the latest version from CRAN.
+       devtools::install_github(\"jackwasey/icd.data\")
+       may be used until CRAN has version 1.1 .
+       ", call. = FALSE)
 }
