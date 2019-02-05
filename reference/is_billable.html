@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Determine whether codes are billable leaf-nodes — is_billable • Comorbidity calculations and tools for ICD-9 and ICD-10 codes</title>
+<title>Check whether a code is billable according to ICD-9-CM or ICD-10-CM — is_billable • Comorbidity calculations and tools for ICD-9 and ICD-10 codes</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -36,10 +36,9 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/jquery.mark.min.js" integrity="sha256-4HLtjeVgH0eIB3aZ9mLYF6E8oU5chNdjU6p6rrXpl9U=" crossorigin="anonymous"></script>
 
 
-<meta property="og:title" content="Determine whether codes are billable leaf-nodes — is_billable" />
+<meta property="og:title" content="Check whether a code is billable according to ICD-9-CM or ICD-10-CM — is_billable" />
 
-<meta property="og:description" content="Codes provided are compared to the most recent edition of the CMS list of
-billable codes, or another edition if specified." />
+<meta property="og:description" content="Using the equivalent is_leaf() is preferred." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -70,7 +69,7 @@ billable codes, or another edition if specified." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Comorbidity calculations and tools for ICD-9 and ICD-10 codes</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">3.4</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">3.4.1</span>
       </span>
     </div>
 
@@ -106,6 +105,9 @@ billable codes, or another edition if specified." />
     </li>
     <li>
       <a href="../articles/compare-maps.html">Comparing Comorbidity Mappings</a>
+    </li>
+    <li>
+      <a href="../articles/custom-maps.html">Quick custom comorbidity maps are helpful</a>
     </li>
     <li>
       <a href="../articles/efficiency.pdf">icd: Efficient Computation of Comorbidities from ICD Codes Using Sparse Matrix Multiplication in R (PDF)</a>
@@ -146,15 +148,14 @@ billable codes, or another edition if specified." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Determine whether codes are billable leaf-nodes</h1>
+    <h1>Check whether a code is billable according to ICD-9-CM or ICD-10-CM</h1>
     
     <div class="hidden name"><code>is_billable.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Codes provided are compared to the most recent edition of the CMS list of
-billable codes, or another edition if specified.</p>
+    <p>Using the equivalent <code><a href='is_leaf.html'>is_leaf()</a></code> is preferred.</p>
     
     </div>
 
@@ -162,19 +163,19 @@ billable codes, or another edition if specified.</p>
 
 <span class='co'># S3 method for icd9</span>
 <span class='fu'>is_billable</span>(<span class='no'>x</span>, <span class='kw'>short_code</span> <span class='kw'>=</span> <span class='fu'><a href='guess_short.html'>guess_short</a></span>(<span class='no'>x</span>),
-  <span class='kw'>icd9cm_edition</span> <span class='kw'>=</span> <span class='fu'><a href='icd9cm_latest_edition.html'>icd9cm_latest_edition</a></span>(), <span class='no'>...</span>)
+  <span class='kw'>icd9cm_edition</span> <span class='kw'>=</span> <span class='fu'><a href='icd9cm_latest_edition.html'>icd9cm_latest_edition</a></span>(), <span class='kw'>nomatch</span> <span class='kw'>=</span> <span class='fl'>0L</span>, <span class='no'>...</span>)
 
-<span class='co'># S3 method for icd10cm</span>
+<span class='co'># S3 method for icd9cm</span>
 <span class='fu'>is_billable</span>(<span class='no'>x</span>, <span class='kw'>short_code</span> <span class='kw'>=</span> <span class='fu'><a href='guess_short.html'>guess_short</a></span>(<span class='no'>x</span>),
-  <span class='kw'>icd10cm_edition</span> <span class='kw'>=</span> <span class='st'>"2016"</span>, <span class='no'>...</span>)
+  <span class='kw'>icd9cm_edition</span> <span class='kw'>=</span> <span class='fu'><a href='icd9cm_latest_edition.html'>icd9cm_latest_edition</a></span>(), <span class='kw'>nomatch</span> <span class='kw'>=</span> <span class='fl'>0L</span>, <span class='no'>...</span>)
 
 <span class='co'># S3 method for icd10</span>
 <span class='fu'>is_billable</span>(<span class='no'>x</span>, <span class='kw'>short_code</span> <span class='kw'>=</span> <span class='fu'><a href='guess_short.html'>guess_short</a></span>(<span class='no'>x</span>),
   <span class='kw'>icd10cm_edition</span> <span class='kw'>=</span> <span class='st'>"2016"</span>, <span class='no'>...</span>)
 
-<span class='co'># S3 method for icd9cm</span>
+<span class='co'># S3 method for icd10cm</span>
 <span class='fu'>is_billable</span>(<span class='no'>x</span>, <span class='kw'>short_code</span> <span class='kw'>=</span> <span class='fu'><a href='guess_short.html'>guess_short</a></span>(<span class='no'>x</span>),
-  <span class='kw'>icd9cm_edition</span> <span class='kw'>=</span> <span class='fu'><a href='icd9cm_latest_edition.html'>icd9cm_latest_edition</a></span>(), <span class='kw'>nomatch</span> <span class='kw'>=</span> <span class='fl'>0L</span>, <span class='no'>...</span>)
+  <span class='kw'>icd10cm_edition</span> <span class='kw'>=</span> <span class='st'>"2016"</span>, <span class='no'>...</span>)
 
 <span class='co'># S3 method for default</span>
 <span class='fu'>is_billable</span>(<span class='no'>x</span>, <span class='kw'>short_code</span> <span class='kw'>=</span> <span class='fu'><a href='guess_short.html'>guess_short</a></span>(<span class='no'>x</span>), <span class='no'>...</span>)
@@ -216,11 +217,6 @@ Not numeric because there are possible cases with non-numeric names, e.g.
 revisions within one year, although none currently implemented.</p></td>
     </tr>
     <tr>
-      <th>icd10cm_edition</th>
-      <td><p>single character string. ICD-10-CM editions are
-currently just the year of release.</p></td>
-    </tr>
-    <tr>
       <th>nomatch</th>
       <td><p>integer value, passed to <code>match</code> default is 0.</p></td>
     </tr>
@@ -231,23 +227,14 @@ currently just the year of release.</p></td>
     </tr>
     </table>
     
-    <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
-
-    <p>logical vector of same length as input</p>
-    
     <h2 class="hasAnchor" id="methods-by-class-"><a class="anchor" href="#methods-by-class-"></a>Methods (by class)</h2>
 
     <ul>
-<li><p><code>icd9</code>: Which of the given ICD-9 codes are leaf nodes in
-ICD-9-CM. Currently assumes ICD-9 codes are ICD-9-CM</p></li>
-<li><p><code>icd10cm</code>: Which of the given ICD-10 codes are leaf nodes in
-ICD-10-CM. Currently assumes ICD-10 codes are ICD-10-CM</p></li>
-<li><p><code>icd10</code>: Which of the given ICD-10 codes are leaf nodes in
-ICD-10-CM. Currently assumes ICD-10 codes are ICD-10-CM</p></li>
-<li><p><code>icd9cm</code>: Which of the given ICD-9 codes are leaf nodes in
-ICD-9-CM</p></li>
-<li><p><code>default</code>: Which of the given ICD codes are leaf nodes in
-ICD version (9 vs 10) guessed from the codes themselves.</p></li>
+<li><p><code>icd9</code>: Prefer 'leaf' to 'billable' for generality.</p></li>
+<li><p><code>icd9cm</code>: Prefer 'leaf' to 'billable' for generality.</p></li>
+<li><p><code>icd10</code>: Prefer 'leaf' to 'billable' for generality.</p></li>
+<li><p><code>icd10cm</code>: Prefer 'leaf' to 'billable' for generality.</p></li>
+<li><p><code>default</code>: Prefer 'leaf' to 'billable' for generality.</p></li>
 </ul>
     
     <h2 class="hasAnchor" id="deprecated-function-names"><a class="anchor" href="#deprecated-function-names"></a>Deprecated function names</h2>
@@ -261,6 +248,10 @@ ICD version (9 vs 10) guessed from the codes themselves.</p></li>
   <code><a href='comorbid.html'>icd9_comorbid_ahrq</a></code>. <span class="pkg">icd</span> specific classes also retain
   the prefix, e.g., <code><a href='wide_vs_long.html'>icd_wide_data</a></code>.</p>
     
+    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
+
+    <div class='dont-index'><p><code><a href='get_leaf.html'>get_leaf()</a></code></p></div>
+    
 
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
@@ -268,11 +259,11 @@ ICD version (9 vs 10) guessed from the codes themselves.</p></li>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
       
-      <li><a href="#value">Value</a></li>
-
       <li><a href="#methods-by-class-">Methods (by class)</a></li>
 
       <li><a href="#deprecated-function-names">Deprecated function names</a></li>
+
+      <li><a href="#see-also">See also</a></li>
           </ul>
 
   </div>

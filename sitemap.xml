@@ -85,9 +85,6 @@
     <loc>https://jackwasey.github.io/icd//reference/diff_comorbid.html</loc>
   </url>
   <url>
-    <loc>https://jackwasey.github.io/icd//reference/do_extra_tests.html</loc>
-  </url>
-  <url>
     <loc>https://jackwasey.github.io/icd//reference/expand_minor.html</loc>
   </url>
   <url>
@@ -152,6 +149,9 @@
   </url>
   <url>
     <loc>https://jackwasey.github.io/icd//reference/get_invalid.html</loc>
+  </url>
+  <url>
+    <loc>https://jackwasey.github.io/icd//reference/get_leaf.html</loc>
   </url>
   <url>
     <loc>https://jackwasey.github.io/icd//reference/get_valid.html</loc>
@@ -304,6 +304,9 @@
     <loc>https://jackwasey.github.io/icd//reference/is_defined.html</loc>
   </url>
   <url>
+    <loc>https://jackwasey.github.io/icd//reference/is_leaf.html</loc>
+  </url>
+  <url>
     <loc>https://jackwasey.github.io/icd//reference/is_valid.html</loc>
   </url>
   <url>
@@ -413,6 +416,9 @@
   </url>
   <url>
     <loc>https://jackwasey.github.io/icd//articles/compare-maps.html</loc>
+  </url>
+  <url>
+    <loc>https://jackwasey.github.io/icd//articles/custom-maps.html</loc>
   </url>
   <url>
     <loc>https://jackwasey.github.io/icd//articles/efficiency.pdf</loc>

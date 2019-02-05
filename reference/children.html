@@ -70,7 +70,7 @@ codes which are defined or billable (leaf nodes)." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Comorbidity calculations and tools for ICD-9 and ICD-10 codes</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">3.4</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">3.4.1</span>
       </span>
     </div>
 
@@ -106,6 +106,9 @@ codes which are defined or billable (leaf nodes)." />
     </li>
     <li>
       <a href="../articles/compare-maps.html">Comparing Comorbidity Mappings</a>
+    </li>
+    <li>
+      <a href="../articles/custom-maps.html">Quick custom comorbidity maps are helpful</a>
     </li>
     <li>
       <a href="../articles/efficiency.pdf">icd: Efficient Computation of Comorbidities from ICD Codes Using Sparse Matrix Multiplication in R (PDF)</a>
@@ -181,7 +184,7 @@ codes which are <em>defined</em> or <em>billable</em> (leaf nodes).</p>
 
 <span class='co'># S3 method for icd10who</span>
 <span class='fu'>children</span>(<span class='no'>x</span>, <span class='kw'>short_code</span> <span class='kw'>=</span> <span class='fu'><a href='guess_short.html'>guess_short</a></span>(<span class='no'>x</span>), <span class='no'>defined</span>,
-  <span class='kw'>billable</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='no'>...</span>)
+  <span class='kw'>billable</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>leaf</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>...</span>)
 
 <span class='fu'>icd_children.character</span>(<span class='no'>...</span>)
 
@@ -222,6 +225,11 @@ version being used, e.g. ICD-9-CM, the WHO version of ICD-10, or other.</p></td>
     </tr>
     <tr>
       <th>billable</th>
+      <td><p>single logical value, identical to 'leaf'. Leaf is preferred
+as most adaptations of WHO ICD codes are not oriented around money.</p></td>
+    </tr>
+    <tr>
+      <th>leaf</th>
       <td><p>single logical value, whether to limit return codes also by
 whether they are billable, i.e. leaf nodes. This is really only designed
 for use with ICD-9-CM, ICD-10-CM etc, since the WHO versions are not

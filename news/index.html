@@ -66,7 +66,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Comorbidity calculations and tools for ICD-9 and ICD-10 codes</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">3.4</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">3.4.1</span>
       </span>
     </div>
 
@@ -102,6 +102,9 @@
     </li>
     <li>
       <a href="../articles/compare-maps.html">Comparing Comorbidity Mappings</a>
+    </li>
+    <li>
+      <a href="../articles/custom-maps.html">Quick custom comorbidity maps are helpful</a>
     </li>
     <li>
       <a href="../articles/efficiency.pdf">icd: Efficient Computation of Comorbidities from ICD Codes Using Sparse Matrix Multiplication in R (PDF)</a>
@@ -159,8 +162,9 @@
 <li>drop deprecated arguments to ‘comorbid’: visitId and icd9Field. Use ‘visit_name’ and ‘icd_name’ instead.</li>
 <li>default not to do (minimal) code cleaning before calculating comorbidities. To re-enable, use <code>preclean = TRUE</code>. Decimal-format codes are still converted to the short form used in the maps. For huge data with decimal format codes, converting the maps to decimal will be more efficient than converting the ICD data to decimal format.</li>
 <li>drop <code>unique_ids</code> argument to <code>comorbid</code> and <code>categorize</code> since it no longer provides any optimization opportunity.</li>
-<li>Let <code>icd</code> work better when not lodaded with <code>library</code>, so <code><a href="../reference/comorbid.html">icd::comorbid_ahrq</a></code> etc. should work with just <code>requireNamespace</code>
+<li>Let <code>icd</code> work better when not lodaded with <code>library</code>, so <code><a href="../reference/comorbid.html">icd::comorbid_ahrq</a></code> etc. should work with just <code>requireNamespace</code> or using <code>icd::function()</code>
 </li>
+<li>Prefere ‘leaf’ over ‘billable’ to indicate a leaf node. Most coding systems are <em>not</em> all about money, and ‘icd’ should reflect this. ‘billable’ as an argument to functions such as <code><a href="../reference/is_defined.html">is_defined()</a></code> and <code><a href="../reference/get_defined.html">get_defined()</a></code>. Functions named like <code><a href="../reference/is_billable.html">is_billable()</a></code> are left in place for ICD-9-CM and ICD-10-CM, but in general, <code><a href="../reference/is_leaf.html">is_leaf()</a></code> and that family of functions is prefered.</li>
 <li>Drop dependency on magrittr, although it may still be used nicely with icd functions</li>
 <li>Increased test coverage with resulting fixes in corner cases</li>
 <li>Accept integer identifiers in patient data</li>

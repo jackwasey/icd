@@ -32,7 +32,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Comorbidity calculations and tools for ICD-9 and ICD-10 codes</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">3.4</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">3.4.1</span>
       </span>
     </div>
 
@@ -68,6 +68,9 @@
     </li>
     <li>
       <a href="../articles/compare-maps.html">Comparing Comorbidity Mappings</a>
+    </li>
+    <li>
+      <a href="../articles/custom-maps.html">Quick custom comorbidity maps are helpful</a>
     </li>
     <li>
       <a href="../articles/efficiency.pdf">icd: Efficient Computation of Comorbidities from ICD Codes Using Sparse Matrix Multiplication in R (PDF)</a>
@@ -108,7 +111,7 @@
       <h1>Charlson and Van Walraven scores</h1>
                         <h4 class="author">Jack O. Wasey</h4>
             
-            <h4 class="date">2019-01-29</h4>
+            <h4 class="date">2019-02-05</h4>
       
       
       <div class="hidden name"><code>charlson-scores.Rmd</code></div>
@@ -156,7 +159,7 @@ along with icd. If not, see <http:#www.gnu.org/licenses/>.
 <a class="sourceLine" id="cb1-9" data-line-number="9">vch &lt;-<span class="st"> </span><span class="kw"><a href="../reference/charlson.html">charlson</a></span>(icd.data<span class="op">::</span>vermont_dx)</a>
 <a class="sourceLine" id="cb1-10" data-line-number="10"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/summary">summary</a></span>(vch)</a>
 <a class="sourceLine" id="cb1-11" data-line-number="11"><span class="co">#&gt;    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. </span></a>
-<a class="sourceLine" id="cb1-12" data-line-number="12"><span class="co">#&gt;   0.000   0.000   1.000   1.573   2.000   9.000</span></a>
+<a class="sourceLine" id="cb1-12" data-line-number="12"><span class="co">#&gt;   0.000   0.000   1.000   1.382   2.000  13.000</span></a>
 <a class="sourceLine" id="cb1-13" data-line-number="13"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/head">head</a></span>(vch)</a>
 <a class="sourceLine" id="cb1-14" data-line-number="14"><span class="co">#&gt;  7 10 13 16 37 41 </span></a>
 <a class="sourceLine" id="cb1-15" data-line-number="15"><span class="co">#&gt;  5  3  0  1  1  0</span></a>
