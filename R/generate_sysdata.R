@@ -1,6 +1,5 @@
 #nocov start
 
-
 #' generate all package data
 #'
 #' Parses (and downloads if necessary) CDC annual revisions of ICD-9-CM to get
@@ -64,15 +63,6 @@ generate_sysdata <- function(save_data = TRUE) {
     icd9_short_v_defined$vec, short_code = TRUE, icd9cm_edition = "32")) # nolint
   icd9_short_e_leaf <- vec_to_lookup_pair(get_billable.icd10cm(
     icd9_short_e_defined$vec, short_code = TRUE, icd9cm_edition = "32")) # nolint
-  # minimal data sources validation
-  long_fns <- icd9_sources[["long_filename"]]
-  short_fns <- icd9_sources[["long_filename"]]
-  # make.names is stricter than necessary, but no function to sanitize a file
-  # name in R, although R CMD check of course can do it...
-  message("non-portable long file names: ",
-          paste(long_fns[long_fns != make.names(long_fns)]))
-  message("non-portable short file names: ",
-          paste(short_fns[short_fns != make.names(short_fns)]))
   # minimal test here just to use variable names to avoid warnings!
   stopifnot(length(icd9_short_n$vec) == length(icd9_short_n$env))
   stopifnot(length(icd9_short_v$vec) == length(icd9_short_v$env))

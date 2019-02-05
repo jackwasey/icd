@@ -55,7 +55,8 @@ icd10_fetch_ahrq_ccs <- function(version = "2018.1", offline) {
 #'   icd:::icd9_parse_ahrq_ccs(single = FALSE, offline = TRUE)
 #' }
 #' @keywords internal manip
-icd9_parse_ahrq_ccs <- function(single = TRUE, save_data = FALSE,
+icd9_parse_ahrq_ccs <- function(single = TRUE,
+                                save_data = FALSE,
                                 offline = TRUE) {
   assert_flag(single)
   assert_flag(save_data)
@@ -130,7 +131,7 @@ icd9_parse_ahrq_ccs <- function(single = TRUE, save_data = FALSE,
            )
     if (save_data) {
       save_in_data_dir(icd9_map_single_ccs)
-      save_in_data_dir(icd9_names_single_ccs)
+      save_in_data_dir("icd9_names_single_ccs")
     }
     out <- icd9_map_single_ccs
   }

@@ -138,6 +138,7 @@ explain_table.icd10who <- function(x,
                                    warn = TRUE,
                                    ...
 ) {
+  req_icd_data()
   explain_table_worker(x = x, hierarchy = get_get_icd10who2016(),
                        short_code = short_code, condense = condense,
                        brief = brief, warn = warn, ...)
