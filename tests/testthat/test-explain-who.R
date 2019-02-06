@@ -6,7 +6,9 @@ test_that("some codes not in ICD-10-CM", {
   skip_missing_icd10who(ver = "2016")
   for (hiv in c("B20", "B21", "B22", "B23", "B24",
                 "B21.9", "B22.7", "B238", "Z21")) {
-    expect_match(x <- explain_code(as.icd10who(hiv)), "HIV")
+    expect_match(x <- explain_code(as.icd10who(hiv)),
+                 "HIV",
+                 info = paste("HIV code: ", hiv))
     expect_length(x, 1)
   }
 })

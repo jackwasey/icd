@@ -465,16 +465,11 @@ test_that("disordered visit ids", {
 })
 
 test_that("diff comorbid works", {
-
-  expect_error(diff_comorbid(bad_input, bad_input))
-
-  # no warning or error for good data
   expect_warning(
     utils::capture.output(
       res <- diff_comorbid(icd9_map_ahrq, icd9_map_elix, show = FALSE)
     ),
     regexp = NA)
-
   expect_true(all(names(res) %in% c(
     "CHF", "Valvular", "PHTN", "PVD", "HTN", "HTNcx", "Paralysis",
     "NeuroOther", "Pulmonary", "DM", "DMcx", "Hypothyroid", "Renal",
@@ -486,10 +481,8 @@ test_that("diff comorbid works", {
   # match
   expect_identical(res$Depression[[2]], character(0))
   expect_identical(res$Depression[[3]], character(0))
-
   # both, also with elements in either side set diff
   expect_equal(res$PUD$both, c("53170", "53270", "53370", "53470"))
-
   expect_warning(
     expect_output(
       resq <- diff_comorbid(icd9_map_quan_elix, icd9_map_elix, show = TRUE),

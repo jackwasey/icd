@@ -93,15 +93,12 @@ expand_range.icd10cm <- function(
       "It will produce a very large number of ",
       "codes because of permutations of the many ",
       "alphabetic and numeric possibilities after the decimal place.")
-
-  # check whether valid?
   # minimal check for type:
-  stopifnot(grepl("[^.]", c(start, end)))
-
+  stopifnot(all(grepl("[^.]", c(start, end))))
   # for ranges, we can semi-legitimately strip any ".x" part ( but other X
   # values CAN appear later). Quan uses x in position 4, but I'm not aware of
   # any ICD-10 code that does this.
-
+  #
   # deliberately not case sensitive, as this is a Quan quirk:
   if (substr(start, 4, 100) == "x")
     start <- substr(start, 1, 3)

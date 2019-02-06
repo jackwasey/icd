@@ -95,15 +95,14 @@ logical_to_binary <- function(x) {
 binary_to_logical <- function(x) {
   stopifnot(is.data.frame(x) || is.matrix(x))
   if (is.matrix(x)) {
-    assert_matrix(x, min.rows = 1, min.cols = 1)
+    stopifnot(is.matrix(x), nrow(x) > 0, ncol(x) > 0)
     mode(x) <- "logical"
     return(x)
   }
-  assert_data_frame(x, min.rows = 1, min.cols = 1)
+  stopifnot(nrow(x) > 0, ncol(x) > 0)
   integer_fields <- names(x)[vapply(x, is.integer, logical(1))]
-  if (is.na(integer_fields) || length(integer_fields) == 0)
+  if (any(is.na(integer_fields)) || length(integer_fields) == 0)
     return(x)
-
   # update just the logical fields with integers
   x[, integer_fields] <-
     vapply(
