@@ -1,7 +1,7 @@
 #!/bin/bash
 set -euo pipefail
 IFS=$'\n\t'
-tmpd=$(mktemp -d /tmp/icdcheckcranplus.XXXXXXXXXXX)
+tmpd=$(mktemp -d /tmp/icdcheckcranplusjit.XXXXXXXXXXX)
 function finish {
 #	  rm -rf "$tmpd"
   echo "Finished with $tmpd"
@@ -53,6 +53,7 @@ MAKEFLAGS=-j$(getconf _NPROCESSORS_ONLN) \
   _R_CHECK_LENGTH_1_CONDITION_="verbose,abort" \
   _R_CHECK_LENGTH_1_LOGIC2_="verbose,abort" \
   R_CHECK_CONSTANTS=5 \
+  R_JIT_STRATEGY=3 \
   R CMD check "$(ls -t $tmpd/icd*.tar.gz | head -1)"
 popd
 
