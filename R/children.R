@@ -196,4 +196,3 @@ children_defined.icd10who <- function(
   kids <- icd10_children_defined_cpp(x, d, nchar(d$code))
   as.icd10who(kids, short_code = short_code)
 }
-

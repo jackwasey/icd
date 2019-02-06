@@ -88,7 +88,7 @@ expand_range.icd10cm <- function(
 ) {
   if (!missing(defined) && !defined)
     stop(
-      "expanding ranges of possible (versus defined) " ,
+      "expanding ranges of possible (versus defined) ",
       "ICD-10-CM codes is not yet implemented. ",
       "It will produce a very large number of ",
       "codes because of permutations of the many ",
