@@ -2,7 +2,7 @@
 set -euo pipefail
 IFS=$'\n\t'
 
-source ~/in_docker_get_icd.sh
+source /in_docker_get_icd.sh
 
 # try also doing this within docker, as it doesn't work when container invoked without this constraint
 old_ulimit=$(ulimit -s)
@@ -14,7 +14,7 @@ function finish {
 }
 trap finish EXIT
 
-source ~/in_docker_ldpreload_asan.sh
+source /in_docker_ldpreload_asan.sh
 
 # actually, we need to build based on the directory name, not the package name:
 $R_CMD CMD build $GITHUB_REPO # --no-build-vignettes (without build, errors more visible at install step)

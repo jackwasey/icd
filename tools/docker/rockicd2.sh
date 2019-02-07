@@ -1,8 +1,8 @@
 #!/bin/bash
 
-# http://redsymbol.net/articles/unofficial-bash-strict-mode/
 set -euo pipefail
 IFS=$'\n\t'
+set -x
 #https://stackoverflow.com/questions/14719349/error-c-stack-usage-is-too-close-to-the-limit#14719448
 # C stack limit problems hopefully fixed by this. Can also be set to "unlimited" Default is 8192k on my pc.
 old_ulimit=$(ulimit -s)
@@ -15,11 +15,11 @@ trap finish EXIT
 echo "Working directory: ${ICD_HOME:=$HOME/icd}"
 DOCKER_IMAGE="${1:-r-clang-trunk}"
 
-if [[ ! $DOCKER_IMAGE =~ (jackwasey\/)r-.+ ]]; then
+if [[ ! "$DOCKER_IMAGE" =~ "(jackwasey/)r-.+" ]]; then
    echo "Not using R from a jackwasey docker image"
 fi
 
-if [[ ! $DOCKER_IMAGE =~ ^rocker\/ && ! $DOCKER_IMAGE =~ ^rhub\/ && ! $DOCKER_IMAGE =~ ^jackwasey\/ ]]; then
+if [[ ! "$DOCKER_IMAGE" =~ "^rocker/" && ! "$DOCKER_IMAGE" =~ "^rhub/" && ! "$DOCKER_IMAGE" =~ "^jackwasey/" ]]; then
   DOCKER_IMAGE="jackwasey/${DOCKER_IMAGE}"
 fi
 # drop trailing slash
@@ -33,6 +33,7 @@ docker run \
 	-v "${TOOLS_DIR}/in_docker_base.sh":/in_docker_base.sh \
 	-v "${TOOLS_DIR}/in_docker_get_icd.sh":/in_docker_get_icd.sh \
 	-v "${TOOLS_DIR}/in_docker_build_check.sh":/in_docker_build_check.sh \
+	-v "${TOOLS_DIR}/in_docker_ldpreload_asan.sh":/in_docker_ldpreload_asan.sh \
 	-e "ICD_PROJECT_NAME=${ICD_PROJECT_NAME:=icd}" \
 	-e "R_PKG_NAME=${R_PKG_NAME:=$ICD_PROJECT_NAME}" \
 	-e "GITHUB_URL=${GITHUB_URL:=https://github.com}" \

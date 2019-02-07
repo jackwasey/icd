@@ -13,6 +13,8 @@ function finish {
 trap finish EXIT
 pushd /tmp
 
+export MAKEFLAGS=-j8
+
 if [ -f /etc/os-release ]; then
     source /etc/os-release
     OS=$NAME
@@ -26,36 +28,24 @@ elif [ -f /etc/debian_version ]; then
 else
     OS=$(uname -s)
 fi
-if [[ "$OS" == "Ubuntu" || "$OS" == "Debian" ]]; then
+#if [[ "$OS" =~ ".*Ubuntu.*" || "$OS" =~ ".*Debian.*" ]]; then
   echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections
   apt-get update -qq || true
   apt-get dist-upgrade -qq -y || true
-  apt-get install -y -qq git libssl-dev libxml2-dev curl libcurl4-openssl-dev unixodbc-dev qpdf pandoc pandoc-citeproc # libssh2-1-dev (optional for git but has debian version problem at least in April 2017)
-elif [[ "$OS" == "Fedora" ]]; then
-  dnf install -y git
-fi
+  # libssh2-1-dev (optional for git but has debian version problem at least in April 2017)
+  apt-get install -y -qq  git \
+                          libssl-dev \
+                          libxml2-dev \
+                          curl \
+                          libcurl4-openssl-dev \
+                          unixodbc-dev \
+                          qpdf \
+                          pandoc \
+                          pandoc-citeproc || true
+#elif [[ "$OS" =~ ".*Fedora.*" ]]; then
+  dnf install -y git libxml2-devel || true
+#fi
 echo "R CMD: using '${R_CMD:-RD}'"
-echo "R CMD ERR: using '${R_CMD_ERR:-RD}'"
-R_CMD_ERR="${R_CMD}script -e 'cat()'"
-if [ -e /usr/lib/llvm-4.0/lib/clang/4.0.1/lib/linux/libclang_rt.asan-x86_64.so ]; then
-  if LD_PRELOAD="/usr/lib/llvm-4.0/lib/clang/4.0.1/lib/linux/libclang_rt.asan-x86_64.so" ${R_CMD_ERR}; then
-    export LD_PRELOAD="/usr/lib/llvm-4.0/lib/clang/4.0.1/lib/linux/libclang_rt.asan-x86_64.so"
-  fi
-elif [ -e /usr/lib/x86_64-linux-gnu/libasan.so.4 ]; then
-  if LD_PRELOAD="/usr/lib/x86_64-linux-gnu/libasan.so.4" ${R_CMD_ERR}; then
-    export LD_PRELOAD="/usr/lib/x86_64-linux-gnu/libasan.so.4"
-  fi
-elif [ -e /usr/lib/x86_64-linux-gnu/libasan.so.3 ]; then
-  if LD_PRELOAD="/usr/lib/x86_64-linux-gnu/libasan.so.3" ${R_CMD_ERR}; then
-    export LD_PRELOAD="/usr/lib/x86_64-linux-gnu/libasan.so.3"
-  fi
-elif [ -e /usr/lib/x86_64-linux-gnu/libasan.so.2 ]; then
-  if LD_PRELOAD="/usr/lib/x86_64-linux-gnu/libasan.so.2" ${R_CMD_ERR}; then
-    export LD_PRELOAD="/usr/lib/x86_64-linux-gnu/libasan.so.2"
-  fi
-else
-  echo "Cannot find libasan in /usr/lib/x86_64-linux-gnu"
-fi
 
 # tolerate R_CMD unset or empty, and default to RD if empty or unset:
 # TODO: actually, RD is not available in all docker images, e.g. most basic rocker/tidyverse, verse, etc.
@@ -64,6 +54,11 @@ if ! command -v ${R_CMD:-RD} &>/dev/null; then
   echo "setting R_CMD to R"
   R_CMD=R
 fi
+
+R_CMD_ERR="${R_CMD}script -e 'cat()'"
+echo "R CMD ERR: using '${R_CMD_ERR:-RD}'"
+
+source /in_docker_ldpreload_asan.sh
 
 # these are always checked for, so we don't care which R is installed. We also need to re-install some packages, for some reason unclear to me: https://github.com/rocker-org/r-devel-san-clang/issues/12
 for pkg in testthat checkmate RODBC xml2 Rcpp stringi knitr rmarkdown microbenchmark; do
