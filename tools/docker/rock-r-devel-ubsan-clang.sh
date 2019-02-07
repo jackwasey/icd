@@ -11,4 +11,5 @@ function finish {
 }
 trap finish EXIT
 echo "Working directory: ${ICD_HOME:=$HOME/icd}"
-R_CMD="RD" ${ICD_HOME}/tools/docker/rockicd.sh rocker/r-devel-ubsan-clang
+R_CMD_ERR="RD" R_CMD="RD" ${ICD_HOME}/tools/docker/rockicd.sh rocker/r-devel-ubsan-clang
+

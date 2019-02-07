@@ -1,6 +1,5 @@
 #!/bin/bash
 
-# http://redsymbol.net/articles/unofficial-bash-strict-mode/
 set -euo pipefail
 IFS=$'\n\t'
 set -x
@@ -30,11 +29,11 @@ TOOLS_DIR="$ICD_HOME/tools/docker"
 set -x
 #https://docs.docker.com/engine/reference/run/#/env-environment-variables
 docker run \
-	-v "${TOOLS_DIR}/in_docker_check.sh":/root/in_docker_check.sh \
-	-v "${TOOLS_DIR}/in_docker_base.sh":/root/in_docker_base.sh \
-	-v "${TOOLS_DIR}/in_docker_get_icd.sh":/root/in_docker_get_icd.sh \
-	-v "${TOOLS_DIR}/in_docker_build_check.sh":/root/in_docker_build_check.sh \
-	-v "${TOOLS_DIR}/in_docker_ldpreload_asan.sh":/root/in_docker_ldpreload_asan.sh \
+	-v "${TOOLS_DIR}/in_docker_check.sh":/in_docker_check.sh \
+	-v "${TOOLS_DIR}/in_docker_base.sh":/in_docker_base.sh \
+	-v "${TOOLS_DIR}/in_docker_get_icd.sh":/in_docker_get_icd.sh \
+	-v "${TOOLS_DIR}/in_docker_build_check.sh":/in_docker_build_check.sh \
+	-v "${TOOLS_DIR}/in_docker_ldpreload_asan.sh":/in_docker_ldpreload_asan.sh \
 	-e "ICD_PROJECT_NAME=${ICD_PROJECT_NAME:=icd}" \
 	-e "R_PKG_NAME=${R_PKG_NAME:=$ICD_PROJECT_NAME}" \
 	-e "GITHUB_URL=${GITHUB_URL:=https://github.com}" \
@@ -43,7 +42,9 @@ docker run \
 	-e "GIT_BRANCH=${GIT_BRANCH:=master}" \
 	-e "GIT_URL=${GIT_URL:=$GITHUB_URL/$GITHUB_USER/$GITHUB_REPO.git}" \
 	-e "R_CMD=${R_CMD:=RD}" \
-	--rm -ti \
+        --rm \
+	-ti \
   --cap-add SYS_PTRACE \
   "$DOCKER_IMAGE" \
-  ${2:-/root/in_docker_check.sh}
+  ${2:-/in_docker_check.sh}
+

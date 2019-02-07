@@ -5,7 +5,7 @@ set -x
 
 pushd ${ICD_HOME:-$HOME/icd}/tools/docker/icd-check-docker
 
-for DOCKER_IMAGE in r-clang-5.0 r-clang-trunk rocker/r-devel-ubsan-clang rocker/r-devel-san rocker/r-devel
+for DOCKER_IMAGE in rocker/r-devel-ubsan-clang rocker/r-devel-san rocker/r-devel r-clang-trunk
 do
 if [[ ! $DOCKER_IMAGE =~ (jackwasey\/)r-.+ ]]; then
    echo "Not using R from a jackwasey docker image"
@@ -31,3 +31,4 @@ docker build \
            .
 done
 popd
+
