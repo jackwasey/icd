@@ -177,17 +177,26 @@ get_visit_name.matrix <- function(x, visit_name = NULL)
 #'   of \code{x}'s columns) and returned unchanged
 #' @param multi If \code{TRUE}, allow multiple ICD field names to be returned.
 #' @keywords internal
-get_icd_name <- function(x, icd_name = NULL, valid_codes = TRUE,
-                         defined_codes = FALSE, multi = FALSE) {
+get_icd_dx_name <- function(
+  x,
+  icd_name = NULL,
+  valid_codes = TRUE,
+  defined_codes = FALSE,
+  multi = FALSE
+) {
   if (!is.null(icd_name)) {
     stopifnot(all(icd_name %in% names(x)))
     return(icd_name)
   }
   if (any(grepl(pattern = "poa", icd_name, ignore.case = TRUE)))
     warning("'POA' Present-on-arrival fields in 'icd_name'.")
-  icd_name <- guess_icd_col_by_class(x)
+  icd_name <- guess_icd_col_by_class(x, pattern = icd_dx_not_generic)
   if (!is.null(icd_name)) return(icd_name)
-  icd_name <- guess_icd_col_by_name(x, valid_codes = valid_codes,
+  icd_pc_name <- guess_icd_col_by_class(x, pattern = icd_pc_not_generic)
+  icd_generic <- guess_icd_col_by_class(x, pattern = c("icd9", "icd10"))
+  if (is.null(icd_pc_name) && !is.null(icd_name)) return(icd_generic)
+  icd_name <- guess_icd_col_by_name(x,
+                                    valid_codes = valid_codes,
                                     defined_codes = defined_codes)
   if (is.null(icd_name)) {
     icd_name <- character()
@@ -214,6 +223,25 @@ get_icd_name <- function(x, icd_name = NULL, valid_codes = TRUE,
   icd_name
 }
 
+get_icd_name <- get_icd_dx_name
+
+#' Guess the columns which contain ICD-9 or ICD10-CM procedure codes.
+#'
+#'  Will also guess procedure codes from other national ICD versions, when supported.
+#'  @keywords internal
+#'  @noRd
+get_icd_pc_name <- function(x, icd_name = NULL) {
+  if (!is.null(icd_name)) {
+    stopifnot(all(icd_name %in% names(x)))
+    return(icd_name)
+  }
+  if (any(grepl(pattern = "poa", icd_name, ignore.case = TRUE)))
+    warning("'POA' Present-on-arrival field name in 'icd_name'.")
+  icd_name <- guess_icd_col_by_class(x, pattern = icd_pc_not_generic)
+  if (!is.null(icd_name)) return(icd_name)
+  guess_icd_pc_col_by_name(x)
+}
+
 #' get candidate column(s) from wide or long data frame frame, using hints
 #' @examples
 #' wide_df <- data.frame(a = letters,
@@ -230,15 +258,33 @@ get_icd_name <- function(x, icd_name = NULL, valid_codes = TRUE,
 #' @return Zero, one or many names of columns likely to contain ICD codes based
 #'   on the column names.
 #' @keywords internal
-guess_icd_col_by_name <- function(x, valid_codes = TRUE,
-                                  defined_codes = FALSE) {
-  guesses <- c("icd.?(9|10)", "icd.?(9|10).?Code", "icd",
-               "diagnos", "diag.?code", "diag", "dx", "i(9|10)", "code")
-  assert_data_frame(x, min.cols = 1L, col.names = "named")
+guess_icd_col_by_name <- function(
+  x,
+  valid_codes = TRUE,
+  defined_codes = FALSE,
+  guesses = c("icd.?(9|10)",
+              "icd.?(9|10).?Code",
+              "icd",
+              "diagnos",
+              "diag.?code",
+              "diag",
+              "dx",
+              "i(9|10)",
+              "code"),
+  class_pattern = icd_dx_not_generic
+) {
+  stopifnot(is.data.frame(x))
+  stopifnot(is.logical(valid_codes), length(valid_codes) == 1L)
+  stopifnot(is.logical(defined_codes), length(defined_codes) == 1L)
+  stopifnot(is.character(guesses))
   # if one column exactly has a class like icd9, then we're done.
-  icd_name_by_class <- guess_icd_col_by_class(x)
+  icd_name_by_class <- guess_icd_col_by_class(x, pattern = class_pattern)
   if (!is.null(icd_name_by_class)) return(icd_name_by_class)
-  guessed <- lapply(guesses, grep, x = names(x), ignore.case = TRUE, value = TRUE)
+  guessed <- lapply(guesses,
+                    grep,
+                    x = names(x),
+                    ignore.case = TRUE,
+                    value = TRUE)
   guess_counts <- vapply(guessed, length, integer(1))
   guesses_logical <- as.logical(guess_counts)
   if (sum(guesses_logical) == 1L) {
@@ -247,16 +293,47 @@ guess_icd_col_by_name <- function(x, valid_codes = TRUE,
   best_guess <- which(guess_counts == max(guess_counts))
   if (any(guess_counts > 0L) && length(best_guess) > 0L)
     return(guessed[[best_guess[1]]])
-  return(NULL)
+  NULL
+}
+
+guess_icd_pc_col_by_name <- function(
+  x,
+  valid_codes = TRUE,
+  defined_codes = FALSE,
+  guesses = c("icd.?(9|10)",
+              "icd.?(9|10).?Code",
+              "icd",
+              "diagnos",
+              "diag.?code",
+              "diag",
+              "dx",
+              "i(9|10)",
+              "code"),
+  class_pattern = icd_dx_not_generic
+) {
+  guess_icd_col_by_name(
+    x = x,
+    guesses = c(
+      "icd.?(9|10).?(proc|p).?(code|c)?",
+      "icd.*pc",
+      "proced.*",
+      "proc.?code",
+      "diag",
+      "pc",
+      "i(9|10).*pc",
+      "pc.*i(9|10)",
+      "proc"),
+    class_pattern = icd_pc_not_generic
+  )
 }
 
 #' @describeIn guess_icd_col_by_name Just use the class of columns
 #' @keywords internal
-guess_icd_col_by_class <- function(x) {
+guess_icd_col_by_class <- function(x, pattern) {
   cls <- lapply(x, class)
-  clg <- vapply(cls, function(z) any(z %in% icd_version_classes), logical(1))
+  clg <- vapply(cls, function(z) any(z %in% pattern), logical(1))
   if (any(clg)) return(names(x)[clg])
-  return(NULL)
+  NULL
 }
 
 #' Latest ICD-9-CM edition

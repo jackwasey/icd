@@ -104,3 +104,9 @@ test_that("we should allow integer ids which get passed to guessing code", {
   pts <- data.frame(id = 1:20, weirdname = rep("0932", 20))
   expect_no_error(icd9_comorbid_ahrq(pts))
 })
+
+test_that("get icd dx name from nhds", {
+  skip_if_not_installed("nhds")
+  expect_true(all(grepl("dx", get_icd_name(nhds::nhds2010))))
+  expect_true(all(grepl("pc", get_icd_pc_name(nhds::nhds2010))))
+})

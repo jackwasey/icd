@@ -1,7 +1,7 @@
 context("refactor bigger factors")
 test_that("longer factors", {
-  n <- 1e6
-  nl <- 1e5
+  n <- 1e4
+  nl <- 1e3
   set.seed(1441)
   expect_error(regexp = NA, v1 <- icd:::generate_random_short_icd9(n))
   v2 <- v1

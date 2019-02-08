@@ -24,8 +24,9 @@ icd10_comorbid_pccc_dx(x, visit_name = NULL, icd_name = NULL,
   short_code = guess_short(x, icd_name = icd_name), return_df = FALSE,
   return_binary = FALSE, ...)
 
-icd9_comorbid_pccc_pcs(x, visit_name = get_visit_name(x), icd_name,
-  return_df = FALSE, return_binary = FALSE, ...)
+icd9_comorbid_pccc_pcs(x, visit_name = get_visit_name(x),
+  icd_name = get_icd_pc_name(x), return_df = FALSE,
+  return_binary = FALSE, ...)
 
 icd10_comorbid_pccc_pcs(x, visit_name = get_visit_name(x), icd_name,
   return_df = FALSE, return_binary = FALSE, ...)

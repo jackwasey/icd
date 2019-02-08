@@ -35,18 +35,24 @@
 #' @md
 #' @keywords internal
 #' @export
-categorize_simple <- function(x, map, id_name, code_name,
-                              return_df = FALSE, return_binary = FALSE,
-                              restore_id_order = TRUE,
-                              preserve_id_type = FALSE,
-                              comorbid_fun = comorbid_mat_mul_wide,
-                              ...) {
+categorize_simple <- function(
+  x,
+  map,
+  id_name,
+  code_name,
+  return_df = FALSE,
+  return_binary = FALSE,
+  restore_id_order = TRUE,
+  preserve_id_type = FALSE,
+  comorbid_fun = comorbid_mat_mul_wide,
+  ...
+) {
   assert_data_frame(x, min.cols = 2, col.names = "unique")
   class(x) <- "data.frame"
   assert_list(map, min.len = 1, names = "unique")
   stopifnot(is.null(id_name) ||
               (is.character(id_name) && length(id_name) == 1L))
-  assert_character(code_name)
+  stopifnot(is.character(code_name))
   stopifnot(id_name %in% names(x))
   stopifnot(all(code_name %in% names(x)))
   for (cd in code_name) stopifnot(is.factor(cd) || is.character(cd))

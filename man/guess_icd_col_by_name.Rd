@@ -5,9 +5,12 @@
 \alias{guess_icd_col_by_class}
 \title{get candidate column(s) from wide or long data frame frame, using hints}
 \usage{
-guess_icd_col_by_name(x, valid_codes = TRUE, defined_codes = FALSE)
+guess_icd_col_by_name(x, valid_codes = TRUE, defined_codes = FALSE,
+  guesses = c("icd.?(9|10)", "icd.?(9|10).?Code", "icd", "diagnos",
+  "diag.?code", "diag", "dx", "i(9|10)", "code"),
+  class_pattern = icd_dx_not_generic)
 
-guess_icd_col_by_class(x)
+guess_icd_col_by_class(x, pattern)
 }
 \value{
 Zero, one or many names of columns likely to contain ICD codes based

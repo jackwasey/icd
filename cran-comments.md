@@ -1,4 +1,4 @@
-Thank you for comments on previous submission, all of which have been addressed. I am submitting icd 3.4, icd.data 1.1 and a new pacakge nhds 1.0 simultaneously.
+I am submitting icd 3.4, icd.data 1.1 and a new pacakge nhds 1.0 simultaneously. Thank you for comments on previous submission, all of which have been addressed. All packages should now check independently, except 'icd' which has a Suggest dependency on the new package 'nhds'.
 
 Please note that a pandoc version error prevents the automated CRAN checks from passing on some platforms. The Pandoc version dependency for building the vignettes is in the DESCRIPTION.
 
@@ -11,6 +11,8 @@ It also Suggests: a new package 'nhds' which I am submitting.
   * Ubuntu 14.04 (Travis) R-devel, gcc
   * Windows Server 2012 R2 x64 (Appveyor), R devel 32 and 64 bit
   * MacOS High Sierra, brew clang 7.0
+  * rocker/r-devel-ubsan-clang
+  * win-builder release and devel
 
 # CRAN checks
  

@@ -418,22 +418,29 @@ comorbid_charlson <- function(...)
 #' @name apply_hier
 #' @keywords internal manip
 apply_hier_elix <- function(x, abbrev_names = TRUE, hierarchy = TRUE) {
+  false <- FALSE
+  use_int <- FALSE
+  if (is.numeric(x[, "Tumor"])) {
+    false <- 0L
+    use_int <- TRUE
+  }
   if (hierarchy) {
-    x[x[, which(colnames(x) == "Mets")] > 0, "Tumor"] <- FALSE
-    x[x[, "DMcx"] > 0, "DM"] <- FALSE
-    x[, "HTN"] <- (x[, "HTN"] + x[, "HTNcx"]) > 0
+    x[x[, which(colnames(x) == "Mets")] > 0, "Tumor"] <- false
+    x[x[, "DMcx"] > 0, "DM"] <- false
+    htn <- (x[, "HTN"] + x[, "HTNcx"]) > 0
+    x[, "HTN"] <- if (use_int) as.integer(htn) else htn
 
     # drop HTNcx without converting to vector if matrix only has one row
     x <- x[, -which(colnames(x) == "HTNcx"), drop = FALSE]
     colnames(x)[cr(x)] <- if (abbrev_names)
-      names_elix_abbrev
+      icd::names_elix_abbrev
     else
-      names_elix
+      icd::names_elix
   } else {
     colnames(x)[cr(x)] <- if (abbrev_names)
-      names_elix_htn_abbrev
+      icd::names_elix_htn_abbrev
     else
-      names_elix_htn
+      icd::names_elix_htn
   }
   x
 }
@@ -441,11 +448,17 @@ apply_hier_elix <- function(x, abbrev_names = TRUE, hierarchy = TRUE) {
 #' @rdname apply_hier
 #' @keywords internal manip
 apply_hier_quan_elix <- function(cbd, abbrev_names = TRUE, hierarchy = TRUE) {
+  false <- FALSE
+  use_int <- FALSE
+  if (is.numeric(cbd[, "Tumor"])) {
+    false <- 0L
+    use_int <- TRUE
+  }
   if (hierarchy) {
-    cbd[cbd[, "Mets"] > 0, "Tumor"] <- FALSE
-    cbd[cbd[, "DMcx"] > 0, "DM"] <- FALSE
-    # combine HTN
-    cbd[, "HTN"] <- (cbd[, "HTN"] + cbd[, "HTNcx"]) > 0
+    cbd[cbd[, "Mets"] > 0, "Tumor"] <- false
+    cbd[cbd[, "DMcx"] > 0, "DM"] <- false
+    htn <- (cbd[, "HTN"] + cbd[, "HTNcx"]) > 0
+    cbd[, "HTN"] <- if (use_int) as.integer(htn) else htn
     # drop HTNcx without converting to vector if matrix only has one row
     cbd <- cbd[, -which(colnames(cbd) == "HTNcx"), drop = FALSE]
 
@@ -458,14 +471,14 @@ apply_hier_quan_elix <- function(cbd, abbrev_names = TRUE, hierarchy = TRUE) {
     # these are just dropped, leaving the fields for visit_name and all the
     # comorbidities:
     colnames(cbd)[cr(cbd)] <- if (abbrev_names)
-      names_quan_elix_abbrev
+      icd::names_quan_elix_abbrev
     else
-      names_quan_elix
+      icd::names_quan_elix
   } else {
     colnames(cbd)[cr(cbd)] <- if (abbrev_names)
-      names_quan_elix_htn_abbrev
+      icd::names_quan_elix_htn_abbrev
     else
-      names_quan_elix_htn
+      icd::names_quan_elix_htn
   }
   cbd
 }
@@ -473,17 +486,20 @@ apply_hier_quan_elix <- function(cbd, abbrev_names = TRUE, hierarchy = TRUE) {
 #' @rdname apply_hier
 #' @keywords internal manip
 apply_hier_quan_deyo <- function(cbd, abbrev_names = TRUE, hierarchy = TRUE) {
+  false <- FALSE
+  if (is.numeric(cbd[, "Cancer"]))
+    false <- 0L
   if (hierarchy) {
     # Use >0 rather than logical - apparently faster, and future proof against
     # change to binary from logical values in the matirx.
-    cbd[cbd[, "Mets"] > 0, "Cancer"] <- FALSE
-    cbd[cbd[, "DMcx"] > 0, "DM"] <- FALSE
-    cbd[cbd[, "LiverSevere"] > 0, "LiverMild"] <- FALSE
+    cbd[cbd[, "Mets"] > 0, "Cancer"] <- false
+    cbd[cbd[, "DMcx"] > 0, "DM"] <- false
+    cbd[cbd[, "LiverSevere"] > 0, "LiverMild"] <- false
   }
   colnames(cbd)[cr(cbd)] <- if (abbrev_names)
-    names_charlson_abbrev
+    icd::names_charlson_abbrev
   else
-    names_charlson
+    icd::names_charlson
 
   cbd
 }
@@ -492,26 +508,33 @@ apply_hier_quan_deyo <- function(cbd, abbrev_names = TRUE, hierarchy = TRUE) {
 #' @keywords internal manip
 apply_hier_ahrq <- function(cbd, abbrev_names = TRUE, hierarchy = TRUE) {
   stopifnot(ncol(cbd) == 30 + is.data.frame(cbd))
+  false <- FALSE
+  use_int <- FALSE
+  if (is.numeric(cbd[, "Tumor"])) {
+    false <- 0L
+    use_int <- TRUE
+  }
   if (hierarchy) {
     # Use >0 rather than logical - apparently faster, and future proof against
     # change to binary from logical values in the matirx.
-    cbd[cbd[, "Mets"] > 0, "Tumor"] <- FALSE
-    cbd[cbd[, "DMcx"] > 0, "DM"] <- FALSE
-    cbd[, "HTN"] <- (cbd[, "HTN"] + cbd[, "HTNcx"]) > 0
+    cbd[cbd[, "Mets"] > 0, "Tumor"] <- false
+    cbd[cbd[, "DMcx"] > 0, "DM"] <- false
+    htn <- (cbd[, "HTN"] + cbd[, "HTNcx"]) > 0
+    cbd[, "HTN"] <- if (use_int) as.integer(htn) else htn
     # according to https://www.hcup-us.ahrq.gov/toolssoftware/comorbidity/comorbidity.jsp
     # diabetes with complications is NOT foldeded into one new category.
 
     # drop HTNcx without converting to vector if matrix only has one row
     cbd <- cbd[, -which(colnames(cbd) == "HTNcx"), drop = FALSE]
     colnames(cbd)[cr(cbd)] <- if (abbrev_names)
-      names_ahrq_abbrev
+      icd::names_ahrq_abbrev
     else
-      names_ahrq
+      icd::names_ahrq
   } else {
     colnames(cbd)[cr(cbd)] <- if (abbrev_names)
-      names_ahrq_htn_abbrev
+      icd::names_ahrq_htn_abbrev
     else
-      names_ahrq_htn
+      icd::names_ahrq_htn
   }
   cbd
 }

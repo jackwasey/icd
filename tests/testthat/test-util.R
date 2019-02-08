@@ -132,5 +132,5 @@ test_that("get_icd_name: icd field not present at all", {
   names(x)[2] <- "icd"
   expect_error(get_icd_name(x))
   x[[2]] <- as.icd9(x[[2]])
-  expect_no_error(get_icd_name(x))
+  expect_error(get_icd_name(x))
 })

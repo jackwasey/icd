@@ -389,32 +389,65 @@ test_that("code appearing in two icd9 comorbidities", {
   dat <- data.frame(id = 1, icd9 = c("123"))
   map <- list(a = "123", b = "123")
   expect_identical(res <- icd9_comorbid(dat, map),
-                   matrix(c(TRUE, TRUE), nrow = 1, dimnames = list("1", c("a", "b")))
+                   matrix(c(TRUE, TRUE),
+                          nrow = 1,
+                          dimnames = list("1", c("a", "b")))
   )
-  dat_clean <- data.frame(id = "1", icd9 = factor("123"), stringsAsFactors = FALSE)
+  dat_clean <- data.frame(id = "1",
+                          icd9 = factor("123"),
+                          stringsAsFactors = FALSE)
+})
+
+test_that("calling specific functions df binary output", {
+  for (f in list("icd9_comorbid_ahrq",
+                 "icd9_comorbid_charlson",
+                 "icd9_comorbid_elix",
+                 "icd9_comorbid_pccc_dx",
+                 "icd9_comorbid_quan_deyo",
+                 "icd9_comorbid_quan_elix")) {
+    res <- do.call(f, args = list(random_test_patients,
+                                  return_binary = TRUE,
+                                  return_df = TRUE))
+    expect_true(all(vapply(res[-1],
+                           FUN = is.integer,
+                           FUN.VALUE = logical(1))),
+                info = f)
+  }
 })
 
 test_that("comorbid for icd9 gives binary values if asked for matrices", {
-  res_bin <- comorbid(random_test_patients, map = icd9_map_charlson,
-                      return_binary = TRUE, return_df = FALSE)
-  res_log <- comorbid(random_test_patients, map = icd9_map_charlson,
-                      return_binary = FALSE, return_df = FALSE)
-  expect_true(is.integer(res_bin))
-  expect_true(is.logical(res_log))
-  expect_equivalent(apply(res_log, 2, as.integer), res_bin)
-  expect_identical(res_bin, logical_to_binary(res_log))
-  expect_identical(res_log, binary_to_logical(res_bin))
+  for (map in list(icd9_map_charlson,
+                   icd9_map_ahrq,
+                   icd9_map_elix,
+                   icd9_map_quan_elix,
+                   icd9_map_quan_deyo)) {
+    res_bin <- comorbid(random_test_patients, map = map,
+                        return_binary = TRUE, return_df = FALSE)
+    res_log <- comorbid(random_test_patients, map = map,
+                        return_binary = FALSE, return_df = FALSE)
+    expect_true(is.integer(res_bin))
+    expect_true(is.logical(res_log))
+    expect_equivalent(apply(res_log, 2, as.integer), res_bin)
+    expect_identical(res_bin, logical_to_binary(res_log))
+    expect_identical(res_log, binary_to_logical(res_bin))
+  }
 })
 
 test_that("comorbid for icd9 gives binary values if asked for data.frames", {
-  res_bin <- comorbid(random_test_patients, map = icd9_map_charlson,
-                      return_binary = TRUE, return_df = TRUE)
-  res_log <- comorbid(random_test_patients, map = icd9_map_charlson,
-                      return_binary = FALSE, return_df = TRUE)
-  expect_true(all(vapply(res_bin[-1], is.integer, logical(1))))
-  expect_true(all(vapply(res_log[-1], is.logical, logical(1))))
-  expect_identical(res_bin, logical_to_binary(res_log))
-  expect_identical(res_log, binary_to_logical(res_bin))
+  for (map in list(icd9_map_charlson,
+                   icd9_map_ahrq,
+                   icd9_map_elix,
+                   icd9_map_quan_elix,
+                   icd9_map_quan_deyo)) {
+    res_bin <- comorbid(random_test_patients, map = icd9_map_charlson,
+                        return_binary = TRUE, return_df = TRUE)
+    res_log <- comorbid(random_test_patients, map = icd9_map_charlson,
+                        return_binary = FALSE, return_df = TRUE)
+    expect_true(all(vapply(res_bin[-1], is.integer, logical(1))))
+    expect_true(all(vapply(res_log[-1], is.logical, logical(1))))
+    expect_identical(res_bin, logical_to_binary(res_log))
+    expect_identical(res_log, binary_to_logical(res_bin))
+  }
 })
 
 test_that("binary output for CCS", {

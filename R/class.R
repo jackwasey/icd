@@ -1,12 +1,36 @@
-icd9_sub_classes <- c("icd9cm", "icd9cm_pc", "icd9who")
+# ICD-9
+icd9_dx_sub_classes <- c("icd9cm",
+                         "icd9who")
+icd9_pc_sub_classes <- "icd9cm_pc"
+icd9_sub_classes <- c(icd9_dx_sub_classes,
+                      icd9_pc_sub_classes)
 icd9_classes <- c(icd9_sub_classes, "icd9")
-icd10_sub_classes <- c("icd10cm", "icd10cm_pc", "icd10who")
+# ICD-10
+icd10_dx_sub_classes <- c("icd10cm",
+                          "icd10who")
+icd10_pc_sub_classes <- "icd10cm_pc"
+icd10_sub_classes <- c(icd10_dx_sub_classes,
+                       icd10_pc_sub_classes)
 icd10_classes <- c(icd10_sub_classes, "icd10")
-icd_version_classes <- c(icd9_classes, icd10_classes)
-icd_data_classes <- c("icd_long_data", "icd_wide_data")
+# ICD-9 and ICD-10
+icd_dx_not_generic <- c(icd9_dx_sub_classes,
+                       icd10_dx_sub_classes)
+icd_pc_not_generic <- c(icd9_pc_sub_classes,
+                        icd10_pc_sub_classes)
+icd_version_classes <- c(icd9_classes,
+                         icd10_classes)
+# Other data types
+icd_data_classes <- c("icd_long_data",
+                      "icd_wide_data")
 icd_other_classes <- c("comorbidity_map")
-icd_all_classes <- c(icd_version_classes, icd_data_classes, icd_other_classes)
-icd_system_classes <- c("data.frame", "list", "numeric", "character", "factor")
+icd_all_classes <- c(icd_version_classes,
+                     icd_data_classes,
+                     icd_other_classes)
+icd_system_classes <- c("data.frame",
+                        "list",
+                        "numeric",
+                        "character",
+                        "factor")
 
 #' Check for class conflict
 #' @param x Data to test
@@ -695,14 +719,15 @@ print.icd9 <- function(x, verbose = FALSE, ...)
 #' @rdname print.icd9
 #' @examples
 #' u <- icd.data::uranium_pathology[1:10, "icd10"]
+#' \dontrun{
 #' print(u)
 #' print(u, verbose = TRUE)
 #' # as.character will unclass the 'icd' classes
 #' print(as.character(u), verbose = TRUE)
-#'
 #' a <- structure(c("R21", "Z21"),
 #'                class = c("icd10cm", "icd10", "character"))
 #' print(a, verbose = TRUE)
+#' }
 #' @keywords internal
 #' @export
 print.icd10 <- function(x, verbose = FALSE, ...) {
