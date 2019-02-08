@@ -2,12 +2,19 @@
 % Please edit documentation in R/util.R
 \name{get_icd_pc_name}
 \alias{get_icd_pc_name}
-\title{Guess the columns which contain ICD-9 or ICD10-CM procedure codes.}
+\title{Uses the columns which contain ICD-9 or ICD-10-CM procedure codes}
 \usage{
 get_icd_pc_name(x, icd_name = NULL)
 }
-\description{
-Will also guess procedure codes from other national ICD versions, when supported.
- @keywords internal
- @noRd
+\arguments{
+\item{x}{Data frame in which to look for the procedure name columns}
+
+\item{icd_name}{character vector of the column names containing the procedure
+codes. This is usually not known in advance, but if known, will be passed
+through.}
 }
+\description{
+Will also guess procedure codes from other national ICD versions, when
+supported.
+}
+\keyword{internal}

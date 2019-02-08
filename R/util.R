@@ -225,11 +225,15 @@ get_icd_dx_name <- function(
 
 get_icd_name <- get_icd_dx_name
 
-#' Guess the columns which contain ICD-9 or ICD10-CM procedure codes.
+#' Uses the columns which contain ICD-9 or ICD-10-CM procedure codes
 #'
-#'  Will also guess procedure codes from other national ICD versions, when supported.
-#'  @keywords internal
-#'  @noRd
+#' Will also guess procedure codes from other national ICD versions, when
+#' supported.
+#' @param x Data frame in which to look for the procedure name columns
+#' @param icd_name character vector of the column names containing the procedure
+#'   codes. This is usually not known in advance, but if known, will be passed
+#'   through.
+#' @keywords internal
 get_icd_pc_name <- function(x, icd_name = NULL) {
   if (!is.null(icd_name)) {
     stopifnot(all(icd_name %in% names(x)))
