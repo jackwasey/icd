@@ -17,8 +17,10 @@ binary_to_logical(x)
 }
 \description{
 When saving data as text files for distribution, printing large amounts of
-text containing \code{TRUE} and \code{FALSE} is inefficient. Convert to
-binary takes more R memory, but allows more compact output
+text containing \code{TRUE} and \code{FALSE} is inefficient. Converting to
+binary allows more compact output to screen. Most functions in \R will
+convert \code{TRUE} and \code{FALSE} logical flags to \code{1} and \code{0},
+respsectively.
 }
 \section{Functions}{
 \itemize{

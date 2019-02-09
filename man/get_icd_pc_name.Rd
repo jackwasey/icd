@@ -17,4 +17,7 @@ through.}
 Will also guess procedure codes from other national ICD versions, when
 supported.
 }
+\seealso{
+\code{\link{get_icd_dx_name}}
+}
 \keyword{internal}

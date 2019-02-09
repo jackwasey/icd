@@ -1,0 +1,26 @@
+---
+title: "Working with World Health Organization ICD codes and national editions"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Working with World Health Organization ICD codes and national editions}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+Surprisingly, there are potential copyright restrictions on redistributing the WHO ICD-9 and ICD-10 definitions, which form the basis of ICD code systems around the world. These definitions are themselves also used as the internationally standard way to codify morbidity and mortality for public health.
+
+`icd` now includes the ability to work with these codes more easily via the companion `icd.data` package. The data is not available in the package so `icd.data` asks the user whether they wish to download the data from the WHO web site, whereupon it is made available just like any other R data, but the name `icd.data::icd10who2016`, which is the latest ICD-10 release from the WHO at the time of writing. For French codes, `icd.data::icd10fr2016`, this would ideally have a synonym `icd.data::cim10fr2016` with internationalized column names, but this would duplicate the data making package storage and loading bigger, which is increasingly a problem as more data is included.
+
+```{r quicklook, eval=FALSE}
+icd.data::icd10who2016[1:5, ]
+icd.data::icd10fr2018[1:5, ]
+library(icd.data)
+summary(icd10who2016)
+```

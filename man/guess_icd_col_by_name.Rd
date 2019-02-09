@@ -3,7 +3,7 @@
 \name{guess_icd_col_by_name}
 \alias{guess_icd_col_by_name}
 \alias{guess_icd_col_by_class}
-\title{get candidate column(s) from wide or long data frame frame, using hints}
+\title{Get candidate column(s) from wide or long data frame frame, using hints}
 \usage{
 guess_icd_col_by_name(x, valid_codes = TRUE, defined_codes = FALSE,
   guesses = c("icd.?(9|10)", "icd.?(9|10).?Code", "icd", "diagnos",
@@ -17,7 +17,7 @@ Zero, one or many names of columns likely to contain ICD codes based
   on the column names.
 }
 \description{
-get candidate column(s) from wide or long data frame frame, using hints
+Get candidate column(s) from wide or long data frame frame, using hints
 }
 \section{Functions}{
 \itemize{

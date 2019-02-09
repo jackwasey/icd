@@ -9,8 +9,8 @@
 #' @keywords internal character
 #' @noRd
 strim <- function(x) {
-  assert_string(x)
-  if (!is.na(x[1]))
+  stopifnot(is.character(x), length(x) == 1)
+  if (!is.na(x))
     strimCpp(as.character(x))
   else
     return(NA_character_)
@@ -60,8 +60,10 @@ strip <- function(x, pattern = " ", use_bytes = TRUE)
 #' Encode \code{TRUE} as 1, and \code{FALSE} as 0 (integers)
 #'
 #' When saving data as text files for distribution, printing large amounts of
-#' text containing \code{TRUE} and \code{FALSE} is inefficient. Convert to
-#' binary takes more R memory, but allows more compact output
+#' text containing \code{TRUE} and \code{FALSE} is inefficient. Converting to
+#' binary allows more compact output to screen. Most functions in \R will
+#' convert \code{TRUE} and \code{FALSE} logical flags to \code{1} and \code{0},
+#' respsectively.
 #' @param x \code{data.frame} which may contain logical fields
 #' @examples
 #' mat <- matrix(sample(c(TRUE, FALSE), size = 9, replace = TRUE), nrow = 3)
@@ -120,7 +122,6 @@ binary_to_logical <- function(x) {
 #' this function, but if unavoidable, using the \code{visit_name} parameter.
 #' @param x input data, typically a data frame
 #' @template visit_name
-#' @noRd
 #' @keywords internal
 get_visit_name <- function(x, visit_name = NULL) {
   UseMethod("get_visit_name")
@@ -128,7 +129,6 @@ get_visit_name <- function(x, visit_name = NULL) {
 
 #' @describeIn get_visit_name Guess or get visit/patient column from data frame
 #' @keywords internal
-#' @noRd
 get_visit_name.data.frame <- function(x, visit_name = NULL) {
   stopifnot(is.data.frame(x))
   stopifnot(is.null(visit_name) ||
@@ -157,7 +157,6 @@ get_visit_name.data.frame <- function(x, visit_name = NULL) {
 #'   matrix with all your patient data, and if so, please convert it to a
 #'   `data.frame` and file an issue on github.
 #' @keywords internal
-#' @noRd
 get_visit_name.matrix <- function(x, visit_name = NULL)
   stop("matrices of comorbidity data are expected to be of logical type, ",
        "and have row names corresponding to the visit or patient.")
@@ -223,6 +222,8 @@ get_icd_dx_name <- function(
   icd_name
 }
 
+#' @rdname get_icd_dx_name
+#' @keywords internal
 get_icd_name <- get_icd_dx_name
 
 #' Uses the columns which contain ICD-9 or ICD-10-CM procedure codes
@@ -233,6 +234,7 @@ get_icd_name <- get_icd_dx_name
 #' @param icd_name character vector of the column names containing the procedure
 #'   codes. This is usually not known in advance, but if known, will be passed
 #'   through.
+#' @seealso \code{\link{get_icd_dx_name}}
 #' @keywords internal
 get_icd_pc_name <- function(x, icd_name = NULL) {
   if (!is.null(icd_name)) {
@@ -246,7 +248,7 @@ get_icd_pc_name <- function(x, icd_name = NULL) {
   guess_icd_pc_col_by_name(x)
 }
 
-#' get candidate column(s) from wide or long data frame frame, using hints
+#' Get candidate column(s) from wide or long data frame frame, using hints
 #' @examples
 #' wide_df <- data.frame(a = letters,
 #'                       dx0 = icd9_map_elix$CHF[1:26],

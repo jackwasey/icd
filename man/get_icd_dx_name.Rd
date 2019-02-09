@@ -2,10 +2,14 @@
 % Please edit documentation in R/util.R
 \name{get_icd_dx_name}
 \alias{get_icd_dx_name}
+\alias{get_icd_name}
 \title{get the name of a \code{data.frame} column which is most likely to contain
 the ICD codes}
 \usage{
 get_icd_dx_name(x, icd_name = NULL, valid_codes = TRUE,
+  defined_codes = FALSE, multi = FALSE)
+
+get_icd_name(x, icd_name = NULL, valid_codes = TRUE,
   defined_codes = FALSE, multi = FALSE)
 }
 \arguments{
