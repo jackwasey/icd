@@ -46,7 +46,7 @@ generate_random_short_icd9 <- function(n = 50000)
 generate_random_short_icd10cm_bill <- function(n = 10, short_code = TRUE) {
   x <- sample(
     unlist(
-      icd.data::icd10cm2016[icd.data::icd10cm2016$billable == 1, "code"]),
+      icd.data::icd10cm_latest[icd.data::icd10cm_latest$billable == 1, "code"]),
     replace = TRUE, size = n)
   if (short_code) x else short_to_decimal(x)
 }
@@ -144,7 +144,7 @@ generate_neds_pts <- function(n = 1000L,
                               icd10 = TRUE,
                               verbose = FALSE) {
   codes <- if (icd10) {
-    unclass(as_char_no_warn(icd.data::icd10cm2016$code))
+    unclass(as_char_no_warn(icd.data::icd10cm_latest$code))
   } else {
     unclass(as_char_no_warn(icd.data::icd9cm_hierarchy$code))
   }

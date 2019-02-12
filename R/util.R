@@ -410,12 +410,15 @@ str_match_all <- function(string, pattern, ...) {
 
 # optional nice error message, could just fall back on icd.data::
 req_icd_data <- function() {
-  if (!requireNamespace("icd.data",
-                        versionCheck = list(version = 1.1,
-                                            op = ">=")))
+  if (!icd_data_ver_ok())
     stop("Please install the 'icd.data' package to explain ICD codes.",
          call. = FALSE)
+}
 
+icd_data_ver_ok <- function(version = 1.1) {
+  requireNamespace("icd.data",
+                     versionCheck = list(version = version,
+                                         op = ">="))
 }
 
 stop_data_lt_1dot1 <- function() {

@@ -17,7 +17,7 @@ vignette: >
 
 Function and variable names are likely to change in the future. The current versions are more consistent with naming of data files.
 
-```{r setup, include = FALSE}
+```{r setup, include=FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
@@ -55,27 +55,29 @@ icd.data::get_icd10cm_active_ver()
 # icd.data::set_icd10cm_active_ver("2015")
 
 # The code "C4311" goes from being a leaf in 2018, to a parent in 2019
-icd.data::with_icd10cm_version(ver = "2018", 
-                               lang = "en",
-                               icd::is_leaf("C4311")
-)
-icd.data::with_icd10cm_version(ver = "2019", 
-                               lang = "en", 
-                               icd::is_leaf("C4311")
-)
-# In 2018 the following code was not even defined, but in 2019 was a new child
-# code of "C4311"s
-icd.data::with_icd10cm_version(ver = "2018", 
-                               lang = "en",
-                               {
-                                 print(icd::is_defined("C43111"))
-                                 print(icd::is_leaf("C43111"))
-                               }
-)
-icd.data::with_icd10cm_version(ver = "2019", 
-                               lang = "en", 
-                               icd::is_leaf("C43111")
-                               )
+if (icd:::icd_data_ver_ok(1.1)) {
+  icd.data::with_icd10cm_version(ver = "2018", 
+                                 lang = "en",
+                                 icd::is_leaf("C4311")
+  )
+  icd.data::with_icd10cm_version(ver = "2019", 
+                                 lang = "en", 
+                                 icd::is_leaf("C4311")
+  )
+  # In 2018 the following code was not even defined, but in 2019 was a new child
+  # code of "C4311"s
+  icd.data::with_icd10cm_version(ver = "2018", 
+                                 lang = "en",
+                                 {
+                                   print(icd::is_defined("C43111"))
+                                   print(icd::is_leaf("C43111"))
+                                 }
+  )
+  icd.data::with_icd10cm_version(ver = "2019", 
+                                 lang = "en", 
+                                 icd::is_leaf("C43111")
+  )
+}
 ```
 
 The following shows how to use the French translations of ICD-10-CM 2014.

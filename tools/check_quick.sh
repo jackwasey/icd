@@ -37,5 +37,6 @@ R_MAKEVARS_USER=${HOME}/.R/Makevars.quick \
   _R_CHECK_LENGTH_1_LOGIC2_="verbose" \
   R CMD check \
     --no-build-vignettes \
+    --ignore-vignettes \
     "$(ls -t $tmpd/icd*.tar.gz | head -1)"
 popd
