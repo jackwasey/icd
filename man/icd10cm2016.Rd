@@ -3,7 +3,7 @@
 \docType{data}
 \name{icd10cm2016}
 \alias{icd10cm2016}
-\title{ICD-10-CM}
+\title{United States ICD-10-CM definitions, mostly a superset of WHO ICD-10}
 \description{
 The public domain modified ICD-10 classification as published in the public
 domain by the US CDC. Currently this has a slightly different structure to

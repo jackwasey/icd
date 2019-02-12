@@ -26,9 +26,7 @@ Where reasonable, this is guessed from the input data.}
 \item{invert}{Single logical value. Returns the inverse of the result. E.g.
 if seeking valid ICD-9 codes, the invalid ones are returned.}
 
-\item{icd9cm_edition}{e.g. "32", not ICD-9 vs ICD-10}
-
-\item{icd10cm_edition}{single character string. ICD-10-CM editions are
+\item{icd9cm_edition}{e.g. "32", not ICD-9 vs ICD-10
 currently just the year of release.}
 }
 \description{

@@ -123,7 +123,7 @@ explain_table.icd9cm <- function(x, short_code = guess_short(x),
 explain_table.icd10cm <- function(x, short_code = guess_short(x),
                                   condense = FALSE, brief = TRUE,
                                   warn = TRUE, ...) {
-  explain_table_worker(x = x, hierarchy = icd.data::icd10cm2016,
+  explain_table_worker(x = x, hierarchy = icd.data::icd10cm_active,
                        short_code = short_code, condense = condense,
                        brief = brief, warn = warn, ...)
 }
@@ -139,7 +139,7 @@ explain_table.icd10who <- function(x,
                                    ...
 ) {
   req_icd_data()
-  explain_table_worker(x = x, hierarchy = get_get_icd10who2016(),
+  explain_table_worker(x = x, hierarchy = icd.data::icd10who2016,
                        short_code = short_code, condense = condense,
                        brief = brief, warn = warn, ...)
 }

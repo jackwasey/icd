@@ -58,8 +58,7 @@ release_questions <- function() {
     "Are there no skipped tests which should be run?",
     "Does it compile, test and check fine on travis and appveyor?",
     "Have you checked on Windows, win_builder,
-      Mac, Ubuntu, UBSAN rocker, and updated my docker image which
-      resembles a CRAN maintainers environment?",
+      Mac, Ubuntu, rhub::check_with_sanitizers() etc",
     # final manual check:
     "Are all NOTES from R CMD check documented in cran-comments.md",
     "Have all unnecessary files been ignored in built archive?")

@@ -1,0 +1,89 @@
+---
+title: "Working with World Health Organization ICD codes and national editions, and different languages"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Working with World Health Organization ICD codes and national editions}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+`icd.data` version 1.1, and `icd` 3.4 together offer some basic international support.
+
+ - World Health Organization (WHO) codes for 2016, the latest release.
+ - ICD-10-FR in French, with modifications as used in France.
+ - Translations of the US ICD-10-CM codes in French and Dutch, which are used in Belgium.
+ 
+ All of this should be considered beta quality, and I would much appreciate testing and bug reports. I would especially be interested if someone has experience internationalizing an R package like this.
+
+Function and variable names are likely to change in the future. The current versions are more consistent with naming of data files.
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+# WHO
+
+Surprisingly, there are potential copyright restrictions on redistributing the WHO ICD-9 and ICD-10 definitions, which form the basis of ICD code systems around the world. These definitions are themselves also used as the internationally standard way to codify morbidity and mortality for public health.
+
+`icd` now includes the ability to work with these codes more easily via the companion `icd.data` package. The data is not available in the package so `icd.data` asks the user whether they wish to download the data from the WHO web site, whereupon it is made available just like any other R data, but the name `icd.data::icd10who2016`, which is the latest ICD-10 release from the WHO at the time of writing. For French codes, `icd.data::icd10fr2016`, this would ideally have a synonym `icd.data::cim10fr2016` with internationalized column names, but this would duplicate the data making package storage and loading bigger, which is increasingly a problem as more data is included.
+
+```{r quicklook, eval=FALSE}
+icd.data::icd10who2016[1:5, ]
+icd.data::icd10fr2018[1:5, ]
+library(icd.data)
+summary(icd10who2016)
+```
+
+# French edition of ICD-10
+
+ICD-10-FR is significantly different from the WHO version, and is used by official bodies and health systems in France. As with all the features in this document, this is an early attempt at the complex problem of providing all the codes, transtatlanguages, 
+
+```{r french}
+
+```
+# Working with different ICD-10-CM annual versions
+
+There is an initial beta-quality mechanism for selecting a particular version of ICD-10-CM to use. This is a US coding system, but Belgian authorities provide translations into French and Dutch, and appear to have made no modifications.
+
+```{r icd10cmoption}
+# get the active version
+icd.data::get_icd10cm_active_ver()
+# set the active version
+# icd.data::set_icd10cm_active_ver("2015")
+
+# The code "C4311" goes from being a leaf in 2018, to a parent in 2019
+icd.data::with_icd10cm_version(ver = "2018", 
+                               lang = "en",
+                               icd::is_leaf("C4311")
+)
+icd.data::with_icd10cm_version(ver = "2019", 
+                               lang = "en", 
+                               icd::is_leaf("C4311")
+)
+# In 2018 the following code was not even defined, but in 2019 was a new child
+# code of "C4311"s
+icd.data::with_icd10cm_version(ver = "2018", 
+                               lang = "en",
+                               {
+                                 print(icd::is_defined("C43111"))
+                                 print(icd::is_leaf("C43111"))
+                               }
+)
+icd.data::with_icd10cm_version(ver = "2019", 
+                               lang = "en", 
+                               icd::is_leaf("C43111")
+                               )
+```
+
+The following shows how to use the French translations of ICD-10-CM 2014.
+```{r eval=FALSE}
+icd.data::set_icd10cm_active_ver(2014)
+icd.data::set_icd10cm_active_lang("fr")
+explain_code(as.icd10cm("C4311"))
+```
+```
+[1] "mélanome malin de la paupière droite, y compris le canthus"
+```

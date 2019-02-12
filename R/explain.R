@@ -127,8 +127,8 @@ explain_code.icd10cm <- function(x, short_code = guess_short(x),
     x <- decimal_to_short.icd10(x)
   # this is a alow linear lookup, but usually only
   # "explaining" one or a few codes at a time.
-  icd.data::icd10cm2016[
-    icd.data::icd10cm2016[["code"]] %in% unique(as_char_no_warn(x)),
+  icd.data::icd10cm_active[
+    icd.data::icd10cm_active[["code"]] %in% unique(as_char_no_warn(x)),
     ifelse(brief, "short_desc", "long_desc")
     ]
 }
@@ -152,8 +152,8 @@ explain_code.icd10who <- function(x, short_code = guess_short(x),
     x <- decimal_to_short.icd10(x)
   # this is a alow linear lookup, but usually only
   # "explaining" one or a few codes at a time.
-  get_get_icd10who2016()[
-    get_get_icd10who2016()[["code"]] %in% unique(as_char_no_warn(x)),
+  icd.data::icd10who2016[
+    icd.data::icd10who2016[["code"]] %in% unique(as_char_no_warn(x)),
     "desc"
     ]
 }

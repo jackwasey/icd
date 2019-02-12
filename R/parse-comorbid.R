@@ -188,7 +188,7 @@ icd9_parse_quan_deyo_sas <- function(save_data = FALSE, offline = TRUE) {
   invisible(icd9_map_quan_deyo)
 }
 
-# duplicated from icd.data
+# mostly duplicated from icd.data, just saving the map here
 icd10_parse_ahrq_pcs <- function(save_data = FALSE) {
   f <- unzip_to_data_raw(
     url = paste0("https://www.hcup-us.ahrq.gov/toolssoftware/",
@@ -198,8 +198,10 @@ icd10_parse_ahrq_pcs <- function(save_data = FALSE) {
                   colClasses = "character", encoding = "latin1")
   names(dat) <- c("code", "desc", "class_number", "class")
   dat$class <- factor(dat$class,
-                      levels = c("Minor Diagnostic", "Minor Therapeutic",
-                                 "Major Diagnostic", "Major Therapeutic"))
+                      levels = c("Minor Diagnostic",
+                                 "Minor Therapeutic",
+                                 "Major Diagnostic",
+                                 "Major Therapeutic"))
   dat$class_number <- NULL
   dat$code <- gsub(dat$code, pattern = "'", replacement = "")
   icd10_map_ahrq_pcs <- split(dat$code, dat$class)

@@ -21,8 +21,8 @@ dat <- data.frame(
   id = n + seq(n),
   icd_dx1 = sample(icd.data::icd10cm2016$code, n, replace = TRUE),
   icd_dx2 = sample(icd.data::icd10cm2016$code, n, replace = TRUE),
-  icd_pcs1 = sample(icd.data::icd10_pcs_2018$pcs, n, replace = TRUE),
-  icd_pcs2 = sample(icd.data::icd10_pcs_2018$pcs, n, replace = TRUE)
+  icd_pcs1 = sample(icd.data::icd10cm2018_pc$code, n, replace = TRUE),
+  icd_pcs2 = sample(icd.data::icd10cm2018_pc$code, n, replace = TRUE)
 )
 ```
 

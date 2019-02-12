@@ -318,10 +318,3 @@ NULL
 #' @inherit icd.data::uranium_pathology
 #' @seealso \code{\link[icd.data]{ls_icd_data}}
 NULL
-
-#' @name icd10_pcs
-#' @docType data
-#' @keywords datasets
-#' @inherit icd.data::icd10_pcs
-#' @seealso \code{\link[icd.data]{ls_icd_data}}
-NULL

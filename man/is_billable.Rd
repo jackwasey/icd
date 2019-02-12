@@ -23,11 +23,9 @@ is_billable(x, short_code = guess_short(x), ...)
 \method{is_billable}{icd9cm}(x, short_code = guess_short(x),
   icd9cm_edition = icd9cm_latest_edition(), nomatch = 0L, ...)
 
-\method{is_billable}{icd10}(x, short_code = guess_short(x),
-  icd10cm_edition = "2016", ...)
+\method{is_billable}{icd10}(x, short_code = guess_short(x), ...)
 
-\method{is_billable}{icd10cm}(x, short_code = guess_short(x),
-  icd10cm_edition = "2016", ...)
+\method{is_billable}{icd10cm}(x, short_code = guess_short(x), ...)
 
 \method{is_billable}{default}(x, short_code = guess_short(x), ...)
 
@@ -58,9 +56,6 @@ Not numeric because there are possible cases with non-numeric names, e.g.
 revisions within one year, although none currently implemented.}
 
 \item{nomatch}{integer value, passed to \code{match} default is 0.}
-
-\item{icd10cm_edition}{single character string. ICD-10-CM editions are
-currently just the year of release.}
 }
 \description{
 Using the equivalent \code{\link[=is_leaf]{is_leaf()}} is preferred.

@@ -418,34 +418,6 @@ req_icd_data <- function() {
 
 }
 
-get_fun_from_icd.data <- function(fun_name) {
-  if (exists(fun_name, envir = asNamespace("icd.data")))
-    get(fun_name, envir = asNamespace("icd.data"))
-  else
-    NULL
-}
-
-get_get_icd10who2016 <- function() {
-  f <- get_fun_from_icd.data("get_icd10who2016")
-  if (is.null(f)) stop_data_lt_1dot1()
-}
-
-get_get_icd10cm_version <- function() {
-  f <- get_fun_from_icd.data("get_icd10cm_version")
-  if (is.null(f))
-    function() icd.data::icd10cm2016
-  else
-    f
-}
-
-get_get_icd10cm_active_ver <- function() {
-  f <- get_fun_from_icd.data("get_icd10cm_active_ver")
-  if (is.null(f))
-    function() "2016"
-  else
-    f
-}
-
 stop_data_lt_1dot1 <- function() {
   stop("WHO and 2014, 2015, 2017, 2018 and 2019 ICD-CM data are only ",
        "available with icd.data >= 1.1 . Use

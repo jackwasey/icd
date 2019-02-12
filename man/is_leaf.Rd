@@ -14,11 +14,9 @@ is_leaf(x, short_code = guess_short(x), ...)
 \method{is_leaf}{icd9}(x, short_code = guess_short(x),
   icd9cm_edition = icd9cm_latest_edition(), ...)
 
-\method{is_leaf}{icd10cm}(x, short_code = guess_short(x),
-  icd10cm_edition = "2016", ...)
+\method{is_leaf}{icd10cm}(x, short_code = guess_short(x), ...)
 
-\method{is_leaf}{icd10}(x, short_code = guess_short(x),
-  icd10cm_edition = "2016", ...)
+\method{is_leaf}{icd10}(x, short_code = guess_short(x), ...)
 
 \method{is_leaf}{icd9cm}(x, short_code = guess_short(x),
   icd9cm_edition = icd9cm_latest_edition(), nomatch = 0L, ...)
@@ -36,9 +34,6 @@ Where reasonable, this is guessed from the input data.}
 latest release from CMS. Currently anything from "23" to "32" is accepted.
 Not numeric because there are possible cases with non-numeric names, e.g.
 revisions within one year, although none currently implemented.}
-
-\item{icd10cm_edition}{single character string. ICD-10-CM editions are
-currently just the year of release.}
 
 \item{nomatch}{integer value, passed to \code{match} default is 0.}
 }
