@@ -115,9 +115,12 @@ explain_code.icd9cm <- function(
     NA_character_
 }
 
-get_from_icd_data <- function(name, alt = NULL) {
+get_from_icd_data <- function(name, alt = NULL, lazy = TRUE) {
   out <- try(silent = TRUE, {
-    getFromNamespace(name, asNamespace("icd.data"))
+    if (lazy)
+      base::getExportedValue(asNamespace("icd.data"), name)
+    else
+      utils::getFromNamespace(name, asNamespace("icd.data"))
   })
   if (!inherits(out, "try-error"))
     out
@@ -173,8 +176,9 @@ explain_code.icd10who <- function(x, short_code = guess_short(x),
     x <- decimal_to_short.icd10(x)
   # this is a alow linear lookup, but usually only
   # "explaining" one or a few codes at a time.
-  icd.data::icd10who2016[
-    icd.data::icd10who2016[["code"]] %in% unique(as_char_no_warn(x)),
+  i <- get_from_icd_data("icd10who2016")
+  i[
+    i[["code"]] %in% unique(as_char_no_warn(x)),
     "desc"
     ]
 }

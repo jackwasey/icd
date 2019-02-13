@@ -16,8 +16,7 @@
 \usage{
 get_billable(...)
 
-\method{get_billable}{icd9}(x, short_code = guess_short(x),
-  invert = FALSE, icd9cm_edition = icd9cm_latest_edition(), ...)
+\method{get_billable}{icd9}(...)
 
 \method{get_billable}{icd9cm}(x, short_code = guess_short(x),
   invert = FALSE, icd9cm_edition = icd9cm_latest_edition(), ...)

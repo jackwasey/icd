@@ -157,7 +157,6 @@ children_defined.icd10cm <- function(x,
   if (!short_code)
     x <- decimal_to_short.icd10cm(x)
   dat <- get_from_icd_data("icd10cm_active", alt = icd.data::icd10cm2016)
-  # icd.data::get_icd10cm_active_ver()
   ver <- if (icd_data_ver_ok()) {
     getOption("icd.data.icd10cm_active_ver")
   } else {
@@ -190,6 +189,7 @@ children_defined.icd10who <- function(
   short_code = guess_short(x),
   warn = FALSE
 ) {
+  req_icd_data()
   stopifnot(is.factor(x) || is.character(unclass(x)))
   stopifnot(is.logical(short_code))
   stopifnot(is.logical(warn))
@@ -197,7 +197,7 @@ children_defined.icd10who <- function(
   x <- toupper(x)
   if (!short_code)
     x <- decimal_to_short.icd10cm(x)
-  d <- icd.data::icd10who2016
+  d <- get_from_icd_data("icd10who2016")
   kids <- icd10_children_defined_cpp(x, d, nchar(d$code))
   as.icd10who(kids, short_code = short_code)
 }

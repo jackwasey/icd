@@ -59,7 +59,7 @@ Suggests:
 LinkingTo:
     Rcpp (>= 0.12.3),
     RcppEigen,
-    testthat
+    testthat (>= 0.11.1)
 VignetteBuilder: 
     knitr
 ByteCompile: true
