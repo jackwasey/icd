@@ -115,19 +115,6 @@ explain_code.icd9cm <- function(
     NA_character_
 }
 
-get_from_icd_data <- function(name, alt = NULL, lazy = TRUE) {
-  out <- try(silent = TRUE, {
-    if (lazy)
-      base::getExportedValue(asNamespace("icd.data"), name)
-    else
-      utils::getFromNamespace(name, asNamespace("icd.data"))
-  })
-  if (!inherits(out, "try-error"))
-    out
-  else
-    alt
-}
-
 #' @describeIn explain_code ICD-10-CM explanation, current a minimal
 #'   implementation
 #' @export

@@ -422,10 +422,20 @@ icd_data_ver_ok <- function() {
   res <- res && getNamespaceVersion(
     asNamespace("icd.data")) >=
     as.package_version("1.1")
-  # loadNamespace("icd.data",
-  #                    versionCheck = list(version = "1.1",
-  #                                        op = ">="))
   res
+}
+
+get_from_icd_data <- function(name, alt = NULL, lazy = TRUE) {
+  out <- try(silent = TRUE, {
+    if (lazy)
+      base::getExportedValue(asNamespace("icd.data"), name)
+    else
+      utils::getFromNamespace(name, asNamespace("icd.data"))
+  })
+  if (!inherits(out, "try-error"))
+    out
+  else
+    alt
 }
 
 stop_data_lt_1dot1 <- function() {
