@@ -48,8 +48,7 @@ The [icd package](https://cran.r-project.org/package=icd) for R includes ICD-10-
 
 The sample data is in the 'long' format, i.e., multiple rows per case.
 ```{r uranium-long}
-library(icd.data)
-uranium_pathology[1:10, ]
+icd.data::uranium_pathology[1:10, ]
 ```
 Pick a code, and see what it means.
 ```{r explain10}
@@ -57,7 +56,9 @@ explain_code("R55")
 ```
 `icd` can work with 'long' or 'wide' format data without modification. If the source database is not normalized, i.e., has multiple diagnostic code columns, `icd` can detect and efficiently work on all the columns at once.
 ```{r uranium-wide}
-head(uranium_pathology)
+head(icd.data::uranium_pathology)
+# attach icd.data for convenience
+library(icd.data)
 ```
 
 Now map these diagnoses to disease groups as defined by Quan et al:

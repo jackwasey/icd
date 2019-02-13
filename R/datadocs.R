@@ -298,23 +298,8 @@ NULL
 NULL
 
 #' @name icd9cm_billable
-#' @aliases icd9Billable
 #' @docType data
 #' @keywords datasets
 #' @inherit icd.data::icd9cm_billable
-#' @seealso \code{\link[icd.data]{ls_icd_data}}
-NULL
-
-#' @name vermont_dx
-#' @docType data
-#' @keywords datasets
-#' @inherit icd.data::vermont_dx
-#' @seealso \code{\link[icd.data]{ls_icd_data}}
-NULL
-
-#' @name uranium_pathology
-#' @docType data
-#' @keywords datasets
-#' @inherit icd.data::uranium_pathology
 #' @seealso \code{\link[icd.data]{ls_icd_data}}
 NULL
