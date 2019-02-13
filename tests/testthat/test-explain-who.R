@@ -9,6 +9,13 @@ test_that("some codes not in ICD-10-CM", {
     expect_match(x <- explain_code(as.icd10who(hiv)),
                  "HIV",
                  info = paste("HIV code: ", hiv))
+    expect_identical(x, explain_code.icd10who(hiv))
     expect_length(x, 1)
   }
+})
+
+test_that("hand-picked WHO-only codes okay", {
+  skip_missing_icd10who(ver = "2016")
+  expect_identical(explain_code.icd10who("U842"),
+                   "Resistance to antiviral drug(s)")
 })

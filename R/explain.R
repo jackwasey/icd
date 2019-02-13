@@ -73,10 +73,12 @@ explain_code.icd9cm <- function(
   warn = TRUE,
   ...
 ) {
-  if (is.numeric(x))
+  if (is.numeric(x)) {
     warning("data is in numeric format. This can easily lead to errors in ",
             "short or decimal codes, e.g. short_code code 1000: is it 10.00 ",
             "or 100.0; or decimal codes, e.g. 10.1 was supposed to be 10.10 .")
+    x <- as.character(x)
+  }
   assert_fac_or_char(x)
   stopifnot(is.logical(short_code), length(short_code) == 1L)
   stopifnot(is.logical(condense), length(condense) == 1L)
@@ -167,6 +169,36 @@ explain_code.icd10who <- function(x, short_code = guess_short(x),
   i[
     i[["code"]] %in% unique(as_char_no_warn(x)),
     "desc"
+    ]
+}
+
+#' @describeIn explain_code ICD-10-fr explanation, current a minimal
+#'   implementation
+#' @export
+explain_code.icd10fr <- function(
+  x,
+  short_code = guess_short(x),
+  condense = TRUE,
+  brief = FALSE,
+  warn = TRUE,
+  ...
+) {
+  req_icd_data()
+  stopifnot(is.atomic(x))
+  stopifnot(is.logical(short_code), length(short_code) == 1L)
+  stopifnot(is.logical(brief), length(brief) == 1L)
+  if (!missing(condense))
+    .NotYetUsed("condense", error = FALSE)
+  if (!missing(warn))
+    .NotYetUsed("warn", error = FALSE)
+  if (!short_code)
+    x <- decimal_to_short.icd10(x)
+  # this is a alow linear lookup, but usually only
+  # "explaining" one or a few codes at a time.
+  i <- get_from_icd_data("icd10fr2014")
+  i[
+    i[["code"]] %in% unique(as_char_no_warn(x)),
+    ifelse(brief, "short_desc", "long_desc")
     ]
 }
 

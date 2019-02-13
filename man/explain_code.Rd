@@ -9,6 +9,7 @@
 \alias{explain_code.icd9cm}
 \alias{explain_code.icd10cm}
 \alias{explain_code.icd10who}
+\alias{explain_code.icd10fr}
 \alias{explain_code.icd10}
 \alias{icd_explain}
 \alias{icd_explain.default}
@@ -38,6 +39,9 @@ explain_icd(...)
 
 \method{explain_code}{icd10who}(x, short_code = guess_short(x),
   condense = TRUE, brief = NULL, warn = TRUE, ...)
+
+\method{explain_code}{icd10fr}(x, short_code = guess_short(x),
+  condense = TRUE, brief = FALSE, warn = TRUE, ...)
 
 \method{explain_code}{icd10}(x, short_code = guess_short(x),
   condense = TRUE, brief = FALSE, warn = TRUE, ...)
@@ -109,6 +113,9 @@ ICD version
 implementation
 
 \item \code{icd10who}: WHO ICD-10 explanation
+
+\item \code{icd10fr}: ICD-10-fr explanation, current a minimal
+implementation
 
 \item \code{icd10}: ICD-10 explanation, falls back on ICD-10-CM until
 ICD-10 WHO copyright workaround is available

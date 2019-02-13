@@ -9,6 +9,7 @@
 \alias{is.icd10cm}
 \alias{is.icd10cm_pc}
 \alias{is.icd10who}
+\alias{is.icd10fr}
 \alias{is.comorbidity_map}
 \alias{is.icd_comorbidity_map}
 \title{test ICD classes}
@@ -28,6 +29,8 @@ is.icd10cm(x)
 is.icd10cm_pc(x)
 
 is.icd10who(x)
+
+is.icd10fr(x)
 
 is.comorbidity_map(x)
 

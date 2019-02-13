@@ -196,3 +196,6 @@ test_that("working with named lists of codes, decimal is guessed", {
 test_that("github #113 for ICD-9 code 038.1", {
   expect_equal(explain_code("0381"), "Staphylococcal septicemia")
 })
+test_that("explaining a numeric value for icd9 gives warning", {
+  expect_warning(explain_code(as.icd9(100)))
+})

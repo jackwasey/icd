@@ -14,7 +14,7 @@ icd10_sub_classes <- c(icd10_dx_sub_classes,
 icd10_classes <- c(icd10_sub_classes, "icd10")
 # ICD-9 and ICD-10
 icd_dx_not_generic <- c(icd9_dx_sub_classes,
-                       icd10_dx_sub_classes)
+                        icd10_dx_sub_classes)
 icd_pc_not_generic <- c(icd9_pc_sub_classes,
                         icd10_pc_sub_classes)
 icd_version_classes <- c(icd9_classes,
@@ -64,7 +64,8 @@ icd_conflicts.icd9cm <- function(x, do_stop = FALSE) {
 icd_conflicts.icd9cm_pc <- function(x, do_stop = FALSE) {
   res <- icd_conflicts.icd9(x, do_stop) ||
     inherits(x, "icd9who") ||
-    inherits(x, "icd9cm")
+    inherits(x, "icd9cm") ||
+    inherits(x, "icd9")
   if (res && do_stop) stop_conflict(x)
   res
 }
@@ -94,7 +95,8 @@ icd_conflicts.icd10cm <- function(x, do_stop = FALSE) {
 icd_conflicts.icd10cm_pc <- function(x, do_stop = FALSE) {
   res <- icd_conflicts.icd10(x, do_stop) ||
     inherits(x, "icd10who") ||
-    inherits(x, "icd10cm")
+    inherits(x, "icd10cm") ||
+    inherits(x, "icd10")
   if (res && do_stop) stop_conflict(x)
   res
 }
@@ -102,7 +104,17 @@ icd_conflicts.icd10cm_pc <- function(x, do_stop = FALSE) {
 icd_conflicts.icd10who <- function(x, do_stop = FALSE) {
   res <- icd_conflicts.icd10(x) ||
     inherits(x, "icd10cm") ||
-    inherits(x, "icd10cm_pc")
+    inherits(x, "icd10cm_pc") ||
+    inherits(x, "icd10fr")
+  if (res && do_stop) stop_conflict(x)
+  res
+}
+
+icd_conflicts.icd10fr <- function(x, do_stop = FALSE) {
+  res <- icd_conflicts.icd10(x) ||
+    inherits(x, "icd10cm") ||
+    inherits(x, "icd10cm_pc") ||
+    inherits(x, "icd10who")
   if (res && do_stop) stop_conflict(x)
   res
 }
@@ -246,14 +258,12 @@ icd9cm_pc <- function(x) {
 as.icd9cm_pc <- function(x) {
   stopifnot(is.atomic(x))
   if ("icd10" %in% class(x))
-    stop("icd10 class already set on this variable")
-  if (any(c("icd9cm", "icd9who") %in% class(x)))
-    stop("and ICD-9 diagnostic code class is already set")
-  icd9_pos <- match("icd9", class(x))
-  if (!is.na(icd9_pos))
-    class(x) <- append(class(x), "icd9cm_pc", after = icd9_pos - 1)
-  else
-    class(x) <- append(class(x), c("icd9cm_pc", "icd9"), after = 0)
+    stop("An ICD-10 diagnostic class is already set on this variable")
+  if ("icd10cm_pc" %in% class(x))
+    stop("An ICD-10 procedure class is already set on this variable")
+  if (any(c("icd9", "icd9cm", "icd9who") %in% class(x)))
+    stop("An ICD-9 diagnostic code class is already set")
+  class(x) <- append(class(x), "icd9cm_pc", after = 0)
   icd_conflicts(x, do_stop = TRUE)
   x
 }
@@ -312,10 +322,7 @@ as.icd10cm <- function(x, short_code = NULL) {
 icd10cm_pc <- function(x) {
   cl <- class(x)
   if ("icd10cm_pc" %in% cl) return(x)
-  if ("icd10" %in% cl)
-    class(x) <- c("icd10cm_pc", cl)
-  else
-    class(x) <- c("icd10cm_pc", "icd10", cl)
+  class(x) <- c("icd10cm_pc", cl)
   x
 }
 
@@ -324,27 +331,22 @@ icd10cm_pc <- function(x) {
 as.icd10cm_pc <- function(x) {
   stopifnot(is.atomic(x))
   if ("icd9" %in% class(x))
-    stop("icd9 class already set on this variable")
+    stop("ICD-9 diagnostic class already set on this variable")
+  if ("icd10cm_pc" %in% class(x))
+    stop("ICD-10-CM procedure class already set on this variable")
   if (any(c("icd10cm", "icd10who") %in% class(x)))
     stop("and ICD-10 diagnostic code class is already set")
-  icd10_pos <- match("icd10", class(x))
-  if (!is.na(icd10_pos))
-    class(x) <- append(class(x), "icd10cm_pc", after = icd10_pos - 1)
-  else
-    class(x) <- append(class(x), c("icd10cm_pc", "icd10"), after = 0)
+  class(x) <- append(class(x), "icd10cm_pc", after = 0)
   icd_conflicts(x, do_stop = TRUE)
   x
 }
 
 #' @noRd
 #' @keywords internal
-icd10cm_pc <- function(x) {
+icd10who <- function(x) {
   cl <- class(x)
   if ("icd10who" %in% cl) return(x)
-  if ("icd10" %in% cl)
-    class(x) <- c("icd10who", cl)
-  else
-    class(x) <- c("icd10who", "icd10", cl)
+  class(x) <- c("icd10who", cl)
   x
 }
 
@@ -373,6 +375,34 @@ icd10who <- function(x) {
     class(x) <- c("icd10who", cl)
   else
     class(x) <- c("icd10who", "icd10", cl)
+  x
+}
+
+#' @describeIn set_icd_class Use ICD-10-FR (France) class for the given data
+#' @export
+as.icd10fr <- function(x, short_code = NULL) {
+  stopifnot(is.atomic(x))
+  if (inherits(x, "icd10fr")) return(x)
+  icd10_pos <- match("icd10", class(x))
+  if (!is.na(icd10_pos))
+    class(x) <- append(class(x), "icd10fr", after = icd10_pos - 1)
+  else
+    class(x) <- append(class(x), c("icd10fr", "icd10"), after = 0)
+  if (!is.null(short_code))
+    attr(x, "icd_short_diag") <- short_code
+  icd_conflicts(x, do_stop = TRUE)
+  x
+}
+
+#' @noRd
+#' @keywords internal
+icd10fr <- function(x) {
+  cl <- class(x)
+  if ("icd10fr" %in% cl) return(x)
+  if ("icd10" %in% cl)
+    class(x) <- c("icd10fr", cl)
+  else
+    class(x) <- c("icd10fr", "icd10", cl)
   x
 }
 
@@ -676,6 +706,10 @@ is.icd10cm_pc <- function(x) inherits(x, "icd10cm_pc")
 #' @rdname is.icd9
 #' @export
 is.icd10who <- function(x) inherits(x, "icd10who")
+
+#' @rdname is.icd9
+#' @export
+is.icd10fr <- function(x) inherits(x, "icd10fr")
 
 #' Test for class describing patient data
 #'

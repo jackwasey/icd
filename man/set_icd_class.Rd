@@ -9,6 +9,7 @@
 \alias{as.icd10cm}
 \alias{as.icd10cm_pc}
 \alias{as.icd10who}
+\alias{as.icd10fr}
 \alias{as.icd_comorbidity_map}
 \title{Construct ICD-9 and ICD-10 data types}
 \usage{
@@ -25,6 +26,8 @@ as.icd10cm(x, short_code = NULL)
 as.icd10cm_pc(x)
 
 as.icd10who(x, short_code = NULL)
+
+as.icd10fr(x, short_code = NULL)
 
 as.icd_comorbidity_map(...)
 }
@@ -68,6 +71,8 @@ possible, use the more specific `icd10who` or `icd10cm`.
 \item \code{as.icd10cm_pc}: Indicate the data are ICD-10-CM procedure codes.
 
 \item \code{as.icd10who}: Use WHO ICD-10 class for the given data
+
+\item \code{as.icd10fr}: Use ICD-10-FR (France) class for the given data
 
 \item \code{as.icd_comorbidity_map}: Deprecated. Use as.comorbidity_map instead.
 }}
