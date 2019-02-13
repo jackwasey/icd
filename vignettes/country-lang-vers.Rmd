@@ -29,7 +29,7 @@ with_icd10cm_version <- function(ver, lang, code)
                      ver,
                      ifelse(lang == "en", "", paste0("_", lang))
   )
-  stopifnot(!is.null(get_from_icd_data(var_name)))
+  stopifnot(!is.null(icd:::get_from_icd_data(var_name)))
   stopifnot(is.character(ver), length(ver) == 1)
   old <- options("icd.data.icd10cm_active_ver" = ver,
                  "icd.data.icd10cm_active_lang" = lang)
