@@ -238,7 +238,7 @@ During development it became clear that the following were also important:
 
 @. String matching
 
-The central computational problem is one of using string matching to map ICD codes from patient data to the comorbidities, and recording the results. String matching is a slow operation, and memory intensive; the innovation described here is the use of matrix algebra to solve the problem. This requires a brief pre-processing step with string matching, whereas other solutions use string matching throughout.
+The central computational problem is one of using string matching to map ICD codes from patient data to the comorbidities, and recording the results. String matching is a slow operation, and memory intensive; the innovation described here is the use of matrix algebra to solve the problem, which requires a brief pre-processing step with string matching, whereas other solutions use string matching throughout.
 
 @. Inexact comorbidity definitions
 
@@ -335,7 +335,7 @@ The main internal feature of this software is the algorithm for assigning the di
 
 ### ICD-9 
 
-Step \ref{itm:dataprep} of the algorithm is only applicable to ICD-9 codes. The comorbidity maps for ICD-9 codes already contain all the syntactically valid permutations of child codes according to the ICD-9 specification. This means exact matching can be done in subsequent steps. The pre-calculation of the ICD-9 maps is done at package creation time, using internal functions which are included for reproducibility.
+Step \ref{itm:dataprep} of the algorithm is only applicable to ICD-9 codes. The comorbidity maps for ICD-9 codes already contain all the syntactically valid permutations of codes in the hierarchy according to the ICD-9 specification. This is a superset of the codes with definitions. This means exact matching can be done in subsequent steps. The pre-calculation of the ICD-9 maps is done at package creation time, using internal functions which are included for reproducibility.
 
 ### ICD-10
 
@@ -502,7 +502,7 @@ There are several things to note, which represent common features in real health
 
 - There are patient-visit codes which do not appear in the comorbidity map.
 - There are codes in the comorbidity map which do not appear in the patient-visit codes.
-- I11 appears in one comorbidity and its child code I110 appears in another.
+- I11 appears in one comorbidity and the code I110, which is beneath it in the hierarchy, appears in another comorbidity.
 - Patient two has code I0981, but only the parent code I098 appears in the comorbidity map.
 
 Let $\boldsymbol{A}$ be a simplified set of patient-visits, where the columns represent the ICD-10 codes I0981 (rheumatic heart failure), I10 (essential hypertension), and I110 (hypertensive heart disease with heart failure). Again, each row is a different patient-visit.
