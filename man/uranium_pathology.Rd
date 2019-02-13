@@ -5,8 +5,8 @@
 \alias{uranium_pathology}
 \title{United States Transuranium & Uranium Registries}
 \description{
-an ICD-10 data set (not ICD-10-CM) with mortality from the United States
-Transuranium & Uranium Registries, published in the public domain.
+This is an ICD-10 data set with mortality from the United States Transuranium
+& Uranium Registries, published in the public domain.
 }
 \seealso{
 \code{\link[icd.data]{ls_icd_data}}

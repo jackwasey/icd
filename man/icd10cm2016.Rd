@@ -3,7 +3,7 @@
 \docType{data}
 \name{icd10cm2016}
 \alias{icd10cm2016}
-\title{ICD-10-CM}
+\title{United States ICD-10-CM definitions, mostly a superset of WHO ICD-10}
 \description{
 The public domain modified ICD-10 classification as published in the public
 domain by the US CDC. Currently this has a slightly different structure to
@@ -16,7 +16,7 @@ There are annual revisions to this data. Currently, the 2016 edition is
 included.
 
 Format:  data frame, with columns for code, leaf status (0 or 1), short and
-  long descriptions.
+long descriptions.
 }
 \seealso{
 \code{\link[icd.data]{ls_icd_data}}

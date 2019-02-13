@@ -4,7 +4,7 @@
 \name{icd9cm_billable}
 \alias{icd9cm_billable}
 \alias{icd9Billable}
-\title{list of annual versions of billable leaf nodes of ICD-9-CM}
+\title{List of annual versions of billable leaf nodes of ICD-9-CM}
 \description{
 These are derived from the CMS published updates, with versions 23 to 32
 currently available going back to 2004/5. The source files back to version 27
@@ -18,8 +18,8 @@ correct, with some \code{UTF-8} encoded strings.
 }
 \details{
 Format:  list of data frames. Each list item is named by the version as a
-  string, e.g. "32". The constituent data frames have columns \code{icd9},
-  \code{shortDesc}, and \code{longDesc}.
+string, e.g. "32". The constituent data frames have columns \code{icd9},
+\code{shortDesc}, and \code{longDesc}.
 }
 \seealso{
 \code{\link[icd.data]{ls_icd_data}}

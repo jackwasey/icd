@@ -57,13 +57,22 @@ if (icd:::icd_data_ver_ok()) {
   summary(icd:::get_from_icd_data("icd10who2016"))
 }
 ```
+
 # French edition of ICD-10
 
 ICD-10-FR is significantly different from the WHO version, and is used by official bodies and health systems in France. As with all the features in this document, this is an early attempt at the complex problem of providing all the codes, transtatlanguages, 
 
-```{r french}
-
+```{r french, eval = FALSE}
+fr <- icd:::get_from_icd_data("icd10fr2018", lazy = TRUE)
+fr[fr$code == "C43", ]
 ```
+```
+     code                                          desc_short
+1151 C431 MELANOME MALIN DE LA PAUPIERE, Y COMPRIS LE CANTHUS
+                                               desc_long                     major three_digit
+1151 Mélanome malin de la paupière, y compris le canthus Mélanome malin de la peau         C43
+```
+
 # Working with different ICD-10-CM annual versions
 
 There is an initial beta-quality mechanism for selecting a particular version of ICD-10-CM to use. This is a US coding system, but Belgian authorities provide translations into French and Dutch, and appear to have made no modifications.

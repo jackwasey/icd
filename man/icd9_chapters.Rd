@@ -5,7 +5,7 @@
 \alias{icd9_chapters}
 \alias{icd9_sub_chapters}
 \alias{icd9_majors}
-\title{ICD-9 chapters}
+\title{ICD-9 chapters and sub_chapters}
 \description{
 \code{icd9_chapters}, \code{icd9_chapters_sub} and \code{icd9_majors} contain
 mappings from the higher level descriptions of ICD-9 codes to the ranges of
@@ -32,7 +32,7 @@ E000-E999 Supplementary Classification Of External Causes Of Injury And
 Poisoning }
 
 Format:  list with chapter/sub-chapter or major names stored in list names,
-  each with two element named character vector with start and end codes.
+each with two element named character vector with start and end codes.
 }
 \seealso{
 \code{\link[icd.data]{ls_icd_data}}
