@@ -3,8 +3,7 @@
 \docType{data}
 \name{icd9cm_billable}
 \alias{icd9cm_billable}
-\alias{icd9Billable}
-\title{List of annual versions of billable leaf nodes of ICD-9-CM}
+\title{list of annual versions of billable leaf nodes of ICD-9-CM}
 \description{
 These are derived from the CMS published updates, with versions 23 to 32
 currently available going back to 2004/5. The source files back to version 27
