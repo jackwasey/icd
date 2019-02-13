@@ -44,9 +44,10 @@ generate_random_short_icd9 <- function(n = 50000)
 #' @template short_code
 #' @keywords internal debugging datagen
 generate_random_short_icd10cm_bill <- function(n = 10, short_code = TRUE) {
+  i <- get_from_icd_data("icd10cm_latest", icd.data::icd10cm2016)
   x <- sample(
     unlist(
-      icd.data::icd10cm_latest[icd.data::icd10cm_latest$billable == 1, "code"]),
+      i[i$billable == 1, "code"]),
     replace = TRUE, size = n)
   if (short_code) x else short_to_decimal(x)
 }
@@ -139,12 +140,15 @@ test_env <- function() {
 #' neds_comorbid <- icd::comorbid_pccc_dx(neds)
 #' }
 #' @keywords internal
-generate_neds_pts <- function(n = 1000L,
-                              ncol = 20L,
-                              icd10 = TRUE,
-                              verbose = FALSE) {
+generate_neds_pts <- function(
+  n = 1000L,
+  ncol = 20L,
+  icd10 = TRUE,
+  verbose = FALSE
+) {
   codes <- if (icd10) {
-    unclass(as_char_no_warn(icd.data::icd10cm_latest$code))
+    i <- get_from_icd_data("icd10cm_latest", icd.data::icd10cm2016)
+    unclass(as_char_no_warn(i$code))
   } else {
     unclass(as_char_no_warn(icd.data::icd9cm_hierarchy$code))
   }

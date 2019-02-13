@@ -47,11 +47,12 @@ is_defined.icd10cm <- function(
   stopifnot(is.factor(x) || is.character(x))
   stopifnot(is.logical(short_code), is.logical(leaf))
   if (!short_code) x <- decimal_to_short(x)
+  i <- get_from_icd_data("icd10cm_active", alt = icd.data::icd10cm2016)
   if (leaf)
     is_leaf.icd10cm(x, short_code = short_code)
   else
     match(x,
-          icd.data::icd10cm_active[["code"]],
+          i[["code"]],
           nomatch = nomatch, ...) > 0L
 }
 
@@ -161,7 +162,7 @@ is_leaf.icd10cm <- function(
 ) {
   if (!short_code)
     x <- decimal_to_short(x)
-  ia <- icd.data::icd10cm_active
+  ia <- get_from_icd_data("icd10cm_active", icd.data::icd10cm2016)
   leaf_name <- ifelse("leaf" %in% names(ia), "leaf", "billable")
   x %in% ia[ia[[leaf_name]] == 1L, "code"]
 }
@@ -329,13 +330,13 @@ is_billable.default <- is_leaf.default
 get_billable <- get_leaf
 #' @describeIn get_billable Prefer 'leaf' to 'billable' for generality.
 #' @export
-get_billable.icd9 <- get_leaf.icd9cm
+get_billable.icd9 <- get_leaf.icd9
 #' @describeIn get_billable Prefer 'leaf' to 'billable' for generality.
 #' @export
 get_billable.icd9cm <- get_leaf.icd9cm
 #' @describeIn get_billable Prefer 'leaf' to 'billable' for generality.
 #' @export
-get_billable.icd10 <- get_leaf.icd10cm
+get_billable.icd10 <- get_leaf.icd10
 #' @describeIn get_billable Prefer 'leaf' to 'billable' for generality.
 #' @export
 get_billable.icd10cm <- get_leaf.icd10cm

@@ -65,18 +65,23 @@ explain_code.icd9 <- function(...)
 
 #' @describeIn explain_code explain character vector of ICD-9-CM codes
 #' @export
-explain_code.icd9cm <- function(x, short_code = guess_short(x),
-                                condense = TRUE, brief = FALSE,
-                                warn = TRUE, ...) {
+explain_code.icd9cm <- function(
+  x,
+  short_code = guess_short(x),
+  condense = TRUE,
+  brief = FALSE,
+  warn = TRUE,
+  ...
+) {
   if (is.numeric(x))
     warning("data is in numeric format. This can easily lead to errors in ",
             "short or decimal codes, e.g. short_code code 1000: is it 10.00 ",
             "or 100.0; or decimal codes, e.g. 10.1 was supposed to be 10.10 .")
   assert_fac_or_char(x)
-  assert_flag(short_code)
-  assert_flag(condense)
-  assert_flag(brief)
-  assert_flag(warn)
+  stopifnot(is.logical(short_code), length(short_code) == 1L)
+  stopifnot(is.logical(condense), length(condense) == 1L)
+  stopifnot(is.logical(brief), length(brief) == 1L)
+  stopifnot(is.logical(warn), length(warn) == 1L)
   if (!short_code)
     x <- decimal_to_short.icd9(x)
   # if there are only defined codes, we should condense with this in mind:
@@ -110,15 +115,30 @@ explain_code.icd9cm <- function(x, short_code = guess_short(x),
     NA_character_
 }
 
+get_from_icd_data <- function(name, alt = NULL) {
+  out <- try(silent = TRUE, {
+    getFromNamespace(name, asNamespace("icd.data"))
+  })
+  if (!inherits(out, "try-error"))
+    out
+  else
+    alt
+}
+
 #' @describeIn explain_code ICD-10-CM explanation, current a minimal
 #'   implementation
 #' @export
-explain_code.icd10cm <- function(x, short_code = guess_short(x),
-                                 condense = TRUE, brief = FALSE,
-                                 warn = TRUE, ...) {
+explain_code.icd10cm <- function(
+  x,
+  short_code = guess_short(x),
+  condense = TRUE,
+  brief = FALSE,
+  warn = TRUE,
+  ...
+) {
   stopifnot(is.atomic(x))
-  assert_flag(short_code)
-  assert_flag(brief)
+  stopifnot(is.logical(short_code), length(short_code) == 1L)
+  stopifnot(is.logical(brief), length(brief) == 1L)
   if (!missing(condense))
     .NotYetUsed("condense", error = FALSE)
   if (!missing(warn))
@@ -127,8 +147,9 @@ explain_code.icd10cm <- function(x, short_code = guess_short(x),
     x <- decimal_to_short.icd10(x)
   # this is a alow linear lookup, but usually only
   # "explaining" one or a few codes at a time.
-  icd.data::icd10cm_active[
-    icd.data::icd10cm_active[["code"]] %in% unique(as_char_no_warn(x)),
+  i <- get_from_icd_data("icd10cm_active", alt = icd.data::icd10cm2016)
+  i[
+    i[["code"]] %in% unique(as_char_no_warn(x)),
     ifelse(brief, "short_desc", "long_desc")
     ]
 }

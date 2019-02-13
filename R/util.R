@@ -415,10 +415,17 @@ req_icd_data <- function() {
          call. = FALSE)
 }
 
-icd_data_ver_ok <- function(version = 1.1) {
-  requireNamespace("icd.data",
-                     versionCheck = list(version = version,
-                                         op = ">="))
+icd_data_ver_ok <- function() {
+  # Bug in R? Version of an already lodaded namespace is not checked if done via
+  # requireNamespace, only loadNamespace.
+  res <- requireNamespace("icd.data", quietly = TRUE)
+  res <- res && getNamespaceVersion(
+    asNamespace("icd.data")) >=
+    as.package_version("1.1")
+  # loadNamespace("icd.data",
+  #                    versionCheck = list(version = "1.1",
+  #                                        op = ">="))
+  res
 }
 
 stop_data_lt_1dot1 <- function() {

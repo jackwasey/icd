@@ -156,10 +156,13 @@ children_defined.icd10cm <- function(x,
   x <- toupper(x)
   if (!short_code)
     x <- decimal_to_short.icd10cm(x)
-  # if icd.data only suggested:
-  # getFromNamespace("icd10cm_active", envir = asNamespace("icd.data"))
-  dat <- icd.data::icd10cm_active
-  ver <- icd.data::get_icd10cm_active_ver()
+  dat <- get_from_icd_data("icd10cm_active", alt = icd.data::icd10cm2016)
+  # icd.data::get_icd10cm_active_ver()
+  ver <- if (icd_data_ver_ok()) {
+    getOption("icd.data.icd10cm_active_ver")
+  } else {
+    "2016"
+  }
   nc <- .chars_in_icd10cm[[ver]]
   kids <- icd10_children_defined_cpp(
     x,

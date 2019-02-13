@@ -22,6 +22,20 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
+# copied from icd.data version 1.1 until everything is on CRAN
+with_icd10cm_version <- function(ver, lang, code)
+{
+   var_name <- paste0("icd10cm",
+                     ver,
+                     ifelse(lang == "en", "", paste0("_", lang))
+  )
+  stopifnot(exists(var_name, envir = asNamespace("icd.data")))
+  stopifnot(is.character(ver), length(ver) == 1)
+  old <- options("icd.data.icd10cm_active_ver" = ver,
+                 "icd.data.icd10cm_active_lang" = lang)
+  on.exit(options(old))
+  force(code)
+}
 ```
 
 # WHO
@@ -36,7 +50,14 @@ icd.data::icd10fr2018[1:5, ]
 library(icd.data)
 summary(icd10who2016)
 ```
-
+```{r quicklookeval, echo = FALSE}
+if (icd:::icd_data_ver_ok()) {
+  icd.data::icd10who2016[1:5, ]
+  icd.data::icd10fr2018[1:5, ]
+  library(icd.data)
+  summary(icd10who2016)
+}
+```
 # French edition of ICD-10
 
 ICD-10-FR is significantly different from the WHO version, and is used by official bodies and health systems in France. As with all the features in this document, this is an early attempt at the complex problem of providing all the codes, transtatlanguages, 
@@ -48,34 +69,36 @@ ICD-10-FR is significantly different from the WHO version, and is used by offici
 
 There is an initial beta-quality mechanism for selecting a particular version of ICD-10-CM to use. This is a US coding system, but Belgian authorities provide translations into French and Dutch, and appear to have made no modifications.
 
+```{r getset, eval = FALSE}
+  # get the active version
+  icd.data::get_icd10cm_active_ver()
+  set the active version
+  # icd.data::set_icd10cm_active_ver("2015")
+```
+The following code is wrapped in some protections in case the latest icd.data isn't available (notably for CRAN checks).
 ```{r icd10cmoption}
-# get the active version
-icd.data::get_icd10cm_active_ver()
-# set the active version
-# icd.data::set_icd10cm_active_ver("2015")
-
-# The code "C4311" goes from being a leaf in 2018, to a parent in 2019
-if (icd:::icd_data_ver_ok(1.1)) {
-  icd.data::with_icd10cm_version(ver = "2018", 
-                                 lang = "en",
-                                 icd::is_leaf("C4311")
+if (icd:::icd_data_ver_ok()) {
+  # The code "C4311" goes from being a leaf in 2018, to a parent in 2019
+  with_icd10cm_version(ver = "2018", 
+                       lang = "en",
+                       icd::is_leaf("C4311")
   )
-  icd.data::with_icd10cm_version(ver = "2019", 
-                                 lang = "en", 
-                                 icd::is_leaf("C4311")
+  with_icd10cm_version(ver = "2019", 
+                       lang = "en", 
+                       icd::is_leaf("C4311")
   )
   # In 2018 the following code was not even defined, but in 2019 was a new child
   # code of "C4311"s
-  icd.data::with_icd10cm_version(ver = "2018", 
-                                 lang = "en",
-                                 {
-                                   print(icd::is_defined("C43111"))
-                                   print(icd::is_leaf("C43111"))
-                                 }
+  with_icd10cm_version(ver = "2018", 
+                       lang = "en",
+                       {
+                         print(icd::is_defined("C43111"))
+                         print(icd::is_leaf("C43111"))
+                       }
   )
-  icd.data::with_icd10cm_version(ver = "2019", 
-                                 lang = "en", 
-                                 icd::is_leaf("C43111")
+  with_icd10cm_version(ver = "2019", 
+                       lang = "en", 
+                       icd::is_leaf("C43111")
   )
 }
 ```
