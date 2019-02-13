@@ -149,7 +149,7 @@ explain_table.icd10who <- function(
   ...
 ) {
   req_icd_data()
-  explain_table_worker(x = x, hierarchy = icd.data::icd10who2016,
+  explain_table_worker(x = x, hierarchy = get_from_icd_data("icd10who2016"),
                        short_code = short_code, condense = condense,
                        brief = brief, warn = warn, ...)
 }

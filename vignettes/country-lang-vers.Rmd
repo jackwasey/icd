@@ -52,10 +52,9 @@ summary(icd10who2016)
 ```
 ```{r quicklookeval, echo = FALSE}
 if (icd:::icd_data_ver_ok()) {
-  icd.data::icd10who2016[1:5, ]
-  icd.data::icd10fr2018[1:5, ]
-  library(icd.data)
-  summary(icd10who2016)
+  icd:::get_from_icd_data("icd10who2016")[1:5, ]
+  icd:::get_from_icd_data("icd10fr2018")[1:5, ]
+  summary(icd:::get_from_icd_data("icd10who2016"))
 }
 ```
 # French edition of ICD-10

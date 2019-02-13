@@ -19,10 +19,10 @@ n <- 10000
 set.seed(1441)
 nm <- "code"
 i <- if (icd:::icd_data_ver_ok()) {
-  getExportedValue(asNamespace("icd.data"), "icd10cm2018_pc")
+  icd:::get_from_icd_data("icd10cm2018_pc")
 } else {
   nm <- "pcs"
-  getExportedValue(asNamespace("icd.data"), "icd10_pcs_2016")
+  icd:::get_from_icd_data("icd10_pcs_2016")
 }
 dat <- data.frame(
   id = n + seq(n),
