@@ -602,7 +602,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_icd_inFast", (DL_FUNC) &_icd_inFast, 2},
     {"_icd_valgrindCallgrindStart", (DL_FUNC) &_icd_valgrindCallgrindStart, 1},
     {"_icd_valgrindCallgrindStop", (DL_FUNC) &_icd_valgrindCallgrindStop, 0},
-    {"run_testthat_tests",              (DL_FUNC) &run_testthat_tests,              0},
+    {"run_testthat_tests",                      (DL_FUNC) &run_testthat_tests,                      0},
     {NULL, NULL, 0}
 };
 

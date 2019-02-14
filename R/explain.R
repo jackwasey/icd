@@ -29,20 +29,28 @@
 #'   descriptions. \code{explain_table} is designed to provide results in a
 #'   reliable order (when not condensing codes, at least).
 #' @export
-explain_code <- function(...)
+explain_code <- function(...) {
   UseMethod("explain_code")
+}
 
 #' @rdname explain_code
 #' @details \code{explain_icd} is a synonym for \code{\link{explain_code}}.
 #' @keywords internal
-explain_icd <- function(...) explain_code(...)
+explain_icd <- function(...) {
+  explain_code(...)
+}
 
 #' @describeIn explain_code Explain ICD codes from a character vector, guessing
 #'   ICD version
 #' @export
-explain_code.default <- function(x, short_code = guess_short(x),
-                                 condense = TRUE, brief = FALSE,
-                                 warn = TRUE, ...) {
+explain_code.default <- function(
+  x,
+  short_code = guess_short(x),
+  condense = TRUE,
+  brief = FALSE,
+  warn = TRUE,
+  ...
+) {
   switch(
     guess_version.character(as_char_no_warn(x), short_code = short_code),
     "icd9" = explain_code.icd9(x, short_code = short_code, condense = condense,
@@ -148,9 +156,14 @@ explain_code.icd10cm <- function(
 
 #' @describeIn explain_code WHO ICD-10 explanation
 #' @export
-explain_code.icd10who <- function(x, short_code = guess_short(x),
-                                  condense = TRUE, brief = NULL,
-                                  warn = TRUE, ...) {
+explain_code.icd10who <- function(
+  x,
+  short_code = guess_short(x),
+  condense = TRUE,
+  brief = NULL,
+  warn = TRUE,
+  ...
+) {
   req_icd_data()
   if (!is.null(brief))
     message("WHO ICD-10 does not have short or long descriptions, ",
@@ -195,7 +208,7 @@ explain_code.icd10fr <- function(
     x <- decimal_to_short.icd10(x)
   # this is a alow linear lookup, but usually only
   # "explaining" one or a few codes at a time.
-  i <- get_from_icd_data("icd10fr2014")
+  i <- get_from_icd_data("icd10fr2019")
   i[
     i[["code"]] %in% unique(as_char_no_warn(x)),
     ifelse(brief, "short_desc", "long_desc")
@@ -205,9 +218,14 @@ explain_code.icd10fr <- function(
 #' @describeIn explain_code ICD-10 explanation, falls back on ICD-10-CM until
 #'   ICD-10 WHO copyright workaround is available
 #' @export
-explain_code.icd10 <- function(x, short_code = guess_short(x),
-                               condense = TRUE, brief = FALSE,
-                               warn = TRUE, ...) {
+explain_code.icd10 <- function(
+  x,
+  short_code = guess_short(x),
+  condense = TRUE,
+  brief = FALSE,
+  warn = TRUE,
+  ...
+) {
   # don't pass on condense and warn until they are implemented
   explain_code.icd10cm(x = x, short_code = short_code, brief = brief, ...)
 }

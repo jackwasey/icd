@@ -46,14 +46,14 @@ Surprisingly, there are potential copyright restrictions on redistributing the W
 
 ```{r quicklook, eval=FALSE}
 icd.data::icd10who2016[1:5, ]
-icd.data::icd10fr2018[1:5, ]
+icd.data::icd10fr2019[1:5, ]
 library(icd.data)
 summary(icd10who2016)
 ```
 ```{r quicklookeval, echo = FALSE}
 if (icd:::icd_data_ver_ok()) {
   icd:::get_from_icd_data("icd10who2016")[1:5, ]
-  icd:::get_from_icd_data("icd10fr2018")[1:5, ]
+  icd:::get_from_icd_data("icd10fr2019")[1:5, ]
   summary(icd:::get_from_icd_data("icd10who2016"))
 }
 ```
@@ -63,7 +63,7 @@ if (icd:::icd_data_ver_ok()) {
 ICD-10-FR is significantly different from the WHO version, and is used by official bodies and health systems in France. As with all the features in this document, this is an early attempt at the complex problem of providing all the codes, transtatlanguages, 
 
 ```{r french, eval = FALSE}
-fr <- icd:::get_from_icd_data("icd10fr2018", lazy = TRUE)
+fr <- icd:::get_from_icd_data("icd10fr2019", lazy = TRUE)
 fr[fr$code == "C43", ]
 ```
 ```
