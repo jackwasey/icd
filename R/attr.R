@@ -19,6 +19,7 @@
 #' @param value \code{TRUE} or \code{FALSE}, default is \code{TRUE} which sets
 #'   the attribute to whatever is indicated in the function name. See examples.
 #' @examples
+#' library(icd)
 #' as.icd_short_diag("6670")
 #' as.icd_short_diag("667.0") # no warning or error!
 #' is.icd_short_diag(decimal_to_short("667.0"))

@@ -244,9 +244,9 @@ skip_missing_icd10who <- function(ver = "2016", lang = "en") {
 }
 
 skip_slow <- function(msg = "Skipping slow test") {
-  skip_on_cran()
-  skip_on_travis()
-  skip_on_appveyor()
+  testthat::skip_on_cran()
+  testthat::skip_on_travis()
+  testthat::skip_on_appveyor()
   s <- tolower(Sys.getenv("ICD_TEST_SLOW"))
   if (s == "") skip(msg)
   if (!startsWith(s, "t") &&

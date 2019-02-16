@@ -10,7 +10,7 @@ globalVariables(c("code_name", "icd10_map_pccc_dx", "icd9_map_pccc_dx",
 #' @inheritParams comorbid
 #' @examples
 #' # not pediatric data, but let's look for this example
-#' head(icd9_comorbid_pccc_dx(wide_to_long(icd.data::vermont_dx)))
+#' head(icd9_comorbid_pccc_dx(icd.data::vermont_dx[1:1000]))
 #' @export
 comorbid_pccc_dx <- function(
   x,

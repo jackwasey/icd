@@ -59,6 +59,7 @@ Get or set whether ICD codes have have an attribute indicating 'short' or
 }
 
 \examples{
+library(icd)
 as.icd_short_diag("6670")
 as.icd_short_diag("667.0") # no warning or error!
 is.icd_short_diag(decimal_to_short("667.0"))
