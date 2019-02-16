@@ -478,3 +478,10 @@ test_that("float visit IDs", {
   df_res <- comorbid_ahrq(d, return_df = TRUE, preserve_id_type = TRUE)
   expect_identical(df_res$visit_id, d[1, "visit_id"])
 })
+
+test_that("plot comorbid", {
+  expect_error(regexp = FALSE,
+               plot_comorbid(icd.data::vermont_dx[1:1000, ]))
+  expect_error(regexp = FALSE,
+               plot_comorbid(icd.data::uranium_pathology))
+})

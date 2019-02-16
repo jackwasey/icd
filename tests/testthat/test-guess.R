@@ -110,3 +110,13 @@ test_that("get icd dx name from nhds", {
   expect_true(all(grepl("dx", get_icd_name(nhds::nhds2010))))
   expect_true(all(grepl("pc", get_icd_pc_name(nhds::nhds2010))))
 })
+
+test_that("guess procedure code column names", {
+  expect_equal(
+    guess_icd_pc_col_by_name(
+      data.frame(id = 1, pc0 = "10000", pc1 = "2222")
+    ),
+    c("pc0", "pc1")
+  )
+  expect_true(is.null(guess_icd_pc_col_by_name(icd.data::vermont_dx)))
+})

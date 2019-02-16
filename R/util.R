@@ -306,29 +306,20 @@ guess_icd_pc_col_by_name <- function(
   x,
   valid_codes = TRUE,
   defined_codes = FALSE,
-  guesses = c("icd.?(9|10)",
-              "icd.?(9|10).?Code",
-              "icd",
-              "diagnos",
-              "diag.?code",
-              "diag",
-              "dx",
-              "i(9|10)",
-              "code"),
+  guesses = c(
+    "icd.?(9|10).?(proc|p).?(code|c)?",
+    "icd.*pc",
+    "proced.*",
+    "proc.?code",
+    "pc",
+    "i(9|10).*pc",
+    "pc.*i(9|10)",
+    "proc"),
   class_pattern = icd_dx_not_generic
 ) {
   guess_icd_col_by_name(
     x = x,
-    guesses = c(
-      "icd.?(9|10).?(proc|p).?(code|c)?",
-      "icd.*pc",
-      "proced.*",
-      "proc.?code",
-      "diag",
-      "pc",
-      "i(9|10).*pc",
-      "pc.*i(9|10)",
-      "proc"),
+    guesses = guesses,
     class_pattern = icd_pc_not_generic
   )
 }
