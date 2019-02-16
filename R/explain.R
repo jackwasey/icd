@@ -204,7 +204,16 @@ explain_code.icd10fr <- function(x, ...) {
 #' @describeIn explain_code ICD-10-BE explanation, initial implementation, subject to change
 #' @examples
 #' # Belgian ICD-10 has three languages available
-#' explain_code(as.icd10be("A00"))
+#' \dontrun{
+#' explain_code(as.icd10be("C20"))
+#' # [1] "Malignant neoplasm of rectum"
+#' explain_code(as.icd10be("C20"), lang = "en")
+#' # [1] "Malignant neoplasm of rectum"
+#' explain_code(as.icd10be("C20"), lang = "fr")
+#' # [1] "néoplasme malin du rectum"
+#' explain_code(as.icd10be("C20"), lang = "nl")
+#' # [1] "maligne neoplasma van het rectum"
+#' }
 #' @export
 explain_code.icd10be <- function(
   x,

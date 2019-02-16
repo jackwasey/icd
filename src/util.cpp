@@ -149,7 +149,11 @@ CharacterVector icd10cmSort(
   return wrap(x_);
 }
 
-// [[Rcpp::export(icd10cm_order_cpp)]]
+//' @title Order ICD-10-CM codes
+//' @description currently required for C7A, C7B (which fall after C80), and
+//'   D3A, which falls after D48.
+//' @keywords internal
+// [[Rcpp::export(icd10cm_order_rcpp)]]
 IntegerVector icd10cmOrder(const CharacterVector& x) {
   // see icd9Order for a different approach
   CharacterVector x_sorted = icd10cmSort(x);

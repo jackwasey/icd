@@ -53,7 +53,7 @@
 # Version 3.0
  * major improvement in comorbidity calculation speed using matrix multiplication behind the scenes. ICD-10 codes were slower than ICD-9 code comorbidities before, and are now 1.5 - 2 orders of magnitude faster.
  * Added AHRQ clinical condition software (CCS) classification for ICD-9 and ICD-10, thanks to Vitaly Druker, fixes #127
- * added 'charlson' synonyms for 'quan_deyo', e.g. Charlson comorbidities can now be found using `comorbid_charlson(patient_data)`
+ * added 'charlson' synonyms for 'Quan/Deyo', e.g. Charlson comorbidities can now be found using `comorbid_charlson(patient_data)`
  * Added AHRQ clinical condition software (CCS) classification for ICD-9 and ICD-10, thanks to Vitaly Druker, fixes #127
  * function names have lost the 'icd_' prefix, old names kept for compatiblity, but easier now to write `comorbid(patient_data)`, and `icd::comorbid` may also be used, and which many consider good practice. `explain_icd` synonym avoids name conflict with the popular `dplyr` package, but `icd::explain` also a nice option.
  * Assume C++11, which is now four years old, enabling code simplification
@@ -112,7 +112,7 @@
  * Completed fix from version 1.2.1 by temporarily disabling OpenMP on all platforms. Still runs quickly due to other optimizations made in supporting the OpenMP. It'll be back, but only when I or someone else can create a docker or VM image which runs Clang 3.7 or greater, OpenMP, with/without LLVM C++ standard library. See #75
 
 # Version 1.2.1
- * Partly fixed obscure memory access violation error seen only withwhen using OpenMP clang 3.7 on fedora, and maybe OS X.
+ * Partly fixed obscure memory access violation error seen only when using OpenMP clang 3.7 on fedora, and maybe OS X.
 
 # Version 1.2
  * Make annual revisions of ICD-9-CM available. The package includes data from each year which CMS has published (versions 23 to 32). The default is to use version 32. More work will be needed to make it straightforward to use an arbitrary version when running `icd9` commands. These are avaiable in the package data `icd9Billable`. See vignette for examples.

@@ -320,7 +320,11 @@ icd10cm_sort_cpp <- function(x) {
     .Call(`_icd_icd10cmSort`, x)
 }
 
-icd10cm_order_cpp <- function(x) {
+#' @title Order ICD-10-CM codes
+#' @description currently required for C7A, C7B (which fall after C80), and
+#'   D3A, which falls after D48.
+#' @keywords internal
+icd10cm_order_rcpp <- function(x) {
     .Call(`_icd_icd10cmOrder`, x)
 }
 

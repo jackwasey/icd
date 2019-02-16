@@ -63,7 +63,7 @@ strip <- function(x, pattern = " ", use_bytes = TRUE)
 #' text containing \code{TRUE} and \code{FALSE} is inefficient. Converting to
 #' binary allows more compact output to screen. Most functions in \R will
 #' convert \code{TRUE} and \code{FALSE} logical flags to \code{1} and \code{0},
-#' respsectively.
+#' respectively.
 #' @param x \code{data.frame} which may contain logical fields
 #' @examples
 #' mat <- matrix(sample(c(TRUE, FALSE), size = 9, replace = TRUE), nrow = 3)

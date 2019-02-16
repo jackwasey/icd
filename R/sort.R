@@ -85,7 +85,7 @@ order.icd9 <- function(x) {
 #' codes[icd::order.icd10cm(codes)]
 #' @export
 order.icd10cm <- function(x) {
-  icd10cm_order_cpp(x);
+  icd10cm_order_rcpp(x);
 }
 
 order.icd10be <- function(x) {
