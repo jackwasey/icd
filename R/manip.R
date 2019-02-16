@@ -49,9 +49,9 @@ icd9_add_leading_zeroes <- function(x, short_code = guess_short(x)) {
   assert_fac_or_char(x)
   assert_flag(short_code)
   if (is.factor(x)) {
-    levels(x) <- icd9_add_leading_zeroes_cpp(levels(x), short_code)
+    levels(x) <- icd9_add_leading_zeroes_rcpp(levels(x), short_code)
     x
-  } else icd9_add_leading_zeroes_cpp(x, short_code)
+  } else icd9_add_leading_zeroes_rcpp(x, short_code)
 }
 
 #' @rdname icd9_drop_leading_zeroes

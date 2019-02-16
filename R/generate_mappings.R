@@ -329,7 +329,7 @@ icd10_generate_map_quan_elix <- function(save_data = TRUE) {
   f <- function(x, verbose = TRUE) {
     if (verbose) message("f working on: ", paste(x, collapse = " "))
     kids <- children_defined.icd10cm(x, short_code = TRUE)
-    sort_icd.icd10(unique(c(kids, x)))
+    sort.icd10(unique(c(kids, x)))
   }
   icd10_map_quan_elix <- lapply(quan_elix_raw, f)
   # It does appear that there are numerous codes in the Quan Elixhauser scheme
@@ -407,7 +407,7 @@ icd10_generate_map_quan_deyo <- function(save_data = TRUE) {
   # children will likely be needed. Maybe generating a huge structure is still
   # worth it, even for ICD-10-CM, because I do end up cutting it back down to
   # size based on the input data before comorbidity matching.
-  f <- function(x) sort_icd.icd10(
+  f <- function(x) sort.icd10(
     unique(c(children_defined.icd10cm(x, short_code = TRUE), x)))
   icd10_map_quan_deyo <- lapply(quan_charl_raw, f)
   icd10_map_quan_deyo <- lapply(icd10_map_quan_deyo, as.short_diag)

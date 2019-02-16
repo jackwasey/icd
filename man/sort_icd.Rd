@@ -2,21 +2,32 @@
 % Please edit documentation in R/sort.R, R/z-deprecated.R
 \name{sort_icd}
 \alias{sort_icd}
-\alias{sort_icd.default}
-\alias{sort_icd.icd10}
-\alias{sort_icd.icd9}
+\alias{sort.icd10}
+\alias{sort.icd10cm}
+\alias{sort.icd9}
+\alias{order.icd9}
+\alias{order.icd10cm}
+\alias{order.icd10be}
 \alias{icd_sort.default}
 \alias{icd_sort.icd10}
 \alias{icd_sort.icd9}
-\title{Sort short-form ICD-9 codes}
+\title{Sort or get order of ICD-9 or ICD-10 codes according to published
+  sequence}
 \usage{
-sort_icd(x, ...)
+sort_icd(x, decreasing = FALSE, short_code = guess_short(x), ...)
 
-\method{sort_icd}{default}(x, short_code = guess_short(x), ...)
+\method{sort}{icd10}(x, decreasing = FALSE, ...)
 
-\method{sort_icd}{icd10}(x, short_code = NULL, ...)
+\method{sort}{icd10cm}(x, ...)
 
-\method{sort_icd}{icd9}(x, short_code = guess_short(x), ...)
+\method{sort}{icd9}(x, decreasing = FALSE, short_code = guess_short(x),
+  ...)
+
+order.icd9(x)
+
+order.icd10cm(x)
+
+order.icd10be(x)
 
 icd_sort.default(...)
 
@@ -25,9 +36,7 @@ icd_sort.icd10(...)
 icd_sort.icd9(...)
 }
 \arguments{
-\item{x}{vector of ICD codes to sort}
-
-\item{...}{arguments passed on to other functions}
+\item{x}{vector of ICD codes to sort or order}
 
 \item{short_code}{single logical value which determines whether the ICD-9
 code provided is in short (\code{TRUE}) or decimal (\code{FALSE}) form.
@@ -38,31 +47,32 @@ Where reasonable, this is guessed from the input data.}
 \item{...}{arguments passed on to other functions}
 
 \item{...}{arguments passed on to other functions}
+
+\item{...}{arguments passed on to other functions}
 }
 \value{
-sorted vector of ICD-9 codes. Numeric, then E codes, then V codes.
+For sort, a sorted vector of ICD-9 codes. Numeric, then E codes, then
+  V codes. For order, an integer vector is returned with the order of each
+  code.
 }
 \description{
-Sorts lists of numeric only, V or E codes. Note that a simple numeric sort
-does not work for ICD-9 codes, since "162" > "1620", and also V codes precede
-E codes.
+The default method will guess whether ICD-9 or ICD-10  then sort
+  based on that type. For ICD-10 codes, note that setting \code{short} is
+  unnecessary and ignored. All codes should consistently use the decimal
+  divider.
 }
-\details{
-Implementation used fast built-in sort, then shuffles the E codes to
-  the end.
+\section{ICD-9}{
+ Sorts lists of numeric, V or E codes. Note that a simple
+  numeric sort does not work for ICD-9 codes, since "162" > "1620", and also
+  V codes precede E codes. Numeric codes are first, then 'V', then 'E'. Will
+  return a factor if a factor is given.
 }
-\section{Methods (by class)}{
-\itemize{
-\item \code{default}: Guess whether ICD-9 or ICD-10 (or possibly sub-type in
-the future) then sort based on that type. ICD-10 codes, note that setting
-\code{short} is unnecessary and ignored.
 
-\item \code{icd10}: Sort ICD-10 codes, note that setting \code{short} is
-unnecessary and ignored.
-
-\item \code{icd9}: sort ICD-9 codes respecting numeric, then 'V', then 'E'
-codes, and accounting for leading zeroes. Will return a factor if a factor is given.
-}}
+\section{ICD-10-CM and ICD-10-BE}{
+ There are some codes which are sequenced
+  out of lexicographic order, e.g., \code{C7A} and \code{C7B} are between
+  \code{C75} and \code{C76}; \code{D3A} is between \code{D48} and \code{D49}.
+}
 
 \section{Deprecated function names}{
  Future versions of \pkg{icd} will drop
@@ -75,5 +85,11 @@ codes, and accounting for leading zeroes. Will return a factor if a factor is gi
   the prefix, e.g., \code{\link{icd_wide_data}}.
 }
 
+\examples{
+# order ICD-10-CM is not lexicographic:
+codes <- c("C7A", "C74", "C75", "C76", "C7B")
+stopifnot(!identical(order(codes), icd::order.icd10cm(codes)))
+codes[icd::order.icd10cm(codes)]
+}
 \keyword{internal}
 \keyword{manip}

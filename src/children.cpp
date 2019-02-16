@@ -3,7 +3,7 @@
 #include <vector>
 using namespace Rcpp;
 
-// [[Rcpp::export(icd10_children_defined_cpp)]]
+// [[Rcpp::export(icd10_children_defined_rcpp)]]
 CV icd10ChildrenDefined(CV &x, List lookup, IntegerVector nc) {
   CV allCodes = lookup["code"];
   IntegerVector matchesNa = match(x, allCodes);

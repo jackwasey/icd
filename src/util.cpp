@@ -78,7 +78,7 @@ inline std::size_t getSecondPlusOne(
   return p.second + 1;
 }
 
-// [[Rcpp::export(icd9_order_cpp)]]
+// [[Rcpp::export(icd9_order_rcpp)]]
 std::vector<std::size_t> icd9Order(VecStr x) {
   std::vector<std::pair<std::string, std::size_t> > vp;
   std::vector<std::size_t> out;
@@ -110,7 +110,7 @@ bool strVecEqual(CharacterVector x, CharacterVector y) {
   return true;
 }
 
-// [[Rcpp::export(icd10cm_compare_cpp)]]
+// [[Rcpp::export(icd10cm_compare_rcpp)]]
 bool icd10cmCompare(const Rcpp::String x, const Rcpp::String y) {
   const char * xstr = x.get_cstring();
   const char * ystr = y.get_cstring();
@@ -140,7 +140,7 @@ bool icd10cmCompare(const Rcpp::String x, const Rcpp::String y) {
   return x < y;
 }
 
-// [[Rcpp::export(icd10cm_sort_cpp)]]
+// [[Rcpp::export(icd10cm_sort_rcpp)]]
 CharacterVector icd10cmSort(
     const CharacterVector& x
 ) {

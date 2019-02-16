@@ -557,16 +557,16 @@ is_major.icd9 <- function(x) {
 #' @keywords internal
 #' @noRd
 icd9_is_n <- function(x)
-  icd9_is_n_cpp(as_char_no_warn(x))
+  icd9_is_n_rcpp(as_char_no_warn(x))
 
 #' @describeIn icd9_is_n are the given codes V type?
 #' @keywords internal
 #' @noRd
 icd9_is_v <- function(x)
-  icd9_is_v_cpp(as_char_no_warn(x))
+  icd9_is_v_rcpp(as_char_no_warn(x))
 
 #' @describeIn icd9_is_n are the given codes E type?
 #' @keywords internal
 #' @noRd
 icd9_is_e <- function(x)
-  icd9_is_e_cpp(as_char_no_warn(x))
+  icd9_is_e_rcpp(as_char_no_warn(x))

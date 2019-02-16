@@ -153,7 +153,7 @@ icd9_condense_short <- function(x, defined = NULL, warn = TRUE,
       fout <- fout[-which(fout %in% test_kids)]
     }
   }
-  out <- unique(sort_icd.icd9(c(out, fout, i9w), short_code = TRUE))
+  out <- unique(sort.icd9(c(out, fout, i9w), short_code = TRUE))
   if (!is.null(icd9Levels)) {
     if (keep_factor_levels)
       out <- factor(out, icd9Levels)

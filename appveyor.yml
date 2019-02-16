@@ -10,9 +10,9 @@ init:
 install:
   ps: Bootstrap
 
-# temporarily disable cache
-#cache:
-#- C:\RLibrary
+# temporarily disable cache if error?
+cache:
+- C:\RLibrary
 
 # Adapt as necessary starting from here
 

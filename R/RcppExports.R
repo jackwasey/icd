@@ -51,7 +51,7 @@ categorize_rcpp <- function() {
     .Call(`_icd_categorize_rcpp`)
 }
 
-icd10_children_defined_cpp <- function(x, lookup, nc) {
+icd10_children_defined_rcpp <- function(x, lookup, nc) {
     .Call(`_icd_icd10ChildrenDefined`, x, lookup, nc)
 }
 
@@ -128,11 +128,11 @@ icd9DecimalToParts <- function(icd9Decimal, mnrEmpty) {
     .Call(`_icd_icd9DecimalToParts`, icd9Decimal, mnrEmpty)
 }
 
-icd9_short_to_decimal_cpp <- function(x) {
+icd9_short_to_decimal_rcpp <- function(x) {
     .Call(`_icd_icd9ShortToDecimal`, x)
 }
 
-icd9_decimal_to_short_cpp <- function(x) {
+icd9_decimal_to_short_rcpp <- function(x) {
     .Call(`_icd_icd9DecimalToShort`, x)
 }
 
@@ -200,20 +200,20 @@ guess_short <- function(x_, short_code = NULL, n = 1000L, icd_name = NULL) {
 #' @param x \code{const char*} of choices of first character to match
 #' @param invert single logical, if TRUE, negates the condition
 #' @keywords internal
-icd9_is_n_cpp <- function(sv) {
-    .Call(`_icd_icd9_is_n_cpp`, sv)
+icd9_is_n_rcpp <- function(sv) {
+    .Call(`_icd_icd9_is_n_rcpp`, sv)
 }
 
-#' @rdname icd9_is_n_cpp
+#' @rdname icd9_is_n_rcpp
 #' @keywords internal
-icd9_is_v_cpp <- function(sv) {
-    .Call(`_icd_icd9_is_v_cpp`, sv)
+icd9_is_v_rcpp <- function(sv) {
+    .Call(`_icd_icd9_is_v_rcpp`, sv)
 }
 
-#' @rdname icd9_is_n_cpp
+#' @rdname icd9_is_n_rcpp
 #' @keywords internal
-icd9_is_e_cpp <- function(sv) {
-    .Call(`_icd_icd9_is_e_cpp`, sv)
+icd9_is_e_rcpp <- function(sv) {
+    .Call(`_icd_icd9_is_e_rcpp`, sv)
 }
 
 #' Simpler add leading zeroes without converting to parts and back
@@ -238,7 +238,7 @@ icd9_add_leading_zeroes_major <- function(mjr) {
 #' @template short_code
 #' @return character vector of ICD-9 codes with leading zeroes
 #' @keywords internal manip
-icd9_add_leading_zeroes_cpp <- function(x, short_code) {
+icd9_add_leading_zeroes_rcpp <- function(x, short_code) {
     .Call(`_icd_icd9AddLeadingZeroes`, x, short_code)
 }
 
@@ -308,15 +308,15 @@ icd9_compare_rcpp <- function(a, b) {
     .Call(`_icd_icd9Compare`, a, b)
 }
 
-icd9_order_cpp <- function(x) {
+icd9_order_rcpp <- function(x) {
     .Call(`_icd_icd9Order`, x)
 }
 
-icd10cm_compare_cpp <- function(x, y) {
+icd10cm_compare_rcpp <- function(x, y) {
     .Call(`_icd_icd10cmCompare`, x, y)
 }
 
-icd10cm_sort_cpp <- function(x) {
+icd10cm_sort_rcpp <- function(x) {
     .Call(`_icd_icd10cmSort`, x)
 }
 

@@ -5,8 +5,8 @@
 bool icd9IsASingleV(const char* s);
 bool icd9IsASingleE(const char* s);
 bool icd9IsASingleVE(const char* s);
-std::vector<bool> icd9_is_n_cpp(const VecStr& sv);
-std::vector<bool> icd9_is_v_cpp(const VecStr& sv);
-std::vector<bool> icd9_is_e_cpp(const VecStr& sv);
+std::vector<bool> icd9_is_n_rcpp(const VecStr& sv);
+std::vector<bool> icd9_is_v_rcpp(const VecStr& sv);
+std::vector<bool> icd9_is_e_rcpp(const VecStr& sv);
 
 #endif /* IS_H_ */

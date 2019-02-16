@@ -272,7 +272,7 @@ short_to_decimal.default <- function(x) {
 #' @export
 #' @keywords internal manip
 short_to_decimal.icd9 <- function(x) {
-  icd9(as.decimal_diag(icd9_short_to_decimal_cpp(x)))
+  icd9(as.decimal_diag(icd9_short_to_decimal_rcpp(x)))
 }
 
 #' @describeIn short_to_decimal convert ICD-10 codes from short to decimal
@@ -314,10 +314,10 @@ decimal_to_short <- function(x) {
 #' @keywords internal manip
 decimal_to_short.icd9 <- function(x) {
   if (is.factor(x)) {
-    levels(x) <- icd9(as.short_diag(icd9_decimal_to_short_cpp(levels(x))))
+    levels(x) <- icd9(as.short_diag(icd9_decimal_to_short_rcpp(levels(x))))
     return(x)
   }
-  icd9(as.short_diag(icd9_decimal_to_short_cpp(x)))
+  icd9(as.short_diag(icd9_decimal_to_short_rcpp(x)))
 }
 
 #' @describeIn decimal_to_short convert ICD-10 codes from decimal to short

@@ -69,8 +69,9 @@
 #'   You can find children of a higher-level ICD-9 code with
 #'   \code{\link{children}} and find a common parent to a set of children (or
 #'   arbitrary list of ICD-9 codes) with \code{\link{condense}}.
-#'   \code{\link{sort_icd}} sorts in hierarchical, then numerical order, so
-#'   '100.0' comes before '100.00', for example.
+#'   \code{\link{sort}} (\code{\link{sort.icd9}}, \code{\link{sort.icd10cm}},
+#'   etc.) sorts in hierarchical, then numerical order, so '100.0' comes before
+#'   '100.00', for example.
 #'
 #'   \code{\link{wide_to_long}} and \code{\link{long_to_wide}} convert the two
 #'   most common data structures containing patient disease data. This is more

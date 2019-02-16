@@ -350,19 +350,19 @@ icd_sort <-
 #' @template dotdotdot
 #' @export
 icd_sort.default <-
-  function(...) { d("sort_icd.default"); sort_icd.default(...) }
+  function(...) { d("sort_icd"); sort_icd(...) }
 
 #' @rdname sort_icd
 #' @template dotdotdot
 #' @export
 icd_sort.icd10 <-
-  function(...) { d("sort_icd.icd10"); sort_icd.icd10(...) }
+  function(...) { d("sort.icd10"); sort.icd10(...) }
 
 #' @rdname sort_icd
 #' @template dotdotdot
 #' @export
 icd_sort.icd9 <-
-  function(...) { d("sort_icd.icd9"); sort_icd.icd9(...) }
+  function(...) { d("sort.icd9"); sort.icd9(...) }
 
 #' @rdname van_walraven
 #' @template deprecated-icd3

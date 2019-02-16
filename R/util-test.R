@@ -235,9 +235,14 @@ expect_character <- function(x, ...) {
 
 # workaround so icd.data 1.0 will not cause CRAN or user errors
 skip_missing_icd10who <- function(ver = "2016", lang = "en") {
-  if (exists("skip_missing_icd10who", envir = asNamespace("icd.data"))) {
-    f <- get("skip_missing_icd10who", envir = asNamespace("icd.data"))
-    f(ver = ver, lang = lang)
+  if (exists("skip_missing_icd10who",
+             envir = asNamespace("icd.data"),
+             inherits = FALSE)) {
+    f <- get("skip_missing_icd10who",
+             envir = asNamespace("icd.data"))
+    do.call(f,
+            args = list(ver = ver, lang = lang),
+            envir = asNamespace("icd.data"))
   } else {
     testthat::skip("No skip_missing_icd10who function, so no data")
   }

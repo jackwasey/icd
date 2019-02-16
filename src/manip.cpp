@@ -109,7 +109,7 @@ CV icd9AddLeadingZeroesMajor(CV mjr) {
 //' @template short_code
 //' @return character vector of ICD-9 codes with leading zeroes
 //' @keywords internal manip
-// [[Rcpp::export(icd9_add_leading_zeroes_cpp)]]
+// [[Rcpp::export(icd9_add_leading_zeroes_rcpp)]]
 CV icd9AddLeadingZeroes(CV x, bool short_code) {
   if (short_code) {
     // a shortcut for when short codes is just to add the appropriate leading

@@ -269,36 +269,36 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// icd9_is_n_cpp
-std::vector<bool> icd9_is_n_cpp(const VecStr& sv);
-RcppExport SEXP _icd_icd9_is_n_cpp(SEXP svSEXP) {
+// icd9_is_n_rcpp
+std::vector<bool> icd9_is_n_rcpp(const VecStr& sv);
+RcppExport SEXP _icd_icd9_is_n_rcpp(SEXP svSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< const VecStr& >::type sv(svSEXP);
-    rcpp_result_gen = Rcpp::wrap(icd9_is_n_cpp(sv));
+    rcpp_result_gen = Rcpp::wrap(icd9_is_n_rcpp(sv));
     return rcpp_result_gen;
 END_RCPP
 }
-// icd9_is_v_cpp
-std::vector<bool> icd9_is_v_cpp(const VecStr& sv);
-RcppExport SEXP _icd_icd9_is_v_cpp(SEXP svSEXP) {
+// icd9_is_v_rcpp
+std::vector<bool> icd9_is_v_rcpp(const VecStr& sv);
+RcppExport SEXP _icd_icd9_is_v_rcpp(SEXP svSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< const VecStr& >::type sv(svSEXP);
-    rcpp_result_gen = Rcpp::wrap(icd9_is_v_cpp(sv));
+    rcpp_result_gen = Rcpp::wrap(icd9_is_v_rcpp(sv));
     return rcpp_result_gen;
 END_RCPP
 }
-// icd9_is_e_cpp
-std::vector<bool> icd9_is_e_cpp(const VecStr& sv);
-RcppExport SEXP _icd_icd9_is_e_cpp(SEXP svSEXP) {
+// icd9_is_e_rcpp
+std::vector<bool> icd9_is_e_rcpp(const VecStr& sv);
+RcppExport SEXP _icd_icd9_is_e_rcpp(SEXP svSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< const VecStr& >::type sv(svSEXP);
-    rcpp_result_gen = Rcpp::wrap(icd9_is_e_cpp(sv));
+    rcpp_result_gen = Rcpp::wrap(icd9_is_e_rcpp(sv));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -624,9 +624,9 @@ static const R_CallMethodDef CallEntries[] = {
     {"_icd_fastIntToStringRcpp", (DL_FUNC) &_icd_fastIntToStringRcpp, 1},
     {"_icd_guessShortPlusFactorCpp", (DL_FUNC) &_icd_guessShortPlusFactorCpp, 2},
     {"_icd_guessShortCompleteCpp", (DL_FUNC) &_icd_guessShortCompleteCpp, 4},
-    {"_icd_icd9_is_n_cpp", (DL_FUNC) &_icd_icd9_is_n_cpp, 1},
-    {"_icd_icd9_is_v_cpp", (DL_FUNC) &_icd_icd9_is_v_cpp, 1},
-    {"_icd_icd9_is_e_cpp", (DL_FUNC) &_icd_icd9_is_e_cpp, 1},
+    {"_icd_icd9_is_n_rcpp", (DL_FUNC) &_icd_icd9_is_n_rcpp, 1},
+    {"_icd_icd9_is_v_rcpp", (DL_FUNC) &_icd_icd9_is_v_rcpp, 1},
+    {"_icd_icd9_is_e_rcpp", (DL_FUNC) &_icd_icd9_is_e_rcpp, 1},
     {"_icd_icd9AddLeadingZeroesMajorSingle", (DL_FUNC) &_icd_icd9AddLeadingZeroesMajorSingle, 1},
     {"_icd_icd9AddLeadingZeroesMajorSingleStd", (DL_FUNC) &_icd_icd9AddLeadingZeroesMajorSingleStd, 1},
     {"_icd_icd9AddLeadingZeroesMajor", (DL_FUNC) &_icd_icd9AddLeadingZeroesMajor, 1},

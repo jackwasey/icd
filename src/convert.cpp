@@ -135,12 +135,12 @@ List icd9DecimalToParts(const CV& icd9Decimal, const String mnrEmpty) {
                       mnrs);
 }
 
-// [[Rcpp::export(name = "icd9_short_to_decimal_cpp")]]
+// [[Rcpp::export(name = "icd9_short_to_decimal_rcpp")]]
 CV icd9ShortToDecimal(const CV& x) {
   return icd9PartsToDecimal(icd9ShortToParts(x, ""));
 }
 
-// [[Rcpp::export(name="icd9_decimal_to_short_cpp")]]
+// [[Rcpp::export(name="icd9_decimal_to_short_rcpp")]]
 CV icd9DecimalToShort(const CV& x) {
   CV out = clone(x); // clone instead of pushing back thousands of times
   size_t ilen = x.length();

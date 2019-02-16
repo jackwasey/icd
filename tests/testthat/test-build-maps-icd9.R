@@ -6,26 +6,26 @@ test_that("AHRQ children same as saved", {
   for (i in icd9_map_ahrq)
     expect_equal(
       children.icd9(i, defined = FALSE, short_code = TRUE),
-      sort_icd.icd9(i))
+      sort.icd9(i))
 })
 
 test_that("Elixhauser children same as saved", {
   for (i in icd9_map_quan_elix)
     expect_equal(
       children.icd9(i, defined = FALSE, short_code = TRUE),
-      sort_icd.icd9(i))
+      sort.icd9(i))
 })
 
 test_that("Quan Charlson children same as saved", {
   for (i in icd9_map_quan_deyo)
     expect_equal_no_class_order(
-      children.icd9(i, defined = FALSE, short_code = TRUE), sort_icd.icd9(i))
+      children.icd9(i, defined = FALSE, short_code = TRUE), sort.icd9(i))
 })
 
 test_that("Quan Elixhauser children same as saved", {
   for (i in icd9_map_quan_elix)
     expect_equal_no_class_order(
-      children.icd9(i, defined = FALSE, short_code = TRUE), sort_icd.icd9(i))
+      children.icd9(i, defined = FALSE, short_code = TRUE), sort.icd9(i))
 })
 
 

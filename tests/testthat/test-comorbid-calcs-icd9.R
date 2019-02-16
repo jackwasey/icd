@@ -480,8 +480,8 @@ test_that("float visit IDs", {
 })
 
 test_that("plot comorbid", {
-  expect_error(regexp = FALSE,
+  expect_error(regexp = NA,
                plot_comorbid(icd.data::vermont_dx[1:1000, ]))
-  expect_error(regexp = FALSE,
+  expect_error(regexp = NA,
                plot_comorbid(icd.data::uranium_pathology))
 })

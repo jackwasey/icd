@@ -176,7 +176,7 @@ sas_expand_range <- function(start, end) {
                                     short_code = TRUE,
                                     ex_ambig_start = TRUE,
                                     ex_ambig_end = TRUE)
-  sort_icd.icd9(unique(c(halfway, nonrealrange)), short_code = TRUE)
+  sort.icd9(unique(c(halfway, nonrealrange)), short_code = TRUE)
 }
 
 #nocov end

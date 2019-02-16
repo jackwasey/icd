@@ -67,7 +67,7 @@ children.icd9cm <- function(x, short_code = guess_short(x),
           icd9Decimal = toupper(x),
           icd9cmReal = icd.data::icd9cm_hierarchy$code,
           onlyReal = defined)
-  res <- sort_icd.icd9(res)
+  res <- sort.icd9(res)
   res <- if (billable)
     get_billable.icd9cm(icd9cm(res), short_code)
   else
@@ -163,7 +163,7 @@ children_defined.icd10cm <- function(x,
     "2016"
   }
   nc <- .chars_in_icd10cm[[ver]]
-  kids <- icd10_children_defined_cpp(
+  kids <- icd10_children_defined_rcpp(
     x,
     dat,
     nc)
@@ -198,6 +198,6 @@ children_defined.icd10who <- function(
   if (!short_code)
     x <- decimal_to_short.icd10cm(x)
   d <- get_from_icd_data("icd10who2016")
-  kids <- icd10_children_defined_cpp(x, d, nchar(d$code))
+  kids <- icd10_children_defined_rcpp(x, d, nchar(d$code))
   as.icd10who(kids, short_code = short_code)
 }

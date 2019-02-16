@@ -99,7 +99,7 @@ icd9_parse_ahrq_sas <- function(save_data = FALSE, offline = TRUE) {
         icd9_map_ahrq[[cmb]] <-
           as.short_diag(
             as.icd9(
-              sort_icd.icd9(
+              sort.icd9(
                 unique(
                   c(icd9_map_ahrq[[cmb]], p)), short_code = TRUE)))
       }
