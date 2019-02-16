@@ -13,7 +13,7 @@ extern "C" {
 
 using namespace Rcpp;
 
-// [[Rcpp::export]]
+// [[Rcpp::export(icd10_short_to_parts)]]
 List icd10ShortToParts(const CV& x, const String mnrEmpty) {
   R_xlen_t i10sz = x.size();
   CV mjr(i10sz);
@@ -21,8 +21,8 @@ List icd10ShortToParts(const CV& x, const String mnrEmpty) {
   std::string::size_type sz;
   for (R_xlen_t i = 0; i != i10sz; ++i) {
     String thisShort = x[i];
-    // workaround because String::is_na is private
-    if (is_true(all(is_na(CV::create(thisShort))))) {
+    if (thisShort == NA_STRING) {
+      mjr[i] = NA_STRING;
       mnr[i] = NA_STRING;
       continue;
     }

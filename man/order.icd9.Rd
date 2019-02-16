@@ -2,9 +2,12 @@
 % Please edit documentation in R/sort.R
 \name{order.icd9}
 \alias{order.icd9}
-\title{Get order of short-form ICD-9 codes}
+\alias{order.icd10cm}
+\title{Get order of a vector of ICD codes}
 \usage{
 order.icd9(x)
+
+order.icd10cm(x)
 }
 \arguments{
 \item{x}{vector or factor of ICD-9 codes}
@@ -13,6 +16,22 @@ order.icd9(x)
 vector of integers with length of the non-NA values in \code{x}
 }
 \description{
-Puts E codes after V codes. \code{NA} values can't be ordered and are dropped
-with a warning if found.
+Get order of a vector of ICD codes
+}
+\section{ICD-9}{
+ Puts E codes after V codes. \code{NA} values can't be ordered
+  and are dropped with a warning if found.
+}
+
+\section{ICD-10-CM}{
+ there are some codes which are sequenced out of
+  lexicographic order, e.g., \code{C7A} and \code{C7B} are between \code{C75}
+  and \code{C76}; \code{D3A} is between \code{D48} and \code{D49}.
+}
+
+\examples{
+# order ICD-10-CM is not lexicographic:
+codes <- c("C7A", "C74", "C75", "C76", "C7B")
+stopifnot(!identical(order(codes), icd::order.icd10cm(codes)))
+codes[icd::order.icd10cm(codes)]
 }

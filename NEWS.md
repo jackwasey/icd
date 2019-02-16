@@ -1,5 +1,7 @@
-# Version 3.4
+# Version 3.4.1
  * Thanks to @vitallish for update to CCS maps see #163, #168
+ * Framework for using WHO ICD-10 codes, which the 'icd.data' package will download as needed from the WHO web site. English and French are available, but currently only for the years 2016 and 2008 respectively. Update 'icd.data' package to version 1.1.1 to enable.
+ * Access to French and Dutch translations of ICD-10-CM, used in Belgium.
  * Handle 'wide' format data much more efficiently, without having to convert to long format first.
  * Add ICD-9 and ICD-10 WHO and US Clinical Modification procedure codes. Some, but not all of these are available through the 'icd.data' package.
  * New function `plot_comorbid` uses simple base R graphics to quickly summarise comorbidities in a bar plot.

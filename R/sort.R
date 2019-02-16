@@ -58,18 +58,36 @@ sort_icd.icd9 <- function(x, short_code = guess_short(x), ...) {
   res
 }
 
-#' Get order of short-form ICD-9 codes
+#' Get order of a vector of ICD codes
 #'
-#' Puts E codes after V codes. \code{NA} values can't be ordered and are dropped
-#' with a warning if found.
+#' @section ICD-9: Puts E codes after V codes. \code{NA} values can't be ordered
+#'   and are dropped with a warning if found.
+#' @section ICD-10-CM: there are some codes which are sequenced out of
+#'   lexicographic order, e.g., \code{C7A} and \code{C7B} are between \code{C75}
+#'   and \code{C76}; \code{D3A} is between \code{D48} and \code{D49}.
 #' @param x vector or factor of ICD-9 codes
 #' @return vector of integers with length of the non-NA values in \code{x}
 #' @export
 order.icd9 <- function(x) {
   if (anyNA(x)) {
-    warning("can't order NA values, so dropping them")
+    warning("Dropping NA values")
     x <- x[!is.na(x)]
-    if (length(x) == 0) return(character())
+    if (length(x) == 0) return(integer())
   }
   icd9_order_cpp(x)
+}
+
+#' @rdname order.icd9
+#' @examples
+#' # order ICD-10-CM is not lexicographic:
+#' codes <- c("C7A", "C74", "C75", "C76", "C7B")
+#' stopifnot(!identical(order(codes), icd::order.icd10cm(codes)))
+#' codes[icd::order.icd10cm(codes)]
+#' @export
+order.icd10cm <- function(x) {
+  icd10cm_order_cpp(x);
+}
+
+order.icd10be <- function(x) {
+ order.icd10cm(x)
 }

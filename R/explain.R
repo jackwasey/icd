@@ -15,6 +15,10 @@
 #' @param warn single logical value, default is \code{TRUE}, meaning that codes
 #'   which do not correspond to diagnoses, or to three-digit codes, will trigger
 #'   a warning.
+#' @param lang For WHO ICD-10 codes, the 2016 English and 2008 French
+#'   translations are available. Use 'en' or 'fr' respectively. For ICD-10-CM
+#'   codes, Dutch is also available, indicated by 'nl'. If `icd.data` 1.0 is
+#'   installed, English descriptions are returned.
 #' @template dotdotdot
 #' @examples
 #' # by default, just show parent code and ignore children (428.0 not shown
@@ -147,7 +151,8 @@ explain_code.icd10cm <- function(
     x <- decimal_to_short.icd10(x)
   # this is a alow linear lookup, but usually only
   # "explaining" one or a few codes at a time.
-  i <- get_from_icd_data("icd10cm_active", alt = icd.data::icd10cm2016)
+  i <- get_from_icd_data("icd10cm_active",
+                         alt = icd.data::icd10cm2016)
   i[
     i[["code"]] %in% unique(as_char_no_warn(x)),
     ifelse(brief, "short_desc", "long_desc")
@@ -162,6 +167,7 @@ explain_code.icd10who <- function(
   condense = TRUE,
   brief = NULL,
   warn = TRUE,
+  lang = c("en", "fr"),
   ...
 ) {
   req_icd_data()
@@ -170,6 +176,7 @@ explain_code.icd10who <- function(
             "so the argument `brief` is redundant")
   stopifnot(is.atomic(x))
   stopifnot(is.logical(short_code), length(short_code) == 1)
+  lang <- match.arg(lang)
   if (!missing(condense))
     .NotYetUsed("condense", error = FALSE)
   if (!missing(warn))
@@ -178,41 +185,37 @@ explain_code.icd10who <- function(
     x <- decimal_to_short.icd10(x)
   # this is a alow linear lookup, but usually only
   # "explaining" one or a few codes at a time.
-  i <- get_from_icd_data("icd10who2016")
+  i <- if (lang == 'fr')
+    get_from_icd_data("icd10who2008fr")
+  else
+    get_from_icd_data("icd10who2016")
   i[
     i[["code"]] %in% unique(as_char_no_warn(x)),
     "desc"
     ]
 }
 
-#' @describeIn explain_code ICD-10-fr explanation, current a minimal
-#'   implementation
+#' @describeIn explain_code ICD-10-FR explanation, initial implementation, subject to change
 #' @export
-explain_code.icd10fr <- function(
+explain_code.icd10fr <- function(x, ...) {
+  explain_code_worker(x, "icd10fr2019")
+}
+
+#' @describeIn explain_code ICD-10-BE explanation, initial implementation, subject to change
+#' @examples
+#' # Belgian ICD-10 has three languages available
+#' explain_code(as.icd10be("A00"))
+#' @export
+explain_code.icd10be <- function(
   x,
-  short_code = guess_short(x),
-  condense = TRUE,
-  brief = FALSE,
-  warn = TRUE,
+  lang = c("fr", "nl", "en"),
   ...
 ) {
-  req_icd_data()
-  stopifnot(is.atomic(x))
-  stopifnot(is.logical(short_code), length(short_code) == 1L)
-  stopifnot(is.logical(brief), length(brief) == 1L)
-  if (!missing(condense))
-    .NotYetUsed("condense", error = FALSE)
-  if (!missing(warn))
-    .NotYetUsed("warn", error = FALSE)
-  if (!short_code)
-    x <- decimal_to_short.icd10(x)
-  # this is a alow linear lookup, but usually only
-  # "explaining" one or a few codes at a time.
-  i <- get_from_icd_data("icd10fr2019")
-  i[
-    i[["code"]] %in% unique(as_char_no_warn(x)),
-    ifelse(brief, "short_desc", "long_desc")
-    ]
+  lang <- match.arg(lang)
+  explain_code_worker(x = x,
+                      dat = "icd10be2017",
+                      lang = lang,
+                      ...)
 }
 
 #' @describeIn explain_code ICD-10 explanation, falls back on ICD-10-CM until
@@ -228,6 +231,42 @@ explain_code.icd10 <- function(
 ) {
   # don't pass on condense and warn until they are implemented
   explain_code.icd10cm(x = x, short_code = short_code, brief = brief, ...)
+}
+
+explain_code_worker <- function(
+  x,
+  dat,
+  short_code = guess_short(x),
+  condense = TRUE,
+  brief = FALSE,
+  warn = TRUE,
+  lang = NULL,
+  ...
+) {
+  req_icd_data()
+  stopifnot(is.atomic(x))
+  stopifnot(is.character(dat))
+  stopifnot(is.logical(short_code), length(short_code) == 1L)
+  stopifnot(is.logical(brief), length(brief) == 1L)
+  if (!missing(condense))
+    .NotYetUsed("condense", error = FALSE)
+  if (!missing(warn))
+    .NotYetUsed("warn", error = FALSE)
+  if (!short_code)
+    x <- decimal_to_short.icd10(x)
+  # this is a alow linear lookup, but usually only
+  # "explaining" one or a few codes at a time.
+  short_str <- "short_desc"
+  long_str <- "long_desc"
+  if (!is.null(lang)) {
+    short_str <- paste0(short_str, "_", lang)
+    long_str <- paste0(long_str, "_", lang)
+  }
+  i <- get_from_icd_data(dat)
+  i[
+    i[["code"]] %in% unique(as_char_no_warn(x)),
+    ifelse(brief, short_str, long_str)
+    ]
 }
 
 icd9_expand_chapter_majors <- function(chap) {

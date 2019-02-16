@@ -146,7 +146,7 @@ get_major.icd9 <- function(x, short_code) {
     .Call(`_icd_icd9GetMajor`, x, short_code)
 }
 
-icd10ShortToParts <- function(x, mnrEmpty) {
+icd10_short_to_parts <- function(x, mnrEmpty) {
     .Call(`_icd_icd10ShortToParts`, x, mnrEmpty)
 }
 
@@ -304,8 +304,24 @@ trimCpp <- function(sv) {
     .Call(`_icd_trimCpp`, sv)
 }
 
+icd9_compare_rcpp <- function(a, b) {
+    .Call(`_icd_icd9Compare`, a, b)
+}
+
 icd9_order_cpp <- function(x) {
-    .Call(`_icd_icd9OrderCpp`, x)
+    .Call(`_icd_icd9Order`, x)
+}
+
+icd10cm_compare_cpp <- function(x, y) {
+    .Call(`_icd_icd10cmCompare`, x, y)
+}
+
+icd10cm_sort_cpp <- function(x) {
+    .Call(`_icd_icd10cmSort`, x)
+}
+
+icd10cm_order_cpp <- function(x) {
+    .Call(`_icd_icd10cmOrder`, x)
 }
 
 #' @title Faster match

@@ -10,6 +10,7 @@
 \alias{explain_code.icd10cm}
 \alias{explain_code.icd10who}
 \alias{explain_code.icd10fr}
+\alias{explain_code.icd10be}
 \alias{explain_code.icd10}
 \alias{icd_explain}
 \alias{icd_explain.default}
@@ -38,10 +39,12 @@ explain_icd(...)
   condense = TRUE, brief = FALSE, warn = TRUE, ...)
 
 \method{explain_code}{icd10who}(x, short_code = guess_short(x),
-  condense = TRUE, brief = NULL, warn = TRUE, ...)
+  condense = TRUE, brief = NULL, warn = TRUE, lang = c("en", "fr"),
+  ...)
 
-\method{explain_code}{icd10fr}(x, short_code = guess_short(x),
-  condense = TRUE, brief = FALSE, warn = TRUE, ...)
+\method{explain_code}{icd10fr}(x, ...)
+
+\method{explain_code}{icd10be}(x, lang = c("fr", "nl", "en"), ...)
 
 \method{explain_code}{icd10}(x, short_code = guess_short(x),
   condense = TRUE, brief = FALSE, warn = TRUE, ...)
@@ -83,6 +86,11 @@ otherwise the long description is used.}
 \item{warn}{single logical value, default is \code{TRUE}, meaning that codes
 which do not correspond to diagnoses, or to three-digit codes, will trigger
 a warning.}
+
+\item{lang}{For WHO ICD-10 codes, the 2016 English and 2008 French
+translations are available. Use 'en' or 'fr' respectively. For ICD-10-CM
+codes, Dutch is also available, indicated by 'nl'. If `icd.data` 1.0 is
+installed, English descriptions are returned.}
 }
 \value{
 data frame, or list of data frames, with fields for ICD-9 code, name
@@ -114,8 +122,9 @@ implementation
 
 \item \code{icd10who}: WHO ICD-10 explanation
 
-\item \code{icd10fr}: ICD-10-fr explanation, current a minimal
-implementation
+\item \code{icd10fr}: ICD-10-FR explanation, initial implementation, subject to change
+
+\item \code{icd10be}: ICD-10-BE explanation, initial implementation, subject to change
 
 \item \code{icd10}: ICD-10 explanation, falls back on ICD-10-CM until
 ICD-10 WHO copyright workaround is available
@@ -140,5 +149,7 @@ explain_code(icd9_map_ahrq$CHF[1:3])
 explain_code(icd9_map_ahrq$CHF[1:3], brief = TRUE)
 # The first three in the ICD-10 equivalent are a little different:
 explain_code(icd10_map_ahrq$CHF[1:3], brief = TRUE)
+# Belgian ICD-10 has three languages available
+explain_code(as.icd10be("A00"))
 }
 \keyword{internal}

@@ -345,32 +345,104 @@ context("refactor") {
     expect_true(is_true(all(((CV) res.attr("levels")) == new_levels)));
   }
 }
-
 context("ICD10 short to parts") {
   test_that("icd10 short to parts handles NA") {
-    CharacterVector x = CharacterVector::create(NA_STRING);
-    List res = icd10ShortToParts(x);
-    expect_true(CV::is_na(((CV)res[0])[0]));
-    expect_true(CV::is_na(((CV)res[0])[1]));
+    const CharacterVector x = CharacterVector::create(NA_STRING);
+    DataFrame res = icd10ShortToParts(x);
+    // expect_true(((CV)res[0])[0] == NA_STRING);
+    // expect_true(((CV)res[0])[1] == NA_STRING);
   }
   test_that("too short, but not empty") {
-    CharacterVector x = CharacterVector::create("V1", "B", "C10");
-    List res = icd10ShortToParts(x);
-    // TODO: reinstate
-    expect_true(((CV)res[0])(0) == "V1");
-    expect_true(((CV)res[1])(0) == "B");
-    expect_true(((CV)res[2])(0) == "C10");
-    expect_true(((CV)res[0])(1) == "");
-    expect_true(((CV)res[1])(1) == "");
-    expect_true(((CV)res[2])(1) == "");
+    const CharacterVector x = CharacterVector::create("V1", "B", "C10");
+    DataFrame r = icd10ShortToParts(x);
+    expect_true(r.size() == 2);
+    expect_true(r.nrow() == x.size());
+    for (auto i = 0; i != x.size() && i != r.size(); ++i) {
+      auto cd = x[i];
+      CV c = CharacterVector::create(cd, "");
+      DataFrame r0 = icd10ShortToParts(CV::create(cd));
+      expect_true(r0.size() == 2);
+      expect_true(r0.nrow() == 1);
+      CV row;
+      row = getDataFrameStringRow(r0, 0);
+      expect_true(strVecEqual(row, c));
+      row = getDataFrameStringRow(r, i);
+      expect_true(strVecEqual(row, c));
+    }
   }
   test_that("empty") {
     CharacterVector x = CharacterVector::create("");
-    List res = icd10ShortToParts(x);
-    expect_true(CV::is_na(((CV)res[0])(0)));
-    expect_true(CV::is_na(((CV)res[0])(1)));
+    DataFrame res = icd10ShortToParts(x);
+    CV mj = res[0];
+    CV mn = res[1];
+    String smj = mj[0];
+    String smn = mn[0];
+    expect_true(smj == NA_STRING);
+    expect_true(smn == NA_STRING);
+    expect_true(is_true(all(is_na((CV)res[0]))));
+    expect_true(is_true(all(is_na((CV)res[1]))));
   }
 }
 
+context("compare/sort/order ICD-10-CM") {
+  test_that("compare quirks") {
+    expect_true(icd10cmCompare("C79", "C80"));
+    expect_true(icd10cmCompare("C79", "C7A"));
+    expect_true(icd10cmCompare("C80", "C7A"));
+    expect_true(icd10cmCompare("C80", "C7B"));
+    expect_true(icd10cmCompare("C7A", "C7B"));
+    expect_true(icd10cmCompare("C7B", "C81"));
+    expect_false(icd10cmCompare("C81", "C7A"));
+    expect_false(icd10cmCompare("C7B", "C7A"));
+    expect_false(icd10cmCompare("C7A", "C7A"));
+    expect_false(icd10cmCompare("C7B", "C7B"));
+    expect_false(icd10cmCompare("C81", "C7B"));
+    expect_false(icd10cmCompare("C82", "C81"));
+  }
+  test_that("compare quirk sub-codes") {
+    expect_true(icd10cmCompare("C791", "C80"));
+    expect_true(icd10cmCompare("C79a", "C7A"));
+    expect_true(icd10cmCompare("C802", "C7A"));
+    expect_true(icd10cmCompare("C80b", "C7B"));
+    expect_true(icd10cmCompare("C7A3", "C7B"));
+    expect_true(icd10cmCompare("C7Ac", "C81"));
+    expect_false(icd10cmCompare("C7B4", "C7A"));
+    expect_false(icd10cmCompare("C7Ad", "C7A"));
+    expect_false(icd10cmCompare("C815", "C7A"));
+    expect_false(icd10cmCompare("C7Be", "C7B"));
+    expect_false(icd10cmCompare("C816", "C7B"));
+    expect_false(icd10cmCompare("C82v", "C81"));
+    expect_true(icd10cmCompare("C79", "C801"));
+    expect_true(icd10cmCompare("C79", "C7A2"));
+    expect_true(icd10cmCompare("C80", "C7A3"));
+    expect_true(icd10cmCompare("C80", "C7B4"));
+    expect_true(icd10cmCompare("C7A", "C7B5"));
+    expect_true(icd10cmCompare("C7A", "C816"));
+    expect_false(icd10cmCompare("C7B", "C7A7"));
+    expect_false(icd10cmCompare("C7A", "C7A8"));
+    expect_false(icd10cmCompare("C81", "C7A9"));
+    expect_false(icd10cmCompare("C7B", "C7B0"));
+    expect_false(icd10cmCompare("C81", "C7Ba"));
+    expect_false(icd10cmCompare("C82", "C76b"));
+  }
+  test_that("order ICD-10-CM quirks") {
+    CharacterVector c = {"Z99", "C81", "C7A", "C7B", "C80", "A00"};
+    IntegerVector i = {6, 5, 3, 4, 2, 1};
+    auto o = icd10cmOrder(c);
+    bool res = is_true(all(o == i));
+    for (auto n = 0; n != c.size() && n != i.size(); ++n) {
+      String s = c[n];
+      expect_true(o[n] == i[n]);
+    }
+    c = {"C7A", "C79", "C80", "C81", "C7B"};
+    i = {3, 1, 2, 5, 4};
+    o = icd10cmOrder(c);
+    res = is_true(all(o == i));
+    for (auto n = 0; n != c.size() && n != i.size(); ++n) {
+      String s = c[n];
+      expect_true(o[n] == i[n]);
+    }
+  }
+}
 // endif have testthat ICD_CATCH
 #endif

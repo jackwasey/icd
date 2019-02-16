@@ -496,14 +496,60 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// icd9OrderCpp
-std::vector<std::size_t> icd9OrderCpp(VecStr x);
-RcppExport SEXP _icd_icd9OrderCpp(SEXP xSEXP) {
+// icd9Compare
+bool icd9Compare(std::string a, std::string b);
+RcppExport SEXP _icd_icd9Compare(SEXP aSEXP, SEXP bSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< std::string >::type a(aSEXP);
+    Rcpp::traits::input_parameter< std::string >::type b(bSEXP);
+    rcpp_result_gen = Rcpp::wrap(icd9Compare(a, b));
+    return rcpp_result_gen;
+END_RCPP
+}
+// icd9Order
+std::vector<std::size_t> icd9Order(VecStr x);
+RcppExport SEXP _icd_icd9Order(SEXP xSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< VecStr >::type x(xSEXP);
-    rcpp_result_gen = Rcpp::wrap(icd9OrderCpp(x));
+    rcpp_result_gen = Rcpp::wrap(icd9Order(x));
+    return rcpp_result_gen;
+END_RCPP
+}
+// icd10cmCompare
+bool icd10cmCompare(const Rcpp::String x, const Rcpp::String y);
+RcppExport SEXP _icd_icd10cmCompare(SEXP xSEXP, SEXP ySEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const Rcpp::String >::type x(xSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::String >::type y(ySEXP);
+    rcpp_result_gen = Rcpp::wrap(icd10cmCompare(x, y));
+    return rcpp_result_gen;
+END_RCPP
+}
+// icd10cmSort
+CharacterVector icd10cmSort(const CharacterVector& x);
+RcppExport SEXP _icd_icd10cmSort(SEXP xSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const CharacterVector& >::type x(xSEXP);
+    rcpp_result_gen = Rcpp::wrap(icd10cmSort(x));
+    return rcpp_result_gen;
+END_RCPP
+}
+// icd10cmOrder
+IntegerVector icd10cmOrder(const CharacterVector& x);
+RcppExport SEXP _icd_icd10cmOrder(SEXP xSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< const CharacterVector& >::type x(xSEXP);
+    rcpp_result_gen = Rcpp::wrap(icd10cmOrder(x));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -597,12 +643,16 @@ static const R_CallMethodDef CallEntries[] = {
     {"_icd_trimLeftCpp", (DL_FUNC) &_icd_trimLeftCpp, 1},
     {"_icd_strimCpp", (DL_FUNC) &_icd_strimCpp, 1},
     {"_icd_trimCpp", (DL_FUNC) &_icd_trimCpp, 1},
-    {"_icd_icd9OrderCpp", (DL_FUNC) &_icd_icd9OrderCpp, 1},
+    {"_icd_icd9Compare", (DL_FUNC) &_icd_icd9Compare, 2},
+    {"_icd_icd9Order", (DL_FUNC) &_icd_icd9Order, 1},
+    {"_icd_icd10cmCompare", (DL_FUNC) &_icd_icd10cmCompare, 2},
+    {"_icd_icd10cmSort", (DL_FUNC) &_icd_icd10cmSort, 1},
+    {"_icd_icd10cmOrder", (DL_FUNC) &_icd_icd10cmOrder, 1},
     {"_icd_matchFast", (DL_FUNC) &_icd_matchFast, 2},
     {"_icd_inFast", (DL_FUNC) &_icd_inFast, 2},
     {"_icd_valgrindCallgrindStart", (DL_FUNC) &_icd_valgrindCallgrindStart, 1},
     {"_icd_valgrindCallgrindStop", (DL_FUNC) &_icd_valgrindCallgrindStop, 0},
-    {"run_testthat_tests",                      (DL_FUNC) &run_testthat_tests,                      0},
+    {"run_testthat_tests",              (DL_FUNC) &run_testthat_tests,              0},
     {NULL, NULL, 0}
 };
 

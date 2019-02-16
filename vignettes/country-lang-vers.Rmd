@@ -9,11 +9,12 @@ vignette: >
 
 `icd.data` version 1.1, and `icd` 3.4 together offer some basic international support.
 
- - World Health Organization (WHO) codes for 2016, the latest release.
+ - World Health Organization (WHO) codes for 2016 in English, the latest release.
+ - World Health Organization (WHO) codes for 2008 in French, the latest available online data.
  - ICD-10-FR in French, with modifications as used in France.
  - Translations of the US ICD-10-CM codes in French and Dutch, which are used in Belgium.
- 
- All of this should be considered beta quality, and I would much appreciate testing and bug reports. I would especially be interested if someone has experience internationalizing an R package like this.
+
+All of this should be considered beta quality, and I would much appreciate testing and bug reports. I would especially be interested if someone has experience internationalizing an R package like this.
 
 Function and variable names are likely to change in the future. The current versions are more consistent with naming of data files.
 
@@ -109,14 +110,4 @@ if (icd:::icd_data_ver_ok()) {
                        icd::is_leaf("C43111")
   )
 }
-```
-
-The following shows how to use the French translations of ICD-10-CM 2014.
-```{r eval=FALSE}
-icd.data::set_icd10cm_active_ver(2014)
-icd.data::set_icd10cm_active_lang("fr")
-explain_code(as.icd10cm("C4311"))
-```
-```
-[1] "mélanome malin de la paupière droite, y compris le canthus"
 ```

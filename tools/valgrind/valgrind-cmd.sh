@@ -6,7 +6,7 @@ function valgrind-cmd () {
 	VG_RCODE=${1:-$RCODE}
 	RCODE=${VG_RCODE:-message("set RCODE env var or call valgrind-cmd() bash function with the code string")}
 	pushd "$ICD_HOME"
-	R --vanilla --slave -d "$VALGRIND_CMD" -e devtools::load_all\(\);$VG_RCODE
+	R --vanilla --slave -d "$VALGRIND_CMD" -e "devtools::load_all\(\);${VG_RCODE}"
 	popd
 }
 

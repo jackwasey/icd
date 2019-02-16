@@ -59,6 +59,7 @@ release_questions <- function() {
     "Does it compile, test and check fine on travis and appveyor?",
     "Have you checked on Windows, win_builder,
       Mac, Ubuntu, rhub::check_with_sanitizers() etc",
+    "Consider whether to include Catch headers in submitted package",
     # final manual check:
     "Are all NOTES from R CMD check documented in cran-comments.md",
     "Have all unnecessary files been ignored in built archive?")

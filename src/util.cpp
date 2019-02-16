@@ -45,7 +45,8 @@ VecStr trimCpp(VecStr sv) {
   return sv;
 }
 
-bool icd9CompareStrings(std::string a, std::string b) {
+// [[Rcpp::export(icd9_compare_rcpp)]]
+bool icd9Compare(std::string a, std::string b) {
   const char * acs = a.c_str();
   const char * bcs = b.c_str();
   // most common is numeric, so deal with that first:
@@ -66,17 +67,19 @@ bool icd9CompareStrings(std::string a, std::string b) {
 bool icd9ComparePair(pas a, pas b) {
   std::string af = a.first;
   std::string bf = b.first;
-  return icd9CompareStrings(af, bf);
+  return icd9Compare(af, bf);
 }
 
 // add one because R indexes from 1, not 0
-inline std::size_t getSecondPlusOne(const std::pair<std::string,
-                                    std::size_t>& p) {
+inline std::size_t getSecondPlusOne(
+    const std::pair<std::string,
+                    std::size_t>& p
+) {
   return p.second + 1;
 }
 
 // [[Rcpp::export(icd9_order_cpp)]]
-std::vector<std::size_t> icd9OrderCpp(VecStr x) {
+std::vector<std::size_t> icd9Order(VecStr x) {
   std::vector<std::pair<std::string, std::size_t> > vp;
   std::vector<std::size_t> out;
   out.reserve(x.size());
@@ -87,6 +90,70 @@ std::vector<std::size_t> icd9OrderCpp(VecStr x) {
   std::transform(vp.begin(), vp.end(), std::back_inserter(out),
                  getSecondPlusOne);
   return out;
+}
+
+// use for testing
+bool strVecEqual(CharacterVector x, CharacterVector y) {
+  if (x.size() != y.size()) {
+    Rcpp::Rcout << "Lengths differ: " <<
+      x.size() << ", " <<
+        y.size() << std::endl;
+    return false;
+  }
+  for (auto i = 0; i != x.size(); ++i) {
+    if (x[i] != y[i]) {
+      Rcpp::Rcout << "Element " << i << " differs: " <<
+        x[i] << " != " << y[i] << std::endl;
+      return false;
+    }
+  }
+  return true;
+}
+
+// [[Rcpp::export(icd10cm_compare_cpp)]]
+bool icd10cmCompare(const Rcpp::String x, const Rcpp::String y) {
+  const char * xstr = x.get_cstring();
+  const char * ystr = y.get_cstring();
+  const int i = strncmp(xstr, ystr, 1);
+  // get out quick if first two characters differ
+  if (i != 0) return i < 0;
+  if (x == "C7A" || strncmp(xstr, "C7A", 3) == 0) {
+    if (x == y) return false;
+    if (y == "C7B" || strncmp(ystr, "C7B", 3) == 0) return true;
+    return y > "C80";
+  } else if (x == "C7B" || strncmp(xstr, "C7B", 3) == 0) {
+    if (x == y) return false;
+    if (y == "C7A" || strncmp(ystr, "C7A", 3) == 0) return false;
+    return y > "C80";
+  } else if (x == "D3A" || strncmp(xstr, "D3A", 3) == 0) {
+    if (x == y) return false;
+    return y > "D48";
+  }
+  if (y == "C7A" ||
+      y == "C7B" ||
+      strncmp(ystr, "C7A", 3) == 0 ||
+      strncmp(ystr, "C7B", 3) == 0 ) {
+    return x < "C81";
+  } else if (y == "D3A" || strncmp(ystr, "D3A", 3) == 0) {
+    return x < "D49";
+  }
+  return x < y;
+}
+
+// [[Rcpp::export(icd10cm_sort_cpp)]]
+CharacterVector icd10cmSort(
+    const CharacterVector& x
+) {
+  std::vector<std::string> x_ = as<std::vector<std::string> >(x);
+  std::sort(x_.begin(), x_.end(), icd10cmCompare);
+  return wrap(x_);
+}
+
+// [[Rcpp::export(icd10cm_order_cpp)]]
+IntegerVector icd10cmOrder(const CharacterVector& x) {
+  // see icd9Order for a different approach
+  CharacterVector x_sorted = icd10cmSort(x);
+  return match(x, x_sorted);
 }
 
 template <int RTYPE>

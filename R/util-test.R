@@ -178,6 +178,9 @@ generate_neds_pts <- function(
   dat_wide_str
 }
 
+.catch <- function() {
+  .Call("run_testthat_tests", PACKAGE = "icd")
+}
 #nocov end
 
 assert_flag <- function(x) {
@@ -230,9 +233,11 @@ expect_character <- function(x, ...) {
   testthat::expect_true(is.character(x))
 }
 
-skip_missing_icd10who <- function(ver) {
+# workaround so icd.data 1.0 will not cause CRAN or user errors
+skip_missing_icd10who <- function(ver = "2016", lang = "en") {
   if (exists("skip_missing_icd10who", envir = asNamespace("icd.data"))) {
-    get("skip_missing_icd10who", envir = asNamespace("icd.data"))()
+    f <- get("skip_missing_icd10who", envir = asNamespace("icd.data"))
+    f(ver = ver, lang = lang)
   } else {
     testthat::skip("No skip_missing_icd10who function, so no data")
   }
