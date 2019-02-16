@@ -374,7 +374,7 @@ short_to_parts.icd9 <- function(x, mnr_empty = "") {
 #' @keywords internal manip
 #' @noRd
 short_to_parts.icd10 <- function(x, mnr_empty = "") {
-  icd10ShortToParts(x, mnrEmpty = mnr_empty)
+  icd10_short_to_parts_rcpp(x, mnrEmpty = mnr_empty)
 }
 
 #' @describeIn short_to_parts Convert short format ICD-10-CM codes to parts
@@ -382,7 +382,7 @@ short_to_parts.icd10 <- function(x, mnr_empty = "") {
 #' @keywords internal manip
 #' @noRd
 short_to_parts.icd10cm <- function(x, mnr_empty = "") {
-  icd10ShortToParts(x, mnrEmpty = mnr_empty)
+  icd10_short_to_parts_rcpp(x, mnrEmpty = mnr_empty)
 }
 
 #' @describeIn short_to_parts Convert short format ICD code to parts,

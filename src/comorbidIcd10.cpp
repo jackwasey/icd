@@ -41,12 +41,12 @@ Rcpp::List simplifyMapLexicographic(const CV& pt_codes, const List map) {
   std::vector<std::unordered_set<std::string> > newMapStd(map.length());
   for (R_xlen_t i = 0; i != icd_codes.size(); ++i) {
     ptCode = icd_codes[i];
-    DEBUG("i = " << i << ", and ptCode = " << ptCode);
+    TRACE("i = " << i << ", and ptCode = " << ptCode);
     size_t codeLen = ptCode.length();
     if (codeLen < 3) continue; // cannot be a valid ICD-10 code
-    DEBUG("code len >=3 chars");
+    TRACE("code len >=3 chars");
     for (R_xlen_t j = 0; j < map.size(); ++j) {
-      DEBUG("cmb, j = " << j);
+      TRACE("cmb, j = " << j);
       const CV &cmbCodes = map[j];
       for (R_xlen_t k = 0; k != cmbCodes.length(); ++k) {
         cmb_len = cmbCodes[k].size();
@@ -64,11 +64,11 @@ Rcpp::List simplifyMapLexicographic(const CV& pt_codes, const List map) {
             cmbCodes[k][2] != ptCode[2])
           goto no_match;
         searchLen = std::min(cmb_len, codeLen);
-        DEBUG("searchLen = " << searchLen);
+        TRACE("searchLen = " << searchLen);
         pos = 3;
         while(pos != searchLen) {
           if (cmbCodes[k][pos] != ptCode[pos]) {
-          DEBUG("mismatch, going to no_match");
+          TRACE("mismatch, going to no_match");
           goto no_match;
           }
           ++pos;
@@ -76,7 +76,7 @@ Rcpp::List simplifyMapLexicographic(const CV& pt_codes, const List map) {
         // push the patient's ICD code, not the original comorbidity ICD code
         // onto the new map.
         newMapStd[j].insert(ptCode);
-        DEBUG("Going to next comorbidity");
+        TRACE("Going to next comorbidity");
         goto next_comorbidity;
         no_match:;
       } // end of codes in current comorbidity

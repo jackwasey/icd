@@ -13,7 +13,7 @@ extern "C" {
 
 using namespace Rcpp;
 
-// [[Rcpp::export(icd10_short_to_parts)]]
+// [[Rcpp::export(icd10_short_to_parts_rcpp)]]
 List icd10ShortToParts(const CV& x, const String mnrEmpty) {
   R_xlen_t i10sz = x.size();
   CV mjr(i10sz);

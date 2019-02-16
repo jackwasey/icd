@@ -406,6 +406,35 @@ icd10fr <- function(x) {
   x
 }
 
+
+#' @describeIn set_icd_class Use ICD-10-BE (Belgium) class for the given data
+#' @export
+as.icd10be <- function(x, short_code = NULL) {
+  stopifnot(is.atomic(x))
+  if (inherits(x, "icd10be")) return(x)
+  icd10_pos <- match("icd10", class(x))
+  if (!is.na(icd10_pos))
+    class(x) <- append(class(x), "icd10be", after = icd10_pos - 1)
+  else
+    class(x) <- append(class(x), c("icd10be", "icd10"), after = 0)
+  if (!is.null(short_code))
+    attr(x, "icd_short_diag") <- short_code
+  icd_conflicts(x, do_stop = TRUE)
+  x
+}
+
+#' @noRd
+#' @keywords internal
+icd10be <- function(x) {
+  cl <- class(x)
+  if ("icd10be" %in% cl) return(x)
+  if ("icd10" %in% cl)
+    class(x) <- c("icd10be", cl)
+  else
+    class(x) <- c("icd10be", "icd10", cl)
+  x
+}
+
 #' Set the ICD data structure class of a \code{matrix} or \code{data.frame}.
 #'
 #' These functions take your patient data, and allow you to describe whether it

@@ -18,6 +18,11 @@ extern "C" {
 // #define ICD_DEBUG_PARALLEL
 // #define ICD_VALGRIND
 
+#if !defined(NDEBUG)
+// good for testing, but aborts all the time
+//#define ICD_DEBUG
+#endif
+
 #ifdef ICD_DEBUG
 #define DEBUG(x) do { Rcpp::Rcout << x << std::endl; } while (0)
 #else

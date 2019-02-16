@@ -90,6 +90,7 @@ factor_nosort_rcpp <- function(x, levels, na.rm = FALSE) {
 #' @keywords internal manip
 refactor <- function(x, levels, na.rm = FALSE, exclude_na = TRUE,
                      validate = FALSE) {
+  stopifnot(is.factor(x))
   if (na.rm)
     refactor_narm_worker(x = x, new_levels = levels, validate = validate)
   else

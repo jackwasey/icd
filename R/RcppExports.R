@@ -146,7 +146,7 @@ get_major.icd9 <- function(x, short_code) {
     .Call(`_icd_icd9GetMajor`, x, short_code)
 }
 
-icd10_short_to_parts <- function(x, mnrEmpty) {
+icd10_short_to_parts_rcpp <- function(x, mnrEmpty) {
     .Call(`_icd_icd10ShortToParts`, x, mnrEmpty)
 }
 

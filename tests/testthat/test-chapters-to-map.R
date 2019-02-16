@@ -1,7 +1,7 @@
 context("slower tests")
 
 test_that("chapters to map", {
-  skip("takes quite a few seconds, and low yield")
+  skip_slow("takes quite a few seconds, and low yield")
   ooe <- icd_long_data(
     visit_id = sprintf("pt%02d", seq_along(icd:::get_one_of_each())),
     code = icd:::get_one_of_each(),

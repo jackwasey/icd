@@ -242,3 +242,14 @@ skip_missing_icd10who <- function(ver = "2016", lang = "en") {
     testthat::skip("No skip_missing_icd10who function, so no data")
   }
 }
+
+skip_slow <- function(msg = "Skipping slow test") {
+  skip_on_cran()
+  skip_on_travis()
+  skip_on_appveyor()
+  s <- tolower(Sys.getenv("ICD_TEST_SLOW"))
+  if (s == "") skip(msg)
+  if (!startsWith(s, "t") &&
+      !startsWith(s, "y"))
+    skip(msg)
+}

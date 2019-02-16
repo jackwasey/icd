@@ -97,7 +97,7 @@ IntegerVector refactor(const IntegerVector& x, const CV& new_levels,
       f[i] = NA_INTEGER;
       continue;
     }
-    DEBUG("x[i]  = " << x[i] << ", max is " << new_level_old_idx.size());
+    TRACE("x[i]  = " << x[i] << ", max is " << new_level_old_idx.size());
     assert(x[i] > 0);
     assert(x[i] <= new_level_old_idx.size());
     auto cur = new_level_old_idx[x[i] - 1]; // cur is new R index into levels
@@ -123,14 +123,18 @@ IntegerVector refactor(const IntegerVector& x, const CV& new_levels,
 //' @describeIn refactor_worker Drop all `NA` values from levels and values
 //' @keywords internal
 // [[Rcpp::export(refactor_narm_worker)]]
-IntegerVector refactor_narm(const IntegerVector& x,
-                            const CV& new_levels,
-                            const bool validate) {
+IntegerVector refactor_narm(
+    const IntegerVector& x,
+    const CV& new_levels,
+    const bool validate
+) {
   TRACE("Refactoring, dropping NA");
+  if (validate && !factorIsValid(x)) {
 #ifdef ICD_DEBUG
-  assert(factorIsValid(x));
+    assert(factorIsValid(x));
 #endif
-  if (validate && !factorIsValid(x)) stop("input is not a valid factor");
+    stop("input is not a valid factor");
+  }
   IntegerVector f(x.size()); // too many if we are dropping NA values.
   f.attr("class") = "factor";
   CharacterVector lx = x.attr("levels");
