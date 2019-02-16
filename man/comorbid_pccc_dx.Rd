@@ -100,7 +100,7 @@ procedure codes
 
 \examples{
 # not pediatric data, but let's look for this example
-head(icd9_comorbid_pccc_dx(icd.data::vermont_dx[1:1000]))
+head(icd9_comorbid_pccc_dx(icd.data::vermont_dx[1:1000, ]))
 # Six random codes from each PCCC procedure code map. 'icd' will use
 # an heuristic to guess whether ICD-9 or ICD-10:
 pts <- data.frame(encounters = c(10, 11, 12),

@@ -29,7 +29,7 @@ class.}
 \description{
 These functions take your patient data, and allow you to describe whether it
 is wide or long. \code{icd} never requires you do this, but it may help avoid
-errors, especially if you have aytpical data that might confuse \code{icd}'s
+errors, especially if you have atypical data that might confuse \code{icd}'s
 heuristics.
 }
 \section{Functions}{

@@ -248,8 +248,8 @@ skip_slow <- function(msg = "Skipping slow test") {
   testthat::skip_on_travis()
   testthat::skip_on_appveyor()
   s <- tolower(Sys.getenv("ICD_TEST_SLOW"))
-  if (s == "") skip(msg)
+  if (s == "") testthat::skip(msg)
   if (!startsWith(s, "t") &&
       !startsWith(s, "y"))
-    skip(msg)
+    testthat::skip(msg)
 }

@@ -10,7 +10,7 @@
  * default not to do (minimal) code cleaning before calculating comorbidities. To re-enable, use `preclean = TRUE`. Decimal-format codes are still converted to the short form used in the maps. For huge data with decimal format codes, converting the maps to decimal will be more efficient than converting the ICD data to decimal format.
  * drop `unique_ids` argument to `comorbid` and `categorize` since it no longer provides any optimization opportunity.
  * Let `icd` work better when not lodaded with `library`, so `icd::comorbid_ahrq` etc. should work with just `requireNamespace` or using `icd::function()`
- * Prefere 'leaf' over 'billable' to indicate a leaf node. Most coding systems are _not_ all about money, and 'icd' should reflect this. 'billable' as an argument to functions such as `is_defined()` and `get_defined()`. Functions named like `is_billable()` are left in place for ICD-9-CM and ICD-10-CM, but in general, `is_leaf()` and that family of functions is prefered.
+ * Prefer 'leaf' over 'billable' to indicate a leaf node. Most coding systems are _not_ all about money, and 'icd' should reflect this. 'billable' as an argument to functions such as `is_defined()` and `get_defined()`. Functions named like `is_billable()` are left in place for ICD-9-CM and ICD-10-CM, but in general, `is_leaf()` and that family of functions is prefered.
  * Drop dependency on magrittr, although it may still be used nicely with icd functions
  * Increased test coverage with resulting fixes in corner cases
  * Accept integer identifiers in patient data
@@ -29,7 +29,7 @@
  * Pediatric Complex Chronic Condition functions more consistent with the other comorbidity functions
  * Minor bug fixes
  * Fixes #157
- * Eigen library is multithreaded, so OpenMP dependencies now dropped from this package, simplifying and speeding up build, dropping configure script, etc..
+ * Eigen library is multi-threaded, so OpenMP dependencies now dropped from this package, simplifying and speeding up build, dropping configure script, etc..
 
 # Version 3.2.0
  * added [Pediatric Complex Chronic Condition comorbidity classification](https://jackwasey.github.io/icd/articles/PCCC.html)
@@ -55,7 +55,7 @@
  * Added AHRQ clinical condition software (CCS) classification for ICD-9 and ICD-10, thanks to Vitaly Druker, fixes #127
  * added 'charlson' synonyms for 'Quan/Deyo', e.g. Charlson comorbidities can now be found using `comorbid_charlson(patient_data)`
  * Added AHRQ clinical condition software (CCS) classification for ICD-9 and ICD-10, thanks to Vitaly Druker, fixes #127
- * function names have lost the 'icd_' prefix, old names kept for compatiblity, but easier now to write `comorbid(patient_data)`, and `icd::comorbid` may also be used, and which many consider good practice. `explain_icd` synonym avoids name conflict with the popular `dplyr` package, but `icd::explain` also a nice option.
+ * function names have lost the 'icd_' prefix, old names kept for compatability, but easier now to write `comorbid(patient_data)`, and `icd::comorbid` may also be used, and which many consider good practice. `explain_icd` synonym avoids name conflict with the popular `dplyr` package, but `icd::explain` also a nice option.
  * Assume C++11, which is now four years old, enabling code simplification
  * rename all functions to remove the icd_, people can use the concise icd:: if library(icd) was not callled
  * deprecated rarely or unused code, including %i9in%
@@ -115,12 +115,12 @@
  * Partly fixed obscure memory access violation error seen only when using OpenMP clang 3.7 on fedora, and maybe OS X.
 
 # Version 1.2
- * Make annual revisions of ICD-9-CM available. The package includes data from each year which CMS has published (versions 23 to 32). The default is to use version 32. More work will be needed to make it straightforward to use an arbitrary version when running `icd9` commands. These are avaiable in the package data `icd9Billable`. See vignette for examples.
+ * Make annual revisions of ICD-9-CM available. The package includes data from each year which CMS has published (versions 23 to 32). The default is to use version 32. More work will be needed to make it straightforward to use an arbitrary version when running `icd9` commands. These are available in the package data `icd9Billable`. See vignette for examples.
  * Inexplicably, the only canonical list which includes both ICD-9-CM codes and headings is an RTF file. `icd9` can now parse this eclectically formatted document to extract all the headings, so it is not possible to do `icd9Explain` on a non-billable four-digit code, e.g. 643.0 (Mild hyperemesis of pregnancy). Previously on three-digit and billable (i.e. lead node) codes were used. In principle, the RTF parsing code could be run on previous versions going back to about year 2000. It seems that most years are the same or expand previous years, although there are a few deletions. Ideally, we would know what year/version a given ICD-9 code was coded under, and then validate or interpret accordingly. This can indeed be done for billable codes, but until the RTF is parsed for previous years, not for headings.
  * Condense and range functions has been completely reworked now that all the intermediate heading codes are available. This means there will be slight differences in the results produced, and there are still very minor quirks, but the tests cover thoroughly all known ICD-9-CM codes in existence from any available version.
- * The package data was refreshed with comorbidities derived from source ranges specified by the original authors. These deliberately produce valid but non-existent codes, and these are now slightly different with the range work. This should not have any impact on comorbidity assignmentments from real ICD-9 codes, but keeps the package consistent with itself.
+ * The package data was refreshed with comorbidities derived from source ranges specified by the original authors. These deliberately produce valid but non-existent codes, and these are now slightly different with the range work. This should not have any impact on comorbidity assignments from real ICD-9 codes, but keeps the package consistent with itself.
  * OpenMP and C++11 are now both enabled on platforms which allow this (i.e. everything except Solaris), which gives performance improvements.
- * Van Walraven comorbidity score (analagous to Charlson score, but based on Elixhauser comorbidities) added by @wmurhpyrd, with thanks.
+ * Van Walraven comorbidity score (analogous to Charlson score, but based on Elixhauser comorbidities) added by @wmurhpyrd, with thanks.
  * Dropped most included data from the package, as most can be retrieved from reliable web sites. The data is still in the github repo, but is downloaded automatically when needed (which is only working in the package source tree.)
  * stopped exporting 'parts' functions, as these complicate the namespace and are unlikely to end-user, but still available with `icd:::icd9PartsToShort` etc.
  * code clean-up with excellent `lintr` package from @jimhester
@@ -172,7 +172,7 @@
 
 * Present-on-arrival field handled gracefully
 * Revised co-morbidity handling, with functions specific to each mapping
-* Standardized naming of fields across Elixhauser and Charlson based mappings for clarity, consistency and comparaibility
+* Standardized naming of fields across Elixhauser and Charlson based mappings for clarity, consistency and comparability
 * Handle mild and severe co-morbidities without double-counting. Fixes issue #23
 * Enable magrittr-style piping as option to clarify chains of operations. Issue #5
 * many more test cases, including specific tests for individual values in each computed mapping, and also for the new comorbidity functions

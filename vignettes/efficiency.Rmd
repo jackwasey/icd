@@ -171,7 +171,7 @@ The ubiquity of ICD codes means there is a long history of grouping them to form
 Charlson did not initially use ICD codes to define the comorbidities, but various authors \citep[e.g.,][]{quan_coding_2005} have since classified  ICD codes into those 17 comorbidity categories. Elixhauser [-@elixhauser_comorbidity_1998] developed ICD-based comorbidities for 31 diseases, and the US-based Agency for Healthcare Research and Quality (AHRQ) used this as a foundation for its own comorbidity groups [@AgencyforHealthcareResearchandQuality_Elixhausercomorbiditysoftware_2018]. Elixhauser and Charlson comorbidities have undergone refinement over the years, especially by \citet{quan_updating_2011} whose meticulous work on ICD-9 and ICD-10 codes has been included in \pkg{icd}, alongside the AHRQ mappings.
 
 ## Medical codes
-Medical coding has a complicated history beginning with epidemiology, and snowballing to include medical billing and research. There are several major coding schemes, including the WHO ICD family, various national modifacations and extensions of the WHO ICD codes, the extensive USA ICD-CM (Clinical Modification), and several unrelated schemes with similar goals. There are codes for diagnoses, procedures, medical equipment, and causes and circumstances of disease or injury. Codes sometimes have detail beyond what seems useful for routine clinical care, for example:
+Medical coding has a complicated history beginning with epidemiology, and snowballing to include medical billing and research. There are several major coding schemes, including the WHO ICD family, various national modifications and extensions of the WHO ICD codes, the extensive USA ICD-CM (Clinical Modification), and several unrelated schemes with similar goals. There are codes for diagnoses, procedures, medical equipment, and causes and circumstances of disease or injury. Codes sometimes have detail beyond what seems useful for routine clinical care, for example:
 
 ```{r suckedintoengine}
 library("icd")
@@ -813,7 +813,7 @@ explain_code(children("4410"), condense = FALSE)
 
 ## Software libraries
 
-This package is built on the strong foundations of \proglang{R} [@R_2018], \pkg{Rcpp} [@Eddelbuettel_RcppSeamlessIntegration_2011], \pkg{RcppEigen} [@Eddelbeuttel_FastElegantNumerical_2013], and \pkg{Eigen} \citep*{Guennebaud_Eigen_2017}, the highly optimized \proglang{C++} linear algebra library. Eigen was chosen because of its performance oriented approach to matrix multiplication using advanced x86 instructions when possible, and, in the case of the row-major sparse multiplication with a dense matrix, a multi-threaded solution. Once this was impemented, the bottlenecks moved to the data preparation before the matrix multiplication, which itself was optimized by simple R techniques such as vectorization.
+This package is built on the strong foundations of \proglang{R} [@R_2018], \pkg{Rcpp} [@Eddelbuettel_RcppSeamlessIntegration_2011], \pkg{RcppEigen} [@Eddelbeuttel_FastElegantNumerical_2013], and \pkg{Eigen} \citep*{Guennebaud_Eigen_2017}, the highly optimized \proglang{C++} linear algebra library. Eigen was chosen because of its performance oriented approach to matrix multiplication using advanced x86 instructions when possible, and, in the case of the row-major sparse multiplication with a dense matrix, a multi-threaded solution. Once this was done, the bottlenecks moved to the data preparation before the matrix multiplication, which itself was optimized by simple R techniques such as vectorization.
 
 ## Extensions
 

@@ -208,7 +208,7 @@ icd9 <- function(x) {
 }
 
 #' @describeIn set_icd_class Use generic ICD-9 class for this data. Ideally, use
-#'   the more specific `icd9cm` or other subclasses (when available).
+#'   the more specific `icd9cm` or other sub-classes (when available).
 #' @export
 as.icd9 <- function(x) {
   stopifnot(is.atomic(x))
@@ -439,7 +439,7 @@ icd10be <- function(x) {
 #'
 #' These functions take your patient data, and allow you to describe whether it
 #' is wide or long. \code{icd} never requires you do this, but it may help avoid
-#' errors, especially if you have aytpical data that might confuse \code{icd}'s
+#' errors, especially if you have atypical data that might confuse \code{icd}'s
 #' heuristics.
 #' @name wide_vs_long
 #' @template widevlong

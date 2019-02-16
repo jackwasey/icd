@@ -60,7 +60,7 @@ Some features make more sense as attributes. E.g. setting code type to
 \section{Functions}{
 \itemize{
 \item \code{as.icd9}: Use generic ICD-9 class for this data. Ideally, use
-the more specific `icd9cm` or other subclasses (when available).
+the more specific `icd9cm` or other sub-classes (when available).
 
 \item \code{as.icd9cm}: Use ICD-9-CM
 
