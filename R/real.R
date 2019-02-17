@@ -131,6 +131,7 @@ get_defined.icd9 <- function(
 #'   latest release from CMS. Currently anything from "23" to "32" is accepted.
 #'   Not numeric because there are possible cases with non-numeric names, e.g.
 #'   revisions within one year, although none currently implemented.
+#' @template dotdotdot
 #' @return logical vector of same length as input
 #' @export
 is_leaf <- function(x, short_code = guess_short(x), ...) {
@@ -224,6 +225,7 @@ is_leaf.default <- function(x, short_code = guess_short(x), ...) {
 #' @template invert
 #' @param icd9cm_edition e.g. "32", not ICD-9 vs ICD-10
 #'   currently just the year of release.
+#' @template dotdotdot
 #' @export
 get_leaf <- function(...) {
   UseMethod("get_leaf")

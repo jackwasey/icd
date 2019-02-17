@@ -17,6 +17,8 @@ get_leaf(...)
 \method{get_leaf}{icd9}(...)
 }
 \arguments{
+\item{...}{arguments passed on to other functions}
+
 \item{x}{input vector of ICD codes}
 
 \item{short_code}{single logical value which determines whether the ICD-9

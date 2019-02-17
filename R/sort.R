@@ -1,5 +1,4 @@
-#' @title Sort or get order of ICD-9 or ICD-10 codes according to published
-#'   sequence
+#' @title Sort or order ICD-9 or ICD-10 codes according to published sequence
 #' @description The default method will guess whether ICD-9 or ICD-10  then sort
 #'   based on that type. For ICD-10 codes, note that setting \code{short} is
 #'   unnecessary and ignored. All codes should consistently use the decimal
@@ -10,16 +9,37 @@
 #'   return a factor if a factor is given.
 #' @section ICD-10-CM and ICD-10-BE: There are some codes which are sequenced
 #'   out of lexicographic order, e.g., \code{C7A} and \code{C7B} are between
-#'   \code{C75} and \code{C76}; \code{D3A} is between \code{D48} and \code{D49}.
+#'   \code{C80} and \code{C81}; \code{D3A} is between \code{D48} and \code{D49}.
+#' @details Note that \code{\link[base]{sort}} is an S3 generic, whereas
+#'   \code{\link[base]{order}} is not. Thus we export \code{order.icd10cm}, but
+#'   not \code{sort.icd10cm}, etc..
 #' @param x vector of ICD codes to sort or order
+#' @param decreasing Logical See \code{\link[base]{sort}}.
 #' @template short_code
 #' @template dotdotdot
+#' @examples
+#' # order ICD-10-CM is not lexicographic:
+#' codes <- as.icd10cm(c("C7A", "C79", "C80", "C81", "C7B"))
+#' # as the class is set, use S3 dispatch to get the right answer
+#' sort(codes)
+#' # or call directly:
+#' icd:::sort.icd10cm(c("C7A", "C79", "C80", "C81", "C7B"))
+#' stopifnot(!identical(order.icd10cm(as.character(codes)),
+#'                      order(codes)))
+#' codes[order.icd10cm(codes)]
+#' # Note that base::order does NOT do S3 dispatch, so the following does not work:
+#' codes[order(codes)]
 #' @return For sort, a sorted vector of ICD-9 codes. Numeric, then E codes, then
 #'   V codes. For order, an integer vector is returned with the order of each
 #'   code.
 #' @keywords manip
 #' @export
-sort_icd <- function(x, decreasing = FALSE, short_code = guess_short(x), ...) {
+sort_icd <- function(
+  x,
+  decreasing = FALSE,
+  short_code = guess_short(x),
+  ...
+) {
   switch(
     guess_version(x, short_code = short_code),
     "icd9" = sort.icd9(x, decreasing = decreasing, short_code),
@@ -29,40 +49,47 @@ sort_icd <- function(x, decreasing = FALSE, short_code = guess_short(x), ...) {
 }
 
 #' @rdname sort_icd
-#' @keywords internal
 #' @export
 sort.icd10 <- function(
   x,
   decreasing = FALSE,
   ...
 ) {
-  r <- sort(x, index.return = TRUE)
-  res <- r[["x"]]
-  attributes(res) <- attributes(x)
-  names(res) <- names(x)[r[["ix"]]]
+  res <- sort(x)
+  # names are preserved, but using attributes would overwrite
+  attr(res, "icd_short_diag") <-  attr(x, "icd_short_diag")
   class(res) <- class(x)
   res
 }
 
 #' @rdname sort_icd
-#' @keywords internal
 #' @export
 sort.icd10cm <- function(
   x,
+  decreasing = FALSE,
   ...
 ) {
   # ignore short, it doesn't matter
   o <- icd10cm_order_rcpp(x)
   o <- match(seq_along(x), o)
+  if (decreasing) o <- rev(o)
   res <- x[o]
-  attributes(res) <- attributes(x)
+  attr(res, "icd_short_diag") <-  attr(x, "icd_short_diag")
   names(res) <- names(x)[o]
   class(res) <- class(x)
   res
 }
 
 #' @rdname sort_icd
-#' @keywords internal
+#' @export
+sort.icd10be <- function(
+  x,
+  decreasing = FALSE,
+  ...
+) {
+  sort.icd10cm(x, decreasing = decreasing, ...)
+}
+#' @rdname sort_icd
 #' @export
 sort.icd9 <- function(
   x,
@@ -80,13 +107,11 @@ sort.icd9 <- function(
   else
     x[o <- icd9_order_rcpp(y)]
   o <- match(seq_along(x), o)
+  if (decreasing) o <- rev(o)
   class(res) <- class(x)
   attributes(res) <- attributes(x)
   names(res) <- names(x)[o]
-  if (decreasing)
-    rev(res)
-  else
-    res
+  res
 }
 
 #' @rdname sort_icd
@@ -101,19 +126,14 @@ order.icd9 <- function(x) {
 }
 
 #' @rdname sort_icd
-#' @examples
-#' # order ICD-10-CM is not lexicographic:
-#' codes <- c("C7A", "C74", "C75", "C76", "C7B")
-#' stopifnot(!identical(order(codes), icd::order.icd10cm(codes)))
-#' codes[icd::order.icd10cm(codes)]
 #' @export
 order.icd10cm <- function(x) {
-  icd10cm_order_rcpp(x);
+  icd10cm_order_rcpp(x)
 }
-
 
 #' @rdname sort_icd
 #' @export
 order.icd10be <- function(x) {
   order.icd10cm(x)
 }
+

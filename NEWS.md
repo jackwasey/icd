@@ -6,6 +6,7 @@
  * Add ICD-9 and ICD-10 WHO and US Clinical Modification procedure codes. Some, but not all of these are available through the 'icd.data' package.
  * New function `plot_comorbid` uses simple base R graphics to quickly summarise comorbidities in a bar plot.
  * Newly exported functions: decimal_to_short and short_to_decimal.
+ * Dropped all deprecated function names, which have been giving warning messages for a long time.
  * drop deprecated arguments to 'comorbid': visitId and icd9Field. Use 'visit_name' and 'icd_name' instead.
  * default not to do (minimal) code cleaning before calculating comorbidities. To re-enable, use `preclean = TRUE`. Decimal-format codes are still converted to the short form used in the maps. For huge data with decimal format codes, converting the maps to decimal will be more efficient than converting the ICD data to decimal format.
  * drop `unique_ids` argument to `comorbid` and `categorize` since it no longer provides any optimization opportunity.

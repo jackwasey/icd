@@ -422,47 +422,47 @@ test_that("is_short ok with redundant children", {
 })
 
 test_that("sorting char vectors", {
-  expect_equal(sort.icd9(short_code = TRUE, c("003", "002", "001", "003")),
+  expect_equal(icd:::sort.icd9(short_code = TRUE, c("003", "002", "001", "003")),
                c("001", "002", "003", "003"))
   expect_equal(sort_icd(short_code = TRUE, c("003", "002", "001", "003")),
                c("001", "002", "003", "003"))
-  expect_equal(sort.icd9(c("001", "V02", "V01", "E003"),
+  expect_equal(icd:::sort.icd9(c("001", "V02", "V01", "E003"),
                              short_code = TRUE),
                c("001", "V01", "V02", "E003"))
-  expect_equal(sort.icd9(
+  expect_equal(icd:::sort.icd9(
     c("0032", "0288", "0019", "0031"), short_code = TRUE),
     c("0019", "0031", "0032", "0288"))
-  expect_equal(sort.icd9(c("V251", "V25", "E0039", "E003"),
+  expect_equal(icd:::sort.icd9(c("V251", "V25", "E0039", "E003"),
                              short_code = TRUE),
                c("V25", "V251", "E003", "E0039"))
-  expect_equal(sort.icd9(c("V25.1", "V25", "E003.9", "E003"),
+  expect_equal(icd:::sort.icd9(c("V25.1", "V25", "E003.9", "E003"),
                              short_code = FALSE),
                c("V25", "V25.1", "E003", "E003.9"))
-  expect_equal(sort.icd9(
+  expect_equal(icd:::sort.icd9(
     short_code = FALSE,
     c("E1.1", "V2.2", "E001", "V02.1", "999.99", "88.8", "77")),
     c("77", "88.8", "999.99", "V02.1", "V2.2", "E001", "E1.1"))
 })
 
 test_that("sorting char factors", {
-  expect_equal(sort.icd9(
+  expect_equal(icd:::sort.icd9(
 
     short_code = TRUE, factor(c("003", "002", "001", "003"))),
     factor(c("001", "002", "003", "003")))
-  expect_equal(sort.icd9(factor(c("001", "V02", "V01", "E003")),
+  expect_equal(icd:::sort.icd9(factor(c("001", "V02", "V01", "E003")),
 
                              short_code = TRUE),
                factor(c("001", "V01", "V02", "E003")))
-  expect_equal(sort.icd9(
+  expect_equal(icd:::sort.icd9(
     short_code = TRUE, factor(c("0032", "0288", "0019", "0031"))),
     factor(c("0019", "0031", "0032", "0288")))
-  expect_equal(sort.icd9(factor(c("V251", "V25", "E0039", "E003")),
+  expect_equal(icd:::sort.icd9(factor(c("V251", "V25", "E0039", "E003")),
                              short_code = TRUE),
                factor(c("V25", "V251", "E003", "E0039")))
-  expect_equal(sort.icd9(factor(c("V25.1", "V25", "E003.9", "E003")),
+  expect_equal(icd:::sort.icd9(factor(c("V25.1", "V25", "E003.9", "E003")),
                              short_code = FALSE),
                factor(c("V25", "V25.1", "E003", "E003.9")))
-  expect_equal(sort.icd9(
+  expect_equal(icd:::sort.icd9(
 
     factor(c("E1.1", "V2.2", "E001", "V02.1", "999.99", "88.8", "77")),
     short_code = FALSE),

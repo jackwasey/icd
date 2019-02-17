@@ -694,11 +694,10 @@ NULL
   y
 }
 
-#' test ICD classes
+#' Test presence of ICD classes
 #'
 #' This merely checks whether the given object is a certain type of ICD code, it
-#' does no validation of any kind.
-#'
+#' does no validation of any kind. For validation, see \code{\link{is_valid}}.
 #' @param x Any object which may have ICD-related classes set
 #' @examples
 #' # A character string is not itself an ICD code
@@ -706,7 +705,9 @@ NULL
 #' is_valid("100.1")
 #' is.icd9(as.icd9cm("100.1"))
 #' @export
-is.icd9 <- function(x) inherits(x, icd9_classes)
+is.icd9 <- function(x) {
+  inherits(x, icd9_classes)
+}
 
 #' @rdname is.icd9
 #' @export
@@ -740,6 +741,10 @@ is.icd10who <- function(x) inherits(x, "icd10who")
 #' @export
 is.icd10fr <- function(x) inherits(x, "icd10fr")
 
+#' @rdname is.icd9
+#' @export
+is.icd10be <- function(x) inherits(x, "icd10be")
+
 #' Test for class describing patient data
 #'
 #' This function does not examine the data itself; it just checks whether one of
@@ -772,7 +777,7 @@ is.comorbidity_map <- function(x) inherits(x, "comorbidity_map")
 #' @param x ICD codes to be printed
 #' @param verbose Annotate based on code attributes, e.g., decimal versus short
 #'   codes.
-#' @keywords internal
+#' @template dotdotdot
 #' @export
 print.icd9 <- function(x, verbose = FALSE, ...)
   print_codes(x,
@@ -791,7 +796,6 @@ print.icd9 <- function(x, verbose = FALSE, ...)
 #'                class = c("icd10cm", "icd10", "character"))
 #' print(a, verbose = TRUE)
 #' }
-#' @keywords internal
 #' @export
 print.icd10 <- function(x, verbose = FALSE, ...) {
   icd10cl <- grep("icd10.+", class(x), value = TRUE)
@@ -801,6 +805,9 @@ print.icd10 <- function(x, verbose = FALSE, ...) {
                       icd10cm = "ICD-10-CM Diagnostic Codes",
                       icd10cm_pc = "ICD-10-CM Procedure Codes",
                       icd10who = "WHO ICD-10 (Diagnostic Codes)",
+                      icd10fr = "ICD-10-FR (French Diagnostic Codes)",
+                      icd10be = "ICD-10-BE (Belgian Diagnostic Codes)",
+                      icd10be_pc = "ICD-10-BE (Belgian Procedure Codes)",
                       "ICD-10 Codes (Subtype not set)")
   print_codes(x, sub_class, verbose = verbose, ...)
 }

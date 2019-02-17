@@ -42,6 +42,7 @@ Depends:
     R (>= 3.4)
 Imports:
     icd.data,
+    methods,
     Rcpp (>= 0.12.3)
 Suggests:
     graphics,

@@ -94,11 +94,12 @@
 #' @aliases icd icd-package package-icd package-icd9 icd9-package icd10-package
 #'   package-icd10
 #' @author Jack O. Wasey \email{jack@@jackwasey.com}
-#' @keywords misc utilities
+#' @keywords misc utilities internal
 #' @concept ICD-9 ICD-10 comorbidity comorbidities
 #' @useDynLib icd, .registration=TRUE
 #' @importFrom Rcpp cppFunction
-#' @importFrom utils head tail read.fwf getFromNamespace
+#' @importFrom utils head tail read.fwf
 #' @importFrom stats setNames reshape
 #' @importFrom graphics barplot
+#' @importFrom methods is
 "_PACKAGE"

@@ -421,7 +421,7 @@ get_from_icd_data <- function(name, alt = NULL, lazy = TRUE) {
     if (lazy)
       base::getExportedValue(asNamespace("icd.data"), name)
     else
-      utils::getFromNamespace(name, asNamespace("icd.data"))
+      get(name, envir = asNamespace("icd.data"), inherits = FALSE)
   })
   if (!inherits(out, "try-error"))
     out

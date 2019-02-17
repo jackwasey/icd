@@ -30,6 +30,8 @@ is_leaf(x, short_code = guess_short(x), ...)
 code provided is in short (\code{TRUE}) or decimal (\code{FALSE}) form.
 Where reasonable, this is guessed from the input data.}
 
+\item{...}{arguments passed on to other functions}
+
 \item{icd9cm_edition}{single character string, default is "32" which is the
 latest release from CMS. Currently anything from "23" to "32" is accepted.
 Not numeric because there are possible cases with non-numeric names, e.g.

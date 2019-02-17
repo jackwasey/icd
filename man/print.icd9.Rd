@@ -14,6 +14,8 @@
 
 \item{verbose}{Annotate based on code attributes, e.g., decimal versus short
 codes.}
+
+\item{...}{arguments passed on to other functions}
 }
 \description{
 Print ICD codes and comorbidity maps cleanly
@@ -40,4 +42,3 @@ a <- structure(c("R21", "Z21"),
 print(a, verbose = TRUE)
 }
 }
-\keyword{internal}

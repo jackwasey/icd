@@ -2,7 +2,7 @@ context("sorting")
 
 test_that("sorting preserves order of names", {
   a <- c("Bad disease" = "100", "Another bad disease" = "200")
-  b <- sort.icd9(a)
+  b <- icd:::sort.icd9(a)
   expect_identical(a[["Bad disease"]], b[["Bad disease"]])
   expect_identical(a[["Another bad disease"]], b[["Another bad disease"]])
 })
@@ -20,7 +20,8 @@ test_that("sorting of icd10 object", {
   k <- sort(j)
   expect_identical(j[2], k[1])
   expect_identical(j[1], k[2])
-  expect_identical(sort.icd10(a), unclass(k))
+  expect_identical(icd:::sort.icd10(a), unclass(k))
+  expect_identical(icd:::sort.icd10cm(a), unclass(k))
 })
 
 test_that("sort icd10", {

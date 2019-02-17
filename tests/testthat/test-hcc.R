@@ -35,7 +35,7 @@ test_that("github 153", {
          icd_code = c("F1020", "G4733", "M1712", NA)),
     row.names = c("1", "2", "3", "NA"),
     class = c("icd_long_data", "data.frame"))
-  expect_error(regexp = NA, icd_comorbid_hcc(hcc_github153_df))
+  expect_error(regexp = NA, comorbid_hcc(hcc_github153_df))
 })
 
 test_that("hcc icd10 codes", {
