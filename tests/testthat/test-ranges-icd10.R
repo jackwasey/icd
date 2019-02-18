@@ -88,9 +88,14 @@ test_that("icd10cm range errors", {
   expect_error(expand_range_major.icd10cm("A10", "A13"), "not found") # neither exist
   expect_error(expand_range_major.icd10cm("A11", "A99"), "not found") # start missing
   expect_error(expand_range_major.icd10cm("A00", "A12"), "not found") # end missing
-
   expect_error(expand_range_major.icd10cm("dsa", "A99"), "is not") # start wrong
   expect_error(expand_range_major.icd10cm("A00", "zds"), "is not") # end wrong
   expect_error(expand_range_major.icd10cm("399annc", "611"), "is not") # both wrong
+})
 
+test_that("expand range quirks", {
+  expect_equal(
+    icd:::expand_range_major.icd10cm("C43", "C44", defined = FALSE),
+    as.icd10cm(c("C43", "C4A", "C44")))
+  skip("more of these needed")
 })

@@ -163,6 +163,10 @@ children_defined.icd10cm <- function(x,
     "2016"
   }
   nc <- .chars_in_icd10cm[[ver]]
+  if (is.null(nc))
+    stop("Unable to get precomputer string lengths for ICD-10-CM version: ",
+         ver,
+         call. = FALSE)
   kids <- icd10_children_defined_rcpp(
     x,
     dat,

@@ -8,6 +8,7 @@ icd10cm_order_rcpp(x)
 }
 \description{
 currently required for C7A, C7B (which fall after C80), and
-  D3A, which falls after D48.
+  D3A, which falls after D48. C4A M1A Z3A are also problems within
+  sub-chapters.
 }
 \keyword{internal}

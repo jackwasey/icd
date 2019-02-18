@@ -322,7 +322,8 @@ icd10cm_sort_rcpp <- function(x) {
 
 #' @title Order ICD-10-CM codes
 #' @description currently required for C7A, C7B (which fall after C80), and
-#'   D3A, which falls after D48.
+#'   D3A, which falls after D48. C4A M1A Z3A are also problems within
+#'   sub-chapters.
 #' @keywords internal
 icd10cm_order_rcpp <- function(x) {
     .Call(`_icd_icd10cmOrder`, x)

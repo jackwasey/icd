@@ -136,7 +136,7 @@ expand_range_major <- function(start, end, defined) {
 #'   of unknown type
 #' @keywords internal
 #' @export
-expand_range_major.default <- function(start, end, defined) {
+expand_range_major.default <- function(start, end, defined = TRUE) {
   icd_ver <- guess_pair_version(start, end, short_code = TRUE)
   if (icd_ver == "icd9")
     expand_range_major.icd9(start, end)
@@ -144,18 +144,37 @@ expand_range_major.default <- function(start, end, defined) {
     expand_range_major.icd10cm(start, end, defined)
 }
 
+
+# Expand range of all (currently) possible ICD-10 major, three-digit part of
+# codes.
+.icd10cm_get_majors_defined <- function(s, e) {
+  o <- sort(
+    as.icd10cm(
+      apply(
+        expand.grid(LETTERS, 0:9, c(0:9, "A", "B")),
+        MARGIN = 1,
+        FUN = paste0,
+        collapse = "")
+    )
+  )
+  stopifnot(all(c(s, e) %in% o))
+  o[seq.int(from = which(o == s),
+            to = which(o == e))]
+}
+
 #' @describeIn expand_range_major Expand range of top-level ICD-10 codes
 #' @keywords internal
 #' @export
-expand_range_major.icd10cm <- function(start, end, defined) {
+expand_range_major.icd10cm <- function(start, end, defined = TRUE) {
   # codes may have alphabetic characters in 3rd position, so can't just do
   # numeric. This may make ICD-10-CM different from ICD-10 WHO. It also makes
   # generating the lookup table of ICD-10-CM codes potentially circular, since
   # we expand the start to end range of chapter and sub-chapter definitions.
-  if (!missing(defined))
-    warning("Argument 'defined' given but not relevant for major expansion")
   se <- toupper(trim(as_char_no_warn(c(start, end))))
-  unique_mjrs <- unique(icd.data::icd10cm2016$three_digit)
+  unique_mjrs <- if (defined)
+    unique(icd.data::icd10cm2016$three_digit)
+  else
+    .icd10cm_get_majors_defined("A00", "Z99")
   if (!is_major.icd10cm(se[[1]]))
     stop("start: ", start, " is not an ICD-10-CM major (three character) code")
   if (!is_major.icd10cm(se[[2]]))

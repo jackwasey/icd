@@ -386,47 +386,61 @@ context("ICD10 short to parts") {
 
 context("compare/sort/order ICD-10-CM") {
   test_that("compare quirks") {
-    expect_true(icd10cmCompare("C79", "C80"));
-    expect_true(icd10cmCompare("C79", "C7A"));
-    expect_true(icd10cmCompare("C80", "C7A"));
-    expect_true(icd10cmCompare("C80", "C7B"));
+    expect_true(icd10cmCompare("C74", "C75"));
+    expect_true(icd10cmCompare("C74", "C7A"));
+    expect_true(icd10cmCompare("C75", "C7A"));
+    expect_true(icd10cmCompare("C75", "C7B"));
     expect_true(icd10cmCompare("C7A", "C7B"));
-    expect_true(icd10cmCompare("C7B", "C81"));
-    expect_false(icd10cmCompare("C81", "C7A"));
+    expect_true(icd10cmCompare("C7B", "C76"));
+    expect_false(icd10cmCompare("C76", "C7A"));
     expect_false(icd10cmCompare("C7B", "C7A"));
     expect_false(icd10cmCompare("C7A", "C7A"));
     expect_false(icd10cmCompare("C7B", "C7B"));
-    expect_false(icd10cmCompare("C81", "C7B"));
-    expect_false(icd10cmCompare("C82", "C81"));
+    expect_false(icd10cmCompare("C76", "C7B"));
+    expect_false(icd10cmCompare("C77", "C76"));
   }
-  test_that("compare quirk sub-codes") {
-    expect_true(icd10cmCompare("C791", "C80"));
-    expect_true(icd10cmCompare("C79a", "C7A"));
-    expect_true(icd10cmCompare("C802", "C7A"));
-    expect_true(icd10cmCompare("C80b", "C7B"));
+  test_that("compare quirk sub-chap codes") {
+    expect_true(icd10cmCompare("C741", "C75"));
+    expect_true(icd10cmCompare("C74a", "C7A"));
+    expect_true(icd10cmCompare("C752", "C7A"));
+    expect_true(icd10cmCompare("C75b", "C7B"));
     expect_true(icd10cmCompare("C7A3", "C7B"));
-    expect_true(icd10cmCompare("C7Ac", "C81"));
+    expect_true(icd10cmCompare("C7Ac", "C76"));
     expect_false(icd10cmCompare("C7B4", "C7A"));
     expect_false(icd10cmCompare("C7Ad", "C7A"));
-    expect_false(icd10cmCompare("C815", "C7A"));
+    expect_false(icd10cmCompare("C765", "C7A"));
     expect_false(icd10cmCompare("C7Be", "C7B"));
-    expect_false(icd10cmCompare("C816", "C7B"));
-    expect_false(icd10cmCompare("C82v", "C81"));
-    expect_true(icd10cmCompare("C79", "C801"));
-    expect_true(icd10cmCompare("C79", "C7A2"));
-    expect_true(icd10cmCompare("C80", "C7A3"));
-    expect_true(icd10cmCompare("C80", "C7B4"));
+    expect_false(icd10cmCompare("C766", "C7B"));
+    expect_false(icd10cmCompare("C77v", "C76"));
+    expect_true(icd10cmCompare("C74", "C751"));
+    expect_true(icd10cmCompare("C74", "C7A2"));
+    expect_true(icd10cmCompare("C75", "C7A3"));
+    expect_true(icd10cmCompare("C75", "C7B4"));
     expect_true(icd10cmCompare("C7A", "C7B5"));
-    expect_true(icd10cmCompare("C7A", "C816"));
+    expect_true(icd10cmCompare("C7A", "C766"));
+    expect_true(icd10cmCompare("C7B", "C7B0"));
+    expect_true(icd10cmCompare("C7A", "C7A8"));
     expect_false(icd10cmCompare("C7B", "C7A7"));
-    expect_false(icd10cmCompare("C7A", "C7A8"));
-    expect_false(icd10cmCompare("C81", "C7A9"));
-    expect_false(icd10cmCompare("C7B", "C7B0"));
-    expect_false(icd10cmCompare("C81", "C7Ba"));
-    expect_false(icd10cmCompare("C82", "C76b"));
+    expect_false(icd10cmCompare("C76", "C7A9"));
+    expect_false(icd10cmCompare("C76", "C7Ba"));
+    expect_false(icd10cmCompare("C77", "C75b"));
+  }
+  test_that("compare other quirks") {
+    expect_true(icd10cmCompare("Z36", "Z3A"));
+    expect_false(icd10cmCompare("Z3A", "Z36"));
+    expect_true(icd10cmCompare("Z3A", "Z37"));
+    expect_false(icd10cmCompare("Z37", "Z3A"));
+    expect_true(icd10cmCompare("M09", "M1A"));
+    expect_false(icd10cmCompare("M1A", "M09"));
+    expect_true(icd10cmCompare("M1A", "M10"));
+    expect_false(icd10cmCompare("M10", "M1A"));
+    expect_true(icd10cmCompare("C43", "C4A"));
+    expect_false(icd10cmCompare("C4A", "C43"));
+    expect_true(icd10cmCompare("C4A", "C44"));
+    expect_false(icd10cmCompare("C44", "C4A"));
   }
   test_that("order ICD-10-CM quirks") {
-    CharacterVector c = {"Z99", "C81", "C7A", "C7B", "C80", "A00"};
+    CharacterVector c = {"Z99", "C76", "C7A", "C7B", "C75", "A00"};
     IntegerVector i = {6, 5, 3, 4, 2, 1};
     auto o = icd10cmOrder(c);
     bool res = is_true(all(o == i));
@@ -434,12 +448,13 @@ context("compare/sort/order ICD-10-CM") {
       String s = c[n];
       expect_true(o[n] == i[n]);
     }
-    c = {"C7A", "C79", "C80", "C81", "C7B"};
-    i = {3, 1, 2, 5, 4};
+    c = {"C7A", "C75", "C76", "C77", "C7B"};
+    i = {2, 1, 4, 5, 3};
     o = icd10cmOrder(c);
     res = is_true(all(o == i));
     for (auto n = 0; n != c.size() && n != i.size(); ++n) {
       String s = c[n];
+      DEBUG_UTIL("o[n] = " << o[n] << ", i[n] = " << i[n]);
       expect_true(o[n] == i[n]);
     }
   }

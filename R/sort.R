@@ -22,7 +22,9 @@
 #' codes <- as.icd10cm(c("C7A", "C79", "C80", "C81", "C7B"))
 #' # as the class is set, use S3 dispatch to get the right answer
 #' sort(codes)
-#' # or call directly:
+#' # or call directly, but recall S3 dispatch will only work once 'icd' is
+#' # attached using:
+#' library(icd)
 #' icd:::sort.icd10cm(c("C7A", "C79", "C80", "C81", "C7B"))
 #' stopifnot(!identical(order.icd10cm(as.character(codes)),
 #'                      order(codes)))

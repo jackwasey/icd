@@ -9,9 +9,9 @@
 \usage{
 expand_range_major(start, end, defined)
 
-\method{expand_range_major}{default}(start, end, defined)
+\method{expand_range_major}{default}(start, end, defined = TRUE)
 
-\method{expand_range_major}{icd10cm}(start, end, defined)
+\method{expand_range_major}{icd10cm}(start, end, defined = TRUE)
 
 \method{expand_range_major}{icd9}(start, end, defined = TRUE)
 }

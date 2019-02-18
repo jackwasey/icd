@@ -110,33 +110,143 @@ bool strVecEqual(CharacterVector x, CharacterVector y) {
   return true;
 }
 
+std::vector<std::string> qx = {"C4A", "D3A", "M1A", "Z3A", "C7A", "C7B"};
+std::vector<std::string> qb = {"C43", "D36", "M09", "Z36", "C75", "C7A"};
+std::vector<std::string> qa = {"C44", "D37", "M10", "Z37", "C7B", "C76"};
+std::vector<std::string> qbb = {"C43", "D36", "M09", "Z36", "C75", "C75"};
+std::vector<std::string> qaa = {"C44", "D37", "M10", "Z37", "C76", "C76"};
+
+// bool isQuirk(std::string s) {
+//   return std::find(qx.begin(), qx.end(), s.substr(0, 3))  == qx.end();
+// }
+//
+// std::string getBeforeQuirk(std::string s) {
+//   auto bqit = std::find(qx.begin(), qx.end(), s.substr(0, 3));
+//   auto i = qb.begin();
+//   // j is an iterator in vector "b"
+//   advance(i, distance(qx.begin(), bqit));
+//   return *i;
+// }
+//
+// std::string getAfterQuirk(std::string s) {
+//   auto bqit = std::find(qx.begin(), qx.end(), s.substr(0, 3));
+//   auto i = qa.begin();
+//   // j is an iterator in vector "b"
+//   advance(i, distance(qx.begin(), bqit));
+//   return *i;
+// }
+
+std::pair<bool, bool> icd10cmCompareQuirk(
+    const Rcpp::String& x,
+    const Rcpp::String& y,
+    const char * quirk,
+    const char * beforeQuirk,
+    const char * afterQuirk,
+    const char * beforeBeforeQuirk,
+    const char * afterAfterQuirk
+);
+
+std::pair<bool, bool> icd10cmCompareQuirk(
+    const Rcpp::String& x,
+    const Rcpp::String& y,
+    const char * quirk,
+    const char * beforeQuirk,
+    const char * afterQuirk,
+    const char * beforeBeforeQuirk,
+    const char * afterAfterQuirk
+) {
+  const char * xstr = x.get_cstring();
+  const char * ystr = y.get_cstring();
+  bool mx = (x == quirk || strncmp(xstr, quirk, 3) == 0);
+  bool my = (y == quirk || strncmp(ystr, quirk, 3) == 0);
+  if (!mx && !my) return std::pair<bool, bool>(false, false);
+  if (x == y) return std::pair<bool, bool>(true, false);
+  //if (isQuirk(beforeQuirk)) realeforeQuirk = getBeforeQuirk(beforeQuirk).c_str();
+  //  if (isQuirk(afterQuirk)) afterQuirk = getAfterQuirk(beforeQuirk).c_str();
+  if (mx) {
+    TRACE_UTIL(quirk << " matched x");
+    if (my) {
+      TRACE_UTIL(quirk << " also matched y for same quirk");
+      return std::pair<bool, bool>(true, x < y);
+    }
+    TRACE_UTIL(quirk << " after x match falling through. x = " << xstr <<
+      ", beforeQuirk = " << beforeQuirk <<
+        ", afterQuirk = " << afterQuirk <<
+          ", beforeBeforeQuirk = " << beforeBeforeQuirk <<
+            ", afterAfterQuirk = " << afterAfterQuirk);
+
+    if (strcmp(beforeQuirk, beforeBeforeQuirk)) {
+      return icd10cmCompareQuirk(x,
+                                 y,
+                                 quirk,
+                                 beforeBeforeQuirk,
+                                 afterQuirk,
+                                 beforeBeforeQuirk,
+                                 afterAfterQuirk);
+    }
+    TRACE_UTIL("Didn't do X recursion");
+    return std::pair<bool, bool>(true, strcmp(beforeQuirk, ystr) < 0);
+  }
+  TRACE_UTIL(quirk << " falling through. x = " << xstr <<
+    ", afterQuirk = " << afterQuirk);
+  if (strcmp(afterQuirk, afterAfterQuirk)) {
+    return icd10cmCompareQuirk(x,
+                               y,
+                               quirk,
+                               beforeQuirk,
+                               afterAfterQuirk,
+                               beforeBeforeQuirk,
+                               afterAfterQuirk);
+  }
+  TRACE_UTIL("Didn't do Y recursion");
+  return std::pair<bool, bool>(true, strcmp(xstr, afterQuirk) < 0);
+}
+
 // [[Rcpp::export(icd10cm_compare_rcpp)]]
 bool icd10cmCompare(const Rcpp::String x, const Rcpp::String y) {
   const char * xstr = x.get_cstring();
   const char * ystr = y.get_cstring();
   const int i = strncmp(xstr, ystr, 1);
-  // get out quick if first two characters differ
+  // get out quick if first character differs.
   if (i != 0) return i < 0;
-  if (x == "C7A" || strncmp(xstr, "C7A", 3) == 0) {
-    if (x == y) return false;
-    if (y == "C7B" || strncmp(ystr, "C7B", 3) == 0) return true;
-    return y > "C80";
-  } else if (x == "C7B" || strncmp(xstr, "C7B", 3) == 0) {
-    if (x == y) return false;
-    if (y == "C7A" || strncmp(ystr, "C7A", 3) == 0) return false;
-    return y > "C80";
-  } else if (x == "D3A" || strncmp(xstr, "D3A", 3) == 0) {
-    if (x == y) return false;
-    return y > "D48";
+  // in flat file, C4A is between 43 and 44. Definitive reference I am using is
+  // the flat file with all the codes from CMS.
+  std::pair<bool, bool> quirkResult;
+  for ( std::vector<std::string>::size_type j = 0; j != qa.size(); ++j) {
+    TRACE_UTIL("Working on " << qx[j]);
+    quirkResult = icd10cmCompareQuirk(x,
+                                      y,
+                                      qx[j].c_str(),
+                                      qb[j].c_str(),
+                                      qa[j].c_str(),
+                                      qbb[j].c_str(),
+                                      qaa[j].c_str()
+    );
+    if (quirkResult.first) return quirkResult.second;
   }
-  if (y == "C7A" ||
-      y == "C7B" ||
-      strncmp(ystr, "C7A", 3) == 0 ||
-      strncmp(ystr, "C7B", 3) == 0 ) {
-    return x < "C81";
-  } else if (y == "D3A" || strncmp(ystr, "D3A", 3) == 0) {
-    return x < "D49";
-  }
+  // int c7a_xcmp = strncmp(xstr, "C7A", 3);
+  // if (x == "C7A" || c7a_xcmp == 0) {
+  //   if (x == y) return false;
+  //   TRACE_UTIL("x = C7A, not exact match");
+  //   if (y == "C7B" || strncmp(ystr, "C7B", 3) == 0) return true;
+  //   TRACE_UTIL("x = C7A, not C7B...");
+  //   return y > "C75";
+  // } else if (x == "C7B" || strncmp(xstr, "C7B", 3) == 0) {
+  //   if (x == y) return false;
+  //   int c7a_ycmp = strncmp(ystr, "C7A", 3);
+  //   if (y == "C7A") {
+  //     if (c7a_ycmp == 0) return false;
+  //     return strcmp(xstr, ystr);
+  //   }
+  //
+  //   return y > "C75";
+  // }
+  // if (y == "C7A" ||
+  //     y == "C7B" ||
+  //     strncmp(ystr, "C7A", 3) == 0 ||
+  //     strncmp(ystr, "C7B", 3) == 0 ) {
+  //   return x < "C76";
+  // }
   return x < y;
 }
 
@@ -151,7 +261,8 @@ CharacterVector icd10cmSort(
 
 //' @title Order ICD-10-CM codes
 //' @description currently required for C7A, C7B (which fall after C80), and
-//'   D3A, which falls after D48.
+//'   D3A, which falls after D48. C4A M1A Z3A are also problems within
+//'   sub-chapters.
 //' @keywords internal
 // [[Rcpp::export(icd10cm_order_rcpp)]]
 IntegerVector icd10cmOrder(const CharacterVector& x) {

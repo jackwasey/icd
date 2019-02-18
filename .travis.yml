@@ -74,6 +74,7 @@ matrix:
     r_check_args: --no-build-vignettes --no-vignettes --ignore-vignettes --no-codoc --no-manual
     env:
     - ICD_COVERAGE=true
+    - ICD_TEST_SLOW=true
 
 before_script:
  - rm .Rinstignore  # do install everything for testing

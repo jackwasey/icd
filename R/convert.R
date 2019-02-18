@@ -16,9 +16,9 @@
 #' @name convert
 NULL
 
-#' convert the chapter headings to lists of codes
+#' Convert chapters to lists of codes for use as a comorbidity map
 #'
-#' the chapter headings can be converted into the full set of their children,
+#' The chapter headings can be converted into the full set of their children,
 #' and then used to look-up which chapter, sub-chapter, or 'major' a given code
 #' belongs. Always returns a map with short-form ICD-9 codes. These can be
 #' converted in bulk with \code{lapply} and \code{short_to_decimal}.
@@ -28,15 +28,18 @@ NULL
 #'   officially defined ICD-9 (currently ICD-9-CM) codes will be used in the
 #'   expansion, not any syntactically possible ICD-9 code.
 #' @keywords internal manip
-icd9_chapters_to_map <- function(x, defined = FALSE) {
-  if (is.character(x) && exists(x))
-    x <- get(x)
-  assert_list(x, types = "character", min.len = 1, names = "unique")
+#' @export
+chapters_to_map <- function(x, defined = TRUE) {
+  if (is.character(x) && exists(x)) x <- get(x)
+  stopifnot(is.list(x))
+  stopifnot(all(vapply(x, is.character, logical(1))))
   ranges <- names(x)
   map <- list()
   for (r in ranges) {
-    map[[r]] <- expand_range.icd9(x[[r]][1], x[[r]][2],
-                                  short_code = TRUE, defined = defined)
+    map[[r]] <- expand_range(x[[r]][1],
+                             x[[r]][2],
+                             short_code = TRUE,
+                             defined = defined)
   }
   map
 }

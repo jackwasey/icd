@@ -389,6 +389,9 @@ icd10_generate_map_quan_deyo <- function(save_data = TRUE) {
                "C50", "C51", "C52", "C53", "C54", "C55", "C56", "C57", "C58",
                "C60", "C61", "C62", "C63", "C64", "C65", "C66", "C67", "C68",
                "C69", "C70", "C71", "C72", "C73", "C74", "C75", "C76",
+               # not in the original non-ICD-10-CM, but clearly appropriate:
+               "C7A", "C7B",
+               # mets is recorded separately
                "C81", "C82", "C83", "C84", "C85", "C88",
                "C90", "C91", "C92", "C93", "C94", "C95", "C96", "C97"),
     liver_s = c("K704", "K711", "K721", "K729", "K765", "K766", "K767", "I850",
