@@ -112,10 +112,25 @@ categorize_simple <- function(
   df_out
 }
 
-comorbid_common <- function(..., visit_name, icd_name)
-  categorize_simple(..., id_name = visit_name, code_name = icd_name)
+comorbid_common <- function(
+  ...,
+  visit_name,
+  icd_name
+) {
+  categorize_simple(...,
+                    id_name = visit_name,
+                    code_name = icd_name)
+}
 
-comorbid_mat_mul_wide <- function(data, map, id_name, code_names,
-                                  validate = FALSE) {
-  comorbidMatMulWide(data, map, id_name, code_names, validate)
+comorbid_mat_mul_wide <- function(data,
+                                  map,
+                                  id_name,
+                                  code_name,
+                                  validate = FALSE
+) {
+  comorbidMatMulWide(data = data,
+                     map = map,
+                     id_name = id_name,
+                     code_names = code_name,
+                     validate = validate)
 }

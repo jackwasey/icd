@@ -1,4 +1,3 @@
-#include "Rcpp.h"
 #include "manip.h"
 #include <string.h> // for strlen
 #include "convert.h"

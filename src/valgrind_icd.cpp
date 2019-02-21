@@ -1,4 +1,3 @@
-#include <Rcpp.h>
 #include "local.h"
 using namespace Rcpp;
 // # nocov start

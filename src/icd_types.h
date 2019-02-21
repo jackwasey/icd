@@ -1,7 +1,10 @@
 #ifndef ICD_TYPES_H_
 #define ICD_TYPES_H_
 
-#include <Rcpp.h>
+// also add LinkingTo element in DESCRIPTION to enable
+#include <RcppEigen.h>
+#include <Eigen/SparseCore>
+
 #include <vector>
 #include <string>
 #include <unordered_map>
@@ -28,9 +31,6 @@ typedef std::pair<std::string, int> RelPair;
 typedef std::unordered_set<std::string> icd_set;
 typedef std::unordered_set<std::string> US;
 typedef Rcpp::CharacterVector CV;
-
-#include <RcppEigen.h> // also add LinkingTo element in DESCRIPTION to enable
-#include <Eigen/SparseCore>
 
 typedef int SparseValue;
 typedef Eigen::Triplet<SparseValue> Triplet;

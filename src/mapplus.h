@@ -1,6 +1,4 @@
-#include "icd_types.h"
 #include "local.h"
-#include <Rcpp.h>
 #include "relevant.h"
 using namespace Rcpp;
 

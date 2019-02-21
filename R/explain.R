@@ -72,8 +72,9 @@ explain_code.list <- function(x, ...)
 
 #' @describeIn explain_code explain character vector of ICD-9 codes.
 #' @export
-explain_code.icd9 <- function(...)
+explain_code.icd9 <- function(...) {
   explain_code.icd9cm(...)
+}
 
 #' @describeIn explain_code explain character vector of ICD-9-CM codes
 #' @export

@@ -193,14 +193,20 @@ icd10_comorbid_reduce <- function(x = x, map, visit_name, icd_name, short_code,
 #'   already run \code{icd9_add_leading_zeroes}), then \code{preclean} can be
 #'   set to \code{FALSE} to save time.
 #' @export
-icd9_comorbid <- function(x, map, visit_name = NULL, icd_name = NULL,
-                          short_code = guess_short(x, icd_name = icd_name),
-                          short_map = guess_short(map),
-                          return_df = FALSE, return_binary = FALSE,
-                          preclean = FALSE,
-                          categorize_fun = categorize_simple,
-                          comorbid_fun = comorbid_mat_mul_wide,
-                          ...) {
+icd9_comorbid <- function(
+  x,
+  map,
+  visit_name = NULL,
+  icd_name = NULL,
+  short_code = guess_short(x, icd_name = icd_name),
+  short_map = guess_short(map),
+  return_df = FALSE,
+  return_binary = FALSE,
+  preclean = FALSE,
+  categorize_fun = categorize_simple,
+  comorbid_fun = comorbid_mat_mul_wide,
+  ...
+) {
   assert_data_frame(x, min.cols = 2, col.names = "unique")
   assert_list(map, min.len = 1, names = "unique")
   stopifnot(is.null(visit_name) ||
@@ -223,9 +229,13 @@ icd9_comorbid <- function(x, map, visit_name = NULL, icd_name = NULL,
   }
   if (!short_map)
     map <- lapply(map, decimal_to_short)
-  categorize_fun(x = x, map = map, id_name = visit_name,
-                 code_name = icd_name, return_df = return_df,
-                 return_binary = return_binary, comorbid_fun = comorbid_fun,
+  categorize_fun(x = x,
+                 map = map,
+                 id_name = visit_name,
+                 code_name = icd_name,
+                 return_df = return_df,
+                 return_binary = return_binary,
+                 comorbid_fun = comorbid_fun,
                  ...)
 }
 

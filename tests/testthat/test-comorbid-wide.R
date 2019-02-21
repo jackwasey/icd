@@ -14,7 +14,7 @@ test_that("simple wide data calc", {
     wide_dat,
     charlson_minimap,
     id_name = "vis",
-    code_names = c("dx1", "dx2")
+    code_name = c("dx1", "dx2")
   )
   expect_equivalent(res["1000", ], c(TRUE, FALSE, TRUE, FALSE, FALSE))
   expect_equivalent(res["1001", ], c(FALSE, TRUE, FALSE, TRUE, FALSE))

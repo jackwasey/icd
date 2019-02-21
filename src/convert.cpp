@@ -4,7 +4,6 @@ extern "C" {
 #include <cstddef>                           // for size_t
 }
 #include <string>                            // for string
-#include "Rcpp.h"                            // for wrap
 #include "appendMinor.h"                     // for icd9MajMinToCode
 #include "is.h"                              // for icd9IsASingleE, icd9IsAS...
 #include "manip.h"                           // for icd9AddLeadingZeroesMajor

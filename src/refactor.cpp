@@ -1,4 +1,3 @@
-#include <Rcpp.h>
 #include "local.h"
 #include "refactor.h"
 
@@ -8,9 +7,11 @@ using namespace Rcpp;
 //' vector inputs only, no argument checking.
 //' @keywords internal manip
 // [[Rcpp::export(factor_nosort_rcpp_worker)]]
-IntegerVector factorNoSort(const CharacterVector& x,
-                           const CharacterVector& levels,
-                           const bool na_rm) {
+IntegerVector factorNoSort(
+    const CharacterVector& x,
+    const CharacterVector& levels,
+    const bool na_rm
+) {
   // TODO: use new factor code? but this is fine.
   IntegerVector out = match(x, levels);
   out.attr("levels") = (CharacterVector) levels;
@@ -30,8 +31,12 @@ IntegerVector factorNoSort(const CharacterVector& x,
 //' @md
 //' @keywords internal manip
 // [[Rcpp::export(refactor_worker)]]
-IntegerVector refactor(const IntegerVector& x, const CV& new_levels,
-                       const bool exclude_na, const bool validate) {
+IntegerVector refactor(
+    const IntegerVector& x,
+    const CV& new_levels,
+    const bool exclude_na,
+    const bool validate
+) {
   TRACE("Refactoring, keeping NAs");
 #ifdef ICD_DEBUG
   assert(factorIsValid(x));
