@@ -1,35 +1,34 @@
-#include "icd_types.h"
 #include "convert.h"
+#include "icd_types.h"
 extern "C" {
-#include <cstddef>                           // for size_t
+#include <cstddef> // for size_t
 }
-#include <string>                            // for string
-#include "appendMinor.h"                     // for icd9MajMinToCode
-#include "is.h"                              // for icd9IsASingleE, icd9IsAS...
-#include "manip.h"                           // for icd9AddLeadingZeroesMajor
-#include "util.h"                            // for strimCpp, trimLeftCpp
+#include "appendMinor.h" // for icd9MajMinToCode
+#include "is.h"          // for icd9IsASingleE, icd9IsAS...
+#include "manip.h"       // for icd9AddLeadingZeroesMajor
+#include "util.h"        // for strimCpp, trimLeftCpp
+#include <string>        // for string
 
 using namespace Rcpp;
 
 // [[Rcpp::export]]
-CV icd9PartsToShort(const List& parts) {
+CV icd9PartsToShort(const List &parts) {
   CV res = icd9MajMinToCode(parts["mjr"], parts["mnr"], true);
   return res;
 }
 
 // [[Rcpp::export]]
-CV icd9PartsToDecimal(const List& parts) {
+CV icd9PartsToDecimal(const List &parts) {
   CV res = icd9MajMinToCode(parts["mjr"], parts["mnr"], false);
   return res;
 }
 
 // [[Rcpp::export]]
-List majMinToParts(const CV& mjr, const CV& mnr) {
-  List returned_frame = List::create(_["mjr"] = mjr,
-                                     _["mnr"] = mnr);
+List majMinToParts(const CV &mjr, const CV &mnr) {
+  List returned_frame = List::create(_["mjr"] = mjr, _["mnr"] = mnr);
 
-  StringVector sample_row = returned_frame(0);
-  IntegerVector row_names = seq_along(sample_row);
+  StringVector sample_row          = returned_frame(0);
+  IntegerVector row_names          = seq_along(sample_row);
   returned_frame.attr("row.names") = row_names;
   // doesn't actually need a data frame, although it is barely distinguishable
   // from a list, and not costly to construct in this manner.
@@ -39,7 +38,7 @@ List majMinToParts(const CV& mjr, const CV& mnr) {
 }
 
 // [[Rcpp::export]]
-List icd9ShortToParts(const CV& icd9Short, String mnrEmpty) {
+List icd9ShortToParts(const CV &icd9Short, String mnrEmpty) {
   CV mjr(icd9Short.size());
   CV mnr(icd9Short.size());
   for (int i = 0; i < icd9Short.size(); ++i) {
@@ -50,7 +49,7 @@ List icd9ShortToParts(const CV& icd9Short, String mnrEmpty) {
       continue;
     }
     std::string s(thisShort.get_cstring());
-    s = strimCpp(s); // in place or rewrite?
+    s                         = strimCpp(s); // in place or rewrite?
     std::string::size_type sz = s.size();
     if (icd9IsASingleE(s.c_str())) { // E code
       switch (sz) {
@@ -67,7 +66,7 @@ List icd9ShortToParts(const CV& icd9Short, String mnrEmpty) {
       default:
         // covr looks like it misses fall-through here, even though tested
         mjr[i] = NA_STRING;
-      mnr[i] = NA_STRING;
+        mnr[i] = NA_STRING;
       }
     } else { // not an E code
       switch (sz) {
@@ -84,7 +83,7 @@ List icd9ShortToParts(const CV& icd9Short, String mnrEmpty) {
         continue;
       default:
         mjr[i] = NA_STRING;
-      mnr[i] = NA_STRING;
+        mnr[i] = NA_STRING;
       }
     }
   } // for
@@ -92,19 +91,17 @@ List icd9ShortToParts(const CV& icd9Short, String mnrEmpty) {
 }
 
 // [[Rcpp::export]]
-List icd9DecimalToParts(const CV& icd9Decimal, const String mnrEmpty) {
+List icd9DecimalToParts(const CV &icd9Decimal, const String mnrEmpty) {
   CV mjrs;
   CV mnrs;
   int ilen = icd9Decimal.length();
 
   if (ilen == 0) {
-    return List::create(_["mjr"] =
-                        CV::create(), _["mnr"] =
-                        CV::create());
+    return List::create(_["mjr"] = CV::create(), _["mnr"] = CV::create());
   }
 
-  for (CV::const_iterator it = icd9Decimal.begin();
-       it != icd9Decimal.end(); ++it) {
+  for (CV::const_iterator it = icd9Decimal.begin(); it != icd9Decimal.end();
+       ++it) {
     String strna = *it;
     if (is_true(all(is_na(CV::create(strna)))) || strna == "") {
       mjrs.push_back(NA_STRING);
@@ -115,48 +112,48 @@ List icd9DecimalToParts(const CV& icd9Decimal, const String mnrEmpty) {
     // get_cstring, and recode the trim functions to take const char *. This
     // would avoid the type change AND may trim faster.
     std::string thiscode = as<std::string>(*it);
-    thiscode = strimCpp(thiscode); // This updates 'thisccode' by reference, no copy
+    thiscode =
+      strimCpp(thiscode); // This updates 'thisccode' by reference, no copy
     std::size_t pos = thiscode.find(".");
     // substring parts
     std::string mjrin;
     String mnrout;
     if (pos != std::string::npos) {
-      mjrin = thiscode.substr(0, pos);
+      mjrin  = thiscode.substr(0, pos);
       mnrout = thiscode.substr(pos + 1);
     } else {
-      mjrin = thiscode;
+      mjrin  = thiscode;
       mnrout = mnrEmpty;
     }
     mjrs.push_back(icd9AddLeadingZeroesMajorSingle(mjrin));
     mnrs.push_back(mnrout);
   }
-  return List::create(_["mjr"] = mjrs, _["mnr"] =
-                      mnrs);
+  return List::create(_["mjr"] = mjrs, _["mnr"] = mnrs);
 }
 
 // [[Rcpp::export(name = "icd9_short_to_decimal_rcpp")]]
-CV icd9ShortToDecimal(const CV& x) {
+CV icd9ShortToDecimal(const CV &x) {
   return icd9PartsToDecimal(icd9ShortToParts(x, ""));
 }
 
 // [[Rcpp::export(name="icd9_decimal_to_short_rcpp")]]
-CV icd9DecimalToShort(const CV& x) {
-  CV out = clone(x); // clone instead of pushing back thousands of times
+CV icd9DecimalToShort(const CV &x) {
+  CV out      = clone(x); // clone instead of pushing back thousands of times
   size_t ilen = x.length();
-  if (ilen == 0)
-    return out;
+  if (ilen == 0) return out;
   for (size_t i = 0; i != ilen; ++i) {
     String strna = x[i]; // need to copy here? does it copy?
-    if (is_true(all(is_na(CV::create(strna)))) || strna == "")
-      continue;
-    const char * thiscode_cstr = strna.get_cstring();
+    if (is_true(all(is_na(CV::create(strna)))) || strna == "") continue;
+    const char *thiscode_cstr = strna.get_cstring();
     std::string thiscode(thiscode_cstr);
-    thiscode = trimLeftCpp(thiscode);
+    thiscode        = trimLeftCpp(thiscode);
     std::size_t pos = thiscode.find_first_of(".");
     if (pos != std::string::npos) {
-      // now we assume that the mjr is snug against the left side, so we can add zero padding
+      // now we assume that the mjr is snug against the left side, so we can add
+      // zero padding
       thiscode.erase(pos, 1); // remove the decimal point
-      // could do fewer tests on the code by doing this last, but most codes are not V or E...
+      // could do fewer tests on the code by doing this last, but most codes are
+      // not V or E...
       if (pos > 0 && pos < 4 && !icd9IsASingleVE(thiscode_cstr)) {
         thiscode.insert(0, 3 - pos, '0');
       } else if (pos == 2 && icd9IsASingleV(thiscode_cstr)) {
@@ -181,10 +178,11 @@ CV icd9DecimalToShort(const CV& x) {
 //' @export
 //' @noRd
 //[[Rcpp::export(name="get_major.icd9")]]
-CV icd9GetMajor(const CV& x, const bool short_code) {
+CV icd9GetMajor(const CV &x, const bool short_code) {
   if (short_code) {
     // am I casting (or just compiler/syntax checker hinting?) SEXP may be
-    // costly, or is it just encapsulating a pointer to some fixed data somewhere?
+    // costly, or is it just encapsulating a pointer to some fixed data
+    // somewhere?
 
     // I don't think i need to PROTECT here, because I immediately return the
     // result via Rcpp

@@ -2,13 +2,13 @@
 #define ICD_TYPES_H_
 
 // also add LinkingTo element in DESCRIPTION to enable
-#include <RcppEigen.h>
 #include <Eigen/SparseCore>
+#include <RcppEigen.h>
 
-#include <vector>
 #include <string>
 #include <unordered_map>
 #include <unordered_set>
+#include <vector>
 typedef std::string Str;
 typedef std::vector<Str> VecStr;
 typedef std::vector<int> VecInt;

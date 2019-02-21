@@ -1,17 +1,18 @@
-#include "icd_types.h"
-#include "local.h"
-#include "is.h"
-#include "manip.h"
-#include "util.h"
 #include "appendMinor.h"
-#include "convert.h"
-#include "refactor.h"
 #include "comorbidMatMul.h"
-#include "relevant.h"
+#include "convert.h"
+#include "icd_types.h"
+#include "is.h"
+#include "local.h"
+#include "manip.h"
 #include "mapplus.h"
+#include "refactor.h"
+#include "relevant.h"
+#include "util.h"
 
 /*
- * Rscript -e "devtools::load_all();devtools::test(filter='cpp',reporter='Location')"
+ * Rscript -e
+ * "devtools::load_all();devtools::test(filter='cpp',reporter='Location')"
  */
 
 #ifdef ICD_CATCH
@@ -27,38 +28,34 @@ context("matmul cpp") {
   CharacterVector v2;
   v2.push_back("V12");
   v2.push_back("V13");
-  List map = List::create(_["X"] = v1,
-                          _["Y"] = v2);
-  List map_v1 = List::create(_["V"] = v1,
-                             _["W"] = v1);
-  List map_v12 = List::create(
-    _["A"] = CharacterVector::create("V10", "V20"),
-    _["B"] = CharacterVector::create("V12", "V40")
-  );
-  DataFrame df1 = DataFrame::create(
-    _["id"] = CharacterVector::create("1001", "1002"),
-    _["dx0"] = v1,
-    _["dx1"] = v2,
-    _["stringsAsFactors"] = false);
-  DataFrame df2 = DataFrame::create(
-    _["id"] = CharacterVector::create("1001", "1002"),
-    _["dx0"] = v1,
-    _["dx1"] = v2,
-    _["dx2"] = CharacterVector::create(NA_STRING, NA_STRING),
-    _["dx2"] = CharacterVector::create(NA_STRING, "100"),
-    _["stringsAsFactors"] = false);
-  DataFrame dff1 = DataFrame::create(
-    _["id"] = CharacterVector::create("1001", "1002"),
-    _["dx0"] = v1,
-    _["dx1"] = v2,
-    _["stringsAsFactors"] = true);
-  DataFrame dff2 = DataFrame::create(
-    _["id"] = CharacterVector::create("1001", "1002"),
-    _["dx0"] = v1,
-    _["dx1"] = v2,
-    _["dx2"] = CharacterVector::create(NA_STRING, NA_STRING),
-    _["dx2"] = CharacterVector::create(NA_STRING, "100"),
-    _["stringsAsFactors"] = true);
+  List map     = List::create(_["X"] = v1, _["Y"] = v2);
+  List map_v1  = List::create(_["V"] = v1, _["W"] = v1);
+  List map_v12 = List::create(_["A"] = CharacterVector::create("V10", "V20"),
+                              _["B"] = CharacterVector::create("V12", "V40"));
+  DataFrame df1 =
+    DataFrame::create(_["id"]  = CharacterVector::create("1001", "1002"),
+                      _["dx0"] = v1,
+                      _["dx1"] = v2,
+                      _["stringsAsFactors"] = false);
+  DataFrame df2 =
+    DataFrame::create(_["id"]  = CharacterVector::create("1001", "1002"),
+                      _["dx0"] = v1,
+                      _["dx1"] = v2,
+                      _["dx2"] = CharacterVector::create(NA_STRING, NA_STRING),
+                      _["dx2"] = CharacterVector::create(NA_STRING, "100"),
+                      _["stringsAsFactors"] = false);
+  DataFrame dff1 =
+    DataFrame::create(_["id"]  = CharacterVector::create("1001", "1002"),
+                      _["dx0"] = v1,
+                      _["dx1"] = v2,
+                      _["stringsAsFactors"] = true);
+  DataFrame dff2 =
+    DataFrame::create(_["id"]  = CharacterVector::create("1001", "1002"),
+                      _["dx0"] = v1,
+                      _["dx1"] = v2,
+                      _["dx2"] = CharacterVector::create(NA_STRING, NA_STRING),
+                      _["dx2"] = CharacterVector::create(NA_STRING, "100"),
+                      _["stringsAsFactors"] = true);
   test_that("make a relevant object with character vectors") {
     Relevant r1(map, v1);
     expect_true(r1.relevant.size() == v1.size());
@@ -87,7 +84,7 @@ context("matmul cpp") {
     f1.push_back(2);
     f1.push_back(1);
     f1.attr("levels") = v1;
-    f1.attr("class") = "factor";
+    f1.attr("class")  = "factor";
     Relevant r(map, f1); // TODO: not implemented yet, but should be!
   }
 
@@ -111,7 +108,8 @@ context("matmul cpp") {
 
   test_that("do a wide comorbid matrix multiplication") {
     comorbidMatMulWide(df1, map, "id", CharacterVector::create("dx0", "dx1"));
-    //  comorbidMatMulWide(dff1, map, "id", CharacterVector::create("dx0", "dx1"));
+    //  comorbidMatMulWide(dff1, map, "id", CharacterVector::create("dx0",
+    //  "dx1"));
   }
 
   test_that("TEMPORARY! use rel unordered map test lookup") {
@@ -126,6 +124,5 @@ context("matmul cpp") {
     got = r12.rel.find("V13");
     expect_true(got != r12.rel.end());
   }
-
 }
 #endif

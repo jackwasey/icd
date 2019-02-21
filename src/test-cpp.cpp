@@ -1,12 +1,12 @@
-#include "icd_types.h"
-#include "local.h"
-#include "is.h"
-#include "manip.h"
-#include "util.h"
 #include "appendMinor.h"
 #include "convert.h"
 #include "convert10.h"
+#include "icd_types.h"
+#include "is.h"
+#include "local.h"
+#include "manip.h"
 #include "refactor.h"
+#include "util.h"
 
 #ifdef ICD_CATCH
 #include <testthat.h>
@@ -21,7 +21,7 @@ context("internal 'is' functions") {
     v.push_back("100.99");
     v.push_back("9999");
     v.push_back("1");
-    std::vector<bool> result = icd9_is_n_rcpp(v);
+    std::vector<bool> result  = icd9_is_n_rcpp(v);
     std::vector<bool> result2 = icd9_is_v_rcpp(v);
     std::vector<bool> result3 = icd9_is_e_rcpp(v);
     for (std::vector<bool>::size_type i = 0; i != result.size(); ++i) {
@@ -40,7 +40,7 @@ context("internal 'is' functions") {
     v.push_back("V9999");
     v.push_back("v1");
     std::vector<bool> result2 = icd9_is_n_rcpp(v);
-    std::vector<bool> result = icd9_is_v_rcpp(v);
+    std::vector<bool> result  = icd9_is_v_rcpp(v);
     std::vector<bool> result3 = icd9_is_e_rcpp(v);
     for (std::vector<bool>::size_type i = 0; i != result.size(); ++i) {
       expect_true(result[i]);
@@ -58,7 +58,7 @@ context("internal 'is' functions") {
     v.push_back("e000");
     std::vector<bool> result3 = icd9_is_n_rcpp(v);
     std::vector<bool> result2 = icd9_is_v_rcpp(v);
-    std::vector<bool> result = icd9_is_e_rcpp(v);
+    std::vector<bool> result  = icd9_is_e_rcpp(v);
     for (std::vector<bool>::size_type i = 0; i != result.size(); ++i) {
       expect_true(result[i]);
       expect_false(result2[i]);
@@ -70,18 +70,16 @@ context("internal 'is' functions") {
 context("icd9ShortToParts") {
   test_that("icd9ShortToParts gives NA value") {
     List out = icd9ShortToParts("E12345678", "");
-    CV j = out["mjr"];
-    CV n = out["mnr"];
+    CV j     = out["mjr"];
+    CV n     = out["mnr"];
     expect_true(CV::is_na(j[0]));
     expect_true(CV::is_na(n[0]));
   }
   test_that("icd9ShortToParts multiple inptus gives multiple NA values") {
-    CV cv = CV::create("E3417824921",
-                       "E375801347",
-                       "E8319473422");
+    CV cv    = CV::create("E3417824921", "E375801347", "E8319473422");
     List out = icd9ShortToParts(cv, "");
-    CV j = out["mjr"];
-    CV n = out["mnr"];
+    CV j     = out["mjr"];
+    CV n     = out["mnr"];
     expect_true(CV::is_na(j[0]));
     expect_true(CV::is_na(n[0]));
     expect_true(CV::is_na(j[1]));
@@ -160,49 +158,49 @@ context("refactor") {
   CV j;
   IntegerVector res;
   test_that("one factor level") {
-    f = {1};
+    f                = {1};
     f.attr("levels") = "old_level";
-    f.attr("class") = "factor";
-    res = refactor(f, empty_levels, false);
+    f.attr("class")  = "factor";
+    res              = refactor(f, empty_levels, false);
     expect_true(IntegerVector::is_na(res[0]));
     j = res.attr("levels");
     expect_true(j.size() == 0);
   }
   test_that("empty factor levels") {
-    f = IntegerVector();
+    f                = IntegerVector();
     f.attr("levels") = empty_levels;
-    f.attr("class") = "factor";
-    res = refactor(f, empty_levels, false);
+    f.attr("class")  = "factor";
+    res              = refactor(f, empty_levels, false);
     expect_true(res.size() == 0);
     j = res.attr("levels");
     expect_true(j.size() == 0);
   }
   test_that("NA with no NA factor levels") {
-    f = { NA_INTEGER };
+    f                = {NA_INTEGER};
     f.attr("levels") = a_level;
-    f.attr("class") = "factor";
-    res = refactor(f, a_level, true);
+    f.attr("class")  = "factor";
+    res              = refactor(f, a_level, true);
     expect_true(IntegerVector::is_na(res[0]));
     j = res.attr("levels");
     expect_true(is_true(all(j == a_level)));
   }
   test_that("2 NAs, no NA factor levels") {
-    f = { NA_INTEGER, NA_INTEGER };
+    f                = {NA_INTEGER, NA_INTEGER};
     f.attr("levels") = a_level;
-    f.attr("class") = "factor";
-    res = refactor(f, b_level, true);
+    f.attr("class")  = "factor";
+    res              = refactor(f, b_level, true);
     expect_true(IntegerVector::is_na(res[0]));
     expect_true(IntegerVector::is_na(res[1]));
     j = res.attr("levels");
     expect_true(is_true(all(j == b_level)));
   }
   test_that("2 NAs, with NA factor levels") {
-    f = { NA_INTEGER, NA_INTEGER };
+    f                = {NA_INTEGER, NA_INTEGER};
     f.attr("levels") = CV::create("b", "c");
-    f.attr("class") = "factor";
-    new_levels= CV::create("a", "NA_STRING");
-    new_levels[1] = NA_STRING;
-    res = refactor(f, new_levels, false);
+    f.attr("class")  = "factor";
+    new_levels       = CV::create("a", "NA_STRING");
+    new_levels[1]    = NA_STRING;
+    res              = refactor(f, new_levels, false);
     expect_false(IntegerVector::is_na(res[0]));
     expect_false(IntegerVector::is_na(res[1]));
     expect_true(is_true(all(res == 2)));
@@ -230,16 +228,16 @@ context("refactor") {
    expect_true(CV::is_na(j[1]));
    } */
   test_that("do drop NA values and levels") {
-    f = { NA_INTEGER, 1, 3, NA_INTEGER };
-    CV old_levels = CV::create("a", "c", "NA_STRING");
-    old_levels[2] = NA_STRING;
+    f                = {NA_INTEGER, 1, 3, NA_INTEGER};
+    CV old_levels    = CV::create("a", "c", "NA_STRING");
+    old_levels[2]    = NA_STRING;
     f.attr("levels") = old_levels;
-    f.attr("class") = "factor";
-    new_levels= CV::create("a", "NA_STRING");
-    new_levels[1] = NA_STRING;
-    res = refactor_narm(f, new_levels);
+    f.attr("class")  = "factor";
+    new_levels       = CV::create("a", "NA_STRING");
+    new_levels[1]    = NA_STRING;
+    res              = refactor_narm(f, new_levels);
     expect_false(IntegerVector::is_na(res[0]));
-    IntegerVector expected_vec = { 1 };
+    IntegerVector expected_vec = {1};
     DEBUG_VEC(res);
     expect_true(is_true(all(res == expected_vec)));
     j = res.attr("levels");
@@ -248,71 +246,74 @@ context("refactor") {
     expect_true(is_true(all(j == CV::create("a"))));
   }
   test_that("new NA level") {
-    f = { NA_INTEGER };
+    f                = {NA_INTEGER};
     f.attr("levels") = CV::create("a");
-    f.attr("class") = "factor";
+    f.attr("class")  = "factor";
     CV na_level(1);
     na_level[0] = NA_STRING;
-    res = refactor(f, na_level, false);
+    res         = refactor(f, na_level, false);
     expect_true(res[0] == 1);
   }
   test_that("factor self works") {
-    f = {1, 2};
-    new_levels = CV::create("a", "b");
+    f                = {1, 2};
+    new_levels       = CV::create("a", "b");
     f.attr("levels") = new_levels;
-    f.attr("class") = "factor";
-    res = refactor(f, new_levels, false);
+    f.attr("class")  = "factor";
+    res              = refactor(f, new_levels, false);
     expect_true(is_true(all(f == res)));
     bool levels_equal = is_true(all(new_levels == ((CV)res.attr("levels"))));
     expect_true(levels_equal);
   }
   test_that("factor simple re-order") {
-    f = {1, 2};
-    f.attr("levels") = CV::create("a", "b");
-    f.attr("class") = "factor";
-    new_levels = CV::create("b", "a");
-    f2 = {2, 1};
+    f                 = {1, 2};
+    f.attr("levels")  = CV::create("a", "b");
+    f.attr("class")   = "factor";
+    new_levels        = CV::create("b", "a");
+    f2                = {2, 1};
     f2.attr("levels") = new_levels;
-    f2.attr("class") = "factor";
-    res = refactor(f, new_levels, false);
+    f2.attr("class")  = "factor";
+    res               = refactor(f, new_levels, false);
     expect_true(is_true(all(f2 == res)));
-    bool levels_equal = is_true(all(((CV)f2.attr("levels")) == ((CV)res.attr("levels"))));
+    bool levels_equal =
+      is_true(all(((CV)f2.attr("levels")) == ((CV)res.attr("levels"))));
     expect_true(levels_equal);
   }
   test_that("factor complex re-order") {
-    f = {1, 3, 2};
-    f.attr("levels") = CV::create("a", "b", "c");
-    f.attr("class") = "factor";
-    f2 = {3, 1, 2};
-    new_levels = CV::create("c", "b", "a");
+    f                 = {1, 3, 2};
+    f.attr("levels")  = CV::create("a", "b", "c");
+    f.attr("class")   = "factor";
+    f2                = {3, 1, 2};
+    new_levels        = CV::create("c", "b", "a");
     f2.attr("levels") = new_levels;
-    f2.attr("class") = "factor";
-    res = refactor(f, new_levels, false);
+    f2.attr("class")  = "factor";
+    res               = refactor(f, new_levels, false);
     expect_true(is_true(all(f2 == res)));
-    bool levels_equal = is_true(all(((CV)f2.attr("levels")) == ((CV)res.attr("levels"))));
+    bool levels_equal =
+      is_true(all(((CV)f2.attr("levels")) == ((CV)res.attr("levels"))));
     expect_true(levels_equal);
   }
   test_that("factor complex re-order w extra") {
-    f = {1, 3, 2};
-    f.attr("levels") = CV::create("a", "b", "c", "d");
-    f.attr("class") = "factor";
-    f2 = {3, 1, 2};
-    new_levels = CV::create("c", "b", "a");
+    f                 = {1, 3, 2};
+    f.attr("levels")  = CV::create("a", "b", "c", "d");
+    f.attr("class")   = "factor";
+    f2                = {3, 1, 2};
+    new_levels        = CV::create("c", "b", "a");
     f2.attr("levels") = new_levels;
-    f2.attr("class") = "factor";
-    res = refactor(f, new_levels, false);
+    f2.attr("class")  = "factor";
+    res               = refactor(f, new_levels, false);
     expect_true(is_true(all(f2 == res)));
-    bool levels_equal = is_true(all(((CV)f2.attr("levels")) == ((CV)res.attr("levels"))));
+    bool levels_equal =
+      is_true(all(((CV)f2.attr("levels")) == ((CV)res.attr("levels"))));
     expect_true(levels_equal);
   }
   test_that("factor complex re-order w extra and missing") {
-    f = {1, 3, 2};
-    f.attr("levels") = CV::create("a", "b", "c", "d");
-    f.attr("class") = "factor";
-    f2 = {NA_INTEGER, 1, 2};
-    new_levels = CV::create("c", "b", "e");
+    f                 = {1, 3, 2};
+    f.attr("levels")  = CV::create("a", "b", "c", "d");
+    f.attr("class")   = "factor";
+    f2                = {NA_INTEGER, 1, 2};
+    new_levels        = CV::create("c", "b", "e");
     f2.attr("levels") = new_levels;
-    f2.attr("class") = "factor";
+    f2.attr("class")  = "factor";
     res = refactor(f, new_levels, false); // keep NA values (but not in levels)
     DEBUG_VEC(res);
     expect_true(res.size() == 3);
@@ -324,42 +325,43 @@ context("refactor") {
     expect_false(IntegerVector::is_na(res[2]));
     bool levels_equal = is_true(all(new_levels == ((CV)res.attr("levels"))));
     expect_true(levels_equal);
-    std::string cl = f2.attr("class");
+    std::string cl         = f2.attr("class");
     std::string factor_str = "factor";
     expect_true(cl == factor_str);
-    // expect_true(is_true(all(res == f2))); // doesn't work because NA = NA is NA, not true
+    // expect_true(is_true(all(res == f2))); // doesn't work because NA = NA is
+    // NA, not true
   }
   test_that("dropping NAs makes vector shorter") {
-    f = { 1, 2 };
-    f.attr("levels") = CV::create("a", "b", "c", "d");
-    f.attr("class") = "factor";
-    f2 = { 1 };
-    new_levels = CV::create("c", "b", "e");
+    f                 = {1, 2};
+    f.attr("levels")  = CV::create("a", "b", "c", "d");
+    f.attr("class")   = "factor";
+    f2                = {1};
+    new_levels        = CV::create("c", "b", "e");
     f2.attr("levels") = new_levels;
-    f2.attr("class") = "factor";
-    res = refactor_narm(f, new_levels);
+    f2.attr("class")  = "factor";
+    res               = refactor_narm(f, new_levels);
     DEBUG_VEC(res);
     expect_false(IntegerVector::is_na(res[0]));
     expect_true(res[0] == 2);
     expect_true(res.size() == 1);
-    expect_true(is_true(all(((CV) res.attr("levels")) == new_levels)));
+    expect_true(is_true(all(((CV)res.attr("levels")) == new_levels)));
   }
 }
 context("ICD10 short to parts") {
   test_that("icd10 short to parts handles NA") {
     const CharacterVector x = CharacterVector::create(NA_STRING);
-    DataFrame res = icd10ShortToParts(x);
+    DataFrame res           = icd10ShortToParts(x);
     // expect_true(((CV)res[0])[0] == NA_STRING);
     // expect_true(((CV)res[0])[1] == NA_STRING);
   }
   test_that("too short, but not empty") {
     const CharacterVector x = CharacterVector::create("V1", "B", "C10");
-    DataFrame r = icd10ShortToParts(x);
+    DataFrame r             = icd10ShortToParts(x);
     expect_true(r.size() == 2);
     expect_true(r.nrow() == x.size());
     for (auto i = 0; i != x.size() && i != r.size(); ++i) {
-      auto cd = x[i];
-      CV c = CharacterVector::create(cd, "");
+      auto cd      = x[i];
+      CV c         = CharacterVector::create(cd, "");
       DataFrame r0 = icd10ShortToParts(CV::create(cd));
       expect_true(r0.size() == 2);
       expect_true(r0.nrow() == 1);
@@ -372,11 +374,11 @@ context("ICD10 short to parts") {
   }
   test_that("empty") {
     CharacterVector x = CharacterVector::create("");
-    DataFrame res = icd10ShortToParts(x);
-    CV mj = res[0];
-    CV mn = res[1];
-    String smj = mj[0];
-    String smn = mn[0];
+    DataFrame res     = icd10ShortToParts(x);
+    CV mj             = res[0];
+    CV mn             = res[1];
+    String smj        = mj[0];
+    String smn        = mn[0];
     expect_true(smj == NA_STRING);
     expect_true(smn == NA_STRING);
     expect_true(is_true(all(is_na((CV)res[0]))));
@@ -441,16 +443,16 @@ context("compare/sort/order ICD-10-CM") {
   }
   test_that("order ICD-10-CM quirks") {
     CharacterVector c = {"Z99", "C76", "C7A", "C7B", "C75", "A00"};
-    IntegerVector i = {6, 5, 3, 4, 2, 1};
-    auto o = icd10cmOrder(c);
-    bool res = is_true(all(o == i));
+    IntegerVector i   = {6, 5, 3, 4, 2, 1};
+    auto o            = icd10cmOrder(c);
+    bool res          = is_true(all(o == i));
     for (auto n = 0; n != c.size() && n != i.size(); ++n) {
       String s = c[n];
       expect_true(o[n] == i[n]);
     }
-    c = {"C7A", "C75", "C76", "C77", "C7B"};
-    i = {2, 1, 4, 5, 3};
-    o = icd10cmOrder(c);
+    c   = {"C7A", "C75", "C76", "C77", "C7B"};
+    i   = {2, 1, 4, 5, 3};
+    o   = icd10cmOrder(c);
     res = is_true(all(o == i));
     for (auto n = 0; n != c.size() && n != i.size(); ++n) {
       String s = c[n];

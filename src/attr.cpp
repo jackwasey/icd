@@ -1,5 +1,5 @@
-#include "icd_types.h"
 #include "attr.h"
+#include "icd_types.h"
 using namespace Rcpp;
 
 //' Set ICD short-form diagnosis code attribute
@@ -17,7 +17,7 @@ using namespace Rcpp;
 //' # if pryr is installed, use address and refs to see what is going on
 //' @keywords internal attribute
 // [[Rcpp::export(attr_decimal_diag)]]
-void setDecimalDiag(RObject& x, bool value = true) {
+void setDecimalDiag(RObject &x, bool value = true) {
   x.attr("icd_short_diag") = !value;
 }
 
@@ -26,6 +26,6 @@ void setDecimalDiag(RObject& x, bool value = true) {
 //' @param value \code{TRUE} or \code{FALSE}
 //' @keywords internal attribute
 // [[Rcpp::export(attr_short_diag)]]
-void setShortDiag(RObject& x, bool value = true) {
+void setShortDiag(RObject &x, bool value = true) {
   x.attr("icd_short_diag") = value;
 }

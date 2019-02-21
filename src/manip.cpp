@@ -1,7 +1,7 @@
 #include "manip.h"
-#include <string.h> // for strlen
 #include "convert.h"
 #include "is.h"
+#include <string.h> // for strlen
 
 using namespace Rcpp;
 
@@ -42,12 +42,11 @@ String icd9AddLeadingZeroesMajorSingle(String mjr) {
         return (m);
       }
     case 4:
-      if (icd9IsASingleE(m.c_str()))
-        return (m);
+      if (icd9IsASingleE(m.c_str())) return (m);
       // # nocov start
     default:
       stop("Major length invalid");
-    // # nocov end
+      // # nocov end
     }
   }
   return NA_STRING;
@@ -55,7 +54,7 @@ String icd9AddLeadingZeroesMajorSingle(String mjr) {
 
 // [[Rcpp::export]]
 std::string icd9AddLeadingZeroesMajorSingleStd(std::string m) {
-  const char * cs = m.c_str();
+  const char *cs                   = m.c_str();
   const std::string::size_type len = m.length();
   if (!icd9IsASingleVE(cs)) {
     switch (len) {
@@ -88,8 +87,7 @@ std::string icd9AddLeadingZeroesMajorSingleStd(std::string m) {
         return (m);
       }
     case 4:
-      if (icd9IsASingleE(cs))
-        return (m);
+      if (icd9IsASingleE(cs)) return (m);
     }
   }
   return "";
@@ -114,12 +112,11 @@ CV icd9AddLeadingZeroes(CV x, bool short_code) {
     // a shortcut for when short codes is just to add the appropriate leading
     // zeros when the total length is <3. Even then decimal may be quicker by
     // converting from short than calculating by parts.
-    List parts = icd9ShortToParts(x, "");
+    List parts   = icd9ShortToParts(x, "");
     parts["mjr"] = icd9AddLeadingZeroesMajor(parts["mjr"]);
     return icd9PartsToShort(parts);
-  }
-  else {
-    List parts = icd9DecimalToParts(x);
+  } else {
+    List parts   = icd9DecimalToParts(x);
     parts["mjr"] = icd9AddLeadingZeroesMajor(parts["mjr"]);
     return icd9PartsToDecimal(parts);
   }

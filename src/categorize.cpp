@@ -1,12 +1,12 @@
 #include "local.h"
 #include "util.h"
-#include <stdlib.h>
-#include <math.h>                              // for floor
+#include <algorithm> // for copy, sort, transform
+#include <iterator>  // for back_insert_iterator
+#include <math.h>    // for floor
+#include <ostream>   // for size_t, operator<<
 #include <stdio.h>
-#include <string.h>                            // for strcmp
-#include <algorithm>                           // for copy, sort, transform
-#include <iterator>                            // for back_insert_iterator
-#include <ostream>                             // for size_t, operator<<
+#include <stdlib.h>
+#include <string.h> // for strcmp
 #include <string>
 #include <vector>
 

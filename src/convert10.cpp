@@ -1,19 +1,19 @@
-#include "icd_types.h"
 #include "convert10.h"
 #include "convert.h"
+#include "icd_types.h"
 extern "C" {
-#include <cstddef>                           // for size_t
+#include <cstddef> // for size_t
 }
-#include <string>                            // for string
-#include "appendMinor.h"                     // for icd9MajMinToCode
-#include "is.h"                              // for icd9IsASingleE, icd9IsAS...
-#include "manip.h"                           // for icd9AddLeadingZeroesMajor
-#include "util.h"                            // for strimCpp, trimLeftCpp
+#include "appendMinor.h" // for icd9MajMinToCode
+#include "is.h"          // for icd9IsASingleE, icd9IsAS...
+#include "manip.h"       // for icd9AddLeadingZeroesMajor
+#include "util.h"        // for strimCpp, trimLeftCpp
+#include <string>        // for string
 
 using namespace Rcpp;
 
 // [[Rcpp::export(icd10_short_to_parts_rcpp)]]
-List icd10ShortToParts(const CV& x, const String mnrEmpty) {
+List icd10ShortToParts(const CV &x, const String mnrEmpty) {
   R_xlen_t i10sz = x.size();
   CV mjr(i10sz);
   CV mnr(i10sz);
@@ -26,7 +26,7 @@ List icd10ShortToParts(const CV& x, const String mnrEmpty) {
       continue;
     }
     std::string s(thisShort.get_cstring()); // maybe faster to use as?
-    s = strimCpp(s); // in place or rewrite? do this at all?
+    s  = strimCpp(s); // in place or rewrite? do this at all?
     sz = s.size();
     if (sz <= 3 && sz > 0) {
       mjr[i] = s.substr(0, sz);
@@ -48,13 +48,10 @@ List icd10DecimalToParts(const CV x, const String mnrEmpty = "") {
   CV mnrs;
   R_xlen_t ilen = x.length();
   if (ilen == 0) {
-    return List::create(_["mjr"] =
-                        CV::create(), _["mnr"] =
-                        CV::create());
+    return List::create(_["mjr"] = CV::create(), _["mnr"] = CV::create());
   }
 
-  for (CV::const_iterator it = x.begin();
-       it != x.end(); ++it) {
+  for (CV::const_iterator it = x.begin(); it != x.end(); ++it) {
     String strna = *it;
     if (is_true(all(is_na(CV::create(strna)))) || strna == "") {
       mjrs.push_back(NA_STRING);
@@ -68,15 +65,14 @@ List icd10DecimalToParts(const CV x, const String mnrEmpty = "") {
     std::string mjrin;
     String mnrout;
     if (pos != std::string::npos) {
-      mjrin = thiscode.substr(0, pos);
+      mjrin  = thiscode.substr(0, pos);
       mnrout = thiscode.substr(pos + 1);
     } else {
-      mjrin = thiscode;
+      mjrin  = thiscode;
       mnrout = mnrEmpty;
     }
     mjrs.push_back(mjrin);
     mnrs.push_back(mnrout);
   }
-  return List::create(_["mjr"] = mjrs, _["mnr"] =
-                      mnrs);
+  return List::create(_["mjr"] = mjrs, _["mnr"] = mnrs);
 }

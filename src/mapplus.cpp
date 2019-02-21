@@ -1,23 +1,23 @@
+#include "mapplus.h"
+#include "comorbidMatMul.h"
+#include "fastIntToString.h"
 #include "icd_types.h"
 #include "local.h"
-#include "valgrind_icd.h"
-#include "fastIntToString.h"
 #include "refactor.h"
-#include <string>
-#include <cstring>
-#include "comorbidMatMul.h"
 #include "relevant.h"
-#include "mapplus.h"
+#include "valgrind_icd.h"
+#include <cstring>
+#include <string>
 
 using namespace Rcpp;
 
 // MapPlus constructor - a reduced comobidity map for one computation
-MapPlus::MapPlus(const List& mapList, const Relevant& r) {
+MapPlus::MapPlus(const List &mapList, const Relevant &r) {
   // take a map of character vectors and reduce it to only relevant
   // codes using hashmap
   //
   // downside is that each list element has a copy of the same relevant levels.
-  //List remap(const List& map, IHS& relevantHash) {
+  // List remap(const List& map, IHS& relevantHash) {
   CharacterVector cmbs = mapList.names();
   for (R_xlen_t i = 0; i != mapList.size(); ++i) {
     String cmb_name = cmbs[i];
@@ -27,10 +27,10 @@ MapPlus::MapPlus(const List& mapList, const Relevant& r) {
     TRACE("character vector in input map");
     CV this_map_cmb = mapList[i];
     // make factor using existing hash, so R-indexed numbers.
-    IntegerVector this_cmb = (IntegerVector) r.hash.lookup(this_map_cmb);
-    this_cmb.attr("levels") = (CharacterVector) r.keys;
-    this_cmb.attr("class") = "factor";
-    this_cmb = this_cmb[!is_na(this_cmb)];
+    IntegerVector this_cmb  = (IntegerVector)r.hash.lookup(this_map_cmb);
+    this_cmb.attr("levels") = (CharacterVector)r.keys;
+    this_cmb.attr("class")  = "factor";
+    this_cmb                = this_cmb[!is_na(this_cmb)];
     TRACE_VEC(this_cmb);
     map[cmb_name] = this_cmb;
   } // for

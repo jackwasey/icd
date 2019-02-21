@@ -1,0 +1,26 @@
+#BasedOnStyle: LLVM
+AlignAfterOpenBracket: Align
+AlignConsecutiveAssignments: true
+AlignEscapedNewlines: Left
+AlignOperands: true
+AlignTrailingComments: true
+AllowAllParametersOfDeclarationOnNextLine: true
+AllowShortBlocksOnASingleLine: true
+AllowShortFunctionsOnASingleLine: All
+AllowShortIfStatementsOnASingleLine: true
+AllowShortLoopsOnASingleLine: true
+AlwaysBreakBeforeMultilineStrings: false
+BinPackArguments: false
+BinPackParameters: false
+BreakBeforeBinaryOperators: None
+BreakBeforeBraces: Attach
+ColumnLimit: 80
+CommentPragmas: ^'
+ContinuationIndentWidth: 2
+IndentWidth: 2
+PenaltyBreakBeforeFirstCallParameter: 100000
+ReflowComments: true
+Standard: Cpp11
+TabWidth: 2
+UseTab: false
+

@@ -24,19 +24,28 @@ extern "C" {
 #endif
 
 #ifdef ICD_DEBUG
-#define DEBUG(x) do { Rcpp::Rcout << x << std::endl; } while (0)
+#define DEBUG(x) \
+  do { Rcpp::Rcout << x << std::endl; } while (0)
 #else
 #define DEBUG(x) ((void)0)
 #endif
 
 #ifdef ICD_DEBUG
-#define DEBUG_VEC(x) do { Rcpp::Rcout << #x << ": " << std::flush; printIt(x); } while (0);
+#define DEBUG_VEC(x)                         \
+  do {                                       \
+    Rcpp::Rcout << #x << ": " << std::flush; \
+    printIt(x);                              \
+  } while (0);
 #else
 #define DEBUG_VEC(x) ((void)0)
 #endif
 
 #ifdef ICD_DEBUG_TRACE
-#define TRACE_VEC(x) do { Rcpp::Rcout << #x << ": " << std::flush; printIt(x); } while (0);
+#define TRACE_VEC(x)                         \
+  do {                                       \
+    Rcpp::Rcout << #x << ": " << std::flush; \
+    printIt(x);                              \
+  } while (0);
 #else
 #define TRACE_VEC(x) ((void)0)
 #endif
@@ -76,11 +85,9 @@ extern "C" {
 
 #if (defined ICD_DEBUG || defined ICD_DEBUG_SETUP)
 #include <iostream>
-template <typename C>
-inline void printIt(const C& c, int n = 10) {
+template <typename C> inline void printIt(const C &c, int n = 10) {
   std::ostringstream o;
-  for (int i = 0; i != std::min(n, (int) c.size()); ++i)
-    o << c[i] << " ";
+  for (int i = 0; i != std::min(n, (int)c.size()); ++i) o << c[i] << " ";
   o << std::endl;
   o << "Length: " << c.size() << std::endl;
   Rcpp::Rcout << o.str();
@@ -88,7 +95,7 @@ inline void printIt(const C& c, int n = 10) {
 }
 
 template <typename C>
-inline void printIt(const Rcpp::Nullable<C>& c, int n = 10) {
+inline void printIt(const Rcpp::Nullable<C> &c, int n = 10) {
   if (c.isNull()) {
     Rcpp::Rcout << "NULL" << std::endl;
     return;
@@ -102,7 +109,7 @@ inline void printUm(std::unordered_map<F, S> um) {
   keys.reserve(um.size());
   std::vector<S> vals;
   vals.reserve(um.size());
-  for(auto kv : um) {
+  for (auto kv : um) {
     keys.push_back(kv.first);
     vals.push_back(kv.second);
   }

@@ -7,7 +7,7 @@ using namespace Rcpp;
 
 class MapPlus {
 public:
-  MapPlus(const List& icd9Mapping, const Relevant& rh);
+  MapPlus(const List &icd9Mapping, const Relevant &rh);
   void buildMatrix();
   List map; // consider ListOf<IntegerVector>
   DenseMap mat;

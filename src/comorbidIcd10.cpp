@@ -1,6 +1,6 @@
 #include "icd_types.h"
 #include "local.h"
-#include <string>                           // for string
+#include <string> // for string
 
 using namespace Rcpp;
 
@@ -29,7 +29,7 @@ using namespace Rcpp;
 //'                              id_name = "case", code_name = "icd10"))
 //' @keywords internal
 // [[Rcpp::export(simplify_map_lex)]]
-Rcpp::List simplifyMapLexicographic(const CV& pt_codes, const List map) {
+Rcpp::List simplifyMapLexicographic(const CV &pt_codes, const List map) {
   std::string ptCode;
   size_t searchLen;
   size_t pos;
@@ -38,7 +38,7 @@ Rcpp::List simplifyMapLexicographic(const CV& pt_codes, const List map) {
   // write my own hash map code....
   CV icd_codes = unique(pt_codes);
   DEBUG_VEC(icd_codes);
-  std::vector<std::unordered_set<std::string> > newMapStd(map.length());
+  std::vector<std::unordered_set<std::string>> newMapStd(map.length());
   for (R_xlen_t i = 0; i != icd_codes.size(); ++i) {
     ptCode = icd_codes[i];
     TRACE("i = " << i << ", and ptCode = " << ptCode);
@@ -59,17 +59,16 @@ Rcpp::List simplifyMapLexicographic(const CV& pt_codes, const List map) {
         TRACE("ptCode[k][0] = " << ptCode[0]);
         TRACE("ptCode[k][1] = " << ptCode[1]);
         TRACE("ptCode[k][2] = " << ptCode[2]);
-        if (cmbCodes[k][0] != ptCode[0] ||
-            cmbCodes[k][1] != ptCode[1] ||
+        if (cmbCodes[k][0] != ptCode[0] || cmbCodes[k][1] != ptCode[1] ||
             cmbCodes[k][2] != ptCode[2])
           goto no_match;
         searchLen = std::min(cmb_len, codeLen);
         TRACE("searchLen = " << searchLen);
         pos = 3;
-        while(pos != searchLen) {
+        while (pos != searchLen) {
           if (cmbCodes[k][pos] != ptCode[pos]) {
-          TRACE("mismatch, going to no_match");
-          goto no_match;
+            TRACE("mismatch, going to no_match");
+            goto no_match;
           }
           ++pos;
         }
@@ -78,18 +77,16 @@ Rcpp::List simplifyMapLexicographic(const CV& pt_codes, const List map) {
         newMapStd[j].insert(ptCode);
         TRACE("Going to next comorbidity");
         goto next_comorbidity;
-        no_match:;
+      no_match:;
       } // end of codes in current comorbidity
-      next_comorbidity:;
+    next_comorbidity:;
     } // each comorbidity
     DEBUG("finished a comorbidity");
   } // each row of input data
   List newMap = List::create();
   for (auto cmbSet : newMapStd) {
     CV cmbOut;
-    for (auto cmbCode : cmbSet) {
-      cmbOut.push_back(cmbCode);
-    }
+    for (auto cmbCode : cmbSet) { cmbOut.push_back(cmbCode); }
     cmbOut.attr("class") = ((CV)map[0]).attr("class");
     newMap.push_back(cmbOut);
   }
