@@ -84,9 +84,9 @@ Rcpp::List simplifyMapLexicographic(const CV &pt_codes, const List map) {
     DEBUG("finished a comorbidity");
   } // each row of input data
   List newMap = List::create();
-  for (auto cmbSet : newMapStd) {
+  for (const auto &cmbSet : newMapStd) {
     CV cmbOut;
-    for (auto cmbCode : cmbSet) { cmbOut.push_back(cmbCode); }
+    for (const auto &cmbCode : cmbSet) { cmbOut.push_back(cmbCode); }
     cmbOut.attr("class") = ((CV)map[0]).attr("class");
     newMap.push_back(cmbOut);
   }

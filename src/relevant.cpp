@@ -25,8 +25,8 @@ void Relevant::buildCodeSetInt(const IntegerVector &codes) {
   allCodesSet.reserve(allCodesSet.size() + codes.size());
   DEBUG_VEC(codes);
   for (R_xlen_t i = 0; i != codes.size(); ++i) {
-    auto ci = codes[i];
-    auto cs = std::to_string(ci);
+    const auto &ci = codes[i];
+    const auto &cs = std::to_string(ci);
     if (!IntegerVector::is_na(ci)) { allCodesSet.insert(cs); }
   }
 }

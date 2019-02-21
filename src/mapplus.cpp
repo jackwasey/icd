@@ -48,7 +48,7 @@ void MapPlus::buildMatrix() {
   TRACE("map SEXP type is: " << TYPEOF(map[0]));
   assert(Rf_isFactor(map[0]));
   for (auto li = map.begin(); li != map.end(); ++li) {
-    auto col = std::distance(map.begin(), li);
+    const auto col = std::distance(map.begin(), li);
     TRACE("working on comorbidity: " << col);
     IntegerVector v(*li);
     for (R_xlen_t vi = 0; vi != v.size(); ++vi) {

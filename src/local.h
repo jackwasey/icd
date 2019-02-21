@@ -109,7 +109,7 @@ inline void printUm(std::unordered_map<F, S> um) {
   keys.reserve(um.size());
   std::vector<S> vals;
   vals.reserve(um.size());
-  for (auto kv : um) {
+  for (const auto &kv : um) {
     keys.push_back(kv.first);
     vals.push_back(kv.second);
   }

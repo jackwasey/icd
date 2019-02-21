@@ -27,7 +27,7 @@ void my_concat(COCiter start, COCiter end, Oiter dest) {
 inline Rcpp::CharacterVector getDataFrameStringRow(
   const Rcpp::DataFrame &df, const R_xlen_t i, const R_xlen_t start_idx = 0) {
   Rcpp::CharacterVector out;
-  auto dfCols = df.size();
+  const auto dfCols = df.size();
   for (R_xlen_t j = start_idx; j != dfCols; ++j) {
     const Rcpp::CharacterVector &col = df(j);
     const Rcpp::String s             = col(i);

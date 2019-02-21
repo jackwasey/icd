@@ -101,7 +101,8 @@ IntegerVector refactor(const IntegerVector &x,
     TRACE("x[i]  = " << x[i] << ", max is " << new_level_old_idx.size());
     assert(x[i] > 0);
     assert(x[i] <= new_level_old_idx.size());
-    auto cur = new_level_old_idx[x[i] - 1]; // cur is new R index into levels
+    const auto cur =
+      new_level_old_idx[x[i] - 1]; // cur is new R index into levels
     if (IntegerVector::is_na(cur)) {
       TRACE("fi++, leaving NA from " << i << " due to no match in new levels");
       f[i]                = NA_INTEGER;

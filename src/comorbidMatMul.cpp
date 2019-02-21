@@ -66,7 +66,7 @@ void buildVisitCodesSparseWide(
   const RObject visits = data[id_name];
   R_xlen_t vlen        = Rf_length(visits);
   std::vector<Triplet> visTriplets;
-  auto ncol = code_names.size();
+  const auto ncol = code_names.size();
   visTriplets.reserve(vlen * ncol); // upper bound
   IntegerVector rows = no_init(vlen * ncol);
   if (!Rf_isFactor(visits)) {
@@ -99,7 +99,7 @@ void buildVisitCodesSparseWide(
       const CV &data_col_cv = (CV)data_col;
       DEBUG_VEC(data_col_cv);
       for (R_xlen_t i = 0; i != rows.size(); ++i) {
-        auto found = rh.rel.find(((String)data_col_cv[i]).get_cstring());
+        const auto found = rh.rel.find(((String)data_col_cv[i]).get_cstring());
         if (found == rh.rel.cend()) continue;
         DEBUG("adding triplet at R idx:" << rows[i] << ", " << found->second);
         visTriplets.push_back(Triplet(rows[i] - 1, found->second, true));
