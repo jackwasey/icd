@@ -8,17 +8,6 @@ cache: packages
 
 r_packages:
   - covr
-# following from DESCRIPTION so travis can cache
-  - checkmate
-  - magrittr
-  - Rcpp
-  - knitr
-  - roxygen2
-  - rmarkdown
-  - rticles
-  - testthat
-  - tinytex
-  - xml2
 
 r_github_packages:
   - jimhester/lintr

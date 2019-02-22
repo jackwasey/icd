@@ -61,6 +61,7 @@
 ^inst\/extdata\/.*$
 ^lib-bench$
 ^man-roxygen$
+^src\/.clang-format$
 ^tests-build$
 ^tests-deprecated$
 ^tests-slow$
