@@ -4,7 +4,7 @@
 \alias{icd10_generate_map_quan_deyo}
 \title{Generate Quan mapping for Charlson categories of ICD-10 codes}
 \usage{
-icd10_generate_map_quan_deyo(save_data = TRUE)
+icd10_generate_map_quan_deyo(save_data = TRUE, verbose = FALSE)
 }
 \arguments{
 \item{save_data}{logical whether to save the result in the source tree.

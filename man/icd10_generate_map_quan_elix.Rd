@@ -4,7 +4,7 @@
 \alias{icd10_generate_map_quan_elix}
 \title{generate ICD-10 Quan Elixhauser mapping}
 \usage{
-icd10_generate_map_quan_elix(save_data = TRUE)
+icd10_generate_map_quan_elix(save_data = TRUE, verbose = FALSE)
 }
 \arguments{
 \item{save_data}{logical whether to save the result in the source tree.

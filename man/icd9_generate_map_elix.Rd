@@ -7,7 +7,7 @@
 \usage{
 icd9_generate_map_elix(save_data = TRUE)
 
-icd10_generate_map_elix(save_data = TRUE)
+icd10_generate_map_elix(save_data = TRUE, verbose = FALSE)
 }
 \arguments{
 \item{save_data}{logical whether to save the result in the source tree.
