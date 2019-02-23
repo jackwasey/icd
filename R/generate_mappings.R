@@ -75,7 +75,7 @@ icd9_generate_map_elix <- function(save_data = TRUE) {
 
 #' @rdname icd9_generate_map_elix
 #' @keywords internal
-icd10_generate_map_elix <- function(save_data = TRUE) {
+icd10_generate_map_elix <- function(save_data = TRUE, verbose = FALSE) {
   icd10_map_elix <- list(
     chf = c("I099", "I110", "I130", "I132", "I255", "I420", "I425", "I426",
             "I427", "I428", "I429",
@@ -161,6 +161,7 @@ icd10_generate_map_elix <- function(save_data = TRUE) {
                    "F412", "F432")
   )
   names(icd10_map_elix) <- icd::names_elix_htn_abbrev
+  icd10_map_elix <- apply_over_icd10cm_vers(icd10_map_elix, verbose = verbose)
   icd10_map_elix <- lapply(icd10_map_elix, as.short_diag)
   icd10_map_elix <- lapply(icd10_map_elix, as.icd10)
   icd10_map_elix <- as.comorbidity_map(icd10_map_elix)
@@ -248,7 +249,7 @@ icd9_generate_map_quan_elix <- function(save_data = TRUE) {
 #
 #' @template parse-template
 #' @keywords internal
-icd10_generate_map_quan_elix <- function(save_data = TRUE) {
+icd10_generate_map_quan_elix <- function(save_data = TRUE, verbose = FALSE) {
   quan_elix_raw <- list(
     c("I099", "I110", "I130", "I132", "I255", "I420", "I425", "I426", "I427",
       "I428", "I429", "I43", "I50", "P290"),
@@ -288,6 +289,7 @@ icd10_generate_map_quan_elix <- function(save_data = TRUE) {
     c("B20", "B21", "B22", "B24"),
     c("C81", "C82", "C83", "C84", "C85", "C88", "C96", "C900", "C902"),
     c("C77", "C78", "C79", "C80"),
+    # tumor
     c("C00", "C01", "C02", "C03", "C04", "C05", "C06", "C07", "C08", "C09",
       "C10", "C11", "C12", "C13", "C14", "C15",
       "C16", "C17", "C18", "C19", "C20", "C21", "C22", "C23", "C24", "C25",
@@ -326,14 +328,12 @@ icd10_generate_map_quan_elix <- function(save_data = TRUE) {
   # are not in fact defined in ICD-10-CM, and currently generation of ICD-10
   # children is limited to 'defined' ones, but only as defined in ICD-10-CM, not
   # ICD-10 in general.
-  f <- function(x, verbose = TRUE) {
-    if (verbose) message("f working on: ", paste(x, collapse = " "))
-    kids <- children_defined.icd10cm(x, short_code = TRUE)
-    sort.icd10(unique(c(kids, x)))
-  }
-  icd10_map_quan_elix <- lapply(quan_elix_raw, f)
+  #
   # It does appear that there are numerous codes in the Quan Elixhauser scheme
-  # which are not present (?anymore) in the ICD-10-CM 2016 list.
+  # which are not present (?anymore) in the ICD-10-CM 2016 list. In particular,
+  # see C43 in Tumor.
+  icd10_map_quan_elix <- apply_over_icd10cm_vers(quan_elix_raw,
+                                                 verbose = verbose)
   icd10_map_quan_elix <- lapply(icd10_map_quan_elix, as.short_diag)
   icd10_map_quan_elix <- lapply(icd10_map_quan_elix, as.icd10)
   icd10_map_quan_elix <- as.comorbidity_map(icd10_map_quan_elix)
@@ -347,7 +347,7 @@ icd10_generate_map_quan_elix <- function(save_data = TRUE) {
 #' Based on Quan's SAS lists, transcribed by wmurphyrd
 #' @template parse-template
 #' @keywords internal
-icd10_generate_map_quan_deyo <- function(save_data = TRUE) {
+icd10_generate_map_quan_deyo <- function(save_data = TRUE, verbose = FALSE) {
   quan_charl_raw <- list(
     mi = c("I21", "I22", "I252"),
     chf = c("I43", "I50", "I099", "I110", "I130", "I132",
@@ -410,9 +410,8 @@ icd10_generate_map_quan_deyo <- function(save_data = TRUE) {
   # children will likely be needed. Maybe generating a huge structure is still
   # worth it, even for ICD-10-CM, because I do end up cutting it back down to
   # size based on the input data before comorbidity matching.
-  f <- function(x) sort.icd10(
-    unique(c(children_defined.icd10cm(x, short_code = TRUE), x)))
-  icd10_map_quan_deyo <- lapply(quan_charl_raw, f)
+  icd10_map_quan_deyo <- apply_over_icd10cm_vers(quan_charl_raw,
+                                                 verbose = verbose)
   icd10_map_quan_deyo <- lapply(icd10_map_quan_deyo, as.short_diag)
   icd10_map_quan_deyo <- lapply(icd10_map_quan_deyo, as.icd10)
   icd10_map_quan_deyo <- as.comorbidity_map(icd10_map_quan_deyo)
@@ -426,3 +425,37 @@ icd10_generate_map_quan_deyo <- function(save_data = TRUE) {
   invisible(icd10_map_quan_deyo)
 }
 #nocov end
+
+apply_over_icd10cm_vers <- function(raw, verbose = FALSE) {
+  set_active <- getExportedValue("icd.data", "set_icd10cm_active_ver")
+  old_active <- set_active(2014)
+  on.exit(set_active(old_active), add = TRUE)
+  f <- function(x) {
+    if (verbose)
+      message("f working on: ", paste(head(x), collapse = " "), "...")
+    sort.icd10(
+      unique(c(children_defined.icd10cm(x, short_code = TRUE), x)))
+  }
+  out <- lapply(raw, f)
+  for (yr in 2015:2019) {
+    if (verbose) message("Year/version = ", yr)
+    set_active(yr)
+    upd <- lapply(out, f)
+    for (cmb in seq_along(out)) {
+      if (verbose) {
+        only_prev <- setdiff(out[[cmb]], upd[[cmb]])
+        only_this <- setdiff(upd[[cmb]], out[[cmb]])
+        if (length(only_prev)) {
+          message("Only in previous for item ", cmb)
+          print(only_prev)
+        }
+        if (length(only_this)) {
+          message("Only in current for item ", cmb)
+          print(only_this)
+        }
+      }
+      out[[cmb]] <- sort(union(out[[cmb]], upd[[cmb]]))
+    }
+  }
+  out
+}

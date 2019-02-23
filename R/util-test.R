@@ -248,13 +248,23 @@ skip_missing_icd10who <- function(ver = "2016", lang = "en") {
   }
 }
 
+set_test_slow <- function(do_slow = TRUE) {
+  Sys.setenv("ICD_TEST_SLOW" = do_slow)
+}
+
+get_test_slow <- function() {
+  s <- tolower(Sys.getenv("ICD_TEST_SLOW"))
+  if (s == "") return(FALSE)
+  if (!startsWith(s, "t") &&
+      !startsWith(s, "y"))
+    return(FALSE)
+  TRUE
+}
+
 skip_slow <- function(msg = "Skipping slow test") {
   testthat::skip_on_cran()
   testthat::skip_on_travis()
   testthat::skip_on_appveyor()
-  s <- tolower(Sys.getenv("ICD_TEST_SLOW"))
-  if (s == "") testthat::skip(msg)
-  if (!startsWith(s, "t") &&
-      !startsWith(s, "y"))
+  if (!get_test_slow())
     testthat::skip(msg)
 }

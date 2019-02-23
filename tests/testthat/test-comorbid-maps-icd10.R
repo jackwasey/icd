@@ -1,8 +1,10 @@
 context("content of icd-10 to comorbidity maps")
 
 test_that("the classes of the ICD-10 maps are correct", {
-  maps <- named_list(icd10_map_ahrq, icd10_map_elix,
-                     icd10_map_quan_deyo, icd10_map_quan_elix)
+  maps <- named_list(icd10_map_ahrq,
+                     icd10_map_elix,
+                     icd10_map_quan_deyo,
+                     icd10_map_quan_elix)
   for (m in names(maps)) {
     # for each map, verify it has class map,
     # and that all it's elements are ICD-10 short diag format
@@ -104,9 +106,8 @@ test_that("independently created list of Quan Elixhauser codes all appear", {
         "F28", "F29", "F302", "F312", "F315"),
     depression =
       c("F204", "F313", "F314", "F315", "F32", "F33", "F341", "F412", "F432"))
-
-  # this list is just parent codes, whereas I store,
-  # for ICD-10, the icd-10-cm children also.
+  # this list is just parent codes, whereas I store, for ICD-10, the icd-10-cm
+  # children also.
   for (i in 1:30) {
     indep <- quan_elix_independent[[i]]
     indep_kids <- children_defined.icd10cm(quan_elix_independent[[i]])

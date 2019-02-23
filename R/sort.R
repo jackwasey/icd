@@ -138,4 +138,3 @@ order.icd10cm <- function(x) {
 order.icd10be <- function(x) {
   order.icd10cm(x)
 }
-
