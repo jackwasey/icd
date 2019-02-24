@@ -31,6 +31,9 @@
     <loc>https://jackwasey.github.io/icd//reference/categorize_simple.html</loc>
   </url>
   <url>
+    <loc>https://jackwasey.github.io/icd//reference/chapters_to_map.html</loc>
+  </url>
+  <url>
     <loc>https://jackwasey.github.io/icd//reference/charlson.html</loc>
   </url>
   <url>
@@ -145,7 +148,10 @@
     <loc>https://jackwasey.github.io/icd//reference/get_defined.html</loc>
   </url>
   <url>
-    <loc>https://jackwasey.github.io/icd//reference/get_icd_name.html</loc>
+    <loc>https://jackwasey.github.io/icd//reference/get_icd_dx_name.html</loc>
+  </url>
+  <url>
+    <loc>https://jackwasey.github.io/icd//reference/get_icd_pc_name.html</loc>
   </url>
   <url>
     <loc>https://jackwasey.github.io/icd//reference/get_invalid.html</loc>
@@ -155,6 +161,9 @@
   </url>
   <url>
     <loc>https://jackwasey.github.io/icd//reference/get_valid.html</loc>
+  </url>
+  <url>
+    <loc>https://jackwasey.github.io/icd//reference/get_visit_name.html</loc>
   </url>
   <url>
     <loc>https://jackwasey.github.io/icd//reference/guess_icd_col_by_name.html</loc>
@@ -199,13 +208,13 @@
     <loc>https://jackwasey.github.io/icd//reference/icd10_parse_cc.html</loc>
   </url>
   <url>
-    <loc>https://jackwasey.github.io/icd//reference/icd10_pcs.html</loc>
-  </url>
-  <url>
     <loc>https://jackwasey.github.io/icd//reference/icd10_sub_chapters.html</loc>
   </url>
   <url>
     <loc>https://jackwasey.github.io/icd//reference/icd10cm2016.html</loc>
+  </url>
+  <url>
+    <loc>https://jackwasey.github.io/icd//reference/icd10cm_order_rcpp.html</loc>
   </url>
   <url>
     <loc>https://jackwasey.github.io/icd//reference/icd9AddLeadingZeroesMajorSingle.html</loc>
@@ -214,13 +223,10 @@
     <loc>https://jackwasey.github.io/icd//reference/icd9MajMinToCode.html</loc>
   </url>
   <url>
-    <loc>https://jackwasey.github.io/icd//reference/icd9_add_leading_zeroes_cpp.html</loc>
+    <loc>https://jackwasey.github.io/icd//reference/icd9_add_leading_zeroes_rcpp.html</loc>
   </url>
   <url>
     <loc>https://jackwasey.github.io/icd//reference/icd9_chapters.html</loc>
-  </url>
-  <url>
-    <loc>https://jackwasey.github.io/icd//reference/icd9_chapters_to_map.html</loc>
   </url>
   <url>
     <loc>https://jackwasey.github.io/icd//reference/icd9_drop_leading_zeroes.html</loc>
@@ -241,7 +247,7 @@
     <loc>https://jackwasey.github.io/icd//reference/icd9_generate_map_quan_elix.html</loc>
   </url>
   <url>
-    <loc>https://jackwasey.github.io/icd//reference/icd9_is_n_cpp.html</loc>
+    <loc>https://jackwasey.github.io/icd//reference/icd9_is_n_rcpp.html</loc>
   </url>
   <url>
     <loc>https://jackwasey.github.io/icd//reference/icd9_map_ahrq.html</loc>
@@ -325,9 +331,6 @@
     <loc>https://jackwasey.github.io/icd//reference/names_elix.html</loc>
   </url>
   <url>
-    <loc>https://jackwasey.github.io/icd//reference/order.icd9.html</loc>
-  </url>
-  <url>
     <loc>https://jackwasey.github.io/icd//reference/plot_comorbid.html</loc>
   </url>
   <url>
@@ -388,13 +391,7 @@
     <loc>https://jackwasey.github.io/icd//reference/unzip_single.html</loc>
   </url>
   <url>
-    <loc>https://jackwasey.github.io/icd//reference/uranium_pathology.html</loc>
-  </url>
-  <url>
     <loc>https://jackwasey.github.io/icd//reference/van_walraven.html</loc>
-  </url>
-  <url>
-    <loc>https://jackwasey.github.io/icd//reference/vermont_dx.html</loc>
   </url>
   <url>
     <loc>https://jackwasey.github.io/icd//reference/wide_to_long.html</loc>
@@ -418,6 +415,9 @@
     <loc>https://jackwasey.github.io/icd//articles/compare-maps.html</loc>
   </url>
   <url>
+    <loc>https://jackwasey.github.io/icd//articles/country-lang-vers.html</loc>
+  </url>
+  <url>
     <loc>https://jackwasey.github.io/icd//articles/custom-maps.html</loc>
   </url>
   <url>
@@ -428,8 +428,5 @@
   </url>
   <url>
     <loc>https://jackwasey.github.io/icd//articles/ranges.html</loc>
-  </url>
-  <url>
-    <loc>https://jackwasey.github.io/icd//articles/who.html</loc>
   </url>
 </urlset>

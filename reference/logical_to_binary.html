@@ -39,8 +39,10 @@
 <meta property="og:title" content="Encode <code>TRUE</code> as 1, and <code>FALSE</code> as 0 (integers) — logical_to_binary" />
 
 <meta property="og:description" content="When saving data as text files for distribution, printing large amounts of
-text containing TRUE and FALSE is inefficient. Convert to
-binary takes more R memory, but allows more compact output" />
+text containing TRUE and FALSE is inefficient. Converting to
+binary allows more compact output to screen. Most functions in R will
+convert TRUE and FALSE logical flags to 1 and 0,
+respectively." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -71,7 +73,7 @@ binary takes more R memory, but allows more compact output" />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Comorbidity calculations and tools for ICD-9 and ICD-10 codes</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">3.4.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">4.0</span>
       </span>
     </div>
 
@@ -109,6 +111,9 @@ binary takes more R memory, but allows more compact output" />
       <a href="../articles/compare-maps.html">Comparing Comorbidity Mappings</a>
     </li>
     <li>
+      <a href="../articles/country-lang-vers.html">Working with World Health Organization ICD codes and national editions, and different languages</a>
+    </li>
+    <li>
       <a href="../articles/custom-maps.html">Quick custom comorbidity maps are helpful</a>
     </li>
     <li>
@@ -119,9 +124,6 @@ binary takes more R memory, but allows more compact output" />
     </li>
     <li>
       <a href="../articles/ranges.html">Ranges of ICD codes</a>
-    </li>
-    <li>
-      <a href="../articles/who.html">Working with World Health Organization ICD codes</a>
     </li>
   </ul>
 </li>
@@ -158,8 +160,10 @@ binary takes more R memory, but allows more compact output" />
     <div class="ref-description">
     
     <p>When saving data as text files for distribution, printing large amounts of
-text containing <code>TRUE</code> and <code>FALSE</code> is inefficient. Convert to
-binary takes more R memory, but allows more compact output</p>
+text containing <code>TRUE</code> and <code>FALSE</code> is inefficient. Converting to
+binary allows more compact output to screen. Most functions in <span style="R">R</span> will
+convert <code>TRUE</code> and <code>FALSE</code> logical flags to <code>1</code> and <code>0</code>,
+respectively.</p>
     
     </div>
 
@@ -221,7 +225,7 @@ binary takes more R memory, but allows more compact output</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.2.0.9000.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.3.0.</p>
 </div>
       </footer>
    </div>

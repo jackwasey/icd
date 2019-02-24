@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>test ICD classes — is.icd9 • Comorbidity calculations and tools for ICD-9 and ICD-10 codes</title>
+<title>Test presence of ICD classes — is.icd9 • Comorbidity calculations and tools for ICD-9 and ICD-10 codes</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -36,10 +36,10 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/jquery.mark.min.js" integrity="sha256-4HLtjeVgH0eIB3aZ9mLYF6E8oU5chNdjU6p6rrXpl9U=" crossorigin="anonymous"></script>
 
 
-<meta property="og:title" content="test ICD classes — is.icd9" />
+<meta property="og:title" content="Test presence of ICD classes — is.icd9" />
 
 <meta property="og:description" content="This merely checks whether the given object is a certain type of ICD code, it
-does no validation of any kind." />
+does no validation of any kind. For validation, see is_valid." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -70,7 +70,7 @@ does no validation of any kind." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Comorbidity calculations and tools for ICD-9 and ICD-10 codes</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">3.4.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">4.0</span>
       </span>
     </div>
 
@@ -108,6 +108,9 @@ does no validation of any kind." />
       <a href="../articles/compare-maps.html">Comparing Comorbidity Mappings</a>
     </li>
     <li>
+      <a href="../articles/country-lang-vers.html">Working with World Health Organization ICD codes and national editions, and different languages</a>
+    </li>
+    <li>
       <a href="../articles/custom-maps.html">Quick custom comorbidity maps are helpful</a>
     </li>
     <li>
@@ -118,9 +121,6 @@ does no validation of any kind." />
     </li>
     <li>
       <a href="../articles/ranges.html">Ranges of ICD codes</a>
-    </li>
-    <li>
-      <a href="../articles/who.html">Working with World Health Organization ICD codes</a>
     </li>
   </ul>
 </li>
@@ -149,7 +149,7 @@ does no validation of any kind." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>test ICD classes</h1>
+    <h1>Test presence of ICD classes</h1>
     
     <div class="hidden name"><code>is.icd9.Rd</code></div>
     </div>
@@ -157,7 +157,7 @@ does no validation of any kind." />
     <div class="ref-description">
     
     <p>This merely checks whether the given object is a certain type of ICD code, it
-does no validation of any kind.</p>
+does no validation of any kind. For validation, see <code><a href='is_valid.html'>is_valid</a></code>.</p>
     
     </div>
 
@@ -177,9 +177,11 @@ does no validation of any kind.</p>
 
 <span class='fu'>is.icd10who</span>(<span class='no'>x</span>)
 
-<span class='fu'>is.comorbidity_map</span>(<span class='no'>x</span>)
+<span class='fu'>is.icd10fr</span>(<span class='no'>x</span>)
 
-<span class='fu'>is.icd_comorbidity_map</span>(<span class='no'>...</span>)</pre>
+<span class='fu'>is.icd10be</span>(<span class='no'>x</span>)
+
+<span class='fu'>is.comorbidity_map</span>(<span class='no'>x</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -188,22 +190,7 @@ does no validation of any kind.</p>
       <th>x</th>
       <td><p>Any object which may have ICD-related classes set</p></td>
     </tr>
-    <tr>
-      <th>...</th>
-      <td><p>arguments passed on to other functions</p></td>
-    </tr>
     </table>
-    
-    <h2 class="hasAnchor" id="deprecated-function-names"><a class="anchor" href="#deprecated-function-names"></a>Deprecated function names</h2>
-
-    <p>Future versions of <span class="pkg">icd</span> will drop
-  the <code>icd_</code> prefix. For example, <code>charlson</code> should be used in
-  favor of <code>icd_charlson</code>. To distinguish <span class="pkg">icd</span> function calls,
-  consider using the prefix <code>icd::</code> instead, e.g., <code><a href='charlson.html'>icd::charlson</a></code>.
-  Functions which specifically operate on either ICD-9 or ICD-10 codes or
-  their sub-types will retain the prefix. E.g.
-  <code><a href='comorbid.html'>icd9_comorbid_ahrq</a></code>. <span class="pkg">icd</span> specific classes also retain
-  the prefix, e.g., <code><a href='wide_vs_long.html'>icd_wide_data</a></code>.</p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
@@ -214,9 +201,7 @@ does no validation of any kind.</p>
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
-      
-      <li><a href="#deprecated-function-names">Deprecated function names</a></li>
-      
+            
       <li><a href="#examples">Examples</a></li>
     </ul>
 
@@ -229,7 +214,7 @@ does no validation of any kind.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.2.0.9000.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.3.0.</p>
 </div>
       </footer>
    </div>

@@ -1,17 +1,17 @@
 pandoc: 2.2.1
-pkgdown: 1.2.0.9000
-pkgdown_sha: c980e84a573614087c6e151d5e6e19a22748b761
+pkgdown: 1.3.0
+pkgdown_sha: ~
 articles:
   CMS-HCC: CMS-HCC.html
   ICD-10: ICD-10.html
   PCCC: PCCC.html
   charlson-scores: charlson-scores.html
   compare-maps: compare-maps.html
+  country-lang-vers: country-lang-vers.html
   custom-maps: custom-maps.html
   efficiency: efficiency.html
   introduction: introduction.html
   ranges: ranges.html
-  who: who.html
 urls:
   reference: https://jackwasey.github.io/icd//reference
   article: https://jackwasey.github.io/icd//articles

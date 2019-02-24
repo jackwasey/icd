@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Sort short-form ICD-9 codes — sort_icd • Comorbidity calculations and tools for ICD-9 and ICD-10 codes</title>
+<title>Sort or order ICD-9 or ICD-10 codes according to published sequence — sort_icd • Comorbidity calculations and tools for ICD-9 and ICD-10 codes</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -36,11 +36,12 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/jquery.mark.min.js" integrity="sha256-4HLtjeVgH0eIB3aZ9mLYF6E8oU5chNdjU6p6rrXpl9U=" crossorigin="anonymous"></script>
 
 
-<meta property="og:title" content="Sort short-form ICD-9 codes — sort_icd" />
+<meta property="og:title" content="Sort or order ICD-9 or ICD-10 codes according to published sequence — sort_icd" />
 
-<meta property="og:description" content="Sorts lists of numeric only, V or E codes. Note that a simple numeric sort
-does not work for ICD-9 codes, since &quot;162&quot; &amp;gt; &quot;1620&quot;, and also V codes precede
-E codes." />
+<meta property="og:description" content="The default method will guess whether ICD-9 or ICD-10  then sort
+  based on that type. For ICD-10 codes, note that setting short is
+  unnecessary and ignored. All codes should consistently use the decimal
+  divider." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -71,7 +72,7 @@ E codes." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Comorbidity calculations and tools for ICD-9 and ICD-10 codes</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">3.4.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">4.0</span>
       </span>
     </div>
 
@@ -109,6 +110,9 @@ E codes." />
       <a href="../articles/compare-maps.html">Comparing Comorbidity Mappings</a>
     </li>
     <li>
+      <a href="../articles/country-lang-vers.html">Working with World Health Organization ICD codes and national editions, and different languages</a>
+    </li>
+    <li>
       <a href="../articles/custom-maps.html">Quick custom comorbidity maps are helpful</a>
     </li>
     <li>
@@ -119,9 +123,6 @@ E codes." />
     </li>
     <li>
       <a href="../articles/ranges.html">Ranges of ICD codes</a>
-    </li>
-    <li>
-      <a href="../articles/who.html">Working with World Health Organization ICD codes</a>
     </li>
   </ul>
 </li>
@@ -150,46 +151,51 @@ E codes." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Sort short-form ICD-9 codes</h1>
+    <h1>Sort or order ICD-9 or ICD-10 codes according to published sequence</h1>
     
     <div class="hidden name"><code>sort_icd.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Sorts lists of numeric only, V or E codes. Note that a simple numeric sort
-does not work for ICD-9 codes, since "162" &gt; "1620", and also V codes precede
-E codes.</p>
+    <p>The default method will guess whether ICD-9 or ICD-10  then sort
+  based on that type. For ICD-10 codes, note that setting <code>short</code> is
+  unnecessary and ignored. All codes should consistently use the decimal
+  divider.</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>sort_icd</span>(<span class='no'>x</span>, <span class='no'>...</span>)
-
-<span class='co'># S3 method for default</span>
-<span class='fu'>sort_icd</span>(<span class='no'>x</span>, <span class='kw'>short_code</span> <span class='kw'>=</span> <span class='fu'><a href='guess_short.html'>guess_short</a></span>(<span class='no'>x</span>), <span class='no'>...</span>)
+    <pre class="usage"><span class='fu'>sort_icd</span>(<span class='no'>x</span>, <span class='kw'>decreasing</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>short_code</span> <span class='kw'>=</span> <span class='fu'><a href='guess_short.html'>guess_short</a></span>(<span class='no'>x</span>), <span class='no'>...</span>)
 
 <span class='co'># S3 method for icd10</span>
-<span class='fu'>sort_icd</span>(<span class='no'>x</span>, <span class='kw'>short_code</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>...</span>)
+<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/sort'>sort</a></span>(<span class='no'>x</span>, <span class='kw'>decreasing</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='no'>...</span>)
+
+<span class='co'># S3 method for icd10cm</span>
+<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/sort'>sort</a></span>(<span class='no'>x</span>, <span class='kw'>decreasing</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='no'>...</span>)
+
+<span class='co'># S3 method for icd10be</span>
+<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/sort'>sort</a></span>(<span class='no'>x</span>, <span class='kw'>decreasing</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='no'>...</span>)
 
 <span class='co'># S3 method for icd9</span>
-<span class='fu'>sort_icd</span>(<span class='no'>x</span>, <span class='kw'>short_code</span> <span class='kw'>=</span> <span class='fu'><a href='guess_short.html'>guess_short</a></span>(<span class='no'>x</span>), <span class='no'>...</span>)
+<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/sort'>sort</a></span>(<span class='no'>x</span>, <span class='kw'>decreasing</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>short_code</span> <span class='kw'>=</span> <span class='fu'><a href='guess_short.html'>guess_short</a></span>(<span class='no'>x</span>),
+  <span class='no'>...</span>)
 
-<span class='fu'>icd_sort.default</span>(<span class='no'>...</span>)
+<span class='fu'>order.icd9</span>(<span class='no'>x</span>)
 
-<span class='fu'>icd_sort.icd10</span>(<span class='no'>...</span>)
+<span class='fu'>order.icd10cm</span>(<span class='no'>x</span>)
 
-<span class='fu'>icd_sort.icd9</span>(<span class='no'>...</span>)</pre>
+<span class='fu'>order.icd10be</span>(<span class='no'>x</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>x</th>
-      <td><p>vector of ICD codes to sort</p></td>
+      <td><p>vector of ICD codes to sort or order</p></td>
     </tr>
     <tr>
-      <th>...</th>
-      <td><p>arguments passed on to other functions</p></td>
+      <th>decreasing</th>
+      <td><p>Logical See <code><a href='https://www.rdocumentation.org/packages/base/topics/sort'>sort</a></code>.</p></td>
     </tr>
     <tr>
       <th>short_code</th>
@@ -201,49 +207,45 @@ Where reasonable, this is guessed from the input data.</p></td>
       <th>...</th>
       <td><p>arguments passed on to other functions</p></td>
     </tr>
-    <tr>
-      <th>...</th>
-      <td><p>arguments passed on to other functions</p></td>
-    </tr>
-    <tr>
-      <th>...</th>
-      <td><p>arguments passed on to other functions</p></td>
-    </tr>
     </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
-    <p>sorted vector of ICD-9 codes. Numeric, then E codes, then V codes.</p>
+    <p>For sort, a sorted vector of ICD-9 codes. Numeric, then E codes, then
+  V codes. For order, an integer vector is returned with the order of each
+  code.</p>
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>Implementation used fast built-in sort, then shuffles the E codes to
-  the end.</p>
+    <p>Note that <code><a href='https://www.rdocumentation.org/packages/base/topics/sort'>sort</a></code> is an S3 generic, whereas
+  <code><a href='https://www.rdocumentation.org/packages/base/topics/order'>order</a></code> is not. Thus we export <code>order.icd10cm</code>, but
+  not <code>sort.icd10cm</code>, etc..</p>
     
-    <h2 class="hasAnchor" id="methods-by-class-"><a class="anchor" href="#methods-by-class-"></a>Methods (by class)</h2>
+    <h2 class="hasAnchor" id="icd-"><a class="anchor" href="#icd-"></a>ICD-9</h2>
 
-    <ul>
-<li><p><code>default</code>: Guess whether ICD-9 or ICD-10 (or possibly sub-type in
-the future) then sort based on that type. ICD-10 codes, note that setting
-<code>short</code> is unnecessary and ignored.</p></li>
-<li><p><code>icd10</code>: Sort ICD-10 codes, note that setting <code>short</code> is
-unnecessary and ignored.</p></li>
-<li><p><code>icd9</code>: sort ICD-9 codes respecting numeric, then 'V', then 'E'
-codes, and accounting for leading zeroes. Will return a factor if a factor is given.</p></li>
-</ul>
+    <p>Sorts lists of numeric, V or E codes. Note that a simple
+  numeric sort does not work for ICD-9 codes, since "162" &gt; "1620", and also
+  V codes precede E codes. Numeric codes are first, then 'V', then 'E'. Will
+  return a factor if a factor is given.</p>
     
-    <h2 class="hasAnchor" id="deprecated-function-names"><a class="anchor" href="#deprecated-function-names"></a>Deprecated function names</h2>
+    <h2 class="hasAnchor" id="icd-cm-and-icd-be"><a class="anchor" href="#icd-cm-and-icd-be"></a>ICD-10-CM and ICD-10-BE</h2>
 
-    <p>Future versions of <span class="pkg">icd</span> will drop
-  the <code>icd_</code> prefix. For example, <code>charlson</code> should be used in
-  favor of <code>icd_charlson</code>. To distinguish <span class="pkg">icd</span> function calls,
-  consider using the prefix <code>icd::</code> instead, e.g., <code><a href='charlson.html'>icd::charlson</a></code>.
-  Functions which specifically operate on either ICD-9 or ICD-10 codes or
-  their sub-types will retain the prefix. E.g.
-  <code><a href='comorbid.html'>icd9_comorbid_ahrq</a></code>. <span class="pkg">icd</span> specific classes also retain
-  the prefix, e.g., <code><a href='wide_vs_long.html'>icd_wide_data</a></code>.</p>
+    <p>There are some codes which are sequenced
+  out of lexicographic order, e.g., <code>C7A</code> and <code>C7B</code> are between
+  <code>C80</code> and <code>C81</code>; <code>D3A</code> is between <code>D48</code> and <code>D49</code>.</p>
     
 
+    <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
+    <pre class="examples"><div class='input'><span class='co'># order ICD-10-CM is not lexicographic:</span>
+<span class='no'>codes</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='set_icd_class.html'>as.icd10cm</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"C7A"</span>, <span class='st'>"C79"</span>, <span class='st'>"C80"</span>, <span class='st'>"C81"</span>, <span class='st'>"C7B"</span>))
+<span class='co'># as the class is set, use S3 dispatch to get the right answer</span>
+<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/sort'>sort</a></span>(<span class='no'>codes</span>)</div><div class='output co'>#&gt; [1] "C7A" "C7B" "C79" "C80" "C81"</div><div class='input'><span class='co'># or call directly, but recall S3 dispatch will only work once 'icd' is</span>
+<span class='co'># attached using:</span>
+<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>library</a></span>(<span class='no'>icd</span>)
+<span class='kw pkg'>icd</span><span class='kw ns'>:::</span><span class='fu'><a href='https://jackwasey.github.io/icd//reference/sort_icd.html'>sort.icd10cm</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"C7A"</span>, <span class='st'>"C79"</span>, <span class='st'>"C80"</span>, <span class='st'>"C81"</span>, <span class='st'>"C7B"</span>))</div><div class='output co'>#&gt; [1] "C7A" "C7B" "C79" "C80" "C81"</div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/stopifnot'>stopifnot</a></span>(!<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/identical'>identical</a></span>(<span class='fu'>order.icd10cm</span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/character'>as.character</a></span>(<span class='no'>codes</span>)),
+                     <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/order'>order</a></span>(<span class='no'>codes</span>)))
+<span class='no'>codes</span>[<span class='fu'>order.icd10cm</span>(<span class='no'>codes</span>)]</div><div class='output co'>#&gt; [1] "C7A" "C80" "C81" "C7B" "C79"</div><div class='input'><span class='co'># Note that base::order does NOT do S3 dispatch, so the following does not work:</span>
+<span class='no'>codes</span>[<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/order'>order</a></span>(<span class='no'>codes</span>)]</div><div class='output co'>#&gt; [1] "C79" "C7A" "C7B" "C80" "C81"</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
@@ -254,10 +256,12 @@ codes, and accounting for leading zeroes. Will return a factor if a factor is gi
 
       <li><a href="#details">Details</a></li>
 
-      <li><a href="#methods-by-class-">Methods (by class)</a></li>
+      <li><a href="#icd-">ICD-9</a></li>
 
-      <li><a href="#deprecated-function-names">Deprecated function names</a></li>
-          </ul>
+      <li><a href="#icd-cm-and-icd-be">ICD-10-CM and ICD-10-BE</a></li>
+      
+      <li><a href="#examples">Examples</a></li>
+    </ul>
 
   </div>
 </div>
@@ -268,7 +272,7 @@ codes, and accounting for leading zeroes. Will return a factor if a factor is gi
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.2.0.9000.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.3.0.</p>
 </div>
       </footer>
    </div>

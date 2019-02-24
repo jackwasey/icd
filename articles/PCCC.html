@@ -32,7 +32,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Comorbidity calculations and tools for ICD-9 and ICD-10 codes</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">3.4.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">4.0</span>
       </span>
     </div>
 
@@ -70,6 +70,9 @@
       <a href="../articles/compare-maps.html">Comparing Comorbidity Mappings</a>
     </li>
     <li>
+      <a href="../articles/country-lang-vers.html">Working with World Health Organization ICD codes and national editions, and different languages</a>
+    </li>
+    <li>
       <a href="../articles/custom-maps.html">Quick custom comorbidity maps are helpful</a>
     </li>
     <li>
@@ -80,9 +83,6 @@
     </li>
     <li>
       <a href="../articles/ranges.html">Ranges of ICD codes</a>
-    </li>
-    <li>
-      <a href="../articles/who.html">Working with World Health Organization ICD codes</a>
     </li>
   </ul>
 </li>
@@ -111,7 +111,7 @@
       <h1>Pediatric Complex Chronic Conditions</h1>
                         <h4 class="author">Jack O. Wasey</h4>
             
-            <h4 class="date">2019-02-05</h4>
+            <h4 class="date">2019-02-24</h4>
       
       
       <div class="hidden name"><code>PCCC.Rmd</code></div>
@@ -134,12 +134,12 @@
 <p>The PCCC comorbidities may be derived from both diagnostic and procedure codes. The following simulated data has both:</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/head">head</a></span>(dat)</a></code></pre></div>
 <pre><code>##      id icd_dx1 icd_dx2 icd_pcs1 icd_pcs2
-## 1 10001 S32010B T422X3D  0SWJ37Z  00QS4ZZ
-## 2 10002    D686     A42  0D124JB  03QB4ZZ
-## 3 10003 S32021G   M4806  2W03X6Z  D91497Z
-## 4 10004 S61320A T475X6A  03SP4ZZ  0BU207Z
-## 5 10005    S054 S90222A  06104ZP  B41D1ZZ
-## 6 10006  M12232 V9209XS  0XRL07P  0PUM0JZ</code></pre>
+## 1 10001 S32010B T422X3D  0THB7LZ  00QF0ZZ
+## 2 10002    D686     A42  0DP637Z  041J0AB
+## 3 10003 S32021G   M4806  2W5KXYZ  DB025ZZ
+## 4 10004 S61320A T475X6A  041M09M  0D5P8ZZ
+## 5 10005    S054 S90222A  07N70ZZ  B52JY0Z
+## 6 10006  M12232 V9209XS  0YH643Z  0QPS04Z</code></pre>
 <p>The data is in ‘wide’ format. <code>icd</code> no longer needs the data to be in ‘long’ format. The PCCC comorbidity classes can be computed directly from the source data and summarized in a plot. Here we calculate the PCCC from ICD diagnostic codes and ICD procedure codes separately, and logically combine them to get the result.</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1">pccc_dx &lt;-<span class="st"> </span><span class="kw"><a href="../reference/comorbid_pccc_dx.html">comorbid_pccc_dx</a></span>(dat)</a>
 <a class="sourceLine" id="cb3-2" data-line-number="2">pccc_pcs &lt;-<span class="st"> </span><span class="kw"><a href="../reference/comorbid_pccc_dx.html">icd10_comorbid_pccc_pcs</a></span>(dat,</a>
@@ -183,7 +183,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.2.0.9000.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.3.0.</p>
 </div>
       </footer>
 </div>

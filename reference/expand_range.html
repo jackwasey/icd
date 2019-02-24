@@ -71,7 +71,7 @@ the extensive tests covering this area for much more detail." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Comorbidity calculations and tools for ICD-9 and ICD-10 codes</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">3.4.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">4.0</span>
       </span>
     </div>
 
@@ -109,6 +109,9 @@ the extensive tests covering this area for much more detail." />
       <a href="../articles/compare-maps.html">Comparing Comorbidity Mappings</a>
     </li>
     <li>
+      <a href="../articles/country-lang-vers.html">Working with World Health Organization ICD codes and national editions, and different languages</a>
+    </li>
+    <li>
       <a href="../articles/custom-maps.html">Quick custom comorbidity maps are helpful</a>
     </li>
     <li>
@@ -119,9 +122,6 @@ the extensive tests covering this area for much more detail." />
     </li>
     <li>
       <a href="../articles/ranges.html">Ranges of ICD codes</a>
-    </li>
-    <li>
-      <a href="../articles/who.html">Working with World Health Organization ICD codes</a>
     </li>
   </ul>
 </li>
@@ -188,17 +188,7 @@ the extensive tests covering this area for much more detail.</p>
 
 <span class='no'>start</span> <span class='kw'>%i9mj%</span> <span class='no'>end</span>
 
-<span class='no'>start</span> <span class='kw'>%i9s%</span> <span class='no'>end</span>
-
-<span class='fu'>icd_expand_range.character</span>(<span class='no'>...</span>)
-
-<span class='fu'>icd_expand_range.icd10cm</span>(<span class='no'>...</span>)
-
-<span class='fu'>icd_expand_range.icd9</span>(<span class='no'>...</span>)
-
-<span class='fu'>icd_expand_range_major.icd9</span>(<span class='no'>...</span>)
-
-<span class='fu'>icd_expand_range</span>(<span class='no'>...</span>)</pre>
+<span class='no'>start</span> <span class='kw'>%i9s%</span> <span class='no'>end</span></pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -209,10 +199,6 @@ the extensive tests covering this area for much more detail.</p>
 given in a code, then the digits are greedily assigned to hundreds, then
 tens, then units, before the decimal parts. E.g. "10" becomes "010", not
 "0010"</p></td>
-    </tr>
-    <tr>
-      <th>...</th>
-      <td><p>arguments passed on to other functions</p></td>
     </tr>
     <tr>
       <th>short_code</th>
@@ -263,17 +249,6 @@ class is not known</p></li>
 <li><p><code>icd9</code>: Expand a range of ICD-9 codes</p></li>
 </ul>
     
-    <h2 class="hasAnchor" id="deprecated-function-names"><a class="anchor" href="#deprecated-function-names"></a>Deprecated function names</h2>
-
-    <p>Future versions of <span class="pkg">icd</span> will drop
-  the <code>icd_</code> prefix. For example, <code>charlson</code> should be used in
-  favor of <code>icd_charlson</code>. To distinguish <span class="pkg">icd</span> function calls,
-  consider using the prefix <code>icd::</code> instead, e.g., <code><a href='charlson.html'>icd::charlson</a></code>.
-  Functions which specifically operate on either ICD-9 or ICD-10 codes or
-  their sub-types will retain the prefix. E.g.
-  <code><a href='comorbid.html'>icd9_comorbid_ahrq</a></code>. <span class="pkg">icd</span> specific classes also retain
-  the prefix, e.g., <code><a href='wide_vs_long.html'>icd_wide_data</a></code>.</p>
-    
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p>Other ICD-9 ranges: <code><a href='children.html'>children</a></code>,
@@ -295,8 +270,6 @@ class is not known</p></li>
 
       <li><a href="#methods-by-class-">Methods (by class)</a></li>
 
-      <li><a href="#deprecated-function-names">Deprecated function names</a></li>
-
       <li><a href="#see-also">See also</a></li>
       
       <li><a href="#examples">Examples</a></li>
@@ -311,7 +284,7 @@ class is not known</p></li>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.2.0.9000.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.3.0.</p>
 </div>
       </footer>
    </div>

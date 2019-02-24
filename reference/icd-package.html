@@ -77,7 +77,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Comorbidity calculations and tools for ICD-9 and ICD-10 codes</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">3.4.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">4.0</span>
       </span>
     </div>
 
@@ -115,6 +115,9 @@
       <a href="../articles/compare-maps.html">Comparing Comorbidity Mappings</a>
     </li>
     <li>
+      <a href="../articles/country-lang-vers.html">Working with World Health Organization ICD codes and national editions, and different languages</a>
+    </li>
+    <li>
       <a href="../articles/custom-maps.html">Quick custom comorbidity maps are helpful</a>
     </li>
     <li>
@@ -125,9 +128,6 @@
     </li>
     <li>
       <a href="../articles/ranges.html">Ranges of ICD codes</a>
-    </li>
-    <li>
-      <a href="../articles/who.html">Working with World Health Organization ICD codes</a>
     </li>
   </ul>
 </li>
@@ -229,8 +229,9 @@
     <dt>Manipulation</dt><dd><p>You can find children of a higher-level ICD-9 code with
   <code><a href='children.html'>children</a></code> and find a common parent to a set of children (or
   arbitrary list of ICD-9 codes) with <code><a href='condense.html'>condense</a></code>.
-  <code><a href='sort_icd.html'>sort_icd</a></code> sorts in hierarchical, then numerical order, so
-  '100.0' comes before '100.00', for example.
+  <code><a href='https://www.rdocumentation.org/packages/base/topics/sort'>sort</a></code> (<code><a href='sort_icd.html'>sort.icd9</a></code>, <code><a href='sort_icd.html'>sort.icd10cm</a></code>,
+  etc.) sorts in hierarchical, then numerical order, so '100.0' comes before
+  '100.00', for example.
     <code><a href='wide_to_long.html'>wide_to_long</a></code> and <code><a href='long_to_wide.html'>long_to_wide</a></code> convert the two
   most common data structures containing patient disease data. This is more
   sophisticated and tailored to the problem than base reshaping or packages
@@ -274,7 +275,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.2.0.9000.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.3.0.</p>
 </div>
       </footer>
    </div>
