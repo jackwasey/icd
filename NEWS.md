@@ -1,4 +1,5 @@
-# Version 4.0
+# Version 4.0.1
+ * The ICD-10 comorbidity maps have been expanded to include the union of all codes for each year in which ICD-10-CM and WHO ICD-10 are available. E.g., HIV in WHO scheme has more detail than the US version. (The ICD-9 code algorithm does not rely on exact ICD-10 codes in maps, so is unchanged). This will flag a few more comorbidities than before, especially when data doesn't correspond to the most recent map. CCS maps are only expanded over history ICD-10-CM since they are US-oriented. This is an important user-facing change which will improve capture of comorbidities in international and historic ICD-10 data. Again, ICD-9 computations are unaffected.
  * Thanks to @vitallish for update to CCS maps see #163, #168
  * Framework for using WHO ICD-10 codes, which the 'icd.data' package will download as needed from the WHO web site. English and French are available, but currently only for the years 2016 and 2008 respectively. Update 'icd.data' package to version 1.1.1 to enable.
  * Access to French and Dutch translations of ICD-10-CM, used in Belgium.
@@ -20,7 +21,6 @@
  * PCCC benchmarking improved (`icd` is about 10x faster than the `pccc` package, which also uses 'Rcpp')
  * Better documentation, including more links between documentation, removed internal documentation from public view. Added "Table One" example demonstration to README.
  * code cleaning, simplification and linting, e.g. replaced sapply with vapply throughout, and dropped custom wide-long-wide conversion C++ code in favour of base R.
- * The ICD-10 comorbidity maps have been expanded to include the union of all codes for each year in which ICD-10-CM was published. Including any additional WHO and international codes is not yet done, but ICD-10-CM is a huge superset of WHO, and the maps do already contain the significant exceptions, e.g., HIV in WHO scheme has more detail than the US version.
 
 # Version 3.3
  * Fixes #160, #161

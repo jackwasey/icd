@@ -4,12 +4,12 @@
 \alias{icd10_fetch_ahrq_ccs}
 \title{Download AHRQ CCS ICD-10 definitions}
 \usage{
-icd10_fetch_ahrq_ccs(version = "2018.1", offline)
+icd10_fetch_ahrq_ccs(version = "2018.1", ...)
 }
 \arguments{
-\item{offline}{single logical, if \code{TRUE} then don't pull the file from
-internet, only return path and file name if the file already exists in the
-raw data directory. This is helpful for testing without using the internet.}
+\item{version}{Default \code{2018.1}}
+
+\item{...}{arguments passed on to other functions}
 }
 \description{
 Download AHRQ CCS ICD-10 definitions

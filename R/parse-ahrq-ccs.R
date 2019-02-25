@@ -2,30 +2,29 @@
 
 #' Download AHRQ CCS ICD-9 definitions
 #' @template ccs-single
-#' @template offline
+#' @template dotdotdot
 #' @keywords internal
-icd9_fetch_ahrq_ccs <- function(single = TRUE, offline) {
+icd9_fetch_ahrq_ccs <- function(single = TRUE, ...) {
   assert_flag(single)
-  assert_flag(offline)
   ccs_base <- "https://www.hcup-us.ahrq.gov/toolssoftware/ccs"
   if (single)
     unzip_to_data_raw(
       url = paste0(ccs_base, "Single_Level_CCS_2015.zip"),
       file_name = "$dxref 2015.csv",
-      offline = offline)
+      ...)
   else
     unzip_to_data_raw(
       url = paste0(ccs_base, "Multi_Level_CCS_2015.zip"),
       file_name = "ccs_multi_dx_tool_2015.csv",
-      offline = offline)
+      ...)
 }
 
 #' Download AHRQ CCS ICD-10 definitions
-#' @template offline
+#' @param version Default \code{2018.1}
+#' @template dotdotdot
 #' @keywords internal
-icd10_fetch_ahrq_ccs <- function(version = "2018.1", offline) {
+icd10_fetch_ahrq_ccs <- function(version = "2018.1", ...) {
   assert_character(version, pattern = "^20[0-9]{2}\\.[1-9]$")
-  assert_flag(offline)
   version <- gsub(".", "_", version, fixed = TRUE)
   # all information in one file, no need for single vs multi
   unzip_to_data_raw(
@@ -33,7 +32,7 @@ icd10_fetch_ahrq_ccs <- function(version = "2018.1", offline) {
       "https://www.hcup-us.ahrq.gov/toolssoftware/ccs10/ccs_dx_icd10cm_",
       version, ".zip"),
     file_name = paste0("ccs_dx_icd10cm_", version, ".csv"),
-    offline = offline)
+    ...)
 }
 
 #' parse AHRQ CCS for mapping
@@ -55,9 +54,11 @@ icd10_fetch_ahrq_ccs <- function(version = "2018.1", offline) {
 #'   icd:::icd9_parse_ahrq_ccs(single = FALSE, offline = TRUE)
 #' }
 #' @keywords internal manip
-icd9_parse_ahrq_ccs <- function(single = TRUE,
-                                save_data = FALSE,
-                                offline = TRUE) {
+icd9_parse_ahrq_ccs <- function(
+  single = TRUE,
+  save_data = FALSE,
+  offline = getOption("icd.data.offline")
+) {
   assert_flag(single)
   assert_flag(save_data)
   assert_flag(offline)
@@ -86,12 +87,25 @@ icd9_parse_ahrq_ccs <- function(single = TRUE,
   }
   rsrt <- function(x) comorbidity_map(resort_lvls(x))
   if (!single) {
-    ahrq_df <- read.csv(ahrq_ccs$file_path, quote = "'\"", colClasses = "character")
-    lvl1 <- rsrt(tapply(ahrq_df[["ICD.9.CM.CODE"]], ahrq_df[["CCS.LVL.1"]], clean_icd9))
-    lvl2 <- rsrt(tapply(ahrq_df[["ICD.9.CM.CODE"]], ahrq_df[["CCS.LVL.2"]], clean_icd9))
-    lvl3 <- rsrt(tapply(ahrq_df[["ICD.9.CM.CODE"]], ahrq_df[["CCS.LVL.3"]], clean_icd9))
-    lvl4 <- rsrt(tapply(ahrq_df[["ICD.9.CM.CODE"]], ahrq_df[["CCS.LVL.4"]], clean_icd9))
-    icd9_map_multi_ccs <- list(lvl1 = lvl1, lvl2 = lvl2, lvl3 = lvl3, lvl4 = lvl4)
+    ahrq_df <- read.csv(ahrq_ccs$file_path,
+                        quote = "'\"",
+                        colClasses = "character")
+    lvl1 <- rsrt(tapply(ahrq_df[["ICD.9.CM.CODE"]],
+                        ahrq_df[["CCS.LVL.1"]],
+                        clean_icd9))
+    lvl2 <- rsrt(tapply(ahrq_df[["ICD.9.CM.CODE"]],
+                        ahrq_df[["CCS.LVL.2"]],
+                        clean_icd9))
+    lvl3 <- rsrt(tapply(ahrq_df[["ICD.9.CM.CODE"]],
+                        ahrq_df[["CCS.LVL.3"]],
+                        clean_icd9))
+    lvl4 <- rsrt(tapply(ahrq_df[["ICD.9.CM.CODE"]],
+                        ahrq_df[["CCS.LVL.4"]],
+                        clean_icd9))
+    icd9_map_multi_ccs <- list(lvl1 = lvl1,
+                               lvl2 = lvl2,
+                               lvl3 = lvl3,
+                               lvl4 = lvl4)
     make_labels <- function(lvl = 1){
       values_col <- paste0("CCS.LVL.", lvl)
       label_col <- paste0("CCS.LVL.", lvl, ".LABEL")
@@ -126,9 +140,9 @@ icd9_parse_ahrq_ccs <- function(single = TRUE,
 
     icd9_map_single_ccs <-
       rsrt(tapply(ahrq_df[["ICD.9.CM.CODE"]],
-                 trimws(ahrq_df$CCS.CATEGORY),
-                 clean_icd9)
-           )
+                  trimws(ahrq_df$CCS.CATEGORY),
+                  clean_icd9)
+      )
     if (save_data) {
       save_in_data_dir(icd9_map_single_ccs)
       save_in_data_dir("icd9_names_single_ccs")
@@ -149,19 +163,24 @@ icd9_parse_ahrq_ccs <- function(single = TRUE,
 #'   as shown on the website
 #' @param save_data logical whether to save the result in the source tree.
 #'   Defaults to \code{FALSE}.
+#' @template verbose
 #' @template offline
 #' @importFrom utils read.csv
 #' @examples
 #' \dontrun{
+#' # offline = FALSE
 #'   icd:::icd10_parse_ahrq_ccs(version = "2018.1",
 #'       save_data = FALSE, offline = FALSE)
 #'   icd:::icd10_parse_ahrq_ccs(version = "2018.1",
 #'       save_data = FALSE, offline = TRUE)
 #' }
 #' @keywords internal manip
-icd10_parse_ahrq_ccs <- function(version = "2018.1",
-                                 save_data = FALSE,
-                                 offline = TRUE) {
+icd10_parse_ahrq_ccs <- function(
+  version = "2018.1",
+  save_data = FALSE,
+  offline = TRUE,
+  verbose = TRUE
+) {
   assert_character(version, pattern = "^20[0-9]{2}\\.[1-9]$")
   assert_flag(save_data)
   assert_flag(offline)
@@ -209,7 +228,6 @@ icd10_parse_ahrq_ccs <- function(version = "2018.1",
                         lvl2 = "MULTI.CCS.LVL.2")
   # Because data is in one file, only have one mapping file to save
   icd10_map_ccs <- lapply(icd10_map_def, ccs_lvl_map)
-
   ccs_lvl_name <- function(values_col){
     label_col <- paste0(values_col, ".LABEL")
 
@@ -218,9 +236,15 @@ icd10_parse_ahrq_ccs <- function(version = "2018.1",
     lkp_chr <- lkp_chr[nchar(names(lkp_chr)) != 0]
     lkp_chr[!duplicated(names(lkp_chr))]
   }
-
   icd10_names_ccs <- lapply(icd10_map_def, ccs_lvl_name)
-
+  # nolint start
+  icd10_map_ccs <- sapply(icd10_map_ccs,
+                          apply_over_icd10cm_vers,
+                          verbose = verbose,
+                          simplify = FALSE,
+                          USE.NAMES = TRUE)
+  # nolint end
+  # not applying over WHO codes because CCS is a US-oriented classification.
   if (save_data) {
     save_in_data_dir(icd10_map_ccs)
     save_in_data_dir(icd10_names_ccs)

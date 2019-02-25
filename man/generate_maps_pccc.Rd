@@ -14,7 +14,7 @@ icd9_generate_map_pccc_dx(save_data = TRUE)
 
 icd9_generate_map_pccc_pcs(save_data = TRUE)
 
-icd10_generate_map_pccc_dx(save_data)
+icd10_generate_map_pccc_dx(save_data, verbose = TRUE)
 
 icd10_generate_map_pccc_pcs(save_data = TRUE)
 }

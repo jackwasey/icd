@@ -4,13 +4,18 @@
 using namespace Rcpp;
 
 // [[Rcpp::export(icd10_children_defined_rcpp)]]
-CV icd10ChildrenDefined(CV &x, List lookup, IntegerVector nc) {
+CV icd10ChildrenDefined(
+    CV &x,
+    List& lookup,
+    IntegerVector nc,
+    bool warn = true
+) {
   CV allCodes             = lookup["code"];
   IntegerVector matchesNa = match(x, allCodes);
   IntegerVector matches   = matchesNa[!is_na(matchesNa)]; // R indexing
   VecStr kids;
   if (matches.length() == 0) {
-    if (x.length() > 0)
+    if (warn && x.length() > 0)
       warning("None of the provided ICD-10 codes matched the lookup codes");
     return (CV(0));
   }

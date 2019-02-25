@@ -4,7 +4,8 @@
 \alias{icd9_parse_ahrq_ccs}
 \title{parse AHRQ CCS for mapping}
 \usage{
-icd9_parse_ahrq_ccs(single = TRUE, save_data = FALSE, offline = TRUE)
+icd9_parse_ahrq_ccs(single = TRUE, save_data = FALSE,
+  offline = getOption("icd.data.offline"))
 }
 \arguments{
 \item{single}{a logical value, if \code{TRUE} then use single level CCS,

@@ -162,6 +162,7 @@ icd10_generate_map_elix <- function(save_data = TRUE, verbose = FALSE) {
   )
   names(icd10_map_elix) <- icd::names_elix_htn_abbrev
   icd10_map_elix <- apply_over_icd10cm_vers(icd10_map_elix, verbose = verbose)
+  icd10_map_elix <- apply_over_icd10who_vers(icd10_map_elix, verbose = verbose)
   icd10_map_elix <- lapply(icd10_map_elix, as.short_diag)
   icd10_map_elix <- lapply(icd10_map_elix, as.icd10)
   icd10_map_elix <- as.comorbidity_map(icd10_map_elix)
@@ -334,6 +335,8 @@ icd10_generate_map_quan_elix <- function(save_data = TRUE, verbose = FALSE) {
   # see C43 in Tumor.
   icd10_map_quan_elix <- apply_over_icd10cm_vers(quan_elix_raw,
                                                  verbose = verbose)
+  icd10_map_quan_elix <- apply_over_icd10who_vers(icd10_map_quan_elix,
+                                                  verbose = verbose)
   icd10_map_quan_elix <- lapply(icd10_map_quan_elix, as.short_diag)
   icd10_map_quan_elix <- lapply(icd10_map_quan_elix, as.icd10)
   icd10_map_quan_elix <- as.comorbidity_map(icd10_map_quan_elix)
@@ -412,6 +415,8 @@ icd10_generate_map_quan_deyo <- function(save_data = TRUE, verbose = FALSE) {
   # size based on the input data before comorbidity matching.
   icd10_map_quan_deyo <- apply_over_icd10cm_vers(quan_charl_raw,
                                                  verbose = verbose)
+  icd10_map_quan_deyo <- apply_over_icd10who_vers(icd10_map_quan_deyo,
+                                                  verbose = verbose)
   icd10_map_quan_deyo <- lapply(icd10_map_quan_deyo, as.short_diag)
   icd10_map_quan_deyo <- lapply(icd10_map_quan_deyo, as.icd10)
   icd10_map_quan_deyo <- as.comorbidity_map(icd10_map_quan_deyo)
@@ -426,21 +431,62 @@ icd10_generate_map_quan_deyo <- function(save_data = TRUE, verbose = FALSE) {
 }
 #nocov end
 
+.apply_over_ver_worker <- function(
+  x,
+  f = children_defined.icd10cm,
+  ...
+) {
+  sort.icd10(
+    unique(c(f(x, short_code = TRUE, ...), x)))
+}
+
 apply_over_icd10cm_vers <- function(raw, verbose = FALSE) {
   set_active <- getExportedValue("icd.data", "set_icd10cm_active_ver")
-  old_active <- set_active(2014)
-  on.exit(set_active(old_active), add = TRUE)
-  f <- function(x) {
-    if (verbose)
-      message("f working on: ", paste(head(x), collapse = " "), "...")
-    sort.icd10(
-      unique(c(children_defined.icd10cm(x, short_code = TRUE), x)))
-  }
-  out <- lapply(raw, f)
-  for (yr in 2015:2019) {
-    if (verbose) message("Year/version = ", yr)
+  get_active <- getExportedValue("icd.data", "get_icd10cm_active_ver")
+  av <- get_active()
+  on.exit(set_active(av), add = TRUE)
+  out <- raw
+  for (yr in 2014:2019) {
     set_active(yr)
-    upd <- lapply(out, f)
+    upd <- lapply(out, .apply_over_ver_worker)
+    for (cmb in seq_along(out)) {
+      if (verbose) {
+        only_prev <- setdiff(out[[cmb]], upd[[cmb]])
+        only_this <- setdiff(upd[[cmb]], out[[cmb]])
+        if (length(only_prev)) {
+          if (verbose) message("Year/version = ", yr)
+          message("Only in previous for item ", cmb)
+          print(only_prev)
+        }
+        if (length(only_this)) {
+          if (verbose) message("Year/version = ", yr)
+          message("Only in current for item ", cmb)
+          print(only_this)
+        }
+      }
+      out[[cmb]] <- sort(union(out[[cmb]], upd[[cmb]]))
+    }
+  }
+  out
+}
+
+#' Augment map with codes that have ever appeared in available WHO versions of ICD-10
+#' @examples
+#' # Codes have been added and removed since 2008
+#' \dontrun{
+#' setdiff(icd.data::icd10who2016$code, icd.data::icd10who2008fr$code)
+#' setdiff(icd.data::icd10who2008fr$code, icd.data::icd10who2016$code)
+#' }
+#' @keywords internal
+#' @noRd
+apply_over_icd10who_vers <- function(raw, verbose) {
+  out <- raw
+  for (who_ver in c("icd10who2016", "icd10who2008fr")) {
+    message("Working on ", who_ver)
+    upd <- lapply(out,
+                  .apply_over_ver_worker,
+                  f = children_defined.icd10who,
+                  who_ver = who_ver)
     for (cmb in seq_along(out)) {
       if (verbose) {
         only_prev <- setdiff(out[[cmb]], upd[[cmb]])

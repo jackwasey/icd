@@ -174,11 +174,13 @@ children_defined.icd10cm <- function(x,
   as.icd10cm(kids, short_code)
 }
 
-#' @describeIn children_defined Internal function to get the children of
-#'   WHO ICD-10 code(s)
+#' @describeIn children_defined Internal function to get the children of WHO
+#'   ICD-10 code(s)
 #' @param warn single logical value, if \code{TRUE} will generate warnings when
 #'   some input codes are not known ICD-10-CM codes
 #' @param use_cpp single logical flag, whether to use C++ version
+#' @param who_ver Single character string of the name of the WHO ICD data to
+#'   use. Default is \code{icd10who2016}. Internal use only.
 #' @examples
 #' \dontrun{
 #' icd:::children_defined.icd10who("H16")
@@ -191,6 +193,7 @@ children_defined.icd10cm <- function(x,
 children_defined.icd10who <- function(
   x,
   short_code = guess_short(x),
+  who_ver = "icd10who2016",
   warn = FALSE
 ) {
   req_icd_data()
@@ -201,7 +204,8 @@ children_defined.icd10who <- function(
   x <- toupper(x)
   if (!short_code)
     x <- decimal_to_short.icd10cm(x)
-  d <- get_from_icd_data("icd10who2016")
-  kids <- icd10_children_defined_rcpp(x, d, nchar(d$code))
+  d <- get_from_icd_data(who_ver)
+  # TODO: cache nchar call, like with ICD-10-CM
+  kids <- icd10_children_defined_rcpp(x, d, nchar(d$code), warn = warn)
   as.icd10who(kids, short_code = short_code)
 }

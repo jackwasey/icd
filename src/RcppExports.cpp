@@ -77,15 +77,16 @@ BEGIN_RCPP
 END_RCPP
 }
 // icd10ChildrenDefined
-CV icd10ChildrenDefined(CV& x, List lookup, IntegerVector nc);
-RcppExport SEXP _icd_icd10ChildrenDefined(SEXP xSEXP, SEXP lookupSEXP, SEXP ncSEXP) {
+CV icd10ChildrenDefined(CV& x, List& lookup, IntegerVector nc, bool warn);
+RcppExport SEXP _icd_icd10ChildrenDefined(SEXP xSEXP, SEXP lookupSEXP, SEXP ncSEXP, SEXP warnSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< CV& >::type x(xSEXP);
-    Rcpp::traits::input_parameter< List >::type lookup(lookupSEXP);
+    Rcpp::traits::input_parameter< List& >::type lookup(lookupSEXP);
     Rcpp::traits::input_parameter< IntegerVector >::type nc(ncSEXP);
-    rcpp_result_gen = Rcpp::wrap(icd10ChildrenDefined(x, lookup, nc));
+    Rcpp::traits::input_parameter< bool >::type warn(warnSEXP);
+    rcpp_result_gen = Rcpp::wrap(icd10ChildrenDefined(x, lookup, nc, warn));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -608,7 +609,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_icd_setDecimalDiag", (DL_FUNC) &_icd_setDecimalDiag, 2},
     {"_icd_setShortDiag", (DL_FUNC) &_icd_setShortDiag, 2},
     {"_icd_categorize_rcpp", (DL_FUNC) &_icd_categorize_rcpp, 0},
-    {"_icd_icd10ChildrenDefined", (DL_FUNC) &_icd_icd10ChildrenDefined, 3},
+    {"_icd_icd10ChildrenDefined", (DL_FUNC) &_icd_icd10ChildrenDefined, 4},
     {"_icd_simplifyMapLexicographic", (DL_FUNC) &_icd_simplifyMapLexicographic, 2},
     {"_icd_comorbidMatMulWide", (DL_FUNC) &_icd_comorbidMatMulWide, 5},
     {"_icd_icd9PartsToShort", (DL_FUNC) &_icd_icd9PartsToShort, 1},
