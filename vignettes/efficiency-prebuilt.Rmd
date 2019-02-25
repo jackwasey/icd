@@ -178,7 +178,7 @@ my_kable(termdf, col.names = c("Term", "Description"),
 Almost every report of a medical investigation includes a table showing the characteristics of the groups comprising a study population. (For example, see Table 2 in @frank_risk-adjusted_2014.) One purpose of this table is to show any differences between the groups under investigation. Things like age and weight can be compared numerically, whereas the tens of thousands of distinct diagnostic codes may only be compared by grouping into comorbidities. It is of central importance to retrospective studies that confounding is minimized by understanding differences in comorbidities between groups, then by risk adjustment. In randomized studies, this is achieved by recruiting enough patients and randomly assigning them to treatment: comorbidities of interest are still needed to demonstrate that recruitment was free from bias and that the sample size was large enough. It is helpful if different studies use the same criteria, and ideally the same methods, for establishing these comorbidities. One main purpose of \pkg{icd} is to enable standardized calculations in \proglang{R} using extremely well validated definitions of comorbidities, e.g., @quan_updating_2011 and @AgencyforHealthcareResearchandQuality_Elixhausercomorbiditysoftware_2018 only offer \proglang{SAS} code for this task.
 
 ### Risk adjustment
-Identifying differences between groups in retrospective medical data is not hard: they almost always exist. The eternal challenge of retrospective research is to account for those differences to make causal inferences. A common, somewhat historic strategy is to use scoring systems to encapsulate the severity of the comorbidities in one number, for example the Charlson Score [@charlson_new_1987]. Another approach is to use propensity scores or propensity matching: the inputs to propensity models include comorbidity information, which is a simple score like the Charlson Score, or a binary representation of the presence or absence of comorbidities for each patient or patient-visit (See [Terminology](#terminology)). More sophisticated matching also relies on comorbidities for better risk adjustment, \citep[e.g.,][]{diamond_genetic_2012}.
+Identifying differences between groups in retrospective medical data is not hard: they almost always exist. The eternal challenge of retrospective research is to account for those differences to make causal inferences. A common, somewhat historic strategy is to use scoring systems to encapsulate the severity of the comorbidities in one number, for example the Charlson Score [@charlson_new_1987]. Another approach is to use propensity scores or propensity matching: the inputs to propensity models include comorbidity information, which is a simple score like the Charlson Score, or a binary representation of the presence or absence of comorbidities for each patient or patient-visit (see terminology in Table \ref{tab:terminology}. More sophisticated matching also relies on comorbidities for better risk adjustment, \citep[e.g.,][]{diamond_genetic_2012}.
 
 ## Mapping ICD codes onto comorbidities
 The ubiquity of ICD codes means there is a long history of grouping them to form comorbidities, and these standardized groups have been used for decades as the basis for medical studies. As revisions of the ICD codes have appeared, and various diseases have waxed and waned in significance, people have worked to categorize them into these standardized comorbidity groups. The two main groups were developed by Charlson [@charlson_new_1987], and Elixhauser [@elixhauser_comorbidity_1998]. Such mappings between comorbidity categories and sets of diagnostic codes will henceforth be called, comorbidity maps. The benefits of using existing comorbidity maps are:
@@ -225,7 +225,7 @@ explain_code("100")
 
 ### Breakdown of an ICD-10 code
 
-This is a breakdown of an ICD-10-CM code, chosen to illustrate the hierarchical nature of the codes, and difference between WHO ICD-10 and ICD-10-CM. The following two codes are shared by the WHO definitions and ICD-10-CM.[^libraryicd]
+Let us breakdown a single ICD-10-CM code, chosen to illustrate the hierarchical nature of the codes, and to show difference between WHO ICD-10 and ICD-10-CM. The following two codes are shared by the WHO definitions and ICD-10-CM.[^libraryicd]
 ```{r exampleicdcodewho}
 explain_code(c("S62", "S62.6"))
 ```
@@ -235,7 +235,7 @@ These three are refinements offered only by ICD-10-CM:
 ```{r exampleicdcodecm}
 explain_code(c("S62.60", "S62.607", "S62.607S"))
 ```
-These codes are all contained in the sub-chapter, `Injuries To The Wrist, Hand And Fingers,` (S60 to S69) and the chapter `Injury, poisoning and certain other consequences of external causes.` (S00 to T88). 
+These codes are all contained in the sub-chapter, `Injuries To The Wrist, Hand And Fingers,` (S60 -- S69) and the chapter `Injury, poisoning and certain other consequences of external causes.` (S00 -- T88). 
 
 [^libraryicd]: Here the \pkg{icd} function `explain_code` is used. More detail on this can be found in Section \ref{other-functionality}.
 
@@ -303,6 +303,8 @@ Big data solutions cannot often be solved simply by increasing hardware capacity
 
 ## User-facing
 
+The following features are made available to end-users, via exported functions:
+
 - Comorbidity computations
     - compute comorbidities based on ICD-9 or ICD-10 codes
     - offer a framework for comorbidity computations based on other medical codes
@@ -322,6 +324,8 @@ Big data solutions cannot often be solved simply by increasing hardware capacity
 [^crosswalk]: \pkg{icd} does not yet convert (also known as 'cross-walk') between ICD-9-CM and ICD-10-CM.
 
 ## Internal
+
+'icd' has some important internal design choices made to make it faithful to the intention of the original comorbidity map authors, accurate, and fast, even with big datasets.
 
 - ICD and comorbidity map data is extracted directly from published sources (journal articles and, where available, \proglang{SAS} code) in a reproducible and verifiable manner
 - \proglang{C} and \proglang{C++} code and accelerated matrix algebra to give accurate results quickly with big data
@@ -349,7 +353,7 @@ Note that these codes are of `icd10` and `character` class, and that they carry 
 
 ## Algorithm for comorbidity computation
 
-The main internal feature of this software is the algorithm for assigning the diagnostic codes of a patient into comorbidities. The core of this implementation is a matrix multiplication, but this is only possible with some pre-processing.
+The main internal feature of this software is the algorithm for assigning the diagnostic codes of a patient into comorbidities. The core of this implementation is a matrix multiplication, but this is only possible with careful pre-processing.
 
 ### Step 1 {#algostep1}
 <!-- label{itm:dataprep} -->
@@ -740,11 +744,11 @@ xmin = 10
 
 ## Derivation of the comorbidity maps
 
-It is important to have a reproducible audit trail for foundational work, so \pkg{icd} contains code which parses \proglang{SAS} source code in order to derive the original intent of the author in how the comorbidity maps were implemented. The AHRQ and \citeauthor{quan_updating_2011} provide such \proglang{SAS} source code, whereas other maps are only available in the form of tabulated data in journal articles.
+It is important to have a reproducible audit trail for foundational work, so \pkg{icd} contains code which parses \proglang{SAS} source code in order to derive the original intent of the author in how the comorbidity maps were implemented. The AHRQ and \cite{quan_updating_2011} provide such \proglang{SAS} source code, whereas other maps are only available in the form of tabulated data in journal articles.
 
 ### Parsing original SAS code
 
-For example, \citeauthor{quan_updating_2011} offer the following code for pulmonary disease in the ICD-9 Charlson map. The lines split for clarity.
+For example, \cite{quan_updating_2011} offer the following code for pulmonary disease in the ICD-9 Charlson map:
 
 ```
 %LET DC6=%STR('4168','4169',
