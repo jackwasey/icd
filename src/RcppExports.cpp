@@ -77,15 +77,15 @@ BEGIN_RCPP
 END_RCPP
 }
 // icd10ChildrenDefined
-CV icd10ChildrenDefined(CV& x, List& lookup, IntegerVector nc, bool warn);
+CV icd10ChildrenDefined(const CV& x, const List& lookup, const IntegerVector nc, const bool warn);
 RcppExport SEXP _icd_icd10ChildrenDefined(SEXP xSEXP, SEXP lookupSEXP, SEXP ncSEXP, SEXP warnSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< CV& >::type x(xSEXP);
-    Rcpp::traits::input_parameter< List& >::type lookup(lookupSEXP);
-    Rcpp::traits::input_parameter< IntegerVector >::type nc(ncSEXP);
-    Rcpp::traits::input_parameter< bool >::type warn(warnSEXP);
+    Rcpp::traits::input_parameter< const CV& >::type x(xSEXP);
+    Rcpp::traits::input_parameter< const List& >::type lookup(lookupSEXP);
+    Rcpp::traits::input_parameter< const IntegerVector >::type nc(ncSEXP);
+    Rcpp::traits::input_parameter< const bool >::type warn(warnSEXP);
     rcpp_result_gen = Rcpp::wrap(icd10ChildrenDefined(x, lookup, nc, warn));
     return rcpp_result_gen;
 END_RCPP

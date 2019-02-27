@@ -161,10 +161,13 @@ icd10_generate_map_elix <- function(save_data = TRUE, verbose = FALSE) {
                    "F412", "F432")
   )
   names(icd10_map_elix) <- icd::names_elix_htn_abbrev
-  icd10_map_elix <- apply_over_icd10cm_vers(icd10_map_elix, verbose = verbose)
   icd10_map_elix <- apply_over_icd10who_vers(icd10_map_elix, verbose = verbose)
+  icd10_map_elix <- apply_over_icd10cm_vers(icd10_map_elix, verbose = verbose)
+  if (verbose) message("applied ICD-10-CM and WHO versions")
   icd10_map_elix <- lapply(icd10_map_elix, as.short_diag)
+  if (verbose) message("applied as.short_diag")
   icd10_map_elix <- lapply(icd10_map_elix, as.icd10)
+  if (verbose) message("applied as.icd10")
   icd10_map_elix <- as.comorbidity_map(icd10_map_elix)
   if (save_data)
     save_in_data_dir(icd10_map_elix)
@@ -436,8 +439,8 @@ icd10_generate_map_quan_deyo <- function(save_data = TRUE, verbose = FALSE) {
   f = children_defined.icd10cm,
   ...
 ) {
-  sort.icd10(
-    unique(c(f(x, short_code = TRUE, ...), x)))
+  y <- f(x, short_code = TRUE, ...)
+  unclass(c(x, y))
 }
 
 apply_over_icd10cm_vers <- function(raw, verbose = FALSE) {
@@ -448,7 +451,10 @@ apply_over_icd10cm_vers <- function(raw, verbose = FALSE) {
   out <- raw
   for (yr in 2014:2019) {
     set_active(yr)
-    upd <- lapply(out, .apply_over_ver_worker)
+    upd <- sapply(out,
+                  FUN = .apply_over_ver_worker,
+                  simplify = FALSE,
+                  USE.NAMES = TRUE)
     for (cmb in seq_along(out)) {
       if (verbose) {
         only_prev <- setdiff(out[[cmb]], upd[[cmb]])
@@ -482,7 +488,7 @@ apply_over_icd10cm_vers <- function(raw, verbose = FALSE) {
 apply_over_icd10who_vers <- function(raw, verbose) {
   out <- raw
   for (who_ver in c("icd10who2016", "icd10who2008fr")) {
-    message("Working on ", who_ver)
+    if (verbose) message("Working on ", who_ver)
     upd <- lapply(out,
                   .apply_over_ver_worker,
                   f = children_defined.icd10who,
@@ -500,7 +506,7 @@ apply_over_icd10who_vers <- function(raw, verbose) {
           print(only_this)
         }
       }
-      out[[cmb]] <- sort(union(out[[cmb]], upd[[cmb]]))
+      out[[cmb]] <- sort(unique(union(out[[cmb]], upd[[cmb]])))
     }
   }
   out

@@ -13,8 +13,8 @@ is defined as the lowest-level grouping of three-digit codes, e.g. C00-C14
 neoplasms" which itself is a subset of the chapter C00-D49 "Neoplasms"
 }
 \details{
-Format:  list with sub-chapter or major names stored in list names, each with
-two element named character vector with start and end codes.
+Format: list with sub-chapter or major names stored in list names,
+each with two element named character vector with start and end codes.
 }
 \seealso{
 \code{\link[icd.data]{ls_icd_data}}

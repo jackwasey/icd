@@ -204,8 +204,13 @@ children_defined.icd10who <- function(
   x <- toupper(x)
   if (!short_code)
     x <- decimal_to_short.icd10cm(x)
-  d <- get_from_icd_data(who_ver)
+  d <- if (who_ver == "icd10fr2008")
+    get_from_icd_data("get_icd10who2008fr")()
+  else
+    get_from_icd_data("get_icd10who2016")()
+  stopifnot(!is.null(d))
+  stopifnot(!is.null(d[["code"]]))
   # TODO: cache nchar call, like with ICD-10-CM
-  kids <- icd10_children_defined_rcpp(x, d, nchar(d$code), warn = warn)
+  kids <- icd10_children_defined_rcpp(x, d, nchar(d[["code"]]), warn = warn)
   as.icd10who(kids, short_code = short_code)
 }

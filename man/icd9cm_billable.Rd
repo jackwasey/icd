@@ -16,9 +16,9 @@ efforts, current locale can give different results, but this packaged data is
 correct, with some \code{UTF-8} encoded strings.
 }
 \details{
-Format:  list of data frames. Each list item is named by the version as a
-string, e.g. "32". The constituent data frames have columns \code{icd9},
-\code{shortDesc}, and \code{longDesc}.
+Format:  list of data frames. Each list item is named by the version
+as a string, e.g. "32". The constituent data frames have columns
+\code{icd9}, \code{shortDesc}, and \code{longDesc}.
 }
 \seealso{
 \code{\link[icd.data]{ls_icd_data}}
