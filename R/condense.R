@@ -88,8 +88,11 @@ icd9_condense_decimal <- function(x, defined = NULL, warn = TRUE,
 #'   \code{TRUE}, will reuse the factor levels from the input data for the
 #'   output data. This only applies if a factor is given for the input codes.
 #' @keywords internal manip
-icd9_condense_short <- function(x, defined = NULL, warn = TRUE,
-                                keep_factor_levels = FALSE) {
+icd9_condense_short <- function(x,
+                                defined = NULL,
+                                warn = TRUE,
+                                keep_factor_levels = FALSE
+) {
   stopifnot(is.null(defined) ||
               (is.logical(defined) && length(defined) == 1L))
   assert_flag(warn)
@@ -103,7 +106,8 @@ icd9_condense_short <- function(x, defined = NULL, warn = TRUE,
   if (is.null(defined)) {
     if (all(is_defined.icd9(i9w, short_code = TRUE))) {
       defined <- TRUE
-      message("'defined' not given, but all codes are indeed defined")
+      if (warn)
+        message("'defined' not given, but all codes are indeed defined")
     } else {
       defined <- FALSE
       if (warn)

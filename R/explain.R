@@ -56,11 +56,18 @@ explain_code.default <- function(
   ...
 ) {
   switch(
-    guess_version.character(as_char_no_warn(x), short_code = short_code),
-    "icd9" = explain_code.icd9(x, short_code = short_code, condense = condense,
-                               brief = brief, warn = warn, ...),
-    "icd10" = explain_code.icd10(x, short_code = short_code,
-                                 brief = brief, ...),
+    guess_version.character(as_char_no_warn(x),
+                            short_code = short_code),
+    "icd9" = explain_code.icd9(x,
+                               short_code = short_code,
+                               condense = condense,
+                               brief = brief,
+                               warn = warn,
+                               ...),
+    "icd10" = explain_code.icd10(x,
+                                 short_code = short_code,
+                                 brief = brief,
+                                 ...),
     stop("Unknown ICD version.")
   )
 }
