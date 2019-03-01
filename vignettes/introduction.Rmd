@@ -349,22 +349,6 @@ The ICD-9-CM scheme is structured as follows:
  
  For most combinations of zero to nine, nothing is defined. Sometimes, nodes at one level in the hierarchy are descriptive only of their children (branch nodes), whereas some are themselves billable.
 
-### Which ICD-9 codes have changed between versions of ICD-9
-```{r "compare ICD-9 versions"}
-new_since_27 <- setdiff(icd9cm_billable[["32"]][["code"]],
-                         icd9cm_billable[["27"]][["code"]]) %>% head
-lost_since_27 <- setdiff(icd9cm_billable[["27"]][["code"]],
-                         icd9cm_billable[["32"]][["code"]]) %>% tail
-# we know this is an ICD-9-CM code, so declare this using nice magrittr motif:
-lost_since_27 %<>% as.icd9cm
-lost_since_27 %<>% as.icd9cm
-
-# these are a few which were gained since v27
-data.frame(code = new_since_27, desc = new_since_27 %>% explain_code)
-# these are a few which were lost since v27
-data.frame(code = lost_since_27, desc = lost_since_27 %>% explain_code)
-```
-
 ## Conclusion
 
 This package allows fluid, fast and accurate manipulation of ICD-9 and ICD-10 codes, especially when combined with [magrittr](https://cran.r-project.org/package=magrittr). Suggestions, contributions and comments are welcome via [github](https://github.com/jackwasey/icd/issues).
