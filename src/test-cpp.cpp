@@ -445,7 +445,7 @@ context("compare/sort/order ICD-10-CM") {
     CharacterVector c = {"Z99", "C76", "C7A", "C7B", "C75", "A00"};
     IntegerVector i   = {6, 5, 3, 4, 2, 1};
     auto o            = icd10cmOrder(c);
-    bool res          = is_true(all(o == i));
+    bool res;
     for (auto n = 0; n != c.size() && n != i.size(); ++n) {
       String s = c[n];
       expect_true(o[n] == i[n]);
