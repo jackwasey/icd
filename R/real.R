@@ -31,8 +31,6 @@ is_defined.icd9 <- function(x, short_code = guess_short(x),
 }
 
 #' @describeIn is_defined Same for ICD-10-CM
-#' @param nomatch integer value, passed to \code{match} default is 0. Setting
-#'   this to \code{NA_integer_} would stop NA values being treated as undefined.
 #' @param leaf New synonym for 'billable', which will be deprecated.
 #' @export
 #' @keywords internal
@@ -41,7 +39,6 @@ is_defined.icd10cm <- function(
   short_code = guess_short(x),
   billable = FALSE,
   leaf = billable,
-  nomatch = 0L,
   ...
 ) {
   stopifnot(is.factor(x) || is.character(x))
@@ -53,7 +50,7 @@ is_defined.icd10cm <- function(
   else
     match(x,
           i[["code"]],
-          nomatch = nomatch, ...) > 0L
+          nomatch = 0L, ...) > 0L
 }
 
 #' @describeIn is_defined Same for ICD-10, temporarily using ICD-10-CM until
@@ -127,10 +124,6 @@ get_defined.icd9 <- function(
 #' billable codes, or another edition if specified.
 #' @param x input vector to test
 #' @template short_code
-#' @param icd9cm_edition single character string, default is "32" which is the
-#'   latest release from CMS. Currently anything from "23" to "32" is accepted.
-#'   Not numeric because there are possible cases with non-numeric names, e.g.
-#'   revisions within one year, although none currently implemented.
 #' @template dotdotdot
 #' @return logical vector of same length as input
 #' @export
@@ -145,7 +138,6 @@ is_leaf <- function(x, short_code = guess_short(x), ...) {
 is_leaf.icd9 <- function(
   x,
   short_code = guess_short(x),
-  icd9cm_edition = icd9cm_latest_edition(),
   ...
 ) {
   is_leaf.icd9cm(x = x,
@@ -183,23 +175,24 @@ is_leaf.icd10 <- function(
 
 #' @describeIn is_leaf Which of the given ICD-9 codes are leaf nodes in
 #'   ICD-9-CM
-#' @param nomatch integer value, passed to \code{match} default is 0.
 #' @export
 #' @keywords internal
 is_leaf.icd9cm <- function(
   x,
   short_code = guess_short(x),
-  icd9cm_edition = icd9cm_latest_edition(),
-  nomatch = 0L,
   ...
 ) {
   stopifnot(is.atomic(x), is.logical(short_code))
-  stopifnot(is.character(icd9cm_edition), length(icd9cm_edition) == 1L)
-  stopifnot(is.integer(nomatch))
   if (!short_code)
     x <- decimal_to_short.icd9(x)
-  match(x, icd.data::icd9cm_billable[[icd9cm_edition]][["code"]],
-        nomatch = nomatch, ...) > 0L
+  m <- match(x,
+             icd.data::icd9cm_hierarchy$code,
+             nomatch = NA_integer_,
+             ...)
+  res <- rep_len(FALSE, length(x))
+  not_na <- !is.na(m)
+  res[not_na] <- icd.data::icd9cm_hierarchy[m[not_na], "billable"]
+  res
 }
 
 #' @describeIn is_leaf Which of the given ICD codes are leaf nodes in
@@ -223,8 +216,6 @@ is_leaf.default <- function(x, short_code = guess_short(x), ...) {
 #' @param x input vector of ICD codes
 #' @template short_code
 #' @template invert
-#' @param icd9cm_edition e.g. "32", not ICD-9 vs ICD-10
-#'   currently just the year of release.
 #' @template dotdotdot
 #' @export
 get_leaf <- function(...) {
@@ -251,16 +242,11 @@ get_leaf.icd9cm <- function(
   x,
   short_code = guess_short(x),
   invert = FALSE,
-  icd9cm_edition = icd9cm_latest_edition(),
   ...
 ) {
   stopifnot(is.atomic(x), is.logical(short_code), is.logical(invert))
-  stopifnot(is.character(icd9cm_edition), length(icd9cm_edition) == 1L)
   x <- as.short_diag(as.icd9cm(x), short_code)
-  x[is_leaf.icd9cm(x,
-                   short_code = short_code,
-                   icd9cm_edition = icd9cm_edition
-  ) != invert]
+  x[is_leaf.icd9cm(x, short_code = short_code) != invert]
 }
 
 #' @describeIn get_leaf Get billable ICD-9 codes, which is currently

@@ -333,17 +333,6 @@ guess_icd_col_by_class <- function(x, pattern) {
   NULL
 }
 
-#' Latest ICD-9-CM edition
-#'
-#' Returns a single character value with the number of the latest edition,
-#' currently \strong{32}.
-#'
-#' Implemented as a function to give flexibility to calculate this, or use an
-#' option override. Duplicated in \code{icd.data} package.
-#'
-#' @keywords internal
-icd9cm_latest_edition <- function() "32"
-
 na_to_false <- function(x) {
   stopifnot(is.logical(x))
   x[is.na(x)] <- FALSE

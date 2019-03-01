@@ -282,24 +282,3 @@ NULL
 #' @inherit icd.data::icd10_sub_chapters
 #' @seealso \code{\link[icd.data]{ls_icd_data}}
 NULL
-
-#' @name icd9cm_hierarchy
-#' @docType data
-#' @keywords datasets
-#' @inherit icd.data::icd9cm_hierarchy
-#' @seealso \code{\link[icd.data]{ls_icd_data}}
-NULL
-
-#' @name icd10cm2016
-#' @docType data
-#' @keywords datasets
-#' @inherit icd.data::icd10cm2016
-#' @seealso \code{\link[icd.data]{ls_icd_data}}
-NULL
-
-#' @name icd9cm_billable
-#' @docType data
-#' @keywords datasets
-#' @inherit icd.data::icd9cm_billable
-#' @seealso \code{\link[icd.data]{ls_icd_data}}
-NULL
