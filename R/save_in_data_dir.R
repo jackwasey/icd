@@ -1,4 +1,4 @@
-#nocov start
+# nocov start
 
 #' Save given variable in package data directory
 #'
@@ -20,18 +20,23 @@
 save_in_data_dir <- function(var_name, suffix = "", data_path = "data",
                              package_dir = getwd(), envir = parent.frame()) {
   stopifnot(is.character(suffix), is.character(data_path))
-  if (!is.character(var_name))
+  if (!is.character(var_name)) {
     var_name <- as.character(substitute(var_name))
+  }
   stopifnot(exists(var_name, envir = envir))
   assert_string(var_name)
   stopifnot(exists(var_name, envir = envir))
-  save(list = var_name,
-       envir = envir,
-       file = file.path(package_dir, data_path,
-                        strip(paste0(var_name, suffix, ".RData"))),
-       compress = "xz")
+  save(
+    list = var_name,
+    envir = envir,
+    file = file.path(
+      package_dir, data_path,
+      strip(paste0(var_name, suffix, ".RData"))
+    ),
+    compress = "xz"
+  )
   message("Now reload package to enable updated/new data: ", var_name)
   invisible(get(var_name, envir = envir))
 }
 
-#nocov end
+# nocov end

@@ -1,25 +1,33 @@
 # nocov start
 
-ahrq_htn <- c("HTNCX", "HTNPREG", "OHTNPREG", "HTNWOCHF", "HTNWCHF", "HRENWORF",
-              "HRENWRF", "HHRWOHRF", "HHRWCHF", "HHRWRF", "HHRWHRF")
+ahrq_htn <- c(
+  "HTNCX", "HTNPREG", "OHTNPREG", "HTNWOCHF", "HTNWCHF", "HRENWORF",
+  "HRENWRF", "HHRWOHRF", "HHRWCHF", "HHRWRF", "HHRWHRF"
+)
 ahrq_chf <- c("CHF", "HTNWCHF", "HHRWCHF", "HHRWHRF")
 ahrq_renal <- c("RENLFAIL", "HRENWRF", "HHRWRF", "HHRWHRF")
-ahrq_unused <- c("HTNPREG", "OHTNPREG", "HTNWOCHF", "HTNWCHF", "HRENWORF",
-                 "HRENWRF", "HHRWOHRF", "HHRWCHF", "HHRWRF", "HHRWHRF")
+ahrq_unused <- c(
+  "HTNPREG", "OHTNPREG", "HTNWOCHF", "HTNWCHF", "HRENWORF",
+  "HRENWRF", "HHRWOHRF", "HHRWCHF", "HHRWRF", "HHRWHRF"
+)
 
-ahrq_order <- c("CHF", "VALVE", "PULMCIRC", "PERIVASC", "HTN", "HTNCX", "PARA",
-                "NEURO", "CHRNLUNG", "DM", "DMCX", "HYPOTHY", "RENLFAIL",
-                "LIVER", "ULCER", "AIDS", "LYMPH", "METS", "TUMOR", "ARTH",
-                "COAG", "OBESE", "WGHTLOSS", "LYTES", "BLDLOSS", "ANEMDEF",
-                "ALCOHOL", "DRUG", "PSYCH", "DEPRESS")
+ahrq_order <- c(
+  "CHF", "VALVE", "PULMCIRC", "PERIVASC", "HTN", "HTNCX", "PARA",
+  "NEURO", "CHRNLUNG", "DM", "DMCX", "HYPOTHY", "RENLFAIL",
+  "LIVER", "ULCER", "AIDS", "LYMPH", "METS", "TUMOR", "ARTH",
+  "COAG", "OBESE", "WGHTLOSS", "LYTES", "BLDLOSS", "ANEMDEF",
+  "ALCOHOL", "DRUG", "PSYCH", "DEPRESS"
+)
 
-ahrq_order_all <- c("CHF", "VALVE", "PULMCIRC", "PERIVASC", "HTN", "HTNCX",
-                    "HTNPREG", "HTNWOCHF", "HTNWCHF", "HRENWORF", "HRENWRF",
-                    "HHRWOHRF", "HHRWCHF", "HHRWRF", "HHRWHRF", "OHTNPREG",
-                    "PARA", "NEURO", "CHRNLUNG", "DM", "DMCX", "HYPOTHY",
-                    "RENLFAIL", "LIVER", "ULCER", "AIDS", "LYMPH", "METS",
-                    "TUMOR", "ARTH", "COAG", "OBESE", "WGHTLOSS", "LYTES",
-                    "BLDLOSS", "ANEMDEF", "ALCOHOL", "DRUG", "PSYCH", "DEPRESS")
+ahrq_order_all <- c(
+  "CHF", "VALVE", "PULMCIRC", "PERIVASC", "HTN", "HTNCX",
+  "HTNPREG", "HTNWOCHF", "HTNWCHF", "HRENWORF", "HRENWRF",
+  "HHRWOHRF", "HHRWCHF", "HHRWRF", "HHRWHRF", "OHTNPREG",
+  "PARA", "NEURO", "CHRNLUNG", "DM", "DMCX", "HYPOTHY",
+  "RENLFAIL", "LIVER", "ULCER", "AIDS", "LYMPH", "METS",
+  "TUMOR", "ARTH", "COAG", "OBESE", "WGHTLOSS", "LYTES",
+  "BLDLOSS", "ANEMDEF", "ALCOHOL", "DRUG", "PSYCH", "DEPRESS"
+)
 
 
 .ahrq_url_base <- "http://www.hcup-us.ahrq.gov/toolssoftware/"
@@ -32,13 +40,15 @@ ahrq_order_all <- c("CHF", "VALVE", "PULMCIRC", "PERIVASC", "HTN", "HTNCX",
 icd9_fetch_ahrq_sas <- function(offline) {
   download_to_data_raw(
     url = paste0(.ahrq_url_base, "comorbidity/comformat2012-2013.txt"),
-    offline = offline)
+    offline = offline
+  )
 }
 
 icd10_fetch_ahrq_sas <- function(offline) {
   download_to_data_raw(
     url = paste0(.ahrq_url_base, "comorbidityicd10/comformat_icd10cm_2016.txt"),
-    offline = offline)
+    offline = offline
+  )
 }
 
 #' parse AHRQ SAS code to get mapping
@@ -62,9 +72,12 @@ icd9_parse_ahrq_sas <- function(save_data = FALSE, offline = TRUE) {
     # non-range values (and their children) just go on list
     unpaired_items <- vapply(some_pairs, length, integer(1)) == 1
     out <- c()
-    if (any(unpaired_items))
-      out <- children.icd9(unlist(some_pairs[unpaired_items]), defined = FALSE,
-                           short_code = TRUE)
+    if (any(unpaired_items)) {
+      out <- children.icd9(unlist(some_pairs[unpaired_items]),
+        defined = FALSE,
+        short_code = TRUE
+      )
+    }
     the_pairs <- some_pairs[lapply(some_pairs, length) == 2]
     out <- c(out, lapply(the_pairs, function(x) sas_expand_range(x[1], x[2])))
     # update icd9_map_ahrq with full range of icd9 codes:
@@ -90,8 +103,10 @@ icd9_parse_ahrq_sas <- function(save_data = FALSE, offline = TRUE) {
   # the parent
   for (cmb in names(icd9_map_ahrq)) {
     message("working on ranges for: ", cmb)
-    parents <- condense.icd9(icd9_map_ahrq[[cmb]], defined = FALSE,
-                                 short_code = TRUE)
+    parents <- condense.icd9(icd9_map_ahrq[[cmb]],
+      defined = FALSE,
+      short_code = TRUE
+    )
     for (p in parents) {
       kids <- children.icd9(p, defined = FALSE, short_code = TRUE)
       kids <- kids[-which(kids == p)] # don't include parent in test
@@ -101,14 +116,20 @@ icd9_parse_ahrq_sas <- function(save_data = FALSE, offline = TRUE) {
             as.icd9(
               sort.icd9(
                 unique(
-                  c(icd9_map_ahrq[[cmb]], p)), short_code = TRUE)))
+                  c(icd9_map_ahrq[[cmb]], p)
+                ),
+                short_code = TRUE
+              )
+            )
+          )
       }
     }
   }
   names(icd9_map_ahrq) <- icd::names_ahrq_htn_abbrev
   icd9_map_ahrq <- comorbidity_map(icd9_map_ahrq)
-  if (save_data)
+  if (save_data) {
     save_in_data_dir("icd9_map_ahrq")
+  }
   invisible(icd9_map_ahrq)
 }
 
@@ -130,8 +151,9 @@ icd10_parse_ahrq_sas <- function(save_data = FALSE, offline = TRUE) {
   icd10_map_ahrq <- lapply(icd10_map_ahrq, as.short_diag)
   icd10_map_ahrq <- lapply(icd10_map_ahrq, as.icd10)
   icd10_map_ahrq <- comorbidity_map(icd10_map_ahrq)
-  if (save_data)
+  if (save_data) {
     save_in_data_dir("icd10_map_ahrq")
+  }
   invisible(icd10_map_ahrq)
 }
 
@@ -140,7 +162,8 @@ icd9_fetch_quan_deyo_sas <- function(...) {
   download_to_data_raw(
     url =
       "http://mchp-appserv.cpe.umanitoba.ca/concept/ICD9_E_Charlson.sas.txt",
-    file_name = "ICD9_E_Charlson.sas", ...)
+    file_name = "ICD9_E_Charlson.sas", ...
+  )
 }
 
 #' parse original SAS code defining Quan's update of Deyo comorbidities.
@@ -169,12 +192,15 @@ icd9_parse_quan_deyo_sas <- function(save_data = FALSE, offline = TRUE) {
   f_info <- icd9_fetch_quan_deyo_sas(offline = offline)
   quan_sas_lines <- readLines(f_info$file_path, warn = FALSE)
   let_statements <- sas_extract_let_strings(quan_sas_lines)
-  icd9_map_quan_deyo <- let_statements[grepl("DC[[:digit:]]+",
-                                             names(let_statements))]
+  icd9_map_quan_deyo <- let_statements[grepl(
+    "DC[[:digit:]]+",
+    names(let_statements)
+  )]
   # use validation: takes time, but these are run-once per package creation (and
   # test) tasks.
   icd9_map_quan_deyo <- lapply(icd9_map_quan_deyo, children.icd9,
-                               short_code = TRUE, defined = FALSE)
+    short_code = TRUE, defined = FALSE
+  )
   # do use icd:: to refer to a lazy-loaded dataset which is obscurely within
   # the package, but not in its namespace, or something...
   names(icd9_map_quan_deyo) <- icd::names_charlson_abbrev
@@ -189,23 +215,32 @@ icd9_parse_quan_deyo_sas <- function(save_data = FALSE, offline = TRUE) {
 }
 
 # mostly duplicated from icd.data, just saving the map here
-icd10_parse_ahrq_pcs <- function(save_data = FALSE) {
+icd10_parse_ahrq_pcs <- function(save_data = TRUE) {
   f <- unzip_to_data_raw(
-    url = paste0("https://www.hcup-us.ahrq.gov/toolssoftware/",
-                 "procedureicd10/pc_icd10pcs_2018_1.zip"),
-    file_name = "pc_icd10pcs_2018.csv", offline = !save_data)
-  dat <- read.csv(file = f$file_path, skip = 1, stringsAsFactors = FALSE,
-                  colClasses = "character", encoding = "latin1")
+    url = paste0(
+      "https://www.hcup-us.ahrq.gov/toolssoftware/",
+      "procedureicd10/pc_icd10pcs_2018_1.zip"
+    ),
+    file_name = "pc_icd10pcs_2018.csv", offline = !save_data
+  )
+  dat <- read.csv(
+    file = f$file_path, skip = 1, stringsAsFactors = FALSE,
+    colClasses = "character", encoding = "latin1"
+  )
   names(dat) <- c("code", "desc", "class_number", "class")
   dat$class <- factor(dat$class,
-                      levels = c("Minor Diagnostic",
-                                 "Minor Therapeutic",
-                                 "Major Diagnostic",
-                                 "Major Therapeutic"))
+    levels = c(
+      "Minor Diagnostic",
+      "Minor Therapeutic",
+      "Major Diagnostic",
+      "Major Therapeutic"
+    )
+  )
   dat$class_number <- NULL
   dat$code <- gsub(dat$code, pattern = "'", replacement = "")
   icd10_map_ahrq_pcs <- split(dat$code, dat$class)
-  if (save_data)
+  if (save_data) {
     save_in_data_dir(icd10_map_ahrq_pcs)
+  }
 }
 # nocov end

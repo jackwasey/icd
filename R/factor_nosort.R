@@ -24,7 +24,7 @@
 #' identical(icd:::factor_nosort(x), x)
 #' # unless the levels change:
 #' icd:::factor_nosort(x, levels = c("a", "z"))
-#'
+#' 
 #' # existing factor levels aren't re-ordered without also moving elements
 #' f <- factor(c("a", "b", "b", "c"))
 #' g <- icd:::factor_nosort(f, levels = c("a", "c", "b"))
@@ -52,15 +52,17 @@ factor_nosort <- function(x, levels) {
 factor_nosort_rcpp <- function(x, levels, na.rm = FALSE) {
   # TODO: if re-factoring, use my refactor code
   if (missing(levels)) {
-    if (is.factor(x))
+    if (is.factor(x)) {
       return(x)
-    else
+    } else {
       levels <- unique.default(x)
+    }
   }
-  if (na.rm)
+  if (na.rm) {
     levels <- levels[!is.na(levels)]
+  }
   factor_nosort_rcpp_worker(as.character(x), levels, na_rm = na.rm)
-  #TODO SLOW - if re-factoring, there is a faster way
+  # TODO SLOW - if re-factoring, there is a faster way
 }
 
 #' Refactor by integer matching levels in C++
@@ -81,24 +83,26 @@ factor_nosort_rcpp <- function(x, levels, na.rm = FALSE) {
 #'   used independently.
 #' @examples
 #' \dontrun{
-#'   f <- factor(c(1, 2, 3))
-#'   icd:::refactor(f, c("2", "3"))
-#'   f <- factor(c(1, 2, NA))
-#'   icd:::refactor(f, c("2", "3", NA))
+#' f <- factor(c(1, 2, 3))
+#' icd:::refactor(f, c("2", "3"))
+#' f <- factor(c(1, 2, NA))
+#' icd:::refactor(f, c("2", "3", NA))
 #' }
 #' @md
 #' @keywords internal manip
 refactor <- function(
-  x,
-  levels,
-  na.rm = FALSE,
-  exclude_na = TRUE,
-  validate = FALSE
-) {
+                     x,
+                     levels,
+                     na.rm = FALSE,
+                     exclude_na = TRUE,
+                     validate = FALSE) {
   stopifnot(is.factor(x))
-  if (na.rm)
+  if (na.rm) {
     refactor_narm_worker(x = x, new_levels = levels, validate = validate)
-  else
-    refactor_worker(x = x, new_levels = levels, exclude_na = exclude_na,
-                    validate = validate)
+  } else {
+    refactor_worker(
+      x = x, new_levels = levels, exclude_na = exclude_na,
+      validate = validate
+    )
+  }
 }

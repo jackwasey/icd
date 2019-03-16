@@ -4,13 +4,15 @@
 .lookup_chars_in_icd10cm <- new.env(parent = emptyenv())
 
 .onAttach <- function(libname, pkgname) {
-  if (system.file(package = "icd9") != "")
+  if (system.file(package = "icd9") != "") {
     packageStartupMessage(paste(
       "The 'icd9' package is now deprecated, and should be removed to avoid",
       "conflicts with 'icd'. The 'icd' package up to version 2.1 contains",
       "tested versions of all the deprecated function names which overlap with",
       "those in the old 'icd9' package, e.g. 'icd9ComorbidAhrq'. It is",
-      "strongly recommended to run the command: remove.packages(\"icd9\")"))
+      "strongly recommended to run the command: remove.packages(\"icd9\")"
+    ))
+  }
 }
 
 .onUnload <- function(libpath) {
@@ -41,6 +43,7 @@ release_questions <- function() {
     "Consider whether to include Catch headers in submitted package",
     # final manual check:
     "Are all NOTES from R CMD check documented in cran-comments.md",
-    "Have all unnecessary files been ignored in built archive?")
+    "Have all unnecessary files been ignored in built archive?"
+  )
 }
 # nocov end

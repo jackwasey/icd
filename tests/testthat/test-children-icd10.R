@@ -2,14 +2,19 @@ context("generate defined child codes for ICD-10-CM")
 
 expect_icd10cm_child_is_self <- function(...) {
   for (i in list(...)) {
-    eval(bquote(expect_identical(children(icd:::icd10cm(.(i))),
-                                 as.icd10cm(as.short_diag(.(i))))))
+    eval(bquote(expect_identical(
+      children(icd:::icd10cm(.(i))),
+      as.icd10cm(as.short_diag(.(i)))
+    )))
     icd10cm_kids <- children(as.icd10cm(i))
     eval(bquote(expect_is(icd10cm_kids, "icd10")))
     eval(bquote(expect_is(icd10cm_kids, "icd10cm")))
     eval(bquote(
-      expect_identical(icd10cm_kids,
-                       as.icd10cm(as.short_diag(.(i))))))
+      expect_identical(
+        icd10cm_kids,
+        as.icd10cm(as.short_diag(.(i)))
+      )
+    ))
     children.icd10(icd10(i)) # should not warn
   }
 }
@@ -19,9 +24,11 @@ test_that("errors found in development", {
 })
 
 test_that("children of a leaf node returns itself", {
-  expect_icd10cm_child_is_self("O9A119", "O9A53", "S0000XA", "T3299", "P150",
-                               "P159", "Z9981", "Z9989", "Z950", "C7A098",
-                               "C7A8")
+  expect_icd10cm_child_is_self(
+    "O9A119", "O9A53", "S0000XA", "T3299", "P150",
+    "P159", "Z9981", "Z9989", "Z950", "C7A098",
+    "C7A8"
+  )
   set.seed(1441)
   rand_icd10cm <- generate_random_short_icd10cm_bill(50)
   expect_icd10cm_child_is_self(rand_icd10cm)
@@ -29,11 +36,13 @@ test_that("children of a leaf node returns itself", {
 
 test_that("zero length ICD-10-CM children", {
   expect_empty_icd10cm_kids <- function(x, has_warning = TRUE) {
-    if (has_warning)
+    if (has_warning) {
       eval(bquote(expect_warning(res <- children_defined.icd10cm(x))))
-    else
+    } else {
       eval(bquote(expect_warning(res <- children_defined.icd10cm(x),
-                                 regexp = NA)))
+        regexp = NA
+      )))
+    }
     eval(bquote(expect_equivalent(res, as.icd10cm(character(0)))))
   }
   expect_empty_icd10cm_kids("%!^#&<>?,./")
@@ -42,8 +51,9 @@ test_that("zero length ICD-10-CM children", {
   expect_empty_icd10cm_kids(c("", ""))
   expect_empty_icd10cm_kids(character(0), has_warning = FALSE)
   expect_warning(children_defined(icd:::icd10cm(character(0))),
-                 icd:::icd10cm(character(0)),
-                 regexp = NA)
+    icd:::icd10cm(character(0)),
+    regexp = NA
+  )
 })
 
 test_that("icd10cm children with one of several missing should not segfault", {
@@ -58,14 +68,22 @@ test_that("icd10cm children with one of several missing should not segfault", {
 })
 
 test_that("class of children same as input class", {
-  expect_identical(class(as.icd9("666.32")),
-                   class(children(as.icd9("666.32"))))
-  expect_identical(class(as.icd9cm("666.32")),
-                   class(children(as.icd9cm("666.32"))))
-  expect_identical(class(as.icd10("T27.6XXD")),
-                   class(children(as.icd10("T27.6XXD"))))
-  expect_identical(class(as.icd10cm("T27.6XXD")),
-                   class(children(as.icd10cm("T27.6XXD"))))
+  expect_identical(
+    class(as.icd9("666.32")),
+    class(children(as.icd9("666.32")))
+  )
+  expect_identical(
+    class(as.icd9cm("666.32")),
+    class(children(as.icd9cm("666.32")))
+  )
+  expect_identical(
+    class(as.icd10("T27.6XXD")),
+    class(children(as.icd10("T27.6XXD")))
+  )
+  expect_identical(
+    class(as.icd10cm("T27.6XXD")),
+    class(children(as.icd10cm("T27.6XXD")))
+  )
 })
 
 context("WHO ICD-10 children")

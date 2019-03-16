@@ -7,20 +7,26 @@ test_that("chapters to map", {
   ooe <- icd_long_data(
     visit_id = sprintf("pt%02d", n),
     code = codes,
-    stringsAsFactors = TRUE)
+    stringsAsFactors = TRUE
+  )
   class(ooe[["code"]]) <- c("icd9", "icd_decimal_diag", "factor")
   expect_warning(
     test_map <- chapters_to_map(
       icd.data::icd9_chapters[n],
-      defined = FALSE),
-    regexp = NA)
+      defined = FALSE
+    ),
+    regexp = NA
+  )
   expect_warning(
-    cmb <- icd9_comorbid(x = ooe,
-                         short_code = FALSE,
-                         map = test_map,
-                         short_map = TRUE,
-                         return_df = TRUE),
-    regexp = NA)
+    cmb <- icd9_comorbid(
+      x = ooe,
+      short_code = FALSE,
+      map = test_map,
+      short_map = TRUE,
+      return_df = TRUE
+    ),
+    regexp = NA
+  )
   cmbcmp <- unname(as.matrix(icd:::logical_to_binary(cmb)[-1]))
   expmat <- diag(nrow = length(ooe$code))
   expect_equivalent(cmbcmp, expmat)

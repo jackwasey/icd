@@ -37,9 +37,10 @@ chapters_to_map <- function(x, defined = TRUE) {
   map <- list()
   for (r in ranges) {
     map[[r]] <- expand_range(x[[r]][1],
-                             x[[r]][2],
-                             short_code = TRUE,
-                             defined = defined)
+      x[[r]][2],
+      short_code = TRUE,
+      defined = defined
+    )
   }
   map
 }
@@ -65,10 +66,11 @@ chapters_to_map <- function(x, defined = TRUE) {
 #'   a column named by \code{icd.name} containing all the non-NA and non-empty
 #'   codes found in the wide input data.
 #' @examples
-#' widedf <- data.frame(visit_name = c("a", "b", "c"),
+#' widedf <- data.frame(
+#'   visit_name = c("a", "b", "c"),
 #'   icd9_01 = c("441", "4424", "441"),
 #'   icd9_02 = c(NA, "443", NA)
-#'   )
+#' )
 #' wide_to_long(widedf)
 #' @family ICD data conversion
 #' @export
@@ -88,20 +90,24 @@ wide_to_long <- function(x,
     re <- length(icd_regex)
     while (re > 0) {
       icd_labels <- grep(rev(icd_regex)[re], names(x),
-                         ignore.case = TRUE, value = TRUE)
+        ignore.case = TRUE, value = TRUE
+      )
       if (length(icd_labels)) break
       re <- re - 1
     }
   }
-  assert_character(icd_labels, any.missing = FALSE, min.chars = 1,
-                   min.len = 1, max.len = ncol(x) - 1)
+  assert_character(icd_labels,
+    any.missing = FALSE, min.chars = 1,
+    min.len = 1, max.len = ncol(x) - 1
+  )
   stopifnot(all(icd_labels %in% names(x)))
   res <- stats::reshape(x,
-                        direction = "long",
-                        varying = icd_labels,
-                        idvar = visit_name,
-                        timevar = NULL,
-                        v.names = icd_name)
+    direction = "long",
+    varying = icd_labels,
+    idvar = visit_name,
+    timevar = NULL,
+    v.names = icd_name
+  )
   res <- res[!is.na(res[[icd_name]]), ]
   res <- res[nchar(as_char_no_warn(res[[icd_name]])) > 0, ]
   res <- res[order(res[[visit_name]]), ]
@@ -123,10 +129,12 @@ wide_to_long <- function(x,
 #'   even if no patients have that many codes. Must be greater than or equal to
 #'   the maximum number of codes per patient.
 #' @examples
-#'   longdf <- data.frame(visit_name = c("a", "b", "b", "c"),
-#'     icd9 = c("441", "4424", "443", "441"))
-#'   long_to_wide(longdf)
-#'   long_to_wide(longdf, prefix = "ICD10_")
+#' longdf <- data.frame(
+#'   visit_name = c("a", "b", "b", "c"),
+#'   icd9 = c("441", "4424", "443", "441")
+#' )
+#' long_to_wide(longdf)
+#' long_to_wide(longdf, prefix = "ICD10_")
 #' @family ICD data conversion
 #' @export
 long_to_wide <- function(x,
@@ -142,24 +150,28 @@ long_to_wide <- function(x,
   stopifnot(is.character(prefix), length(prefix) == 1, nchar(prefix) > 0)
   stopifnot(all(min_width > 0), length(min_width) == 1)
   visit_name_f <- is.factor(x[[visit_name]])
-  icd_name_f <-  is.factor(x[[icd_name]])
+  icd_name_f <- is.factor(x[[icd_name]])
   if (icd_name_f) i_levels <- levels(x[[icd_name]])
   x_order <- order(x[[visit_name]])
   x <- x[x_order, ]
-  if (visit_name_f)
+  if (visit_name_f) {
     v_levels <- levels(x[[visit_name]])
-  else
+  } else {
     v_levels <- x[!duplicated(x[[visit_name]]), visit_name]
+  }
   x$seqnum <- sequence(tabulate(factor(x[[visit_name]], levels = v_levels)))
   out <- reshape(x[c(visit_name, "seqnum", icd_name)],
-                 idvar = visit_name,
-                 timevar = "seqnum",
-                 direction = "wide")
-  if (visit_name_f)
+    idvar = visit_name,
+    timevar = "seqnum",
+    direction = "wide"
+  )
+  if (visit_name_f) {
     out[[visit_name]] <- factor(x = out[[visit_name]], levels = v_levels)
-  if (icd_name_f)
+  }
+  if (icd_name_f) {
     out[-which(names(out) == visit_name)] <-
-    lapply(out[-which(names(out) == visit_name)], factor, levels = i_levels)
+      lapply(out[-which(names(out) == visit_name)], factor, levels = i_levels)
+  }
   nc <- ncol(out) - 1
   names(out)[-which(names(out) == visit_name)] <-
     paste(prefix, sprintf("%03d", 1:nc), sep = "")
@@ -182,8 +194,9 @@ long_to_wide <- function(x,
 #' @template stringsAsFactors
 #' @examples
 #' longdf <- icd_long_data(
-#'             visit_id = c("a", "b", "b", "c"),
-#'             icd9 = as.icd9(c("441", "4240", "443", "441")))
+#'   visit_id = c("a", "b", "b", "c"),
+#'   icd9 = as.icd9(c("441", "4240", "443", "441"))
+#' )
 #' mat <- icd9_comorbid_elix(longdf)
 #' class(mat)
 #' typeof(mat)
@@ -202,8 +215,10 @@ long_to_wide <- function(x,
 #' @export
 comorbid_mat_to_df <- function(x, visit_name = "visit_id",
                                stringsAsFactors = getOption("stringsAsFactors")) { # nolint
-  assert_matrix(x, min.rows = 1, min.cols = 1,
-                row.names = "named", col.names = "named")
+  assert_matrix(x,
+    min.rows = 1, min.cols = 1,
+    row.names = "named", col.names = "named"
+  )
   assert_string(visit_name)
   assert_flag(stringsAsFactors) # nolint
   out <- data.frame(rownames(x), x, stringsAsFactors = stringsAsFactors, row.names = NULL) # nolint
@@ -223,9 +238,9 @@ comorbid_mat_to_df <- function(x, visit_name = "visit_id",
 #' @template stringsAsFactors
 #' @examples
 #' longdf <- icd_long_data(
-#'             visit = c("a", "b", "b", "c"),
-#'             icd9 = c("441", "4240", "443", "441")
-#'             )
+#'   visit = c("a", "b", "b", "c"),
+#'   icd9 = c("441", "4240", "443", "441")
+#' )
 #' cmbdf <- icd9_comorbid_elix(longdf, return_df = TRUE)
 #' class(cmbdf)
 #' rownames(cmbdf)
@@ -394,7 +409,7 @@ short_to_parts.icd10cm <- function(x, mnr_empty = "") {
 #' @keywords internal manip
 #' @noRd
 short_to_parts.character <- function(x, mnr_empty = "")
-  # No default values in header plus C++ function body, so shim here.
+# No default values in header plus C++ function body, so shim here.
   switch(
     guess_version(x, short_code = TRUE),
     "icd9" = icd9ShortToParts(x, mnrEmpty = mnr_empty),

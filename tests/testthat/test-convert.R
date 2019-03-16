@@ -1,16 +1,26 @@
 context("icd9 type conversions")
 
 test_that("extract decimal parts - invalid or empty input", {
-  expect_equal(decimal_to_parts.icd9(character()), list(mjr = character(),
-                                                        mnr = character()))
-  expect_equal(decimal_to_parts.icd10(character()), list(mjr = character(),
-                                                         mnr = character()))
-  expect_equal(decimal_to_parts.icd9(""),
-               list(mjr = NA_character_, mnr = NA_character_))
-  expect_equal(decimal_to_parts.icd10(""),
-               list(mjr = NA_character_, mnr = NA_character_))
-  expect_equal(decimal_to_parts(""),
-               list(mjr = NA_character_, mnr = NA_character_))
+  expect_equal(decimal_to_parts.icd9(character()), list(
+    mjr = character(),
+    mnr = character()
+  ))
+  expect_equal(decimal_to_parts.icd10(character()), list(
+    mjr = character(),
+    mnr = character()
+  ))
+  expect_equal(
+    decimal_to_parts.icd9(""),
+    list(mjr = NA_character_, mnr = NA_character_)
+  )
+  expect_equal(
+    decimal_to_parts.icd10(""),
+    list(mjr = NA_character_, mnr = NA_character_)
+  )
+  expect_equal(
+    decimal_to_parts(""),
+    list(mjr = NA_character_, mnr = NA_character_)
+  )
   expect_equal(
     decimal_to_parts.icd9("", mnr_empty = NA_character_),
     list(mjr = NA_character_, mnr = NA_character_)
@@ -31,22 +41,28 @@ test_that("extract decimal parts - valid inputs", {
   expect_equal(decimal_to_parts.icd9("022.22"), list(mjr = "022", mnr = "22"))
   expect_equal(decimal_to_parts.icd9("333.3"), list(mjr = "333", mnr = "3"))
   expect_equal(decimal_to_parts.icd9("444"), list(mjr = "444", mnr = ""))
-  expect_equal(decimal_to_parts.icd9("444", mnr_empty = NA_character_),
-               list(mjr = "444", mnr = NA_character_))
-  expect_equal(decimal_to_parts.icd9("444", mnr_empty = ""),
-               list(mjr = "444", mnr = ""))
-  expect_equal(decimal_to_parts.icd9(c("9.9", "88.88", "777.6")),
-               list(
-                 mjr = c("009", "088", "777"),
-                 mnr = c("9", "88", "6")
-               )
+  expect_equal(
+    decimal_to_parts.icd9("444", mnr_empty = NA_character_),
+    list(mjr = "444", mnr = NA_character_)
+  )
+  expect_equal(
+    decimal_to_parts.icd9("444", mnr_empty = ""),
+    list(mjr = "444", mnr = "")
+  )
+  expect_equal(
+    decimal_to_parts.icd9(c("9.9", "88.88", "777.6")),
+    list(
+      mjr = c("009", "088", "777"),
+      mnr = c("9", "88", "6")
+    )
   )
 
-  expect_equal(decimal_to_parts.icd9(c("009.9", "088.88", "777.6")),
-               list(
-                 mjr = c("009", "088", "777"),
-                 mnr = c("9", "88", "6")
-               )
+  expect_equal(
+    decimal_to_parts.icd9(c("009.9", "088.88", "777.6")),
+    list(
+      mjr = c("009", "088", "777"),
+      mnr = c("9", "88", "6")
+    )
   )
   expect_equal(
     decimal_to_parts.icd9(c("9.9", "88", "777.6"), mnr_empty = NA_character_),
@@ -56,11 +72,12 @@ test_that("extract decimal parts - valid inputs", {
     )
   )
 
-  expect_equal(decimal_to_parts.icd9(c("9.9", "88", "777.6"), mnr_empty = ""),
-               list(
-                 mjr = c("009", "088", "777"),
-                 mnr = c("9", "", "6")
-               )
+  expect_equal(
+    decimal_to_parts.icd9(c("9.9", "88", "777.6"), mnr_empty = ""),
+    list(
+      mjr = c("009", "088", "777"),
+      mnr = c("9", "", "6")
+    )
   )
 
   expect_equal(
@@ -88,11 +105,14 @@ test_that("icd9 decimal to short form", {
   expect_equal_no_icd(decimal_to_short.icd9("991.23"), "99123")
 
   expect_equal_no_icd(
-    decimal_to_short.icd9(c("1", "991.23")), c("001", "99123"))
+    decimal_to_short.icd9(c("1", "991.23")), c("001", "99123")
+  )
   expect_equal_no_icd(
-    decimal_to_short.icd9(c("1.", "991.23")), c("001", "99123"))
+    decimal_to_short.icd9(c("1.", "991.23")), c("001", "99123")
+  )
   expect_equal_no_icd(
-    decimal_to_short.icd9(c("1", NA, "991.23")), c("001", NA, "99123"))
+    decimal_to_short.icd9(c("1", NA, "991.23")), c("001", NA, "99123")
+  )
 })
 
 test_that("icd9 decimal to short with factor input", {
@@ -121,8 +141,10 @@ test_that("short to decimal bad input", {
   # NA is not character type, so expect error.
   expect_equal_no_icd(short_to_decimal.icd9(NA), NA_character_)
   # NA is not character type, so expect error.
-  expect_equal_no_icd(short_to_decimal.icd9(c("000000", "0ab1bc2d")),
-                      c(NA_character_, NA_character_))
+  expect_equal_no_icd(
+    short_to_decimal.icd9(c("000000", "0ab1bc2d")),
+    c(NA_character_, NA_character_)
+  )
 })
 
 test_that("decimal to short with single value, no dispatch", {
@@ -139,14 +161,17 @@ test_that("icd10 short to decimal", {
   expect_true(is.decimal_diag(short_to_decimal.icd10cm("A009")))
 
   expect_equal(
-    short_to_decimal("A00"), as.icd10("A00") %>% as.decimal_diag)
+    short_to_decimal("A00"), as.icd10("A00") %>% as.decimal_diag()
+  )
   expect_equal(
-    short_to_decimal.icd10("A00"), as.icd10("A00") %>% as.decimal_diag)
+    short_to_decimal.icd10("A00"), as.icd10("A00") %>% as.decimal_diag()
+  )
   expect_equal(
-    short_to_decimal("A000"), as.icd10("A00.0") %>% as.decimal_diag)
+    short_to_decimal("A000"), as.icd10("A00.0") %>% as.decimal_diag()
+  )
   expect_equal(
-    short_to_decimal.icd10("A000"), as.icd10("A00.0") %>% as.decimal_diag)
-
+    short_to_decimal.icd10("A000"), as.icd10("A00.0") %>% as.decimal_diag()
+  )
 })
 
 test_that("#97 is fixed", {
@@ -159,39 +184,55 @@ test_that("icd10 short to decimal for multiple codes", {
   # pick up specific bug where a warning was given for muliple codes
   expect_warning(
     res <- short_to_decimal(
-      c("O9A119", "O9A53", "S0000XA", "T3299", "P150", "P159",
-        "Z9989", "Z950", "C7A098", "C7A8")), regexp = NA)
+      c(
+        "O9A119", "O9A53", "S0000XA", "T3299", "P150", "P159",
+        "Z9989", "Z950", "C7A098", "C7A8"
+      )
+    ),
+    regexp = NA
+  )
 
   expect_equal(
     as.vector(res),
-    c("O9A.119", "O9A.53", "S00.00XA", "T32.99", "P15.0", "P15.9",
-      "Z99.89", "Z95.0", "C7A.098", "C7A.8"))
+    c(
+      "O9A.119", "O9A.53", "S00.00XA", "T32.99", "P15.0", "P15.9",
+      "Z99.89", "Z95.0", "C7A.098", "C7A.8"
+    )
+  )
   expect_true(is.decimal_diag(res))
 
   # is the icd10cm class preserved?
   expect_warning(
     res <- short_to_decimal(
-      icd10cm(c("O9A119", "O9A53", "S0000XA", "T3299", "P150", "P159",
-                "Z9989", "Z950", "C7A098", "C7A8"))), regexp = NA)
+      icd10cm(c(
+        "O9A119", "O9A53", "S0000XA", "T3299", "P150", "P159",
+        "Z9989", "Z950", "C7A098", "C7A8"
+      ))
+    ),
+    regexp = NA
+  )
 
   expect_true(is.decimal_diag(res))
   expect_true(is.icd10cm(res))
-
 })
 
 test_that("icd10 short to decimal and back", {
   expect_identical(
     short_to_decimal(decimal_to_short("A00.0")),
-    as.icd10("A00.0") %>% as.decimal_diag)
+    as.icd10("A00.0") %>% as.decimal_diag()
+  )
   expect_identical(
     decimal_to_short(short_to_decimal("A000")),
-    as.icd10("A000") %>% as.short_diag)
+    as.icd10("A000") %>% as.short_diag()
+  )
   expect_identical(
     short_to_decimal.icd10(decimal_to_short.icd10("A00.0")),
-    as.icd10("A00.0") %>% as.decimal_diag)
+    as.icd10("A00.0") %>% as.decimal_diag()
+  )
   expect_identical(
     decimal_to_short.icd10(short_to_decimal.icd10("A000")),
-    as.icd10("A000") %>% as.short_diag)
+    as.icd10("A000") %>% as.short_diag()
+  )
 })
 
 test_that("icd9 short to major part, E codes", {
@@ -203,11 +244,10 @@ test_that("icd9 short to major part, E codes", {
   expect_equal_no_icd(get_major.icd9(short_code = TRUE, "E0123"), "E012")
   expect_equal_no_icd(get_major.icd9(short_code = TRUE, "E100"), "E100")
   expect_equal_no_icd(get_major.icd9(short_code = TRUE, "E1234"), "E123")
-
 })
 
 test_that("short to decimal before and after expansion of ICD-9 codes same", {
-  icd9List <- icd9_map_ahrq #todo SUBSET OR EXTRA MAPPINGS?
+  icd9List <- icd9_map_ahrq # todo SUBSET OR EXTRA MAPPINGS?
   for (i in names(icd9List)) {
     expect_equal_no_icd(
       decimal_to_short.icd9(short_to_decimal.icd9(icd9List[[i]])),
@@ -247,13 +287,17 @@ test_that("short to decimal before and after expansion of ICD-9 codes same", {
   set.seed(1441)
   rd2pad <- sprintf("%03d", round(stats::runif(min = 1, max = 999, n = n)))
   expect_equal_no_icd(
-    short_to_decimal.icd9(decimal_to_short.icd9(rd2)), rd2pad)
+    short_to_decimal.icd9(decimal_to_short.icd9(rd2)), rd2pad
+  )
   expect_equal_no_icd(
-    decimal_to_short.icd9(short_to_decimal.icd9(rd2)), rd2pad)
+    decimal_to_short.icd9(short_to_decimal.icd9(rd2)), rd2pad
+  )
   expect_equal_no_icd(
-    short_to_decimal.icd9(decimal_to_short.icd9(rd2pad)), rd2pad)
+    short_to_decimal.icd9(decimal_to_short.icd9(rd2pad)), rd2pad
+  )
   expect_equal_no_icd(
-    decimal_to_short.icd9("123."), "123")
+    decimal_to_short.icd9("123."), "123"
+  )
 })
 
 test_that("show why padding zeroes before decimal conv without class matters", {
@@ -327,20 +371,26 @@ test_that("parts to valid short with empty or NA minor", {
 
 test_that("parts to valid simple numeric inputs", {
   expect_equal(
-    icd9PartsToShort(list(mjr = "1", mnr = "23")), "00123")
+    icd9PartsToShort(list(mjr = "1", mnr = "23")), "00123"
+  )
   expect_equal(
     icd9PartsToShort(list(mjr = "01", mnr = "23", stringsAsFactors = TRUE)),
-    "00123")
+    "00123"
+  )
   expect_equal(
-    icd9PartsToShort(list(mjr = "001", mnr = "23")), "00123")
+    icd9PartsToShort(list(mjr = "001", mnr = "23")), "00123"
+  )
   expect_equal(
     icd9PartsToShort(list(mjr = "10", mnr = "23", stringsAsFactors = TRUE)),
-    "01023")
+    "01023"
+  )
   expect_equal(
-    icd9PartsToShort(list(mjr = "010", mnr = "23")), "01023")
+    icd9PartsToShort(list(mjr = "010", mnr = "23")), "01023"
+  )
   expect_equal(
     icd9PartsToShort(list(mjr = "100", mnr = "23", stringsAsFactors = TRUE)),
-    "10023")
+    "10023"
+  )
 })
 
 test_that("parts to short V code inputs", {
@@ -354,21 +404,26 @@ test_that("parts to short V code inputs", {
 })
 
 test_that("maj min to short for multiple majors", {
-  expect_identical(icd9MajMinToShort(c("100", "200"), c("10", "20")),
-                   c("10010", "20020"))
+  expect_identical(
+    icd9MajMinToShort(c("100", "200"), c("10", "20")),
+    c("10010", "20020")
+  )
 })
 
 test_that("icd9 parts to short: don't allow cycling.", {
   expect_error(icd9MajMinToShort(c("123", "34", "56"), c("1", "20")),
-               regexp = "length")
+    regexp = "length"
+  )
   # causes hang only when compiled with MinGW GCC 4.9 in Rtools 3.2 on 64 bit
   expect_error(icd9MajMinToShort(c("123", "34"), c("1", "20", "45")),
-               regexp = "length")
+    regexp = "length"
+  )
 })
 
 test_that("Windows Rtools 3.2 hang test - also triggers bug #75", {
   expect_error(icd9MajMinToShort(c("123", "34"), c("1", "20", "45")),
-               regexp = "equal")
+    regexp = "equal"
+  )
   # see Rcpp issue #276.
 })
 
@@ -382,11 +437,17 @@ test_that("icd9 parts to short form V and E input, mismatched lengths", {
 # RcppExports is not tested. Also, compare slower functions for identical
 # results as a regression test.
 test_that("code routes through RcppExports.R and slower versions", {
-  expect_equal(short_to_parts.icd9("1001"),
-               data.frame(mjr = "100", mnr = "1", stringsAsFactors = FALSE))
-  expect_equal(short_to_parts.icd9(c("99999", "0011")),
-               data.frame(mjr = c("999", "001"), mnr = c("99", "1"),
-                          stringsAsFactors = FALSE))
+  expect_equal(
+    short_to_parts.icd9("1001"),
+    data.frame(mjr = "100", mnr = "1", stringsAsFactors = FALSE)
+  )
+  expect_equal(
+    short_to_parts.icd9(c("99999", "0011")),
+    data.frame(
+      mjr = c("999", "001"), mnr = c("99", "1"),
+      stringsAsFactors = FALSE
+    )
+  )
 })
 
 
@@ -408,10 +469,14 @@ test_that("decimal ICD-10 to parts", {
 })
 
 test_that("icd10 short to parts", {
-  expect_equal(short_to_parts("A0101"),
-               data.frame(mjr = "A01", mnr = "01", stringsAsFactors = FALSE))
+  expect_equal(
+    short_to_parts("A0101"),
+    data.frame(mjr = "A01", mnr = "01", stringsAsFactors = FALSE)
+  )
   # for V and E codes, we can't just assume ICD-10 will work with the ICD-9
   # function:
-  expect_equal(short_to_parts(as.icd10cm("E8989")),
-               data.frame(mjr = "E89", mnr = "89", stringsAsFactors = FALSE))
+  expect_equal(
+    short_to_parts(as.icd10cm("E8989")),
+    data.frame(mjr = "E89", mnr = "89", stringsAsFactors = FALSE)
+  )
 })

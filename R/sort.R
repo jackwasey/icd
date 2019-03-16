@@ -26,8 +26,10 @@
 #' # attached using:
 #' library(icd)
 #' icd:::sort.icd10cm(c("C7A", "C79", "C80", "C81", "C7B"))
-#' stopifnot(!identical(order.icd10cm(as.character(codes)),
-#'                      order(codes)))
+#' stopifnot(!identical(
+#'   order.icd10cm(as.character(codes)),
+#'   order(codes)
+#' ))
 #' codes[order.icd10cm(codes)]
 #' # Note that base::order does NOT do S3 dispatch, so the following does not work:
 #' codes[order(codes)]
@@ -37,11 +39,10 @@
 #' @keywords manip
 #' @export
 sort_icd <- function(
-  x,
-  decreasing = FALSE,
-  short_code = guess_short(x),
-  ...
-) {
+                     x,
+                     decreasing = FALSE,
+                     short_code = guess_short(x),
+                     ...) {
   switch(
     guess_version(x, short_code = short_code),
     "icd9" = sort.icd9(x, decreasing = decreasing, short_code),
@@ -53,13 +54,12 @@ sort_icd <- function(
 #' @rdname sort_icd
 #' @export
 sort.icd10 <- function(
-  x,
-  decreasing = FALSE,
-  ...
-) {
+                       x,
+                       decreasing = FALSE,
+                       ...) {
   res <- sort(x)
   # names are preserved, but using attributes would overwrite
-  attr(res, "icd_short_diag") <-  attr(x, "icd_short_diag")
+  attr(res, "icd_short_diag") <- attr(x, "icd_short_diag")
   class(res) <- class(x)
   res
 }
@@ -67,16 +67,15 @@ sort.icd10 <- function(
 #' @rdname sort_icd
 #' @export
 sort.icd10cm <- function(
-  x,
-  decreasing = FALSE,
-  ...
-) {
+                         x,
+                         decreasing = FALSE,
+                         ...) {
   # ignore short, it doesn't matter
   o <- icd10cm_order_rcpp(x)
   o <- match(seq_along(x), o)
   if (decreasing) o <- rev(o)
   res <- x[o]
-  attr(res, "icd_short_diag") <-  attr(x, "icd_short_diag")
+  attr(res, "icd_short_diag") <- attr(x, "icd_short_diag")
   names(res) <- names(x)[o]
   class(res) <- class(x)
   res
@@ -85,29 +84,29 @@ sort.icd10cm <- function(
 #' @rdname sort_icd
 #' @export
 sort.icd10be <- function(
-  x,
-  decreasing = FALSE,
-  ...
-) {
+                         x,
+                         decreasing = FALSE,
+                         ...) {
   sort.icd10cm(x, decreasing = decreasing, ...)
 }
 #' @rdname sort_icd
 #' @export
 sort.icd9 <- function(
-  x,
-  decreasing = FALSE,
-  short_code = guess_short(x),
-  ...
-) {
+                      x,
+                      decreasing = FALSE,
+                      short_code = guess_short(x),
+                      ...) {
   # no assertions here: they are slower than the actual sorting...
-  y <- if (short_code)
+  y <- if (short_code) {
     x
-  else
+  } else {
     decimal_to_short.icd9(x)
-  res <- if (is.factor(x))
+  }
+  res <- if (is.factor(x)) {
     x[o <- icd9_order_rcpp(as_char_no_warn(y))]
-  else
+  } else {
     x[o <- icd9_order_rcpp(y)]
+  }
   o <- match(seq_along(x), o)
   if (decreasing) o <- rev(o)
   class(res) <- class(x)

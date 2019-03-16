@@ -257,8 +257,8 @@ NULL
 #' @docType data
 #' @keywords datasets
 #' @examples
-#'   icd10_map_ahrq_pcs[["Major Diagnostic"]][1:5]
-#'   icd10_map_ahrq_pcs[["Minor Therapeutic"]][1:5]
+#' icd10_map_ahrq_pcs[["Major Diagnostic"]][1:5]
+#' icd10_map_ahrq_pcs[["Minor Therapeutic"]][1:5]
 NULL
 
 #' @name icd9_chapters

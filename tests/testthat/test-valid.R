@@ -5,7 +5,8 @@ test_that("regular expressions are put on the given environment", {
   set_re_globals(e)
   expect_identical(
     ls(envir = e),
-    c("re_icd10_any", "re_icd10_decimal", "re_icd10_major", "re_icd10_major_bare",
+    c(
+      "re_icd10_any", "re_icd10_decimal", "re_icd10_major", "re_icd10_major_bare",
       "re_icd10_short", "re_icd10cm_any", "re_icd10cm_decimal", "re_icd10cm_major",
       "re_icd10cm_major_bare", "re_icd10cm_short", "re_icd9_any", "re_icd9_any_e",
       "re_icd9_any_n", "re_icd9_any_v", "re_icd9_decimal", "re_icd9_decimal_bare",
@@ -17,7 +18,9 @@ test_that("regular expressions are put on the given environment", {
       "re_icd9_major_n_strict", "re_icd9_major_strict", "re_icd9_major_strict_bare",
       "re_icd9_major_v", "re_icd9_major_v_strict", "re_icd9_minor_e",
       "re_icd9_minor_nv", "re_icd9_short", "re_icd9_short_e", "re_icd9_short_n",
-      "re_icd9_short_v"))
+      "re_icd9_short_v"
+    )
+  )
 })
 
 test_that("is ICD-9 code valid, factor or character", {
@@ -42,17 +45,23 @@ test_that("mixed ICD-9 and ICD-10 codes can't all be valid", {
 
 
 test_that("icd9IsValidDecimal - rubbish input", {
-  expect_error(is_valid.icd9(short_code = FALSE,
-                             list(1230, c(12323, 2323), c("nonesnseses"))))
+  expect_error(is_valid.icd9(
+    short_code = FALSE,
+    list(1230, c(12323, 2323), c("nonesnseses"))
+  ))
   expect_error(is_valid.icd9(short_code = FALSE, c(10.1, 200)))
   expect_equal(is_valid.icd9(short_code = FALSE, character()), logical())
   expect_false(is_valid.icd9(short_code = FALSE, "."))
-  expect_equal(is_valid.icd9(short_code = FALSE, c("100", "chestnut")),
-               c(TRUE, FALSE))
+  expect_equal(
+    is_valid.icd9(short_code = FALSE, c("100", "chestnut")),
+    c(TRUE, FALSE)
+  )
   expect_false(is_valid.icd9(short_code = FALSE, "100, 200"))
   expect_false(is_valid.icd9(short_code = FALSE, NA_character_))
-  expect_equal(is_valid.icd9(short_code = FALSE, c("two", "things")),
-               c(FALSE, FALSE))
+  expect_equal(
+    is_valid.icd9(short_code = FALSE, c("two", "things")),
+    c(FALSE, FALSE)
+  )
 })
 
 test_that("icd9IsValidDecimal numeric-only", {
@@ -79,14 +88,18 @@ test_that("icd9IsValidDecimal numeric-only", {
   expect_true(is_valid.icd9(short_code = FALSE, "100."))
   expect_equal(
     is_valid.icd9(short_code = FALSE, c("100", "200.55", "V01.11")),
-    c(TRUE, TRUE, TRUE))
+    c(TRUE, TRUE, TRUE)
+  )
   expect_equal(
     is_valid.icd9(as.factor(c("0", "100", "222.22", "100", "1", "0")),
-                  short_code = FALSE),
-    c(TRUE, TRUE, TRUE, TRUE, TRUE, TRUE))
+      short_code = FALSE
+    ),
+    c(TRUE, TRUE, TRUE, TRUE, TRUE, TRUE)
+  )
   expect_equal(
     is_valid.icd9(short_code = FALSE, c("10.1", "100", "999.99", "0.01")),
-    c(TRUE, TRUE, TRUE, TRUE))
+    c(TRUE, TRUE, TRUE, TRUE)
+  )
 })
 
 test_that("icd9IsValidDecimal V codes", {
@@ -100,7 +113,6 @@ test_that("icd9IsValidDecimal V codes", {
 })
 
 test_that("validate invalid decimal E codes", {
-
   expect_error(icd9_is_valid_decimal_e(8760))
 
   expect_false(icd9_is_valid_decimal_e(NA_character_))
@@ -156,7 +168,7 @@ test_that("validate invalid decimal E codes", {
 })
 
 test_that("icd9IsValidDecimal valid E codes", {
-  expect_true(is_valid.icd9(short_code = FALSE, "E0")) #E000 is okay
+  expect_true(is_valid.icd9(short_code = FALSE, "E0")) # E000 is okay
   expect_true(is_valid.icd9(short_code = FALSE, "E00"))
   expect_true(is_valid.icd9(short_code = FALSE, "E000"))
   expect_true(is_valid.icd9(short_code = FALSE, "E0."))
@@ -195,7 +207,8 @@ test_that("detect valid short codes", {
   expect_true(is_valid.icd9(short_code = TRUE, "0"))
   expect_equal(
     is_valid.icd9(short_code = TRUE, c("0", "00", "000", "0000", "00000")),
-    c(TRUE, TRUE, TRUE, TRUE, TRUE))
+    c(TRUE, TRUE, TRUE, TRUE, TRUE)
+  )
   expect_true(is_valid.icd9(short_code = TRUE, "12345"))
   expect_true(is_valid.icd9(short_code = TRUE, "12 "))
   expect_error(is_valid.icd9(short_code = TRUE, 1))
@@ -203,7 +216,8 @@ test_that("detect valid short codes", {
   expect_equal(is_valid.icd9(short_code = TRUE, c("1", "100", "222.22")), c(TRUE, TRUE, FALSE))
   expect_equal(
     is_valid.icd9(short_code = TRUE, as.factor(c("1", "100", "222.22", "100", "1.1"))),
-    c(TRUE, TRUE, FALSE, TRUE, FALSE))
+    c(TRUE, TRUE, FALSE, TRUE, FALSE)
+  )
   expect_true(is_valid.icd9(short_code = TRUE, "V1")) # not zero-padded, but not ambiguous.
 
   expect_false(is_valid.icd9(short_code = TRUE, "jericho"))
@@ -219,7 +233,8 @@ test_that("detect valid short codes directly", {
   expect_true(icd9_is_valid_short_n("0"))
   expect_equal(
     icd9_is_valid_short_n(c("0", "00", "000", "0000", "00000")),
-    c(TRUE, TRUE, TRUE, TRUE, TRUE))
+    c(TRUE, TRUE, TRUE, TRUE, TRUE)
+  )
   expect_true(icd9_is_valid_short_n("12345"))
   expect_true(icd9_is_valid_short_n("12 "))
   expect_error(icd9_is_valid_short_n(1))
@@ -227,7 +242,8 @@ test_that("detect valid short codes directly", {
   expect_equal(icd9_is_valid_short_n(c("1", "100", "222.22")), c(TRUE, TRUE, FALSE))
   expect_equal(
     icd9_is_valid_short_n(as.factor(c("1", "100", "222.22", "100", "1.1"))),
-    c(TRUE, TRUE, FALSE, TRUE, FALSE))
+    c(TRUE, TRUE, FALSE, TRUE, FALSE)
+  )
   expect_true(icd9_is_valid_short_v("V1")) # not zero-padded, but not ambiguous.
 
   expect_false(icd9_is_valid_short_n("jericho"))
@@ -409,35 +425,48 @@ test_that("valid short form E codes - valid input", {
 
 test_that("test valid major numeric, valid", {
   expect_equal(
-    icd9_is_valid_major_n(c("1", "22", "333", "4444", "55555",
-                            "1.1", "22.22", "333.333")),
+    icd9_is_valid_major_n(c(
+      "1", "22", "333", "4444", "55555",
+      "1.1", "22.22", "333.333"
+    )),
     c(T, T, T, F, F, F, F, F)
   )
   expect_equal(
-    icd9_is_valid_major_n(c("01", "001", "22", "022", "0333", "04444",
-                            "0055555", "01.1", "022.22", "00333.333")),
+    icd9_is_valid_major_n(c(
+      "01", "001", "22", "022", "0333", "04444",
+      "0055555", "01.1", "022.22", "00333.333"
+    )),
     c(T, T, T, T, F, F, F, F, F, F)
   )
 })
 
 test_that("test major validation", {
   expect_equal(
-    is_valid_major.icd9(c("", "1", "22", "333", "4444", "V", "V2", "V34",
-                          "V567", "E", "E1", "E000", "E70", "E300", "E876")),
-    c(FALSE, TRUE, TRUE, TRUE, FALSE, FALSE, TRUE, TRUE,
-      FALSE, FALSE, TRUE, TRUE, TRUE, TRUE, TRUE)
+    is_valid_major.icd9(c(
+      "", "1", "22", "333", "4444", "V", "V2", "V34",
+      "V567", "E", "E1", "E000", "E70", "E300", "E876"
+    )),
+    c(
+      FALSE, TRUE, TRUE, TRUE, FALSE, FALSE, TRUE, TRUE,
+      FALSE, FALSE, TRUE, TRUE, TRUE, TRUE, TRUE
+    )
   )
   expect_equal(
     icd9_is_valid_major_e(c("E", "E1", "E000", "E70", "E300", "E876")),
-    c(FALSE, TRUE, TRUE, TRUE, TRUE, TRUE))
+    c(FALSE, TRUE, TRUE, TRUE, TRUE, TRUE)
+  )
 
   expect_equal(
-    icd9_is_valid_major_v(c("", "1", "22", "333", "4444", "V", "V2", "V34",
-                            "V567", "E", "E1", "E000", "E70", "E300", "E876",
-                            "V1.1", "V2.89", "V12.4", "V23.45")),
-    c(FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, TRUE, TRUE,
+    icd9_is_valid_major_v(c(
+      "", "1", "22", "333", "4444", "V", "V2", "V34",
+      "V567", "E", "E1", "E000", "E70", "E300", "E876",
+      "V1.1", "V2.89", "V12.4", "V23.45"
+    )),
+    c(
+      FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, TRUE, TRUE,
       FALSE, FALSE, FALSE, FALSE, FALSE, FALSE, FALSE,
-      FALSE, FALSE, FALSE, FALSE)
+      FALSE, FALSE, FALSE, FALSE
+    )
   )
 })
 
@@ -487,7 +516,6 @@ test_that("get invalid - vector input", {
   expect_equal(get_invalid(short_code = TRUE, c("V100", "nolk")), "nolk")
 })
 test_that("filter valid - data frame input", {
-
   expect_equal(icd9_filter_valid(pts_invalid_mix), pts_invalid_mix[c(1, 3), ])
   expect_equal(icd9_filter_invalid(pts_invalid_mix), pts_invalid_mix[2, ])
   expect_equal(icd9_filter_valid(pts_invalid_mix, invert = TRUE), pts_invalid_mix[2, ])
@@ -499,34 +527,43 @@ test_that("filter valid - data frame input", {
   # no non-short so all are invalid:
   expect_equal(
     icd9_filter_valid(pts_invalid_mix, invert = TRUE, short_code = FALSE),
-    pts_invalid_mix)
+    pts_invalid_mix
+  )
   # same with S3 dispatch
   expect_equal(
     tfinvalid <- filter_valid(pts_invalid_mix, invert = TRUE, short_code = FALSE),
-    pts_invalid_mix)
+    pts_invalid_mix
+  )
   expect_true(is.icd_long_data(tfinvalid))
   # arg order irrelevant, but can be mixed up in S3 dispatch.
   expect_equal(
     icd9_filter_valid(pts_invalid_mix, short_code = FALSE, invert = TRUE),
-    pts_invalid_mix)
+    pts_invalid_mix
+  )
 
   expect_equal(
     icd9_filter_valid(pts_invalid_mix, short_code = TRUE, invert = TRUE),
-    pts_invalid_mix[2, ])
+    pts_invalid_mix[2, ]
+  )
   expect_equal(
     icd9_filter_valid(pts_invalid_mix, short_code = TRUE, invert = FALSE),
-    pts_invalid_mix[c(1, 3), ])
+    pts_invalid_mix[c(1, 3), ]
+  )
 })
 
 test_that("validate mappings", {
   expect_true(
-    is_valid.comorbidity_map(short_code = FALSE, list(a = "100.1", b = "202.3")))
+    is_valid.comorbidity_map(short_code = FALSE, list(a = "100.1", b = "202.3"))
+  )
   expect_true(
-    is_valid.comorbidity_map(short_code = TRUE, list(a = "1001", b = "2023")))
+    is_valid.comorbidity_map(short_code = TRUE, list(a = "1001", b = "2023"))
+  )
   expect_false(
-    is_valid.comorbidity_map(short_code = FALSE, list(a = "1001", b = "2023")))
+    is_valid.comorbidity_map(short_code = FALSE, list(a = "1001", b = "2023"))
+  )
   expect_false(
-    is_valid.comorbidity_map(short_code = TRUE, list(a = "100.1", b = "202.3")))
+    is_valid.comorbidity_map(short_code = TRUE, list(a = "100.1", b = "202.3"))
+  )
 
   expect_false(is_valid.comorbidity_map(list(a = "car", b = "et"), short_code = FALSE))
   expect_true(is_valid.comorbidity_map(list(a = "1001", b = "2023"), short_code = TRUE))
@@ -535,16 +572,19 @@ test_that("validate mappings", {
 test_that("get invalid decimals", {
   expect_equal(
     get_invalid.icd9(c("10.1", "rhubarb", "3000"), short_code = FALSE),
-    c("rhubarb", "3000"))
+    c("rhubarb", "3000")
+  )
 })
 
 test_that("get real codes from a longer list", {
   expect_equal(
     get_defined(short_code = TRUE, c("003", "0031", "0032"), billable = TRUE),
-    "0031")
+    "0031"
+  )
   expect_equal(
     get_defined(short_code = FALSE, c("003", "003.1", "3.2"), billable = TRUE),
-    "003.1")
+    "003.1"
+  )
 })
 
 test_that("billable codes are identified", {

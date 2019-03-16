@@ -18,16 +18,16 @@
 #' @keywords hplot
 #' @export
 plot_comorbid <- function(
-  x,
-  sort = TRUE,
-  comorbid_fun = icd::comorbid_ahrq,
-  las = 2,
-  cex = 0.75,
-  ...
-) {
+                          x,
+                          sort = TRUE,
+                          comorbid_fun = icd::comorbid_ahrq,
+                          las = 2,
+                          cex = 0.75,
+                          ...) {
   comorbid_fun <- match.fun(comorbid_fun)
   d <- comorbid_fun(x)
   graphics::barplot(
     sort(colSums(d), decreasing = TRUE),
-    las = las, cex.names = cex, ...)
+    las = las, cex.names = cex, ...
+  )
 }

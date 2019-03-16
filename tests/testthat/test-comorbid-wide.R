@@ -6,7 +6,7 @@ wide_dat <- data.frame(
   # MI, CHF (charlson)
   dx2 = c("0930", "43001"),
   stringsAsFactors = FALSE
-) #PVD, Stroke (charlson)
+) # PVD, Stroke (charlson)
 charlson_minimap <- lapply(icd9_map_charlson[1:5], head)
 
 test_that("simple wide data calc", {
@@ -22,12 +22,13 @@ test_that("simple wide data calc", {
 
 test_that("convert long to wide, then do wide cmb", {
   icd9_dfs <-
-    c("two_pts",
+    c(
+      "two_pts",
       "two_pts_fac",
       "ahrq_test_dat",
       "complex_poa_pts",
       "elix_test_dat",
-      #"empty_pts",
+      # "empty_pts",
       "hcc_test_invalid",
       "hcc_test_simple10",
       "hcc_test_simple9",
@@ -44,15 +45,18 @@ test_that("convert long to wide, then do wide cmb", {
       "test_twenty"
     )
   for (df in icd9_dfs) {
-    expect_error(regexp = NA,
-                 by_long <- comorbid_ahrq(get(df)),
-                 info = df)
+    expect_error(
+      regexp = NA,
+      by_long <- comorbid_ahrq(get(df)),
+      info = df
+    )
     df_wide <- long_to_wide(get(df))
     icd_names <- names(df_wide)[-1]
     by_wide <- comorbid_ahrq(df_wide, icd_name = icd_names)
     # first, is the data the same?
     expect_equivalent(by_long[order(rownames(by_long)), ], by_wide,
-                      info = paste("Wide", df))
+      info = paste("Wide", df)
+    )
     skip("should the order of patients also be the same?")
     expect_equivalent(by_long, by_wide, info = paste("Wide", df))
 
@@ -60,8 +64,10 @@ test_that("convert long to wide, then do wide cmb", {
     wide_dbl <- cbin(get(df), get(df))
     nc2 <- ncol(wide_dbl / 2)
     icd_name <- names(wide_dbl)[seq.int(from = nc2 + 1, to = nc2)]
-    expect_error(regexp = NA,
-                 comorbid_charlson(wide_dbl, icd_name = icd_name),
-                 info = paste("Double long", df))
+    expect_error(
+      regexp = NA,
+      comorbid_charlson(wide_dbl, icd_name = icd_name),
+      info = paste("Double long", df)
+    )
   }
 })

@@ -37,15 +37,17 @@ test_that("guess type from a data frame with no class set on column", {
   expect_true(guess_short(pts))
 
   no_pts <- structure(
-    list(visit_id = integer(0),
-         code = character(0),
-         poa = structure(integer(0), .Label = character(0), class = "factor")),
+    list(
+      visit_id = integer(0),
+      code = character(0),
+      poa = structure(integer(0), .Label = character(0), class = "factor")
+    ),
     .Names = c("visit_id", "code", "poa"),
-    row.names = integer(0), class = "data.frame")
+    row.names = integer(0), class = "data.frame"
+  )
 
   # no error?
   guess_short(no_pts)
-
 })
 
 test_that("guess on a zero length character vector works", {

@@ -24,10 +24,11 @@ is_defined.icd9 <- function(x, short_code = guess_short(x),
   stopifnot(is.factor(x) || is.character(x))
   stopifnot(is.logical(short_code), is.logical(billable))
   if (!short_code) x <- decimal_to_short.icd9(x)
-  if (billable)
+  if (billable) {
     is_leaf.icd9cm(short_code = TRUE, as_char_no_warn(x))
-  else
+  } else {
     x %in% icd.data::icd9cm_hierarchy[["code"]]
+  }
 }
 
 #' @describeIn is_defined Same for ICD-10-CM
@@ -35,22 +36,23 @@ is_defined.icd9 <- function(x, short_code = guess_short(x),
 #' @export
 #' @keywords internal
 is_defined.icd10cm <- function(
-  x,
-  short_code = guess_short(x),
-  billable = FALSE,
-  leaf = billable,
-  ...
-) {
+                               x,
+                               short_code = guess_short(x),
+                               billable = FALSE,
+                               leaf = billable,
+                               ...) {
   stopifnot(is.factor(x) || is.character(x))
   stopifnot(is.logical(short_code), is.logical(leaf))
   if (!short_code) x <- decimal_to_short(x)
   i <- get_from_icd_data("icd10cm_active", alt = icd.data::icd10cm2016)
-  if (leaf)
+  if (leaf) {
     is_leaf.icd10cm(x, short_code = short_code)
-  else
+  } else {
     match(x,
-          i[["code"]],
-          nomatch = 0L, ...) > 0L
+      i[["code"]],
+      nomatch = 0L, ...
+    ) > 0L
+  }
 }
 
 #' @describeIn is_defined Same for ICD-10, temporarily using ICD-10-CM until
@@ -58,12 +60,11 @@ is_defined.icd10cm <- function(
 #' @export
 #' @keywords internal
 is_defined.icd10 <- function(
-  x,
-  short_code = guess_short(x),
-  billable = FALSE,
-  leaf = billable,
-  ...
-) {
+                             x,
+                             short_code = guess_short(x),
+                             billable = FALSE,
+                             leaf = billable,
+                             ...) {
   is_defined.icd10cm(x = x, short_code = short_code, leaf = leaf, ...)
 }
 
@@ -90,11 +91,10 @@ is_defined.default <- function(x, short_code = guess_short(x), ...) {
 #' @template billable
 #' @export
 get_defined <- function(
-  x,
-  short_code = guess_short(x),
-  billable = FALSE,
-  leaf = billable
-) {
+                        x,
+                        short_code = guess_short(x),
+                        billable = FALSE,
+                        leaf = billable) {
   UseMethod("get_defined")
 }
 
@@ -102,19 +102,19 @@ get_defined <- function(
 #' @keywords internal
 get_defined.default <- function(x, short_code = guess_short(x), ...) {
   icd_ver <- guess_version(x)
-  if (icd_ver != "icd9")
+  if (icd_ver != "icd9") {
     stop("testing whether ICD codes are defined is currently only implemented for ICD-9-CM")
+  }
   x[is_defined.icd9(x, short_code, ...)]
 }
 
 #' @export
 #' @keywords internal
 get_defined.icd9 <- function(
-  x,
-  short_code = guess_short(x),
-  billable = FALSE,
-  leaf = billable
-) {
+                             x,
+                             short_code = guess_short(x),
+                             billable = FALSE,
+                             leaf = billable) {
   x[is_defined.icd9(x, short_code = short_code, leaf = leaf)]
 }
 
@@ -136,12 +136,13 @@ is_leaf <- function(x, short_code = guess_short(x), ...) {
 #' @export
 #' @keywords internal
 is_leaf.icd9 <- function(
-  x,
-  short_code = guess_short(x),
-  ...
-) {
-  is_leaf.icd9cm(x = x,
-                 short_code = short_code)
+                         x,
+                         short_code = guess_short(x),
+                         ...) {
+  is_leaf.icd9cm(
+    x = x,
+    short_code = short_code
+  )
 }
 
 #' @describeIn is_leaf Which of the given ICD-10 codes are leaf nodes in
@@ -149,12 +150,12 @@ is_leaf.icd9 <- function(
 #' @export
 #' @keywords internal
 is_leaf.icd10cm <- function(
-  x,
-  short_code = guess_short(x),
-  ...
-) {
-  if (!short_code)
+                            x,
+                            short_code = guess_short(x),
+                            ...) {
+  if (!short_code) {
     x <- decimal_to_short(x)
+  }
   # Workaround until next icd.data is on CRAN
   ia <- get_from_icd_data("icd10cm_active", icd.data::icd10cm2016)
   leaf_name <- ifelse("leaf" %in% names(ia), "leaf", "billable")
@@ -166,10 +167,9 @@ is_leaf.icd10cm <- function(
 #' @export
 #' @keywords internal
 is_leaf.icd10 <- function(
-  x,
-  short_code = guess_short(x),
-  ...
-) {
+                          x,
+                          short_code = guess_short(x),
+                          ...) {
   is_leaf.icd10cm(x = x, short_code = short_code)
 }
 
@@ -178,17 +178,18 @@ is_leaf.icd10 <- function(
 #' @export
 #' @keywords internal
 is_leaf.icd9cm <- function(
-  x,
-  short_code = guess_short(x),
-  ...
-) {
+                           x,
+                           short_code = guess_short(x),
+                           ...) {
   stopifnot(is.atomic(x), is.logical(short_code))
-  if (!short_code)
+  if (!short_code) {
     x <- decimal_to_short.icd9(x)
+  }
   m <- match(x,
-             icd.data::icd9cm_hierarchy$code,
-             nomatch = NA_integer_,
-             ...)
+    icd.data::icd9cm_hierarchy$code,
+    nomatch = NA_integer_,
+    ...
+  )
   res <- rep_len(FALSE, length(x))
   not_na <- !is.na(m)
   res[not_na] <- icd.data::icd9cm_hierarchy[m[not_na], "billable"]
@@ -239,11 +240,10 @@ get_leaf.default <- function(x, short_code = guess_short(x), ...) {
 #' @export
 #' @keywords internal
 get_leaf.icd9cm <- function(
-  x,
-  short_code = guess_short(x),
-  invert = FALSE,
-  ...
-) {
+                            x,
+                            short_code = guess_short(x),
+                            invert = FALSE,
+                            ...) {
   stopifnot(is.atomic(x), is.logical(short_code), is.logical(invert))
   x <- as.short_diag(as.icd9cm(x), short_code)
   x[is_leaf.icd9cm(x, short_code = short_code) != invert]
@@ -261,11 +261,10 @@ get_leaf.icd9 <- function(...)
 #' @keywords internal
 #' @noRd
 get_leaf.icd10cm <- function(
-  x,
-  short_code = guess_short(x),
-  invert = FALSE,
-  ...
-) {
+                             x,
+                             short_code = guess_short(x),
+                             invert = FALSE,
+                             ...) {
   stopifnot(is.atomic(x), is.logical(short_code), is.logical(invert))
   x <- as.short_diag(as.icd10cm(x), short_code)
   x[is_leaf.icd10cm(unclass(x), short_code = short_code) != invert]
@@ -276,14 +275,15 @@ get_leaf.icd10cm <- function(
 #' @keywords internal
 #' @noRd
 get_leaf.icd10 <- function(
-  x,
-  short_code = guess_short(x),
-  invert = FALSE,
-  ...
-) {
-  get_leaf.icd10cm(x = x,
-                   short_code = short_code,
-                   invert = invert)
+                           x,
+                           short_code = guess_short(x),
+                           invert = FALSE,
+                           ...) {
+  get_leaf.icd10cm(
+    x = x,
+    short_code = short_code,
+    invert = invert
+  )
 }
 
 

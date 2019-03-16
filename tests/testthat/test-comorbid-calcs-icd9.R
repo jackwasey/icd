@@ -2,23 +2,31 @@ context("Generic comorbidity calculation")
 
 test_that("comorbid quick test", {
   testres <- icd9_comorbid(two_pts, two_map, return_df = TRUE)
-  testres_cat_simple <- categorize_simple(two_pts, two_map, return_df = TRUE,
-                                          id_name = "visit_id", code_name = "icd9")
-  trueres <- data.frame("visit_id" = c("v01", "v02"),
-                        "malady" = c(FALSE, TRUE),
-                        "ailment" = c(TRUE, FALSE),
-                        stringsAsFactors = FALSE)
+  testres_cat_simple <- categorize_simple(two_pts, two_map,
+    return_df = TRUE,
+    id_name = "visit_id", code_name = "icd9"
+  )
+  trueres <- data.frame(
+    "visit_id" = c("v01", "v02"),
+    "malady" = c(FALSE, TRUE),
+    "ailment" = c(TRUE, FALSE),
+    stringsAsFactors = FALSE
+  )
   expect_equal(testres, trueres)
   expect_equal(testres_cat_simple, trueres)
   testmat <- icd9_comorbid(two_pts, two_map, return_df = FALSE)
-  truemat <- matrix(c(FALSE, TRUE, TRUE, FALSE), nrow = 2,
-                    dimnames = list(c("v01", "v02"), c("malady", "ailment")))
+  truemat <- matrix(c(FALSE, TRUE, TRUE, FALSE),
+    nrow = 2,
+    dimnames = list(c("v01", "v02"), c("malady", "ailment"))
+  )
   expect_equal(testmat, truemat)
   testresfac <- icd9_comorbid(two_pts_fac, two_map_fac, return_df = TRUE)
-  trueresfac <- data.frame("visit_id" = c("v01", "v02"),
-                           "malady" = c(FALSE, TRUE),
-                           "ailment" = c(TRUE, FALSE),
-                           stringsAsFactors = TRUE)
+  trueresfac <- data.frame(
+    "visit_id" = c("v01", "v02"),
+    "malady" = c(FALSE, TRUE),
+    "ailment" = c(TRUE, FALSE),
+    stringsAsFactors = TRUE
+  )
   expect_equal(testresfac, trueresfac)
   expect_equal(icd9_comorbid(two_pts, two_map_fac, return_df = FALSE), truemat)
   expect_equal(icd9_comorbid(two_pts_fac, two_map, return_df = FALSE), truemat)
@@ -26,8 +34,10 @@ test_that("comorbid quick test", {
 })
 
 test_that("failing example", {
-  mydf <- data.frame(visit_id = c("a", "b", "c"),
-                     icd9 = c("441", "412.93", "042"))
+  mydf <- data.frame(
+    visit_id = c("a", "b", "c"),
+    icd9 = c("441", "412.93", "042")
+  )
   cmb <- icd9_comorbid_quan_deyo(mydf, short_code = FALSE, hierarchy = TRUE)
   expect_false("names" %in% names(attributes(cmb)))
   charlson(mydf, short_code = FALSE)
@@ -50,9 +60,11 @@ test_that("disordered visit_ids works by default", {
 context("ICD-9 comorbidity calculations")
 
 test_that("ahrq all comorbidities in one patient, no abbrev, hier", {
-  res <- icd9_comorbid_ahrq(ahrq_test_dat, short_code = TRUE,
-                            abbrev_names = FALSE,
-                            hierarchy = TRUE, return_df = TRUE)
+  res <- icd9_comorbid_ahrq(ahrq_test_dat,
+    short_code = TRUE,
+    abbrev_names = FALSE,
+    hierarchy = TRUE, return_df = TRUE
+  )
   expect_equal(dim(res), c(1, 30))
   expect_true(setequal(c("visit_id", names_ahrq), names(res)))
   # should not have dm and dmcx, etc
@@ -60,10 +72,12 @@ test_that("ahrq all comorbidities in one patient, no abbrev, hier", {
   expect_false(res[1, "Diabetes, uncomplicated"])
   expect_false(res[1, "Solid tumor without metastasis"])
 
-  #matrix
-  res <- icd9_comorbid_ahrq(ahrq_test_dat, short_code = TRUE,
-                            abbrev_names = FALSE,
-                            hierarchy = TRUE, return_df = FALSE)
+  # matrix
+  res <- icd9_comorbid_ahrq(ahrq_test_dat,
+    short_code = TRUE,
+    abbrev_names = FALSE,
+    hierarchy = TRUE, return_df = FALSE
+  )
   expect_equal(dim(res), c(1, 29))
   expect_true(setequal(names_ahrq, colnames(res)))
   # should not have dm and dmcx, etc
@@ -83,9 +97,11 @@ test_that("empty data returns empty data with or without hierarchy", {
 })
 
 test_that("elix, all cmb in one patient, no abbrev, hier", {
-  res <- icd9_comorbid_elix(elix_test_dat, short_code = TRUE,
-                            abbrev_names = FALSE,
-                            hierarchy = TRUE, return_df = TRUE)
+  res <- icd9_comorbid_elix(elix_test_dat,
+    short_code = TRUE,
+    abbrev_names = FALSE,
+    hierarchy = TRUE, return_df = TRUE
+  )
   expect_equal(dim(res), c(1, 31))
   expect_true(setequal(c("visit_id", names_elix), names(res)))
   # should not have dm and dmcx, etc
@@ -93,10 +109,12 @@ test_that("elix, all cmb in one patient, no abbrev, hier", {
   expect_false(res[1, "Diabetes, uncomplicated"])
   expect_false(res[1, "Solid tumor without metastasis"])
 
-  #matrix
-  res <- icd9_comorbid_elix(elix_test_dat, short_code = TRUE,
-                            abbrev_names = FALSE,
-                            hierarchy = TRUE, return_df = FALSE)
+  # matrix
+  res <- icd9_comorbid_elix(elix_test_dat,
+    short_code = TRUE,
+    abbrev_names = FALSE,
+    hierarchy = TRUE, return_df = FALSE
+  )
   expect_equal(dim(res), c(1, 30))
   expect_true(setequal(names_elix, colnames(res)))
   # should not have dm and dmcx, etc
@@ -107,228 +125,273 @@ test_that("elix, all cmb in one patient, no abbrev, hier", {
 
 test_that("elix, all cmb in one patient, abbrev, hier", {
   res <- icd9_comorbid_elix(elix_test_dat,
-                            short_code = TRUE,
-                            abbrev_names = TRUE,
-                            hierarchy = TRUE, return_df = TRUE)
+    short_code = TRUE,
+    abbrev_names = TRUE,
+    hierarchy = TRUE, return_df = TRUE
+  )
   expect_equal(dim(res), c(1, 31))
   expect_true(setequal(c("visit_id", names_elix_abbrev), names(res)))
   # should not have dm and dmcx, etc
   expect_false(
-    all(as.logical(res[1, unlist(names_elix_abbrev)])))
+    all(as.logical(res[1, unlist(names_elix_abbrev)]))
+  )
   expect_false(res[1, "DM"])
   expect_false(res[1, "Tumor"])
 
-  #matrix
+  # matrix
   res <- icd9_comorbid_elix(elix_test_dat,
-                            short_code = TRUE,
-                            abbrev_names = TRUE,
-                            hierarchy = TRUE, return_df = FALSE)
+    short_code = TRUE,
+    abbrev_names = TRUE,
+    hierarchy = TRUE, return_df = FALSE
+  )
   expect_equal(dim(res), c(1, 30))
   expect_true(setequal(names_elix_abbrev, colnames(res)))
   # should not have dm and dmcx, etc
   expect_false(
-    all(as.logical(res[1, unlist(names_elix_abbrev)])))
+    all(as.logical(res[1, unlist(names_elix_abbrev)]))
+  )
   expect_false(res[1, "DM"])
   expect_false(res[1, "Tumor"])
 })
 
 test_that("elix, all cmb in one patient, no abbrev, no hier", {
-  res <- icd9_comorbid_elix(elix_test_dat, short_code = TRUE,
-                            abbrev_names = FALSE,
-                            hierarchy = FALSE, return_df = TRUE)
-  expect_equal(dim(res), c(1, 32)) #longer because 2x htn
+  res <- icd9_comorbid_elix(elix_test_dat,
+    short_code = TRUE,
+    abbrev_names = FALSE,
+    hierarchy = FALSE, return_df = TRUE
+  )
+  expect_equal(dim(res), c(1, 32)) # longer because 2x htn
   expect_true(setequal(c("visit_id", names_elix_htn), names(res)))
   # not applying hierarchy, so dm and dmcx can both be true
   expect_true(all(as.logical(res[1, unlist(names_elix_htn)])))
 
   # same for matrix result
-  res <- icd9_comorbid_elix(elix_test_dat, short_code = TRUE,
-                            abbrev_names = FALSE,
-                            hierarchy = FALSE, return_df = FALSE)
-  expect_equal(dim(res), c(1, 31)) #longer because 2x htn
+  res <- icd9_comorbid_elix(elix_test_dat,
+    short_code = TRUE,
+    abbrev_names = FALSE,
+    hierarchy = FALSE, return_df = FALSE
+  )
+  expect_equal(dim(res), c(1, 31)) # longer because 2x htn
   expect_true(setequal(names_elix_htn, colnames(res)))
   # not applying hierarchy, so dm and dmcx can both be true
   expect_true(all(as.logical(res[1, unlist(names_elix_htn)])))
 })
 
 test_that("elix, all cmb in one patient, abbrev, no hier", {
-  res <- icd9_comorbid_elix(elix_test_dat, short_code = TRUE,
-                            abbrev_names = TRUE,
-                            hierarchy = FALSE, return_df = TRUE)
+  res <- icd9_comorbid_elix(elix_test_dat,
+    short_code = TRUE,
+    abbrev_names = TRUE,
+    hierarchy = FALSE, return_df = TRUE
+  )
   expect_equal(dim(res), c(1, 32))
   expect_true(setequal(c("visit_id", names_elix_htn_abbrev), names(res)))
   expect_true(
-    all(as.logical(res[1, unlist(names_elix_htn_abbrev)])))
+    all(as.logical(res[1, unlist(names_elix_htn_abbrev)]))
+  )
 
-  #matrix
-  res <- icd9_comorbid_elix(elix_test_dat, short_code = TRUE,
-                            abbrev_names = TRUE,
-                            hierarchy = FALSE, return_df = FALSE)
+  # matrix
+  res <- icd9_comorbid_elix(elix_test_dat,
+    short_code = TRUE,
+    abbrev_names = TRUE,
+    hierarchy = FALSE, return_df = FALSE
+  )
   expect_equal(dim(res), c(1, 31))
   expect_true(setequal(names_elix_htn_abbrev, colnames(res)))
   expect_true(
-    all(as.logical(res[1, unlist(names_elix_htn_abbrev)])))
-
+    all(as.logical(res[1, unlist(names_elix_htn_abbrev)]))
+  )
 })
 
 test_that("qelix, all cmb in one patient, no abbrev, hier", {
   res <- icd9_comorbid_quan_elix(quan_elix_test_dat,
-                                 short_code = TRUE, abbrev_names = FALSE,
-                                 hierarchy = TRUE, return_df = TRUE)
+    short_code = TRUE, abbrev_names = FALSE,
+    hierarchy = TRUE, return_df = TRUE
+  )
   expect_equal(dim(res), c(1, 31))
   expect_true(setequal(c("visit_id", names_quan_elix), names(res)))
   # should not have dm and dmcx, etc
   expect_false(
-    all(as.logical(res[1, unlist(names_quan_elix)])))
+    all(as.logical(res[1, unlist(names_quan_elix)]))
+  )
   expect_false(res[1, "Diabetes, uncomplicated"])
   expect_false(res[1, "Solid tumor without metastasis"])
 
-  #matrix
+  # matrix
   res <- icd9_comorbid_quan_elix(quan_elix_test_dat,
-                                 short_code = TRUE,
-                                 abbrev_names = FALSE,
-                                 hierarchy = TRUE, return_df = FALSE)
+    short_code = TRUE,
+    abbrev_names = FALSE,
+    hierarchy = TRUE, return_df = FALSE
+  )
   expect_equal(dim(res), c(1, 30))
   expect_true(setequal(names_quan_elix, colnames(res)))
   # should not have dm and dmcx, etc
   expect_false(
-    all(as.logical(res[1, unlist(names_quan_elix)])))
+    all(as.logical(res[1, unlist(names_quan_elix)]))
+  )
   expect_false(res[1, "Diabetes, uncomplicated"])
   expect_false(res[1, "Solid tumor without metastasis"])
 })
 
 test_that("qelix, cmb in one patient, abbrev, hier", {
   res <- icd9_comorbid_quan_elix(quan_elix_test_dat,
-                                 short_code = TRUE,
-                                 abbrev_names = TRUE,
-                                 hierarchy = TRUE, return_df = TRUE)
+    short_code = TRUE,
+    abbrev_names = TRUE,
+    hierarchy = TRUE, return_df = TRUE
+  )
   expect_equal(dim(res), c(1, 31))
   expect_true(setequal(c("visit_id", names_quan_elix_abbrev), colnames(res)))
   # should not have dm and dmcx, etc
   expect_false(
-    all(as.logical(res[1, unlist(names_quan_elix_abbrev)])))
+    all(as.logical(res[1, unlist(names_quan_elix_abbrev)]))
+  )
   expect_false(res[1, "DM"])
   expect_false(res[1, "Tumor"])
 
-  #same for matrix
+  # same for matrix
   res <- icd9_comorbid_quan_elix(quan_elix_test_dat,
-                                 short_code = TRUE,
-                                 abbrev_names = TRUE,
-                                 hierarchy = TRUE, return_df = FALSE)
+    short_code = TRUE,
+    abbrev_names = TRUE,
+    hierarchy = TRUE, return_df = FALSE
+  )
   expect_equal(dim(res), c(1, 30))
   expect_equal(rownames(res)[1], quan_elix_test_dat[1, "visit_id"])
   expect_true(setequal(names_quan_elix_abbrev, colnames(res)))
   # should not have dm and dmcx, etc
   expect_false(
-    all(as.logical(res[1, unlist(names_quan_elix_abbrev)])))
+    all(as.logical(res[1, unlist(names_quan_elix_abbrev)]))
+  )
   expect_false(res[1, "DM"])
   expect_false(res[1, "Tumor"])
 })
 
 test_that("qelix, all cmb in one patient, no abbrev, no hier", {
   res <- icd9_comorbid_quan_elix(quan_elix_test_dat,
-                                 short_code = TRUE,
-                                 abbrev_names = FALSE,
-                                 hierarchy = FALSE, return_df = TRUE)
-  #longer because 2x htn
+    short_code = TRUE,
+    abbrev_names = FALSE,
+    hierarchy = FALSE, return_df = TRUE
+  )
+  # longer because 2x htn
   expect_equal(dim(res), c(1, 32))
   # not applying hierarchy, so dm and dmcx can both be true
   expect_true(setequal(c("visit_id", names_quan_elix_htn), names(res)))
   expect_true(
-    all(as.logical(res[1, unlist(names_quan_elix_htn)])))
+    all(as.logical(res[1, unlist(names_quan_elix_htn)]))
+  )
 
-  #matrix
+  # matrix
   res <- icd9_comorbid_quan_elix(quan_elix_test_dat,
-                                 short_code = TRUE,
-                                 abbrev_names = FALSE,
-                                 hierarchy = FALSE, return_df = FALSE)
+    short_code = TRUE,
+    abbrev_names = FALSE,
+    hierarchy = FALSE, return_df = FALSE
+  )
   expect_equal(dim(res), c(1, 31))
   # not applying hierarchy, so dm and dmcx can both be true
   expect_true(setequal(names_quan_elix_htn, colnames(res)))
   expect_true(
-    all(as.logical(res[1, unlist(names_quan_elix_htn)])))
+    all(as.logical(res[1, unlist(names_quan_elix_htn)]))
+  )
 })
 
 test_that("qelix, all cmb in one patient, abbrev, no hier", {
   res <- icd9_comorbid_quan_elix(quan_elix_test_dat,
-                                 short_code = TRUE,
-                                 abbrev_names = TRUE,
-                                 hierarchy = FALSE, return_df = TRUE)
+    short_code = TRUE,
+    abbrev_names = TRUE,
+    hierarchy = FALSE, return_df = TRUE
+  )
   expect_equal(dim(res), c(1, 32))
   expect_true(setequal(c("visit_id", names_quan_elix_htn_abbrev), names(res)))
   expect_true(
-    all(as.logical(res[1, unlist(names_quan_elix_htn_abbrev)])))
+    all(as.logical(res[1, unlist(names_quan_elix_htn_abbrev)]))
+  )
   # same for matrix
   res <- icd9_comorbid_quan_elix(quan_elix_test_dat,
-                                 short_code = TRUE,
-                                 abbrev_names = TRUE,
-                                 hierarchy = FALSE, return_df = FALSE)
+    short_code = TRUE,
+    abbrev_names = TRUE,
+    hierarchy = FALSE, return_df = FALSE
+  )
   expect_equal(dim(res), c(1, 31))
   expect_true(setequal(names_quan_elix_htn_abbrev, colnames(res)))
   expect_true(
-    all(as.logical(res[1, unlist(names_quan_elix_htn_abbrev)])))
+    all(as.logical(res[1, unlist(names_quan_elix_htn_abbrev)]))
+  )
 })
 
 test_that("ahrq, all cmb in one patient, abbrev, hier", {
-  res <- icd9_comorbid_ahrq(ahrq_test_dat, short_code = TRUE,
-                            abbrev_names = TRUE,
-                            hierarchy = TRUE, return_df = TRUE)
+  res <- icd9_comorbid_ahrq(ahrq_test_dat,
+    short_code = TRUE,
+    abbrev_names = TRUE,
+    hierarchy = TRUE, return_df = TRUE
+  )
   expect_equal(dim(res), c(1, 30))
   expect_true(setequal(c("visit_id", names_ahrq_abbrev), names(res)))
   # should not have dm and dmcx, etc
   expect_false(
-    all(as.logical(res[1, unlist(names_ahrq_abbrev)])))
+    all(as.logical(res[1, unlist(names_ahrq_abbrev)]))
+  )
   expect_false(res[1, "DM"])
   expect_false(res[1, "Tumor"])
 
-  #same for matrix
-  res <- icd9_comorbid_ahrq(ahrq_test_dat, short_code = TRUE,
-                            abbrev_names = TRUE,
-                            hierarchy = TRUE, return_df = FALSE)
+  # same for matrix
+  res <- icd9_comorbid_ahrq(ahrq_test_dat,
+    short_code = TRUE,
+    abbrev_names = TRUE,
+    hierarchy = TRUE, return_df = FALSE
+  )
   expect_equal(dim(res), c(1, 29))
   expect_true(setequal(names_ahrq_abbrev, colnames(res)))
   expect_false(
-    all(as.logical(res[1, unlist(names_ahrq_abbrev)])))
+    all(as.logical(res[1, unlist(names_ahrq_abbrev)]))
+  )
   expect_false(res[1, "DM"])
   expect_false(res[1, "Tumor"])
 })
 
 test_that("ahrq, all cmb in one patient, no abbrev, no hier", {
-  res <- icd9_comorbid_ahrq(ahrq_test_dat, short_code = TRUE,
-                            abbrev_names = FALSE,
-                            hierarchy = FALSE, return_df = TRUE)
-  #longer because 2x htn
+  res <- icd9_comorbid_ahrq(ahrq_test_dat,
+    short_code = TRUE,
+    abbrev_names = FALSE,
+    hierarchy = FALSE, return_df = TRUE
+  )
+  # longer because 2x htn
   expect_equal(dim(res), c(1, 31))
   # not applying hierarchy, so dm and dmcx can both be true
   expect_true(setequal(c("visit_id", names_ahrq_htn), names(res)))
   expect_true(all(as.logical(res[1, unlist(names_ahrq_htn)])))
 
-  #same for matrix:
-  res <- icd9_comorbid_ahrq(ahrq_test_dat, short_code = TRUE,
-                            abbrev_names = FALSE,
-                            hierarchy = FALSE, return_df = FALSE)
+  # same for matrix:
+  res <- icd9_comorbid_ahrq(ahrq_test_dat,
+    short_code = TRUE,
+    abbrev_names = FALSE,
+    hierarchy = FALSE, return_df = FALSE
+  )
   expect_equal(dim(res), c(1, 30))
   expect_true(setequal(names_ahrq_htn, colnames(res)))
   expect_true(all(as.logical(res[1, unlist(names_ahrq_htn)])))
 })
 
 test_that("ahrq, all cmb in one patient, abbrev, no hier", {
-  res <- icd9_comorbid_ahrq(ahrq_test_dat, short_code = TRUE,
-                            abbrev_names = TRUE,
-                            hierarchy = FALSE, return_df = TRUE)
+  res <- icd9_comorbid_ahrq(ahrq_test_dat,
+    short_code = TRUE,
+    abbrev_names = TRUE,
+    hierarchy = FALSE, return_df = TRUE
+  )
   expect_equal(dim(res), c(1, 31))
   expect_true(setequal(c("visit_id", names_ahrq_htn_abbrev), names(res)))
   expect_true(
-    all(as.logical(res[1, unlist(names_ahrq_htn_abbrev)])))
+    all(as.logical(res[1, unlist(names_ahrq_htn_abbrev)]))
+  )
 
-  #matrix
-  res <- icd9_comorbid_ahrq(ahrq_test_dat, short_code = TRUE,
-                            abbrev_names = TRUE,
-                            hierarchy = FALSE, return_df = FALSE)
+  # matrix
+  res <- icd9_comorbid_ahrq(ahrq_test_dat,
+    short_code = TRUE,
+    abbrev_names = TRUE,
+    hierarchy = FALSE, return_df = FALSE
+  )
   expect_equal(dim(res), c(1, 30))
   expect_true(setequal(names_ahrq_htn_abbrev, colnames(res)))
   expect_true(
-    all(as.logical(res[1, unlist(names_ahrq_htn_abbrev)])))
+    all(as.logical(res[1, unlist(names_ahrq_htn_abbrev)]))
+  )
 })
 
 test_that("Charlson/Deyo comorbidities for a single patient, one icd9", {
@@ -340,13 +403,18 @@ test_that("Charlson/Deyo comorbidities for a single patient, one icd9", {
         MI = FALSE, CHF = FALSE, PVD = FALSE, Stroke = FALSE, Dementia = FALSE,
         Pulmonary = FALSE, Rheumatic = FALSE, PUD = FALSE, LiverMild = FALSE,
         DM = FALSE, DMcx = FALSE, Paralysis = FALSE, Renal = FALSE,
-        Cancer = FALSE, LiverSevere = FALSE, Mets = FALSE, HIV = TRUE),
-      .Names = c("visit_id",
-                 "MI", "CHF", "PVD", "Stroke", "Dementia", "Pulmonary",
-                 "Rheumatic", "PUD", "LiverMild", "DM", "DMcx", "Paralysis",
-                 "Renal", "Cancer", "LiverSevere", "Mets", "HIV"),
+        Cancer = FALSE, LiverSevere = FALSE, Mets = FALSE, HIV = TRUE
+      ),
+      .Names = c(
+        "visit_id",
+        "MI", "CHF", "PVD", "Stroke", "Dementia", "Pulmonary",
+        "Rheumatic", "PUD", "LiverMild", "DM", "DMcx", "Paralysis",
+        "Renal", "Cancer", "LiverSevere", "Mets", "HIV"
+      ),
       row.names = 1L,
-      class = "data.frame"))
+      class = "data.frame"
+    )
+  )
 })
 
 test_that("no error for deyo single pt w two identical (major) icd9 codes", {
@@ -360,8 +428,10 @@ test_that("no error for deyo single pt w two different decimal icd9 codes", {
 })
 
 test_that("dispatch from column class when specified", {
-  mydf <- data.frame(visit_id = c("a", "b", "c"),
-                     icd9 = icd:::icd9cm(c("412.93", "441", "042")))
+  mydf <- data.frame(
+    visit_id = c("a", "b", "c"),
+    icd9 = icd:::icd9cm(c("412.93", "441", "042"))
+  )
   expect_warning(icd9_comorbid_quan_elix(mydf), regexp = NA)
   expect_warning(icd9_comorbid_quan_deyo(mydf), regexp = NA)
   expect_warning(icd9_comorbid_elix(mydf), regexp = NA)
@@ -370,8 +440,10 @@ test_that("dispatch from column class when specified", {
 
 # if an ICD class is not set for a column, the correct method is dispatched
 test_that("dispatch from column class when not specified", {
-  mydf <- data.frame(visit_id = c("a", "b", "c"),
-                     icd9 = c("412.93", "441", "042"))
+  mydf <- data.frame(
+    visit_id = c("a", "b", "c"),
+    icd9 = c("412.93", "441", "042")
+  )
   expect_warning(icd9_comorbid_quan_elix(mydf), regexp = NA)
   expect_warning(icd9_comorbid_quan_deyo(mydf), regexp = NA)
   expect_warning(icd9_comorbid_elix(mydf), regexp = NA)
@@ -380,51 +452,68 @@ test_that("dispatch from column class when not specified", {
 
 test_that("if we try to do comorbidity calc on wide data, it works!", {
   expect_error(comorbid_elix(icd.data::vermont_dx),
-               regexp = NA)
+    regexp = NA
+  )
   expect_error(comorbid_charlson(long_to_wide(icd.data::uranium_pathology)),
-               regexp = NA)
+    regexp = NA
+  )
 })
 
 test_that("code appearing in two icd9 comorbidities", {
   dat <- data.frame(id = 1, icd9 = c("123"))
   map <- list(a = "123", b = "123")
-  expect_identical(res <- icd9_comorbid(dat, map),
-                   matrix(c(TRUE, TRUE),
-                          nrow = 1,
-                          dimnames = list("1", c("a", "b")))
+  expect_identical(
+    res <- icd9_comorbid(dat, map),
+    matrix(c(TRUE, TRUE),
+      nrow = 1,
+      dimnames = list("1", c("a", "b"))
+    )
   )
-  dat_clean <- data.frame(id = "1",
-                          icd9 = factor("123"),
-                          stringsAsFactors = FALSE)
+  dat_clean <- data.frame(
+    id = "1",
+    icd9 = factor("123"),
+    stringsAsFactors = FALSE
+  )
 })
 
 test_that("calling specific functions df binary output", {
-  for (f in list("icd9_comorbid_ahrq",
-                 "icd9_comorbid_charlson",
-                 "icd9_comorbid_elix",
-                 "icd9_comorbid_pccc_dx",
-                 "icd9_comorbid_quan_deyo",
-                 "icd9_comorbid_quan_elix")) {
+  for (f in list(
+    "icd9_comorbid_ahrq",
+    "icd9_comorbid_charlson",
+    "icd9_comorbid_elix",
+    "icd9_comorbid_pccc_dx",
+    "icd9_comorbid_quan_deyo",
+    "icd9_comorbid_quan_elix"
+  )) {
     res <- do.call(f, args = list(random_test_patients,
-                                  return_binary = TRUE,
-                                  return_df = TRUE))
+      return_binary = TRUE,
+      return_df = TRUE
+    ))
     expect_true(all(vapply(res[-1],
-                           FUN = is.integer,
-                           FUN.VALUE = logical(1))),
-                info = f)
+      FUN = is.integer,
+      FUN.VALUE = logical(1)
+    )),
+    info = f
+    )
   }
 })
 
 test_that("comorbid for icd9 gives binary values if asked for matrices", {
-  for (map in list(icd9_map_charlson,
-                   icd9_map_ahrq,
-                   icd9_map_elix,
-                   icd9_map_quan_elix,
-                   icd9_map_quan_deyo)) {
-    res_bin <- comorbid(random_test_patients, map = map,
-                        return_binary = TRUE, return_df = FALSE)
-    res_log <- comorbid(random_test_patients, map = map,
-                        return_binary = FALSE, return_df = FALSE)
+  for (map in list(
+    icd9_map_charlson,
+    icd9_map_ahrq,
+    icd9_map_elix,
+    icd9_map_quan_elix,
+    icd9_map_quan_deyo
+  )) {
+    res_bin <- comorbid(random_test_patients,
+      map = map,
+      return_binary = TRUE, return_df = FALSE
+    )
+    res_log <- comorbid(random_test_patients,
+      map = map,
+      return_binary = FALSE, return_df = FALSE
+    )
     expect_true(is.integer(res_bin))
     expect_true(is.logical(res_log))
     expect_equivalent(apply(res_log, 2, as.integer), res_bin)
@@ -434,15 +523,21 @@ test_that("comorbid for icd9 gives binary values if asked for matrices", {
 })
 
 test_that("comorbid for icd9 gives binary values if asked for data.frames", {
-  for (map in list(icd9_map_charlson,
-                   icd9_map_ahrq,
-                   icd9_map_elix,
-                   icd9_map_quan_elix,
-                   icd9_map_quan_deyo)) {
-    res_bin <- comorbid(random_test_patients, map = icd9_map_charlson,
-                        return_binary = TRUE, return_df = TRUE)
-    res_log <- comorbid(random_test_patients, map = icd9_map_charlson,
-                        return_binary = FALSE, return_df = TRUE)
+  for (map in list(
+    icd9_map_charlson,
+    icd9_map_ahrq,
+    icd9_map_elix,
+    icd9_map_quan_elix,
+    icd9_map_quan_deyo
+  )) {
+    res_bin <- comorbid(random_test_patients,
+      map = icd9_map_charlson,
+      return_binary = TRUE, return_df = TRUE
+    )
+    res_log <- comorbid(random_test_patients,
+      map = icd9_map_charlson,
+      return_binary = FALSE, return_df = TRUE
+    )
     expect_true(all(vapply(res_bin[-1], is.integer, logical(1))))
     expect_true(all(vapply(res_log[-1], is.logical, logical(1))))
     expect_identical(res_bin, logical_to_binary(res_log))
@@ -452,9 +547,11 @@ test_that("comorbid for icd9 gives binary values if asked for data.frames", {
 
 test_that("binary output for CCS", {
   res_bin <- comorbid_ccs(random_test_patients,
-                          return_binary = TRUE, return_df = TRUE)
+    return_binary = TRUE, return_df = TRUE
+  )
   res_log <- comorbid_ccs(random_test_patients,
-                          return_binary = FALSE, return_df = TRUE)
+    return_binary = FALSE, return_df = TRUE
+  )
   expect_true(all(vapply(res_bin[-1], is.integer, logical(1))))
   expect_true(all(vapply(res_log[-1], is.logical, logical(1))))
   expect_identical(res_bin, logical_to_binary(res_log))
@@ -480,8 +577,12 @@ test_that("float visit IDs", {
 })
 
 test_that("plot comorbid", {
-  expect_error(regexp = NA,
-               plot_comorbid(icd.data::vermont_dx[1:1000, ]))
-  expect_error(regexp = NA,
-               plot_comorbid(icd.data::uranium_pathology))
+  expect_error(
+    regexp = NA,
+    plot_comorbid(icd.data::vermont_dx[1:1000, ])
+  )
+  expect_error(
+    regexp = NA,
+    plot_comorbid(icd.data::uranium_pathology)
+  )
 })

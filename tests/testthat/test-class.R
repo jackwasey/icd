@@ -127,24 +127,33 @@ test_that("subsetting a comorbidity map gives the right class", {
 test_that("constructing wide data works", {
   expect_equal(
     as.icd_wide_data(icd.data::vermont_dx),
-    icd.data::vermont_dx)
+    icd.data::vermont_dx
+  )
   expect_equivalent(
     as.icd_wide_data(icd.data::vermont_dx),
-    icd.data::vermont_dx)
+    icd.data::vermont_dx
+  )
   expect_equivalent(
     as.icd_wide_data(as.data.frame(icd.data::vermont_dx)),
-    icd.data::vermont_dx)
+    icd.data::vermont_dx
+  )
 })
 
 test_that("constructing long data works", {
   l <- data.frame(id = c(1, 1), code = c("A10", "B10"))
   expect_true(is.icd_long_data(as.icd_long_data(l)))
-  expect_identical(as.icd_long_data(icd.data::uranium_pathology),
-                   icd.data::uranium_pathology)
-  expect_equivalent(as.icd_long_data(icd.data::uranium_pathology),
-                    icd.data::uranium_pathology)
-  expect_identical(as.icd_long_data(as.data.frame(icd.data::uranium_pathology)),
-                   icd.data::uranium_pathology)
+  expect_identical(
+    as.icd_long_data(icd.data::uranium_pathology),
+    icd.data::uranium_pathology
+  )
+  expect_equivalent(
+    as.icd_long_data(icd.data::uranium_pathology),
+    icd.data::uranium_pathology
+  )
+  expect_identical(
+    as.icd_long_data(as.data.frame(icd.data::uranium_pathology)),
+    icd.data::uranium_pathology
+  )
 })
 
 test_that("is long or wide data?", {
@@ -162,10 +171,12 @@ test_that("constructing wide or long format for non-data frame gives error", {
 })
 
 test_that("subsetting data frame works", {
-  v_subsets <- list(icd.data::vermont_dx,
-                    icd.data::vermont_dx[1:10, ],
-                    icd.data::vermont_dx[, 1:15],
-                    icd.data::vermont_dx[1:10, 1:17])
+  v_subsets <- list(
+    icd.data::vermont_dx,
+    icd.data::vermont_dx[1:10, ],
+    icd.data::vermont_dx[, 1:15],
+    icd.data::vermont_dx[1:10, 1:17]
+  )
   for (v in v_subsets) {
     i <- paste(nrow(v), "x", ncol(v))
     expect_equal(unclass(v[1, "DX1"]), as.short_diag("27801"), info = i)
@@ -184,10 +195,11 @@ test_that("subsetting data frame works", {
 test_that("data frame subsetting doesn't incorrectly set class on columns", {
   expect_true(is.numeric(pts_invalid_mix[c(TRUE, TRUE, TRUE), "visit_id"]))
   expect_false(
-    inherits(pts_invalid_mix[c(TRUE, TRUE, TRUE), "visit_id"], "icd9"))
-  expect_equal(lapply(pts_invalid_mix[c(TRUE, TRUE, TRUE), ], class),
-               structure(list(visit_id = "numeric", icd9 = c("icd9", "character"
-               ), poa = "factor"), .Names = c("visit_id", "icd9", "poa"))
+    inherits(pts_invalid_mix[c(TRUE, TRUE, TRUE), "visit_id"], "icd9")
+  )
+  expect_equal(
+    lapply(pts_invalid_mix[c(TRUE, TRUE, TRUE), ], class),
+    structure(list(visit_id = "numeric", icd9 = c("icd9", "character"), poa = "factor"), .Names = c("visit_id", "icd9", "poa"))
   )
 })
 
@@ -195,13 +207,15 @@ test_that("printing a comorbidity map works very simply", {
   expect_warning(
     capture.output(
       print.comorbidity_map(icd9_map_quan_elix)
-    ), regexp = NA)
+    ),
+    regexp = NA
+  )
 })
 
 test_that("is comorbidity map?", {
   icd9_map_ahrq %>%
-    unclass %>%
-    comorbidity_map -> x
+    unclass() %>%
+    comorbidity_map() -> x
   expect_true(is.comorbidity_map(icd9_map_ahrq))
   expect_true(is.comorbidity_map(x))
   expect_is(icd9_map_ahrq, "comorbidity_map")
@@ -212,17 +226,17 @@ context("class conflicts")
 
 test_that("no conflict for standard classes", {
   expect_false(icd_classes_conflict(icd9("100.1")))
-  expect_false(icd_classes_conflict(icd9("100.1") %>% as.decimal_diag))
-  expect_false(icd_classes_conflict(icd9("1001") %>% as.short_diag))
+  expect_false(icd_classes_conflict(icd9("100.1") %>% as.decimal_diag()))
+  expect_false(icd_classes_conflict(icd9("1001") %>% as.short_diag()))
   expect_false(icd_classes_conflict(icd9cm("100.1")))
-  expect_false(icd_classes_conflict(icd9cm("100.1") %>% as.decimal_diag))
-  expect_false(icd_classes_conflict(icd9cm("1001") %>% as.short_diag))
+  expect_false(icd_classes_conflict(icd9cm("100.1") %>% as.decimal_diag()))
+  expect_false(icd_classes_conflict(icd9cm("1001") %>% as.short_diag()))
   expect_false(icd_classes_conflict(icd10("A00.0")))
-  expect_false(icd_classes_conflict(icd10("A00.0") %>% as.decimal_diag))
-  expect_false(icd_classes_conflict(icd10("A000") %>% as.short_diag))
+  expect_false(icd_classes_conflict(icd10("A00.0") %>% as.decimal_diag()))
+  expect_false(icd_classes_conflict(icd10("A000") %>% as.short_diag()))
   expect_false(icd_classes_conflict(icd10cm("A00.0")))
-  expect_false(icd_classes_conflict(icd10cm("A00.0") %>% as.decimal_diag))
-  expect_false(icd_classes_conflict(icd10cm("A000") %>% as.short_diag))
+  expect_false(icd_classes_conflict(icd10cm("A00.0") %>% as.decimal_diag()))
+  expect_false(icd_classes_conflict(icd10cm("A000") %>% as.short_diag()))
 })
 
 test_that("no conflict for built-in data", {
@@ -239,35 +253,59 @@ test_that("conflicting ICD type classes can be found", {
   expect_true(
     icd_classes_conflict(
       structure("V10",
-                class = c("icd9cm", "icd10", "character"))))
+        class = c("icd9cm", "icd10", "character")
+      )
+    )
+  )
   expect_true(
     icd_classes_conflict(
       structure("V10",
-                class = c("icd9", "icd10", "character"))))
+        class = c("icd9", "icd10", "character")
+      )
+    )
+  )
   expect_true(
     icd_classes_conflict(
       structure("V10",
-                class = c("icd9cm", "icd10cm", "character"))))
+        class = c("icd9cm", "icd10cm", "character")
+      )
+    )
+  )
   expect_true(
     icd_classes_conflict(
       structure("V10",
-                class = c("icd10cm", "icd9", "character"))))
+        class = c("icd10cm", "icd9", "character")
+      )
+    )
+  )
   expect_true(
     icd_classes_conflict(
       structure("V10",
-                class = c("icd10cm", "icd9cm", "character"))))
+        class = c("icd10cm", "icd9cm", "character")
+      )
+    )
+  )
   expect_true(
     icd_classes_conflict(
       structure("V10",
-                class = c("icd10", "icd9", "character"))))
+        class = c("icd10", "icd9", "character")
+      )
+    )
+  )
   expect_true(
     icd_classes_conflict(
       structure("V10",
-                class = c("icd10", "icd9cm", "character"))))
+        class = c("icd10", "icd9cm", "character")
+      )
+    )
+  )
   expect_true(
     icd_classes_conflict(
       structure(list("V10", "A20"),
-                class = c("icd9cm", "icd10", "list"))))
+        class = c("icd9cm", "icd10", "list")
+      )
+    )
+  )
 })
 
 test_that("we can't set a data.frame to have a vector class", {

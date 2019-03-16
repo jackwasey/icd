@@ -1,4 +1,4 @@
-#nocov start
+# nocov start
 
 #' Unzip file to raw data directory
 #'
@@ -33,8 +33,12 @@ unzip_to_data_raw <- function(url,
   # TODO: This temporary directory should be cleaned up if run during testing.
   if (!dir.exists(data_raw_path)) data_raw_path <- tempdir()
   file_path <- file.path(data_raw_path, make.names(save_name))
-  if (verbose) sprintf("file path = %s\nfile name = %s\nsave name = %s",
-                       file_path, file_name, save_name)
+  if (verbose) {
+    sprintf(
+      "file path = %s\nfile name = %s\nsave name = %s",
+      file_path, file_name, save_name
+    )
+  }
   if (force || !file.exists(file_path)) {
     if (offline) return()
     stopifnot(
@@ -48,10 +52,10 @@ unzip_to_data_raw <- function(url,
 #' @keywords internal
 #' @noRd
 download_to_data_raw <- function(
-  url,
-  file_name = regmatches(url, regexpr("[^/]*$", url)),
-  offline = TRUE,
-  data_raw_path = get_raw_data_dir()) {
+                                 url,
+                                 file_name = regmatches(url, regexpr("[^/]*$", url)),
+                                 offline = TRUE,
+                                 data_raw_path = get_raw_data_dir()) {
   assert_string(url)
   assert_string(file_name)
   assert_flag(offline)
@@ -60,8 +64,9 @@ download_to_data_raw <- function(
   f_info <- list(file_path = save_path, file_name = file_name)
   if (file.exists(save_path)) return(f_info)
   if (offline) return()
-  if (utils::download.file(url = url, destfile = save_path, quiet = TRUE) != 0)
+  if (utils::download.file(url = url, destfile = save_path, quiet = TRUE) != 0) {
     stop(paste(url, " not downloaded successfully."))
+  }
   f_info
 }
-#nocov end
+# nocov end

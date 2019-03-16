@@ -27,19 +27,21 @@ test_that("sorting of icd10 object", {
 test_that("sort icd10", {
   expect_equal(
     sort(as.icd10cm(c("Z00", "A99", "J4C"))),
-    as.icd10cm(c("A99", "J4C", "Z00")))
+    as.icd10cm(c("A99", "J4C", "Z00"))
+  )
   expect_equal(sort(as.icd10cm("Z04")), as.icd10cm("Z04"))
 })
 
 test_that("warn if NA when ordering ICD-9 codes", {
   expect_warning(order.icd9(c("a", NA)))
   expect_identical(
-    expect_warning(order.icd9(NA)), integer())
+    expect_warning(order.icd9(NA)), integer()
+  )
 })
 
 test_that("order some icd-9 codes", {
   expect_equal(
     order.icd9(c("1002", "1001")),
     c(2L, 1L)
-    )
+  )
 })

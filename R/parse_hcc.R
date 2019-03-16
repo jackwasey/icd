@@ -16,7 +16,8 @@ icd9_parse_cc <- function(save_data = FALSE) {
   hcc_icd9_dir <- file.path(get_raw_data_dir(), "icd_hcc_rawdata", "icd9")
   icd9_map_cc <- lapply(
     list.files(hcc_icd9_dir, full.names = TRUE),
-    FUN = read.fwf, widths = c(7, 4), header = FALSE, stringsAsFactors = FALSE)
+    FUN = read.fwf, widths = c(7, 4), header = FALSE, stringsAsFactors = FALSE
+  )
   # Create a vector of year names based on the file names in the icd folders
   years <- list()
   years$icd9 <- as.numeric(
@@ -24,7 +25,9 @@ icd9_parse_cc <- function(save_data = FALSE) {
   )
   # Assign year to each dataframe within the list of dataframes
   icd9_map_cc <- mapply(
-    cbind, icd9_map_cc, "year" = years$icd9, SIMPLIFY = FALSE)
+    cbind, icd9_map_cc,
+    "year" = years$icd9, SIMPLIFY = FALSE
+  )
   rm(years)
   # Combine lsit of DFs into a single DF
   icd9_map_cc <- do.call(rbind, icd9_map_cc)
@@ -38,31 +41,42 @@ icd9_parse_cc <- function(save_data = FALSE) {
   # icd9 40403, 40413, and 40493 are assigned to CC 80 in 2007-2012
   extracodes$e1 <- c("40403", "40413", "40493")
   extracodes$e1 <- expand.grid(
-    extracodes$e1, 80, 2007:2012, stringsAsFactors = FALSE)
+    extracodes$e1, 80, 2007:2012,
+    stringsAsFactors = FALSE
+  )
   # icd9 40401, 40403, 40411, 40413, 40491, 40493 are assigned to CC85 in 2013
   extracodes$e2 <- c("40401", "40403", "40411", "40413", "40491", "40493")
   extracodes$e2 <- expand.grid(
-    extracodes$e2, 85, 2013, stringsAsFactors = FALSE)
+    extracodes$e2, 85, 2013,
+    stringsAsFactors = FALSE
+  )
   # icd9 40403, 40413, 40493 are assigned to CC85 in 2014-2015
   extracodes$e3 <- c("40403", "40413", "40493")
   extracodes$e3 <- expand.grid(
-    extracodes$e3, 85, 2014:2015, stringsAsFactors = FALSE)
+    extracodes$e3, 85, 2014:2015,
+    stringsAsFactors = FALSE
+  )
   # icd9 3572 and 36202 are assigned to CC18 in 2013
   extracodes$e4 <- c("3572", "36202")
   extracodes$e4 <- expand.grid(
-    extracodes$e4, 18, 2013, stringsAsFactors = FALSE)
+    extracodes$e4, 18, 2013,
+    stringsAsFactors = FALSE
+  )
   # icd9 36202 is assigned to CC18 in 2014-2015
   extracodes$e5 <- "36202"
   extracodes$e5 <- expand.grid(
-    extracodes$e5, 18, 2014:2015, stringsAsFactors = FALSE)
+    extracodes$e5, 18, 2014:2015,
+    stringsAsFactors = FALSE
+  )
   # Combine into one DF
   extracodes <- do.call(rbind, extracodes)
   colnames(extracodes) <- c("icd_code", "cc", "year")
   # combine with full icd9_map_cc listing
   icd9_map_cc <- rbind(icd9_map_cc, extracodes)
   rm(extracodes)
-  if (save_data)
+  if (save_data) {
     save_in_data_dir(icd9_map_cc)
+  }
   invisible(icd9_map_cc)
 }
 
@@ -75,7 +89,8 @@ icd10_parse_cc <- function(save_data = FALSE) {
   # Import raw CMS data for ICD9
   icd10_map_cc <- lapply(
     list.files(hcc_icd10_dir, full.names = TRUE),
-    FUN = read.fwf, widths = c(7, 4), header = FALSE, stringsAsFactors = FALSE)
+    FUN = read.fwf, widths = c(7, 4), header = FALSE, stringsAsFactors = FALSE
+  )
 
   # TODO: do use factors, as there is much duplication in "year" and "cc" which
   # shaves 20% off the memory requirement of the data.frame. This is likely to
@@ -85,10 +100,13 @@ icd10_parse_cc <- function(save_data = FALSE) {
   # Create a vector of year names based on the file names in the icd folders
   years <- list()
   years$icd10 <- as.numeric(
-    substr(list.files(hcc_icd10_dir), 0, 4))
+    substr(list.files(hcc_icd10_dir), 0, 4)
+  )
   # Assign year to each dataframe within the list of dataframes
   icd10_map_cc <- mapply(
-    cbind, icd10_map_cc, "year" = years$icd10, SIMPLIFY = FALSE)
+    cbind, icd10_map_cc,
+    "year" = years$icd10, SIMPLIFY = FALSE
+  )
   rm(years)
   # Combine lsit of DFs into a single DF
   icd10_map_cc <- do.call(rbind, icd10_map_cc)
@@ -99,8 +117,9 @@ icd10_parse_cc <- function(save_data = FALSE) {
   # Per CMS instructions, some ICDs may to be manually assigned additional CCs
   # Currently, no rules exist for ICD10, but if they need to be added,
   # can adapt the code from icd9_map_cc()
-  if (save_data)
+  if (save_data) {
     save_in_data_dir(icd10_map_cc)
+  }
   invisible(icd10_map_cc)
 }
 
@@ -122,20 +141,24 @@ icd_parse_cc_hierarchy <- function(save_data = FALSE) {
   # Define Hierarchy
   # import raw hierarchy files from CMS
   hierarchy_path <- system.file(get_raw_data_dir(),
-                                "icd_hcc_rawdata", "hierarchy",
-                                package = "icd")
+    "icd_hcc_rawdata", "hierarchy",
+    package = "icd"
+  )
   hierarchy_files <- list.files(hierarchy_path)
   hierarchy_file_paths <- list.files(hierarchy_path, full.names = TRUE)
   icd_map_cc_hcc <- lapply(hierarchy_file_paths, FUN = readLines)
   # Create a vector of year names based on the file names in the icd folders
   years <- substr(hierarchy_files, 0, 4)
   # Add year variable to each dataframe
-  icd_map_cc_hcc <- mapply(cbind, icd_map_cc_hcc, "year" = years,
-                           SIMPLIFY = FALSE)
+  icd_map_cc_hcc <- mapply(cbind, icd_map_cc_hcc,
+    "year" = years,
+    SIMPLIFY = FALSE
+  )
   # Convert each item in the list of 'icd_map_cc_hcc' objects into a dataframe
   # and combine into a single DF
   icd_map_cc_hcc <- lapply(icd_map_cc_hcc, as.data.frame,
-                           stringsAsFactors = FALSE)
+    stringsAsFactors = FALSE
+  )
   icd_map_cc_hcc <- do.call(rbind, icd_map_cc_hcc)
   # convert years to numeric
   #
@@ -170,8 +193,9 @@ icd_parse_cc_hierarchy <- function(save_data = FALSE) {
   )
   # combine CC requirements with CCs to zero
   icd_map_cc_hcc <- cbind(icd_map_cc_hcc[, c("year", "ifcc")], todrop)
-  if (save_data)
+  if (save_data) {
     save_in_data_dir(icd_map_cc_hcc)
+  }
   invisible(icd_map_cc_hcc)
 }
 

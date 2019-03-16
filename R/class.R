@@ -1,36 +1,56 @@
 # ICD-9
-icd9_dx_sub_classes <- c("icd9cm",
-                         "icd9who")
+icd9_dx_sub_classes <- c(
+  "icd9cm",
+  "icd9who"
+)
 icd9_pc_sub_classes <- "icd9cm_pc"
-icd9_sub_classes <- c(icd9_dx_sub_classes,
-                      icd9_pc_sub_classes)
+icd9_sub_classes <- c(
+  icd9_dx_sub_classes,
+  icd9_pc_sub_classes
+)
 icd9_classes <- c(icd9_sub_classes, "icd9")
 # ICD-10
-icd10_dx_sub_classes <- c("icd10cm",
-                          "icd10who")
+icd10_dx_sub_classes <- c(
+  "icd10cm",
+  "icd10who"
+)
 icd10_pc_sub_classes <- "icd10cm_pc"
-icd10_sub_classes <- c(icd10_dx_sub_classes,
-                       icd10_pc_sub_classes)
+icd10_sub_classes <- c(
+  icd10_dx_sub_classes,
+  icd10_pc_sub_classes
+)
 icd10_classes <- c(icd10_sub_classes, "icd10")
 # ICD-9 and ICD-10
-icd_dx_not_generic <- c(icd9_dx_sub_classes,
-                        icd10_dx_sub_classes)
-icd_pc_not_generic <- c(icd9_pc_sub_classes,
-                        icd10_pc_sub_classes)
-icd_version_classes <- c(icd9_classes,
-                         icd10_classes)
+icd_dx_not_generic <- c(
+  icd9_dx_sub_classes,
+  icd10_dx_sub_classes
+)
+icd_pc_not_generic <- c(
+  icd9_pc_sub_classes,
+  icd10_pc_sub_classes
+)
+icd_version_classes <- c(
+  icd9_classes,
+  icd10_classes
+)
 # Other data types
-icd_data_classes <- c("icd_long_data",
-                      "icd_wide_data")
+icd_data_classes <- c(
+  "icd_long_data",
+  "icd_wide_data"
+)
 icd_other_classes <- c("comorbidity_map")
-icd_all_classes <- c(icd_version_classes,
-                     icd_data_classes,
-                     icd_other_classes)
-icd_system_classes <- c("data.frame",
-                        "list",
-                        "numeric",
-                        "character",
-                        "factor")
+icd_all_classes <- c(
+  icd_version_classes,
+  icd_data_classes,
+  icd_other_classes
+)
+icd_system_classes <- c(
+  "data.frame",
+  "list",
+  "numeric",
+  "character",
+  "factor"
+)
 
 #' Check for class conflict
 #' @param x Data to test
@@ -42,10 +62,11 @@ icd_conflicts <- function(x, do_stop = FALSE)
 
 stop_conflict <- function(x)
   stop("Cannot set requested class as the current data already has the ",
-       "following incompatible classes: ", paste(class(x), sep = ", "),
-       ". If you really wish to do this, use unclass, then set the desired ",
-       "icd class",
-       call. = FALSE)
+    "following incompatible classes: ", paste(class(x), sep = ", "),
+    ". If you really wish to do this, use unclass, then set the desired ",
+    "icd class",
+    call. = FALSE
+  )
 
 icd_conflicts.icd9 <- function(x, do_stop = FALSE) {
   res <- inherits(x, icd10_classes)
@@ -149,10 +170,12 @@ icd_classes_conflict <- function(x) {
 #' @keywords internal
 #' @noRd
 classes_ordered <- function(x) {
-  m <- match(class(x), c(icd_other_classes,
-                         icd_version_classes,
-                         icd_data_classes,
-                         icd_system_classes))
+  m <- match(class(x), c(
+    icd_other_classes,
+    icd_version_classes,
+    icd_data_classes,
+    icd_system_classes
+  ))
   all(diff(m) >= 0, na.rm = TRUE)
 }
 
@@ -175,16 +198,16 @@ classes_ordered <- function(x) {
 #' @name set_icd_class
 #' @family ICD data types
 #' @examples
-#' x = as.icd10("A1009")
+#' x <- as.icd10("A1009")
 #' attr(x, "icd_short_diag") <- TRUE
 #' x
 #' attributes(x) <- list(icd_short_diag = NULL)
 #' x
-#'
+#' 
 #' y <- as.decimal_diag(as.icd10("A10.09"))
 #' y
 #' is.short_diag(y)
-#'
+#' 
 #' j <- as.short_diag(as.icd10(c("A11", "B2222")))
 #' j[2] <- "C33"
 #' stopifnot(is.short_diag(j))
@@ -235,11 +258,12 @@ as.icd9cm <- function(x) {
   stopifnot(is.atomic(x))
   if (inherits(x, "icd9") && inherits(x, "icd9cm")) return(x)
   icd9_pos <- match("icd9", class(x))
-  if (!is.na(icd9_pos))
+  if (!is.na(icd9_pos)) {
     class(x) <- append(class(x), "icd9cm", after = icd9_pos - 1)
-  else
+  } else {
     # put the more specific type at beginning
     class(x) <- append(class(x), c("icd9cm", "icd9"), after = 0)
+  }
   icd_conflicts(x, do_stop = TRUE)
   x
 }
@@ -257,12 +281,15 @@ icd9cm_pc <- function(x) {
 #' @export
 as.icd9cm_pc <- function(x) {
   stopifnot(is.atomic(x))
-  if ("icd10" %in% class(x))
+  if ("icd10" %in% class(x)) {
     stop("An ICD-10 diagnostic class is already set on this variable")
-  if ("icd10cm_pc" %in% class(x))
+  }
+  if ("icd10cm_pc" %in% class(x)) {
     stop("An ICD-10 procedure class is already set on this variable")
-  if (any(c("icd9", "icd9cm", "icd9who") %in% class(x)))
+  }
+  if (any(c("icd9", "icd9cm", "icd9who") %in% class(x))) {
     stop("An ICD-9 diagnostic code class is already set")
+  }
   class(x) <- append(class(x), "icd9cm_pc", after = 0)
   icd_conflicts(x, do_stop = TRUE)
   x
@@ -294,10 +321,11 @@ as.icd10 <- function(x) {
 icd10cm <- function(x) {
   cl <- class(x)
   if ("icd10cm" %in% cl) return(x)
-  if ("icd10" %in% cl)
+  if ("icd10" %in% cl) {
     class(x) <- c("icd10cm", cl)
-  else
+  } else {
     class(x) <- c("icd10cm", "icd10", cl)
+  }
   x
 }
 
@@ -307,12 +335,14 @@ as.icd10cm <- function(x, short_code = NULL) {
   stopifnot(is.atomic(x))
   if (inherits(x, "icd10cm")) return(x)
   icd10_pos <- match("icd10", class(x))
-  if (!is.na(icd10_pos))
+  if (!is.na(icd10_pos)) {
     class(x) <- append(class(x), "icd10cm", after = icd10_pos - 1)
-  else
+  } else {
     class(x) <- append(class(x), c("icd10cm", "icd10"), after = 0)
-  if (!is.null(short_code))
+  }
+  if (!is.null(short_code)) {
     attr(x, "icd_short_diag") <- short_code
+  }
   icd_conflicts(x, do_stop = TRUE)
   x
 }
@@ -330,12 +360,15 @@ icd10cm_pc <- function(x) {
 #' @export
 as.icd10cm_pc <- function(x) {
   stopifnot(is.atomic(x))
-  if ("icd9" %in% class(x))
+  if ("icd9" %in% class(x)) {
     stop("ICD-9 diagnostic class already set on this variable")
-  if ("icd10cm_pc" %in% class(x))
+  }
+  if ("icd10cm_pc" %in% class(x)) {
     stop("ICD-10-CM procedure class already set on this variable")
-  if (any(c("icd10cm", "icd10who") %in% class(x)))
+  }
+  if (any(c("icd10cm", "icd10who") %in% class(x))) {
     stop("and ICD-10 diagnostic code class is already set")
+  }
   class(x) <- append(class(x), "icd10cm_pc", after = 0)
   icd_conflicts(x, do_stop = TRUE)
   x
@@ -356,12 +389,14 @@ as.icd10who <- function(x, short_code = NULL) {
   stopifnot(is.atomic(x))
   if (inherits(x, "icd10who")) return(x)
   icd10_pos <- match("icd10", class(x))
-  if (!is.na(icd10_pos))
+  if (!is.na(icd10_pos)) {
     class(x) <- append(class(x), "icd10who", after = icd10_pos - 1)
-  else
+  } else {
     class(x) <- append(class(x), c("icd10who", "icd10"), after = 0)
-  if (!is.null(short_code))
+  }
+  if (!is.null(short_code)) {
     attr(x, "icd_short_diag") <- short_code
+  }
   icd_conflicts(x, do_stop = TRUE)
   x
 }
@@ -371,10 +406,11 @@ as.icd10who <- function(x, short_code = NULL) {
 icd10who <- function(x) {
   cl <- class(x)
   if ("icd10who" %in% cl) return(x)
-  if ("icd10" %in% cl)
+  if ("icd10" %in% cl) {
     class(x) <- c("icd10who", cl)
-  else
+  } else {
     class(x) <- c("icd10who", "icd10", cl)
+  }
   x
 }
 
@@ -384,12 +420,14 @@ as.icd10fr <- function(x, short_code = NULL) {
   stopifnot(is.atomic(x))
   if (inherits(x, "icd10fr")) return(x)
   icd10_pos <- match("icd10", class(x))
-  if (!is.na(icd10_pos))
+  if (!is.na(icd10_pos)) {
     class(x) <- append(class(x), "icd10fr", after = icd10_pos - 1)
-  else
+  } else {
     class(x) <- append(class(x), c("icd10fr", "icd10"), after = 0)
-  if (!is.null(short_code))
+  }
+  if (!is.null(short_code)) {
     attr(x, "icd_short_diag") <- short_code
+  }
   icd_conflicts(x, do_stop = TRUE)
   x
 }
@@ -399,10 +437,11 @@ as.icd10fr <- function(x, short_code = NULL) {
 icd10fr <- function(x) {
   cl <- class(x)
   if ("icd10fr" %in% cl) return(x)
-  if ("icd10" %in% cl)
+  if ("icd10" %in% cl) {
     class(x) <- c("icd10fr", cl)
-  else
+  } else {
     class(x) <- c("icd10fr", "icd10", cl)
+  }
   x
 }
 
@@ -413,12 +452,14 @@ as.icd10be <- function(x, short_code = NULL) {
   stopifnot(is.atomic(x))
   if (inherits(x, "icd10be")) return(x)
   icd10_pos <- match("icd10", class(x))
-  if (!is.na(icd10_pos))
+  if (!is.na(icd10_pos)) {
     class(x) <- append(class(x), "icd10be", after = icd10_pos - 1)
-  else
+  } else {
     class(x) <- append(class(x), c("icd10be", "icd10"), after = 0)
-  if (!is.null(short_code))
+  }
+  if (!is.null(short_code)) {
     attr(x, "icd_short_diag") <- short_code
+  }
   icd_conflicts(x, do_stop = TRUE)
   x
 }
@@ -428,10 +469,11 @@ as.icd10be <- function(x, short_code = NULL) {
 icd10be <- function(x) {
   cl <- class(x)
   if ("icd10be" %in% cl) return(x)
-  if ("icd10" %in% cl)
+  if ("icd10" %in% cl) {
     class(x) <- c("icd10be", cl)
-  else
+  } else {
     class(x) <- c("icd10be", "icd10", cl)
+  }
   x
 }
 
@@ -460,9 +502,11 @@ icd10be <- function(x) {
 #' @examples
 #' class(icd.data::uranium_pathology)
 #' class(icd.data::vermont_dx)
-#' icd_wide_data(id = c(1, 2, 3),
-#'               dx01 = c("100", "441", "V20"),
-#'               dx02 = c("E9981", "V10", "44004"))
+#' icd_wide_data(
+#'   id = c(1, 2, 3),
+#'   dx01 = c("100", "441", "V20"),
+#'   dx02 = c("E9981", "V10", "44004")
+#' )
 #' @seealso \code{\link{long_to_wide}} and \code{\link{wide_to_long}}
 NULL
 
@@ -478,11 +522,15 @@ as.icd_long_data <- function(x, warn = TRUE) {
   # rbind."
   stopifnot(is.data.frame(x) || is.matrix(x))
   assert_data_frame(x)
-  if (warn && is.icd_wide_data(x))
-    warning("Setting 'icd_long_data' on a data.frame or matrix which already",
-            " has 'icd_wide_data' class")
-  if (is.icd_long_data(x))
+  if (warn && is.icd_wide_data(x)) {
+    warning(
+      "Setting 'icd_long_data' on a data.frame or matrix which already",
+      " has 'icd_wide_data' class"
+    )
+  }
+  if (is.icd_long_data(x)) {
     return(x)
+  }
   class(x) <- c("icd_long_data", class(x))
   x
 }
@@ -492,11 +540,15 @@ as.icd_long_data <- function(x, warn = TRUE) {
 #' @export
 as.icd_wide_data <- function(x, warn = TRUE) {
   stopifnot(is.data.frame(x) || is.matrix(x))
-  if (warn && is.icd_long_data(x))
-    warning("Setting 'icd_wide_data' on a data.frame or matrix which already",
-            " has 'icd_long_data' class")
-  if (is.icd_wide_data(x))
+  if (warn && is.icd_long_data(x)) {
+    warning(
+      "Setting 'icd_wide_data' on a data.frame or matrix which already",
+      " has 'icd_long_data' class"
+    )
+  }
+  if (is.icd_wide_data(x)) {
     return(x)
+  }
   class(x) <- c("icd_wide_data", class(x))
   x
 }
@@ -533,12 +585,15 @@ comorbidity_map <- function(x) {
 #' @family ICD data types
 #' @export
 as.comorbidity_map <- function(x) {
-  stopifnot(is.list(x),
-            !is.null(names(x)),
-            !any(names(x) == ""),
-            !anyDuplicated(names(x)))
-  if (inherits(x, "comorbidity_map"))
+  stopifnot(
+    is.list(x),
+    !is.null(names(x)),
+    !any(names(x) == ""),
+    !anyDuplicated(names(x))
+  )
+  if (inherits(x, "comorbidity_map")) {
     return(x)
+  }
   class(x) <- c("comorbidity_map", class(x))
   x
 }
@@ -580,12 +635,16 @@ as.comorbidity_map <- function(x) {
 c.icd9 <- function(..., warn = FALSE) {
   dots <- list(...)
   if (warn &&
-      any(vapply(dots, icd_conflicts.icd9, FUN.VALUE = logical(1))))
-    stop("Do you really want to combine ICD-9 codes (first argument) ",
-         " with ICD-9 codes (subsequent arguments)? If so, use 'unclass'",
-         " on some or all the arguments")
+    any(vapply(dots, icd_conflicts.icd9, FUN.VALUE = logical(1)))) {
+    stop(
+      "Do you really want to combine ICD-9 codes (first argument) ",
+      " with ICD-9 codes (subsequent arguments)? If so, use 'unclass'",
+      " on some or all the arguments"
+    )
+  }
   structure(c(lapply(dots, unclass), recursive = TRUE),
-            class = class(.subset2(dots, 1)))
+    class = class(.subset2(dots, 1))
+  )
   # SOMEDAY: would be nice to set the attribute, but by default, R's 'c' drops
   # attributes.
 }
@@ -610,10 +669,13 @@ c.icd10 <- function(..., warn = FALSE) {
   dots <- list(...)
   base_class <- class(.subset2(dots, 1))
   if (warn &&
-      any(vapply(dots, icd_conflicts.icd10, FUN.VALUE = logical(1))))
-    stop("Do you really want to combine ICD-10 codes (first argument) ",
-         " with ICD-9 codes (subsequent arguments)? If so, use 'unclass'",
-         " on some or all the arguments.")
+    any(vapply(dots, icd_conflicts.icd10, FUN.VALUE = logical(1)))) {
+    stop(
+      "Do you really want to combine ICD-10 codes (first argument) ",
+      " with ICD-9 codes (subsequent arguments)? If so, use 'unclass'",
+      " on some or all the arguments."
+    )
+  }
   out <- structure(c(unlist(dots)), class = base_class)
   # only set this attribute if all the consituent terms have the same attribute
   # present. One NULL or one conflict will mean the attribute is not set
@@ -621,14 +683,17 @@ c.icd10 <- function(..., warn = FALSE) {
   nulls <- vapply(attribs, is.null, logical(1))
   if (all(nulls)) return(out)
   short_attribs <- unlist(attribs[!nulls])
-  if (all(short_attribs))
+  if (all(short_attribs)) {
     attr(out, "icd_short_diag") <- TRUE
-  else if (!any(short_attribs))
+  } else if (!any(short_attribs)) {
     attr(out, "icd_short_diag") <- FALSE
-  else
-    warning("Combining codes with different short and decimal attributes.",
-            " 'icd_short_diag' attribute will be removed from result. Did",
-            " you mean to do this?")
+  } else {
+    warning(
+      "Combining codes with different short and decimal attributes.",
+      " 'icd_short_diag' attribute will be removed from result. Did",
+      " you mean to do this?"
+    )
+  }
   out
 }
 
@@ -647,7 +712,7 @@ c.icd10 <- function(..., warn = FALSE) {
 #' # preserving the ICD class
 #' stopifnot(!inherits(x[[1]], "list"))
 #' stopifnot(!inherits(x[[1]][2], "list"))
-#'
+#' 
 #' y <- as.icd10(c("A01", "B0234"))
 #' y[2]
 #' y[[2]]
@@ -670,8 +735,9 @@ NULL
 `[[.icd9` <- function(x, ...) {
   y <- NextMethod()
   attr(y, "icd_short_diag") <- attr(x, "icd_short_diag")
-  if (mode(x) != "list")
+  if (mode(x) != "list") {
     class(y) <- class(x)
+  }
   y
 }
 
@@ -689,8 +755,9 @@ NULL
 `[[.icd10` <- function(x, ...) {
   y <- NextMethod()
   attr(y, "icd_short_diag") <- attr(x, "icd_short_diag")
-  if (mode(x) != "list")
+  if (mode(x) != "list") {
     class(y) <- class(x)
+  }
   y
 }
 
@@ -767,7 +834,8 @@ is.comorbidity_map <- function(x) inherits(x, "comorbidity_map")
 #' x <- structure(
 #'   c("40201", "2258", "7208", "25001", "34400", "4011", "4011", NA),
 #'   class = c("icd9cm", "icd9", "character"),
-#'   icd_short_diag = TRUE)
+#'   icd_short_diag = TRUE
+#' )
 #' \dontrun{
 #' print(x)
 #' print(x, verbose = TRUE)
@@ -781,8 +849,9 @@ is.comorbidity_map <- function(x) inherits(x, "comorbidity_map")
 #' @export
 print.icd9 <- function(x, verbose = FALSE, ...)
   print_codes(x,
-              ifelse(is.icd9cm(x), "ICD-9-CM", "ICD-9"),
-              verbose = verbose, ...)
+    ifelse(is.icd9cm(x), "ICD-9-CM", "ICD-9"),
+    verbose = verbose, ...
+  )
 
 #' @rdname print.icd9
 #' @examples
@@ -793,33 +862,37 @@ print.icd9 <- function(x, verbose = FALSE, ...)
 #' # as.character will unclass the 'icd' classes
 #' print(as.character(u), verbose = TRUE)
 #' a <- structure(c("R21", "Z21"),
-#'                class = c("icd10cm", "icd10", "character"))
+#'   class = c("icd10cm", "icd10", "character")
+#' )
 #' print(a, verbose = TRUE)
 #' }
 #' @export
 print.icd10 <- function(x, verbose = FALSE, ...) {
   icd10cl <- grep("icd10.+", class(x), value = TRUE)
-  if (length(icd10cl) == 0)
+  if (length(icd10cl) == 0) {
     icd10cl <- "default"
+  }
   sub_class <- switch(icd10cl,
-                      icd10cm = "ICD-10-CM Diagnostic Codes",
-                      icd10cm_pc = "ICD-10-CM Procedure Codes",
-                      icd10who = "WHO ICD-10 (Diagnostic Codes)",
-                      icd10fr = "ICD-10-FR (French Diagnostic Codes)",
-                      icd10be = "ICD-10-BE (Belgian Diagnostic Codes)",
-                      icd10be_pc = "ICD-10-BE (Belgian Procedure Codes)",
-                      "ICD-10 Codes (Subtype not set)")
+    icd10cm = "ICD-10-CM Diagnostic Codes",
+    icd10cm_pc = "ICD-10-CM Procedure Codes",
+    icd10who = "WHO ICD-10 (Diagnostic Codes)",
+    icd10fr = "ICD-10-FR (French Diagnostic Codes)",
+    icd10be = "ICD-10-BE (Belgian Diagnostic Codes)",
+    icd10be_pc = "ICD-10-BE (Belgian Procedure Codes)",
+    "ICD-10 Codes (Subtype not set)"
+  )
   print_codes(x, sub_class, verbose = verbose, ...)
 }
 
 print_codes <- function(x, code_str, verbose = FALSE, ...) {
   if (verbose) {
-    if (is.icd_short_diag(x))
+    if (is.icd_short_diag(x)) {
       cat("Short-form", code_str, "codes:\n")
-    else if (is.icd_decimal_diag(x))
+    } else if (is.icd_decimal_diag(x)) {
       cat("Decimal-form", code_str, "codes:\n")
-    else
+    } else {
       cat(code_str, "codes (short/decimal attribute not set):\n")
+    }
   }
   x <- icd_attr_clean(x)
   icd_cl <- class(x) %in% c(icd9_classes, icd10_classes)
