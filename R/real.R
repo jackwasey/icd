@@ -155,6 +155,7 @@ is_leaf.icd10cm <- function(
 ) {
   if (!short_code)
     x <- decimal_to_short(x)
+  # Workaround until next icd.data is on CRAN
   ia <- get_from_icd_data("icd10cm_active", icd.data::icd10cm2016)
   leaf_name <- ifelse("leaf" %in% names(ia), "leaf", "billable")
   x %in% ia[ia[[leaf_name]] == 1L, "code"]
@@ -169,8 +170,7 @@ is_leaf.icd10 <- function(
   short_code = guess_short(x),
   ...
 ) {
-  is_leaf.icd10cm(x = x,
-                  short_code = short_code)
+  is_leaf.icd10cm(x = x, short_code = short_code)
 }
 
 #' @describeIn is_leaf Which of the given ICD-9 codes are leaf nodes in
@@ -271,7 +271,7 @@ get_leaf.icd10cm <- function(
   x[is_leaf.icd10cm(unclass(x), short_code = short_code) != invert]
 }
 
-#' @describeIn get_leaf Get billable, i.e. leaf nodes from ICD-10-CM
+#' @describeIn get_leaf Get leaf nodes from ICD-10, currently defaults to ICD-10-CM for historic reasons.
 #' @export
 #' @keywords internal
 #' @noRd
@@ -285,6 +285,7 @@ get_leaf.icd10 <- function(
                    short_code = short_code,
                    invert = invert)
 }
+
 
 #' Check whether a code is billable according to ICD-9-CM or ICD-10-CM
 #'
@@ -301,7 +302,7 @@ is_billable.icd9 <- is_leaf.icd9cm
 is_billable.icd9cm <- is_leaf.icd9cm
 #' @describeIn is_billable Prefer 'leaf' to 'billable' for generality.
 #' @export
-is_billable.icd10 <- is_leaf.icd10cm
+is_billable.icd10 <- is_leaf.icd10
 #' @describeIn is_billable Prefer 'leaf' to 'billable' for generality.
 #' @export
 is_billable.icd10cm <- is_leaf.icd10cm

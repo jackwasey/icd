@@ -147,11 +147,14 @@ expand_range_major.default <- function(start, end, defined = TRUE) {
 
 # Expand range of all (currently) possible ICD-10 major, three-digit part of
 # codes.
-.icd10cm_get_majors_defined <- function(s, e) {
+.icd10cm_get_majors_possible <- function(s, e) {
+  ss <- substr(s, 1L, 1L)
+  es <- substr(e, 1L, 1L)
+  lets <- LETTERS[which(LETTERS == ss):which(LETTERS == es)]
   o <- sort(
     as.icd10cm(
       apply(
-        expand.grid(LETTERS, 0:9, c(0:9, "A", "B")),
+        expand.grid(lets, 0:9, c(0:9, "A", "B")),
         MARGIN = 1,
         FUN = paste0,
         collapse = "")
@@ -170,11 +173,11 @@ expand_range_major.icd10cm <- function(start, end, defined = TRUE) {
   # numeric. This may make ICD-10-CM different from ICD-10 WHO. It also makes
   # generating the lookup table of ICD-10-CM codes potentially circular, since
   # we expand the start to end range of chapter and sub-chapter definitions.
-  se <- toupper(trim(as_char_no_warn(c(start, end))))
+  se <- toupper(trimws(as_char_no_warn(c(start, end))))
   unique_mjrs <- if (defined)
     unique(icd.data::icd10cm2016$three_digit)
   else
-    .icd10cm_get_majors_defined("A00", "Z99")
+    .icd10cm_get_majors_possible("A00", "Z99")
   if (!is_major.icd10cm(se[[1]]))
     stop("start: ", start, " is not an ICD-10-CM major (three character) code")
   if (!is_major.icd10cm(se[[2]]))
@@ -225,8 +228,14 @@ expand_range.icd9 <- function(start, end,
 #'   is ordered)
 #' @keywords internal
 #' @noRd
-icd9_expand_range_worker <- function(start, end, lookup, defined,
-                                     ex_ambig_start, ex_ambig_end) {
+icd9_expand_range_worker <- function(
+  start,
+  end,
+  lookup,
+  defined,
+  ex_ambig_start,
+  ex_ambig_end
+) {
   stopifnot(length(start) == 1)
   stopifnot(length(end) == 1)
   stopifnot(is.character(start))
@@ -254,11 +263,15 @@ icd9_expand_range_worker <- function(start, end, lookup, defined,
   out_env <- vec_to_env_true(lookup$vec[start_index:end_index])
   # do not want to check a load of leaf nodes for children, since they have
   # none. # TODO: pre-calculate
-  leaf_env <- vec_to_env_true(icd.data::icd9cm_billable[["32"]][["code"]])
+  leaf_codes <- get_from_icd_data("icd9cm_leaf_v32")[["code"]]
+  if (is.null(leaf_codes))
+    leaf_codes <- get_from_icd_data("icd9cm_billable")[["32"]][["code"]]
+  leaf_env <- vec_to_env_true(leaf_codes)
   is_parent <- function(x, defined) {
     if (!defined)
-      return(nchar(x) < 5L)
-    is.null(leaf_env[[x]])
+      nchar(x) < 5L
+    else
+      is.null(leaf_env[[x]])
   }
   icd_get_missing_kids <- function(code, defined) {
     s_kids <- children.icd9(code, short_code = TRUE, defined = defined)

@@ -72,11 +72,6 @@ extern "C" {
 #define DEBUG_VALGRIND(x) ((void)0)
 #endif
 
-#define ICD_CATCH
-//#ifdef NDEBUG
-//#undef ICD_CATCH
-//#endif
-
 #if defined(ICD_VALGRIND) && defined(HAVE_VALGRIND_VALGRIND_H)
 #include <valgrind/callgrind.h>
 #else

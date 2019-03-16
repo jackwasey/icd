@@ -162,16 +162,23 @@ test_that("constructing wide or long format for non-data frame gives error", {
 })
 
 test_that("subsetting data frame works", {
-  expect_equal(unclass(icd.data::vermont_dx[1, 6]), as.short_diag("27801"))
-  expect_equal(unclass(icd.data::vermont_dx[1, "DX1"]), as.short_diag("27801"))
-  expect_is(icd.data::vermont_dx[1, "DX1"], c("icd9cm", "icd9", "character"))
-  expect_equivalent(unclass(icd.data::vermont_dx[[1, 6]]), "27801")
-  expect_is(icd.data::vermont_dx[[1, "DX1"]], c("icd9cm", "icd9", "character"))
-  expect_true(is.icd9(icd.data::vermont_dx[[1, "DX9"]]))
-  expect_true(is.icd9cm(icd.data::vermont_dx[[1, "DX12"]]))
-  # columns
-  expect_is(icd.data::vermont_dx[6], c("icd9cm", "icd9", "data.frame"))
-  expect_is(icd.data::vermont_dx[[6]], c("icd9cm", "icd9", "character"))
+  v_subsets <- list(icd.data::vermont_dx,
+                    icd.data::vermont_dx[1:10, ],
+                    icd.data::vermont_dx[, 1:15],
+                    icd.data::vermont_dx[1:10, 1:17])
+  for (v in v_subsets) {
+    i <- paste(nrow(v), "x", ncol(v))
+    expect_equal(unclass(v[1, "DX1"]), as.short_diag("27801"), info = i)
+    expect_true(is.short_diag(v[, "DX2"]))
+    expect_equivalent(unclass(v[[1, "DX1"]]), "27801", info = i)
+    expect_is(v[2, "DX3"], c("icd9cm", "icd9", "character"), info = i)
+    expect_is(v[[3, "DX4"]], c("icd9cm", "icd9", "character"), info = i)
+    expect_true(is.icd9(v[[4, "DX5"]]), info = i)
+    expect_true(is.icd9cm(v[[5, "DX6"]]), info = i)
+    # columns
+    expect_is(v[9], c("icd9cm", "icd9", "data.frame"), info = i)
+    expect_is(v[[8]], c("icd9cm", "icd9", "character"), info = i)
+  }
 })
 
 test_that("data frame subsetting doesn't incorrectly set class on columns", {

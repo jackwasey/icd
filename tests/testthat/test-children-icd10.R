@@ -1,34 +1,16 @@
 context("generate defined child codes for ICD-10-CM")
 
 expect_icd10cm_child_is_self <- function(...) {
-  dots <- unlist(list(...))
-  for (i in dots) {
+  for (i in list(...)) {
     eval(bquote(expect_identical(children(icd:::icd10cm(.(i))),
                                  as.icd10cm(as.short_diag(.(i))))))
-    children(icd10(i))
-    eval(bquote(expect_warning(warn_res <- children(as.icd10cm(.(i))),
-                               regexp = NA)))
-    eval(bquote(expect_is(warn_res, "icd10")))
-    eval(bquote(expect_is(warn_res, "icd10cm")))
-    eval(bquote(expect_warning(warn_res <- children(.(i)), regexp = NA)))
-    eval(bquote(expect_identical(warn_res,
-                                 as.icd10(as.short_diag(.(i))))))
-    eval(bquote(expect_identical(children.icd10cm(.(i)),
-                                 as.icd10cm(as.short_diag(.(i))))))
-    eval(bquote(expect_identical(children.icd10cm(as.icd10(.(i))),
-                                 as.icd10cm(as.short_diag(.(i))))))
-    eval(bquote(expect_identical(children.icd10cm(as.icd10cm(.(i))),
-                                 as.icd10cm(as.short_diag(.(i))))))
-
-    # at present, the children are only even icd10cm, but we should not enforce
-    # this:
+    icd10cm_kids <- children(as.icd10cm(i))
+    eval(bquote(expect_is(icd10cm_kids, "icd10")))
+    eval(bquote(expect_is(icd10cm_kids, "icd10cm")))
+    eval(bquote(
+      expect_identical(icd10cm_kids,
+                       as.icd10cm(as.short_diag(.(i))))))
     children.icd10(icd10(i)) # should not warn
-    eval(bquote(expect_true(is.icd10(warn_res))))
-    eval(bquote(expect_equivalent(unclass(.(warn_res)), .(i))))
-
-    children(icd10(i)) # should not warn
-    eval(bquote(expect_true(is.icd10(warn_res))))
-    eval(bquote(expect_equivalent(unclass(.(warn_res)), .(i))))
   }
 }
 

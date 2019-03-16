@@ -146,14 +146,15 @@ children_defined <- function(x)
 #' @export
 #' @keywords internal
 #' @noRd
-children_defined.icd10cm <- function(x,
-                                     short_code = guess_short(x),
-                                     warn = FALSE) {
+children_defined.icd10cm <- function(
+  x,
+  short_code = guess_short(x),
+  warn = FALSE
+) {
   stopifnot(is.factor(x) || is.character(unclass(x)))
   stopifnot(is.logical(short_code))
   stopifnot(is.logical(warn))
-  x <- trim(x)
-  x <- toupper(x)
+  x <- trimws(toupper(x))
   if (!short_code)
     x <- decimal_to_short.icd10cm(x)
   dat <- get_from_icd_data("icd10cm_active", alt = icd.data::icd10cm2016)
@@ -162,11 +163,7 @@ children_defined.icd10cm <- function(x,
   } else {
     "2016"
   }
-  nc <- .chars_in_icd10cm[[ver]]
-  if (is.null(nc))
-    stop("Unable to get precomputer string lengths for ICD-10-CM version: ",
-         ver,
-         call. = FALSE)
+  nc <- .icd10cm_get_nchars(ver)
   kids <- icd10_children_defined_rcpp(
     x,
     dat,
@@ -200,8 +197,7 @@ children_defined.icd10who <- function(
   stopifnot(is.factor(x) || is.character(unclass(x)))
   stopifnot(is.logical(short_code))
   stopifnot(is.logical(warn))
-  x <- trim(x)
-  x <- toupper(x)
+  x <- trimws(toupper(x))
   if (!short_code)
     x <- decimal_to_short.icd10cm(x)
   d <- if (who_ver == "icd10fr2008")

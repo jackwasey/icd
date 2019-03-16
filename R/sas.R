@@ -24,7 +24,7 @@ sas_format_extract <- function(sas_lines) {
   #spaces.
   sas_lines <- gsub(pattern = "\\\\n", "", sas_lines) # nolint
   sas_lines <- gsub(pattern = "[[:space:]]+", " ", sas_lines)
-  sas_lines <- trim(sas_lines)
+  sas_lines <- trimws(sas_lines)
   # drop everything except VALUE statements
   sas_lines <- grep(pattern = "^VALUE.*", x = sas_lines, ignore.case = TRUE,
                     value = TRUE)

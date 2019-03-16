@@ -59,7 +59,7 @@ icd9_add_leading_zeroes <- function(x, short_code = guess_short(x)) {
 icd9_drop_leading_zeroes_major <- function(major) {
   # (valid) E codes from 000 exist. Dropping zeroes from E000 would require a
   # lot of logic for no current benefit. Defer this until it is a problem.
-  major <- trim(major)
+  major <- trimws(major)
   # not checking validity, necessarily, just quick check
   is_v <- icd9_is_v(major)
   is_n <- icd9_is_valid_major_n(major)

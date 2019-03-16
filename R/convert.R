@@ -283,7 +283,7 @@ short_to_decimal.icd9 <- function(x) {
 #' @export
 #' @keywords internal manip
 short_to_decimal.icd10 <- function(x) {
-  x <- trim(x)
+  x <- trimws(x)
   out <- substr(x, 0, 3) # majors
   minors <- substr(x, 4, 100L)
   out[minors != ""] <- paste0(out[minors != ""], ".", minors[minors != ""])

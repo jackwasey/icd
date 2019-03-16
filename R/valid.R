@@ -285,9 +285,9 @@ is_valid.icd10 <- function(x, short_code = guess_short(x),
   # SOMEDAY: check whether code has 'year' attribute. This is maybe more for
   # testing 'realness' start with a broad regular expression
   if (short_code)
-    grepl(pattern = justify_re(re_icd10_short), trim(x), perl = TRUE)
+    grepl(pattern = justify_re(re_icd10_short), trimws(x), perl = TRUE)
   else
-    grepl(pattern = justify_re(re_icd10_decimal), trim(x), perl = TRUE)
+    grepl(pattern = justify_re(re_icd10_decimal), trimws(x), perl = TRUE)
 }
 
 #' @describeIn is_valid Test whether generic ICD-10 code is valid
@@ -495,7 +495,7 @@ get_major <- function(x)
 #' @export
 #' @noRd
 get_major.icd10 <- function(x)
-  substr(trim(x), 1L, 3L)
+  substr(trimws(x), 1L, 3L)
 
 #' Check whether a code is major
 #' @param icd character vector of ICD codes.
@@ -537,7 +537,7 @@ is_major.icd10 <- function(x) {
 #' @noRd
 is_major.icd10cm <- function(x) {
   assert_character(x)
-  grepl(jws(re_icd10cm_major), trim(x), perl = TRUE)
+  grepl(jws(re_icd10cm_major), trimws(x), perl = TRUE)
 }
 
 #' @describeIn is_major check whether a code is an ICD-9 major

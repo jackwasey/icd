@@ -1,28 +1,7 @@
 # nocov start
 
-.onLoad <- function(libname, pkgname) {
-  # this is annoying. Difficult to get contents of lazy data in unattached
-  # package. Also, we do need these look-up tables (or possibly memoisation)
-  # because these data are used in children.R, which are sometimes called
-  # frequently.
-  work <- list()
-  for (ver in as.character(2014:2019)) {
-    dat <- try(silent = TRUE, {
-      base::getExportedValue(asNamespace("icd.data"),
-                             paste0("icd10cm", ver))
-    })
-    if (!inherits(dat, "try-error")) {
-      work[[length(work) + 1]] <- dat
-      names(work)[length(work)] <- ver
-    }
-  }
-  .chars_in_icd10cm <- lapply(work, function(v) nchar(v[["code"]])
-  )
-  names(.chars_in_icd10cm) <- names(work)
-  assign(".chars_in_icd10cm",
-         .chars_in_icd10cm,
-         envir = parent.env(environment()))
-}
+# Set up an environment to cache chars_in_icd10cm
+.lookup_chars_in_icd10cm <- new.env(parent = emptyenv())
 
 .onAttach <- function(libname, pkgname) {
   if (system.file(package = "icd9") != "")

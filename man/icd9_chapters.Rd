@@ -32,8 +32,8 @@ E000-E999 Supplementary Classification Of External Causes Of Injury And
 Poisoning }
 
 Format: list with chapter/sub-chapter or major names stored in list
-names, each with two element named character vector with start and end
-codes.
+  names, each with two element named character vector with start and end
+  codes.
 }
 \seealso{
 \code{\link[icd.data]{ls_icd_data}}

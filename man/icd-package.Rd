@@ -13,13 +13,17 @@
 \title{icd: Comorbidity Calculations and Tools for ICD-9 and ICD-10
     Codes}
 \description{
-Calculate comorbidities, Charlson and van Walraven
-    scores, perform extremely fast and accurate validation, conversion,
-    manipulation, filtering and comparison of ICD-9 and ICD-10 codes. This
-    package enables a work flow from raw lists of ICD codes in hospital
-    databases to comorbidities. ICD-9 and ICD-10 comorbidity mappings from
-    Quan (Deyo and Elixhauser versions), Elixhauser and AHRQ included.
-    Common ambiguities and code formats are handled.
+Calculate comorbidities, medical risk scores, and
+    work quickly and precisely with ICD-9 and ICD-10 codes. This package
+    enables a work flow from raw tables of ICD codes in hospital databases
+    to comorbidities. ICD-9 and ICD-10 comorbidity mappings from Quan
+    (Deyo and Elixhauser versions), Elixhauser and AHRQ included.  Common
+    ambiguities and code formats are handled. Comorbidity computation
+    includes Hierarchical Condition Codes, and a reimplementation of the
+    AHRQ Clinical Classifications Software. Risk scores include those of
+    Charlson and van Walraven.  US Clinical Modification, Word Health
+    Organization, Belgian and French ICD-10 codes are supported through
+    the 'icd.data' package, some of which are downloaded on demand.
 }
 \details{
 \describe{ \item{Comorbidities}{ \code{\link{comorbid}} determines

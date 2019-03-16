@@ -16,19 +16,6 @@ strim <- function(x) {
     return(NA_character_)
 }
 
-#' Trim leading and trailing white space
-#'
-#' \code{NA} is accepted and returned, probably as \code{NA_character_}
-#' @param x character vector
-#' @return character vector
-#' @keywords internal manip
-#' @noRd
-trim <- function(x) {
-  nax <- is.na(x)
-  x[!nax] <- .Call("_icd_trimCpp", PACKAGE = "icd", as.character(x[!nax]))
-  x
-}
-
 "%nin%" <- function(x, table)
   match(x, table, nomatch = 0L) == 0L
 
@@ -368,7 +355,7 @@ str_extract <- function(string, pattern, ...)
          FUN = `[[`, 1, FUN.VALUE = character(1L))
 
 capitalize_first <- function(x)
-  trim(paste0(toupper(substr(x, 1, 1)), substr(x, 2, nchar(x))))
+  trimws(paste0(toupper(substr(x, 1, 1)), substr(x, 2, nchar(x))))
 # nocov end
 
 #' Get the raw data directory
@@ -405,17 +392,25 @@ icd_data_ver_ok <- function() {
   res
 }
 
-get_from_icd_data <- function(name, alt = NULL, lazy = TRUE) {
+get_from_icd_data <- function(
+  name,
+  alt = NULL,
+  must_work = TRUE
+) {
+  # this will try find lazy data first, then active bindings, functions
   out <- try(silent = TRUE, {
-    if (lazy)
-      base::getExportedValue(asNamespace("icd.data"), name)
-    else
-      as.environment(getNamespace("icd.data"))[[name]]
+    base::getExportedValue(asNamespace("icd.data"), name)
   })
-  if (!inherits(out, "try-error"))
-    out
-  else
-    alt
+  if (!inherits(out, "try-error") && !is.null(out))
+    return(out)
+  out <- try(silent = TRUE, {
+    as.environment(getNamespace("icd.data"))[[name]]
+  })
+  if (!inherits(out, "try-error") && !is.null(out))
+    return(out)
+  if (must_work)
+    stop("Unable to get '", name, "' from icd.data")
+  alt
 }
 
 stop_data_lt_1dot1 <- function() {

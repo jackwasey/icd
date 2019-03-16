@@ -40,6 +40,7 @@ developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.re
 "Core Code Coverage")](https://codecov.io/github/jackwasey/icd?branch=master)
 [![CII Best
 Practices](https://bestpractices.coreinfrastructure.org/projects/2092/badge)](https://bestpractices.coreinfrastructure.org/projects/2092)
+[![Dependencies](https://tinyverse.netlify.com/badge/icd)](https://cran.r-project.org/package=icd)
 [![CRAN RStudio mirror downloads last calendar
 month](https://cranlogs.r-pkg.org/badges/icd
 "RStudio Mirror Downloads Last Calendar Month")](https://cran.r-project.org/package=icd)
@@ -50,13 +51,17 @@ month](https://cranlogs.r-pkg.org/badges/icd
 
 ## Introduction
 
-Calculate comorbidities, Charlson and van Walraven scores, perform fast
-and accurate validation, conversion, manipulation, filtering and
-comparison of ICD-9 and ICD-10 codes. This package enables a work flow
-from raw lists of ICD codes in hospital databases to comorbidities.
+Calculate comorbidities, medical risk scores, and work quickly and
+precisely with ICD-9 and ICD-10 codes. This package enables a work flow
+from raw tables of ICD codes in hospital databases to comorbidities.
 ICD-9 and ICD-10 comorbidity mappings from Quan (Deyo and Elixhauser
 versions), Elixhauser and AHRQ included. Common ambiguities and code
-formats are handled.
+formats are handled. Comorbidity computation includes Hierarchical
+Condition Codes, and a reimplementation of the AHRQ Clinical
+Classifications Software. Risk scores include those of Charlson and van
+Walraven. US Clinical Modification, Word Health Organization, Belgian
+and French ICD-10 codes are supported through the ‘icd.data’ package,
+some of which are downloaded on demand.
 
 `icd` is used by many researchers around the world who work in public
 health, epidemiology, clinical research, nutrition, journalism, health
@@ -172,23 +177,23 @@ knitr::kable(t(tab_dat), col.names = c("Emergency", "Not emergency"))
 
 |                                             | Emergency      | Not emergency |
 | ------------------------------------------- | :------------- | :------------ |
-| Myocardial Infarction                       | 2709 (3.70%)   | 1113 (1.42%)  |
-| Congestive Heart Failure                    | 12349 (16.85%) | 5644 (7.21%)  |
-| Periphral Vascular Disease                  | 3843 (5.25%)   | 3318 (4.24%)  |
-| Cerebrovascular Disease                     | 5788 (7.90%)   | 3177 (4.06%)  |
-| Dementia                                    | 2176 (2.97%)   | 729 (0.93%)   |
-| Chronic Pulmonary Disease                   | 12216 (16.67%) | 7058 (9.02%)  |
-| Connective Tissue Disease-Rheumatic Disease | 1529 (2.09%)   | 1143 (1.46%)  |
-| Peptic Ulcer Disease                        | 1143 (1.56%)   | 636 (0.81%)   |
-| Mild Liver Disease                          | 2171 (2.96%)   | 1149 (1.47%)  |
-| Diabetes without complications              | 14399 (19.65%) | 9133 (11.67%) |
+| Myocardial Infarction                       | 2707 (3.69%)   | 1077 (1.38%)  |
+| Congestive Heart Failure                    | 12339 (16.84%) | 5628 (7.19%)  |
+| Periphral Vascular Disease                  | 3798 (5.18%)   | 3042 (3.89%)  |
+| Cerebrovascular Disease                     | 5329 (7.27%)   | 2748 (3.51%)  |
+| Dementia                                    | 2175 (2.97%)   | 728 (0.93%)   |
+| Chronic Pulmonary Disease                   | 11989 (16.36%) | 6762 (8.64%)  |
+| Connective Tissue Disease-Rheumatic Disease | 1527 (2.08%)   | 1131 (1.44%)  |
+| Peptic Ulcer Disease                        | 1044 (1.42%)   | 473 (0.60%)   |
+| Mild Liver Disease                          | 2030 (2.77%)   | 1011 (1.29%)  |
+| Diabetes without complications              | 14399 (19.65%) | 9125 (11.66%) |
 | Diabetes with complications                 | 2719 (3.71%)   | 1449 (1.85%)  |
-| Paraplegia and Hemiplegia                   | 1446 (1.97%)   | 968 (1.24%)   |
-| Renal Disease                               | 9387 (12.81%)  | 4669 (5.96%)  |
-| Cancer                                      | 2780 (3.79%)   | 4008 (5.12%)  |
-| Moderate or Severe Liver Disease            | 1080 (1.47%)   | 521 (0.67%)   |
-| Metastatic Carcinoma                        | 2100 (2.87%)   | 1665 (2.13%)  |
-| HIV/AIDS                                    | 25 (0.03%)     | 63 (0.08%)    |
+| Paraplegia and Hemiplegia                   | 1386 (1.89%)   | 852 (1.09%)   |
+| Renal Disease                               | 9322 (12.72%)  | 4604 (5.88%)  |
+| Cancer                                      | 2724 (3.72%)   | 3496 (4.47%)  |
+| Moderate or Severe Liver Disease            | 893 (1.22%)    | 352 (0.45%)   |
+| Metastatic Carcinoma                        | 2100 (2.87%)   | 1663 (2.12%)  |
+| HIV/AIDS                                    | 0 (0.00%)      | 0 (0.00%)     |
 
 ## How to get help
 

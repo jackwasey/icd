@@ -557,3 +557,17 @@ apply_hier_ahrq <- function(cbd, abbrev_names = TRUE, hierarchy = TRUE) {
 #' @keywords internal
 cr <- function(x)
   seq(from = 1 + is.data.frame(x), to = ncol(x))
+
+.icd10cm_get_nchars <- function(ver) {
+  if (ver %in% names(.lookup_chars_in_icd10cm))
+    return(.lookup_chars_in_icd10cm[[ver]])
+  dat <- try(silent = TRUE, {
+    base::getExportedValue(asNamespace("icd.data"),
+                           paste0("icd10cm", ver))
+  })
+  if (inherits(dat, "try-error"))
+    stop("Unable to pre-calculate code lengths for ICD-10-CM version: ", ver)
+  n <- nchar(dat$code)
+  assign(ver, n, envir = .lookup_chars_in_icd10cm)
+  n
+}
