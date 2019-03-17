@@ -103,9 +103,11 @@ procedure codes
 head(icd9_comorbid_pccc_dx(icd.data::vermont_dx[1:1000, ]))
 # Six random codes from each PCCC procedure code map. 'icd' will use
 # an heuristic to guess whether ICD-9 or ICD-10:
-pts <- data.frame(encounters = c(10, 11, 12),
-                  icd9_pcs = c("0152", "304", "0050"),
-                  icd10_pcs = c("0B110Z4", "02YA0Z2", "031209D"))
+pts <- data.frame(
+  encounters = c(10, 11, 12),
+  icd9_pcs = c("0152", "304", "0050"),
+  icd10_pcs = c("0B110Z4", "02YA0Z2", "031209D")
+)
 comorbid_pccc_pcs(pts, icd_name = "icd9_pcs", return_binary = TRUE)
 comorbid_pccc_pcs(pts, icd_name = "icd10_pcs", return_binary = TRUE)
 

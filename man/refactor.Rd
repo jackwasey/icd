@@ -28,10 +28,10 @@ With \code{NA} values, margin is smaller, but still beats base \code{factor}.
 }
 \examples{
 \dontrun{
-  f <- factor(c(1, 2, 3))
-  icd:::refactor(f, c("2", "3"))
-  f <- factor(c(1, 2, NA))
-  icd:::refactor(f, c("2", "3", NA))
+f <- factor(c(1, 2, 3))
+icd:::refactor(f, c("2", "3"))
+f <- factor(c(1, 2, NA))
+icd:::refactor(f, c("2", "3", NA))
 }
 }
 \keyword{internal}

@@ -44,7 +44,7 @@ generate_random_short_icd9 <- function(n = 50000)
 #' @template short_code
 #' @keywords internal debugging datagen
 generate_random_short_icd10cm_bill <- function(n = 10, short_code = TRUE) {
-  i <- get_from_icd_data("icd10cm_latest", icd.data::icd10cm2016)
+  i <- icd.data::icd10cm2016
   x <- sample(
     unlist(
       i[i$billable == 1, "code"]
@@ -147,8 +147,7 @@ test_env <- function() {
 #' neds_comorbid <- icd::comorbid_pccc_dx(neds)
 #' }
 #' @keywords internal
-generate_neds_pts <- function(
-                              n = 1000L,
+generate_neds_pts <- function(n = 1000L,
                               ncol = 20L,
                               icd10 = TRUE,
                               verbose = FALSE) {
@@ -188,9 +187,6 @@ generate_neds_pts <- function(
   dat_wide_str
 }
 
-.catch <- function() {
-  .Call("run_testthat_tests", PACKAGE = "icd")
-}
 # nocov end
 
 assert_flag <- function(x) {

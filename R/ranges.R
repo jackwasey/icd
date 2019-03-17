@@ -41,8 +41,7 @@ expand_range <- function(start, end, ...) {
 #'   called.
 #' @export
 #' @keywords internal
-expand_range.character <- function(
-                                   start,
+expand_range.character <- function(start,
                                    end,
                                    short_code = NULL,
                                    defined = TRUE, ...) {
@@ -84,8 +83,7 @@ expand_range.character <- function(
 #' @param end  character vector of length one containing an ICD code
 #' @export
 #' @keywords internal
-expand_range.icd10cm <- function(
-                                 start,
+expand_range.icd10cm <- function(start,
                                  end,
                                  short_code = guess_short(c(start, end)),
                                  defined,
@@ -253,8 +251,7 @@ expand_range.icd9 <- function(start, end,
 #'   is ordered)
 #' @keywords internal
 #' @noRd
-icd9_expand_range_worker <- function(
-                                     start,
+icd9_expand_range_worker <- function(start,
                                      end,
                                      lookup,
                                      defined,

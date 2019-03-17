@@ -59,8 +59,7 @@ icd10_fetch_ahrq_ccs <- function(version = "2018.1", ...) {
 #' icd:::icd9_parse_ahrq_ccs(single = FALSE, offline = TRUE)
 #' }
 #' @keywords internal manip
-icd9_parse_ahrq_ccs <- function(
-                                single = TRUE,
+icd9_parse_ahrq_ccs <- function(single = TRUE,
                                 save_data = FALSE,
                                 offline = getOption("icd.data.offline")) {
   assert_flag(single)
@@ -199,8 +198,7 @@ icd9_parse_ahrq_ccs <- function(
 #' )
 #' }
 #' @keywords internal manip
-icd10_parse_ahrq_ccs <- function(
-                                 version = "2018.1",
+icd10_parse_ahrq_ccs <- function(version = "2018.1",
                                  save_data = FALSE,
                                  offline = TRUE,
                                  verbose = TRUE) {

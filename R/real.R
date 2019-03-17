@@ -35,8 +35,7 @@ is_defined.icd9 <- function(x, short_code = guess_short(x),
 #' @param leaf New synonym for 'billable', which will be deprecated.
 #' @export
 #' @keywords internal
-is_defined.icd10cm <- function(
-                               x,
+is_defined.icd10cm <- function(x,
                                short_code = guess_short(x),
                                billable = FALSE,
                                leaf = billable,
@@ -59,8 +58,7 @@ is_defined.icd10cm <- function(
 #'   ICD-10 WHO is available in this package
 #' @export
 #' @keywords internal
-is_defined.icd10 <- function(
-                             x,
+is_defined.icd10 <- function(x,
                              short_code = guess_short(x),
                              billable = FALSE,
                              leaf = billable,
@@ -90,8 +88,7 @@ is_defined.default <- function(x, short_code = guess_short(x), ...) {
 #' @param short_code logical value, whether short-form ICD code
 #' @template billable
 #' @export
-get_defined <- function(
-                        x,
+get_defined <- function(x,
                         short_code = guess_short(x),
                         billable = FALSE,
                         leaf = billable) {
@@ -110,8 +107,7 @@ get_defined.default <- function(x, short_code = guess_short(x), ...) {
 
 #' @export
 #' @keywords internal
-get_defined.icd9 <- function(
-                             x,
+get_defined.icd9 <- function(x,
                              short_code = guess_short(x),
                              billable = FALSE,
                              leaf = billable) {
@@ -135,8 +131,7 @@ is_leaf <- function(x, short_code = guess_short(x), ...) {
 #'   ICD-9-CM. Currently assumes ICD-9 codes are ICD-9-CM
 #' @export
 #' @keywords internal
-is_leaf.icd9 <- function(
-                         x,
+is_leaf.icd9 <- function(x,
                          short_code = guess_short(x),
                          ...) {
   is_leaf.icd9cm(
@@ -149,8 +144,7 @@ is_leaf.icd9 <- function(
 #'   ICD-10-CM. Currently assumes ICD-10 codes are ICD-10-CM
 #' @export
 #' @keywords internal
-is_leaf.icd10cm <- function(
-                            x,
+is_leaf.icd10cm <- function(x,
                             short_code = guess_short(x),
                             ...) {
   if (!short_code) {
@@ -166,8 +160,7 @@ is_leaf.icd10cm <- function(
 #'   ICD-10-CM. Currently assumes ICD-10 codes are ICD-10-CM
 #' @export
 #' @keywords internal
-is_leaf.icd10 <- function(
-                          x,
+is_leaf.icd10 <- function(x,
                           short_code = guess_short(x),
                           ...) {
   is_leaf.icd10cm(x = x, short_code = short_code)
@@ -177,8 +170,7 @@ is_leaf.icd10 <- function(
 #'   ICD-9-CM
 #' @export
 #' @keywords internal
-is_leaf.icd9cm <- function(
-                           x,
+is_leaf.icd9cm <- function(x,
                            short_code = guess_short(x),
                            ...) {
   stopifnot(is.atomic(x), is.logical(short_code))
@@ -239,8 +231,7 @@ get_leaf.default <- function(x, short_code = guess_short(x), ...) {
 #' @describeIn get_leaf Get billable ICD-9-CM codes
 #' @export
 #' @keywords internal
-get_leaf.icd9cm <- function(
-                            x,
+get_leaf.icd9cm <- function(x,
                             short_code = guess_short(x),
                             invert = FALSE,
                             ...) {
@@ -260,8 +251,7 @@ get_leaf.icd9 <- function(...)
 #' @export
 #' @keywords internal
 #' @noRd
-get_leaf.icd10cm <- function(
-                             x,
+get_leaf.icd10cm <- function(x,
                              short_code = guess_short(x),
                              invert = FALSE,
                              ...) {
@@ -274,8 +264,7 @@ get_leaf.icd10cm <- function(
 #' @export
 #' @keywords internal
 #' @noRd
-get_leaf.icd10 <- function(
-                           x,
+get_leaf.icd10 <- function(x,
                            short_code = guess_short(x),
                            invert = FALSE,
                            ...) {

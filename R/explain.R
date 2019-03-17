@@ -47,8 +47,7 @@ explain_icd <- function(...) {
 #' @describeIn explain_code Explain ICD codes from a character vector, guessing
 #'   ICD version
 #' @export
-explain_code.default <- function(
-                                 x,
+explain_code.default <- function(x,
                                  short_code = guess_short(x),
                                  condense = TRUE,
                                  brief = FALSE,
@@ -87,8 +86,7 @@ explain_code.icd9 <- function(...) {
 
 #' @describeIn explain_code explain character vector of ICD-9-CM codes
 #' @export
-explain_code.icd9cm <- function(
-                                x,
+explain_code.icd9cm <- function(x,
                                 short_code = guess_short(x),
                                 condense = TRUE,
                                 brief = FALSE,
@@ -151,8 +149,7 @@ explain_code.icd9cm <- function(
 #' @describeIn explain_code ICD-10-CM explanation, current a minimal
 #'   implementation
 #' @export
-explain_code.icd10cm <- function(
-                                 x,
+explain_code.icd10cm <- function(x,
                                  short_code = guess_short(x),
                                  condense = TRUE,
                                  brief = FALSE,
@@ -183,8 +180,7 @@ explain_code.icd10cm <- function(
 
 #' @describeIn explain_code WHO ICD-10 explanation
 #' @export
-explain_code.icd10who <- function(
-                                  x,
+explain_code.icd10who <- function(x,
                                   short_code = guess_short(x),
                                   condense = TRUE,
                                   brief = NULL,
@@ -243,8 +239,7 @@ explain_code.icd10fr <- function(x, ...) {
 #' # [1] "maligne neoplasma van het rectum"
 #' }
 #' @export
-explain_code.icd10be <- function(
-                                 x,
+explain_code.icd10be <- function(x,
                                  lang = c("fr", "nl", "en"),
                                  ...) {
   lang <- match.arg(lang)
@@ -259,8 +254,7 @@ explain_code.icd10be <- function(
 #' @describeIn explain_code ICD-10 explanation, falls back on ICD-10-CM until
 #'   ICD-10 WHO copyright workaround is available
 #' @export
-explain_code.icd10 <- function(
-                               x,
+explain_code.icd10 <- function(x,
                                short_code = guess_short(x),
                                condense = TRUE,
                                brief = FALSE,
@@ -270,8 +264,7 @@ explain_code.icd10 <- function(
   explain_code.icd10cm(x = x, short_code = short_code, brief = brief, ...)
 }
 
-explain_code_worker <- function(
-                                x,
+explain_code_worker <- function(x,
                                 dat,
                                 short_code = guess_short(x),
                                 condense = TRUE,

@@ -38,8 +38,7 @@
 #'   code.
 #' @keywords manip
 #' @export
-sort_icd <- function(
-                     x,
+sort_icd <- function(x,
                      decreasing = FALSE,
                      short_code = guess_short(x),
                      ...) {
@@ -53,8 +52,7 @@ sort_icd <- function(
 
 #' @rdname sort_icd
 #' @export
-sort.icd10 <- function(
-                       x,
+sort.icd10 <- function(x,
                        decreasing = FALSE,
                        ...) {
   res <- sort(x)
@@ -66,8 +64,7 @@ sort.icd10 <- function(
 
 #' @rdname sort_icd
 #' @export
-sort.icd10cm <- function(
-                         x,
+sort.icd10cm <- function(x,
                          decreasing = FALSE,
                          ...) {
   # ignore short, it doesn't matter
@@ -83,16 +80,14 @@ sort.icd10cm <- function(
 
 #' @rdname sort_icd
 #' @export
-sort.icd10be <- function(
-                         x,
+sort.icd10be <- function(x,
                          decreasing = FALSE,
                          ...) {
   sort.icd10cm(x, decreasing = decreasing, ...)
 }
 #' @rdname sort_icd
 #' @export
-sort.icd9 <- function(
-                      x,
+sort.icd9 <- function(x,
                       decreasing = FALSE,
                       short_code = guess_short(x),
                       ...) {

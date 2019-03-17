@@ -77,14 +77,14 @@ BEGIN_RCPP
 END_RCPP
 }
 // icd10ChildrenDefined
-CV icd10ChildrenDefined(const CV& x, const List& lookup, const IntegerVector nc, const bool warn);
+CV icd10ChildrenDefined(const CV& x, const List& lookup, const IntegerVector& nc, const bool warn);
 RcppExport SEXP _icd_icd10ChildrenDefined(SEXP xSEXP, SEXP lookupSEXP, SEXP ncSEXP, SEXP warnSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< const CV& >::type x(xSEXP);
     Rcpp::traits::input_parameter< const List& >::type lookup(lookupSEXP);
-    Rcpp::traits::input_parameter< const IntegerVector >::type nc(ncSEXP);
+    Rcpp::traits::input_parameter< const IntegerVector& >::type nc(ncSEXP);
     Rcpp::traits::input_parameter< const bool >::type warn(warnSEXP);
     rcpp_result_gen = Rcpp::wrap(icd10ChildrenDefined(x, lookup, nc, warn));
     return rcpp_result_gen;
@@ -600,8 +600,6 @@ BEGIN_RCPP
 END_RCPP
 }
 
-RcppExport SEXP run_testthat_tests();
-
 static const R_CallMethodDef CallEntries[] = {
     {"_icd_icd9MajMinToCode", (DL_FUNC) &_icd_icd9MajMinToCode, 3},
     {"_icd_icd9MajMinToShort", (DL_FUNC) &_icd_icd9MajMinToShort, 2},
@@ -653,7 +651,6 @@ static const R_CallMethodDef CallEntries[] = {
     {"_icd_inFast", (DL_FUNC) &_icd_inFast, 2},
     {"_icd_valgrindCallgrindStart", (DL_FUNC) &_icd_valgrindCallgrindStart, 1},
     {"_icd_valgrindCallgrindStop", (DL_FUNC) &_icd_valgrindCallgrindStop, 0},
-    {"run_testthat_tests",                      (DL_FUNC) &run_testthat_tests,                      0},
     {NULL, NULL, 0}
 };
 

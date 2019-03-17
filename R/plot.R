@@ -17,8 +17,7 @@
 #' @md
 #' @keywords hplot
 #' @export
-plot_comorbid <- function(
-                          x,
+plot_comorbid <- function(x,
                           sort = TRUE,
                           comorbid_fun = icd::comorbid_ahrq,
                           las = 2,

@@ -76,7 +76,7 @@ possible, use the more specific `icd10who` or `icd10cm`.
 }}
 
 \examples{
-x = as.icd10("A1009")
+x <- as.icd10("A1009")
 attr(x, "icd_short_diag") <- TRUE
 x
 attributes(x) <- list(icd_short_diag = NULL)

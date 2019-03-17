@@ -51,8 +51,7 @@ unzip_to_data_raw <- function(url,
 #' @rdname unzip_to_data_raw
 #' @keywords internal
 #' @noRd
-download_to_data_raw <- function(
-                                 url,
+download_to_data_raw <- function(url,
                                  file_name = regmatches(url, regexpr("[^/]*$", url)),
                                  offline = TRUE,
                                  data_raw_path = get_raw_data_dir()) {

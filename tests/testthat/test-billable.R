@@ -16,5 +16,5 @@ test_that("specific known parsing errors", {
 
 test_that("billable codes are all in order", {
   i <- icd.data::icd9cm_leaf_v32[["code"]]
-  expect_identical(i, sort.icd9cm(i, short_code = TRUE))
+  expect_identical(i, sort.icd9(i, short_code = TRUE))
 })

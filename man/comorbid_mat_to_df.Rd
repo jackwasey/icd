@@ -24,8 +24,9 @@ information
 }
 \examples{
 longdf <- icd_long_data(
-            visit_id = c("a", "b", "b", "c"),
-            icd9 = as.icd9(c("441", "4240", "443", "441")))
+  visit_id = c("a", "b", "b", "c"),
+  icd9 = as.icd9(c("441", "4240", "443", "441"))
+)
 mat <- icd9_comorbid_elix(longdf)
 class(mat)
 typeof(mat)

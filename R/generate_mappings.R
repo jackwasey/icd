@@ -467,10 +467,10 @@ icd10_generate_map_quan_elix <- function(save_data = TRUE, verbose = FALSE) {
   # which are not present (?anymore) in the ICD-10-CM 2016 list. In particular,
   # see C43 in Tumor.
   icd10_map_quan_elix <- apply_over_icd10cm_vers(quan_elix_raw,
-    verbose = verbose
+                                                 verbose = verbose
   )
   icd10_map_quan_elix <- apply_over_icd10who_vers(icd10_map_quan_elix,
-    verbose = verbose
+                                                  verbose = verbose
   )
   icd10_map_quan_elix <- lapply(icd10_map_quan_elix, as.short_diag)
   icd10_map_quan_elix <- lapply(icd10_map_quan_elix, as.icd10)
@@ -574,10 +574,10 @@ icd10_generate_map_quan_deyo <- function(save_data = TRUE, verbose = FALSE) {
   # worth it, even for ICD-10-CM, because I do end up cutting it back down to
   # size based on the input data before comorbidity matching.
   icd10_map_quan_deyo <- apply_over_icd10cm_vers(quan_charl_raw,
-    verbose = verbose
+                                                 verbose = verbose
   )
   icd10_map_quan_deyo <- apply_over_icd10who_vers(icd10_map_quan_deyo,
-    verbose = verbose
+                                                  verbose = verbose
   )
   icd10_map_quan_deyo <- lapply(icd10_map_quan_deyo, as.short_diag)
   icd10_map_quan_deyo <- lapply(icd10_map_quan_deyo, as.icd10)
@@ -593,45 +593,43 @@ icd10_generate_map_quan_deyo <- function(save_data = TRUE, verbose = FALSE) {
 }
 # nocov end
 
-.apply_over_ver_worker <- function(
-                                   x,
-                                   f = children_defined.icd10cm,
+.apply_over_ver_worker <- function(x,
+                                   inner_fun = children_defined.icd10cm,
                                    ...) {
-  y <- f(x, short_code = TRUE, ...)
+  y <- inner_fun(x, short_code = TRUE, ...)
   unclass(c(x, y))
 }
 
 apply_over_icd10cm_vers <- function(raw, verbose = FALSE) {
-  set_active <- getExportedValue("icd.data", "set_icd10cm_active_ver")
-  get_active <- getExportedValue("icd.data", "get_icd10cm_active_ver")
-  av <- get_active()
-  on.exit(set_active(av), add = TRUE)
+  with_active <- getExportedValue(ns = "icd.data",
+                                  name = "with_icd10cm_version")
   out <- raw
   for (yr in 2014:2019) {
-    set_active(yr)
-    upd <- sapply(out,
-      FUN = .apply_over_ver_worker,
-      simplify = FALSE,
-      USE.NAMES = TRUE
-    )
-    for (cmb in seq_along(out)) {
-      if (verbose) {
-        only_prev <- setdiff(out[[cmb]], upd[[cmb]])
-        only_this <- setdiff(upd[[cmb]], out[[cmb]])
-        if (length(only_prev)) {
-          if (verbose) message("Year/version = ", yr)
-          message("Only in previous for item ", cmb)
-          print(only_prev)
+    with_active(as.character(yr), {
+      upd <- sapply(out,
+                    FUN = .apply_over_ver_worker,
+                    simplify = FALSE,
+                    USE.NAMES = TRUE
+      )
+      for (cmb in seq_along(out)) {
+        if (verbose) {
+          only_prev <- setdiff(out[[cmb]], upd[[cmb]])
+          only_this <- setdiff(upd[[cmb]], out[[cmb]])
+          if (length(only_prev)) {
+            if (verbose) message("Year/version = ", yr)
+            message("Only in previous for item ", cmb)
+            print(only_prev)
+          }
+          if (length(only_this)) {
+            if (verbose) message("Year/version = ", yr)
+            message("Only in current for item ", cmb)
+            print(only_this)
+          }
         }
-        if (length(only_this)) {
-          if (verbose) message("Year/version = ", yr)
-          message("Only in current for item ", cmb)
-          print(only_this)
-        }
+        out[[cmb]] <- sort(union(out[[cmb]], upd[[cmb]]))
       }
-      out[[cmb]] <- sort(union(out[[cmb]], upd[[cmb]]))
-    }
-  }
+    }) # end of with active version
+  } # end year loop
   out
 }
 
@@ -648,10 +646,12 @@ apply_over_icd10who_vers <- function(raw, verbose) {
   out <- raw
   for (who_ver in c("icd10who2016", "icd10who2008fr")) {
     if (verbose) message("Working on ", who_ver)
-    upd <- lapply(out,
-      .apply_over_ver_worker,
-      f = children_defined.icd10who,
-      who_ver = who_ver
+    upd <- sapply(out,
+                  FUN = .apply_over_ver_worker,
+                  inner_fun = children_defined.icd10who,
+                  who_ver = who_ver,
+                  simplify = FALSE,
+                  USE.NAMES = TRUE
     )
     for (cmb in seq_along(out)) {
       if (verbose) {

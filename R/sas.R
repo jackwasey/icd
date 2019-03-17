@@ -162,7 +162,7 @@ sas_extract_let_strings <- function(x) {
   let_rex <-
     "%LET ([[:alnum:]]+)[[:space:]]*=[[:space:]]*%STR\\(([[:print:]]+?)\\)"
   a <- str_match_all(x, let_rex)
-  a <- lapply(a, trim)
+  a <- lapply(a, trimws)
   a <- a[vapply(a, FUN = function(x) length(x) != 0, FUN.VALUE = logical(1))]
 
   vls <- vapply(a, FUN = `[[`, 3, FUN.VALUE = "")

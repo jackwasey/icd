@@ -35,8 +35,7 @@
 #' @md
 #' @keywords internal
 #' @export
-categorize_simple <- function(
-                              x,
+categorize_simple <- function(x,
                               map,
                               id_name,
                               code_name,
@@ -121,8 +120,7 @@ categorize_simple <- function(
   df_out
 }
 
-comorbid_common <- function(
-                            ...,
+comorbid_common <- function(...,
                             visit_name,
                             icd_name) {
   categorize_simple(...,

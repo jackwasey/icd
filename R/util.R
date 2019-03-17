@@ -173,8 +173,7 @@ get_visit_name.matrix <- function(x, visit_name = NULL)
 #'   of \code{x}'s columns) and returned unchanged
 #' @param multi If \code{TRUE}, allow multiple ICD field names to be returned.
 #' @keywords internal
-get_icd_dx_name <- function(
-                            x,
+get_icd_dx_name <- function(x,
                             icd_name = NULL,
                             valid_codes = TRUE,
                             defined_codes = FALSE,
@@ -273,8 +272,7 @@ get_icd_pc_name <- function(x, icd_name = NULL) {
 #' @return Zero, one or many names of columns likely to contain ICD codes based
 #'   on the column names.
 #' @keywords internal
-guess_icd_col_by_name <- function(
-                                  x,
+guess_icd_col_by_name <- function(x,
                                   valid_codes = TRUE,
                                   defined_codes = FALSE,
                                   guesses = c(
@@ -314,8 +312,7 @@ guess_icd_col_by_name <- function(
   NULL
 }
 
-guess_icd_pc_col_by_name <- function(
-                                     x,
+guess_icd_pc_col_by_name <- function(x,
                                      valid_codes = TRUE,
                                      defined_codes = FALSE,
                                      guesses = c(
@@ -422,17 +419,18 @@ icd_data_ver_ok <- function() {
   res
 }
 
-get_from_icd_data <- function(
-                              name,
+get_from_icd_data <- function(name,
                               alt = NULL,
-                              must_work = TRUE) {
-  # this will try find lazy data first, then active bindings, functions
+                              must_work = TRUE,
+                              verbose = FALSE) {
+  if (verbose) message("Trying ::: equivalent first (lazy or top namespace)")
   out <- try(silent = TRUE, {
     base::getExportedValue(asNamespace("icd.data"), name)
   })
   if (!inherits(out, "try-error") && !is.null(out)) {
     return(out)
   }
+  if (verbose) message("Trying main namespace,redundant?")
   out <- try(silent = TRUE, {
     as.environment(getNamespace("icd.data"))[[name]]
   })
@@ -442,6 +440,7 @@ get_from_icd_data <- function(
   if (must_work) {
     stop("Unable to get '", name, "' from icd.data")
   }
+  if (verbose) message("Returning alt")
   alt
 }
 

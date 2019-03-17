@@ -7,10 +7,18 @@ using namespace Rcpp;
 CV icd10ChildrenDefined(
     const CV &x,
     const List& lookup,
-    const IntegerVector nc,
+    const IntegerVector& nc,
     const bool warn = true
 ) {
-  const CV allCodes             = lookup["code"];
+  if (!lookup.containsElementNamed("code")) {
+    stop("lookup does not have a code column");
+  }
+  const CV& allCodes = lookup["code"];
+  if (nc.size() != allCodes.size()) {
+    DEBUG_VEC(nc);
+    DEBUG_VEC(allCodes);
+    stop("nc is not the same length as allCodes!");
+  }
   const IntegerVector matchesNa = match(x, allCodes);
   const IntegerVector matches   = matchesNa[!is_na(matchesNa)]; // R indexing
   VecStr kids;

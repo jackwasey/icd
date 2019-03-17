@@ -56,8 +56,7 @@ charlson <- function(x, visit_name = NULL,
 #'   (e.g. Quan Deyo) comorbidities, then calling
 #'   \code{charlson_from_comorbid}.
 #' @export
-charlson.data.frame <- function(
-                                x,
+charlson.data.frame <- function(x,
                                 visit_name = NULL,
                                 scoring_system = c("original", "charlson", "quan"),
                                 return_df = FALSE,
@@ -104,8 +103,7 @@ charlson.data.frame <- function(
 #'   \code{TRUE}, will drop \code{DM} if \code{DMcx} is present, etc.
 #' @template scoring-system
 #' @export
-charlson_from_comorbid <- function(
-                                   x,
+charlson_from_comorbid <- function(x,
                                    visit_name = NULL,
                                    hierarchy = FALSE,
                                    scoring_system = c("original", "charlson", "quan")) {
@@ -170,10 +168,10 @@ charlson_from_comorbid <- function(
 #' )
 #' count_codes(mydf, return_df = TRUE)
 #' count_codes(mydf)
-#' 
+#'
 #' cmb <- icd9_comorbid_quan_deyo(mydf, short_code = FALSE, return_df = TRUE)
 #' count_comorbid(cmb)
-#' 
+#'
 #' wide <- data.frame(
 #'   visit_name = c("r", "s", "t"),
 #'   icd9_1 = c("0011", "441", "456"),
@@ -187,8 +185,7 @@ charlson_from_comorbid <- function(
 #' wide %>% wide_to_long() %>% count_codes()
 #' }
 #' @export
-count_codes <- function(
-                        x,
+count_codes <- function(x,
                         visit_name = get_visit_name(x),
                         return_df = FALSE) {
   stopifnot(is.data.frame(x), ncol(x) >= 2, !is.null(colnames(x)))
@@ -221,8 +218,7 @@ count_codes <- function(
 #' @template visit_name
 #' @template return_df
 #' @export
-count_comorbid <- function(
-                           x,
+count_comorbid <- function(x,
                            visit_name = get_visit_name(x),
                            return_df = FALSE) {
   assert_string(visit_name)
@@ -256,8 +252,7 @@ count_comorbid <- function(
 #'   duplicate \code{visit_name}s will be counted together.
 #' @importFrom stats aggregate
 #' @export
-count_codes_wide <- function(
-                             x,
+count_codes_wide <- function(x,
                              visit_name = get_visit_name(x),
                              return_df = FALSE,
                              aggr = FALSE) {
@@ -312,7 +307,7 @@ count_codes_wide <- function(
 #' cmb <- icd9_comorbid_quan_elix(mydf, short_code = FALSE, hierarchy = TRUE)
 #' vwr <- van_walraven_from_comorbid(cmb)
 #' stopifnot(identical(van_walraven(mydf), vwr))
-#' 
+#'
 #' # alternatively return as data frame in 'tidy' format
 #' van_walraven(mydf, return_df = TRUE)
 #' @author wmurphyrd
@@ -321,8 +316,7 @@ count_codes_wide <- function(
 #'   Hospital Death Using Administrative Data. Med Care. 2009; 47(6):626-633.
 #'   \url{http://www.ncbi.nlm.nih.gov/pubmed/19433995}
 #' @export
-van_walraven <- function(
-                         x,
+van_walraven <- function(x,
                          visit_name = NULL,
                          return_df = FALSE,
                          stringsAsFactors = getOption("stringsAsFactors"), # nolint
@@ -333,8 +327,7 @@ van_walraven <- function(
 #' @describeIn van_walraven van Walraven scores from data frame of visits
 #'   and ICD-9 codes
 #' @export
-van_walraven.data.frame <- function(
-                                    x,
+van_walraven.data.frame <- function(x,
                                     visit_name = NULL,
                                     return_df = FALSE,
                                     stringsAsFactors = getOption("stringsAsFactors"), # nolint
@@ -369,8 +362,7 @@ van_walraven.data.frame <- function(
 #'   Elixhauser, you can't have uncomplicated and complicated diabetes both
 #'   flagged.
 #' @export
-van_walraven_from_comorbid <- function(
-                                       x,
+van_walraven_from_comorbid <- function(x,
                                        visit_name = NULL,
                                        hierarchy = FALSE) {
   stopifnot(is.data.frame(x) || is.matrix(x))

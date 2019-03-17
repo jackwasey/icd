@@ -133,8 +133,7 @@ explain_table.icd9cm <- function(x, short_code = guess_short(x),
 #' @author Ed Lee
 #' @export
 #' @keywords internal
-explain_table.icd10cm <- function(
-                                  x,
+explain_table.icd10cm <- function(x,
                                   short_code = guess_short(x),
                                   condense = FALSE,
                                   brief = TRUE,
@@ -154,8 +153,7 @@ explain_table.icd10cm <- function(
 #' @describeIn explain_table explain character vector of ICD1-10-CM codes
 #' @export
 #' @keywords internal
-explain_table.icd10who <- function(
-                                   x,
+explain_table.icd10who <- function(x,
                                    short_code = guess_short(x),
                                    condense = FALSE,
                                    brief = TRUE,

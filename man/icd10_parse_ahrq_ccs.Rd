@@ -30,10 +30,14 @@ These are in the format of \code{YYYY.1}, \code{YYYY.2} etc.
 \examples{
 \dontrun{
 # offline = FALSE
-  icd:::icd10_parse_ahrq_ccs(version = "2018.1",
-      save_data = FALSE, offline = FALSE)
-  icd:::icd10_parse_ahrq_ccs(version = "2018.1",
-      save_data = FALSE, offline = TRUE)
+icd:::icd10_parse_ahrq_ccs(
+  version = "2018.1",
+  save_data = FALSE, offline = FALSE
+)
+icd:::icd10_parse_ahrq_ccs(
+  version = "2018.1",
+  save_data = FALSE, offline = TRUE
+)
 }
 }
 \keyword{internal}

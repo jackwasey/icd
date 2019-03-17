@@ -30,8 +30,10 @@ test_that("children of a leaf node returns itself", {
     "C7A8"
   )
   set.seed(1441)
-  rand_icd10cm <- generate_random_short_icd10cm_bill(50)
-  expect_icd10cm_child_is_self(rand_icd10cm)
+  with_icd10cm_version("2016", {
+    rand_icd10cm <- generate_random_short_icd10cm_bill(50)
+    expect_icd10cm_child_is_self(rand_icd10cm)
+  })
 })
 
 test_that("zero length ICD-10-CM children", {

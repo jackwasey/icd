@@ -26,10 +26,10 @@ Readmission metric)
 }
 \examples{
 \dontrun{
-  icd:::icd9_parse_ahrq_ccs(single = TRUE, offline = FALSE)
-  icd:::icd9_parse_ahrq_ccs(single = TRUE, offline = TRUE)
-  icd:::icd9_parse_ahrq_ccs(single = FALSE, offline = FALSE)
-  icd:::icd9_parse_ahrq_ccs(single = FALSE, offline = TRUE)
+icd:::icd9_parse_ahrq_ccs(single = TRUE, offline = FALSE)
+icd:::icd9_parse_ahrq_ccs(single = TRUE, offline = TRUE)
+icd:::icd9_parse_ahrq_ccs(single = FALSE, offline = FALSE)
+icd:::icd9_parse_ahrq_ccs(single = FALSE, offline = TRUE)
 }
 }
 \keyword{internal}
