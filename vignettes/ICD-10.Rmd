@@ -114,10 +114,10 @@ The AHRQ publishes an annually updated categorization of ICD-10-CM procedure cod
 ```{r setuppcs, echo = FALSE}
 nm = "code"
 pcs <- if (icd:::icd_data_ver_ok()) {
-  icd:::get_from_icd_data("icd10cm2018_pc", lazy = TRUE)
+  icd:::get_from_icd_data("icd10cm2018_pc")
 } else {
   nm <- "pcs"
-  icd:::get_from_icd_data("icd10_pcs_2018", lazy = TRUE)
+  icd:::get_from_icd_data("icd10_pcs_2018")
 }
 ```
 ```{r icd10pcs}

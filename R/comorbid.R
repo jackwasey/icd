@@ -612,7 +612,7 @@ cr <- function(x)
     )
   })
   if (inherits(dat, "try-error")) {
-    stop("Unable to pre-calculate code lengths for ICD-10-CM version: ", ver)
+    stop("Unable to pre-calculate code lengths for ICD-10-CM version: ", year)
   }
   n <- nchar(dat$code)
   assign(year, n, envir = .lookup_chars_in_icd10cm)
