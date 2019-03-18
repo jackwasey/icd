@@ -152,7 +152,7 @@ generate_neds_pts <- function(n = 1000L,
                               icd10 = TRUE,
                               verbose = FALSE) {
   codes <- if (icd10) {
-    i <- get_from_icd_data("icd10cm_latest", icd.data::icd10cm2016)
+    i <- icd.data::icd10cm_latest
     unclass(as_char_no_warn(i$code))
   } else {
     unclass(as_char_no_warn(icd.data::icd9cm_hierarchy$code))
@@ -253,15 +253,13 @@ with_interact <- function(interact, code) {
 
 # workaround so icd.data 1.0 will not cause CRAN or user errors
 skip_missing_icd10who <- function() {
-  g <- get_from_icd_data("get_icd_data", must_work = FALSE)
-  if (is.null(g)) testthat::skip("Older icd.data, so cannot get get_icd_data")
   with_offline(
     offline = TRUE,
     with_interact(
       interact = FALSE, {
-        dat <- g("icd10who2016")
+        dat <- icd.data::icd10who2016
         if (is.null(dat)) testthat::skip("No WHO ICD-10 2016 English data")
-        dat <- g("icd10who2008fr")
+        dat <- icd.data::icd10who2008fr
         if (is.null(dat)) testthat::skip("No WHO ICD-10 2008 French data")
       }
     )

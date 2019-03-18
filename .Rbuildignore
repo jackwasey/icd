@@ -51,6 +51,8 @@
 ^tests-slow$
 ^todo$
 ^tools$
+^vignettes\/PCCC\.Rmd$
+^vignettes\/country-lang-vers\.Rmd$
 ^vignettes\/.*\.R$
 ^vignettes\/.*\.dvi$
 ^vignettes\/.*\.fls$

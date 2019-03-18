@@ -399,15 +399,6 @@ str_match_all <- function(string, pattern, ...) {
   regmatches(x = string, m = regexec(pattern = pattern, text = string, ...))
 }
 
-# optional nice error message, could just fall back on icd.data::
-req_icd_data <- function() {
-  if (!icd_data_ver_ok()) {
-    stop("Please install the 'icd.data' package to explain ICD codes.",
-      call. = FALSE
-    )
-  }
-}
-
 icd_data_ver_ok <- function() {
   # Bug in R? Version of an already lodaded namespace is not checked if done via
   # requireNamespace, only loadNamespace.
@@ -419,43 +410,6 @@ icd_data_ver_ok <- function() {
   res
 }
 
-get_from_icd_data <- function(name,
-                              alt = NULL,
-                              must_work = TRUE,
-                              verbose = FALSE) {
-  if (verbose) message("Trying ::: equivalent first (lazy or top namespace)")
-  out <- try(silent = TRUE, {
-    base::getExportedValue(asNamespace("icd.data"), name)
-  })
-  if (!inherits(out, "try-error") && !is.null(out)) {
-    return(out)
-  }
-  if (verbose) message("Trying main namespace,redundant?")
-  out <- try(silent = TRUE, {
-    as.environment(getNamespace("icd.data"))[[name]]
-  })
-  if (!inherits(out, "try-error") && !is.null(out)) {
-    return(out)
-  }
-  if (must_work && is.null(alt)) {
-    stop("Unable to get '", name, "' from icd.data")
-  }
-  if (verbose) message("Returning alt")
-  alt
-}
-
-stop_data_lt_1dot1 <- function() {
-  stop("WHO and 2014, 2015, 2017, 2018 and 2019 ICD-CM data are only ",
-    "available with icd.data >= 1.1 . Use
-       install.packages(\"icd.data\")
-       to install the latest version from CRAN.
-       devtools::install_github(\"jackwasey/icd.data\")
-       may be used until CRAN has version 1.1 .
-       ",
-    call. = FALSE
-  )
-}
-
 # copied from icd.data version 1.1 until everything is on CRAN
 with_icd10cm_version <- function(ver, lang = c("en", "fr"), code) {
   lang <- match.arg(lang)
@@ -464,7 +418,10 @@ with_icd10cm_version <- function(ver, lang = c("en", "fr"), code) {
     ver,
     ifelse(lang == "en", "", paste0("_", lang))
   )
-  stopifnot(!is.null(get_from_icd_data(var_name)))
+  stopifnot(!is.null(getExportedValue(
+    ns = asNamespace("icd.data"),
+    name = var_name
+  )))
   stopifnot(is.character(ver), length(ver) == 1)
   old <- options(
     "icd.data.icd10cm_active_ver" = ver,

@@ -23,10 +23,6 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
-if (is.null(icd:::get_from_icd_data("icd10who2016", must_work = FALSE))) {
-  message("Cannot build this vignette with older version of icd")
-  icd_eval = FALSE
-}
 ```
 
 # WHO
@@ -41,11 +37,11 @@ icd.data::icd10fr2019[1:5, ]
 library(icd.data)
 summary(icd10who2016)
 ```
-```{r quicklookeval, echo = FALSE, eval = icd_eval}
+```{r quicklookeval, echo = FALSE, eval = TRUE}
 if (icd:::icd_data_ver_ok()) {
-  icd:::get_from_icd_data("icd10who2016")[1:5, ]
-  icd:::get_from_icd_data("icd10fr2019")[1:5, ]
-  summary(icd:::get_from_icd_data("icd10who2016"))
+  icd.data::icd10who2016[1:5, ]
+  icd.data::icd10fr2019[1:5, ]
+  summary(icd.data::icd10who2016)
 }
 ```
 
@@ -54,7 +50,7 @@ if (icd:::icd_data_ver_ok()) {
 ICD-10-FR is significantly different from the WHO version, and is used by official bodies and health systems in France. As with all the features in this document, this is an early attempt at the complex problem of providing all the codes, transtatlanguages, 
 
 ```{r french, eval = FALSE}
-fr <- icd:::get_from_icd_data("icd10fr2019")
+fr <- icd.data::icd10fr2019
 fr[fr$code == "C43", ]
 ```
 ```
@@ -75,7 +71,7 @@ There is an initial beta-quality mechanism for selecting a particular version of
   # icd.data::set_icd10cm_active_ver("2015")
 ```
 The following code is wrapped in some protections in case the latest icd.data isn't available (notably for CRAN checks).
-```{r icd10cmoption, eval = icd_eval}
+```{r icd10cmoption, eval = TRUE}
 if (icd:::icd_data_ver_ok()) {
   # The code "C4311" goes from being a leaf in 2018, to a parent in 2019
   with_icd10cm_version(ver = "2018",

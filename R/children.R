@@ -167,22 +167,12 @@ children_defined.icd10cm <- function(x,
   if (!short_code) {
     x <- decimal_to_short.icd10cm(x)
   }
-  ver <- ifelse(icd_data_ver_ok(),
-    get_from_icd_data("get_icd10cm_active_ver")(),
-    "2016"
-  )
+  ver <- icd.data::get_icd10cm_active_ver()
   if (verbose) message("Using ICD-10-CM version: ", ver)
-  # dat <- get_from_icd_data("icd10cm_active", alt = icd.data::icd10cm2016)
-  get_fun <- get_from_icd_data("get_icd10cm_active", must_work = FALSE)
-  if (is.null(get_fun)) {
-    dat <- icd.data::icd10cm2016
-  } else {
-    dat <- get_fun()
-  }
   nc <- .icd10cm_get_nchars(ver)
   kids <- icd10_children_defined_rcpp(
     x = x,
-    lookup = dat,
+    lookup = icd.data::get_icd10cm_active(verbose = verbose),
     nc = nc
   )
   as.icd10cm(kids, short_code)
@@ -208,7 +198,6 @@ children_defined.icd10who <- function(x,
                                       short_code = guess_short(x),
                                       who_ver = "icd10who2016",
                                       warn = FALSE) {
-  req_icd_data()
   stopifnot(is.factor(x) || is.character(unclass(x)))
   stopifnot(is.logical(short_code))
   stopifnot(is.logical(warn))
@@ -217,9 +206,9 @@ children_defined.icd10who <- function(x,
     x <- decimal_to_short.icd10cm(x)
   }
   d <- if (who_ver == "icd10who2008fr") {
-    get_from_icd_data("icd10who2008fr")
+    icd.data::icd10who2008fr
   } else {
-    get_from_icd_data("icd10who2016")
+    icd.data::icd10who2016
   }
   stopifnot(!is.null(d))
   stopifnot(!is.null(d[["code"]]))

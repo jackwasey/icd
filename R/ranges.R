@@ -116,7 +116,7 @@ expand_range.icd10cm <- function(start,
   new_end <- end_kids[length(end_kids)]
 
   # find the start and end code positions in the master list
-  i <- get_from_icd_data("icd10cm_active", alt = icd.data::icd10cm2016)
+  i <- icd.data::icd10cm_active
   pos <- match(
     c(start, new_end),
     i[["code"]]
@@ -124,7 +124,7 @@ expand_range.icd10cm <- function(start,
   if (is.na(pos[1])) stop(sprintf("start code '%s' not found", start))
   if (is.na(pos[2])) stop(sprintf("calculated end code '%s' not found", end))
   stopifnot(pos[2] >= pos[1])
-  i <- get_from_icd_data("icd10cm_active", alt = icd.data::icd10cm2016)
+  i <- icd.data::icd10cm_active
   i[pos[1]:pos[2], "code"]
 }
 
@@ -292,10 +292,7 @@ icd9_expand_range_worker <- function(start,
   out_env <- vec_to_env_true(lookup$vec[start_index:end_index])
   # do not want to check a load of leaf nodes for children, since they have
   # none. # TODO: pre-calculate
-  leaf_codes <- get_from_icd_data("icd9cm_billable")[["32"]][["code"]]
-  if (is.null(leaf_codes)) {
-    leaf_codes <- get_from_icd_data("icd9cm_billable")[["32"]][["code"]]
-  }
+  leaf_codes <- icd.data::icd9cm_leaf_v32[["code"]]
   leaf_env <- vec_to_env_true(leaf_codes)
   is_parent <- function(x, defined) {
     if (!defined) {

@@ -169,9 +169,7 @@ explain_code.icd10cm <- function(x,
   }
   # this is a alow linear lookup, but usually only
   # "explaining" one or a few codes at a time.
-  i <- get_from_icd_data("icd10cm_active",
-    alt = icd.data::icd10cm2016
-  )
+  i <- icd.data::icd10cm_active
   i[
     i[["code"]] %in% unique(as_char_no_warn(x)),
     ifelse(brief, "short_desc", "long_desc")
@@ -187,7 +185,6 @@ explain_code.icd10who <- function(x,
                                   warn = TRUE,
                                   lang = c("en", "fr"),
                                   ...) {
-  req_icd_data()
   if (!is.null(brief)) {
     message(
       "WHO ICD-10 does not have short or long descriptions, ",
@@ -209,9 +206,9 @@ explain_code.icd10who <- function(x,
   # this is a slow linear lookup, but usually only
   # "explaining" one or a few codes at a time.
   i <- if (lang == "fr") {
-    get_from_icd_data("icd10who2008fr")
+    icd.data::icd10who2008fr
   } else {
-    get_from_icd_data("icd10who2016")
+    icd.data::icd10who2016
   }
   i[
     i[["code"]] %in% unique(as_char_no_warn(x)),
@@ -245,7 +242,7 @@ explain_code.icd10be <- function(x,
   lang <- match.arg(lang)
   explain_code_worker(
     x = x,
-    dat = "icd10be2017",
+    var_name = "icd10be2017",
     lang = lang,
     ...
   )
@@ -265,16 +262,15 @@ explain_code.icd10 <- function(x,
 }
 
 explain_code_worker <- function(x,
-                                dat,
+                                var_name,
                                 short_code = guess_short(x),
                                 condense = TRUE,
                                 brief = FALSE,
                                 warn = TRUE,
                                 lang = NULL,
                                 ...) {
-  req_icd_data()
   stopifnot(is.atomic(x))
-  stopifnot(is.character(dat))
+  stopifnot(is.character(var_name))
   stopifnot(is.logical(short_code), length(short_code) == 1L)
   stopifnot(is.logical(brief), length(brief) == 1L)
   if (!missing(condense)) {
@@ -294,7 +290,7 @@ explain_code_worker <- function(x,
     short_str <- paste0(short_str, "_", lang)
     long_str <- paste0(long_str, "_", lang)
   }
-  i <- get_from_icd_data(dat)
+  i <- get(var_name, asNamespace("icd.data"))
   i[
     i[["code"]] %in% unique(as_char_no_warn(x)),
     ifelse(brief, short_str, long_str)

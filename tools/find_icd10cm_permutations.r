@@ -2,7 +2,7 @@
 #now some development code to see what permutations there are of ICD-10 codes
 #based on the 2016 CM set.
 
-i10 <- icd10cm2016$code
+i10 <- icd.data::icd10cm2016$code
 
 alpha_in_tail <- grep("[[:alpha:]]", i10tail, value = TRUE)
 alpha_in_tail_bool <- grepl("[[:alpha:]].*[[:alpha:]].*", x = i10)

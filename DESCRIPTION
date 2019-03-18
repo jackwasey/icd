@@ -47,7 +47,7 @@ Depends:
 Imports:
     methods,
     Rcpp (>= 0.12.3),
-    icd.data
+    icd.data (>= 1.1)
 Suggests:
     graphics,
     knitr,

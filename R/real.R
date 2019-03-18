@@ -43,7 +43,7 @@ is_defined.icd10cm <- function(x,
   stopifnot(is.factor(x) || is.character(x))
   stopifnot(is.logical(short_code), is.logical(leaf))
   if (!short_code) x <- decimal_to_short(x)
-  i <- get_from_icd_data("icd10cm_active", alt = icd.data::icd10cm2016)
+  i <- icd.data::icd10cm_active
   if (leaf) {
     is_leaf.icd10cm(x, short_code = short_code)
   } else {
@@ -151,7 +151,7 @@ is_leaf.icd10cm <- function(x,
     x <- decimal_to_short(x)
   }
   # Workaround until next icd.data is on CRAN
-  ia <- get_from_icd_data("icd10cm_active", icd.data::icd10cm2016)
+  ia <- icd.data::icd10cm_active
   leaf_name <- ifelse("leaf" %in% names(ia), "leaf", "billable")
   x %in% ia[ia[[leaf_name]] == 1L, "code"]
 }

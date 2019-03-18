@@ -601,17 +601,15 @@ icd10_generate_map_quan_deyo <- function(save_data = TRUE, verbose = FALSE) {
 }
 
 apply_over_icd10cm_vers <- function(raw, verbose = FALSE) {
-  with_active <- getExportedValue(
-    ns = "icd.data",
-    name = "with_icd10cm_version"
-  )
   out <- raw
   for (yr in 2014:2019) {
-    with_active(as.character(yr), {
+    if (verbose) message("applying ICD-10-CM year: ", yr)
+    icd.data::with_icd10cm_version(as.character(yr), {
       upd <- sapply(out,
         FUN = .apply_over_ver_worker,
         simplify = FALSE,
-        USE.NAMES = TRUE
+        USE.NAMES = TRUE,
+        verbose = verbose
       )
       for (cmb in seq_along(out)) {
         if (verbose) {
