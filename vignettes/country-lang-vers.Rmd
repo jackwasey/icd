@@ -23,20 +23,6 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
-# copied from icd.data version 1.1 until everything is on CRAN
-with_icd10cm_version <- function(ver, lang, code)
-{
-   var_name <- paste0("icd10cm",
-                     ver,
-                     ifelse(lang == "en", "", paste0("_", lang))
-  )
-  stopifnot(!is.null(icd:::get_from_icd_data(var_name)))
-  stopifnot(is.character(ver), length(ver) == 1)
-  old <- options("icd.data.icd10cm_active_ver" = ver,
-                 "icd.data.icd10cm_active_lang" = lang)
-  on.exit(options(old))
-  force(code)
-}
 ```
 
 # WHO
@@ -88,7 +74,7 @@ The following code is wrapped in some protections in case the latest icd.data is
 ```{r icd10cmoption}
 if (icd:::icd_data_ver_ok()) {
   # The code "C4311" goes from being a leaf in 2018, to a parent in 2019
-  with_icd10cm_version(ver = "2018", 
+  with_icd10cm_version(ver = "2018",
                        lang = "en",
                        icd::is_leaf("C4311")
   )

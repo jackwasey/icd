@@ -324,7 +324,6 @@ test_that("big bad factor frmo github133 test", {
       "I442", "Z6839", "J449", "K449", "I739", "Z90710", "Z9049", "Z85828"
     ), class = "factor"
   )
-
   f2 <- structure(
     c(
       14L, 14L, 211L, 212L, 212L, 17L, 213L, 80L, 64L,
@@ -376,6 +375,10 @@ test_that("big bad factor frmo github133 test", {
       "I442", "Z6839", "J449", "K449", "I739", "Z90710", "Z9049", "Z85828"
     ), class = "factor"
   )
+  d <- data.frame(id = seq_along(f), icd = f)
+  d2 <- data.frame(id = seq_along(f2), icd = f2)
+  expect_error(regexp = NA, comorbid_ahrq(d))
+  expect_error(regexp = NA, comorbid_ahrq(d2))
 })
 
 test_that("crash case", {

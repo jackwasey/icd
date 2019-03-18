@@ -437,7 +437,7 @@ get_from_icd_data <- function(name,
   if (!inherits(out, "try-error") && !is.null(out)) {
     return(out)
   }
-  if (must_work) {
+  if (must_work && is.null(alt)) {
     stop("Unable to get '", name, "' from icd.data")
   }
   if (verbose) message("Returning alt")
@@ -454,4 +454,22 @@ stop_data_lt_1dot1 <- function() {
        ",
     call. = FALSE
   )
+}
+
+# copied from icd.data version 1.1 until everything is on CRAN
+with_icd10cm_version <- function(ver, lang = c("en", "fr"), code) {
+  lang <- match.arg(lang)
+  var_name <- paste0(
+    "icd10cm",
+    ver,
+    ifelse(lang == "en", "", paste0("_", lang))
+  )
+  stopifnot(!is.null(get_from_icd_data(var_name)))
+  stopifnot(is.character(ver), length(ver) == 1)
+  old <- options(
+    "icd.data.icd10cm_active_ver" = ver,
+    "icd.data.icd10cm_active_lang" = lang
+  )
+  on.exit(options(old))
+  force(code)
 }

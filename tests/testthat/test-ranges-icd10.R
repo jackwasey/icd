@@ -113,5 +113,4 @@ test_that("expand range quirks", {
     icd:::expand_range_major.icd10cm("C43", "C44", defined = FALSE),
     as.icd10cm(c("C43", "C4A", "C44"))
   )
-  skip("more of these needed")
 })

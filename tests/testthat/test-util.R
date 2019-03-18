@@ -55,17 +55,6 @@ test_that("well structured data frame, ICD & visit guessed", {
   expect_equal(get_icd_name(test_twenty), "icd9Code")
 })
 
-test_that("ambiguous icd_name gives warning", {
-  skip("we now accept wide data, but we could still warn if there is a mix")
-  two_code_pt <- data.frame(
-    visit_id = "V111111",
-    icd9 = "441",
-    icd10 = "A11",
-    poa = "N"
-  )
-  expect_warning(get_icd_name(two_code_pt))
-})
-
 test_that("icd name heuristic works for various", {
   guesses <- c(
     "icd.?(9|10)", "icd.?(9|10).?Code", "icd",

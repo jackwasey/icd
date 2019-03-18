@@ -292,7 +292,7 @@ icd9_expand_range_worker <- function(start,
   out_env <- vec_to_env_true(lookup$vec[start_index:end_index])
   # do not want to check a load of leaf nodes for children, since they have
   # none. # TODO: pre-calculate
-  leaf_codes <- get_from_icd_data("icd9cm_leaf_v32")[["code"]]
+  leaf_codes <- get_from_icd_data("icd9cm_billable")[["32"]][["code"]]
   if (is.null(leaf_codes)) {
     leaf_codes <- get_from_icd_data("icd9cm_billable")[["32"]][["code"]]
   }

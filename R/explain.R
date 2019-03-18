@@ -206,7 +206,7 @@ explain_code.icd10who <- function(x,
   if (!short_code) {
     x <- decimal_to_short.icd10(x)
   }
-  # this is a alow linear lookup, but usually only
+  # this is a slow linear lookup, but usually only
   # "explaining" one or a few codes at a time.
   i <- if (lang == "fr") {
     get_from_icd_data("icd10who2008fr")

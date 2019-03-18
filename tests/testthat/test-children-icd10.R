@@ -30,10 +30,13 @@ test_that("children of a leaf node returns itself", {
     "C7A8"
   )
   set.seed(1441)
-  with_icd10cm_version("2016", {
-    rand_icd10cm <- generate_random_short_icd10cm_bill(50)
-    expect_icd10cm_child_is_self(rand_icd10cm)
-  })
+  with_icd10cm_version(
+    ver = "2016",
+    code = {
+      rand_icd10cm <- generate_random_short_icd10cm_bill(50)
+      expect_icd10cm_child_is_self(rand_icd10cm)
+    }
+  )
 })
 
 test_that("zero length ICD-10-CM children", {
@@ -92,6 +95,12 @@ context("WHO ICD-10 children")
 
 test_that("basic", {
   skip_if_not_installed("icd.data", 1.1)
-  skip_missing_icd10who(ver = "2016")
-  children(as.icd10who("A01"))
+  skip_missing_icd10who()
+  expect_identical(
+    children(as.icd10who("A01")),
+    structure(c("A01", "A010", "A011", "A012", "A013", "A014"),
+      class = c("icd10who", "icd10", "character"),
+      icd_short_diag = TRUE
+    )
+  )
 })

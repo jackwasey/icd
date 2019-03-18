@@ -168,10 +168,10 @@ charlson_from_comorbid <- function(x,
 #' )
 #' count_codes(mydf, return_df = TRUE)
 #' count_codes(mydf)
-#'
+#' 
 #' cmb <- icd9_comorbid_quan_deyo(mydf, short_code = FALSE, return_df = TRUE)
 #' count_comorbid(cmb)
-#'
+#' 
 #' wide <- data.frame(
 #'   visit_name = c("r", "s", "t"),
 #'   icd9_1 = c("0011", "441", "456"),
@@ -307,7 +307,7 @@ count_codes_wide <- function(x,
 #' cmb <- icd9_comorbid_quan_elix(mydf, short_code = FALSE, hierarchy = TRUE)
 #' vwr <- van_walraven_from_comorbid(cmb)
 #' stopifnot(identical(van_walraven(mydf), vwr))
-#'
+#' 
 #' # alternatively return as data frame in 'tidy' format
 #' van_walraven(mydf, return_df = TRUE)
 #' @author wmurphyrd

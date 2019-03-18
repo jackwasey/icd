@@ -239,22 +239,33 @@ expect_character <- function(x, ...) {
   testthat::expect_true(is.character(x))
 }
 
+with_offline <- function(offline, code) {
+  old <- options("icd.data.offline" = offline)
+  on.exit(options(old))
+  force(code)
+}
+
+with_interact <- function(interact, code) {
+  old <- options("icd.data.interact" = interact)
+  on.exit(options(old))
+  force(code)
+}
+
 # workaround so icd.data 1.0 will not cause CRAN or user errors
-skip_missing_icd10who <- function(ver = "2016", lang = "en") {
-  if (exists("skip_missing_icd10who",
-    envir = asNamespace("icd.data"),
-    inherits = FALSE
-  )) {
-    f <- get("skip_missing_icd10who",
-      envir = asNamespace("icd.data")
+skip_missing_icd10who <- function() {
+  g <- get_from_icd_data("get_icd_data", must_work = FALSE)
+  if (is.null(g)) testthat::skip("Older icd.data, so cannot get get_icd_data")
+  with_offline(
+    offline = TRUE,
+    with_interact(
+      interact = FALSE, {
+        dat <- g("icd10who2016")
+        if (is.null(dat)) testthat::skip("No WHO ICD-10 2016 English data")
+        dat <- g("icd10who2008fr")
+        if (is.null(dat)) testthat::skip("No WHO ICD-10 2008 French data")
+      }
     )
-    do.call(f,
-      args = list(ver = ver, lang = lang),
-      envir = asNamespace("icd.data")
-    )
-  } else {
-    testthat::skip("No skip_missing_icd10who function, so no data")
-  }
+  )
 }
 
 set_test_slow <- function(do_slow = TRUE) {
