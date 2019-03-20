@@ -73,8 +73,8 @@ before_script:
  # otherwise, icd.data is installed from CRAN, and after the github install???
  #
  # Quoting and colons in YAML https://github.com/ansible/ansible/issues/2769
- - 'echo "Remotes: jackwasey/icd.data" >> DESCRIPTION'
- - cat DESCRIPTION
+ #- 'echo "Remotes: jackwasey/icd.data" >> DESCRIPTION'
+ #- cat DESCRIPTION
  - Rscript -e "Rcpp::compileAttributes()" # make sure Rcpp generated code is updated, ideally this is not be checked in repo...
 
 after_success:
