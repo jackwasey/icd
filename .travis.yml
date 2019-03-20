@@ -71,7 +71,7 @@ before_script:
 # - sed -i'' '/\.lintr/d' .Rbuildignore
  - sed -i'' '/\benchmark/d' .Rbuildignore
  # otherwise, icd.data is installed from CRAN, and after the github install???
- - cat "Remotes: jackwasey/icd.data\n" >> DESCRIPTION
+ - cat "Remotes:\ jackwasey/icd.data" >> DESCRIPTION
  - cat DESCRIPTION
  - Rscript -e "Rcpp::compileAttributes()" # make sure Rcpp generated code is updated, ideally this is not be checked in repo...
 
