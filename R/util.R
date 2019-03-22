@@ -434,6 +434,7 @@ with_icd10cm_version <- function(ver, lang = c("en", "fr"), code) {
 require_icd_data <- function() {
   if (!requireNamespace("icd.data", quietly = TRUE)) {
     stop("Package \"icd.data\" needed for this function to work. Please install it with install.packages(\"icd.data\")",
-         call. = FALSE)
+      call. = FALSE
+    )
   }
 }

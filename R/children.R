@@ -13,18 +13,18 @@
 #' @family ICD-9 ranges
 #' @examples
 #' library(magrittr, warn.conflicts = FALSE, quietly = TRUE) # optional
-#'
+#' 
 #' # no children other than self
 #' children("10201", short_code = TRUE, defined = FALSE)
-#'
+#' 
 #' # guess it was ICD-9 and a short, not decimal code
 #' children("0032")
-#'
+#' 
 #' # empty because 102.01 is not meaningful
 #' children("10201", short_code = TRUE, defined = TRUE)
 #' x <- children("003", short_code = TRUE, defined = TRUE)
 #' explain_code(x, condense = FALSE, short_code = TRUE)
-#'
+#' 
 #' children(short_code = FALSE, "100.0")
 #' children(short_code = FALSE, "100.00")
 #' children(short_code = FALSE, "2.34")
@@ -56,15 +56,18 @@ children.character <- function(x, ...) {
 
 #' @describeIn children Get children of ICD-9-CM codes
 #' @export
-children.icd9cm <- function(x, short_code = guess_short(x),
-                            defined = TRUE, billable = FALSE, ...) {
+children.icd9cm <- function(x,
+                            short_code = guess_short(x),
+                            defined = TRUE,
+                            billable = FALSE,
+                            ...) {
   stopifnot(is.factor(x) || is.character(x))
   stopifnot(is.logical(short_code))
   stopifnot(is.logical(defined))
   stopifnot(is.logical(billable))
   res <- if (short_code) {
     .Call("_icd_icd9ChildrenShortUnordered",
-      icd9Decimal = toupper(x),
+      icd9Short = toupper(x),
       icd9cmReal = icd.data::icd9cm_hierarchy$code,
       onlyReal = defined
     )

@@ -467,10 +467,10 @@ icd10_generate_map_quan_elix <- function(save_data = TRUE, verbose = FALSE) {
   # which are not present (?anymore) in the ICD-10-CM 2016 list. In particular,
   # see C43 in Tumor.
   icd10_map_quan_elix <- apply_over_icd10cm_vers(quan_elix_raw,
-                                                 verbose = verbose
+    verbose = verbose
   )
   icd10_map_quan_elix <- apply_over_icd10who_vers(icd10_map_quan_elix,
-                                                  verbose = verbose
+    verbose = verbose
   )
   icd10_map_quan_elix <- lapply(icd10_map_quan_elix, as.short_diag)
   icd10_map_quan_elix <- lapply(icd10_map_quan_elix, as.icd10)
@@ -574,10 +574,10 @@ icd10_generate_map_quan_deyo <- function(save_data = TRUE, verbose = FALSE) {
   # worth it, even for ICD-10-CM, because I do end up cutting it back down to
   # size based on the input data before comorbidity matching.
   icd10_map_quan_deyo <- apply_over_icd10cm_vers(quan_charl_raw,
-                                                 verbose = verbose
+    verbose = verbose
   )
   icd10_map_quan_deyo <- apply_over_icd10who_vers(icd10_map_quan_deyo,
-                                                  verbose = verbose
+    verbose = verbose
   )
   icd10_map_quan_deyo <- lapply(icd10_map_quan_deyo, as.short_diag)
   icd10_map_quan_deyo <- lapply(icd10_map_quan_deyo, as.icd10)
@@ -608,10 +608,10 @@ apply_over_icd10cm_vers <- function(raw, verbose = FALSE) {
       as.character(yr),
       code = {
         upd <- sapply(out,
-                      FUN = .apply_over_ver_worker,
-                      simplify = FALSE,
-                      USE.NAMES = TRUE,
-                      verbose = verbose
+          FUN = .apply_over_ver_worker,
+          simplify = FALSE,
+          USE.NAMES = TRUE,
+          verbose = verbose
         )
         for (cmb in seq_along(out)) {
           if (verbose) {
@@ -630,7 +630,8 @@ apply_over_icd10cm_vers <- function(raw, verbose = FALSE) {
           }
           out[[cmb]] <- sort(union(out[[cmb]], upd[[cmb]]))
         }
-      }) # end of with active version
+      }
+    ) # end of with active version
   } # end year loop
   out
 }
@@ -649,11 +650,11 @@ apply_over_icd10who_vers <- function(raw, verbose) {
   for (who_ver in c("icd10who2016", "icd10who2008fr")) {
     if (verbose) message("Working on ", who_ver)
     upd <- sapply(out,
-                  FUN = .apply_over_ver_worker,
-                  inner_fun = children_defined.icd10who,
-                  who_ver = who_ver,
-                  simplify = FALSE,
-                  USE.NAMES = TRUE
+      FUN = .apply_over_ver_worker,
+      inner_fun = children_defined.icd10who,
+      who_ver = who_ver,
+      simplify = FALSE,
+      USE.NAMES = TRUE
     )
     for (cmb in seq_along(out)) {
       if (verbose) {

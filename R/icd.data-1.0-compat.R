@@ -27,10 +27,11 @@ icd_data_get_icd10cm_active_ver <- function() {
     message("icd.data doesn't appear to be available")
     return()
   }
-  if (utils::packageVersion("icd.data") < "1.1")
+  if (utils::packageVersion("icd.data") < "1.1") {
     "2016"
-  else
+  } else {
     get("get_icd10cm_active_ver", envir = asNamespace("icd.data"))()
+  }
 }
 
 .idget <- function(var_name, alt = NULL, must_work = TRUE) {

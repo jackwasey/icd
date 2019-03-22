@@ -4,8 +4,9 @@ skip_multi <- function() {
   skip_on_appveyor()
   skip_on_travis()
   skip_on_cran()
-  if (isTRUE(getOption("icd.data.offline", default = TRUE)))
+  if (isTRUE(getOption("icd.data.offline", default = TRUE))) {
     skip("Offline")
+  }
 }
 
 test_that("the icd-10 quan elix comorbidity map is reproduced", {
