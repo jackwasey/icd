@@ -72,7 +72,7 @@ Readmission metric)" />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Comorbidity calculations and tools for ICD-9 and ICD-10 codes</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">4.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">4.0.1</span>
       </span>
     </div>
 
@@ -99,9 +99,6 @@ Readmission metric)" />
     </li>
     <li>
       <a href="../articles/ICD-10.html">ICD-10 comorbidities</a>
-    </li>
-    <li>
-      <a href="../articles/PCCC.html">Pediatric Complex Chronic Conditions</a>
     </li>
     <li>
       <a href="../articles/charlson-scores.html">Charlson and Van Walraven scores</a>
@@ -165,7 +162,8 @@ Readmission metric)</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>icd9_parse_ahrq_ccs</span>(<span class='kw'>single</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>save_data</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>offline</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
+    <pre class="usage"><span class='fu'>icd9_parse_ahrq_ccs</span>(<span class='kw'>single</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>save_data</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>offline</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/options'>getOption</a></span>(<span class='st'>"icd.data.offline"</span>))</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -191,10 +189,10 @@ raw data directory. This is helpful for testing without using the internet.</p><
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><span class='co'># NOT RUN {</span>
-  <span class='kw pkg'>icd</span><span class='kw ns'>:::</span><span class='fu'><a href='https://jackwasey.github.io/icd//reference/icd9_parse_ahrq_ccs.html'>icd9_parse_ahrq_ccs</a></span>(<span class='kw'>single</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>offline</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
-  <span class='kw pkg'>icd</span><span class='kw ns'>:::</span><span class='fu'><a href='https://jackwasey.github.io/icd//reference/icd9_parse_ahrq_ccs.html'>icd9_parse_ahrq_ccs</a></span>(<span class='kw'>single</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>offline</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
-  <span class='kw pkg'>icd</span><span class='kw ns'>:::</span><span class='fu'><a href='https://jackwasey.github.io/icd//reference/icd9_parse_ahrq_ccs.html'>icd9_parse_ahrq_ccs</a></span>(<span class='kw'>single</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>offline</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
-  <span class='kw pkg'>icd</span><span class='kw ns'>:::</span><span class='fu'><a href='https://jackwasey.github.io/icd//reference/icd9_parse_ahrq_ccs.html'>icd9_parse_ahrq_ccs</a></span>(<span class='kw'>single</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>offline</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
+<span class='kw pkg'>icd</span><span class='kw ns'>:::</span><span class='fu'><a href='https://jackwasey.github.io/icd//reference/icd9_parse_ahrq_ccs.html'>icd9_parse_ahrq_ccs</a></span>(<span class='kw'>single</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>offline</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
+<span class='kw pkg'>icd</span><span class='kw ns'>:::</span><span class='fu'><a href='https://jackwasey.github.io/icd//reference/icd9_parse_ahrq_ccs.html'>icd9_parse_ahrq_ccs</a></span>(<span class='kw'>single</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>offline</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
+<span class='kw pkg'>icd</span><span class='kw ns'>:::</span><span class='fu'><a href='https://jackwasey.github.io/icd//reference/icd9_parse_ahrq_ccs.html'>icd9_parse_ahrq_ccs</a></span>(<span class='kw'>single</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>offline</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
+<span class='kw pkg'>icd</span><span class='kw ns'>:::</span><span class='fu'><a href='https://jackwasey.github.io/icd//reference/icd9_parse_ahrq_ccs.html'>icd9_parse_ahrq_ccs</a></span>(<span class='kw'>single</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>offline</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
 <span class='co'># }</span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">

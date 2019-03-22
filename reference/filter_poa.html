@@ -73,7 +73,7 @@ set unless all codes were either Y or N." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Comorbidity calculations and tools for ICD-9 and ICD-10 codes</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">4.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">4.0.1</span>
       </span>
     </div>
 
@@ -100,9 +100,6 @@ set unless all codes were either Y or N." />
     </li>
     <li>
       <a href="../articles/ICD-10.html">ICD-10 comorbidities</a>
-    </li>
-    <li>
-      <a href="../articles/PCCC.html">Pediatric Complex Chronic Conditions</a>
     </li>
     <li>
       <a href="../articles/charlson-scores.html">Charlson and Van Walraven scores</a>
@@ -230,14 +227,19 @@ out-of-hospital characteristics.</p></li>
 )
 <span class='no'>myData</span> <span class='kw'>%&gt;%</span> <span class='fu'>filter_poa_not_no</span>() <span class='kw'>%&gt;%</span> <span class='fu'><a href='comorbid.html'>comorbid_ahrq</a></span>()
 <span class='co'># can fill out named fields also:</span>
-<span class='no'>myData</span> <span class='kw'>%&gt;%</span> <span class='fu'>filter_poa_yes</span>(<span class='kw'>poa_name</span><span class='kw'>=</span><span class='st'>"poa"</span>) <span class='kw'>%&gt;%</span>
-  <span class='fu'><a href='comorbid.html'>comorbid_ahrq</a></span>(<span class='kw'>icd_name</span> <span class='kw'>=</span> <span class='st'>"diag"</span>, <span class='kw'>visit_name</span> <span class='kw'>=</span> <span class='st'>"visit_id"</span>,
-  <span class='kw'>short_code</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
+<span class='no'>myData</span> <span class='kw'>%&gt;%</span>
+  <span class='fu'>filter_poa_yes</span>(<span class='kw'>poa_name</span> <span class='kw'>=</span> <span class='st'>"poa"</span>) <span class='kw'>%&gt;%</span>
+  <span class='fu'><a href='comorbid.html'>comorbid_ahrq</a></span>(
+    <span class='kw'>icd_name</span> <span class='kw'>=</span> <span class='st'>"diag"</span>, <span class='kw'>visit_name</span> <span class='kw'>=</span> <span class='st'>"visit_id"</span>,
+    <span class='kw'>short_code</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>
+  )
 <span class='co'># can call the core comorbid() function with an arbitrary mapping</span>
 <span class='no'>myData</span> <span class='kw'>%&gt;%</span>
-  <span class='no'>filter_poa_yes</span> <span class='kw'>%&gt;%</span>
-  <span class='fu'><a href='comorbid.html'>comorbid_elix</a></span>(<span class='kw'>icd_name</span> <span class='kw'>=</span> <span class='st'>"diag"</span>, <span class='kw'>visit_name</span> <span class='kw'>=</span> <span class='st'>"visit_id"</span>,
-  <span class='kw'>short_mapping</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
+  <span class='fu'>filter_poa_yes</span>() <span class='kw'>%&gt;%</span>
+  <span class='fu'><a href='comorbid.html'>comorbid_elix</a></span>(
+    <span class='kw'>icd_name</span> <span class='kw'>=</span> <span class='st'>"diag"</span>, <span class='kw'>visit_name</span> <span class='kw'>=</span> <span class='st'>"visit_id"</span>,
+    <span class='kw'>short_mapping</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>
+  )
 <span class='co'># }</span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">

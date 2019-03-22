@@ -25,9 +25,6 @@
     <loc>https://jackwasey.github.io/icd//reference/attr_short_diag.html</loc>
   </url>
   <url>
-    <loc>https://jackwasey.github.io/icd//reference/c.icd9.html</loc>
-  </url>
-  <url>
     <loc>https://jackwasey.github.io/icd//reference/categorize_simple.html</loc>
   </url>
   <url>
@@ -41,6 +38,9 @@
   </url>
   <url>
     <loc>https://jackwasey.github.io/icd//reference/children.html</loc>
+  </url>
+  <url>
+    <loc>https://jackwasey.github.io/icd//reference/combine.html</loc>
   </url>
   <url>
     <loc>https://jackwasey.github.io/icd//reference/comorbid.html</loc>
@@ -184,9 +184,6 @@
     <loc>https://jackwasey.github.io/icd//reference/icd-package.html</loc>
   </url>
   <url>
-    <loc>https://jackwasey.github.io/icd//reference/icd10_chapters.html</loc>
-  </url>
-  <url>
     <loc>https://jackwasey.github.io/icd//reference/icd10_comorbid_reduce.html</loc>
   </url>
   <url>
@@ -208,12 +205,6 @@
     <loc>https://jackwasey.github.io/icd//reference/icd10_parse_cc.html</loc>
   </url>
   <url>
-    <loc>https://jackwasey.github.io/icd//reference/icd10_sub_chapters.html</loc>
-  </url>
-  <url>
-    <loc>https://jackwasey.github.io/icd//reference/icd10cm2016.html</loc>
-  </url>
-  <url>
     <loc>https://jackwasey.github.io/icd//reference/icd10cm_order_rcpp.html</loc>
   </url>
   <url>
@@ -224,9 +215,6 @@
   </url>
   <url>
     <loc>https://jackwasey.github.io/icd//reference/icd9_add_leading_zeroes_rcpp.html</loc>
-  </url>
-  <url>
-    <loc>https://jackwasey.github.io/icd//reference/icd9_chapters.html</loc>
   </url>
   <url>
     <loc>https://jackwasey.github.io/icd//reference/icd9_drop_leading_zeroes.html</loc>
@@ -281,15 +269,6 @@
   </url>
   <url>
     <loc>https://jackwasey.github.io/icd//reference/icd9_parse_quan_deyo_sas.html</loc>
-  </url>
-  <url>
-    <loc>https://jackwasey.github.io/icd//reference/icd9cm_billable.html</loc>
-  </url>
-  <url>
-    <loc>https://jackwasey.github.io/icd//reference/icd9cm_hierarchy.html</loc>
-  </url>
-  <url>
-    <loc>https://jackwasey.github.io/icd//reference/icd9cm_latest_edition.html</loc>
   </url>
   <url>
     <loc>https://jackwasey.github.io/icd//reference/icd_attr_clean.html</loc>
@@ -404,9 +383,6 @@
   </url>
   <url>
     <loc>https://jackwasey.github.io/icd//articles/ICD-10.html</loc>
-  </url>
-  <url>
-    <loc>https://jackwasey.github.io/icd//articles/PCCC.html</loc>
   </url>
   <url>
     <loc>https://jackwasey.github.io/icd//articles/charlson-scores.html</loc>

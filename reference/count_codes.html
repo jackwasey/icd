@@ -71,7 +71,7 @@ patient." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Comorbidity calculations and tools for ICD-9 and ICD-10 codes</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">4.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">4.0.1</span>
       </span>
     </div>
 
@@ -98,9 +98,6 @@ patient." />
     </li>
     <li>
       <a href="../articles/ICD-10.html">ICD-10 comorbidities</a>
-    </li>
-    <li>
-      <a href="../articles/PCCC.html">Pediatric Complex Chronic Conditions</a>
     </li>
     <li>
       <a href="../articles/charlson-scores.html">Charlson and Van Walraven scores</a>
@@ -211,24 +208,27 @@ first column is used.</p>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'>  <span class='no'>mydf</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/data.frame'>data.frame</a></span>(<span class='kw'>visit_name</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"r"</span>, <span class='st'>"r"</span>, <span class='st'>"s"</span>),
-                   <span class='kw'>icd9</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"441"</span>, <span class='st'>"412.93"</span>, <span class='st'>"042"</span>))
-  <span class='fu'>count_codes</span>(<span class='no'>mydf</span>, <span class='kw'>return_df</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt;   visit_name icd_count
+    <pre class="examples"><div class='input'><span class='no'>mydf</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/data.frame'>data.frame</a></span>(
+  <span class='kw'>visit_name</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"r"</span>, <span class='st'>"r"</span>, <span class='st'>"s"</span>),
+  <span class='kw'>icd9</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"441"</span>, <span class='st'>"412.93"</span>, <span class='st'>"042"</span>)
+)
+<span class='fu'>count_codes</span>(<span class='no'>mydf</span>, <span class='kw'>return_df</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt;   visit_name icd_count
 #&gt; 1          r         2
-#&gt; 2          s         1</div><div class='input'>  <span class='fu'>count_codes</span>(<span class='no'>mydf</span>)</div><div class='output co'>#&gt; [1] 2 1</div><div class='input'>
-  <span class='no'>cmb</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='comorbid.html'>icd9_comorbid_quan_deyo</a></span>(<span class='no'>mydf</span>, <span class='kw'>short_code</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>return_df</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
-  <span class='fu'><a href='count_comorbid.html'>count_comorbid</a></span>(<span class='no'>cmb</span>)</div><div class='output co'>#&gt; r s 
+#&gt; 2          s         1</div><div class='input'><span class='fu'>count_codes</span>(<span class='no'>mydf</span>)</div><div class='output co'>#&gt; [1] 2 1</div><div class='input'>
+<span class='no'>cmb</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='comorbid.html'>icd9_comorbid_quan_deyo</a></span>(<span class='no'>mydf</span>, <span class='kw'>short_code</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>return_df</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
+<span class='fu'><a href='count_comorbid.html'>count_comorbid</a></span>(<span class='no'>cmb</span>)</div><div class='output co'>#&gt; r s 
 #&gt; 2 1 </div><div class='input'>
-  <span class='no'>wide</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/data.frame'>data.frame</a></span>(<span class='kw'>visit_name</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"r"</span>, <span class='st'>"s"</span>, <span class='st'>"t"</span>),
-                   <span class='kw'>icd9_1</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"0011"</span>, <span class='st'>"441"</span>, <span class='st'>"456"</span>),
-                   <span class='kw'>icd9_2</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>NA</span>, <span class='st'>"442"</span>, <span class='fl'>NA</span>),
-                   <span class='kw'>icd9_3</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>NA</span>, <span class='fl'>NA</span>, <span class='st'>"510"</span>))
-  <span class='fu'><a href='count_codes_wide.html'>count_codes_wide</a></span>(<span class='no'>wide</span>)</div><div class='output co'>#&gt; r s t 
-#&gt; 1 2 2 </div><div class='input'>  # or:
-  </div><span class='co'># NOT RUN {</span>
-  <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>library</a></span>(<span class='no'>magrittr</span>, <span class='kw'>warn.conflicts</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
-  <span class='no'>wide</span> <span class='kw'>%&gt;%</span> <span class='no'>wide_to_long</span> <span class='kw'>%&gt;%</span> <span class='no'>count_codes</span>
-
+<span class='no'>wide</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/data.frame'>data.frame</a></span>(
+  <span class='kw'>visit_name</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"r"</span>, <span class='st'>"s"</span>, <span class='st'>"t"</span>),
+  <span class='kw'>icd9_1</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"0011"</span>, <span class='st'>"441"</span>, <span class='st'>"456"</span>),
+  <span class='kw'>icd9_2</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>NA</span>, <span class='st'>"442"</span>, <span class='fl'>NA</span>),
+  <span class='kw'>icd9_3</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>NA</span>, <span class='fl'>NA</span>, <span class='st'>"510"</span>)
+)
+<span class='fu'><a href='count_codes_wide.html'>count_codes_wide</a></span>(<span class='no'>wide</span>)</div><div class='output co'>#&gt; r s t 
+#&gt; 1 2 2 </div><div class='input'># or:
+</div><span class='co'># NOT RUN {</span>
+<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>library</a></span>(<span class='no'>magrittr</span>, <span class='kw'>warn.conflicts</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
+<span class='no'>wide</span> <span class='kw'>%&gt;%</span> <span class='fu'><a href='wide_to_long.html'>wide_to_long</a></span>() <span class='kw'>%&gt;%</span> <span class='fu'>count_codes</span>()
 <span class='co'># }</span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">

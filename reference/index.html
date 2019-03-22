@@ -66,7 +66,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Comorbidity calculations and tools for ICD-9 and ICD-10 codes</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">4.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">4.0.1</span>
       </span>
     </div>
 
@@ -93,9 +93,6 @@
     </li>
     <li>
       <a href="../articles/ICD-10.html">ICD-10 comorbidities</a>
-    </li>
-    <li>
-      <a href="../articles/PCCC.html">Pediatric Complex Chronic Conditions</a>
     </li>
     <li>
       <a href="../articles/charlson-scores.html">Charlson and Van Walraven scores</a>
@@ -370,126 +367,9 @@
       </tr><tr>
         
         <td>
-          <p><code><a href="diff_comorbid.html">diff_comorbid()</a></code> </p>
+          <p><code><a href="combine.html">c(<i>&lt;icd9&gt;</i>)</a></code> <code><a href="combine.html">c(<i>&lt;icd10&gt;</i>)</a></code> </p>
         </td>
-        <td><p>show the difference between two comorbidity mappings</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="filter_poa.html">filter_poa()</a></code> <code><a href="filter_poa.html">filter_poa_yes()</a></code> <code><a href="filter_poa.html">filter_poa_no()</a></code> <code><a href="filter_poa.html">filter_poa_not_no()</a></code> <code><a href="filter_poa.html">filter_poa_not_yes()</a></code> </p>
-        </td>
-        <td><p>Filters data frame based on present-on-arrival flag</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="filter_valid.html">filter_valid()</a></code> <code><a href="filter_valid.html">filter_invalid()</a></code> <code><a href="filter_valid.html">icd9_filter_valid()</a></code> <code><a href="filter_valid.html">icd10_filter_valid()</a></code> <code><a href="filter_valid.html">icd9_filter_invalid()</a></code> <code><a href="filter_valid.html">icd10_filter_invalid()</a></code> </p>
-        </td>
-        <td><p>Filter ICD codes by validity.</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="get_defined.html">get_defined()</a></code> </p>
-        </td>
-        <td><p>Select only defined ICD codes</p></td>
-      </tr>
-    </tbody><tbody>
-      <tr>
-        <th colspan="2">
-          <h2 id="section-data" class="hasAnchor"><a href="#section-data" class="anchor"></a>Data</h2>
-          <p class="section-desc"><p>ICD code lists, descriptions and comorbidity maps</p></p>
-        </th>
-      </tr>
-      <tr>
-        
-        <td>
-          <p><code><a href="as.comorbidity_map.html">as.comorbidity_map()</a></code> </p>
-        </td>
-        <td><p>Set the class of a named list to show it is a comorbidity map.</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="as.decimal_diag.html">as.decimal_diag()</a></code> <code><a href="as.decimal_diag.html">as.icd_decimal_diag()</a></code> <code><a href="as.decimal_diag.html">as.short_diag()</a></code> <code><a href="as.decimal_diag.html">as.icd_short_diag()</a></code> <code><a href="as.decimal_diag.html">is.decimal_diag()</a></code> <code><a href="as.decimal_diag.html">is.icd_decimal_diag()</a></code> <code><a href="as.decimal_diag.html">is.short_diag()</a></code> <code><a href="as.decimal_diag.html">is.icd_short_diag()</a></code> </p>
-        </td>
-        <td><p>Get or set whether ICD codes have have an attribute indicating 'short' or
-'decimal' format</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="c.icd9.html">c(<i>&lt;icd9&gt;</i>)</a></code> <code><a href="c.icd9.html">c(<i>&lt;icd10&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>combine ICD codes</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="charlson.html">charlson()</a></code> </p>
-        </td>
-        <td><p>Calculate Charlson Comorbidity Index (Charlson Score)</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="charlson_from_comorbid.html">charlson_from_comorbid()</a></code> </p>
-        </td>
-        <td><p>Calculate Charlson scores from precomputed Charlson comorbidities</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="children.html">children()</a></code> </p>
-        </td>
-        <td><p>Get children of ICD codes</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="comorbid.html">comorbid()</a></code> <code><a href="comorbid.html">icd10_comorbid()</a></code> <code><a href="comorbid.html">icd9_comorbid()</a></code> <code><a href="comorbid.html">icd9_comorbid_ahrq()</a></code> <code><a href="comorbid.html">icd10_comorbid_ahrq()</a></code> <code><a href="comorbid.html">icd9_comorbid_elix()</a></code> <code><a href="comorbid.html">icd10_comorbid_elix()</a></code> <code><a href="comorbid.html">icd9_comorbid_quan_elix()</a></code> <code><a href="comorbid.html">icd10_comorbid_quan_elix()</a></code> <code><a href="comorbid.html">icd9_comorbid_quan_deyo()</a></code> <code><a href="comorbid.html">icd10_comorbid_quan_deyo()</a></code> <code><a href="comorbid.html">icd9_comorbid_charlson()</a></code> <code><a href="comorbid.html">icd10_comorbid_charlson()</a></code> <code><a href="comorbid.html">comorbid_ccs()</a></code> <code><a href="comorbid.html">icd9_comorbid_ccs()</a></code> <code><a href="comorbid.html">icd10_comorbid_ccs()</a></code> <code><a href="comorbid.html">comorbid_ahrq()</a></code> <code><a href="comorbid.html">comorbid_elix()</a></code> <code><a href="comorbid.html">comorbid_quan_elix()</a></code> <code><a href="comorbid.html">comorbid_quan_deyo()</a></code> <code><a href="comorbid.html">comorbid_charlson()</a></code> </p>
-        </td>
-        <td><p>Find comorbidities from ICD-9 codes.</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="comorbid_df_to_mat.html">comorbid_df_to_mat()</a></code> </p>
-        </td>
-        <td><p>convert comorbidity matrix to data frame</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="comorbid_hcc.html">comorbid_hcc()</a></code> <code><a href="comorbid_hcc.html">icd9_comorbid_hcc()</a></code> <code><a href="comorbid_hcc.html">icd10_comorbid_hcc()</a></code> </p>
-        </td>
-        <td><p>Get Hierarchical Condition Codes (HCC)</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="comorbid_mat_to_df.html">comorbid_mat_to_df()</a></code> </p>
-        </td>
-        <td><p>convert comorbidity data frame from matrix</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="comorbid_pccc_dx.html">comorbid_pccc_dx()</a></code> <code><a href="comorbid_pccc_dx.html">comorbid_pccc_pcs()</a></code> <code><a href="comorbid_pccc_dx.html">icd9_comorbid_pccc_dx()</a></code> <code><a href="comorbid_pccc_dx.html">icd10_comorbid_pccc_dx()</a></code> <code><a href="comorbid_pccc_dx.html">icd9_comorbid_pccc_pcs()</a></code> <code><a href="comorbid_pccc_dx.html">icd10_comorbid_pccc_pcs()</a></code> </p>
-        </td>
-        <td><p>Calculate pediatric complex chronic conditions (PCCC) comorbidities</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="convert.html">convert</a></code> </p>
-        </td>
-        <td><p>Convert ICD data between formats and structures.</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="count_codes.html">count_codes()</a></code> </p>
-        </td>
-        <td><p>Count ICD codes or comorbidities for each patient</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="count_codes_wide.html">count_codes_wide()</a></code> </p>
-        </td>
-        <td><p>Count ICD codes given in wide format</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="count_comorbid.html">count_comorbid()</a></code> </p>
-        </td>
-        <td><p>Count number of comorbidities per patient</p></td>
+        <td><p>Combine ICD codes</p></td>
       </tr><tr>
         
         <td>
@@ -511,159 +391,9 @@
       </tr><tr>
         
         <td>
-          <p><code><a href="get_billable.html">get_billable()</a></code> </p>
-        </td>
-        <td><p>Get the subset of codes that are billable according to ICD-9-CM or ICD-10-CM</p></td>
-      </tr><tr>
-        
-        <td>
           <p><code><a href="get_defined.html">get_defined()</a></code> </p>
         </td>
         <td><p>Select only defined ICD codes</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="icd10_chapters.html">icd10_chapters</a></code> </p>
-        </td>
-        <td><p>ICD-10 chapters</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="icd10_map_ahrq_pcs.html">icd10_map_ahrq_pcs</a></code> </p>
-        </td>
-        <td><p>AHRQ ICD-10-PCS categories</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="icd10_sub_chapters.html">icd10_sub_chapters</a></code> </p>
-        </td>
-        <td><p>ICD-10 sub-chapters</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="icd10cm2016.html">icd10cm2016</a></code> </p>
-        </td>
-        <td><p>United States and Belgium ICD-10-CM</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="icd9_chapters.html">icd9_chapters</a></code> </p>
-        </td>
-        <td><p>ICD-9 chapters</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="icd9_map_ahrq.html">icd9_map_ahrq</a></code> </p>
-        </td>
-        <td><p>AHRQ comorbidities</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="icd9_map_elix.html">icd9_map_elix</a></code> </p>
-        </td>
-        <td><p>Elixhauser comorbidities</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="icd9_map_hcc.html">icd9_map_hcc</a></code> </p>
-        </td>
-        <td><p>Medicare Hierarchical Condition Categories</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="icd9_map_pccc.html">icd9_map_pccc</a></code> </p>
-        </td>
-        <td><p>Pediatric Complex Chronic Conditions</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="icd9_map_quan_deyo.html">icd9_map_quan_deyo</a></code> </p>
-        </td>
-        <td><p>Quan adaptation of Deyo/Charlson comorbidities</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="icd9_map_quan_elix.html">icd9_map_quan_elix</a></code> </p>
-        </td>
-        <td><p>Quan adaptation of Elixhauser comorbidities</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="icd9_map_single_ccs.html">icd9_map_single_ccs</a></code> </p>
-        </td>
-        <td><p>Clinical Classifications Software (CCS) for ICD9/10-CM</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="icd9cm_billable.html">icd9cm_billable</a></code> </p>
-        </td>
-        <td><p>List of annual versions of billable leaf nodes of ICD-9-CM</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="icd9cm_hierarchy.html">icd9cm_hierarchy</a></code> </p>
-        </td>
-        <td><p>Latest ICD-9-CM diagnosis codes, in flat <code>data.frame</code> format</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="is.icd9.html">is.icd9()</a></code> <code><a href="is.icd9.html">is.icd9cm()</a></code> <code><a href="is.icd9.html">is.icd9cm_pc()</a></code> <code><a href="is.icd9.html">is.icd9who()</a></code> <code><a href="is.icd9.html">is.icd10()</a></code> <code><a href="is.icd9.html">is.icd10cm()</a></code> <code><a href="is.icd9.html">is.icd10cm_pc()</a></code> <code><a href="is.icd9.html">is.icd10who()</a></code> <code><a href="is.icd9.html">is.icd10fr()</a></code> <code><a href="is.icd9.html">is.icd10be()</a></code> <code><a href="is.icd9.html">is.comorbidity_map()</a></code> </p>
-        </td>
-        <td><p>Test presence of ICD classes</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="is.icd_long_data.html">is.icd_long_data()</a></code> <code><a href="is.icd_long_data.html">is.icd_wide_data()</a></code> </p>
-        </td>
-        <td><p>Test for class describing patient data</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="is_billable.html">is_billable()</a></code> </p>
-        </td>
-        <td><p>Check whether a code is billable according to ICD-9-CM or ICD-10-CM</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="long_to_wide.html">long_to_wide()</a></code> </p>
-        </td>
-        <td><p>Convert ICD data from long to wide format</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="names_elix.html">names_elix</a></code> </p>
-        </td>
-        <td><p>Comorbidity names</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="plot_comorbid.html">plot_comorbid()</a></code> </p>
-        </td>
-        <td><p>Basic bar plot showing counts of each comorbidity</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="poa_choices.html">poa_choices</a></code> </p>
-        </td>
-        <td><p>Present-on-admission flags</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="print.icd9.html">print(<i>&lt;icd9&gt;</i>)</a></code> <code><a href="print.icd9.html">print(<i>&lt;icd10&gt;</i>)</a></code> </p>
-        </td>
-        <td><p>Print ICD codes and comorbidity maps cleanly</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="set_icd_class.html">as.icd9()</a></code> <code><a href="set_icd_class.html">as.icd9cm()</a></code> <code><a href="set_icd_class.html">as.icd9cm_pc()</a></code> <code><a href="set_icd_class.html">as.icd10()</a></code> <code><a href="set_icd_class.html">as.icd10cm()</a></code> <code><a href="set_icd_class.html">as.icd10cm_pc()</a></code> <code><a href="set_icd_class.html">as.icd10who()</a></code> <code><a href="set_icd_class.html">as.icd10fr()</a></code> <code><a href="set_icd_class.html">as.icd10be()</a></code> </p>
-        </td>
-        <td><p>Construct ICD-9 and ICD-10 data types</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="sort_icd.html">sort_icd()</a></code> <code><a href="sort_icd.html">sort(<i>&lt;icd10&gt;</i>)</a></code> <code><a href="sort_icd.html">sort(<i>&lt;icd10cm&gt;</i>)</a></code> <code><a href="sort_icd.html">sort(<i>&lt;icd10be&gt;</i>)</a></code> <code><a href="sort_icd.html">sort(<i>&lt;icd9&gt;</i>)</a></code> <code><a href="sort_icd.html">order.icd9()</a></code> <code><a href="sort_icd.html">order.icd10cm()</a></code> <code><a href="sort_icd.html">order.icd10be()</a></code> </p>
-        </td>
-        <td><p>Sort or order ICD-9 or ICD-10 codes according to published sequence</p></td>
       </tr><tr>
         
         <td>
@@ -673,21 +403,9 @@
       </tr><tr>
         
         <td>
-          <p><code><a href="van_walraven.html">van_walraven()</a></code> <code><a href="van_walraven.html">van_walraven_from_comorbid()</a></code> </p>
+          <p><code><a href="icd9_map_ahrq.html">icd9_map_ahrq</a></code> </p>
         </td>
-        <td><p>Calculate van Walraven Elixhauser Score</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="wide_to_long.html">wide_to_long()</a></code> </p>
-        </td>
-        <td><p>Convert ICD data from wide to long format</p></td>
-      </tr><tr>
-        
-        <td>
-          <p><code><a href="wide_vs_long.html">as.icd_long_data()</a></code> <code><a href="wide_vs_long.html">as.icd_wide_data()</a></code> <code><a href="wide_vs_long.html">icd_long_data()</a></code> <code><a href="wide_vs_long.html">icd_wide_data()</a></code> </p>
-        </td>
-        <td><p>Set the ICD data structure class of a <code>matrix</code> or <code>data.frame</code>.</p></td>
+        <td><p>AHRQ comorbidities</p></td>
       </tr>
     </tbody>
     </table>
@@ -702,7 +420,6 @@
       <li><a href="#section-transforming-icd-data">Transforming ICD data</a></li>
       <li><a href="#section-metadata">Metadata</a></li>
       <li><a href="#section-manipulation">Manipulation</a></li>
-      <li><a href="#section-data">Data</a></li>
     </ul>
   </div>
 </div>

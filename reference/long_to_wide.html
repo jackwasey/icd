@@ -71,7 +71,7 @@ icd provides, and actually converting the structure of the data." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Comorbidity calculations and tools for ICD-9 and ICD-10 codes</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">4.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">4.0.1</span>
       </span>
     </div>
 
@@ -98,9 +98,6 @@ icd provides, and actually converting the structure of the data." />
     </li>
     <li>
       <a href="../articles/ICD-10.html">ICD-10 comorbidities</a>
-    </li>
-    <li>
-      <a href="../articles/PCCC.html">Pediatric Complex Chronic Conditions</a>
     </li>
     <li>
       <a href="../articles/charlson-scores.html">Charlson and Van Walraven scores</a>
@@ -240,12 +237,14 @@ the maximum number of codes per patient.</p></td>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'>  <span class='no'>longdf</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/data.frame'>data.frame</a></span>(<span class='kw'>visit_name</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"a"</span>, <span class='st'>"b"</span>, <span class='st'>"b"</span>, <span class='st'>"c"</span>),
-    <span class='kw'>icd9</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"441"</span>, <span class='st'>"4424"</span>, <span class='st'>"443"</span>, <span class='st'>"441"</span>))
-  <span class='fu'>long_to_wide</span>(<span class='no'>longdf</span>)</div><div class='output co'>#&gt;   visit_name icd_001 icd_002
+    <pre class="examples"><div class='input'><span class='no'>longdf</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/data.frame'>data.frame</a></span>(
+  <span class='kw'>visit_name</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"a"</span>, <span class='st'>"b"</span>, <span class='st'>"b"</span>, <span class='st'>"c"</span>),
+  <span class='kw'>icd9</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"441"</span>, <span class='st'>"4424"</span>, <span class='st'>"443"</span>, <span class='st'>"441"</span>)
+)
+<span class='fu'>long_to_wide</span>(<span class='no'>longdf</span>)</div><div class='output co'>#&gt;   visit_name icd_001 icd_002
 #&gt; 1          a     441    &lt;NA&gt;
 #&gt; 2          b    4424     443
-#&gt; 4          c     441    &lt;NA&gt;</div><div class='input'>  <span class='fu'>long_to_wide</span>(<span class='no'>longdf</span>, <span class='kw'>prefix</span> <span class='kw'>=</span> <span class='st'>"ICD10_"</span>)</div><div class='output co'>#&gt;   visit_name ICD10_001 ICD10_002
+#&gt; 4          c     441    &lt;NA&gt;</div><div class='input'><span class='fu'>long_to_wide</span>(<span class='no'>longdf</span>, <span class='kw'>prefix</span> <span class='kw'>=</span> <span class='st'>"ICD10_"</span>)</div><div class='output co'>#&gt;   visit_name ICD10_001 ICD10_002
 #&gt; 1          a       441      &lt;NA&gt;
 #&gt; 2          b      4424       443
 #&gt; 4          c       441      &lt;NA&gt;</div></pre>

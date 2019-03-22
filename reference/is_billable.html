@@ -69,7 +69,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Comorbidity calculations and tools for ICD-9 and ICD-10 codes</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">4.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">4.0.1</span>
       </span>
     </div>
 
@@ -96,9 +96,6 @@
     </li>
     <li>
       <a href="../articles/ICD-10.html">ICD-10 comorbidities</a>
-    </li>
-    <li>
-      <a href="../articles/PCCC.html">Pediatric Complex Chronic Conditions</a>
     </li>
     <li>
       <a href="../articles/charlson-scores.html">Charlson and Van Walraven scores</a>
@@ -162,12 +159,10 @@
     <pre class="usage"><span class='fu'>is_billable</span>(<span class='no'>x</span>, <span class='kw'>short_code</span> <span class='kw'>=</span> <span class='fu'><a href='guess_short.html'>guess_short</a></span>(<span class='no'>x</span>), <span class='no'>...</span>)
 
 <span class='co'># S3 method for icd9</span>
-<span class='fu'>is_billable</span>(<span class='no'>x</span>, <span class='kw'>short_code</span> <span class='kw'>=</span> <span class='fu'><a href='guess_short.html'>guess_short</a></span>(<span class='no'>x</span>),
-  <span class='kw'>icd9cm_edition</span> <span class='kw'>=</span> <span class='fu'><a href='icd9cm_latest_edition.html'>icd9cm_latest_edition</a></span>(), <span class='kw'>nomatch</span> <span class='kw'>=</span> <span class='fl'>0L</span>, <span class='no'>...</span>)
+<span class='fu'>is_billable</span>(<span class='no'>x</span>, <span class='kw'>short_code</span> <span class='kw'>=</span> <span class='fu'><a href='guess_short.html'>guess_short</a></span>(<span class='no'>x</span>), <span class='no'>...</span>)
 
 <span class='co'># S3 method for icd9cm</span>
-<span class='fu'>is_billable</span>(<span class='no'>x</span>, <span class='kw'>short_code</span> <span class='kw'>=</span> <span class='fu'><a href='guess_short.html'>guess_short</a></span>(<span class='no'>x</span>),
-  <span class='kw'>icd9cm_edition</span> <span class='kw'>=</span> <span class='fu'><a href='icd9cm_latest_edition.html'>icd9cm_latest_edition</a></span>(), <span class='kw'>nomatch</span> <span class='kw'>=</span> <span class='fl'>0L</span>, <span class='no'>...</span>)
+<span class='fu'>is_billable</span>(<span class='no'>x</span>, <span class='kw'>short_code</span> <span class='kw'>=</span> <span class='fu'><a href='guess_short.html'>guess_short</a></span>(<span class='no'>x</span>), <span class='no'>...</span>)
 
 <span class='co'># S3 method for icd10</span>
 <span class='fu'>is_billable</span>(<span class='no'>x</span>, <span class='kw'>short_code</span> <span class='kw'>=</span> <span class='fu'><a href='guess_short.html'>guess_short</a></span>(<span class='no'>x</span>), <span class='no'>...</span>)
@@ -194,17 +189,6 @@ Where reasonable, this is guessed from the input data.</p></td>
     <tr>
       <th>...</th>
       <td><p>arguments passed on to other functions</p></td>
-    </tr>
-    <tr>
-      <th>icd9cm_edition</th>
-      <td><p>single character string, default is "32" which is the
-latest release from CMS. Currently anything from "23" to "32" is accepted.
-Not numeric because there are possible cases with non-numeric names, e.g.
-revisions within one year, although none currently implemented.</p></td>
-    </tr>
-    <tr>
-      <th>nomatch</th>
-      <td><p>integer value, passed to <code>match</code> default is 0.</p></td>
     </tr>
     </table>
     

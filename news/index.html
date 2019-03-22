@@ -66,7 +66,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Comorbidity calculations and tools for ICD-9 and ICD-10 codes</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">4.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">4.0.1</span>
       </span>
     </div>
 
@@ -93,9 +93,6 @@
     </li>
     <li>
       <a href="../articles/ICD-10.html">ICD-10 comorbidities</a>
-    </li>
-    <li>
-      <a href="../articles/PCCC.html">Pediatric Complex Chronic Conditions</a>
     </li>
     <li>
       <a href="../articles/charlson-scores.html">Charlson and Van Walraven scores</a>
@@ -149,11 +146,12 @@
       
     </div>
 
-    <div id="version-4-0" class="section level1">
+    <div id="version-4-0-1" class="section level1">
 <h1 class="page-header">
-<a href="#version-4-0" class="anchor"></a>Version 4.0<small> Unreleased </small>
+<a href="#version-4-0-1" class="anchor"></a>Version 4.0.1<small> Unreleased </small>
 </h1>
 <ul>
+<li>The ICD-10 comorbidity maps have been expanded to include the union of all codes for each year in which ICD-10-CM and WHO ICD-10 are available. E.g., HIV in WHO scheme has more detail than the US version. (The ICD-9 code algorithm does not rely on exact ICD-10 codes in maps, so is unchanged). This will flag a few more comorbidities than before, especially when data doesn’t correspond to the most recent map. CCS maps are only expanded over history ICD-10-CM since they are US-oriented. This is an important user-facing change which will improve capture of comorbidities in international and historic ICD-10 data. Again, ICD-9 computations are unaffected.</li>
 <li>Thanks to <a href='https://github.com/vitallish'>@vitallish</a> for update to CCS maps see #163, #168</li>
 <li>Framework for using WHO ICD-10 codes, which the ‘icd.data’ package will download as needed from the WHO web site. English and French are available, but currently only for the years 2016 and 2008 respectively. Update ‘icd.data’ package to version 1.1.1 to enable.</li>
 <li>Access to French and Dutch translations of ICD-10-CM, used in Belgium.</li>
@@ -176,7 +174,6 @@
 <li>PCCC benchmarking improved (<code>icd</code> is about 10x faster than the <code>pccc</code> package, which also uses ‘Rcpp’)</li>
 <li>Better documentation, including more links between documentation, removed internal documentation from public view. Added “Table One” example demonstration to README.</li>
 <li>code cleaning, simplification and linting, e.g. replaced sapply with vapply throughout, and dropped custom wide-long-wide conversion C++ code in favour of base R.</li>
-<li>The ICD-10 comorbidity maps have been expanded to include the union of all codes for each year in which ICD-10-CM was published. Including any additional WHO and international codes is not yet done, but ICD-10-CM is a huge superset of WHO, and the maps do already contain the significant exceptions, e.g., HIV in WHO scheme has more detail than the US version.</li>
 </ul>
 </div>
     <div id="version-3-3" class="section level1">
@@ -501,7 +498,7 @@
     <div id="tocnav">
       <h2>Contents</h2>
       <ul class="nav nav-pills nav-stacked">
-        <li><a href="#version-4-0">4.0</a></li>
+        <li><a href="#version-4-0-1">4.0.1</a></li>
         <li><a href="#version-3-3">3.3</a></li>
         <li><a href="#version-3-2-1">3.2.1</a></li>
         <li><a href="#version-3-2-0">3.2.0</a></li>

@@ -32,7 +32,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Comorbidity calculations and tools for ICD-9 and ICD-10 codes</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">4.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">4.0.1</span>
       </span>
     </div>
 
@@ -59,9 +59,6 @@
     </li>
     <li>
       <a href="../articles/ICD-10.html">ICD-10 comorbidities</a>
-    </li>
-    <li>
-      <a href="../articles/PCCC.html">Pediatric Complex Chronic Conditions</a>
     </li>
     <li>
       <a href="../articles/charlson-scores.html">Charlson and Van Walraven scores</a>
@@ -136,14 +133,24 @@
 <a class="sourceLine" id="cb1-2" data-line-number="2">icd.data<span class="op">::</span>icd10fr2019[<span class="dv">1</span><span class="op">:</span><span class="dv">5</span>, ]</a>
 <a class="sourceLine" id="cb1-3" data-line-number="3"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(icd.data)</a>
 <a class="sourceLine" id="cb1-4" data-line-number="4"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/summary">summary</a></span>(icd10who2016)</a></code></pre></div>
-<pre><code>#&gt; Length  Class   Mode 
-#&gt;      0   NULL   NULL</code></pre>
+<pre><code>#&gt;      code              leaf             desc           three_digit       
+#&gt;  Length:10759       Mode :logical   Length:10759       Length:10759      
+#&gt;  Class :character   FALSE:1413      Class :character   Class :character  
+#&gt;  Mode  :character   TRUE :9346      Mode  :character   Mode  :character  
+#&gt;     major           sub_sub_chapter    sub_chapter       
+#&gt;  Length:10759       Length:10759       Length:10759      
+#&gt;  Class :character   Class :character   Class :character  
+#&gt;  Mode  :character   Mode  :character   Mode  :character  
+#&gt;    chapter         
+#&gt;  Length:10759      
+#&gt;  Class :character  
+#&gt;  Mode  :character</code></pre>
 </div>
 <div id="french-edition-of-icd-10" class="section level1">
 <h1 class="hasAnchor">
 <a href="#french-edition-of-icd-10" class="anchor"></a>French edition of ICD-10</h1>
 <p>ICD-10-FR is significantly different from the WHO version, and is used by official bodies and health systems in France. As with all the features in this document, this is an early attempt at the complex problem of providing all the codes, transtatlanguages,</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1">fr &lt;-<span class="st"> </span>icd<span class="op">:::</span><span class="kw">get_from_icd_data</span>(<span class="st">"icd10fr2019"</span>, <span class="dt">lazy =</span> <span class="ot">TRUE</span>)</a>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1">fr &lt;-<span class="st"> </span>icd.data<span class="op">::</span>icd10fr2019</a>
 <a class="sourceLine" id="cb3-2" data-line-number="2">fr[fr<span class="op">$</span>code <span class="op">==</span><span class="st"> "C43"</span>, ]</a></code></pre></div>
 <pre><code>     code                                          desc_short
 1151 C431 MELANOME MALIN DE LA PAUPIERE, Y COMPRIS LE CANTHUS
@@ -161,31 +168,27 @@
 <p>The following code is wrapped in some protections in case the latest icd.data isn’t available (notably for CRAN checks).</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1"><span class="cf">if</span> (icd<span class="op">:::</span><span class="kw">icd_data_ver_ok</span>()) {</a>
 <a class="sourceLine" id="cb6-2" data-line-number="2">  <span class="co"># The code "C4311" goes from being a leaf in 2018, to a parent in 2019</span></a>
-<a class="sourceLine" id="cb6-3" data-line-number="3">  <span class="kw"><a href="https://www.rdocumentation.org/packages/icd.data/topics/with_icd10cm_version">with_icd10cm_version</a></span>(<span class="dt">ver =</span> <span class="st">"2018"</span>, </a>
-<a class="sourceLine" id="cb6-4" data-line-number="4">                       <span class="dt">lang =</span> <span class="st">"en"</span>,</a>
-<a class="sourceLine" id="cb6-5" data-line-number="5">                       icd<span class="op">::</span><span class="kw"><a href="https://jackwasey.github.io/icd//reference/is_leaf.html">is_leaf</a></span>(<span class="st">"C4311"</span>)</a>
-<a class="sourceLine" id="cb6-6" data-line-number="6">  )</a>
-<a class="sourceLine" id="cb6-7" data-line-number="7">  <span class="kw"><a href="https://www.rdocumentation.org/packages/icd.data/topics/with_icd10cm_version">with_icd10cm_version</a></span>(<span class="dt">ver =</span> <span class="st">"2019"</span>, </a>
-<a class="sourceLine" id="cb6-8" data-line-number="8">                       <span class="dt">lang =</span> <span class="st">"en"</span>, </a>
-<a class="sourceLine" id="cb6-9" data-line-number="9">                       icd<span class="op">::</span><span class="kw"><a href="https://jackwasey.github.io/icd//reference/is_leaf.html">is_leaf</a></span>(<span class="st">"C4311"</span>)</a>
-<a class="sourceLine" id="cb6-10" data-line-number="10">  )</a>
-<a class="sourceLine" id="cb6-11" data-line-number="11">  <span class="co"># In 2018 the following code was not even defined, but in 2019 was a new child</span></a>
-<a class="sourceLine" id="cb6-12" data-line-number="12">  <span class="co"># code of "C4311"s</span></a>
-<a class="sourceLine" id="cb6-13" data-line-number="13">  <span class="kw"><a href="https://www.rdocumentation.org/packages/icd.data/topics/with_icd10cm_version">with_icd10cm_version</a></span>(<span class="dt">ver =</span> <span class="st">"2018"</span>, </a>
-<a class="sourceLine" id="cb6-14" data-line-number="14">                       <span class="dt">lang =</span> <span class="st">"en"</span>,</a>
-<a class="sourceLine" id="cb6-15" data-line-number="15">                       {</a>
-<a class="sourceLine" id="cb6-16" data-line-number="16">                         <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/print">print</a></span>(icd<span class="op">::</span><span class="kw"><a href="https://jackwasey.github.io/icd//reference/is_defined.html">is_defined</a></span>(<span class="st">"C43111"</span>))</a>
-<a class="sourceLine" id="cb6-17" data-line-number="17">                         <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/print">print</a></span>(icd<span class="op">::</span><span class="kw"><a href="https://jackwasey.github.io/icd//reference/is_leaf.html">is_leaf</a></span>(<span class="st">"C43111"</span>))</a>
-<a class="sourceLine" id="cb6-18" data-line-number="18">                       }</a>
+<a class="sourceLine" id="cb6-3" data-line-number="3">  icd.data<span class="op">::</span><span class="kw">with_icd10cm_version</span>(<span class="dt">ver =</span> <span class="st">"2018"</span>,</a>
+<a class="sourceLine" id="cb6-4" data-line-number="4">                                 icd<span class="op">::</span><span class="kw"><a href="https://jackwasey.github.io/icd//reference/is_leaf.html">is_leaf</a></span>(<span class="st">"C4311"</span>)</a>
+<a class="sourceLine" id="cb6-5" data-line-number="5">  )</a>
+<a class="sourceLine" id="cb6-6" data-line-number="6">  icd.data<span class="op">::</span><span class="kw">with_icd10cm_version</span>(<span class="dt">ver =</span> <span class="st">"2019"</span>, </a>
+<a class="sourceLine" id="cb6-7" data-line-number="7">                                 icd<span class="op">::</span><span class="kw"><a href="https://jackwasey.github.io/icd//reference/is_leaf.html">is_leaf</a></span>(<span class="st">"C4311"</span>)</a>
+<a class="sourceLine" id="cb6-8" data-line-number="8">  )</a>
+<a class="sourceLine" id="cb6-9" data-line-number="9">  <span class="co"># In 2018 the following code was not even defined, but in 2019 was a new child</span></a>
+<a class="sourceLine" id="cb6-10" data-line-number="10">  <span class="co"># code of "C4311"s</span></a>
+<a class="sourceLine" id="cb6-11" data-line-number="11">  icd.data<span class="op">::</span><span class="kw">with_icd10cm_version</span>(<span class="dt">ver =</span> <span class="st">"2018"</span>, </a>
+<a class="sourceLine" id="cb6-12" data-line-number="12">                                 {</a>
+<a class="sourceLine" id="cb6-13" data-line-number="13">                                   <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/print">print</a></span>(icd<span class="op">::</span><span class="kw"><a href="https://jackwasey.github.io/icd//reference/is_defined.html">is_defined</a></span>(<span class="st">"C43111"</span>))</a>
+<a class="sourceLine" id="cb6-14" data-line-number="14">                                   <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/print">print</a></span>(icd<span class="op">::</span><span class="kw"><a href="https://jackwasey.github.io/icd//reference/is_leaf.html">is_leaf</a></span>(<span class="st">"C43111"</span>))</a>
+<a class="sourceLine" id="cb6-15" data-line-number="15">                                 }</a>
+<a class="sourceLine" id="cb6-16" data-line-number="16">  )</a>
+<a class="sourceLine" id="cb6-17" data-line-number="17">  icd.data<span class="op">::</span><span class="kw">with_icd10cm_version</span>(<span class="dt">ver =</span> <span class="st">"2019"</span>, </a>
+<a class="sourceLine" id="cb6-18" data-line-number="18">                                 icd<span class="op">::</span><span class="kw"><a href="https://jackwasey.github.io/icd//reference/is_leaf.html">is_leaf</a></span>(<span class="st">"C43111"</span>)</a>
 <a class="sourceLine" id="cb6-19" data-line-number="19">  )</a>
-<a class="sourceLine" id="cb6-20" data-line-number="20">  <span class="kw"><a href="https://www.rdocumentation.org/packages/icd.data/topics/with_icd10cm_version">with_icd10cm_version</a></span>(<span class="dt">ver =</span> <span class="st">"2019"</span>, </a>
-<a class="sourceLine" id="cb6-21" data-line-number="21">                       <span class="dt">lang =</span> <span class="st">"en"</span>, </a>
-<a class="sourceLine" id="cb6-22" data-line-number="22">                       icd<span class="op">::</span><span class="kw"><a href="https://jackwasey.github.io/icd//reference/is_leaf.html">is_leaf</a></span>(<span class="st">"C43111"</span>)</a>
-<a class="sourceLine" id="cb6-23" data-line-number="23">  )</a>
-<a class="sourceLine" id="cb6-24" data-line-number="24">}</a>
-<a class="sourceLine" id="cb6-25" data-line-number="25"><span class="co">#&gt; [1] FALSE</span></a>
-<a class="sourceLine" id="cb6-26" data-line-number="26"><span class="co">#&gt; [1] FALSE</span></a>
-<a class="sourceLine" id="cb6-27" data-line-number="27"><span class="co">#&gt; [1] TRUE</span></a></code></pre></div>
+<a class="sourceLine" id="cb6-20" data-line-number="20">}</a>
+<a class="sourceLine" id="cb6-21" data-line-number="21"><span class="co">#&gt; [1] TRUE</span></a>
+<a class="sourceLine" id="cb6-22" data-line-number="22"><span class="co">#&gt; [1] TRUE</span></a>
+<a class="sourceLine" id="cb6-23" data-line-number="23"><span class="co">#&gt; [1] TRUE</span></a></code></pre></div>
 </div>
   </div>
 

@@ -69,7 +69,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Comorbidity calculations and tools for ICD-9 and ICD-10 codes</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">4.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">4.0.1</span>
       </span>
     </div>
 
@@ -96,9 +96,6 @@
     </li>
     <li>
       <a href="../articles/ICD-10.html">ICD-10 comorbidities</a>
-    </li>
-    <li>
-      <a href="../articles/PCCC.html">Pediatric Complex Chronic Conditions</a>
     </li>
     <li>
       <a href="../articles/charlson-scores.html">Charlson and Van Walraven scores</a>
@@ -189,16 +186,16 @@ NEDS</p></td>
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/summary'>summary</a></span>(<span class='kw pkg'>icd</span><span class='kw ns'>::</span><span class='fu'><a href='https://jackwasey.github.io/icd//reference/comorbid_pccc_dx.html'>comorbid_pccc_dx</a></span>(<span class='kw pkg'>icd</span><span class='kw ns'>:::</span><span class='fu'><a href='https://jackwasey.github.io/icd//reference/generate_neds_pts.html'>generate_neds_pts</a></span>()))</div><div class='output co'>#&gt;  neuromusc          cvd          respiratory       renal        
 #&gt;  Mode :logical   Mode :logical   Mode :logical   Mode :logical  
-#&gt;  FALSE:998       FALSE:995       FALSE:1000      FALSE:1000     
-#&gt;  TRUE :2         TRUE :5                                        
+#&gt;  FALSE:998       FALSE:998       FALSE:1000      FALSE:1000     
+#&gt;  TRUE :2         TRUE :2                                        
 #&gt;      gi          hemato_immu     metabolic       congeni_genetic
 #&gt;  Mode :logical   Mode :logical   Mode :logical   Mode :logical  
-#&gt;  FALSE:997       FALSE:997       FALSE:997       FALSE:999      
-#&gt;  TRUE :3         TRUE :3         TRUE :3         TRUE :1        
+#&gt;  FALSE:996       FALSE:998       FALSE:997       FALSE:998      
+#&gt;  TRUE :4         TRUE :2         TRUE :3         TRUE :2        
 #&gt;  malignancy       neonatal        tech_dep       transplant     
 #&gt;  Mode :logical   Mode :logical   Mode :logical   Mode :logical  
-#&gt;  FALSE:997       FALSE:1000      FALSE:1000      FALSE:1000     
-#&gt;  TRUE :3                                                        </div><div class='input'><span class='no'>neds</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>icd</span><span class='kw ns'>:::</span><span class='fu'><a href='https://jackwasey.github.io/icd//reference/generate_neds_pts.html'>generate_neds_pts</a></span>(<span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>100</span>, <span class='kw'>ncol</span> <span class='kw'>=</span> <span class='fl'>10L</span>, <span class='kw'>icd10</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
+#&gt;  FALSE:995       FALSE:999       FALSE:999       FALSE:999      
+#&gt;  TRUE :5         TRUE :1         TRUE :1         TRUE :1        </div><div class='input'><span class='no'>neds</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>icd</span><span class='kw ns'>:::</span><span class='fu'><a href='https://jackwasey.github.io/icd//reference/generate_neds_pts.html'>generate_neds_pts</a></span>(<span class='kw'>n</span> <span class='kw'>=</span> <span class='fl'>100</span>, <span class='kw'>ncol</span> <span class='kw'>=</span> <span class='fl'>10L</span>, <span class='kw'>icd10</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
 <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/stopifnot'>stopifnot</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/dim'>dim</a></span>(<span class='no'>neds</span>) <span class='kw'>==</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>100L</span>, <span class='fl'>11L</span>))
 <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/summary'>summary</a></span>(<span class='kw pkg'>icd</span><span class='kw ns'>::</span><span class='fu'><a href='https://jackwasey.github.io/icd//reference/comorbid_pccc_dx.html'>comorbid_pccc_dx</a></span>(<span class='no'>neds</span>))</div><div class='output co'>#&gt;  neuromusc          cvd          respiratory       renal        
 #&gt;  Mode :logical   Mode :logical   Mode :logical   Mode :logical  

@@ -78,7 +78,7 @@ comorbid_ccs." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Comorbidity calculations and tools for ICD-9 and ICD-10 codes</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">4.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">4.0.1</span>
       </span>
     </div>
 
@@ -105,9 +105,6 @@ comorbid_ccs." />
     </li>
     <li>
       <a href="../articles/ICD-10.html">ICD-10 comorbidities</a>
-    </li>
-    <li>
-      <a href="../articles/PCCC.html">Pediatric Complex Chronic Conditions</a>
     </li>
     <li>
       <a href="../articles/charlson-scores.html">Charlson and Van Walraven scores</a>
@@ -476,8 +473,10 @@ according to Quan/Deyo ICD categories. Synonymous with
 #&gt;  Mode :logical  
 #&gt;  FALSE:334      
 #&gt;                 </div><div class='input'>
-<span class='no'>pts</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='wide_vs_long.html'>icd_long_data</a></span>(<span class='kw'>visit_name</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"2"</span>, <span class='st'>"1"</span>, <span class='st'>"2"</span>, <span class='st'>"3"</span>, <span class='st'>"3"</span>),
-                 <span class='kw'>icd9</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"39891"</span>, <span class='st'>"40110"</span>, <span class='st'>"09322"</span>, <span class='st'>"41514"</span>, <span class='st'>"39891"</span>))
+<span class='no'>pts</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='wide_vs_long.html'>icd_long_data</a></span>(
+  <span class='kw'>visit_name</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"2"</span>, <span class='st'>"1"</span>, <span class='st'>"2"</span>, <span class='st'>"3"</span>, <span class='st'>"3"</span>),
+  <span class='kw'>icd9</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"39891"</span>, <span class='st'>"40110"</span>, <span class='st'>"09322"</span>, <span class='st'>"41514"</span>, <span class='st'>"39891"</span>)
+)
 <span class='fu'>comorbid</span>(<span class='no'>pts</span>, <span class='no'>icd9_map_ahrq</span>, <span class='kw'>short_code</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>) <span class='co'># visit_name is now sorted</span></div><div class='output co'>#&gt;     CHF Valvular  PHTN   PVD   HTN HTNcx Paralysis NeuroOther Pulmonary    DM
 #&gt; 2  TRUE     TRUE FALSE FALSE FALSE FALSE     FALSE      FALSE     FALSE FALSE
 #&gt; 1 FALSE    FALSE FALSE FALSE  TRUE FALSE     FALSE      FALSE     FALSE FALSE
@@ -494,10 +493,13 @@ according to Quan/Deyo ICD categories. Synonymous with
 #&gt; 2     FALSE      FALSE
 #&gt; 1     FALSE      FALSE
 #&gt; 3     FALSE      FALSE</div><div class='input'><span class='no'>pts</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='wide_vs_long.html'>icd_long_data</a></span>(
-           <span class='kw'>visit_name</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"1"</span>, <span class='st'>"2"</span>, <span class='st'>"3"</span>, <span class='st'>"4"</span>, <span class='st'>"4"</span>),
-           <span class='kw'>icd_name</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"20084"</span>, <span class='st'>"1742"</span>, <span class='st'>"30410"</span>, <span class='st'>"41514"</span>, <span class='st'>"95893"</span>),
-           <span class='kw'>date</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/as.Date'>as.Date</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"2011-01-01"</span>, <span class='st'>"2011-01-02"</span>, <span class='st'>"2011-01-03"</span>,
-             <span class='st'>"2011-01-04"</span>, <span class='st'>"2011-01-04"</span>)))
+  <span class='kw'>visit_name</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"1"</span>, <span class='st'>"2"</span>, <span class='st'>"3"</span>, <span class='st'>"4"</span>, <span class='st'>"4"</span>),
+  <span class='kw'>icd_name</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"20084"</span>, <span class='st'>"1742"</span>, <span class='st'>"30410"</span>, <span class='st'>"41514"</span>, <span class='st'>"95893"</span>),
+  <span class='kw'>date</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/as.Date'>as.Date</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(
+    <span class='st'>"2011-01-01"</span>, <span class='st'>"2011-01-02"</span>, <span class='st'>"2011-01-03"</span>,
+    <span class='st'>"2011-01-04"</span>, <span class='st'>"2011-01-04"</span>
+  ))
+)
 
 <span class='no'>pt_hccs</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='comorbid_hcc.html'>comorbid_hcc</a></span>(<span class='no'>pts</span>, <span class='kw'>date_name</span> <span class='kw'>=</span> <span class='st'>"date"</span>)
 <span class='fu'><a href='https://www.rdocumentation.org/packages/utils/topics/head'>head</a></span>(<span class='no'>pt_hccs</span>)</div><div class='output co'>#&gt;   visit_name       date hcc
@@ -507,9 +509,11 @@ according to Quan/Deyo ICD categories. Synonymous with
 #&gt; 4          4 2011-01-04 164</div><div class='input'>
 <span class='no'>pts10</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='wide_vs_long.html'>icd_long_data</a></span>(
   <span class='kw'>visit_name</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"a"</span>, <span class='st'>"b"</span>, <span class='st'>"c"</span>, <span class='st'>"d"</span>, <span class='st'>"e"</span>),
-  <span class='kw'>icd_name</span> <span class='kw'>=</span><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"I058"</span>, <span class='fl'>NA</span>, <span class='st'>"T82817A"</span>, <span class='st'>""</span>, <span class='st'>"I69369"</span>),
+  <span class='kw'>icd_name</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"I058"</span>, <span class='fl'>NA</span>, <span class='st'>"T82817A"</span>, <span class='st'>""</span>, <span class='st'>"I69369"</span>),
   <span class='kw'>date</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/as.Date'>as.Date</a></span>(
-    <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"2011-01-01"</span>, <span class='st'>"2011-01-02"</span>, <span class='st'>"2011-01-03"</span>, <span class='st'>"2011-01-03"</span>, <span class='st'>"2011-01-03"</span>)))
+    <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"2011-01-01"</span>, <span class='st'>"2011-01-02"</span>, <span class='st'>"2011-01-03"</span>, <span class='st'>"2011-01-03"</span>, <span class='st'>"2011-01-03"</span>)
+  )
+)
 
 <span class='fu'>icd10_comorbid</span>(<span class='no'>pts10</span>, <span class='kw'>map</span> <span class='kw'>=</span> <span class='no'>icd10_map_ahrq</span>)</div><div class='output co'>#&gt;     CHF Valvular  PHTN   PVD   HTN HTNcx Paralysis NeuroOther Pulmonary    DM
 #&gt; a FALSE     TRUE FALSE FALSE FALSE FALSE     FALSE      FALSE     FALSE FALSE
@@ -584,11 +588,15 @@ according to Quan/Deyo ICD categories. Synonymous with
 #&gt; d     FALSE      FALSE
 #&gt; e     FALSE      FALSE</div><div class='input'>
 <span class='co'># specify a simple custom comorbidity map:</span>
-<span class='no'>my_map</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/list'>list</a></span>(<span class='st'>"malady"</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"100"</span>, <span class='st'>"2000"</span>),
-               <span class='st'>"ailment"</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"003"</span>, <span class='st'>"040"</span>))
-<span class='no'>two_pts</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/data.frame'>data.frame</a></span>(<span class='kw'>visit_id</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"v01"</span>, <span class='st'>"v01"</span>, <span class='st'>"v02"</span>, <span class='st'>"v02"</span>),
+<span class='no'>my_map</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/list'>list</a></span>(
+  <span class='st'>"malady"</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"100"</span>, <span class='st'>"2000"</span>),
+  <span class='st'>"ailment"</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"003"</span>, <span class='st'>"040"</span>)
+)
+<span class='no'>two_pts</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/data.frame'>data.frame</a></span>(
+  <span class='kw'>visit_id</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"v01"</span>, <span class='st'>"v01"</span>, <span class='st'>"v02"</span>, <span class='st'>"v02"</span>),
   <span class='kw'>icd9</span> <span class='kw'>=</span> <span class='fu'><a href='set_icd_class.html'>as.icd9</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"040"</span>, <span class='st'>"000"</span>, <span class='st'>"100"</span>, <span class='st'>"000"</span>)),
-  <span class='kw'>stringsAsFactors</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
+  <span class='kw'>stringsAsFactors</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>
+)
 <span class='fu'>comorbid</span>(<span class='no'>two_pts</span>, <span class='kw'>map</span> <span class='kw'>=</span> <span class='no'>my_map</span>)</div><div class='output co'>#&gt;     malady ailment
 #&gt; v01  FALSE    TRUE
 #&gt; v02   TRUE   FALSE</div></pre>

@@ -74,7 +74,7 @@ metastatic tumor" />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Comorbidity calculations and tools for ICD-9 and ICD-10 codes</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">4.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">4.0.1</span>
       </span>
     </div>
 
@@ -101,9 +101,6 @@ metastatic tumor" />
     </li>
     <li>
       <a href="../articles/ICD-10.html">ICD-10 comorbidities</a>
-    </li>
-    <li>
-      <a href="../articles/PCCC.html">Pediatric Complex Chronic Conditions</a>
     </li>
     <li>
       <a href="../articles/charlson-scores.html">Charlson and Van Walraven scores</a>
@@ -244,8 +241,10 @@ and ICD-9 codes</p></li>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='no'>mydf</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/data.frame'>data.frame</a></span>(<span class='kw'>visit_name</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"a"</span>, <span class='st'>"b"</span>, <span class='st'>"c"</span>),
-                   <span class='kw'>icd9</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"412.93"</span>, <span class='st'>"441"</span>, <span class='st'>"042"</span>))
+    <pre class="examples"><div class='input'><span class='no'>mydf</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/data.frame'>data.frame</a></span>(
+  <span class='kw'>visit_name</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"a"</span>, <span class='st'>"b"</span>, <span class='st'>"c"</span>),
+  <span class='kw'>icd9</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"412.93"</span>, <span class='st'>"441"</span>, <span class='st'>"042"</span>)
+)
 <span class='fu'>van_walraven</span>(<span class='no'>mydf</span>)</div><div class='output co'>#&gt; a b c 
 #&gt; 0 2 0 </div><div class='input'><span class='co'># or calculate comorbodities first:</span>
 <span class='no'>cmb</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='comorbid.html'>icd9_comorbid_quan_elix</a></span>(<span class='no'>mydf</span>, <span class='kw'>short_code</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>hierarchy</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)

@@ -72,7 +72,7 @@ functions." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Comorbidity calculations and tools for ICD-9 and ICD-10 codes</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">4.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">4.0.1</span>
       </span>
     </div>
 
@@ -99,9 +99,6 @@ functions." />
     </li>
     <li>
       <a href="../articles/ICD-10.html">ICD-10 comorbidities</a>
-    </li>
-    <li>
-      <a href="../articles/PCCC.html">Pediatric Complex Chronic Conditions</a>
     </li>
     <li>
       <a href="../articles/charlson-scores.html">Charlson and Van Walraven scores</a>
@@ -293,9 +290,11 @@ procedure codes</p></li>
 #&gt; 37           FALSE      FALSE    FALSE    FALSE      FALSE
 #&gt; 41           FALSE      FALSE    FALSE    FALSE      FALSE</div><div class='input'><span class='co'># Six random codes from each PCCC procedure code map. 'icd' will use</span>
 <span class='co'># an heuristic to guess whether ICD-9 or ICD-10:</span>
-<span class='no'>pts</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/data.frame'>data.frame</a></span>(<span class='kw'>encounters</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>10</span>, <span class='fl'>11</span>, <span class='fl'>12</span>),
-                  <span class='kw'>icd9_pcs</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"0152"</span>, <span class='st'>"304"</span>, <span class='st'>"0050"</span>),
-                  <span class='kw'>icd10_pcs</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"0B110Z4"</span>, <span class='st'>"02YA0Z2"</span>, <span class='st'>"031209D"</span>))
+<span class='no'>pts</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/data.frame'>data.frame</a></span>(
+  <span class='kw'>encounters</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>10</span>, <span class='fl'>11</span>, <span class='fl'>12</span>),
+  <span class='kw'>icd9_pcs</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"0152"</span>, <span class='st'>"304"</span>, <span class='st'>"0050"</span>),
+  <span class='kw'>icd10_pcs</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"0B110Z4"</span>, <span class='st'>"02YA0Z2"</span>, <span class='st'>"031209D"</span>)
+)
 <span class='fu'>comorbid_pccc_pcs</span>(<span class='no'>pts</span>, <span class='kw'>icd_name</span> <span class='kw'>=</span> <span class='st'>"icd9_pcs"</span>, <span class='kw'>return_binary</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt;    neuromusc cvd respiratory renal gi hemato_immu metabolic congeni_genetic
 #&gt; 10         1   0           0     0  0           0         0               0
 #&gt; 11         0   0           1     0  0           0         0               0

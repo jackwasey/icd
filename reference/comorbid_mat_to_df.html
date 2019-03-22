@@ -70,7 +70,7 @@ information" />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Comorbidity calculations and tools for ICD-9 and ICD-10 codes</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">4.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">4.0.1</span>
       </span>
     </div>
 
@@ -97,9 +97,6 @@ information" />
     </li>
     <li>
       <a href="../articles/ICD-10.html">ICD-10 comorbidities</a>
-    </li>
-    <li>
-      <a href="../articles/PCCC.html">Pediatric Complex Chronic Conditions</a>
     </li>
     <li>
       <a href="../articles/charlson-scores.html">Charlson and Van Walraven scores</a>
@@ -197,8 +194,9 @@ argument used in, among other base functions <code>as.data.frame</code>.</p></td
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='no'>longdf</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='wide_vs_long.html'>icd_long_data</a></span>(
-            <span class='kw'>visit_id</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"a"</span>, <span class='st'>"b"</span>, <span class='st'>"b"</span>, <span class='st'>"c"</span>),
-            <span class='kw'>icd9</span> <span class='kw'>=</span> <span class='fu'><a href='set_icd_class.html'>as.icd9</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"441"</span>, <span class='st'>"4240"</span>, <span class='st'>"443"</span>, <span class='st'>"441"</span>)))
+  <span class='kw'>visit_id</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"a"</span>, <span class='st'>"b"</span>, <span class='st'>"b"</span>, <span class='st'>"c"</span>),
+  <span class='kw'>icd9</span> <span class='kw'>=</span> <span class='fu'><a href='set_icd_class.html'>as.icd9</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"441"</span>, <span class='st'>"4240"</span>, <span class='st'>"443"</span>, <span class='st'>"441"</span>))
+)
 <span class='no'>mat</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='comorbid.html'>icd9_comorbid_elix</a></span>(<span class='no'>longdf</span>)
 <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/class'>class</a></span>(<span class='no'>mat</span>)</div><div class='output co'>#&gt; [1] "matrix"</div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/typeof'>typeof</a></span>(<span class='no'>mat</span>)</div><div class='output co'>#&gt; [1] "logical"</div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/colnames'>rownames</a></span>(<span class='no'>mat</span>)</div><div class='output co'>#&gt; [1] "a" "b" "c"</div><div class='input'><span class='no'>df.out</span> <span class='kw'>&lt;-</span> <span class='fu'>comorbid_mat_to_df</span>(<span class='no'>mat</span>)
 <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/stopifnot'>stopifnot</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/as.data.frame'>is.data.frame</a></span>(<span class='no'>df.out</span>))
