@@ -271,13 +271,7 @@ set_test_slow <- function(do_slow = TRUE) {
 }
 
 get_test_slow <- function() {
-  s <- tolower(Sys.getenv("ICD_TEST_SLOW"))
-  if (s == "") return(FALSE)
-  if (!startsWith(s, "t") &&
-    !startsWith(s, "y")) {
-    return(FALSE)
-  }
-  TRUE
+  substring(tolower(Sys.getenv("ICD_TEST_SLOW")), 1, 1) %in% c("t", "y")
 }
 
 skip_slow <- function(msg = "Skipping slow test") {

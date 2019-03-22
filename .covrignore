@@ -6,4 +6,3 @@ R/fuzz.R
 R/*_alt.R
 src/*_alt*.cpp
 src/*.h
-
