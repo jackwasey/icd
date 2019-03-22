@@ -113,7 +113,7 @@ The AHRQ publishes an annually updated categorization of ICD-10-CM procedure cod
 
 ```{r setuppcs, echo = FALSE}
 nm = "code"
-pcs <- icd.data:::.idget("icd10cm2018_pc", alt = "icd10_pcs_2018")
+pcs <- icd:::.idget("icd10cm2018_pc", alt = "icd10_pcs_2018")
 ```
 ```{r icd10pcs}
 set.seed(1441)
