@@ -18,6 +18,7 @@ test_that("some codes not in ICD-10-CM", {
 })
 
 test_that("hand-picked WHO-only codes okay", {
+  skip_if_not_installed("icd.data", 1.1)
   skip_missing_icd10who()
   expect_identical(
     explain_code.icd10who("U842"),
@@ -44,6 +45,7 @@ test_that("some codes not in ICD-10-CM", {
 })
 
 test_that("hand-picked WHO-only codes okay", {
+  skip_if_not_installed("icd.data", 1.1)
   skip_missing_icd10who()
   expect_identical(
     explain_code.icd10who("F21", lang = "fr"),

@@ -167,12 +167,12 @@ children_defined.icd10cm <- function(x,
   if (!short_code) {
     x <- decimal_to_short.icd10cm(x)
   }
-  ver <- icd.data::get_icd10cm_active_ver()
+  ver <- icd_data_get_icd10cm_active_ver()
   if (verbose) message("Using ICD-10-CM version: ", ver)
   nc <- .icd10cm_get_nchars(ver)
   kids <- icd10_children_defined_rcpp(
     x = x,
-    lookup = icd.data::get_icd10cm_active(verbose = verbose),
+    lookup = icd_data_icd10cm_active(),
     nc = nc
   )
   as.icd10cm(kids, short_code)

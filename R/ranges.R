@@ -292,7 +292,7 @@ icd9_expand_range_worker <- function(start,
   out_env <- vec_to_env_true(lookup$vec[start_index:end_index])
   # do not want to check a load of leaf nodes for children, since they have
   # none. # TODO: pre-calculate
-  leaf_codes <- icd.data::icd9cm_leaf_v32[["code"]]
+  leaf_codes <- icd_data_icd9cm_leaf_v32()[["code"]]
   leaf_env <- vec_to_env_true(leaf_codes)
   is_parent <- function(x, defined) {
     if (!defined) {

@@ -11,7 +11,7 @@ j <- icd:::icd9cm_generate_chapters_hierarchy()
 Rprof(NULL)
 summaryRprof("/tmp/gh.txt", lines = "show")
 
-test_codes <- icd.data::icd9cm_leaf_v32[["code"]]
+test_codes <- icd_data_icd9cm_leaf_v32()[["code"]]
 
 prf <- profr(
   icd9_get_chapters(x = test_codes[1:1000], short_code = TRUE),

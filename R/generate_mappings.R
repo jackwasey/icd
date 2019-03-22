@@ -604,7 +604,7 @@ apply_over_icd10cm_vers <- function(raw, verbose = FALSE) {
   out <- raw
   for (yr in 2014:2019) {
     if (verbose) message("applying ICD-10-CM year: ", yr)
-    icd.data::with_icd10cm_version(
+    with_icd10cm_version(
       as.character(yr),
       code = {
         upd <- sapply(out,
