@@ -116,7 +116,7 @@ expand_range.icd10cm <- function(start,
   new_end <- end_kids[length(end_kids)]
 
   # find the start and end code positions in the master list
-  i <- icd.data::icd10cm_active
+  i <- icd_data_icd10cm_active()
   pos <- match(
     c(start, new_end),
     i[["code"]]
@@ -124,7 +124,7 @@ expand_range.icd10cm <- function(start,
   if (is.na(pos[1])) stop(sprintf("start code '%s' not found", start))
   if (is.na(pos[2])) stop(sprintf("calculated end code '%s' not found", end))
   stopifnot(pos[2] >= pos[1])
-  i <- icd.data::icd10cm_active
+  i <- icd_data_icd10cm_active()
   i[pos[1]:pos[2], "code"]
 }
 

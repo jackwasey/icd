@@ -242,7 +242,7 @@ bool icd10cmCompare(const Rcpp::String x, const Rcpp::String y) {
 
 // [[Rcpp::export(icd10cm_sort_rcpp)]]
 CharacterVector icd10cmSort(const CharacterVector &x) {
-  std::vector<std::string> x_ = as<std::vector<std::string>>(x);
+  std::vector<std::string> x_ = as<std::vector<std::string> >(x);
   std::sort(x_.begin(), x_.end(), icd10cmCompare);
   return wrap(x_);
 }

@@ -169,7 +169,7 @@ explain_code.icd10cm <- function(x,
   }
   # this is a alow linear lookup, but usually only
   # "explaining" one or a few codes at a time.
-  i <- icd.data::icd10cm_active
+  i <- icd_data_icd10cm_active()
   i[
     i[["code"]] %in% unique(as_char_no_warn(x)),
     ifelse(brief, "short_desc", "long_desc")
@@ -206,9 +206,9 @@ explain_code.icd10who <- function(x,
   # this is a slow linear lookup, but usually only
   # "explaining" one or a few codes at a time.
   i <- if (lang == "fr") {
-    icd.data::icd10who2008fr
+    .idget("icd10who2008fr")
   } else {
-    icd.data::icd10who2016
+    .idget("icd10who2016")
   }
   i[
     i[["code"]] %in% unique(as_char_no_warn(x)),

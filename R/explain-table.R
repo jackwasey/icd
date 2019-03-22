@@ -141,7 +141,7 @@ explain_table.icd10cm <- function(x,
                                   ...) {
   explain_table_worker(
     x = x,
-    hierarchy = icd.data::icd10cm_active,
+    hierarchy = icd_data_icd10cm_active(),
     short_code = short_code,
     condense = condense,
     brief = brief,
@@ -161,7 +161,7 @@ explain_table.icd10who <- function(x,
                                    ...) {
   explain_table_worker(
     x = x,
-    hierarchy = icd.data::icd10who2016,
+    hierarchy = .idget("icd10who2016"),
     short_code = short_code,
     condense = condense,
     brief = brief,

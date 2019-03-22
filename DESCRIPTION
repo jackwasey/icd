@@ -47,7 +47,7 @@ Depends:
 Imports:
     methods,
     Rcpp (>= 0.12.3),
-    icd.data (>= 1.1)
+    icd.data
 Suggests:
     graphics,
     knitr,
@@ -66,7 +66,6 @@ LinkingTo:
     RcppEigen
 VignetteBuilder: 
     knitr
-ByteCompile: true
 SystemRequirements: pandoc >= 2.2 to build the JSS vignette
 Classification/ACM-2012: Social and professional topics~Medical
     records, Applied computing~Health care information systems, Applied
@@ -77,4 +76,3 @@ Language: en-US
 LazyData: true
 LazyDataCompression: xz
 RoxygenNote: 6.1.1
-Remotes: jackwasey/icd.data
