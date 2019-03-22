@@ -14,10 +14,11 @@ icd_data_icd9cm_leaf_v32 <- function() {
     message("icd.data doesn't appear to be available")
     return()
   }
-  if (utils::packageVersion("icd.data") < "1.1")
-    icd.data::icd9cm_billable[["32"]]
-  else
-    get("icd9cm_leaf_v32", envir = asNamespace("icd.data"))
+  icd.data::icd9cm_billable[["32"]]
+  # if (utils::packageVersion("icd.data") < "1.1")
+  #   icd.data::icd9cm_billable[["32"]]
+  # else
+  #   get("icd9cm_leaf_v32", envir = asNamespace("icd.data"))
 }
 
 icd_data_get_icd10cm_active_ver <- function() {
