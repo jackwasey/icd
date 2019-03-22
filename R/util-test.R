@@ -241,13 +241,13 @@ expect_character <- function(x, ...) {
 
 with_offline <- function(offline, code) {
   old <- options("icd.data.offline" = offline)
-  on.exit(options(old))
+  on.exit(options(old), add = TRUE)
   force(code)
 }
 
 with_interact <- function(interact, code) {
   old <- options("icd.data.interact" = interact)
-  on.exit(options(old))
+  on.exit(options(old), add = TRUE)
   force(code)
 }
 

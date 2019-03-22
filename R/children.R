@@ -172,9 +172,11 @@ children_defined.icd10cm <- function(x,
   ver <- icd_data_get_icd10cm_active_ver()
   if (verbose) message("Using ICD-10-CM version: ", ver)
   nc <- .icd10cm_get_nchars(ver)
+  lu <- icd_data_icd10cm_active()
+  if (length(nc) != nrow(lu)) browser()
   kids <- icd10_children_defined_rcpp(
     x = x,
-    lookup = icd_data_icd10cm_active(),
+    lookup = lu,
     nc = nc
   )
   as.icd10cm(kids, short_code)

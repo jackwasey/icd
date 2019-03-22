@@ -427,7 +427,7 @@ with_icd10cm_version <- function(ver, lang = c("en", "fr"), code) {
     "icd.data.icd10cm_active_ver" = ver,
     "icd.data.icd10cm_active_lang" = lang
   )
-  on.exit(options(old))
+  on.exit(options(old), add = TRUE)
   force(code)
 }
 

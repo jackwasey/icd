@@ -3,10 +3,11 @@ icd_data_icd10cm_active <- function() {
     message("icd.data doesn't appear to be available")
     return()
   }
-  if (utils::packageVersion("icd.data") < "1.1")
+  if (utils::packageVersion("icd.data") < "1.1") {
     icd.data::icd10cm2016
-  else
-    get("icd10cm_active", envir = asNamespace("icd.data"))
+  } else {
+    get("get_icd10cm_active", envir = asNamespace("icd.data"))()
+  }
 }
 
 icd_data_icd9cm_leaf_v32 <- function() {
@@ -57,6 +58,6 @@ icd_data_get_icd10cm_active_ver <- function() {
 with_icd10cm_version <- function(ver, code) {
   stopifnot(is.character(ver), length(ver) == 1)
   old <- options("icd.data.icd10cm_active_ver" = ver)
-  on.exit(options(old))
+  on.exit(options(old), add = TRUE)
   force(code)
 }

@@ -5,7 +5,7 @@
 as_char_no_warn <- function(x) {
   if (is.character(x)) return(x)
   old <- options(warn = -1)
-  on.exit(options(old))
+  on.exit(options(old), add = TRUE)
   if (is.integer(x)) {
     return(fastIntToStringRcpp(x))
   }
