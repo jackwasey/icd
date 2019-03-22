@@ -261,24 +261,3 @@ NULL
 #' icd10_map_ahrq_pcs[["Minor Therapeutic"]][1:5]
 NULL
 
-#' @name icd9_chapters
-#' @aliases icd9_sub_chapters icd9_majors
-#' @docType data
-#' @keywords datasets
-#' @inherit icd.data::icd9_chapters
-#' @seealso \code{\link[icd.data]{ls_icd_data}}
-NULL
-
-#' @name icd10_chapters
-#' @docType data
-#' @keywords datasets
-#' @inherit icd.data::icd10_chapters
-#' @seealso \code{\link[icd.data]{ls_icd_data}}
-NULL
-
-#' @name icd10_sub_chapters
-#' @docType data
-#' @keywords datasets
-#' @inherit icd.data::icd10_sub_chapters
-#' @seealso \code{\link[icd.data]{ls_icd_data}}
-NULL

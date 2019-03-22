@@ -203,11 +203,11 @@ classes_ordered <- function(x) {
 #' x
 #' attributes(x) <- list(icd_short_diag = NULL)
 #' x
-#' 
+#'
 #' y <- as.decimal_diag(as.icd10("A10.09"))
 #' y
 #' is.short_diag(y)
-#' 
+#'
 #' j <- as.short_diag(as.icd10(c("A11", "B2222")))
 #' j[2] <- "C33"
 #' stopifnot(is.short_diag(j))
@@ -615,9 +615,9 @@ as.comorbidity_map <- function(x) {
   out
 }
 
-#' combine ICD codes
+#' Combine ICD codes
 #'
-#' These function implement combination of lists or vectors of codes, while
+#' These function implement ICD specific methods for \code{c}, i.e., combinations of lists or vectors of codes, while
 #' preserving ICD classes. Base R \code{c} just drops all user defined classes
 #' and casts down to lowest common denominator, e.g. if mixing numbers and
 #' characters. No attempt here to catch all possible combinations of feeding in
@@ -631,6 +631,7 @@ as.comorbidity_map <- function(x) {
 #' c(as.icd9("E998"), as.icd10("A10"))
 #' # which results in both codes sharing the 'icd9' class.
 #' @seealso \link[=set_icd_class]{ICD data types}
+#' @name combine
 #' @export
 c.icd9 <- function(..., warn = FALSE) {
   dots <- list(...)
@@ -649,7 +650,7 @@ c.icd9 <- function(..., warn = FALSE) {
   # attributes.
 }
 
-#' @rdname c.icd9
+#' @rdname combine
 #' @examples
 #' # ICD-10 codes
 #' (a <- as.icd10("A100SSX"))
@@ -712,7 +713,7 @@ c.icd10 <- function(..., warn = FALSE) {
 #' # preserving the ICD class
 #' stopifnot(!inherits(x[[1]], "list"))
 #' stopifnot(!inherits(x[[1]][2], "list"))
-#' 
+#'
 #' y <- as.icd10(c("A01", "B0234"))
 #' y[2]
 #' y[[2]]

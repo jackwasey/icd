@@ -96,6 +96,6 @@ reference:
 #  - '`poa_choices`'
 #  - '`print.comorbidity_map`'
 #  - '`[[.comorbidity_map`'
-  - '`subset_icd`'
+  - '`subset`'
 #  - '`unzip_single`'
   - '`icd10_map_ahrq`'

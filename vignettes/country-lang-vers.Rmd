@@ -74,22 +74,22 @@ The following code is wrapped in some protections in case the latest icd.data is
 ```{r icd10cmoption, eval = TRUE}
 if (icd:::icd_data_ver_ok()) {
   # The code "C4311" goes from being a leaf in 2018, to a parent in 2019
-  with_icd10cm_version(ver = "2018",
-                       icd::is_leaf("C4311")
+  icd.data::with_icd10cm_version(ver = "2018",
+                                 icd::is_leaf("C4311")
   )
-  with_icd10cm_version(ver = "2019", 
-                       icd::is_leaf("C4311")
+  icd.data::with_icd10cm_version(ver = "2019", 
+                                 icd::is_leaf("C4311")
   )
   # In 2018 the following code was not even defined, but in 2019 was a new child
   # code of "C4311"s
-  with_icd10cm_version(ver = "2018", 
-                       {
-                         print(icd::is_defined("C43111"))
-                         print(icd::is_leaf("C43111"))
-                       }
+  icd.data::with_icd10cm_version(ver = "2018", 
+                                 {
+                                   print(icd::is_defined("C43111"))
+                                   print(icd::is_leaf("C43111"))
+                                 }
   )
-  with_icd10cm_version(ver = "2019", 
-                       icd::is_leaf("C43111")
+  icd.data::with_icd10cm_version(ver = "2019", 
+                                 icd::is_leaf("C43111")
   )
 }
 ```
