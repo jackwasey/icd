@@ -27,8 +27,10 @@
 #'   ordering is in the same order as input, including rows filled with NA for
 #'   invalid input codes
 #' @export
-explain_table <- function(...)
+explain_table <- function(...) {
+  require_icd_data()
   UseMethod("explain_table")
+}
 
 #' @describeIn explain_table explaining ICD codes from a character vector,
 #'   guessing ICD version

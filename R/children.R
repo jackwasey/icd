@@ -31,8 +31,10 @@
 #' @return Returns a vector of ICD codes, with class of \code{character} and the
 #'   class of the identified or specified ICD code, e.g. \code{icd9}
 #' @export
-children <- function(x, ...)
+children <- function(x, ...) {
+  require_icd_data()
   UseMethod("children")
+}
 
 #' @describeIn children Get child codes, guessing ICD version and short
 #'   versus decimal format

@@ -12,6 +12,7 @@
 #' @return logical vector
 #' @export
 is_defined <- function(x, short_code = guess_short(x), ...) {
+  require_icd_data()
   UseMethod("is_defined")
 }
 
@@ -92,6 +93,7 @@ get_defined <- function(x,
                         short_code = guess_short(x),
                         billable = FALSE,
                         leaf = billable) {
+  require_icd_data()
   UseMethod("get_defined")
 }
 
@@ -124,6 +126,7 @@ get_defined.icd9 <- function(x,
 #' @return logical vector of same length as input
 #' @export
 is_leaf <- function(x, short_code = guess_short(x), ...) {
+  require_icd_data()
   UseMethod("is_leaf")
 }
 
@@ -212,6 +215,7 @@ is_leaf.default <- function(x, short_code = guess_short(x), ...) {
 #' @template dotdotdot
 #' @export
 get_leaf <- function(...) {
+  require_icd_data()
   UseMethod("get_leaf")
 }
 

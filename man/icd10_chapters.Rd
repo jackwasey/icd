@@ -15,8 +15,8 @@ alphabetic initial characters. E.g. Chapter I spans A00 to B99.
 U00-U49 - Provisional assignment of new diseases of uncertain etiology or
 emergency use U82-U85 - Resistance to antimicrobial and anti-neoplastic drugs
 
-Format:  list with chapter names stored in list names, each with two element
-  named character vector with start and end codes.
+Format: list with chapter names stored in list names, each with two
+  element named character vector with start and end codes.
 }
 \seealso{
 \code{\link[icd.data]{ls_icd_data}}

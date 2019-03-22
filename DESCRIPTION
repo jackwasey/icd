@@ -46,10 +46,10 @@ Depends:
     R (>= 3.4)
 Imports:
     methods,
-    Rcpp (>= 0.12.3),
-    icd.data
+    Rcpp (>= 0.12.3)
 Suggests:
     graphics,
+    icd.data,
     knitr,
     magrittr,
     nhds,

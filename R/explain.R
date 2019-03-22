@@ -34,6 +34,7 @@
 #'   reliable order (when not condensing codes, at least).
 #' @export
 explain_code <- function(...) {
+  require_icd_data()
   UseMethod("explain_code")
 }
 

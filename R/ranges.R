@@ -28,6 +28,7 @@
 #' @family ICD-9 ranges
 #' @export
 expand_range <- function(start, end, ...) {
+  require_icd_data()
   stopifnot(length(start) == 1)
   stopifnot(length(end) == 1)
   UseMethod("expand_range")
