@@ -34,7 +34,7 @@ icd_data_get_icd10cm_active_ver <- function() {
   }
 }
 
-.idget <- function(var_name, alt = NULL, must_work = TRUE) {
+.idget <- function(var_name, alt = NULL, must_work = is.null(alt)) {
   # this should only happen in weird R CMD check internals since we Import
   # icd.data...
   if (!requireNamespace("icd.data")) {
@@ -53,7 +53,7 @@ icd_data_get_icd10cm_active_ver <- function() {
   if (exists(var_name, ns)) return(get(var_name, ns))
   lz <- ns$.__NAMESPACE__.$lazydata
   # if icd.data >= 1.1, then we now assume it must be in lazy data
-  return(get(var_name, lz))
+  get(var_name, lz)
 }
 
 with_icd10cm_version <- function(ver, code) {

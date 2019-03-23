@@ -112,12 +112,13 @@ icd10_map_quan_elix$HTNcx
 The AHRQ publishes an annually updated categorization of ICD-10-CM procedure codes into four classes, representing diagnostic and therapeutic procedures, each being either minor or major.
 
 ```{r setuppcs, echo = FALSE}
+n <- 10
 nm <- "code"
-pcs <- icd:::.idget("icd10cm2018_pc", alt = "icd10_pcs_2018", must_work = FALSE)
+pcs_sample <- sample(unname(unlist(icd10_map_ahrq_pcs)), n)
 if (!is.null(pcs)) {
   set.seed(1441)
-  pts <- data.frame(id = sample(LETTERS, 10),
-                    pc = sample(pcs[[nm]], 10))
+  pts <- data.frame(id = sample(LETTERS, n),
+                    pc = pcs_sample)
   res <- icd10_comorbid(pts,
                         map = icd10_map_ahrq_pcs, 
                         icd_name = "pc",
