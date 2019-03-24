@@ -14,7 +14,7 @@ icd_data_icd10cm_active <- function() {
     message("icd.data doesn't appear to be available")
     return()
   }
-  if (icd_data_ver_ok()) {
+  if (!icd_data_ver_ok()) {
     icd.data::icd10cm2016
   } else {
     get("get_icd10cm_active", envir = asNamespace("icd.data"))()
@@ -34,7 +34,7 @@ icd_data_get_icd10cm_active_ver <- function() {
     message("icd.data doesn't appear to be available")
     return()
   }
-  if (icd_data_ver_ok()) {
+  if (!icd_data_ver_ok()) {
     "2016"
   } else {
     get("get_icd10cm_active_ver", envir = asNamespace("icd.data"))()
@@ -48,7 +48,7 @@ icd_data_get_icd10cm_active_ver <- function() {
     message("icd.data doesn't appear to be available")
     return(.idget(alt))
   }
-  if (icd_data_ver_ok()) {
+  if (!icd_data_ver_ok()) {
     message("This data is not available with icd.data version < 1.1")
     message("Upgrade icd.data using install.packages(\"icd.data\"")
     if (must_work) stop("Cannot proceed")
