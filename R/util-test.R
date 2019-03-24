@@ -251,17 +251,40 @@ with_interact <- function(interact, code) {
   force(code)
 }
 
+with_absent_action <- function(absent_action, code) {
+  old <- options("icd.data.absent_action" = absent_action)
+  on.exit(options(old), add = TRUE)
+  force(code)
+}
 # workaround so icd.data 1.0 will not cause CRAN or user errors
 skip_missing_icd10who <- function() {
-  with_offline(
-    offline = TRUE,
-    with_interact(
-      interact = FALSE, {
-        dat <- .idget("icd10who2016")
-        if (is.null(dat)) testthat::skip("No WHO ICD-10 2016 English data")
-        dat <- .idget("icd10who2008fr")
-        if (is.null(dat)) testthat::skip("No WHO ICD-10 2008 French data")
-      }
+  with_absent_action(
+    absent_action = "silent",
+    with_offline(
+      offline = TRUE,
+      with_interact(
+        interact = FALSE, {
+          dat <- .idget("icd10who2016", mode = "function")()
+          if (is.null(dat)) testthat::skip("No WHO ICD-10 2016 English data")
+          dat <- .idget("icd10who2008fr", mode = "function")()
+          if (is.null(dat)) testthat::skip("No WHO ICD-10 2008 French data")
+        }
+      )
+    )
+  )
+}
+
+skip_missing_icd10fr <- function() {
+  with_absent_action(
+    absent_action = "silent",
+    with_offline(
+      offline = TRUE,
+      with_interact(
+        interact = FALSE, {
+          dat <- .idget("icd10fr2019", mode = "function")()
+          if (is.null(dat)) testthat::skip("No ICD-10-FR 2019 French data")
+        }
+      )
     )
   )
 }

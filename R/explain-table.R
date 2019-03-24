@@ -163,7 +163,7 @@ explain_table.icd10who <- function(x,
                                    ...) {
   explain_table_worker(
     x = x,
-    hierarchy = .idget("icd10who2016"),
+    hierarchy = .idget("icd10who2016")(),
     short_code = short_code,
     condense = condense,
     brief = brief,

@@ -207,9 +207,9 @@ explain_code.icd10who <- function(x,
   # this is a slow linear lookup, but usually only
   # "explaining" one or a few codes at a time.
   i <- if (lang == "fr") {
-    .idget("icd10who2008fr")
+    .idget("icd10who2008fr")()
   } else {
-    .idget("icd10who2016")
+    .idget("icd10who2016")()
   }
   i[
     i[["code"]] %in% unique(as_char_no_warn(x)),
@@ -291,7 +291,7 @@ explain_code_worker <- function(x,
     short_str <- paste0(short_str, "_", lang)
     long_str <- paste0(long_str, "_", lang)
   }
-  i <- get(var_name, asNamespace("icd.data"))
+  i <- .idget(var_name)()
   i[
     i[["code"]] %in% unique(as_char_no_warn(x)),
     ifelse(brief, short_str, long_str)

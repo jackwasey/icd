@@ -34,7 +34,7 @@ icd_data_get_icd10cm_active_ver <- function() {
   }
 }
 
-.idget <- function(var_name, alt = NULL, must_work = is.null(alt)) {
+.idget <- function(var_name, alt = NULL, must_work = is.null(alt), ...) {
   # this should only happen in weird R CMD check internals since we Import
   # icd.data...
   if (!requireNamespace("icd.data")) {
@@ -50,10 +50,10 @@ icd_data_get_icd10cm_active_ver <- function() {
   # bindings are in the top level namespace
   # lazy data will only be at top level if package is attached
   ns <- asNamespace("icd.data")
-  if (exists(var_name, ns)) return(get(var_name, ns))
+  if (exists(var_name, ns)) return(get(var_name, ns, ...))
   lz <- ns$.__NAMESPACE__.$lazydata
   # if icd.data >= 1.1, then we now assume it must be in lazy data
-  get(var_name, lz)
+  get(var_name, lz, ...)
 }
 
 with_icd10cm_version <- function(ver, code) {
