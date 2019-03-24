@@ -36,8 +36,10 @@ env:
     - _R_CHECK_CRAN_INCOMING_=FALSE
     - _R_CHECK_CRAN_INCOMING_REMOTE_=FALSE
     - _R_CHECK_FORCE_SUGGESTS_=FALSE
-#    - LINTR_COMMENT_BOT=false
     - ICD_COVERAGE=false
+    - ICD_DATA_VERBOSE=true
+    - ICD_DATA_OFFLINE=true
+    - ICD_DATA_INTERACT=false
 
 matrix:
   fast_finish: true
