@@ -399,17 +399,6 @@ str_match_all <- function(string, pattern, ...) {
   regmatches(x = string, m = regexec(pattern = pattern, text = string, ...))
 }
 
-icd_data_ver_ok <- function() {
-  # Bug in R? Version of an already lodaded namespace is not checked if done via
-  # requireNamespace, only loadNamespace.
-  res <- requireNamespace("icd.data", quietly = TRUE)
-  res <- res && getNamespaceVersion(
-    asNamespace("icd.data")
-  ) >=
-    as.package_version("1.1")
-  res
-}
-
 # copied from icd.data version 1.1 until everything is on CRAN
 with_icd10cm_version <- function(ver, lang = c("en", "fr"), code) {
   lang <- match.arg(lang)

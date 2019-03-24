@@ -264,9 +264,15 @@ skip_missing_icd10who <- function() {
       offline = TRUE,
       with_interact(
         interact = FALSE, {
-          dat <- .idget("icd10who2016", mode = "function")()
+          dat <- .idget("icd10who2016",
+            must_work = FALSE,
+            mode = "function"
+          )()
           if (is.null(dat)) testthat::skip("No WHO ICD-10 2016 English data")
-          dat <- .idget("icd10who2008fr", mode = "function")()
+          dat <- .idget("icd10who2008fr",
+            must_work = FALSE,
+            mode = "function"
+          )()
           if (is.null(dat)) testthat::skip("No WHO ICD-10 2008 French data")
         }
       )

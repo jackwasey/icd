@@ -1,9 +1,20 @@
+icd_data_ver_ok <- function() {
+  # Bug in R? Version of an already lodaded namespace is not checked if done via
+  # requireNamespace, only loadNamespace.
+  res <- requireNamespace("icd.data", quietly = TRUE)
+  res <- res && !getNamespaceVersion(
+    asNamespace("icd.data")
+  ) <
+    as.package_version("1.1")
+  res
+}
+
 icd_data_icd10cm_active <- function() {
   if (!requireNamespace("icd.data")) {
     message("icd.data doesn't appear to be available")
     return()
   }
-  if (utils::packageVersion("icd.data") < "1.1") {
+  if (icd_data_ver_ok()) {
     icd.data::icd10cm2016
   } else {
     get("get_icd10cm_active", envir = asNamespace("icd.data"))()
@@ -16,10 +27,6 @@ icd_data_icd9cm_leaf_v32 <- function() {
     return()
   }
   icd.data::icd9cm_billable[["32"]]
-  # if (utils::packageVersion("icd.data") < "1.1")
-  #   icd.data::icd9cm_billable[["32"]]
-  # else
-  #   get("icd9cm_leaf_v32", envir = asNamespace("icd.data"))
 }
 
 icd_data_get_icd10cm_active_ver <- function() {
@@ -27,7 +34,7 @@ icd_data_get_icd10cm_active_ver <- function() {
     message("icd.data doesn't appear to be available")
     return()
   }
-  if (utils::packageVersion("icd.data") < "1.1") {
+  if (icd_data_ver_ok()) {
     "2016"
   } else {
     get("get_icd10cm_active_ver", envir = asNamespace("icd.data"))()
@@ -41,7 +48,7 @@ icd_data_get_icd10cm_active_ver <- function() {
     message("icd.data doesn't appear to be available")
     return(.idget(alt))
   }
-  if (utils::packageVersion("icd.data") < "1.1") {
+  if (icd_data_ver_ok()) {
     message("This data is not available with icd.data version < 1.1")
     message("Upgrade icd.data using install.packages(\"icd.data\"")
     if (must_work) stop("Cannot proceed")

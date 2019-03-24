@@ -23,55 +23,63 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
+library(icd.data)
+icd.data11 <- icd:::icd_data_ver_ok()
 ```
 
 # WHO
 
 Surprisingly, there are potential copyright restrictions on redistributing the WHO ICD-9 and ICD-10 definitions, which form the basis of ICD code systems around the world. These definitions are themselves also used as the internationally standard way to codify morbidity and mortality for public health.
 
-`icd` now includes the ability to work with these codes more easily via the companion `icd.data` package. The data is not available in the package so `icd.data` asks the user whether they wish to download the data from the WHO web site, whereupon it is made available just like any other R data, but the name `icd.data::icd10who2016`, which is the latest ICD-10 release from the WHO at the time of writing. For French codes, `icd.data::icd10fr2016`, this would ideally have a synonym `icd.data::cim10fr2016` with internationalized column names, but this would duplicate the data making package storage and loading bigger, which is increasingly a problem as more data is included.
+`icd` now includes the ability to work with these codes more easily via the companion `icd.data` package. The data is not available in the package so `icd.data` asks the user whether they wish to download the data from the WHO web site, whereupon it is made available as functions, named similarly to existing data, e.g., `icd.data::icd10who2016()`, which is the latest ICD-10 release from the WHO at the time of writing. For French codes, `icd.data::icd10fr2016()`, with the localized synonym `icd.data::cim10fr2016()` having internationalized column names, but this would duplicate the data making package storage and loading bigger, which is increasingly a problem as more data is included.
 
-```{r quicklook, eval=FALSE}
-icd.data::icd10who2016[1:5, ]
-icd.data::icd10fr2019[1:5, ]
+```{r getstarted, eval = FALSE}
 library(icd.data)
-summary(icd10who2016)
+# if not already done, set up the downloaded data cache:
+icd.data::setup_icd_data()
+# or setup and download everything at once
+# (takes 5-10 mins with reasonable internet connection)
+icd.data::download_icd_data()
 ```
-```{r quicklookeval, echo = FALSE, eval = TRUE}
-if (icd:::icd_data_ver_ok()) {
-  icd.data::icd10who2016[1:5, ]
-  icd.data::icd10fr2019[1:5, ]
-  summary(icd.data::icd10who2016)
-}
+
+```{r quicklook, eval=icd.data11}
+icd.data::icd10who2016()[1:5, ]
+icd.data::icd10fr2019()[1:5, ]
+library(icd.data)
+summary(icd10who2016())
+```
+```{r quicklookeval, echo = FALSE, eval=icd.data11}
+icd.data::icd10who2016()[1:5, ]
+icd.data::icd10fr2019()[1:5, ]
+summary(icd.data::icd10who2016)
 ```
 
 # French edition of ICD-10
 
 ICD-10-FR is significantly different from the WHO version, and is used by official bodies and health systems in France. As with all the features in this document, this is an early attempt at the complex problem of providing all the codes, transtatlanguages, 
 
-```{r french, eval = FALSE}
-fr <- icd.data::icd10fr2019
+```{r french, eval=icd.data11}
+fr <- icd.data::icd10fr2019()
 fr[fr$code == "C43", ]
-```
-```
-     code                                          desc_short
-1151 C431 MELANOME MALIN DE LA PAUPIERE, Y COMPRIS LE CANTHUS
-                                               desc_long                     major three_digit
-1151 Mélanome malin de la paupière, y compris le canthus Mélanome malin de la peau         C43
 ```
 
 # Working with different ICD-10-CM annual versions
 
 There is an initial beta-quality mechanism for selecting a particular version of ICD-10-CM to use. This is a US coding system, but Belgian authorities provide translations into French and Dutch, and appear to have made no modifications.
 
-```{r getset, eval = FALSE}
-  # get the active version
+```{r getset, eval=icd.data11}
+  # get the active version string
   icd.data::get_icd10cm_active_ver()
-  set the active version
-  # icd.data::set_icd10cm_active_ver("2015")
+  # get the data itself:
+  devnull <- icd10cm_active()
+  #set the active version, and check it is the one we expected
+  icd.data::set_icd10cm_active_ver("2015")
+  identical(icd.data::icd10cm_active(), icd.data::icd10cm2015())
 ```
-The following code is wrapped in some protections in case the latest icd.data isn't available (notably for CRAN checks).
-```{r icd10cmoption, eval = TRUE}
+
+The function `icd.data::with_icd10cm_version` allows temporarily using a particular data set for a computation, analogous to the functions in the `withr` package:
+
+```{r icd10cmoption, eval=icd.data11}
 if (icd:::icd_data_ver_ok()) {
   # The code "C4311" goes from being a leaf in 2018, to a parent in 2019
   icd.data::with_icd10cm_version(ver = "2018",
