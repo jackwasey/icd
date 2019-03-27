@@ -121,6 +121,7 @@ test_that("cmb from a ICD-10, no infinite recursion with Elix", {
 })
 
 test_that("ICD-10 map reduction is sane", {
+  skip_if_not_installed("icd.data")
   uranium_short_codes <- as_char_no_warn(
     decimal_to_short.icd10(icd.data::uranium_pathology$icd10)
   )
@@ -211,6 +212,7 @@ test_that("NA example which crashed during devel", {
 })
 
 test_that("ICD-10 comorbidities from uranium", {
+  skip_if_not_installed("icd.data")
   expect_error(
     regexp = NA,
     comorbid(icd.data::uranium_pathology, icd10_map_quan_elix)

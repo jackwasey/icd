@@ -1,5 +1,7 @@
 context("explain ICD-9: code to human-readable")
 
+skip_if_not_installed("icd.data")
+
 test_that("explain a large set of ICD-9 codes succinctly", {
   expect_identical(
     explain_code(children.icd9("391", defined = FALSE, short_code = TRUE),

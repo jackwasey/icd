@@ -23,6 +23,8 @@ test_that("regular expressions are put on the given environment", {
   )
 })
 
+skip_if_not_installed("icd.data")
+
 test_that("is ICD-9 code valid, factor or character", {
   x <- c("1001", "E999", "V01")
   expect_identical(is_valid(x), is_valid(factor(x)))

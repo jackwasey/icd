@@ -1,5 +1,7 @@
 context("ICD-10 ranges")
 
+skip_if_not_installed("icd.data")
+
 test_that("very bad input data fails completely", {
   expect_error(expand_range(data.frame(a = 1, b = "b"), factor(1, 2, 3)))
 })

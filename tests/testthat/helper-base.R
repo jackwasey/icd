@@ -36,7 +36,8 @@ simple_pts <- data.frame(
   poa = factor(c("Y", "N", "Y", "N", "Y", "N"))
 )
 two_pts_fac <- data.frame(
-  visit_id = c("v01", "v01", "v02", "v02"),
+  # don't use visit IDs that collide with ICD codes! So unlikely in real life.
+  visit_id = c("visit01", "visit01", "visit02", "visit02"),
   icd9 = c("040", "000", "100", "000"),
   stringsAsFactors = TRUE
 )
@@ -46,7 +47,7 @@ two_map_fac <- as.list(data.frame(
   stringsAsFactors = TRUE
 ))
 simple_poa_pts <- data.frame(
-  visit_id = c("v1", "v2", "v3", "v4"),
+  visit_id = c("visit01", "visit02", "visit03", "visit04"),
   code = c("39891", "39790", "41791", "4401"),
   poa = c("y", "N", "E", NA_character_), # should tolerate mixed case
   stringsAsFactors = FALSE
@@ -54,7 +55,9 @@ simple_poa_pts <- data.frame(
 # multiple codes for POA and not POA, bad POA input. Throw in some invalid ICD9
 # codes
 complex_poa_pts <- data.frame(
-  visit_id = c("v1", "v1", "v1", "v2", "v2", "v3", "v3"),
+  visit_id = c("visit1", "visit1", "visit1",
+               "visit2", "visit2",
+               "visit3", "visit3"),
   icd9 = c("39891", "39891", "39790", "41791", "41791", "41791", "4401"),
   poa = c("Y", "n", NA_character_, "E", NA_character_, "paris", ""),
   stringsAsFactors = FALSE
@@ -155,7 +158,9 @@ multi_comorbid <- rbind(
   quan_deyo_test_dat
 )
 multi_comorbid$visit_id <-
-  sample(c("v1", "v2", "v3", "v4"), size = nrow(multi_comorbid), replace = TRUE)
+  sample(c("visit1", "visit2", "visit3", "visit4"),
+         size = nrow(multi_comorbid),
+         replace = TRUE)
 othersalmonella <- c(
   "0030", "0031", "00320", "00321", "00322",
   "00323", "00324", "00329", "0038", "0039"
@@ -178,7 +183,7 @@ one_pt_two_icd9 <- data.frame(
 )
 # two items per map, two codes per item, two codes for two visits
 two_pts <- data.frame(
-  visit_id = c("v01", "v01", "v02", "v02"),
+  visit_id = c("visit01", "visit01", "visit02", "visit02"),
   icd9 = c("040", "000", "100", "000"),
   stringsAsFactors = FALSE
 )

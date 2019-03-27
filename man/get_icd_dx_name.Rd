@@ -3,7 +3,7 @@
 \name{get_icd_dx_name}
 \alias{get_icd_dx_name}
 \alias{get_icd_name}
-\title{get the name of a \code{data.frame} column which is most likely to contain
+\title{Get the name of a \code{data.frame} column which is most likely to contain
 the ICD codes}
 \usage{
 get_icd_dx_name(x, icd_name = NULL, valid_codes = TRUE,
@@ -15,14 +15,14 @@ get_icd_name(x, icd_name = NULL, valid_codes = TRUE,
 \arguments{
 \item{x}{data frame}
 
-\item{icd_name}{usually \code{NULL} but if specified, will be checked it is
+\item{icd_name}{Usually \code{NULL} but if specified, will be checked it is
 valid (i.e. a character vector of length one, which is indeed a name of one
 of \code{x}'s columns) and returned unchanged}
 
 \item{multi}{If \code{TRUE}, allow multiple ICD field names to be returned.}
 }
 \description{
-guess which field contains the (only) ICD code, in order of preference, the
+Guess which field contains the (only) ICD code, in order of preference, the
 column name has an icd code class, case-insensitive regular expressions of
 commonly used names for ICD code fields, a single column has more than 10%
 valid ICD codes. If the result is not specified by class, or exactly with

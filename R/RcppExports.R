@@ -73,11 +73,13 @@ icd10_children_defined_rcpp <- function(x, lookup, nc, warn = TRUE) {
 #' stopifnot(simple_map$CHF == "I0981")
 #' stopifnot(simple_map$PHTN != character(0))
 #' stopifnot(simple_map$PVD == "I26019")
+#' if (requireNamespace("icd.data", quietly = TRUE)) {
 #' umap <- icd:::simplify_map_lex(icd.data::uranium_pathology$icd10, icd10_map_ahrq)
 #' head(icd:::categorize_simple(icd.data::uranium_pathology, icd10_map_ahrq,
 #'                       id_name = "case", code_name = "icd10"))
 #' head(icd:::categorize_simple(icd.data::uranium_pathology, umap,
 #'                              id_name = "case", code_name = "icd10"))
+#' }
 #' @keywords internal
 simplify_map_lex <- function(pt_codes, map) {
     .Call(`_icd_simplifyMapLexicographic`, pt_codes, map)

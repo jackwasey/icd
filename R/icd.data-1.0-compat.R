@@ -1,12 +1,9 @@
-icd_data_ver_ok <- function() {
+icd_data_ver_ok <- function(ver = "1.1") {
   # Bug in R? Version of an already lodaded namespace is not checked if done via
   # requireNamespace, only loadNamespace.
   res <- requireNamespace("icd.data", quietly = TRUE)
-  res <- res && !getNamespaceVersion(
-    asNamespace("icd.data")
-  ) <
-    as.package_version("1.1")
-  res
+  res &&
+    !getNamespaceVersion(asNamespace("icd.data")) >= as.package_version(ver)
 }
 
 icd_data_icd10cm_active <- function() {

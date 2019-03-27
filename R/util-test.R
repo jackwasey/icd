@@ -136,15 +136,19 @@ test_env <- function() {
 #'   `ICD-9`
 #' @template verbose
 #' @examples
+#' if (requireNamespace("icd.data", quietly = TRUE)) {
 #' summary(icd::comorbid_pccc_dx(icd:::generate_neds_pts()))
 #' neds <- icd:::generate_neds_pts(n = 100, ncol = 10L, icd10 = FALSE)
 #' stopifnot(dim(neds) == c(100L, 11L))
 #' summary(icd::comorbid_pccc_dx(neds))
+#' }
 #' \dontrun{
+#' if (requireNamespace("icd.data", quietly = TRUE)) {
 #' # original size data for PCCC benchmarking:
 #' set.seed(1441)
 #' neds <- icd:::generate_neds_pts(28584301L)
 #' neds_comorbid <- icd::comorbid_pccc_dx(neds)
+#' }
 #' }
 #' @keywords internal
 generate_neds_pts <- function(n = 1000L,

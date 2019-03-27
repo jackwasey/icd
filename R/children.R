@@ -12,8 +12,10 @@
 #' @keywords manip
 #' @family ICD-9 ranges
 #' @examples
-#' library(magrittr, warn.conflicts = FALSE, quietly = TRUE) # optional
-#'
+#' library(magrittr, warn.conflicts = FALSE, quietly = TRUE)
+#' # magrittr not required by icd
+#' # icd.data package highly recommended, but not a depependency for comorbidity calculations
+#' if (requireNamespace("icd.data", quietly = TRUE)) {
 #' # no children other than self
 #' children("10201", short_code = TRUE, defined = FALSE)
 #'
@@ -28,6 +30,7 @@
 #' children(short_code = FALSE, "100.0")
 #' children(short_code = FALSE, "100.00")
 #' children(short_code = FALSE, "2.34")
+#' }
 #' @return Returns a vector of ICD codes, with class of \code{character} and the
 #'   class of the identified or specified ICD code, e.g. \code{icd9}
 #' @export

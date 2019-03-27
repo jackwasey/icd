@@ -108,6 +108,7 @@ ICD-10 WHO copyright workaround is available
 }}
 
 \examples{
+if (requireNamespace("icd.data", quietly = TRUE)) {
 # by default, just show parent code and ignore children (428.0 not shown
 # because 428 is present):
 explain_code(icd9_map_ahrq$CHF[1:3])
@@ -115,6 +116,7 @@ explain_code(icd9_map_ahrq$CHF[1:3])
 explain_code(icd9_map_ahrq$CHF[1:3], brief = TRUE)
 # The first three in the ICD-10 equivalent are a little different:
 explain_code(icd10_map_ahrq$CHF[1:3], brief = TRUE)
+}
 # Belgian ICD-10 has three languages available
 \dontrun{
 explain_code(as.icd10be("C20"))

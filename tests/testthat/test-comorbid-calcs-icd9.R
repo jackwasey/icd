@@ -7,7 +7,7 @@ test_that("comorbid quick test", {
     id_name = "visit_id", code_name = "icd9"
   )
   trueres <- data.frame(
-    "visit_id" = c("v01", "v02"),
+    "visit_id" = c("visit01", "visit02"),
     "malady" = c(FALSE, TRUE),
     "ailment" = c(TRUE, FALSE),
     stringsAsFactors = FALSE
@@ -17,12 +17,12 @@ test_that("comorbid quick test", {
   testmat <- icd9_comorbid(two_pts, two_map, return_df = FALSE)
   truemat <- matrix(c(FALSE, TRUE, TRUE, FALSE),
     nrow = 2,
-    dimnames = list(c("v01", "v02"), c("malady", "ailment"))
+    dimnames = list(c("visit01", "visit02"), c("malady", "ailment"))
   )
   expect_equal(testmat, truemat)
   testresfac <- icd9_comorbid(two_pts_fac, two_map_fac, return_df = TRUE)
   trueresfac <- data.frame(
-    "visit_id" = c("v01", "v02"),
+    "visit_id" = c("visit01", "visit02"),
     "malady" = c(FALSE, TRUE),
     "ailment" = c(TRUE, FALSE),
     stringsAsFactors = TRUE
@@ -451,6 +451,7 @@ test_that("dispatch from column class when not specified", {
 })
 
 test_that("if we try to do comorbidity calc on wide data, it works!", {
+  skip_if_not_installed("icd.data")
   expect_error(comorbid_elix(icd.data::vermont_dx),
     regexp = NA
   )
@@ -577,6 +578,7 @@ test_that("float visit IDs", {
 })
 
 test_that("plot comorbid", {
+  skip_if_not_installed("icd.data")
   expect_error(
     regexp = NA,
     plot_comorbid(icd.data::vermont_dx[1:1000, ])

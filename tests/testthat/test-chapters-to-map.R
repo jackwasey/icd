@@ -2,6 +2,7 @@ context("slower tests")
 
 test_that("chapters to map", {
   # Slow for huge chapters, like II (Cancer)
+  skip_if_not_installed("icd.data")
   n <- 3:6
   codes <- icd:::get_one_of_each()[n]
   ooe <- icd_long_data(

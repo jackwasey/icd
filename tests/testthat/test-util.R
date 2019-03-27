@@ -82,7 +82,7 @@ test_that("icd9 field guessed from data if name fails, any order", {
   x10[[2]] <- icd10_each_ahrq_cmb[1:4]
   names(x)[2] <- "not_helpful"
   names(x10)[2] <- "not_helpful"
-  expect_equal(get_icd_name(x), "not_helpful")
+  expect_equal(get_icd_dx_name(x), "not_helpful")
   perms <- matrix(ncol = 3, byrow = TRUE, data = c(
     1, 2, 3,
     1, 3, 2,

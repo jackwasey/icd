@@ -1,5 +1,7 @@
 context("explain in table format")
 
+skip_if_not_installed("icd.data")
+
 test_that("with and without condense returns correct structure", {
   codes <- c("362.5", "413.9", "414.01", "584.9", "357.2", "588.81", "414")
   expect_equal(dim(explain_table(codes, condense = FALSE)), c(7, 11))

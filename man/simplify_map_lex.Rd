@@ -48,11 +48,13 @@ simple_map <- icd:::simplify_map_lex(icd10, icd10_map_ahrq)
 stopifnot(simple_map$CHF == "I0981")
 stopifnot(simple_map$PHTN != character(0))
 stopifnot(simple_map$PVD == "I26019")
+if (requireNamespace("icd.data", quietly = TRUE)) {
 umap <- icd:::simplify_map_lex(icd.data::uranium_pathology$icd10, icd10_map_ahrq)
 head(icd:::categorize_simple(icd.data::uranium_pathology, icd10_map_ahrq,
                       id_name = "case", code_name = "icd10"))
 head(icd:::categorize_simple(icd.data::uranium_pathology, umap,
                              id_name = "case", code_name = "icd10"))
+}
 }
 \seealso{
 \url{https://github.com/s-u/fastmatch/blob/master/src/fastmatch.c}

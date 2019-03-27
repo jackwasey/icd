@@ -21,6 +21,7 @@
 #'   installed, English descriptions are returned.
 #' @template dotdotdot
 #' @examples
+#' if (requireNamespace("icd.data", quietly = TRUE)) {
 #' # by default, just show parent code and ignore children (428.0 not shown
 #' # because 428 is present):
 #' explain_code(icd9_map_ahrq$CHF[1:3])
@@ -28,6 +29,7 @@
 #' explain_code(icd9_map_ahrq$CHF[1:3], brief = TRUE)
 #' # The first three in the ICD-10 equivalent are a little different:
 #' explain_code(icd10_map_ahrq$CHF[1:3], brief = TRUE)
+#' }
 #' @return data frame, or list of data frames, with fields for ICD-9 code, name
 #'   and description. There is no guarantee on the order of the returned
 #'   descriptions. \code{explain_table} is designed to provide results in a

@@ -99,6 +99,7 @@ test_that("guess and update version", {
 })
 
 test_that("guess uranium codes are long", {
+  skip_if_not_installed("icd.data")
   expect_false(guess_short(icd.data::uranium_pathology$icd10))
 })
 
@@ -120,5 +121,6 @@ test_that("guess procedure code column names", {
     ),
     c("pc0", "pc1")
   )
+  skip_if_not_installed("icd.data")
   expect_true(is.null(guess_icd_pc_col_by_name(icd.data::vermont_dx)))
 })

@@ -158,17 +158,17 @@ get_visit_name.matrix <- function(x, visit_name = NULL)
     "and have row names corresponding to the visit or patient."
   )
 
-#' get the name of a \code{data.frame} column which is most likely to contain
+#' Get the name of a \code{data.frame} column which is most likely to contain
 #' the ICD codes
 #'
-#' guess which field contains the (only) ICD code, in order of preference, the
+#' Guess which field contains the (only) ICD code, in order of preference, the
 #' column name has an icd code class, case-insensitive regular expressions of
 #' commonly used names for ICD code fields, a single column has more than 10%
 #' valid ICD codes. If the result is not specified by class, or exactly with
 #' \code{icd_name} being given, we confirm there are at least some valid ICD
 #' codes in there
 #' @param x data frame
-#' @param icd_name usually \code{NULL} but if specified, will be checked it is
+#' @param icd_name Usually \code{NULL} but if specified, will be checked it is
 #'   valid (i.e. a character vector of length one, which is indeed a name of one
 #'   of \code{x}'s columns) and returned unchanged
 #' @param multi If \code{TRUE}, allow multiple ICD field names to be returned.
@@ -197,7 +197,10 @@ get_icd_dx_name <- function(x,
   if (is.null(icd_name)) {
     icd_name <- character()
     for (n in names(x)) {
-      pc <- get_icd_defined_percent(x[[n]])
+      pc <- if (requireNamespace("icd.data", quietly = TRUE))
+        get_icd_defined_percent(x[[n]])
+      else
+        get_icd_valid_percent(x[[n]])
       if (pc$icd9 > 25 || pc$icd10 > 25) {
         icd_name <- c(icd_name, n)
       }
@@ -206,7 +209,7 @@ get_icd_dx_name <- function(x,
   if (nrow(x) < 2 || (!valid_codes && !defined_codes)) {
     return(icd_name)
   }
-  pc <- if (defined_codes) {
+  pc <- if (defined_codes && requireNamespace("icd.data", quietly = TRUE)) {
     get_icd_defined_percent(x[icd_name[1]])
   } # TODO vectorize this function
   else {

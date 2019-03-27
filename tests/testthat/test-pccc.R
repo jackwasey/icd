@@ -42,6 +42,7 @@ test_that("procedure codes work", {
 })
 
 test_that("PCCC dx works", {
+  skip_if_not_installed("icd.data")
   res <- icd9_comorbid_pccc_dx(icd.data::vermont_dx, return_binary = TRUE)
   expect_equivalent(
     colSums(res[1:1000, ]),

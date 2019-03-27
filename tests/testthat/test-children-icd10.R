@@ -20,10 +20,12 @@ expect_icd10cm_child_is_self <- function(...) {
 }
 
 test_that("errors found in development", {
+  skip_if_not_installed("icd.data")
   expect_error(regexp = NA, children_defined.icd10cm("C17"))
 })
 
 test_that("children of a leaf node returns itself", {
+  skip_if_not_installed("icd.data")
   expect_icd10cm_child_is_self(
     "O9A119", "O9A53", "S0000XA", "T3299", "P150",
     "P159", "Z9981", "Z9989", "Z950", "C7A098",
@@ -40,6 +42,7 @@ test_that("children of a leaf node returns itself", {
 })
 
 test_that("zero length ICD-10-CM children", {
+  skip_if_not_installed("icd.data")
   expect_empty_icd10cm_kids <- function(x, has_warning = TRUE) {
     if (has_warning) {
       eval(bquote(expect_warning(res <- children_defined.icd10cm(x))))
@@ -62,6 +65,7 @@ test_that("zero length ICD-10-CM children", {
 })
 
 test_that("icd10cm children with one of several missing should not segfault", {
+  skip_if_not_installed("icd.data")
   expect_identical(
     children.icd10cm(c("I792", "K551")),
     children.icd10cm("K551")
@@ -73,6 +77,7 @@ test_that("icd10cm children with one of several missing should not segfault", {
 })
 
 test_that("class of children same as input class", {
+  skip_if_not_installed("icd.data")
   expect_identical(
     class(as.icd9("666.32")),
     class(children(as.icd9("666.32")))

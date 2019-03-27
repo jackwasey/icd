@@ -347,7 +347,6 @@ is_valid.icd10 <- function(x, short_code = guess_short(x),
 #' @keywords internal
 is_valid.icd9 <- function(x, short_code = guess_short(x),
                           whitespace_ok = TRUE, ...) {
-  assert_flag(short_code)
   if (short_code) {
     icd9_is_valid_short(x, whitespace_ok = whitespace_ok)
   } else {

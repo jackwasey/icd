@@ -1,6 +1,7 @@
 context("explain ICD-10-CM codes")
 # see also test-explain-who
 test_that("basic explain ICD-10 codes", {
+  skip_if_not_installed("icd.data")
   i10 <- list(
     "A00" = "Cholera",
     "Z998" = "Dependence on other enabling machines and devices"

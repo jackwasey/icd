@@ -1,10 +1,12 @@
 context("condense ranges of codes to parents and orphans")
 
 test_that("five digit to five digit code range condenses", {
+  skip_if_not_installed("icd.data")
   expect_equal(condense.icd9("34500" %i9sa% "34509", defined = FALSE), "3450")
 })
 
 test_that("condensing a single real codes gives themselves", {
+  skip_if_not_installed("icd.data")
   expect_message(res <- condense.icd9("61172"))
   expect_equal(res, "61172")
   expect_equal(condense.icd9("61172", defined = FALSE), "61172")
@@ -21,6 +23,7 @@ test_that("condensing a single real codes gives themselves", {
 })
 
 test_that("dispatch character vector for condense", {
+  skip_if_not_installed("icd.data")
   expect_equal(condense("E8280"), "E8280")
   expect_equal(
     sort(condense(as.character("98799" %i9sa% "98901"), defined = FALSE)),
@@ -29,6 +32,7 @@ test_that("dispatch character vector for condense", {
 })
 
 test_that("condense an ICD-9 code set to minimal group", {
+  skip_if_not_installed("icd.data")
   expect_equal(
     sort(condense.icd9("98799" %i9sa% "98901", defined = FALSE)),
     sort(c("98799", "988", "98900", "98901"))
@@ -42,6 +46,7 @@ test_that("condense an ICD-9 code set to minimal group", {
 
 
 test_that("condense ranges which do consense", {
+  skip_if_not_installed("icd.data")
   expect_equal(
     condense.icd9(children.icd9("123", short_code = TRUE, defined = TRUE), defined = TRUE),
     "123"
@@ -79,6 +84,7 @@ test_that("condense ranges which do consense", {
 })
 
 test_that("condense ranges that don't condense at all", {
+  skip_if_not_installed("icd.data")
   expect_equal(
     sort(condense.icd9(c("1230", "1232", "1236"), defined = FALSE)),
     c("1230", "1232", "1236")
@@ -97,6 +103,7 @@ test_that("condense ranges that don't condense at all", {
 })
 
 test_that("condense range invalid data", {
+  skip_if_not_installed("icd.data")
   expect_equal(condense.icd9("turnpike", defined = FALSE), character(0))
   expect_equal(condense.icd9(c("turnpike", "road"), defined = FALSE), character(0))
   expect_equal(condense.icd9(c(""), defined = FALSE), character(0))
@@ -108,6 +115,7 @@ test_that("condense range invalid data", {
 })
 
 test_that("mix of four and five digit billable codes", {
+  skip_if_not_installed("icd.data")
   # this is all of leptospirosis, but missing the "1008" non-billable sub-heading
   expect_equal(
     condense.icd9(short_code = TRUE, c("1000", "10081", "10089", "1009")),
@@ -116,6 +124,7 @@ test_that("mix of four and five digit billable codes", {
 })
 
 test_that("mix of four and five digit billable codes over bigger range", {
+  skip_if_not_installed("icd.data")
   # this is all of leptospirosis, but missing the "1008" non-billable sub-heading
   expect_equal(
     condense.icd9(short_code = TRUE, c("1000", "10081", "10089", "1009", "101")),
@@ -125,14 +134,15 @@ test_that("mix of four and five digit billable codes over bigger range", {
 
 
 test_that("mix of four and five digit with non-billable mid-level four digit code", {
+  skip_if_not_installed("icd.data")
   expect_equal(
     condense.icd9(short_code = TRUE, c("1000", "1008", "10081", "10089", "1009")),
     "100"
   )
 })
 
-
 test_that("condense short range", {
+  skip_if_not_installed("icd.data")
   expect_equal(explain_code.icd9(othersalmonella), "Other salmonella infections")
 
   expect_equal(condense.icd9(short_code = TRUE, othersalmonella, defined = TRUE), "003")
@@ -183,6 +193,7 @@ test_that("condense short range", {
 })
 
 test_that("condense full ranges", {
+skip_if_not_installed("icd.data")
   # condensing to "real" means we don't get a lot of majors, which are often not
   # themselves defined.
   # majors:
@@ -333,8 +344,8 @@ test_that("condense full ranges", {
 })
 
 test_that("condense single major and its children", {
+  skip_if_not_installed("icd.data")
   expect_equal(condense.icd9(short_code = TRUE, "003"), "003")
-
   rheum_fever <- "Rheumatic fever with heart involvement"
   expect_equal(explain_code.icd9("391"), rheum_fever)
   expect_equal(
@@ -346,25 +357,28 @@ test_that("condense single major and its children", {
   )
 })
 
-vdat <- unique(icd.data::vermont_dx$DX1)[1:10]
+test_that("vermont stuff", {
+  skip_if_not_installed("icd.data")
+  vdat <- unique(icd.data::vermont_dx$DX1)[1:10]
 
-test_that("condense a factor of codes instead of character vector", {
-  # this is not a condensable list
-  dat <- as.factor(vdat)
-  dat2 <- condense.icd9(short_code = TRUE, defined = TRUE, dat)
-  expect_true(all(intersect(dat, dat2) == dat))
-})
+  test_that("condense a factor of codes instead of character vector", {
+    # this is not a condensable list
+    dat <- as.factor(vdat)
+    dat2 <- condense.icd9(short_code = TRUE, defined = TRUE, dat)
+    expect_true(all(intersect(dat, dat2) == dat))
+  })
 
-test_that("levels are preserved from source factor", {
-  dat <- factor(vdat, levels = c("plastic", vdat))
-  dat3 <- condense.icd9(dat,
-    short_code = TRUE, defined = TRUE,
-    keep_factor_levels = TRUE
-  )
-  dat4 <- condense.icd9(dat,
-    short_code = TRUE,
-    defined = TRUE, keep_factor_levels = FALSE
-  )
-  expect_identical(intersect(dat, dat3), vdat)
-  expect_identical(intersect(dat, dat4), vdat)
+  test_that("levels are preserved from source factor", {
+    dat <- factor(vdat, levels = c("plastic", vdat))
+    dat3 <- condense.icd9(dat,
+                          short_code = TRUE, defined = TRUE,
+                          keep_factor_levels = TRUE
+    )
+    dat4 <- condense.icd9(dat,
+                          short_code = TRUE,
+                          defined = TRUE, keep_factor_levels = FALSE
+    )
+    expect_identical(intersect(dat, dat3), vdat)
+    expect_identical(intersect(dat, dat4), vdat)
+  })
 })

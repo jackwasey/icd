@@ -7,12 +7,14 @@
 #' The default for the argument \code{defined} is \code{TRUE} since this is far
 #' more likely to be useful to the end user, dealing with real ICD codes.
 #' @examples
+#' if (requireNamespace("icd.data", quietly = TRUE)) {
 #' expand_range("428.0", "428.9")
 #' "4280" %i9s% "4289"
 #' "4280" %i9s% "42821"
 #' "42799" %i9sa% "42802" # doesn't include 428 or 4280
 #' "427.99" %i9da% "428.02"
 #' "V80" %i9s% "V810"
+#' }
 #' @templateVar icd9ShortName start,end
 #' @template icd9-short
 #' @template defined
@@ -138,6 +140,7 @@ expand_range.icd10cm <- function(start,
 #' @template dotdotdot
 #' @export
 expand_range_major <- function(start, end, defined) {
+  skip_if_not_installed("icd.data")
   UseMethod("expand_range_major")
 }
 
@@ -146,6 +149,7 @@ expand_range_major <- function(start, end, defined) {
 #' @keywords internal
 #' @export
 expand_range_major.default <- function(start, end, defined = TRUE) {
+  skip_if_not_installed("icd.data")
   icd_ver <- guess_pair_version(start, end, short_code = TRUE)
   if (icd_ver == "icd9") {
     expand_range_major.icd9(start, end)
@@ -182,6 +186,7 @@ expand_range_major.default <- function(start, end, defined = TRUE) {
 #' @keywords internal
 #' @export
 expand_range_major.icd10cm <- function(start, end, defined = TRUE) {
+  require_icd_data()
   # codes may have alphabetic characters in 3rd position, so can't just do
   # numeric. This may make ICD-10-CM different from ICD-10 WHO. It also makes
   # generating the lookup table of ICD-10-CM codes potentially circular, since
@@ -404,6 +409,7 @@ icd9_expand_range_short <- function(start, end, defined = TRUE,
 #'   major codes
 #' @export
 expand_range_major.icd9 <- function(start, end, defined = TRUE) {
+  skip_if_not_installed("icd.data")
   assert_scalar(start) # i'll permit numeric but prefer char
   assert_scalar(end)
   assert_flag(defined)

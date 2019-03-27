@@ -12,7 +12,9 @@ globalVariables(c(
 #' @inheritParams comorbid
 #' @examples
 #' # not pediatric data, but let's look for this example
-#' head(icd9_comorbid_pccc_dx(icd.data::vermont_dx[1:1000, ]))
+#' if (requireNamespace("icd.data", quietly = TRUE)) {
+#'   head(icd9_comorbid_pccc_dx(icd.data::vermont_dx))
+#' }
 #' @export
 comorbid_pccc_dx <- function(x,
                              visit_name = get_visit_name(x),
@@ -44,7 +46,7 @@ comorbid_pccc_dx <- function(x,
 #' )
 #' comorbid_pccc_pcs(pts, icd_name = "icd9_pcs", return_binary = TRUE)
 #' comorbid_pccc_pcs(pts, icd_name = "icd10_pcs", return_binary = TRUE)
-#' 
+#'
 #' # All ICD-9 procedure codes are numeric, some ICD-10 procedure codes
 #' # are numeric, so best to call functions directly:
 #' pts <- data.frame(encounters = c(100), icd10_pcs = c("0016070"))
