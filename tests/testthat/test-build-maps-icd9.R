@@ -1,6 +1,6 @@
 context("build icd9 maps")
 
-skip_slow("Skipping re-building of ICD-9 comorbidity maps")
+skip_slow("Skipping slow re-building of ICD-9 comorbidity maps")
 
 test_that("AHRQ children same as saved", {
   for (i in icd9_map_ahrq)

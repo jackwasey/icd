@@ -1,5 +1,5 @@
 context("build sysdata")
-skip_slow("Skipping re-building of sysdata")
+skip_slow("Skipping slow re-building of sysdata")
 test_that("sysdata.rda is okay", {
   lknames <- c(
     "icd9_short_n",

@@ -163,7 +163,7 @@ explain_table.icd10who <- function(x,
                                    ...) {
   explain_table_worker(
     x = x,
-    hierarchy = .idget("icd10who2016")(),
+    hierarchy = .idget("icd10who2016"),
     short_code = short_code,
     condense = condense,
     brief = brief,
@@ -172,9 +172,9 @@ explain_table.icd10who <- function(x,
   )
 }
 
-#' condense \code{explain_table} output down to major codes
+#' Condense \code{explain_table} output down to major codes
 #'
-#' if a major code appears in the code column, and any children of that major
+#' If a major code appears in the code column, and any children of that major
 #' code, the children are aggregated to a list and added to the major code row.
 #' This does currently not 'condense' e.g. middle-order codes
 #'
