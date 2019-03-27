@@ -13,18 +13,18 @@
 #' @family ICD-9 ranges
 #' @examples
 #' library(magrittr, warn.conflicts = FALSE, quietly = TRUE) # optional
-#' 
+#'
 #' # no children other than self
 #' children("10201", short_code = TRUE, defined = FALSE)
-#' 
+#'
 #' # guess it was ICD-9 and a short, not decimal code
 #' children("0032")
-#' 
+#'
 #' # empty because 102.01 is not meaningful
 #' children("10201", short_code = TRUE, defined = TRUE)
 #' x <- children("003", short_code = TRUE, defined = TRUE)
 #' explain_code(x, condense = FALSE, short_code = TRUE)
-#' 
+#'
 #' children(short_code = FALSE, "100.0")
 #' children(short_code = FALSE, "100.00")
 #' children(short_code = FALSE, "2.34")
@@ -40,6 +40,7 @@ children <- function(x, ...) {
 #'   versus decimal format
 #' @export
 children.character <- function(x, ...) {
+  require_icd_data()
   ver <- guess_version(x)
   # eventually UseMethod again, but this would be circular until the icd10
   # method is defined.
@@ -65,9 +66,11 @@ children.icd9cm <- function(x,
   stopifnot(is.logical(short_code))
   stopifnot(is.logical(defined))
   stopifnot(is.logical(billable))
+  require_icd_data()
   res <- if (short_code) {
     .Call("_icd_icd9ChildrenShortUnordered",
       icd9Short = toupper(x),
+      # TODO: update to use new icd.data naming scheme
       icd9cmReal = icd.data::icd9cm_hierarchy$code,
       onlyReal = defined
     )
@@ -107,6 +110,7 @@ children.icd10 <- function(x,
                            short_code = guess_short(x),
                            defined,
                            billable = FALSE, ...) {
+  require_icd_data()
   res <- children.icd10cm(x, short_code, defined, billable, ...)
   if (!is.icd10cm(x)) {
     cl <- class(res)
@@ -123,6 +127,7 @@ children.icd10cm <- function(x,
                              defined,
                              billable = FALSE,
                              ...) {
+  require_icd_data()
   if (!missing(defined) && !defined) {
     stop("Only finding children of 'defined' ICD-10-CM codes is supported.")
   }
@@ -137,6 +142,7 @@ children.icd10who <- function(x,
                               billable = NULL,
                               leaf = NULL,
                               ...) {
+  require_icd_data()
   if (!missing(defined) && !defined) {
     stop("Only finding children of 'defined' ICD-10-CM codes is supported.")
   }
@@ -165,6 +171,7 @@ children_defined.icd10cm <- function(x,
                                      short_code = guess_short(x),
                                      warn = FALSE,
                                      verbose = FALSE) {
+  require_icd_data()
   stopifnot(is.factor(x) || is.character(unclass(x)))
   stopifnot(is.logical(short_code))
   stopifnot(is.logical(warn))
@@ -205,6 +212,7 @@ children_defined.icd10who <- function(x,
                                       short_code = guess_short(x),
                                       who_ver = "icd10who2016",
                                       warn = FALSE) {
+  require_icd_data(version = "1.1")
   stopifnot(is.factor(x) || is.character(unclass(x)))
   stopifnot(is.logical(short_code))
   stopifnot(is.logical(warn))

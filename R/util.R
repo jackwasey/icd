@@ -420,8 +420,10 @@ with_icd10cm_version <- function(ver, lang = c("en", "fr"), code) {
   force(code)
 }
 
-require_icd_data <- function() {
-  if (!requireNamespace("icd.data", quietly = TRUE)) {
+require_icd_data <- function(version = "1.0") {
+  if (!requireNamespace("icd.data",
+                        quietly = TRUE,
+                        versionCheck(version = version, op = ">="))) {
     stop("Package \"icd.data\" needed for this function to work. Please install it with install.packages(\"icd.data\")",
       call. = FALSE
     )
