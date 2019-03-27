@@ -132,8 +132,8 @@ test_env <- function() {
 #' @param n Integer number of rows of data to generate
 #' @param ncol Integer number of diagnostic code columns, default of 20 matches
 #'   NEDS
-#' @param icd10 Logical, default `TRUE` to sample ICD-10-CM codes. `FALSE` gives
-#'   `ICD-9`
+#' @param icd10 Logical, default \code{TRUE} to sample ICD-10-CM codes.
+#'   \code{FALSE} gives \code{ICD-9}
 #' @template verbose
 #' @examples
 #' if (requireNamespace("icd.data", quietly = TRUE)) {
@@ -291,7 +291,7 @@ skip_missing_icd10fr <- function() {
       offline = TRUE,
       with_interact(
         interact = FALSE, {
-          dat <- .idget("get_icd10fr2019", mode = "function")()
+          dat <- .idget("get_icd10fr2019", mode = "function")
           if (is.null(dat)) testthat::skip("No ICD-10-FR 2019 French data")
         }
       )

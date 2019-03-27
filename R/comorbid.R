@@ -38,8 +38,8 @@ poa_choices <- c("yes", "no", "notYes", "notNo")
 #' \code{\link{comorbid_ccs}}.
 #' @param x \code{data.frame} containing a column of patient-visit identifiers
 #'   and a column of ICD codes. The \code{data.frame} should be in \sQuote{long}
-#'   format, like the example \code{icd.data::vermont_dx} data. If it is in
-#'   \sQuote{wide} format, it must be converted to \sQuote{long} using
+#'   format, like the example \code{\link[icd.data]{vermont_dx}} data. If it is
+#'   in \sQuote{wide} format, it must be converted to \sQuote{long} using
 #'   \code{\link{wide_to_long}} before calling any comorbidity functions.
 #' @param map list of the comorbidities with each list item containing a vector
 #'   of decimal ICD-9 codes. This is in the form of a list, with the names of
@@ -64,7 +64,7 @@ poa_choices <- c("yes", "no", "notYes", "notNo")
 #' @details The order of visits may change depending on the original sequence,
 #'   and the underlying algorithm used. Usually this would be the order of the
 #'   first occurrence of each visit/patient identifier, but this is not
-#'   guaranteed unless `restore_id_order` is set to `TRUE`.
+#'   guaranteed unless \code{restore_id_order} is set to \code{TRUE}.
 #' @md
 #' @family comorbidity computations
 #' @family comorbidities
@@ -72,7 +72,7 @@ poa_choices <- c("yes", "no", "notYes", "notNo")
 #' # Need icd.data for Vermont and Uranium patients,
 #' # not for the comorbidity calculations
 #' if (requireNamespace("icd.data", quietly = TRUE)) {
-#' vermont_dx[1:5, 1:10]
+#' icd.data::vermont_dx[1:5, 1:10]
 #' # get first few rows and columns of Charlson comorbidities using Quan/Deyo
 #' # mapping of ICD-9 or ICD-10 codes Charlson categories
 #' comorbid_quan_deyo(icd.data::vermont_dx)[1:5, 1:14]
@@ -88,7 +88,7 @@ poa_choices <- c("yes", "no", "notYes", "notNo")
 #' )
 #'
 #' # get summary AHRQ (based on Elixhauser) comorbidities for the Uranium data:
-#' summary(comorbid_ahrq(uranium_pathology))
+#' summary(comorbid_ahrq(icd.data::uranium_pathology))
 #' }
 #' pts <- icd_long_data(
 #'   visit_name = c("2", "1", "2", "3", "3"),

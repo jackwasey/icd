@@ -22,10 +22,10 @@ IntegerVector factorNoSort(const CharacterVector &x,
 // instead of making a new hash table to do the integer matching?
 
 //' @title Re-generate a factor with new levels, without doing string matching
-//' @description This is called by an R wrapper. There is an `na.rm` version,
-//'   too. Some work simply to mirror behavior of `base::factor`, e.g. when a
-//'   level is not available, but NA level is available, NA is inserted into the
-//'   integer vector, not an index to the NA level.
+//' @description This is called by an R wrapper. There is an \code{na.rm}
+//'   version, too. Some work simply to mirror behavior of \code{base::factor},
+//'   e.g. when a level is not available, but NA level is available, NA is
+//'   inserted into the integer vector, not an index to the NA level.
 //' @md
 //' @keywords internal manip
 // [[Rcpp::export(refactor_worker)]]
@@ -122,7 +122,7 @@ IntegerVector refactor(const IntegerVector &x,
   return (f);
 }
 
-//' @describeIn refactor_worker Drop all `NA` values from levels and values
+//' @describeIn refactor_worker Drop all \code{NA} values from levels and values
 //' @keywords internal
 // [[Rcpp::export(refactor_narm_worker)]]
 IntegerVector refactor_narm(const IntegerVector &x,

@@ -1,9 +1,8 @@
 icd_data_ver_ok <- function(ver = "1.1") {
-  # Bug in R? Version of an already lodaded namespace is not checked if done via
-  # requireNamespace, only loadNamespace.
+  # requireNamespace only checks version
   res <- requireNamespace("icd.data", quietly = TRUE)
-  res &&
-    !getNamespaceVersion(asNamespace("icd.data")) >= as.package_version(ver)
+  # versionCheck = list(version = ver, op = ">="))
+  res && utils::packageVersion("icd.data") >= ver
 }
 
 icd_data_icd10cm_active <- function() {
@@ -28,7 +27,7 @@ icd_data_icd9cm_leaf_v32 <- function() {
 
 icd_data_get_icd10cm_active_ver <- function() {
   if (!requireNamespace("icd.data")) {
-    message("icd.data doesn't appear to be available")
+    message("icd.data package doesn't appear to be available at all.")
     return()
   }
   if (!icd_data_ver_ok()) {
@@ -41,14 +40,12 @@ icd_data_get_icd10cm_active_ver <- function() {
 .idget <- function(var_name, alt = NULL, must_work = is.null(alt), ...) {
   # this should only happen in weird R CMD check internals since we Import
   # icd.data...
-  if (!requireNamespace("icd.data")) {
-    message("icd.data doesn't appear to be available")
-    return(.idget(alt))
-  }
   if (!icd_data_ver_ok()) {
-    message("This data is not available with icd.data version < 1.1")
-    message("Upgrade icd.data using install.packages(\"icd.data\"")
-    if (must_work) stop("Cannot proceed")
+    msg <- paste(
+      "This data is not available with icd.data version < 1.1",
+      "Upgrade icd.data using install.packages(\"icd.data\"."
+    )
+    if (must_work) stop(msg, " Cannot proceed.")
     return(.idget(alt))
   }
   # bindings are in the top level namespace
@@ -56,8 +53,16 @@ icd_data_get_icd10cm_active_ver <- function() {
   ns <- asNamespace("icd.data")
   if (exists(var_name, ns, ...)) return(get(var_name, ns, ...))
   lz <- ns$.__NAMESPACE__.$lazydata
-  # if icd.data >= 1.1, then we now assume it must be in lazy data
-  get(var_name, lz, ...)
+  if (exists(var_name, lz, ...)) return(get(var_name, lz, ...))
+  if (!exists(var_name, ns, ...) && substring(var_name, 1, 4) != "get_") {
+    var_name <- paste0("get_", var_name)
+  }
+  g <- get(var_name, ns, ...)
+  if (is.function(g)) {
+    g()
+  } else {
+    g
+  }
 }
 
 with_icd10cm_version <- function(ver, code) {

@@ -224,9 +224,9 @@ children_defined.icd10who <- function(x,
     x <- decimal_to_short.icd10cm(x)
   }
   d <- if (who_ver == "icd10who2008fr") {
-    .idget("icd10who2008fr")()
+    .idget("icd10who2008fr")
   } else {
-    .idget("icd10who2016")()
+    .idget("icd10who2016")
   }
   stopifnot(!is.null(d))
   stopifnot(!is.null(d[["code"]]))

@@ -34,8 +34,8 @@ icd10_comorbid_pccc_pcs(x, visit_name = get_visit_name(x), icd_name,
 \arguments{
 \item{x}{\code{data.frame} containing a column of patient-visit identifiers
 and a column of ICD codes. The \code{data.frame} should be in \sQuote{long}
-format, like the example \code{icd.data::vermont_dx} data. If it is in
-\sQuote{wide} format, it must be converted to \sQuote{long} using
+format, like the example \code{\link[icd.data]{vermont_dx}} data. If it is
+in \sQuote{wide} format, it must be converted to \sQuote{long} using
 \code{\link{wide_to_long}} before calling any comorbidity functions.}
 
 \item{visit_name}{The name of the column in the data frame which contains the

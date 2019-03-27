@@ -38,7 +38,7 @@ this function, but if unavoidable, using the \code{visit_name} parameter.
 \item \code{matrix}: Give useful error message if matrix passed, as we
 assume it is a comorbidity matrix. It is possible you have a character
 matrix with all your patient data, and if so, please convert it to a
-`data.frame` and file an issue on github.
+\code{data.frame} and file an issue on github.
 }}
 
 \keyword{internal}

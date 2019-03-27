@@ -157,7 +157,7 @@ icd10DecimalToParts <- function(x, mnrEmpty = "") {
 }
 
 #' @title Convert integers to strings as quickly as possible
-#' @description Have tried R, `sprintf` with \pkg{Rcpp} and C++ standard
+#' @description Have tried R, \code{sprintf} with \pkg{Rcpp} and C++ standard
 #' library. Doesn't do bounds checking, but limited by length of integers.
 #' @param x Vector of integers
 #' @return Vector of characters
@@ -272,17 +272,17 @@ factor_nosort_rcpp_worker <- function(x, levels, na_rm) {
 }
 
 #' @title Re-generate a factor with new levels, without doing string matching
-#' @description This is called by an R wrapper. There is an `na.rm` version,
-#'   too. Some work simply to mirror behavior of `base::factor`, e.g. when a
-#'   level is not available, but NA level is available, NA is inserted into the
-#'   integer vector, not an index to the NA level.
+#' @description This is called by an R wrapper. There is an \code{na.rm}
+#'   version, too. Some work simply to mirror behavior of \code{base::factor},
+#'   e.g. when a level is not available, but NA level is available, NA is
+#'   inserted into the integer vector, not an index to the NA level.
 #' @md
 #' @keywords internal manip
 refactor_worker <- function(x, new_levels, exclude_na, validate) {
     .Call(`_icd_refactor`, x, new_levels, exclude_na, validate)
 }
 
-#' @describeIn refactor_worker Drop all `NA` values from levels and values
+#' @describeIn refactor_worker Drop all \code{NA} values from levels and values
 #' @keywords internal
 refactor_narm_worker <- function(x, new_levels, validate) {
     .Call(`_icd_refactor_narm`, x, new_levels, validate)

@@ -13,8 +13,8 @@ generate_neds_pts(n = 1000L, ncol = 20L, icd10 = TRUE,
 \item{ncol}{Integer number of diagnostic code columns, default of 20 matches
 NEDS}
 
-\item{icd10}{Logical, default `TRUE` to sample ICD-10-CM codes. `FALSE` gives
-`ICD-9`}
+\item{icd10}{Logical, default \code{TRUE} to sample ICD-10-CM codes.
+\code{FALSE} gives \code{ICD-9}}
 
 \item{verbose}{single logical value, defaults to \code{FALSE} in most functions.}
 }

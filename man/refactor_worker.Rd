@@ -10,14 +10,14 @@ refactor_worker(x, new_levels, exclude_na, validate)
 refactor_narm_worker(x, new_levels, validate)
 }
 \description{
-This is called by an R wrapper. There is an \code{na.rm} version,
-too. Some work simply to mirror behavior of \code{base::factor}, e.g. when a
-level is not available, but NA level is available, NA is inserted into the
-integer vector, not an index to the NA level.
+This is called by an R wrapper. There is an \code{na.rm}
+version, too. Some work simply to mirror behavior of \code{base::factor},
+e.g. when a level is not available, but NA level is available, NA is
+inserted into the integer vector, not an index to the NA level.
 }
 \section{Functions}{
 \itemize{
-\item \code{refactor_narm_worker}: Drop all `NA` values from levels and values
+\item \code{refactor_narm_worker}: Drop all \code{NA} values from levels and values
 }}
 
 \keyword{internal}

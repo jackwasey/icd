@@ -6,7 +6,7 @@
 #' @param x Data frame containing a column for an 'id' and a column for a code,
 #'   e.g., an ICD-10 code.
 #' @template mapping
-#' @param id_name The name of the `data.frame` field which is the unique
+#' @param id_name The name of the \code{data.frame} field which is the unique
 #'   identifier.
 #' @param code_name String with name(s) of column(s) containing the codes.
 #' @template return_df
@@ -26,13 +26,12 @@
 #'   to be called to do the comorbidity calculation
 #' @template dotdotdot
 #' @examples
-#' \dontrun{
-#' u <- uranium_pathology
+#' if (requireNamespace("icd.data", quietly = TRUE)) {
+#' u <- icd.data::uranium_pathology
 #' m <- icd10_map_ahrq
 #' u$icd10 <- decimal_to_short(u$icd10)
 #' j <- categorize_simple(u, m, id_name = "case", code_name = "icd10")
 #' }
-#' @md
 #' @keywords internal
 #' @export
 categorize_simple <- function(x,

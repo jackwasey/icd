@@ -17,8 +17,8 @@
 #'   a warning.
 #' @param lang For WHO ICD-10 codes, the 2016 English and 2008 French
 #'   translations are available. Use 'en' or 'fr' respectively. For ICD-10-CM
-#'   codes, Dutch is also available, indicated by 'nl'. If `icd.data` 1.0 is
-#'   installed, English descriptions are returned.
+#'   codes, Dutch is also available, indicated by 'nl'. If \code{icd.data} 1.0
+#'   is installed, English descriptions are returned.
 #' @template dotdotdot
 #' @examples
 #' if (requireNamespace("icd.data", quietly = TRUE)) {
@@ -209,9 +209,9 @@ explain_code.icd10who <- function(x,
   # this is a slow linear lookup, but usually only
   # "explaining" one or a few codes at a time.
   i <- if (lang == "fr") {
-    .idget("icd10who2008fr")()
+    .idget("icd10who2008fr")
   } else {
-    .idget("icd10who2016")()
+    .idget("icd10who2016")
   }
   i[
     i[["code"]] %in% unique(as_char_no_warn(x)),
@@ -228,7 +228,7 @@ explain_code.icd10fr <- function(x, ...) {
 #' @describeIn explain_code ICD-10-BE explanation, initial implementation, subject to change
 #' @examples
 #' # Belgian ICD-10 has three languages available
-#' \dontrun{
+#' if (icd:::icd_data_ver_ok()) {
 #' explain_code(as.icd10be("C20"))
 #' # [1] "Malignant neoplasm of rectum"
 #' explain_code(as.icd10be("C20"), lang = "en")
@@ -266,6 +266,7 @@ explain_code.icd10 <- function(x,
 
 explain_code_worker <- function(x,
                                 var_name,
+                                var,
                                 short_code = guess_short(x),
                                 condense = TRUE,
                                 brief = FALSE,
@@ -273,7 +274,9 @@ explain_code_worker <- function(x,
                                 lang = NULL,
                                 ...) {
   stopifnot(is.atomic(x))
-  stopifnot(is.character(var_name))
+  stopifnot(missing(var_name) || missing(var))
+  stopifnot(missing(var_name) || is.character(var_name))
+  stopifnot(missing(var) || is.data.frame(var))
   stopifnot(is.logical(short_code), length(short_code) == 1L)
   stopifnot(is.logical(brief), length(brief) == 1L)
   if (!missing(condense)) {
@@ -293,7 +296,13 @@ explain_code_worker <- function(x,
     short_str <- paste0(short_str, "_", lang)
     long_str <- paste0(long_str, "_", lang)
   }
-  i <- .idget(var_name)()
+  if (missing(var_name)) {
+    i <- var
+  } else {
+  if (substring(var_name, 1, 4) != "get_")
+    var_name <- paste0("get_", var_name)
+    i <- .idget(var_name)()
+  }
   i[
     i[["code"]] %in% unique(as_char_no_warn(x)),
     ifelse(brief, short_str, long_str)

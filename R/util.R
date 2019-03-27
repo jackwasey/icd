@@ -150,7 +150,7 @@ get_visit_name.data.frame <- function(x, visit_name = NULL) {
 #' @describeIn get_visit_name Give useful error message if matrix passed, as we
 #'   assume it is a comorbidity matrix. It is possible you have a character
 #'   matrix with all your patient data, and if so, please convert it to a
-#'   `data.frame` and file an issue on github.
+#'   \code{data.frame} and file an issue on github.
 #' @keywords internal
 get_visit_name.matrix <- function(x, visit_name = NULL)
   stop(
@@ -424,10 +424,10 @@ with_icd10cm_version <- function(ver, lang = c("en", "fr"), code) {
 }
 
 require_icd_data <- function(version = "1.0") {
-  if (!requireNamespace("icd.data",
-                        quietly = TRUE,
-                        versionCheck(version = version, op = ">="))) {
-    stop("Package \"icd.data\" needed for this function to work. Please install it with install.packages(\"icd.data\")",
+  if (!icd_data_ver_ok(ver = version)) {
+    stop("Package \"icd.data\" version ", version,
+         " needed for this function to work. ",
+         "Please install it with install.packages(\"icd.data\")",
       call. = FALSE
     )
   }

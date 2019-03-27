@@ -54,7 +54,7 @@ icd_system_classes <- c(
 
 #' Check for class conflict
 #' @param x Data to test
-#' @param do_stop logical, if `TRUE`, execution will stop with an error
+#' @param do_stop logical, if \code{TRUE}, execution will stop with an error
 #' @keywords internal
 #' @noRd
 icd_conflicts <- function(x, do_stop = FALSE)
@@ -231,7 +231,7 @@ icd9 <- function(x) {
 }
 
 #' @describeIn set_icd_class Use generic ICD-9 class for this data. Ideally, use
-#'   the more specific `icd9cm` or other sub-classes (when available).
+#'   the more specific \code{icd9cm} or other sub-classes (when available).
 #' @export
 as.icd9 <- function(x) {
   stopifnot(is.atomic(x))
@@ -305,7 +305,7 @@ icd10 <- function(x) {
 }
 
 #' @describeIn set_icd_class Use generic ICD-10 class for this data. If
-#'   possible, use the more specific `icd10who` or `icd10cm`.
+#'   possible, use the more specific \code{icd10who} or \code{icd10cm}.
 #' @export
 as.icd10 <- function(x) {
   stopifnot(is.atomic(x))

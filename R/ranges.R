@@ -134,13 +134,15 @@ expand_range.icd10cm <- function(start,
 #' Expand two major codes to a range
 #'
 #' Expand a pair of major codes into a range of major codes. Primarily for use
-#' by `icd.data`.
+#' by \code{icd.data}.
 #' @examples
+#' if (requireNamespace("icd.data", quietly = TRUE)) {
 #' expand_range_major("100", "102")
+#' }
 #' @template dotdotdot
 #' @export
 expand_range_major <- function(start, end, defined) {
-  skip_if_not_installed("icd.data")
+  require_icd_data()
   UseMethod("expand_range_major")
 }
 
@@ -149,7 +151,7 @@ expand_range_major <- function(start, end, defined) {
 #' @keywords internal
 #' @export
 expand_range_major.default <- function(start, end, defined = TRUE) {
-  skip_if_not_installed("icd.data")
+  require_icd_data()
   icd_ver <- guess_pair_version(start, end, short_code = TRUE)
   if (icd_ver == "icd9") {
     expand_range_major.icd9(start, end)
@@ -409,7 +411,7 @@ icd9_expand_range_short <- function(start, end, defined = TRUE,
 #'   major codes
 #' @export
 expand_range_major.icd9 <- function(start, end, defined = TRUE) {
-  skip_if_not_installed("icd.data")
+  require_icd_data()
   assert_scalar(start) # i'll permit numeric but prefer char
   assert_scalar(end)
   assert_flag(defined)
