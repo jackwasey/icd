@@ -81,20 +81,20 @@ library(magrittr, warn.conflicts = FALSE, quietly = TRUE)
 # magrittr not required by icd
 # icd.data package highly recommended, but not a depependency for comorbidity calculations
 if (requireNamespace("icd.data", quietly = TRUE)) {
-# no children other than self
-children("10201", short_code = TRUE, defined = FALSE)
+  # no children other than self
+  children("10201", short_code = TRUE, defined = FALSE)
 
-# guess it was ICD-9 and a short, not decimal code
-children("0032")
+  # guess it was ICD-9 and a short, not decimal code
+  children("0032")
 
-# empty because 102.01 is not meaningful
-children("10201", short_code = TRUE, defined = TRUE)
-x <- children("003", short_code = TRUE, defined = TRUE)
-explain_code(x, condense = FALSE, short_code = TRUE)
+  # empty because 102.01 is not meaningful
+  children("10201", short_code = TRUE, defined = TRUE)
+  x <- children("003", short_code = TRUE, defined = TRUE)
+  explain_code(x, condense = FALSE, short_code = TRUE)
 
-children(short_code = FALSE, "100.0")
-children(short_code = FALSE, "100.00")
-children(short_code = FALSE, "2.34")
+  children(short_code = FALSE, "100.0")
+  children(short_code = FALSE, "100.00")
+  children(short_code = FALSE, "2.34")
 }
 }
 \seealso{

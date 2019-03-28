@@ -1,8 +1,8 @@
 #' Explain ICD-9 and ICD-10 codes in English
 #'
-#' Convert 'decimal' format (123.45 style) ICD-9 codes into the name and
-#' description for human review there are official ICD9-CM data tables, not with
-#' conversion to decimal notation, but to the textual format.
+#' Converts a vector of ICD codes to a vector of descriptions of these codes.
+#' The conversion is based on the edition (ICD-9 or ICD-10), and class (e.g.,
+#' \code{icd10who}) of the input vector. See examples.
 #' @param x vector or other structure of ICD codes to explain in human language
 #' @template short_code
 #' @param condense single logical value which indicates whether to condense the

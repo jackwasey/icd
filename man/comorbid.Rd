@@ -80,19 +80,21 @@ comorbid_charlson(...)
 }
 \arguments{
 \item{x}{\code{data.frame} containing a column of patient-visit identifiers
-and a column of ICD codes. The \code{data.frame} should be in \sQuote{long}
-format, like the example \code{\link[icd.data]{vermont_dx}} data. If it is
-in \sQuote{wide} format, it must be converted to \sQuote{long} using
-\code{\link{wide_to_long}} before calling any comorbidity functions.}
+and a column of ICD codes. The \code{data.frame} may be in \sQuote{long} or
+\sQuote{wide} format, like the example \code{\link[icd.data]{vermont_dx}}
+and \code{\link[icd.data]{uranium_pathology}} data.}
 
-\item{map}{list of the comorbidities with each list item containing a vector
-of decimal ICD-9 codes. This is in the form of a list, with the names of
-the items corresponding to the comorbidities (e.g. \sQuote{HTN}, or
+\item{map}{A named list of the comorbidities with each list item containing a
+vector of decimal ICD-9 codes. \pkg{icd} includes a number of these, e.g.,
+\code{\link{icd9_map_elix}}. Alternatively, this can be omited if the
+convenience functions, such as \code{icd10_comorbid_charlson} are used
+directly. \code{map} should be in the form of a list, with the names of the
+items corresponding to the comorbidities (e.g. \sQuote{HTN}, or
 \sQuote{diabetes}) and the contents of each list item being a character
 vector of short-form (no decimal place, zero left-padded) ICD codes. There
 is no default: the user should use the family of functions, e.g.
-\code{comorbid_ahrq}, since these also name the fields correctly, apply any
-hierarchical rules (see \code{hierarchy} below)}
+\code{comorbid_ahrq}, since these also name the fields correctly, and these
+functions also apply any hierarchical rules (see \code{hierarchy} below)}
 
 \item{visit_name}{The name of the column in the data frame which contains the
 patient or visit identifier. Typically this is the visit identifier, since
@@ -247,23 +249,23 @@ according to Quan/Deyo ICD categories. Synonymous with
 # Need icd.data for Vermont and Uranium patients,
 # not for the comorbidity calculations
 if (requireNamespace("icd.data", quietly = TRUE)) {
-icd.data::vermont_dx[1:5, 1:10]
-# get first few rows and columns of Charlson comorbidities using Quan/Deyo
-# mapping of ICD-9 or ICD-10 codes Charlson categories
-comorbid_quan_deyo(icd.data::vermont_dx)[1:5, 1:14]
+  icd.data::vermont_dx[1:5, 1:10]
+  # get first few rows and columns of Charlson comorbidities using Quan/Deyo
+  # mapping of ICD-9 or ICD-10 codes Charlson categories
+  comorbid_quan_deyo(icd.data::vermont_dx)[1:5, 1:14]
 
-# Note that the comorbidity calculations automatically finds the ICD code
-# columns, and uses 'wide' or 'long' format data.
+  # Note that the comorbidity calculations automatically finds the ICD code
+  # columns, and uses 'wide' or 'long' format data.
 
-stopifnot(
-  identical(
-    comorbid_quan_deyo(icd.data::vermont_dx),
-    comorbid_quan_deyo(wide_to_long(icd.data::vermont_dx))
+  stopifnot(
+    identical(
+      comorbid_quan_deyo(icd.data::vermont_dx),
+      comorbid_quan_deyo(wide_to_long(icd.data::vermont_dx))
+    )
   )
-)
 
-# get summary AHRQ (based on Elixhauser) comorbidities for the Uranium data:
-summary(comorbid_ahrq(icd.data::uranium_pathology))
+  # get summary AHRQ (based on Elixhauser) comorbidities for the Uranium data:
+  summary(comorbid_ahrq(icd.data::uranium_pathology))
 }
 pts <- icd_long_data(
   visit_name = c("2", "1", "2", "3", "3"),

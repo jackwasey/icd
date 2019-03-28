@@ -29,7 +29,7 @@ Authors@R:
              comment = "explain codes in table format"))
 Maintainer: Jack O. Wasey <jack@jackwasey.com>
 Description: Calculate comorbidities, medical risk scores, and
-    work quickly and precisely with ICD-9 and ICD-10 codes. This package
+    work very quickly and precisely with ICD-9 and ICD-10 codes. This package
     enables a work flow from raw tables of ICD codes in hospital databases
     to comorbidities. ICD-9 and ICD-10 comorbidity mappings from Quan
     (Deyo and Elixhauser versions), Elixhauser and AHRQ included.  Common

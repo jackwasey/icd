@@ -35,7 +35,7 @@ major codes
 
 \examples{
 if (requireNamespace("icd.data", quietly = TRUE)) {
-expand_range_major("100", "102")
+  expand_range_major("100", "102")
 }
 }
 \keyword{internal}
