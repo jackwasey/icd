@@ -1,7 +1,8 @@
-# Version 4.0.1
+# Version 4.0.2
+ * Major update. Highlights include: wide/long data both handled efficiently without conversion; WHO, France, Belgium ICD-10 codes; more comprehensive ICD-10 comorbidity maps to span historic ICD-10 versions
  * The ICD-10 comorbidity maps have been expanded to include the union of all codes for each year in which ICD-10-CM and WHO ICD-10 are available. E.g., HIV in WHO scheme has more detail than the US version. (The ICD-9 code algorithm does not rely on exact ICD-10 codes in maps, so is unchanged). This will flag a few more comorbidities than before, especially when data doesn't correspond to the most recent map. CCS maps are only expanded over history ICD-10-CM since they are US-oriented. This is an important user-facing change which will improve capture of comorbidities in international and historic ICD-10 data. Again, ICD-9 computations are unaffected.
  * Thanks to @vitallish for update to CCS maps see #163, #168
- * Framework for using WHO ICD-10 codes, which the 'icd.data' package will download as needed from the WHO web site. English and French are available, but currently only for the years 2016 and 2008 respectively. Update 'icd.data' package to version 1.1.1 to enable.
+ * Framework for using WHO ICD-10 codes, which the 'icd.data' package will download as needed from the WHO web site. English and French are available, but currently only for the years 2016 and 2008 respectively. Update 'icd.data' package to version >= 1.1 to enable.
  * Access to French and Dutch translations of ICD-10-CM, used in Belgium.
  * Handle 'wide' format data much more efficiently, without having to convert to long format first.
  * Add ICD-9 and ICD-10 WHO and US Clinical Modification procedure codes. Some, but not all of these are available through the 'icd.data' package.
