@@ -1,10 +1,10 @@
 context("icd9 validation")
 
 test_that("regular expressions are put on the given environment", {
-  e <- new.env(parent = baseenv())
+  e <- new.env(parent = emptyenv())
   set_re_globals(e)
   expect_identical(
-    ls(envir = e),
+    ls(envir = e, pattern = "^re_"),
     c(
       "re_icd10_any", "re_icd10_decimal", "re_icd10_major", "re_icd10_major_bare",
       "re_icd10_short", "re_icd10cm_any", "re_icd10cm_decimal", "re_icd10cm_major",
