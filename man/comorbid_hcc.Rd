@@ -6,14 +6,16 @@
 \alias{icd10_comorbid_hcc}
 \title{Get Hierarchical Condition Codes (HCC)}
 \usage{
-comorbid_hcc(x, date_name = "date", visit_name = get_visit_name(x),
-  icd_name = get_icd_name(x))
+comorbid_hcc(
+  x,
+  date_name = "date",
+  visit_name = get_visit_name(x),
+  icd_name = get_icd_name(x)
+)
 
-icd9_comorbid_hcc(x, date_name = "date", visit_name = NULL,
-  icd_name = NULL)
+icd9_comorbid_hcc(x, date_name = "date", visit_name = NULL, icd_name = NULL)
 
-icd10_comorbid_hcc(x, date_name = "date", visit_name = NULL,
-  icd_name = NULL)
+icd10_comorbid_hcc(x, date_name = "date", visit_name = NULL, icd_name = NULL)
 }
 \arguments{
 \item{x}{data frame with columns for patient/visit ID, ICD code and date}
@@ -58,16 +60,21 @@ annually) are applied to create the HCCs.
 }}
 
 \seealso{
-Other comorbidity computations: \code{\link{comorbid_pccc_dx}},
-  \code{\link{comorbid}}
+Other comorbidity computations: 
+\code{\link{comorbid_pccc_dx}()},
+\code{\link{comorbid}()}
 
-Other comorbidities: \code{\link{comorbid_pccc_dx}},
-  \code{\link{comorbid}}, \code{\link{icd10_map_ahrq_pcs}},
-  \code{\link{icd9_map_ahrq}}, \code{\link{icd9_map_elix}},
-  \code{\link{icd9_map_hcc}}, \code{\link{icd9_map_pccc}},
-  \code{\link{icd9_map_quan_deyo}},
-  \code{\link{icd9_map_quan_elix}},
-  \code{\link{icd9_map_single_ccs}}
+Other comorbidities: 
+\code{\link{comorbid_pccc_dx}()},
+\code{\link{comorbid}()},
+\code{\link{icd10_map_ahrq_pcs}},
+\code{\link{icd9_map_ahrq}},
+\code{\link{icd9_map_elix}},
+\code{\link{icd9_map_hcc}},
+\code{\link{icd9_map_pccc}},
+\code{\link{icd9_map_quan_deyo}},
+\code{\link{icd9_map_quan_elix}},
+\code{\link{icd9_map_single_ccs}}
 }
 \concept{comorbidities}
 \concept{comorbidity computations}

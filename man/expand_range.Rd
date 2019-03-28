@@ -13,12 +13,17 @@
 \usage{
 expand_range(start, end, ...)
 
-\method{expand_range}{character}(start, end, short_code = NULL,
-  defined = TRUE, ...)
+\method{expand_range}{character}(start, end, short_code = NULL, defined = TRUE, ...)
 
-\method{expand_range}{icd9}(start, end, short_code = guess_short(c(start,
-  end)), defined = TRUE, ex_ambig_start = TRUE, ex_ambig_end = TRUE,
-  ...)
+\method{expand_range}{icd9}(
+  start,
+  end,
+  short_code = guess_short(c(start, end)),
+  defined = TRUE,
+  ex_ambig_start = TRUE,
+  ex_ambig_end = TRUE,
+  ...
+)
 
 start \%i9da\% end
 
@@ -88,8 +93,9 @@ expand_range("428.0", "428.9")
 "V80" \%i9s\% "V810"
 }
 \seealso{
-Other ICD-9 ranges: \code{\link{children}},
-  \code{\link{condense}}
+Other ICD-9 ranges: 
+\code{\link{children}()},
+\code{\link{condense}()}
 }
 \concept{ICD-9 ranges}
 \keyword{internal}

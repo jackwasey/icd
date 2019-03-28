@@ -10,15 +10,18 @@
 \usage{
 is_valid(x, ...)
 
-\method{is_valid}{icd10}(x, short_code = guess_short(x),
-  whitespace_ok = TRUE, re_short = re_icd10_short,
-  re_decimal = re_icd10_decimal, ...)
+\method{is_valid}{icd10}(
+  x,
+  short_code = guess_short(x),
+  whitespace_ok = TRUE,
+  re_short = re_icd10_short,
+  re_decimal = re_icd10_decimal,
+  ...
+)
 
-\method{is_valid}{icd10fr}(x, short_code = guess_short(x),
-  whitespace_ok = TRUE, ...)
+\method{is_valid}{icd10fr}(x, short_code = guess_short(x), whitespace_ok = TRUE, ...)
 
-\method{is_valid}{icd9}(x, short_code = guess_short(x),
-  whitespace_ok = TRUE, ...)
+\method{is_valid}{icd9}(x, short_code = guess_short(x), whitespace_ok = TRUE, ...)
 
 \method{is_valid}{comorbidity_map}(x, short_code, ...)
 }

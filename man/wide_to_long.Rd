@@ -4,8 +4,13 @@
 \alias{wide_to_long}
 \title{Convert ICD data from wide to long format}
 \usage{
-wide_to_long(x, visit_name = get_visit_name(x), icd_labels = NULL,
-  icd_name = "icd_code", icd_regex = c("icd", "diag", "dx_", "dx"))
+wide_to_long(
+  x,
+  visit_name = get_visit_name(x),
+  icd_labels = NULL,
+  icd_name = "icd_code",
+  icd_regex = c("icd", "diag", "dx_", "dx")
+)
 }
 \arguments{
 \item{x}{\code{data.frame} in wide format, i.e. one row per patient, and
@@ -80,10 +85,12 @@ widedf <- data.frame(
 wide_to_long(widedf)
 }
 \seealso{
-Other ICD data conversion: \code{\link{comorbid_df_to_mat}},
-  \code{\link{comorbid_mat_to_df}}, \code{\link{convert}},
-  \code{\link{decimal_to_short}},
-  \code{\link{long_to_wide}},
-  \code{\link{short_to_decimal}}
+Other ICD data conversion: 
+\code{\link{comorbid_df_to_mat}()},
+\code{\link{comorbid_mat_to_df}()},
+\code{\link{convert}},
+\code{\link{decimal_to_short}()},
+\code{\link{long_to_wide}()},
+\code{\link{short_to_decimal}()}
 }
 \concept{ICD data conversion}

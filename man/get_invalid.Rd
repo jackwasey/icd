@@ -16,8 +16,7 @@ get_invalid(...)
 
 \method{get_invalid}{icd10}(x, short_code = guess_short(x), ...)
 
-\method{get_invalid}{comorbidity_map}(x, short_code = guess_short(x),
-  ...)
+\method{get_invalid}{comorbidity_map}(x, short_code = guess_short(x), ...)
 }
 \arguments{
 \item{x}{vector of ICD codes, or list of vectors of ICD codes forming a

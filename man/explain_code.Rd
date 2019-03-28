@@ -18,29 +18,59 @@ explain_code(...)
 
 explain_icd(...)
 
-\method{explain_code}{default}(x, short_code = guess_short(x),
-  condense = TRUE, brief = FALSE, warn = TRUE, ...)
+\method{explain_code}{default}(
+  x,
+  short_code = guess_short(x),
+  condense = TRUE,
+  brief = FALSE,
+  warn = TRUE,
+  ...
+)
 
 \method{explain_code}{list}(x, ...)
 
 \method{explain_code}{icd9}(...)
 
-\method{explain_code}{icd9cm}(x, short_code = guess_short(x),
-  condense = TRUE, brief = FALSE, warn = TRUE, ...)
+\method{explain_code}{icd9cm}(
+  x,
+  short_code = guess_short(x),
+  condense = TRUE,
+  brief = FALSE,
+  warn = TRUE,
+  ...
+)
 
-\method{explain_code}{icd10cm}(x, short_code = guess_short(x),
-  condense = TRUE, brief = FALSE, warn = TRUE, ...)
+\method{explain_code}{icd10cm}(
+  x,
+  short_code = guess_short(x),
+  condense = TRUE,
+  brief = FALSE,
+  warn = TRUE,
+  ...
+)
 
-\method{explain_code}{icd10who}(x, short_code = guess_short(x),
-  condense = TRUE, brief = NULL, warn = TRUE, lang = c("en", "fr"),
-  ...)
+\method{explain_code}{icd10who}(
+  x,
+  short_code = guess_short(x),
+  condense = TRUE,
+  brief = NULL,
+  warn = TRUE,
+  lang = c("en", "fr"),
+  ...
+)
 
 \method{explain_code}{icd10fr}(x, ...)
 
 \method{explain_code}{icd10be}(x, lang = c("fr", "nl", "en"), ...)
 
-\method{explain_code}{icd10}(x, short_code = guess_short(x),
-  condense = TRUE, brief = FALSE, warn = TRUE, ...)
+\method{explain_code}{icd10}(
+  x,
+  short_code = guess_short(x),
+  condense = TRUE,
+  brief = FALSE,
+  warn = TRUE,
+  ...
+)
 }
 \arguments{
 \item{...}{arguments passed on to other functions}

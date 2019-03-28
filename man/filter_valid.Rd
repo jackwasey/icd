@@ -9,23 +9,47 @@
 \alias{icd10_filter_invalid}
 \title{Filter ICD codes by validity.}
 \usage{
-filter_valid(x, icd_name = get_icd_name(x),
-  short_code = guess_short(.subset2(x, icd_name)), invert = FALSE)
+filter_valid(
+  x,
+  icd_name = get_icd_name(x),
+  short_code = guess_short(.subset2(x, icd_name)),
+  invert = FALSE
+)
 
-filter_invalid(x, icd_name = get_icd_name(x),
-  short_code = guess_short(x[[icd_name]]), invert = FALSE)
+filter_invalid(
+  x,
+  icd_name = get_icd_name(x),
+  short_code = guess_short(x[[icd_name]]),
+  invert = FALSE
+)
 
-icd9_filter_valid(x, icd_name = get_icd_name(x),
-  short_code = guess_short(x[[icd_name]]), invert = FALSE)
+icd9_filter_valid(
+  x,
+  icd_name = get_icd_name(x),
+  short_code = guess_short(x[[icd_name]]),
+  invert = FALSE
+)
 
-icd10_filter_valid(x, icd_name = get_icd_name(x),
-  short_code = guess_short(x[[icd_name]]), invert = FALSE)
+icd10_filter_valid(
+  x,
+  icd_name = get_icd_name(x),
+  short_code = guess_short(x[[icd_name]]),
+  invert = FALSE
+)
 
-icd9_filter_invalid(x, icd_name = get_icd_name(x),
-  short_code = guess_short(x[[icd_name]]), invert = FALSE)
+icd9_filter_invalid(
+  x,
+  icd_name = get_icd_name(x),
+  short_code = guess_short(x[[icd_name]]),
+  invert = FALSE
+)
 
-icd10_filter_invalid(x, icd_name = get_icd_name(x),
-  short_code = guess_short(x[[icd_name]]), invert = FALSE)
+icd10_filter_invalid(
+  x,
+  icd_name = get_icd_name(x),
+  short_code = guess_short(x[[icd_name]]),
+  invert = FALSE
+)
 }
 \arguments{
 \item{x}{a data.frame containing a column of ICD codes}

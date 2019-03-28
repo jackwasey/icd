@@ -13,14 +13,11 @@ get_billable(...)
 
 \method{get_billable}{icd9}(...)
 
-\method{get_billable}{icd9cm}(x, short_code = guess_short(x),
-  invert = FALSE, ...)
+\method{get_billable}{icd9cm}(x, short_code = guess_short(x), invert = FALSE, ...)
 
-\method{get_billable}{icd10}(x, short_code = guess_short(x),
-  invert = FALSE, ...)
+\method{get_billable}{icd10}(x, short_code = guess_short(x), invert = FALSE, ...)
 
-\method{get_billable}{icd10cm}(x, short_code = guess_short(x),
-  invert = FALSE, ...)
+\method{get_billable}{icd10cm}(x, short_code = guess_short(x), invert = FALSE, ...)
 
 \method{get_billable}{default}(x, short_code = guess_short(x), ...)
 }

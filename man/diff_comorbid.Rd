@@ -5,11 +5,25 @@
 \alias{diff_comorbid.list}
 \title{show the difference between two comorbidity mappings}
 \usage{
-diff_comorbid(x, y, all_names = NULL, x_names = NULL, y_names = NULL,
-  show = TRUE, explain = TRUE)
+diff_comorbid(
+  x,
+  y,
+  all_names = NULL,
+  x_names = NULL,
+  y_names = NULL,
+  show = TRUE,
+  explain = TRUE
+)
 
-\method{diff_comorbid}{list}(x, y, all_names = NULL, x_names = NULL,
-  y_names = NULL, show = TRUE, explain = TRUE)
+\method{diff_comorbid}{list}(
+  x,
+  y,
+  all_names = NULL,
+  x_names = NULL,
+  y_names = NULL,
+  show = TRUE,
+  explain = TRUE
+)
 }
 \arguments{
 \item{x}{list of character vectors}
