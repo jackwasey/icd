@@ -1,7 +1,18 @@
 url: https://jackwasey.github.io/icd/
 
 title: Comorbidity calculations and tools for ICD-9 and ICD-10 codes
-
+desc: >
+    Calculate comorbidities, medical risk scores, and
+    work quickly and precisely with ICD-9 and ICD-10 codes. This package
+    enables a work flow from raw tables of ICD codes in hospital databases
+    to comorbidities. ICD-9 and ICD-10 comorbidity mappings from Quan
+    (Deyo and Elixhauser versions), Elixhauser and AHRQ included.  Common
+    ambiguities and code formats are handled. Comorbidity computation
+    includes Hierarchical Condition Codes, and a reimplementation of the
+    AHRQ Clinical Classifications Software. Risk scores include those of
+    Charlson and van Walraven.  US Clinical Modification, Word Health
+    Organization, Belgian and French ICD-10 codes are supported through
+    the 'icd.data' package, some of which are downloaded on demand.
 template:
   params:
     docsearch:
@@ -85,19 +96,6 @@ reference:
 #  - '`poa_choices`'
 #  - '`print.comorbidity_map`'
 #  - '`[[.comorbidity_map`'
-  - '`subset_icd`'
+  - '`subset`'
 #  - '`unzip_single`'
-
-- title: Data
-  desc: ICD code lists, descriptions and comorbidity maps
-  contents:
-  - '`uranium_pathology`'
-  - '`vermont_dx`'
-  - '`icd10_chapters`'
-  - '`icd10_sub_chapters`'
-  - '`icd10cm2016`'
-  - '`icd10_pcs`'
-  - '`icd9_chapters`'
-  - '`icd9cm_billable`'
-  - '`icd9cm_hierarchy`'
-  - '`names_elix`'
+  - '`icd10_map_ahrq`'

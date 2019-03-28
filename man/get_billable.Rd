@@ -14,7 +14,7 @@ get_billable(...)
 \method{get_billable}{icd9}(...)
 
 \method{get_billable}{icd9cm}(x, short_code = guess_short(x),
-  invert = FALSE, icd9cm_edition = icd9cm_latest_edition(), ...)
+  invert = FALSE, ...)
 
 \method{get_billable}{icd10}(x, short_code = guess_short(x),
   invert = FALSE, ...)
@@ -35,9 +35,6 @@ Where reasonable, this is guessed from the input data.}
 
 \item{invert}{Single logical value. Returns the inverse of the result. E.g.
 if seeking valid ICD-9 codes, the invalid ones are returned.}
-
-\item{icd9cm_edition}{e.g. "32", not ICD-9 vs ICD-10
-currently just the year of release.}
 }
 \description{
 Using the equivalent \code{\link[=get_leaf]{get_leaf()}} is preferred.

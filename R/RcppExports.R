@@ -51,8 +51,8 @@ categorize_rcpp <- function() {
     .Call(`_icd_categorize_rcpp`)
 }
 
-icd10_children_defined_rcpp <- function(x, lookup, nc) {
-    .Call(`_icd_icd10ChildrenDefined`, x, lookup, nc)
+icd10_children_defined_rcpp <- function(x, lookup, nc, warn = TRUE) {
+    .Call(`_icd_icd10ChildrenDefined`, x, lookup, nc, warn)
 }
 
 #' @title Internal function to simplify a comorbidity map by only including
@@ -73,11 +73,13 @@ icd10_children_defined_rcpp <- function(x, lookup, nc) {
 #' stopifnot(simple_map$CHF == "I0981")
 #' stopifnot(simple_map$PHTN != character(0))
 #' stopifnot(simple_map$PVD == "I26019")
+#' if (requireNamespace("icd.data", quietly = TRUE)) {
 #' umap <- icd:::simplify_map_lex(icd.data::uranium_pathology$icd10, icd10_map_ahrq)
 #' head(icd:::categorize_simple(icd.data::uranium_pathology, icd10_map_ahrq,
 #'                       id_name = "case", code_name = "icd10"))
 #' head(icd:::categorize_simple(icd.data::uranium_pathology, umap,
 #'                              id_name = "case", code_name = "icd10"))
+#' }
 #' @keywords internal
 simplify_map_lex <- function(pt_codes, map) {
     .Call(`_icd_simplifyMapLexicographic`, pt_codes, map)
@@ -155,7 +157,7 @@ icd10DecimalToParts <- function(x, mnrEmpty = "") {
 }
 
 #' @title Convert integers to strings as quickly as possible
-#' @description Have tried R, `sprintf` with \pkg{Rcpp} and C++ standard
+#' @description Have tried R, \code{sprintf} with \pkg{Rcpp} and C++ standard
 #' library. Doesn't do bounds checking, but limited by length of integers.
 #' @param x Vector of integers
 #' @return Vector of characters
@@ -270,17 +272,17 @@ factor_nosort_rcpp_worker <- function(x, levels, na_rm) {
 }
 
 #' @title Re-generate a factor with new levels, without doing string matching
-#' @description This is called by an R wrapper. There is an `na.rm` version,
-#'   too. Some work simply to mirror behavior of `base::factor`, e.g. when a
-#'   level is not available, but NA level is available, NA is inserted into the
-#'   integer vector, not an index to the NA level.
+#' @description This is called by an R wrapper. There is an \code{na.rm}
+#'   version, too. Some work simply to mirror behavior of \code{base::factor},
+#'   e.g. when a level is not available, but NA level is available, NA is
+#'   inserted into the integer vector, not an index to the NA level.
 #' @md
 #' @keywords internal manip
 refactor_worker <- function(x, new_levels, exclude_na, validate) {
     .Call(`_icd_refactor`, x, new_levels, exclude_na, validate)
 }
 
-#' @describeIn refactor_worker Drop all `NA` values from levels and values
+#' @describeIn refactor_worker Drop all \code{NA} values from levels and values
 #' @keywords internal
 refactor_narm_worker <- function(x, new_levels, validate) {
     .Call(`_icd_refactor_narm`, x, new_levels, validate)

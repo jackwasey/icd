@@ -77,8 +77,10 @@ sort(codes)
 # attached using:
 library(icd)
 icd:::sort.icd10cm(c("C7A", "C79", "C80", "C81", "C7B"))
-stopifnot(!identical(order.icd10cm(as.character(codes)),
-                     order(codes)))
+stopifnot(!identical(
+  order.icd10cm(as.character(codes)),
+  order(codes)
+))
 codes[order.icd10cm(codes)]
 # Note that base::order does NOT do S3 dispatch, so the following does not work:
 codes[order(codes)]

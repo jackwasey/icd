@@ -13,13 +13,17 @@
 \title{icd: Comorbidity Calculations and Tools for ICD-9 and ICD-10
     Codes}
 \description{
-Calculate comorbidities, Charlson and van Walraven
-    scores, perform extremely fast and accurate validation, conversion,
-    manipulation, filtering and comparison of ICD-9 and ICD-10 codes. This
-    package enables a work flow from raw lists of ICD codes in hospital
-    databases to comorbidities. ICD-9 and ICD-10 comorbidity mappings from
-    Quan (Deyo and Elixhauser versions), Elixhauser and AHRQ included.
-    Common ambiguities and code formats are handled.
+Calculate comorbidities, medical risk scores, and
+    work quickly and precisely with ICD-9 and ICD-10 codes. This package
+    enables a work flow from raw tables of ICD codes in hospital databases
+    to comorbidities. ICD-9 and ICD-10 comorbidity mappings from Quan
+    (Deyo and Elixhauser versions), Elixhauser and AHRQ included.  Common
+    ambiguities and code formats are handled. Comorbidity computation
+    includes Hierarchical Condition Codes, and a reimplementation of the
+    AHRQ Clinical Classifications Software. Risk scores include those of
+    Charlson and van Walraven.  US Clinical Modification, Word Health
+    Organization, Belgian and French ICD-10 codes are supported through
+    the 'icd.data' package, some of which are downloaded on demand.
 }
 \details{
 \describe{ \item{Comorbidities}{ \code{\link{comorbid}} determines
@@ -105,14 +109,17 @@ Calculate comorbidities, Charlson and van Walraven
   \item{Explanation and decoding}{
 
   Use \code{\link{explain_code}} to convert a list of codes into
-  human-readable descriptions. This function can optionally reduce the codes
-  to a their top-level groups if all the child members of a group are
-  present. \code{\link{diff_comorbid}} allows summary of the differences
-  between comorbidity mappings, e.g. to find what has changed from
-  year-to-year or between revisions by different authors.
-  \code{\link{icd9cm_hierarchy}} is a \code{data.frame} containing the full
-  ICD-9 classification for each diagnosis. \code{\link{icd9_chapters}}
-  contains definitions of chapters, sub-chapters and three-digit groups.} }
+  human-readable descriptions. This (and a number of other functions in this
+  package) relies on the \code{icd.data} package, which is not installed by
+  default. This function can optionally reduce the codes to a their top-level
+  groups if all the child members of a group are present.
+  \code{\link{diff_comorbid}} allows summary of the differences between
+  comorbidity mappings, e.g. to find what has changed from year-to-year or
+  between revisions by different authors.
+  \code{\link[icd.data]{icd9cm_hierarchy}} is a \code{data.frame} containing
+  the full ICD-9 classification for each diagnosis.
+  \code{\link[icd.data]{icd9_chapters}} contains definitions of chapters,
+  sub-chapters and three-digit groups.} }
 }
 \seealso{
 Useful links:

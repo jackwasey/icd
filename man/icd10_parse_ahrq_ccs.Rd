@@ -5,7 +5,7 @@
 \title{parse AHRQ CCS for mapping - ICD10}
 \usage{
 icd10_parse_ahrq_ccs(version = "2018.1", save_data = FALSE,
-  offline = TRUE)
+  offline = TRUE, verbose = TRUE)
 }
 \arguments{
 \item{version}{string in format like "2018.1" where 1 is the version number
@@ -17,6 +17,8 @@ Defaults to \code{FALSE}.}
 \item{offline}{single logical, if \code{TRUE} then don't pull the file from
 internet, only return path and file name if the file already exists in the
 raw data directory. This is helpful for testing without using the internet.}
+
+\item{verbose}{single logical value, defaults to \code{FALSE} in most functions.}
 }
 \description{
 Data is downloaded from AHRQ website. ICD10 codes are continually being
@@ -27,10 +29,15 @@ These are in the format of \code{YYYY.1}, \code{YYYY.2} etc.
 }
 \examples{
 \dontrun{
-  icd:::icd10_parse_ahrq_ccs(version = "2018.1",
-      save_data = FALSE, offline = FALSE)
-  icd:::icd10_parse_ahrq_ccs(version = "2018.1",
-      save_data = FALSE, offline = TRUE)
+# offline = FALSE
+icd:::icd10_parse_ahrq_ccs(
+  version = "2018.1",
+  save_data = FALSE, offline = FALSE
+)
+icd:::icd10_parse_ahrq_ccs(
+  version = "2018.1",
+  save_data = FALSE, offline = TRUE
+)
 }
 }
 \keyword{internal}

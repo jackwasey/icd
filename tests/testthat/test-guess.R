@@ -37,15 +37,17 @@ test_that("guess type from a data frame with no class set on column", {
   expect_true(guess_short(pts))
 
   no_pts <- structure(
-    list(visit_id = integer(0),
-         code = character(0),
-         poa = structure(integer(0), .Label = character(0), class = "factor")),
+    list(
+      visit_id = integer(0),
+      code = character(0),
+      poa = structure(integer(0), .Label = character(0), class = "factor")
+    ),
     .Names = c("visit_id", "code", "poa"),
-    row.names = integer(0), class = "data.frame")
+    row.names = integer(0), class = "data.frame"
+  )
 
   # no error?
   guess_short(no_pts)
-
 })
 
 test_that("guess on a zero length character vector works", {
@@ -97,6 +99,7 @@ test_that("guess and update version", {
 })
 
 test_that("guess uranium codes are long", {
+  skip_if_not_installed("icd.data")
   expect_false(guess_short(icd.data::uranium_pathology$icd10))
 })
 
@@ -118,5 +121,6 @@ test_that("guess procedure code column names", {
     ),
     c("pc0", "pc1")
   )
+  skip_if_not_installed("icd.data")
   expect_true(is.null(guess_icd_pc_col_by_name(icd.data::vermont_dx)))
 })

@@ -17,14 +17,19 @@ filter_valid <- function(x, icd_name = get_icd_name(x),
   assert_flag(invert)
   # don't UseMethod: the data frame itself doesn't have an ICD version class
   icd_ver <- guess_version(.subset2(x, icd_name))
-  if (icd_ver == "icd9")
-    icd9_filter_valid(x = x, icd_name = icd_name,
-                      short_code = short_code, invert = invert)
-  else if (icd_ver == "icd10")
-    icd10_filter_valid(x = x, icd_name = icd_name,
-                       short_code = short_code, invert = invert)
-  else
+  if (icd_ver == "icd9") {
+    icd9_filter_valid(
+      x = x, icd_name = icd_name,
+      short_code = short_code, invert = invert
+    )
+  } else if (icd_ver == "icd10") {
+    icd10_filter_valid(
+      x = x, icd_name = icd_name,
+      short_code = short_code, invert = invert
+    )
+  } else {
     stop("could not identify ICD code type")
+  }
 }
 
 #' @describeIn filter_valid Filter invalid rows from data frame of patients with
@@ -34,8 +39,10 @@ filter_valid <- function(x, icd_name = get_icd_name(x),
 filter_invalid <- function(x, icd_name = get_icd_name(x),
                            short_code = guess_short(x[[icd_name]]),
                            invert = FALSE) {
-  filter_valid(x = x, icd_name = icd_name,
-               short_code = short_code, invert = !invert)
+  filter_valid(
+    x = x, icd_name = icd_name,
+    short_code = short_code, invert = !invert
+  )
 }
 
 #' @describeIn filter_valid Filter data frame for valid ICD codes
@@ -49,7 +56,8 @@ icd9_filter_valid <- function(x, icd_name = get_icd_name(x),
   assert_flag(invert)
   assert_data_frame(x, min.cols = 1, col.names = "named")
   x[is_valid.icd9(as_char_no_warn(.subset2(x, icd_name)),
-                  short_code = short_code) != invert, ]
+    short_code = short_code
+  ) != invert, ]
 }
 
 #' @rdname filter_valid
@@ -64,9 +72,11 @@ icd10_filter_valid <- function(x, icd_name = get_icd_name(x),
   x[
     is_valid.icd10(
       as_char_no_warn(
-        .subset2(x, icd_name)), short_code = short_code) != invert,
-    ]
-
+        .subset2(x, icd_name)
+      ),
+      short_code = short_code
+    ) != invert,
+  ]
 }
 
 #' @rdname filter_valid
@@ -78,8 +88,10 @@ icd9_filter_invalid <- function(x, icd_name = get_icd_name(x),
   assert_string(icd_name)
   assert_flag(short_code)
   assert_flag(invert)
-  icd9_filter_valid(x = x, icd_name = icd_name,
-                    short_code = short_code, invert = !invert)
+  icd9_filter_valid(
+    x = x, icd_name = icd_name,
+    short_code = short_code, invert = !invert
+  )
 }
 
 #' @rdname filter_valid
@@ -91,8 +103,10 @@ icd10_filter_invalid <- function(x, icd_name = get_icd_name(x),
   assert_string(icd_name)
   assert_flag(short_code)
   assert_flag(invert)
-  icd10_filter_valid(x = x, icd_name = icd_name,
-                     short_code = short_code, invert = !invert)
+  icd10_filter_valid(
+    x = x, icd_name = icd_name,
+    short_code = short_code, invert = !invert
+  )
 }
 
 #' Filters data frame based on present-on-arrival flag
@@ -116,14 +130,19 @@ icd10_filter_invalid <- function(x, icd_name = get_icd_name(x),
 #' )
 #' myData %>% filter_poa_not_no() %>% comorbid_ahrq()
 #' # can fill out named fields also:
-#' myData %>% filter_poa_yes(poa_name="poa") %>%
-#'   comorbid_ahrq(icd_name = "diag", visit_name = "visit_id",
-#'   short_code = TRUE)
+#' myData %>%
+#'   filter_poa_yes(poa_name = "poa") %>%
+#'   comorbid_ahrq(
+#'     icd_name = "diag", visit_name = "visit_id",
+#'     short_code = TRUE
+#'   )
 #' # can call the core comorbid() function with an arbitrary mapping
 #' myData %>%
-#'   filter_poa_yes %>%
-#'   comorbid_elix(icd_name = "diag", visit_name = "visit_id",
-#'   short_mapping = TRUE)
+#'   filter_poa_yes() %>%
+#'   comorbid_elix(
+#'     icd_name = "diag", visit_name = "visit_id",
+#'     short_mapping = TRUE
+#'   )
 #' }
 #' @keywords manip
 #' @export
@@ -133,10 +152,10 @@ filter_poa <- function(x, poa_name = "poa", poa = poa_choices) {
   assert_string(poa_name)
   stopifnot(poa_name %in% names(x))
   switch(poa,
-         "yes" = filter_poa_yes(x, poa_name = poa_name),
-         "no" = filter_poa_no(x, poa_name = poa_name),
-         "notYes" = filter_poa_not_yes(x, poa_name = poa_name),
-         "notNo" = filter_poa_not_no(x, poa_name = poa_name)
+    "yes" = filter_poa_yes(x, poa_name = poa_name),
+    "no" = filter_poa_no(x, poa_name = poa_name),
+    "notYes" = filter_poa_not_yes(x, poa_name = poa_name),
+    "notNo" = filter_poa_not_no(x, poa_name = poa_name)
   )
 }
 
@@ -147,8 +166,9 @@ filter_poa <- function(x, poa_name = "poa", poa = poa_choices) {
   assert_flag(invert)
   stopifnot(poa_name %in% names(x))
   p <- x[[poa_name]]
-  if (invert)
+  if (invert) {
     return(x[is.na(p) | p %nin% choice, names(x) != poa_name])
+  }
   x[!is.na(p) & p %in% choice, names(x) != poa_name]
 }
 

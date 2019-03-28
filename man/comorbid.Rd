@@ -81,8 +81,8 @@ comorbid_charlson(...)
 \arguments{
 \item{x}{\code{data.frame} containing a column of patient-visit identifiers
 and a column of ICD codes. The \code{data.frame} should be in \sQuote{long}
-format, like the example \code{icd.data::vermont_dx} data. If it is in
-\sQuote{wide} format, it must be converted to \sQuote{long} using
+format, like the example \code{\link[icd.data]{vermont_dx}} data. If it is
+in \sQuote{wide} format, it must be converted to \sQuote{long} using
 \code{\link{wide_to_long}} before calling any comorbidity functions.}
 
 \item{map}{list of the comorbidities with each list item containing a vector
@@ -244,32 +244,51 @@ according to Quan/Deyo ICD categories. Synonymous with
 }}
 
 \examples{
-library(icd.data) # for Vermont data
-vermont_dx[1:5, 1:10]
-vd <- wide_to_long(vermont_dx)
-# get first few rows and columns of Charlson comorbidities using Quan mapping
-comorbid_quan_deyo(vd)[1:5, 1:14]
+# Need icd.data for Vermont and Uranium patients,
+# not for the comorbidity calculations
+if (requireNamespace("icd.data", quietly = TRUE)) {
+icd.data::vermont_dx[1:5, 1:10]
+# get first few rows and columns of Charlson comorbidities using Quan/Deyo
+# mapping of ICD-9 or ICD-10 codes Charlson categories
+comorbid_quan_deyo(icd.data::vermont_dx)[1:5, 1:14]
+
+# Note that the comorbidity calculations automatically finds the ICD code
+# columns, and uses 'wide' or 'long' format data.
+
+stopifnot(
+  identical(
+    comorbid_quan_deyo(icd.data::vermont_dx),
+    comorbid_quan_deyo(wide_to_long(icd.data::vermont_dx))
+  )
+)
 
 # get summary AHRQ (based on Elixhauser) comorbidities for the Uranium data:
-summary(comorbid_ahrq(uranium_pathology))
-
-pts <- icd_long_data(visit_name = c("2", "1", "2", "3", "3"),
-                 icd9 = c("39891", "40110", "09322", "41514", "39891"))
+summary(comorbid_ahrq(icd.data::uranium_pathology))
+}
+pts <- icd_long_data(
+  visit_name = c("2", "1", "2", "3", "3"),
+  icd9 = c("39891", "40110", "09322", "41514", "39891")
+)
 comorbid(pts, icd9_map_ahrq, short_code = TRUE) # visit_name is now sorted
 pts <- icd_long_data(
-           visit_name = c("1", "2", "3", "4", "4"),
-           icd_name = c("20084", "1742", "30410", "41514", "95893"),
-           date = as.Date(c("2011-01-01", "2011-01-02", "2011-01-03",
-             "2011-01-04", "2011-01-04")))
+  visit_name = c("1", "2", "3", "4", "4"),
+  icd_name = c("20084", "1742", "30410", "41514", "95893"),
+  date = as.Date(c(
+    "2011-01-01", "2011-01-02", "2011-01-03",
+    "2011-01-04", "2011-01-04"
+  ))
+)
 
 pt_hccs <- comorbid_hcc(pts, date_name = "date")
 head(pt_hccs)
 
 pts10 <- icd_long_data(
   visit_name = c("a", "b", "c", "d", "e"),
-  icd_name =c("I058", NA, "T82817A", "", "I69369"),
+  icd_name = c("I058", NA, "T82817A", "", "I69369"),
   date = as.Date(
-    c("2011-01-01", "2011-01-02", "2011-01-03", "2011-01-03", "2011-01-03")))
+    c("2011-01-01", "2011-01-02", "2011-01-03", "2011-01-03", "2011-01-03")
+  )
+)
 
 icd10_comorbid(pts10, map = icd10_map_ahrq)
 # or if library(icd) hasn't been called first:
@@ -278,11 +297,15 @@ icd::icd10_comorbid(pts10, map = icd::icd10_map_ahrq)
 icd::icd10_comorbid_ahrq(pts10)
 
 # specify a simple custom comorbidity map:
-my_map <- list("malady" = c("100", "2000"),
-               "ailment" = c("003", "040"))
-two_pts <- data.frame(visit_id = c("v01", "v01", "v02", "v02"),
+my_map <- list(
+  "malady" = c("100", "2000"),
+  "ailment" = c("003", "040")
+)
+two_pts <- data.frame(
+  visit_id = c("v01", "v01", "v02", "v02"),
   icd9 = as.icd9(c("040", "000", "100", "000")),
-  stringsAsFactors = FALSE)
+  stringsAsFactors = FALSE
+)
 comorbid(two_pts, map = my_map)
 }
 \seealso{

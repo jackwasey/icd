@@ -33,9 +33,9 @@ information
 }
 \examples{
 longdf <- icd_long_data(
-            visit = c("a", "b", "b", "c"),
-            icd9 = c("441", "4240", "443", "441")
-            )
+  visit = c("a", "b", "b", "c"),
+  icd9 = c("441", "4240", "443", "441")
+)
 cmbdf <- icd9_comorbid_elix(longdf, return_df = TRUE)
 class(cmbdf)
 rownames(cmbdf)

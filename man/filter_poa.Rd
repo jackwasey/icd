@@ -69,14 +69,19 @@ myData <- data.frame(
 )
 myData \%>\% filter_poa_not_no() \%>\% comorbid_ahrq()
 # can fill out named fields also:
-myData \%>\% filter_poa_yes(poa_name="poa") \%>\%
-  comorbid_ahrq(icd_name = "diag", visit_name = "visit_id",
-  short_code = TRUE)
+myData \%>\%
+  filter_poa_yes(poa_name = "poa") \%>\%
+  comorbid_ahrq(
+    icd_name = "diag", visit_name = "visit_id",
+    short_code = TRUE
+  )
 # can call the core comorbid() function with an arbitrary mapping
 myData \%>\%
-  filter_poa_yes \%>\%
-  comorbid_elix(icd_name = "diag", visit_name = "visit_id",
-  short_mapping = TRUE)
+  filter_poa_yes() \%>\%
+  comorbid_elix(
+    icd_name = "diag", visit_name = "visit_id",
+    short_mapping = TRUE
+  )
 }
 }
 \keyword{manip}

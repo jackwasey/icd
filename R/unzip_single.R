@@ -14,19 +14,23 @@ unzip_single <- function(url, file_name, save_path) {
   assert_character(file_name, len = 1)
   assert_character(save_path, len = 1)
   zipfile <- tempfile()
-  dl_code <- utils::download.file(url = url, destfile = zipfile,
-                                  quiet = TRUE, method = "libcurl", mode = "wb")
+  dl_code <- utils::download.file(
+    url = url, destfile = zipfile,
+    quiet = TRUE, method = "libcurl", mode = "wb"
+  )
   stopifnot(dl_code == 0)
   zipdir <- tempfile() # i do want tempfile, so I get an empty new directory
   dir.create(zipdir)
-  utils::unzip(zipfile, exdir = zipdir)  # files="" so extract all
+  utils::unzip(zipfile, exdir = zipdir) # files="" so extract all
   files <- list.files(zipdir)
   if (missing(file_name)) {
     if (length(files) == 1) {
       file_name <- files
     } else {
-      stop("multiple files in zip, but no file name specified: ",
-           paste(files, collapse = ", "))
+      stop(
+        "multiple files in zip, but no file name specified: ",
+        paste(files, collapse = ", ")
+      )
     }
   } else {
     if (!file_name %in% files) {

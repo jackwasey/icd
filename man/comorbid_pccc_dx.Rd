@@ -34,8 +34,8 @@ icd10_comorbid_pccc_pcs(x, visit_name = get_visit_name(x), icd_name,
 \arguments{
 \item{x}{\code{data.frame} containing a column of patient-visit identifiers
 and a column of ICD codes. The \code{data.frame} should be in \sQuote{long}
-format, like the example \code{icd.data::vermont_dx} data. If it is in
-\sQuote{wide} format, it must be converted to \sQuote{long} using
+format, like the example \code{\link[icd.data]{vermont_dx}} data. If it is
+in \sQuote{wide} format, it must be converted to \sQuote{long} using
 \code{\link{wide_to_long}} before calling any comorbidity functions.}
 
 \item{visit_name}{The name of the column in the data frame which contains the
@@ -100,12 +100,16 @@ procedure codes
 
 \examples{
 # not pediatric data, but let's look for this example
-head(icd9_comorbid_pccc_dx(icd.data::vermont_dx[1:1000, ]))
+if (requireNamespace("icd.data", quietly = TRUE)) {
+  head(icd9_comorbid_pccc_dx(icd.data::vermont_dx))
+}
 # Six random codes from each PCCC procedure code map. 'icd' will use
 # an heuristic to guess whether ICD-9 or ICD-10:
-pts <- data.frame(encounters = c(10, 11, 12),
-                  icd9_pcs = c("0152", "304", "0050"),
-                  icd10_pcs = c("0B110Z4", "02YA0Z2", "031209D"))
+pts <- data.frame(
+  encounters = c(10, 11, 12),
+  icd9_pcs = c("0152", "304", "0050"),
+  icd10_pcs = c("0B110Z4", "02YA0Z2", "031209D")
+)
 comorbid_pccc_pcs(pts, icd_name = "icd9_pcs", return_binary = TRUE)
 comorbid_pccc_pcs(pts, icd_name = "icd10_pcs", return_binary = TRUE)
 

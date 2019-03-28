@@ -19,8 +19,8 @@ so the generic \code{\link{comorbid}} \code{\link{icd9_comorbid}}
 as the \code{map}.
 }
 \examples{
-  icd10_map_ahrq_pcs[["Major Diagnostic"]][1:5]
-  icd10_map_ahrq_pcs[["Minor Therapeutic"]][1:5]
+icd10_map_ahrq_pcs[["Major Diagnostic"]][1:5]
+icd10_map_ahrq_pcs[["Minor Therapeutic"]][1:5]
 }
 \seealso{
 \code{\link{comorbid}} \code{\link{icd9_comorbid}}

@@ -1,4 +1,4 @@
-#nocov start
+# nocov start
 
 #' generate all package data
 #'
@@ -59,11 +59,17 @@ generate_sysdata <- function(save_data = TRUE) {
   # also consider doing this in the ranging functions, even though slower, so
   # version can be chosen each time.
   icd9_short_n_leaf <- vec_to_lookup_pair(get_billable.icd10cm(
-    icd9_short_n_defined$vec, short_code = TRUE, icd9cm_edition = "32")) # nolint
+    icd9_short_n_defined$vec,
+    short_code = TRUE, icd9cm_edition = "32"
+  )) # nolint
   icd9_short_v_leaf <- vec_to_lookup_pair(get_billable.icd10cm(
-    icd9_short_v_defined$vec, short_code = TRUE, icd9cm_edition = "32")) # nolint
+    icd9_short_v_defined$vec,
+    short_code = TRUE, icd9cm_edition = "32"
+  )) # nolint
   icd9_short_e_leaf <- vec_to_lookup_pair(get_billable.icd10cm(
-    icd9_short_e_defined$vec, short_code = TRUE, icd9cm_edition = "32")) # nolint
+    icd9_short_e_defined$vec,
+    short_code = TRUE, icd9cm_edition = "32"
+  )) # nolint
   # minimal test here just to use variable names to avoid warnings!
   stopifnot(length(icd9_short_n$vec) == length(icd9_short_n$env))
   stopifnot(length(icd9_short_v$vec) == length(icd9_short_v$env))
@@ -75,20 +81,23 @@ generate_sysdata <- function(save_data = TRUE) {
   icd9_short_n_leaf
   icd9_short_v_leaf
   icd9_short_e_leaf
-  sysdata_names <- c("icd9_short_n",
-                     "icd9_short_v",
-                     "icd9_short_e",
-                     "icd9_short_n_defined",
-                     "icd9_short_v_defined",
-                     "icd9_short_e_defined",
-                     "icd9_short_n_leaf",
-                     "icd9_short_v_leaf",
-                     "icd9_short_e_leaf")
+  sysdata_names <- c(
+    "icd9_short_n",
+    "icd9_short_v",
+    "icd9_short_e",
+    "icd9_short_n_defined",
+    "icd9_short_v_defined",
+    "icd9_short_e_defined",
+    "icd9_short_n_leaf",
+    "icd9_short_v_leaf",
+    "icd9_short_e_leaf"
+  )
   # we assume we are in the root of the package directory. Save to sysdata.rda
   # because these are probably not of interest to a user and would clutter an
   # already busy namespace.
-  if (save_data)
+  if (save_data) {
     save(list = sysdata_names, file = path, compress = "xz")
+  }
   invisible(mget(sysdata_names))
 }
 
@@ -137,4 +146,4 @@ icd9_generate_all_ <- function(major_fun,
   invisible(list(env = env, vec = env_to_vec_flip(env)))
 }
 
-#nocov end
+# nocov end

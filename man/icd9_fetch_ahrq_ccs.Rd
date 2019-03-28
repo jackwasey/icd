@@ -4,15 +4,13 @@
 \alias{icd9_fetch_ahrq_ccs}
 \title{Download AHRQ CCS ICD-9 definitions}
 \usage{
-icd9_fetch_ahrq_ccs(single = TRUE, offline)
+icd9_fetch_ahrq_ccs(single = TRUE, ...)
 }
 \arguments{
 \item{single}{a logical value, if \code{TRUE} then use single level CCS,
 otherwise use multi level}
 
-\item{offline}{single logical, if \code{TRUE} then don't pull the file from
-internet, only return path and file name if the file already exists in the
-raw data directory. This is helpful for testing without using the internet.}
+\item{...}{arguments passed on to other functions}
 }
 \description{
 Download AHRQ CCS ICD-9 definitions

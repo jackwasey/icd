@@ -11,12 +11,15 @@ test_that("longer factors", {
   l3 <- c(l1, NA_character_)
   l4 <- c(l1, "XXX")
   expect_error(l5 <- unique(icd:::generate_random_short_icd9(n * 2)),
-               regexp = NA)
-  expect_error(regexp = NA,
-               test_cases <- expand.grid(
-                 list(v1, v2),
-                 list(l1, l2, l3, l4, l5),
-                 list(l1, l2, l3, l4, l5))
+    regexp = NA
+  )
+  expect_error(
+    regexp = NA,
+    test_cases <- expand.grid(
+      list(v1, v2),
+      list(l1, l2, l3, l4, l5),
+      list(l1, l2, l3, l4, l5)
+    )
   )
   for (tc in seq_along(test_cases[[1]])) {
     m <- test_cases[tc, 1][[1]]
@@ -32,10 +35,12 @@ test_that("longer factors", {
     expect_identical(
       refactor(factor(m, levels = pl), nl),
       factor(factor(m, levels = pl), levels = nl),
-      info = inf)
+      info = inf
+    )
     expect_identical(
       refactor(factor(m, levels = pl), nl, na.rm = FALSE, exclude_na = FALSE),
       factor(factor(m, levels = pl), levels = nl, exclude = NULL),
-      info = inf)
+      info = inf
+    )
   }
 })

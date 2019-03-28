@@ -3,10 +3,12 @@ context("basic ICD-9 manipulations")
 test_that("zero pad decimal - bad input", {
   expect_equal(
     icd9_add_leading_zeroes(short_code = FALSE, character()),
-    character())
+    character()
+  )
   expect_equal(
     icd9_add_leading_zeroes(short_code = FALSE, NA_character_),
-    NA_character_)
+    NA_character_
+  )
 })
 
 test_that("zero pad decimal, numeric only", {
@@ -21,10 +23,13 @@ test_that("zero pad decimal, numeric only", {
   expect_equal(icd9_add_leading_zeroes(short_code = FALSE, "333"), "333")
   expect_equal(icd9_add_leading_zeroes(short_code = FALSE, "333.99"), "333.99")
   expect_equal(icd9_add_leading_zeroes(short_code = FALSE, "333.1 "), "333.1")
-  expect_equal(icd9_add_leading_zeroes(short_code = FALSE,
-                                       c("01", "1.99 ", "22.34", "333", "999.00")),
-               c("001", "001.99", "022.34", "333", "999.00"))
-
+  expect_equal(
+    icd9_add_leading_zeroes(
+      short_code = FALSE,
+      c("01", "1.99 ", "22.34", "333", "999.00")
+    ),
+    c("001", "001.99", "022.34", "333", "999.00")
+  )
 })
 
 test_that("zero pad decimel V and E codes", {
@@ -41,21 +46,27 @@ test_that("zero pad decimel V and E codes", {
   expect_equal(icd9_add_leading_zeroes(short_code = FALSE, "V22"), "V22")
   expect_equal(
     icd9_add_leading_zeroes(short_code = FALSE, " V22.34 "),
-    "V22.34")
+    "V22.34"
+  )
 })
 
 test_that("zero pad short invalid codes", {
   expect_equal(
     icd9_add_leading_zeroes(short_code = TRUE, character()),
-    character())
-  expect_equal(icd9_add_leading_zeroes(short_code = TRUE, "anything"),
-               NA_character_)
+    character()
+  )
   expect_equal(
     icd9_add_leading_zeroes(short_code = TRUE, "anything"),
-    NA_character_)
+    NA_character_
+  )
+  expect_equal(
+    icd9_add_leading_zeroes(short_code = TRUE, "anything"),
+    NA_character_
+  )
   expect_equal(
     icd9_add_leading_zeroes(short_code = TRUE, NA_character_),
-    NA_character_)
+    NA_character_
+  )
   # this is just re-checking the validation code...
   expect_equal(icd9_add_leading_zeroes(short_code = TRUE, "V012"), "V012")
   expect_equal(icd9_add_leading_zeroes(short_code = TRUE, "V199"), "V199")
@@ -78,16 +89,21 @@ test_that("zero pad short", {
   expect_equal(icd9_add_leading_zeroes(short_code = TRUE, " V11 "), "V11")
   expect_equal(icd9_add_leading_zeroes(short_code = TRUE, " V2234 "), "V2234")
   expect_equal(icd9_add_leading_zeroes(short_code = TRUE, "3331 "), "3331")
-  expect_equal(icd9_add_leading_zeroes(short_code = TRUE,
-                                       c("9", "01", "0199 ", "02234", "333", "99900")),
-               c("009", "001", "0199", "02234", "333", "99900"))
+  expect_equal(
+    icd9_add_leading_zeroes(
+      short_code = TRUE,
+      c("9", "01", "0199 ", "02234", "333", "99900")
+    ),
+    c("009", "001", "0199", "02234", "333", "99900")
+  )
   expect_equal(
     icd9_add_leading_zeroes(short_code = TRUE, NA_character_),
-    NA_character_)
+    NA_character_
+  )
   expect_equal(
     icd9_add_leading_zeroes(short_code = TRUE, "V12.34"),
-    NA_character_)
-
+    NA_character_
+  )
 })
 
 test_that("icd9 parts to short form numeric input", {
@@ -101,8 +117,10 @@ test_that("add leading zeroes to V (and E) majors", {
   expect_equal(icd9_add_leading_zeroes_major("V1"), "V01")
   expect_equal(icd9_add_leading_zeroes_major("V2"), "V02")
   expect_equal(icd9_add_leading_zeroes_major("V03"), "V03")
-  expect_equal(icd9_add_leading_zeroes_major(c("10", "V05")),
-               c("010", "V05"))
+  expect_equal(
+    icd9_add_leading_zeroes_major(c("10", "V05")),
+    c("010", "V05")
+  )
   expect_equal(icd9_add_leading_zeroes_major("E915"), "E915")
 })
 
@@ -122,19 +140,26 @@ test_that("add leading zeroes to majors, invalid input", {
 test_that("add leading zeroes to a factor", {
   expect_equal(
     icd9_add_leading_zeroes(factor(c("02", "300.4"))),
-    factor(c("002", "300.4")))
+    factor(c("002", "300.4"))
+  )
 })
 
 test_that("extracting alphabetic and numeric parts from ICD-9 codes works", {
-  expect_equal(icd9_extract_alpha_numeric("V12"),
-               matrix(data = c("V", "12"), ncol = 2))
-  expect_equal(icd9_extract_alpha_numeric(c("V12", 34)),
-               t(matrix(data = c("V", "12", "", "34"), ncol = 2)))
+  expect_equal(
+    icd9_extract_alpha_numeric("V12"),
+    matrix(data = c("V", "12"), ncol = 2)
+  )
+  expect_equal(
+    icd9_extract_alpha_numeric(c("V12", 34)),
+    t(matrix(data = c("V", "12", "", "34"), ncol = 2))
+  )
 })
 
 test_that("strip leading zeroes: errors", {
-  expect_equal(icd9_drop_leading_zeroes(short_code = FALSE, NA_character_),
-               NA_character_)
+  expect_equal(
+    icd9_drop_leading_zeroes(short_code = FALSE, NA_character_),
+    NA_character_
+  )
   # no guaranteed behaviour when code is invalid: it may or may not match the
   # regex. If the user wants to get the valid codes first, they can do that.
 })
@@ -180,14 +205,17 @@ test_that("strip leading zero from decimal V and E", {
   expect_equal(icd9_drop_leading_zeroes(short_code = FALSE, "E912.7"), "E912.7")
   expect_equal(
     icd9_drop_leading_zeroes(c("V12.78", " E898.", "02", "034.5"),
-                             short_code = FALSE),
-    c("V12.78", "E898.", "2", "34.5"))
+      short_code = FALSE
+    ),
+    c("V12.78", "E898.", "2", "34.5")
+  )
 })
 
 test_that("strip leading zero from short numeric only", {
   expect_equal(
     icd9_drop_leading_zeroes(short_code = TRUE, NA_character_),
-    NA_character_)
+    NA_character_
+  )
   expect_equal(icd9_drop_leading_zeroes(short_code = TRUE, "010"), "10")
   expect_equal(icd9_drop_leading_zeroes(short_code = TRUE, "009"), "9")
   # must have zero to be valid (001.2)
@@ -201,7 +229,8 @@ test_that("strip leading zero from short numeric only", {
   # check other way
   expect_equal(
     unclass(res <- icd9_drop_leading_zeroes("1239", short_code = TRUE)),
-    "1239")
+    "1239"
+  )
   # not sure whether I should test for short code or icd9 classes, too.
 })
 
@@ -217,8 +246,10 @@ test_that("strip leading zero from decimal V and E", {
   test_that("mixed vector drop leading zero short", {
     expect_equal(
       icd9_drop_leading_zeroes(c("V1278", " E898", "02", "0345"),
-                               short_code = TRUE),
-      c("V1278", "E898", "2", "0345"))
+        short_code = TRUE
+      ),
+      c("V1278", "E898", "2", "0345")
+    )
   })
 })
 

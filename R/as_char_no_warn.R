@@ -5,10 +5,12 @@
 as_char_no_warn <- function(x) {
   if (is.character(x)) return(x)
   old <- options(warn = -1)
-  on.exit(options(old))
-  if (is.integer(x))
+  on.exit(options(old), add = TRUE)
+  if (is.integer(x)) {
     return(fastIntToStringRcpp(x))
-  if (is.factor(x))
+  }
+  if (is.factor(x)) {
     return(levels(x)[x])
+  }
   as.character(x)
 }

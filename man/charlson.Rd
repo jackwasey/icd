@@ -76,8 +76,10 @@ codes. ICD-10 Charlson can be calculated simply by getting the Charlson
 }}
 
 \examples{
-mydf <- data.frame(visit_name = c("a", "b", "c"),
-                   icd9 = c("441", "412.93", "042"))
+mydf <- data.frame(
+  visit_name = c("a", "b", "c"),
+  icd9 = c("441", "412.93", "042")
+)
 charlson(mydf)
 cmb <- icd9_comorbid_quan_deyo(mydf)
 cmb

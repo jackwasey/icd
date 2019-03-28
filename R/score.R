@@ -32,8 +32,10 @@
 #' @param ... further arguments to pass on to \code{icd9_comorbid_quan_deyo},
 #'   e.g. \code{name}
 #' @examples
-#' mydf <- data.frame(visit_name = c("a", "b", "c"),
-#'                    icd9 = c("441", "412.93", "042"))
+#' mydf <- data.frame(
+#'   visit_name = c("a", "b", "c"),
+#'   icd9 = c("441", "412.93", "042")
+#' )
 #' charlson(mydf)
 #' cmb <- icd9_comorbid_quan_deyo(mydf)
 #' cmb
@@ -54,34 +56,35 @@ charlson <- function(x, visit_name = NULL,
 #'   (e.g. Quan Deyo) comorbidities, then calling
 #'   \code{charlson_from_comorbid}.
 #' @export
-charlson.data.frame <- function(
-  x,
-  visit_name = NULL,
-  scoring_system = c("original", "charlson", "quan"),
-  return_df = FALSE,
-  stringsAsFactors = getOption("stringsAsFactors"), # nolint
-  ...
-) {
+charlson.data.frame <- function(x,
+                                visit_name = NULL,
+                                scoring_system = c("original", "charlson", "quan"),
+                                return_df = FALSE,
+                                stringsAsFactors = getOption("stringsAsFactors"), # nolint
+                                ...) {
   stopifnot(is.data.frame(x), ncol(x) >= 2, !is.null(colnames(x)))
   stopifnot(is.null(visit_name) ||
-              (is.character(visit_name) && length(visit_name) == 1L))
+    (is.character(visit_name) && length(visit_name) == 1L))
   stopifnot(is.null(visit_name) ||
-              (is.character(visit_name) && length(visit_name) == 1L))
+    (is.character(visit_name) && length(visit_name) == 1L))
   assert_flag(return_df)
   assert_flag(stringsAsFactors) # nolint
   visit_name <- get_visit_name(x, visit_name)
   res <- charlson_from_comorbid(
     comorbid_quan_deyo(x,
-                       visit_name = visit_name,
-                       hierarchy = TRUE,
-                       return_df = TRUE, ...),
+      visit_name = visit_name,
+      hierarchy = TRUE,
+      return_df = TRUE, ...
+    ),
     visit_name = visit_name,
     hierarchy = FALSE,
-    scoring_system = scoring_system)
+    scoring_system = scoring_system
+  )
   if (!return_df) return(res)
   out <- cbind(names(res),
-               data.frame("Charlson" = unname(res)),
-               stringsAsFactors = stringsAsFactors) # nolint
+    data.frame("Charlson" = unname(res)),
+    stringsAsFactors = stringsAsFactors
+  ) # nolint
   names(out)[1] <- visit_name
   out
 }
@@ -100,22 +103,25 @@ charlson.data.frame <- function(
 #'   \code{TRUE}, will drop \code{DM} if \code{DMcx} is present, etc.
 #' @template scoring-system
 #' @export
-charlson_from_comorbid <- function(
-  x,
-  visit_name = NULL,
-  hierarchy = FALSE,
-  scoring_system = c("original", "charlson", "quan")
-) {
+charlson_from_comorbid <- function(x,
+                                   visit_name = NULL,
+                                   hierarchy = FALSE,
+                                   scoring_system = c("original", "charlson", "quan")) {
   stopifnot(is.data.frame(x) || is.matrix(x))
   stopifnot(nrow(x) > 0, ncol(x) >= 2)
   stopifnot(!is.null(colnames(x)))
   stopifnot(ncol(x) - is.data.frame(x) == 17)
-  if (match.arg(scoring_system) == "quan")
-    weights <- c(0, 2, 0, 0, 2, 1, 1, 0, 2, 0,
-                 1, 2, 1, 2, 4, 6, 4)
-  else
-    weights <- c(1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
-                 2, 2, 2, 2, 3, 6, 6)
+  if (match.arg(scoring_system) == "quan") {
+    weights <- c(
+      0, 2, 0, 0, 2, 1, 1, 0, 2, 0,
+      1, 2, 1, 2, 4, 6, 4
+    )
+  } else {
+    weights <- c(
+      1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+      2, 2, 2, 2, 3, 6, 6
+    )
+  }
   if (hierarchy) {
     x[, "DM"] <- x[, "DM"] & !x[, "DMcx"]
     x[, "LiverMild"] <- x[, "LiverMild"] & !x[, "LiverSevere"]
@@ -156,41 +162,45 @@ charlson_from_comorbid <- function(
 #'   sometimes used as a metric of comorbidity load, instead of, or in addition
 #'   to metrics like the Charlson Comorbidity Index (aka Charlson Score)
 #' @examples
-#'   mydf <- data.frame(visit_name = c("r", "r", "s"),
-#'                    icd9 = c("441", "412.93", "042"))
-#'   count_codes(mydf, return_df = TRUE)
-#'   count_codes(mydf)
-#'
-#'   cmb <- icd9_comorbid_quan_deyo(mydf, short_code = FALSE, return_df = TRUE)
-#'   count_comorbid(cmb)
-#'
-#'   wide <- data.frame(visit_name = c("r", "s", "t"),
-#'                    icd9_1 = c("0011", "441", "456"),
-#'                    icd9_2 = c(NA, "442", NA),
-#'                    icd9_3 = c(NA, NA, "510"))
-#'   count_codes_wide(wide)
-#'   # or:
-#'   \dontrun{
-#'   library(magrittr, warn.conflicts = FALSE)
-#'   wide %>% wide_to_long %>% count_codes
-#'   }
+#' mydf <- data.frame(
+#'   visit_name = c("r", "r", "s"),
+#'   icd9 = c("441", "412.93", "042")
+#' )
+#' count_codes(mydf, return_df = TRUE)
+#' count_codes(mydf)
+#' 
+#' cmb <- icd9_comorbid_quan_deyo(mydf, short_code = FALSE, return_df = TRUE)
+#' count_comorbid(cmb)
+#' 
+#' wide <- data.frame(
+#'   visit_name = c("r", "s", "t"),
+#'   icd9_1 = c("0011", "441", "456"),
+#'   icd9_2 = c(NA, "442", NA),
+#'   icd9_3 = c(NA, NA, "510")
+#' )
+#' count_codes_wide(wide)
+#' # or:
+#' \dontrun{
+#' library(magrittr, warn.conflicts = FALSE)
+#' wide %>% wide_to_long() %>% count_codes()
+#' }
 #' @export
-count_codes <- function(
-  x,
-  visit_name = get_visit_name(x),
-  return_df = FALSE
-) {
+count_codes <- function(x,
+                        visit_name = get_visit_name(x),
+                        return_df = FALSE) {
   stopifnot(is.data.frame(x), ncol(x) >= 2, !is.null(colnames(x)))
   assert_string(visit_name)
   assert_flag(return_df)
   res <- stats::aggregate(x[names(x) %nin% visit_name],
-                          by = x[visit_name],
-                          FUN = length)
+    by = x[visit_name],
+    FUN = length
+  )
   names(res)[names(res) %nin% visit_name] <- "icd_count"
-  if (return_df)
+  if (return_df) {
     res
-  else
+  } else {
     res[["icd_count"]]
+  }
 }
 
 #' Count number of comorbidities per patient
@@ -208,22 +218,22 @@ count_codes <- function(
 #' @template visit_name
 #' @template return_df
 #' @export
-count_comorbid <- function(
-  x,
-  visit_name = get_visit_name(x),
-  return_df = FALSE
-) {
+count_comorbid <- function(x,
+                           visit_name = get_visit_name(x),
+                           return_df = FALSE) {
   assert_string(visit_name)
   assert_flag(return_df)
   stopifnot(is.data.frame(x) || is.matrix(x))
   res <- apply(x[, names(x) %nin% visit_name],
-               MARGIN = 1,
-               FUN = sum)
+    MARGIN = 1,
+    FUN = sum
+  )
   names(res) <- x[[visit_name]]
-  if (return_df)
+  if (return_df) {
     cbind(x[visit_name], "icd_count" = res)
-  else
+  } else {
     res
+  }
 }
 
 #' Count ICD codes given in wide format
@@ -242,12 +252,10 @@ count_comorbid <- function(
 #'   duplicate \code{visit_name}s will be counted together.
 #' @importFrom stats aggregate
 #' @export
-count_codes_wide <- function(
-  x,
-  visit_name = get_visit_name(x),
-  return_df = FALSE,
-  aggr = FALSE
-) {
+count_codes_wide <- function(x,
+                             visit_name = get_visit_name(x),
+                             return_df = FALSE,
+                             aggr = FALSE) {
   stopifnot(is.data.frame(x))
   assert_string(visit_name)
   assert_flag(return_df)
@@ -256,10 +264,11 @@ count_codes_wide <- function(
   res <- apply(x[names(x) %nin% visit_name], 1, function(x) sum(!is.na(x)))
   names(res) <- x[[visit_name]]
   if (!aggr) {
-    if (return_df)
+    if (return_df) {
       return(cbind(x[visit_name], "count" = res))
-    else
+    } else {
       return(res)
+    }
   }
   rdf <- cbind(x[visit_name], "count" = res)
   rdfagg <- aggregate(rdf["count"], by = rdf[visit_name], FUN = sum)
@@ -289,14 +298,16 @@ count_codes_wide <- function(
 #' @template stringsAsFactors
 #' @template dotdotdot
 #' @examples
-#' mydf <- data.frame(visit_name = c("a", "b", "c"),
-#'                    icd9 = c("412.93", "441", "042"))
+#' mydf <- data.frame(
+#'   visit_name = c("a", "b", "c"),
+#'   icd9 = c("412.93", "441", "042")
+#' )
 #' van_walraven(mydf)
 #' # or calculate comorbodities first:
 #' cmb <- icd9_comorbid_quan_elix(mydf, short_code = FALSE, hierarchy = TRUE)
 #' vwr <- van_walraven_from_comorbid(cmb)
 #' stopifnot(identical(van_walraven(mydf), vwr))
-#'
+#' 
 #' # alternatively return as data frame in 'tidy' format
 #' van_walraven(mydf, return_df = TRUE)
 #' @author wmurphyrd
@@ -305,42 +316,42 @@ count_codes_wide <- function(
 #'   Hospital Death Using Administrative Data. Med Care. 2009; 47(6):626-633.
 #'   \url{http://www.ncbi.nlm.nih.gov/pubmed/19433995}
 #' @export
-van_walraven <- function(
-  x,
-  visit_name = NULL,
-  return_df = FALSE,
-  stringsAsFactors = getOption("stringsAsFactors"), # nolint
-  ...) {
+van_walraven <- function(x,
+                         visit_name = NULL,
+                         return_df = FALSE,
+                         stringsAsFactors = getOption("stringsAsFactors"), # nolint
+                         ...) {
   UseMethod("van_walraven")
 }
 
 #' @describeIn van_walraven van Walraven scores from data frame of visits
 #'   and ICD-9 codes
 #' @export
-van_walraven.data.frame <- function(
-  x,
-  visit_name = NULL,
-  return_df = FALSE,
-  stringsAsFactors = getOption("stringsAsFactors"), # nolint
-  ...
-) {
+van_walraven.data.frame <- function(x,
+                                    visit_name = NULL,
+                                    return_df = FALSE,
+                                    stringsAsFactors = getOption("stringsAsFactors"), # nolint
+                                    ...) {
   stopifnot(is.data.frame(x), ncol(x) >= 2, !is.null(colnames(x)))
   stopifnot(is.null(visit_name) ||
-              (is.character(visit_name) && length(visit_name) == 1L))
+    (is.character(visit_name) && length(visit_name) == 1L))
   assert_flag(return_df)
   assert_flag(stringsAsFactors) # nolint
   visit_name <- get_visit_name(x, visit_name)
   tmp <- icd9_comorbid_quan_elix(x,
-                                 visit_name,
-                                 hierarchy = TRUE,
-                                 return_df = TRUE, ...)
+    visit_name,
+    hierarchy = TRUE,
+    return_df = TRUE, ...
+  )
   res <- van_walraven_from_comorbid(tmp,
-                                    visit_name = visit_name,
-                                    hierarchy = FALSE)
+    visit_name = visit_name,
+    hierarchy = FALSE
+  )
   if (!return_df) return(res)
   out <- cbind(names(res),
-               data.frame("vanWalraven" = unname(res)),
-               stringsAsFactors = stringsAsFactors) # nolint
+    data.frame("vanWalraven" = unname(res)),
+    stringsAsFactors = stringsAsFactors
+  ) # nolint
   names(out)[1] <- visit_name
   out
 }
@@ -351,18 +362,18 @@ van_walraven.data.frame <- function(
 #'   Elixhauser, you can't have uncomplicated and complicated diabetes both
 #'   flagged.
 #' @export
-van_walraven_from_comorbid <- function(
-  x,
-  visit_name = NULL,
-  hierarchy = FALSE
-) {
+van_walraven_from_comorbid <- function(x,
+                                       visit_name = NULL,
+                                       hierarchy = FALSE) {
   stopifnot(is.data.frame(x) || is.matrix(x))
   stopifnot(is.null(visit_name) ||
-              (is.character(visit_name) && length(visit_name) == 1L))
+    (is.character(visit_name) && length(visit_name) == 1L))
   assert_flag(hierarchy)
   stopifnot(ncol(x) - is.data.frame(x) == 30)
-  weights <- c(7, 5, -1, 4, 2, 0, 7, 6, 3, 0, 0, 0, 5, 11, 0, 0,
-               9, 12, 4, 0, 3, -4, 6, 5, -2, -2, 0, -7, 0, -3)
+  weights <- c(
+    7, 5, -1, 4, 2, 0, 7, 6, 3, 0, 0, 0, 5, 11, 0, 0,
+    9, 12, 4, 0, 3, -4, 6, 5, -2, -2, 0, -7, 0, -3
+  )
   if (hierarchy) {
     x[, "DM"] <- x[, "DM"] & !x[, "DMcx"]
     x[, "Tumor"] <- x[, "Tumor"] & !x[, "Mets"]

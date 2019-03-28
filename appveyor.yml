@@ -24,10 +24,11 @@ before_build:
 #  - ls -aR
   - rm .Rinstignore  # do install everything for testing
   - sed -i'' -e '/.*[Dd]ata.*/d' .Rbuildignore # do include data for testing, some data not in github though
-  - Rscript -e "install.packages(c('remotes', 'Rcpp', 'knitr'), repos = 'https://cloud.r-project.org/'); Rcpp::compileAttributes()" # make sure Rcpp generated code is made, if not checked in to repo
+  # make sure Rcpp generated code is made, if not checked in to repo
+  - Rscript -e "install.packages(c('remotes', 'Rcpp', 'knitr'), repos = 'https://cloud.r-project.org/'); Rcpp::compileAttributes()"
   # temporarily used while latest icd.data is not on CRAN
   #- Rscript -e "remotes::install_github(\"jackwasey/icd.data\", ref = \"WHO\")"
-#  - Rscript -e "remotes::install_github(\"jackwasey/icd.data\")"
+  # CRAN of course doesn't do this, but Travis has build without nhds available
   - Rscript -e "remotes::install_github(\"jackwasey/nhds\")"
 
 build_script:
@@ -37,6 +38,7 @@ environment:
   # temporarily work around a cache problem for old github version of icd.data
   # APPVEYOR_CACHE_SKIP_RESTORE: true
   WARNINGS_ARE_ERRORS: 1
+  _R_CHECK_EXIT_ON_FIRST_ERROR_: true
   USE_RTOOLS: true
   R_BUILD_ARGS: ""
   NOT_CRAN: true
@@ -44,6 +46,11 @@ environment:
     - R_VERSION: release
       MINI_BENCH: "yes"
     - R_VERSION: devel
+# by default, don't set environment, to be more like CRAN
+#  ICD_DATA_OFFLINE: true
+#  ICD_DATA_INTERACT: false
+#  ICD_DATA_VERBOSE: true
+#  ICD_DATA_ABSENT_ACTION: 'message'
 
 matrix:
   fast_finish: true

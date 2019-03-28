@@ -63,8 +63,10 @@ and ICD-9 codes
 }}
 
 \examples{
-mydf <- data.frame(visit_name = c("a", "b", "c"),
-                   icd9 = c("412.93", "441", "042"))
+mydf <- data.frame(
+  visit_name = c("a", "b", "c"),
+  icd9 = c("412.93", "441", "042")
+)
 van_walraven(mydf)
 # or calculate comorbodities first:
 cmb <- icd9_comorbid_quan_elix(mydf, short_code = FALSE, hierarchy = TRUE)

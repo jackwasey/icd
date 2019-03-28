@@ -10,10 +10,10 @@ r_packages:
   - covr
 
 r_github_packages:
-  - jimhester/lintr
-  # for testing against icd.data which is not yet updated in CRAN
-#  - jackwasey/icd.data@WHO
-  - jackwasey/icd.data
+  - jackwasey/nhds
+# for testing against icd.data which is not yet updated in CRAN
+#  - jackwasey/icd.data
+
 
 cran: https://cloud.r-project.org
 
@@ -26,9 +26,9 @@ before_install:
       echo 'CC=clang' > ~/.R/Makevars ;
       echo 'CXX=clang++' >> ~/.R/Makevars ;
       echo 'CXX11=clang++' >> ~/.R/Makevars ;
-      echo 'CFLAGS=-O0 -march=native' >> ~/.R/Makevars ;
-      echo 'CXXFLAGS=-O0 -march=native' >> ~/.R/Makevars ;
-      echo 'CXX11FLAGS=-O0 -march=native' >> ~/.R/Makevars ;
+      echo 'CFLAGS=-O0' >> ~/.R/Makevars ;
+      echo 'CXXFLAGS=-O0' >> ~/.R/Makevars ;
+      echo 'CXX11FLAGS=-O0' >> ~/.R/Makevars ;
       fi
 
 env:
@@ -36,14 +36,16 @@ env:
     - _R_CHECK_CRAN_INCOMING_=FALSE
     - _R_CHECK_CRAN_INCOMING_REMOTE_=FALSE
     - _R_CHECK_FORCE_SUGGESTS_=FALSE
-    - LINTR_COMMENT_BOT=false
     - ICD_COVERAGE=false
+    - ICD_DATA_VERBOSE=true
+    - ICD_DATA_OFFLINE=true
+    - ICD_DATA_INTERACT=false
 
 matrix:
   fast_finish: true
   include:
   - r: devel
-    env: LINTR_COMMENT_BOT=true
+#    env: LINTR_COMMENT_BOT=true
   - r: release
   - r: oldrel
     r_build_args: --no-build-vignettes --no-manual --resave-data=no
@@ -54,7 +56,6 @@ matrix:
     env:
     - ICD_COVERAGE=true
   allow_failures:
-  # temporarily allow failure for lintr run on travis as a dependency of lintr fails to install.
   - r: oldrel
     r_build_args: --no-build-vignettes --no-manual --resave-data=no
     r_check_args: --no-build-vignettes --no-vignettes --ignore-vignettes --no-codoc --no-manual
@@ -68,9 +69,14 @@ matrix:
 before_script:
  - rm .Rinstignore  # do install everything for testing
  - sed -i'' '/.*[Dd]ata.*/d' .Rbuildignore # do include data for testing
- - sed -i'' '/\.covrignore/d' .Rbuildignore
- - sed -i'' '/\.lintr/d' .Rbuildignore
+# - sed -i'' '/\.covrignore/d' .Rbuildignore
+# - sed -i'' '/\.lintr/d' .Rbuildignore
  - sed -i'' '/\benchmark/d' .Rbuildignore
+ # otherwise, icd.data is installed from CRAN, and after the github install???
+ #
+ # Quoting and colons in YAML https://github.com/ansible/ansible/issues/2769
+ #- 'echo "Remotes: jackwasey/icd.data" >> DESCRIPTION'
+ #- cat DESCRIPTION
  - Rscript -e "Rcpp::compileAttributes()" # make sure Rcpp generated code is updated, ideally this is not be checked in repo...
 
 after_success:
@@ -80,8 +86,8 @@ after_success:
    fi
  - if [ "$ICD_COVERAGE" = "true" ]; then
      Rscript -e "covr::codecov(quiet = FALSE)"; fi
- - if [ "$LINTR_COMMENT_BOT" = "true" ]; then
-     Rscript -e "lintr::lint_package()"; fi
+# - if [ "$LINTR_COMMENT_BOT" = "true" ]; then
+#     Rscript -e "lintr::lint_package()"; fi
 
 notifications:
   email:

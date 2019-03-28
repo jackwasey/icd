@@ -2,7 +2,7 @@
 % Please edit documentation in R/util-test.R
 \name{generate_neds_pts}
 \alias{generate_neds_pts}
-\title{Generate simulated NEDS data for PCCC and wide-data testing}
+\title{Generate simulated 'NEDS' data for 'PCCC' and bigger wide data testing}
 \usage{
 generate_neds_pts(n = 1000L, ncol = 20L, icd10 = TRUE,
   verbose = FALSE)
@@ -13,24 +13,28 @@ generate_neds_pts(n = 1000L, ncol = 20L, icd10 = TRUE,
 \item{ncol}{Integer number of diagnostic code columns, default of 20 matches
 NEDS}
 
-\item{icd10}{Logical, default `TRUE` to sample ICD-10-CM codes. `FALSE` gives
-`ICD-9`}
+\item{icd10}{Logical, default \code{TRUE} to sample ICD-10-CM codes.
+\code{FALSE} gives \code{ICD-9}}
 
 \item{verbose}{single logical value, defaults to \code{FALSE} in most functions.}
 }
 \description{
-Generate simulated NEDS data for PCCC and wide-data testing
+Generate simulated 'NEDS' data for 'PCCC' and bigger wide data testing
 }
 \examples{
+if (requireNamespace("icd.data", quietly = TRUE)) {
 summary(icd::comorbid_pccc_dx(icd:::generate_neds_pts()))
 neds <- icd:::generate_neds_pts(n = 100, ncol = 10L, icd10 = FALSE)
 stopifnot(dim(neds) == c(100L, 11L))
 summary(icd::comorbid_pccc_dx(neds))
+}
 \dontrun{
+if (requireNamespace("icd.data", quietly = TRUE)) {
 # original size data for PCCC benchmarking:
 set.seed(1441)
 neds <- icd:::generate_neds_pts(28584301L)
 neds_comorbid <- icd::comorbid_pccc_dx(neds)
+}
 }
 }
 \keyword{internal}

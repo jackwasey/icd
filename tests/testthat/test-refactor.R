@@ -1,37 +1,65 @@
 context("refactor")
 
 test_that("simple cases", {
-  expect_identical(refactor(factor("a", levels = "a"), "a"),
-                   factor("a", levels = "a"))
-  expect_identical(refactor(factor(NA, levels = "a"), "a"),
-                   factor(NA, levels = "a"))
-  expect_identical(refactor(factor(NA, levels = "a"), "b"),
-                   factor(NA, levels = "b"))
-  expect_identical(refactor(factor(NA, levels = "a"), "a"),
-                   factor(NA, levels = "a"))
-  expect_identical(refactor(factor(c("a", "b")), "a"),
-                   factor(c("a", NA), levels = "a"))
-  expect_identical(refactor(factor(c("a", "b")), "b"),
-                   factor(c(NA, "b"), levels = "b"))
-  expect_identical(refactor(factor(c("a", "b")), "c"),
-                   factor(c("a", "b"), levels = "c"))
+  expect_identical(
+    refactor(factor("a", levels = "a"), "a"),
+    factor("a", levels = "a")
+  )
+  expect_identical(
+    refactor(factor(NA, levels = "a"), "a"),
+    factor(NA, levels = "a")
+  )
+  expect_identical(
+    refactor(factor(NA, levels = "a"), "b"),
+    factor(NA, levels = "b")
+  )
+  expect_identical(
+    refactor(factor(NA, levels = "a"), "a"),
+    factor(NA, levels = "a")
+  )
+  expect_identical(
+    refactor(factor(c("a", "b")), "a"),
+    factor(c("a", NA), levels = "a")
+  )
+  expect_identical(
+    refactor(factor(c("a", "b")), "b"),
+    factor(c(NA, "b"), levels = "b")
+  )
+  expect_identical(
+    refactor(factor(c("a", "b")), "c"),
+    factor(c("a", "b"), levels = "c")
+  )
 })
 
 test_that("simple na.rm cases", {
-  expect_identical(refactor(factor("a", levels = "a"), "a", na.rm = TRUE),
-                   factor("a", levels = "a"))
-  expect_identical(refactor(factor(NA, levels = "a"), "a", na.rm = TRUE),
-                   factor(c(), levels = "a"))
-  expect_identical(refactor(factor(NA, levels = "a"), "b", na.rm = TRUE),
-                   factor(c(), levels = "b"))
-  expect_identical(refactor(factor(NA, levels = "a"), "a", na.rm = TRUE),
-                   factor(c(), levels = "a"))
-  expect_identical(refactor(factor(c("a", "b")), "a", na.rm = TRUE),
-                   factor(c("a"), levels = "a"))
-  expect_identical(refactor(factor(c("a", "b")), "b", na.rm = TRUE),
-                   factor(c("b"), levels = "b"))
-  expect_identical(refactor(factor(c("a", "b")), "c", na.rm = TRUE),
-                   factor(c(), levels = "c"))
+  expect_identical(
+    refactor(factor("a", levels = "a"), "a", na.rm = TRUE),
+    factor("a", levels = "a")
+  )
+  expect_identical(
+    refactor(factor(NA, levels = "a"), "a", na.rm = TRUE),
+    factor(c(), levels = "a")
+  )
+  expect_identical(
+    refactor(factor(NA, levels = "a"), "b", na.rm = TRUE),
+    factor(c(), levels = "b")
+  )
+  expect_identical(
+    refactor(factor(NA, levels = "a"), "a", na.rm = TRUE),
+    factor(c(), levels = "a")
+  )
+  expect_identical(
+    refactor(factor(c("a", "b")), "a", na.rm = TRUE),
+    factor(c("a"), levels = "a")
+  )
+  expect_identical(
+    refactor(factor(c("a", "b")), "b", na.rm = TRUE),
+    factor(c("b"), levels = "b")
+  )
+  expect_identical(
+    refactor(factor(c("a", "b")), "c", na.rm = TRUE),
+    factor(c(), levels = "c")
+  )
 })
 
 test_that("basic refactoring", {
@@ -42,7 +70,8 @@ test_that("basic refactoring", {
   test_cases <- expand.grid(
     list(u, v, w, x),
     list(u, v, w, x),
-    list(u, v, w, x))
+    list(u, v, w, x)
+  )
   for (tc in seq_along(test_cases[[1]])) {
     m <- test_cases[tc, 1][[1]]
     n <- test_cases[tc, 2][[1]]
@@ -53,27 +82,31 @@ test_that("basic refactoring", {
       refactor(f, n, na.rm = TRUE, exclude_na = TRUE),
       f_res[!is.na(f_res)], # exclude NA by default, as factor does
       info = paste("m = c('", paste(unlist(m), collapse = "', '"), "')\n",
-                   "n = c('", paste(unlist(n), collapse = "', '"), "')\n",
-                   "p = c('", paste(p, collapse = "', '"), "')",
-                   sep = "")
+        "n = c('", paste(unlist(n), collapse = "', '"), "')\n",
+        "p = c('", paste(p, collapse = "', '"), "')",
+        sep = ""
+      )
     )
     expect_identical(
       refactor(f, n, na.rm = FALSE, exclude_na = FALSE),
       factor(f, levels = n, exclude = NULL),
       info = paste("m = c('", paste(unlist(m), collapse = "', '"), "')\n",
-                   "n = c('", paste(unlist(n), collapse = "', '"), "')",
-                   "p = c(", paste(p, collapse = "', '"), "')",
-                   sep = "")
+        "n = c('", paste(unlist(n), collapse = "', '"), "')",
+        "p = c(", paste(p, collapse = "', '"), "')",
+        sep = ""
+      )
     )
-    if (!anyNA(f) && !anyNA(levels(f)))
+    if (!anyNA(f) && !anyNA(levels(f))) {
       expect_identical(
         refactor(f, n, na.rm = FALSE, exclude_na = TRUE),
         f_res,
         info = paste("m = c('", paste(unlist(m), collapse = "', '"), "')\n",
-                     "n = c('", paste(unlist(n), collapse = "', '"), "')",
-                     "p = c(", paste(p, collapse = "', '"), "')",
-                     sep = "")
+          "n = c('", paste(unlist(n), collapse = "', '"), "')",
+          "p = c(", paste(p, collapse = "', '"), "')",
+          sep = ""
+        )
       )
+    }
   }
 })
 
@@ -81,27 +114,42 @@ test_that("new factor has empty levels when necessary", {
   f <- factor("a")
   expect_equal(
     refactor(f, levels = NA, na.rm = TRUE),
-    factor())
+    factor()
+  )
   expect_equal(
     refactor(f, levels = NA, na.rm = FALSE, exclude_na = TRUE),
-    factor(NA, levels = NULL))
+    factor(NA, levels = NULL)
+  )
   expect_equal(
     refactor(f, levels = NA, na.rm = FALSE, exclude_na = FALSE),
-    factor(NA, exclude = NULL))
+    factor(NA, exclude = NULL)
+  )
   for (narm in c(TRUE, FALSE)) {
     expect_error(info = paste("narm = ", narm), refactor(NA, NA, na.rm = narm))
-    expect_error(regexp = NA, info = paste("narm = ", narm),
-                 refactor(factor(NA), NA, na.rm = narm))
-    expect_error(regexp = NA, info = paste("narm = ", narm),
-                 refactor(factor(NA), "a", na.rm = narm))
-    expect_error(regexp = NA, info = paste("narm = ", narm),
-                 refactor(factor(NA, levels = NA), c("a", NA), na.rm = narm))
-    expect_error(regexp = NA, info = paste("narm = ", narm),
-                 refactor(factor(NA), c("a", NA), na.rm = narm))
-    expect_error(regexp = NA, info = paste("narm = ", narm),
-                 refactor(factor("a"), c("a", NA), na.rm = narm))
-    expect_error(regexp = NA, info = paste("narm = ", narm),
-                 refactor(factor("a"), NA, na.rm = narm))
+    expect_error(
+      regexp = NA, info = paste("narm = ", narm),
+      refactor(factor(NA), NA, na.rm = narm)
+    )
+    expect_error(
+      regexp = NA, info = paste("narm = ", narm),
+      refactor(factor(NA), "a", na.rm = narm)
+    )
+    expect_error(
+      regexp = NA, info = paste("narm = ", narm),
+      refactor(factor(NA, levels = NA), c("a", NA), na.rm = narm)
+    )
+    expect_error(
+      regexp = NA, info = paste("narm = ", narm),
+      refactor(factor(NA), c("a", NA), na.rm = narm)
+    )
+    expect_error(
+      regexp = NA, info = paste("narm = ", narm),
+      refactor(factor("a"), c("a", NA), na.rm = narm)
+    )
+    expect_error(
+      regexp = NA, info = paste("narm = ", narm),
+      refactor(factor("a"), NA, na.rm = narm)
+    )
   }
 })
 
@@ -125,22 +173,25 @@ test_that("NA anywhere in middle of input levels ok", {
               l <- l[!is.na(l)]
             }
             ftt <- refactor(w, l, na.rm = narm, exclude_na = exna)
-            if (exna)
+            if (exna) {
               gtt <- factor(w, l, exclude = NA)
-            else
+            } else {
               gtt <- factor(w, l, exclude = NULL)
+            }
             expect_identical(
               ftt, gtt,
-              info = paste("i = ", i,
-                           "; ii = ", ii,
-                           "; iii = ", iii,
-                           "; w = ", paste(w, collapse = ", "),
-                           "; wlen = ", length(w),
-                           "; l = ", paste(l, collapse = ", "),
-                           "; llen = ", length(l),
-                           ifelse(narm, "; narm=TRUE", "; narm=FALSE"),
-                           ifelse(exna, "; exna=TRUE", "exna=FALSE")
-              ))
+              info = paste(
+                "i = ", i,
+                "; ii = ", ii,
+                "; iii = ", iii,
+                "; w = ", paste(w, collapse = ", "),
+                "; wlen = ", length(w),
+                "; l = ", paste(l, collapse = ", "),
+                "; llen = ", length(l),
+                ifelse(narm, "; narm=TRUE", "; narm=FALSE"),
+                ifelse(exna, "; exna=TRUE", "exna=FALSE")
+              )
+            )
           }
         }
       }
@@ -150,7 +201,8 @@ test_that("NA anywhere in middle of input levels ok", {
 
 test_that("big bad factor frmo github133 test", {
   f <- structure(
-    c(1L, 2L, 2L, 3L, 4L, 5L, 6L, 7L, 8L, 9L, 10L, 11L,
+    c(
+      1L, 2L, 2L, 3L, 4L, 5L, 6L, 7L, 8L, 9L, 10L, 11L,
       12L, 13L, 14L, 14L, 14L, 14L, 14L, 14L, 14L, 14L, 14L, 14L, 14L,
       14L, 14L, 14L, 14L, 14L, 14L, 14L, 14L, 14L, 14L, 14L, 14L, 14L,
       14L, 14L, 14L, 14L, 14L, 14L, 14L, 14L, 14L, 14L, 14L, 14L, 14L,
@@ -235,7 +287,8 @@ test_that("big bad factor frmo github133 test", {
       231L, 40L, 41L, 64L, 61L, 232L, 42L, 233L, 25L, 226L, 234L, 235L,
       236L, 24L, 65L, 14L, 14L, 14L, 14L, 14L, 14L, 14L, 14L, 14L,
       14L, 14L, 14L, 14L, 14L, 14L, 14L, 14L, 14L, 14L, 14L, 14L, 14L,
-      14L, 14L, 14L, 14L, 14L, 14L, 14L, 14L, 14L, 14L),
+      14L, 14L, 14L, 14L, 14L, 14L, 14L, 14L, 14L, 14L
+    ),
     .Label = c(
       "R2243",
       "L03116", "R64", "Z681", "L52", "F79", "K121", "D539", "E876",
@@ -269,10 +322,11 @@ test_that("big bad factor frmo github133 test", {
       "T486X5A", "R0902", "Z23", "Y92230", "R1110", "J8410", "K222",
       "Z9981", "I701", "K529", "D631", "B9620", "Z881", "Z96641", "N289",
       "I442", "Z6839", "J449", "K449", "I739", "Z90710", "Z9049", "Z85828"
-    ), class = "factor")
-
+    ), class = "factor"
+  )
   f2 <- structure(
-    c(14L, 14L, 211L, 212L, 212L, 17L, 213L, 80L, 64L,
+    c(
+      14L, 14L, 211L, 212L, 212L, 17L, 213L, 80L, 64L,
       149L, 211L, 214L, 215L, 216L, 14L, 14L, 14L, 14L, 14L, 14L, 14L,
       14L, 14L, 14L, 14L, 14L, 14L, 14L, 14L, 217L, 131L, 217L, 131L,
       14L, 14L, 14L, 14L, 14L, 14L, 14L, 14L, 14L, 14L, 14L, 14L, 14L,
@@ -284,7 +338,8 @@ test_that("big bad factor frmo github133 test", {
       14L, 14L, 14L, 229L, 229L, 229L, 52L, 230L, 19L, 231L, 40L, 41L,
       64L, 61L, 232L, 42L, 233L, 25L, 226L, 234L, 235L, 236L, 24L,
       65L, 14L, 14L, 14L, 14L, 14L, 14L, 14L, 14L, 14L, 14L, 14L, 14L,
-      14L, 14L, 14L, 14L, 14L, 14L, 14L, 14L, 14L, 14L),
+      14L, 14L, 14L, 14L, 14L, 14L, 14L, 14L, 14L, 14L
+    ),
     .Label = c(
       "R2243",
       "L03116", "R64", "Z681", "L52", "F79", "K121", "D539", "E876",
@@ -318,23 +373,35 @@ test_that("big bad factor frmo github133 test", {
       "T486X5A", "R0902", "Z23", "Y92230", "R1110", "J8410", "K222",
       "Z9981", "I701", "K529", "D631", "B9620", "Z881", "Z96641", "N289",
       "I442", "Z6839", "J449", "K449", "I739", "Z90710", "Z9049", "Z85828"
-    ), class = "factor")
+    ), class = "factor"
+  )
+  d <- data.frame(id = seq_along(f), icd = f)
+  d2 <- data.frame(id = seq_along(f2), icd = f2)
+  expect_error(regexp = NA, comorbid_ahrq(d))
+  expect_error(regexp = NA, comorbid_ahrq(d2))
 })
 
 test_that("crash case", {
   f <- factor(c(NA, "a"), levels = c(NA, "a"), exclude = NULL)
-  expect_identical(refactor(f, c("a", "b")),
-                   structure(c(NA, 1L), .Label = c("a", "b"), class = "factor"))
+  expect_identical(
+    refactor(f, c("a", "b")),
+    structure(c(NA, 1L), .Label = c("a", "b"), class = "factor")
+  )
 })
 
 test_that("refactor NA to different level", {
   f <- factor(NA, exclude = NULL)
-  expect_identical(refactor(f, levels = NA, na.rm = FALSE, exclude_na = FALSE),
-                   f)
+  expect_identical(
+    refactor(f, levels = NA, na.rm = FALSE, exclude_na = FALSE),
+    f
+  )
   f <- factor(c(NA, "a"), exclude = NULL)
-  expect_identical(refactor(f, levels = NA, na.rm = FALSE, exclude_na = FALSE),
-                   factor(f, levels = NA, exclude = NULL))
+  expect_identical(
+    refactor(f, levels = NA, na.rm = FALSE, exclude_na = FALSE),
+    factor(f, levels = NA, exclude = NULL)
+  )
   expect_identical(
     refactor(f, levels = c("a", NA), na.rm = FALSE, exclude_na = FALSE),
-    factor(c(NA, "a"), levels = c("a", NA), exclude = NULL))
+    factor(c(NA, "a"), levels = c("a", NA), exclude = NULL)
+  )
 })
