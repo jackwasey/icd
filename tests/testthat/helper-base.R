@@ -55,9 +55,11 @@ simple_poa_pts <- data.frame(
 # multiple codes for POA and not POA, bad POA input. Throw in some invalid ICD9
 # codes
 complex_poa_pts <- data.frame(
-  visit_id = c("visit1", "visit1", "visit1",
-               "visit2", "visit2",
-               "visit3", "visit3"),
+  visit_id = c(
+    "visit1", "visit1", "visit1",
+    "visit2", "visit2",
+    "visit3", "visit3"
+  ),
   icd9 = c("39891", "39891", "39790", "41791", "41791", "41791", "4401"),
   poa = c("Y", "n", NA_character_, "E", NA_character_, "paris", ""),
   stringsAsFactors = FALSE
@@ -159,8 +161,9 @@ multi_comorbid <- rbind(
 )
 multi_comorbid$visit_id <-
   sample(c("visit1", "visit2", "visit3", "visit4"),
-         size = nrow(multi_comorbid),
-         replace = TRUE)
+    size = nrow(multi_comorbid),
+    replace = TRUE
+  )
 othersalmonella <- c(
   "0030", "0031", "00320", "00321", "00322",
   "00323", "00324", "00329", "0038", "0039"

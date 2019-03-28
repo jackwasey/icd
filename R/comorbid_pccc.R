@@ -46,7 +46,7 @@ comorbid_pccc_dx <- function(x,
 #' )
 #' comorbid_pccc_pcs(pts, icd_name = "icd9_pcs", return_binary = TRUE)
 #' comorbid_pccc_pcs(pts, icd_name = "icd10_pcs", return_binary = TRUE)
-#'
+#' 
 #' # All ICD-9 procedure codes are numeric, some ICD-10 procedure codes
 #' # are numeric, so best to call functions directly:
 #' pts <- data.frame(encounters = c(100), icd10_pcs = c("0016070"))
@@ -121,23 +121,24 @@ icd9_comorbid_pccc_dx <-
 #' @describeIn comorbid_pccc_dx Calculate PCCC comorbidities from ICD-10
 #'   diagnosis codes
 #' @export
-icd10_comorbid_pccc_dx <- function(x,
-                                   visit_name = NULL,
-                                   icd_name = NULL,
-                                   short_code = guess_short(x, icd_name = icd_name),
-                                   return_df = FALSE, return_binary = FALSE, ...) {
-  icd10_comorbid(
-    x = x,
-    map = icd10_map_pccc_dx,
-    visit_name = visit_name,
-    icd_name = icd_name,
-    short_code = short_code,
-    short_map = TRUE,
-    return_df = return_df,
-    return_binary = return_binary,
-    ...
-  )
-}
+icd10_comorbid_pccc_dx <-
+  function(x,
+             visit_name = NULL,
+             icd_name = NULL,
+             short_code = guess_short(x, icd_name = icd_name),
+             return_df = FALSE, return_binary = FALSE, ...) {
+    icd10_comorbid(
+      x = x,
+      map = icd10_map_pccc_dx,
+      visit_name = visit_name,
+      icd_name = icd_name,
+      short_code = short_code,
+      short_map = TRUE,
+      return_df = return_df,
+      return_binary = return_binary,
+      ...
+    )
+  }
 
 #' @describeIn comorbid_pccc_dx Calculate PCCC comorbidities from ICD-9
 #'   procedure codes

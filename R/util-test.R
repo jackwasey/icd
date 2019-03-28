@@ -101,8 +101,8 @@ random_string <- function(n, max_chars = 4) {
     sample(c(LETTERS, letters, 0:9, rep("", times = 50)), replace = TRUE, size = n)
 
   v <- vapply(1:max_chars,
-              FUN = function(x) rand_ch(),
-              FUN.VALUE = character(n)
+    FUN = function(x) rand_ch(),
+    FUN.VALUE = character(n)
   )
   apply(v, 1, paste0, collapse = "")
 }
@@ -128,7 +128,7 @@ test_env <- function() {
   list2env(as.list(ns, all.names = TRUE), parent = parent.env(ns))
 }
 
-#' Generate simulated NEDS data for PCCC and wide-data testing
+#' Generate simulated 'NEDS' data for 'PCCC' and bigger wide data testing
 #' @param n Integer number of rows of data to generate
 #' @param ncol Integer number of diagnostic code columns, default of 20 matches
 #'   NEDS
@@ -137,17 +137,17 @@ test_env <- function() {
 #' @template verbose
 #' @examples
 #' if (requireNamespace("icd.data", quietly = TRUE)) {
-#' summary(icd::comorbid_pccc_dx(icd:::generate_neds_pts()))
-#' neds <- icd:::generate_neds_pts(n = 100, ncol = 10L, icd10 = FALSE)
-#' stopifnot(dim(neds) == c(100L, 11L))
-#' summary(icd::comorbid_pccc_dx(neds))
+#'   summary(icd::comorbid_pccc_dx(icd:::generate_neds_pts()))
+#'   neds <- icd:::generate_neds_pts(n = 100, ncol = 10L, icd10 = FALSE)
+#'   stopifnot(dim(neds) == c(100L, 11L))
+#'   summary(icd::comorbid_pccc_dx(neds))
 #' }
 #' \dontrun{
 #' if (requireNamespace("icd.data", quietly = TRUE)) {
-#' # original size data for PCCC benchmarking:
-#' set.seed(1441)
-#' neds <- icd:::generate_neds_pts(28584301L)
-#' neds_comorbid <- icd::comorbid_pccc_dx(neds)
+#'   # original size data for PCCC benchmarking:
+#'   set.seed(1441)
+#'   neds <- icd:::generate_neds_pts(28584301L)
+#'   neds_comorbid <- icd::comorbid_pccc_dx(neds)
 #' }
 #' }
 #' @keywords internal
@@ -270,10 +270,11 @@ is_missing_icd_data <- function(var_name) {
       with_interact(
         interact = FALSE, {
           d <- .idget(var_name, must_work = FALSE)
-          i <- if (is.function(d))
+          i <- if (is.function(d)) {
             d()
-          else
+          } else {
             d
+          }
           is.null(i)
         }
       )
@@ -283,15 +284,18 @@ is_missing_icd_data <- function(var_name) {
 
 # workaround so icd.data 1.0 will not cause CRAN or user errors
 skip_missing_icd10who <- function() {
-  if (is_missing_icd_data("icd10who2016"))
+  if (is_missing_icd_data("icd10who2016")) {
     testthat::skip("No WHO ICD-10 2016 English data")
-  if (is_missing_icd_data("icd10who2008fr"))
+  }
+  if (is_missing_icd_data("icd10who2008fr")) {
     testthat::skip("No WHO ICD-10 2008 French data")
+  }
 }
 
 skip_missing_icd10fr <- function() {
-  if (is_missing_icd_data("icd10fr2019"))
+  if (is_missing_icd_data("icd10fr2019")) {
     testthat::skip("No ICD-10-FR 2019 French data")
+  }
 }
 
 set_test_slow <- function(do_slow = TRUE) {

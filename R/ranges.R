@@ -8,12 +8,12 @@
 #' more likely to be useful to the end user, dealing with real ICD codes.
 #' @examples
 #' if (requireNamespace("icd.data", quietly = TRUE)) {
-#' expand_range("428.0", "428.9")
-#' "4280" %i9s% "4289"
-#' "4280" %i9s% "42821"
-#' "42799" %i9sa% "42802" # doesn't include 428 or 4280
-#' "427.99" %i9da% "428.02"
-#' "V80" %i9s% "V810"
+#'   expand_range("428.0", "428.9")
+#'   "4280" %i9s% "4289"
+#'   "4280" %i9s% "42821"
+#'   "42799" %i9sa% "42802" # doesn't include 428 or 4280
+#'   "427.99" %i9da% "428.02"
+#'   "V80" %i9s% "V810"
 #' }
 #' @templateVar icd9ShortName start,end
 #' @template icd9-short
@@ -137,7 +137,7 @@ expand_range.icd10cm <- function(start,
 #' by \code{icd.data}.
 #' @examples
 #' if (requireNamespace("icd.data", quietly = TRUE)) {
-#' expand_range_major("100", "102")
+#'   expand_range_major("100", "102")
 #' }
 #' @template dotdotdot
 #' @export

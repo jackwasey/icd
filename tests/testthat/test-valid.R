@@ -3,22 +3,23 @@ context("icd9 validation")
 test_that("regular expressions are put on the given environment", {
   e <- new.env(parent = emptyenv())
   set_re_globals(e)
-  expect_identical(
-    ls(envir = e, pattern = "^re_"),
-    c(
-      "re_icd10_any", "re_icd10_decimal", "re_icd10_major", "re_icd10_major_bare",
-      "re_icd10_short", "re_icd10cm_any", "re_icd10cm_decimal", "re_icd10cm_major",
-      "re_icd10cm_major_bare", "re_icd10cm_short", "re_icd9_any", "re_icd9_any_e",
-      "re_icd9_any_n", "re_icd9_any_v", "re_icd9_decimal", "re_icd9_decimal_bare",
-      "re_icd9_decimal_e", "re_icd9_decimal_e_bare", "re_icd9_decimal_e_strict_bare",
-      "re_icd9_decimal_n", "re_icd9_decimal_n_bare", "re_icd9_decimal_n_strict_bare",
-      "re_icd9_decimal_strict_bare", "re_icd9_decimal_v", "re_icd9_decimal_v_bare",
-      "re_icd9_decimal_v_strict_bare", "re_icd9_major", "re_icd9_major_bare",
-      "re_icd9_major_e", "re_icd9_major_e_strict", "re_icd9_major_n",
-      "re_icd9_major_n_strict", "re_icd9_major_strict", "re_icd9_major_strict_bare",
-      "re_icd9_major_v", "re_icd9_major_v_strict", "re_icd9_minor_e",
-      "re_icd9_minor_nv", "re_icd9_short", "re_icd9_short_e", "re_icd9_short_n",
-      "re_icd9_short_v"
+  expect_true(
+    all(
+      c(
+        "re_icd10_any", "re_icd10_decimal", "re_icd10_major", "re_icd10_major_bare",
+        "re_icd10_short", "re_icd10cm_any", "re_icd10cm_decimal", "re_icd10cm_major",
+        "re_icd10cm_major_bare", "re_icd10cm_short", "re_icd9_any", "re_icd9_any_e",
+        "re_icd9_any_n", "re_icd9_any_v", "re_icd9_decimal", "re_icd9_decimal_bare",
+        "re_icd9_decimal_e", "re_icd9_decimal_e_bare", "re_icd9_decimal_e_strict_bare",
+        "re_icd9_decimal_n", "re_icd9_decimal_n_bare", "re_icd9_decimal_n_strict_bare",
+        "re_icd9_decimal_strict_bare", "re_icd9_decimal_v", "re_icd9_decimal_v_bare",
+        "re_icd9_decimal_v_strict_bare", "re_icd9_major", "re_icd9_major_bare",
+        "re_icd9_major_e", "re_icd9_major_e_strict", "re_icd9_major_n",
+        "re_icd9_major_n_strict", "re_icd9_major_strict", "re_icd9_major_strict_bare",
+        "re_icd9_major_v", "re_icd9_major_v_strict", "re_icd9_minor_e",
+        "re_icd9_minor_nv", "re_icd9_short", "re_icd9_short_e", "re_icd9_short_n",
+        "re_icd9_short_v"
+      ) %in% ls(envir = e, pattern = "^re_")
     )
   )
 })

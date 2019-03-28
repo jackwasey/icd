@@ -193,7 +193,7 @@ test_that("condense short range", {
 })
 
 test_that("condense full ranges", {
-skip_if_not_installed("icd.data")
+  skip_if_not_installed("icd.data")
   # condensing to "real" means we don't get a lot of majors, which are often not
   # themselves defined.
   # majors:
@@ -371,12 +371,12 @@ test_that("vermont stuff", {
   test_that("levels are preserved from source factor", {
     dat <- factor(vdat, levels = c("plastic", vdat))
     dat3 <- condense.icd9(dat,
-                          short_code = TRUE, defined = TRUE,
-                          keep_factor_levels = TRUE
+      short_code = TRUE, defined = TRUE,
+      keep_factor_levels = TRUE
     )
     dat4 <- condense.icd9(dat,
-                          short_code = TRUE,
-                          defined = TRUE, keep_factor_levels = FALSE
+      short_code = TRUE,
+      defined = TRUE, keep_factor_levels = FALSE
     )
     expect_identical(intersect(dat, dat3), vdat)
     expect_identical(intersect(dat, dat4), vdat)

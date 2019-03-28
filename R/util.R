@@ -121,6 +121,7 @@ get_visit_name <- function(x, visit_name = NULL) {
 
 #' @describeIn get_visit_name Guess or get visit/patient column from data frame
 #' @keywords internal
+#' @export
 get_visit_name.data.frame <- function(x, visit_name = NULL) {
   stopifnot(is.data.frame(x))
   stopifnot(is.null(visit_name) ||
@@ -152,11 +153,16 @@ get_visit_name.data.frame <- function(x, visit_name = NULL) {
 #'   matrix with all your patient data, and if so, please convert it to a
 #'   \code{data.frame} and file an issue on github.
 #' @keywords internal
-get_visit_name.matrix <- function(x, visit_name = NULL)
-  stop(
-    "matrices of comorbidity data are expected to be of logical type, ",
-    "and have row names corresponding to the visit or patient."
-  )
+#' @export
+get_visit_name.matrix <- function(x, visit_name = NULL) {
+  if (is.logical(x)) {
+    stop(
+      "matrices of comorbidity data are expected to be of logical type, ",
+      "and have row names corresponding to the visit or patient."
+    )
+  }
+  get_visit_name.data.frame(as.data.frame(head(x, 1000)))
+}
 
 #' Get the name of a \code{data.frame} column which is most likely to contain
 #' the ICD codes
@@ -197,10 +203,11 @@ get_icd_dx_name <- function(x,
   if (is.null(icd_name)) {
     icd_name <- character()
     for (n in names(x)) {
-      pc <- if (requireNamespace("icd.data", quietly = TRUE))
+      pc <- if (requireNamespace("icd.data", quietly = TRUE)) {
         get_icd_defined_percent(x[[n]])
-      else
+      } else {
         get_icd_valid_percent(x[[n]])
+      }
       if (pc$icd9 > 25 || pc$icd10 > 25) {
         icd_name <- c(icd_name, n)
       }
@@ -426,8 +433,8 @@ with_icd10cm_version <- function(ver, lang = c("en", "fr"), code) {
 require_icd_data <- function(version = "1.0") {
   if (!icd_data_ver_ok(ver = version)) {
     stop("Package \"icd.data\" version ", version,
-         " needed for this function to work. ",
-         "Please install it with install.packages(\"icd.data\")",
+      " needed for this function to work. ",
+      "Please install it with install.packages(\"icd.data\")",
       call. = FALSE
     )
   }

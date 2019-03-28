@@ -2,7 +2,7 @@
 % Please edit documentation in R/util-test.R
 \name{generate_neds_pts}
 \alias{generate_neds_pts}
-\title{Generate simulated NEDS data for PCCC and wide-data testing}
+\title{Generate simulated 'NEDS' data for 'PCCC' and bigger wide data testing}
 \usage{
 generate_neds_pts(n = 1000L, ncol = 20L, icd10 = TRUE,
   verbose = FALSE)
@@ -19,7 +19,7 @@ NEDS}
 \item{verbose}{single logical value, defaults to \code{FALSE} in most functions.}
 }
 \description{
-Generate simulated NEDS data for PCCC and wide-data testing
+Generate simulated 'NEDS' data for 'PCCC' and bigger wide data testing
 }
 \examples{
 if (requireNamespace("icd.data", quietly = TRUE)) {

@@ -22,17 +22,14 @@
 release_questions <- function() {
   c(
     # commands:
-    "update_everything(), then copy data to icd.data package",
+    "update_everything() on linux",
     "aspell_package_Rd_files('.')",
-    "tools/package-registration.r",
     # documentation:
     "Check all TODO comments, make into github issues",
     "Do all examples look ok (not just run without errors)?",
     "Have all the fixed github issues been closed",
-    "Does every file have correct licence information?",
     # code quality:
-    "Is every SEXP PROTECT()ed and UNPROTECT()ed, when appropriate?",
-    "Are all public S3 classes all exported? use devtools::missing_s3()",
+    "Are all public S3 classes all exported? use devtools::missing_s3() http://r-pkgs.had.co.nz/namespace.html",
     "use LLVM static scan build, scan-build before compiler in .R/Makevars",
     # testing and compilation and different platforms:
     "Have you run tests in tests-deprecated and tests-build-code?",
