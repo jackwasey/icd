@@ -22,7 +22,8 @@ test_that("strim", {
 })
 
 test_that("get visit name from a matrix should fail", {
-  expect_error(get_visit_name(matrix(c(1, 2, 3, 4), nrow = 2)))
+  expect_error(regexp = NA, get_visit_name(matrix(c(1, 2, 3, 4), nrow = 2)))
+  expect_error(get_visit_name(matrix(c(TRUE, TRUE, TRUE, TRUE), nrow = 2)))
 })
 
 test_that("get visit name works for this failure case", {
