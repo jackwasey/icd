@@ -22,7 +22,7 @@ short_to_decimal(x)
 \item{x}{ICD codes}
 }
 \description{
-Convert codes between short and decimal forms
+Convert from short to decimal forms of ICD codes.
 }
 \section{Methods (by class)}{
 \itemize{

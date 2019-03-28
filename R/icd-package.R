@@ -1,7 +1,9 @@
 #' @details \describe{ \item{Comorbidities}{ \code{\link{comorbid}} determines
 #'   comorbidities for a set of patients with one or more ICD codes each. All
-#'   the comorbidity functions attempt to guess which are your identifier and
-#'   ICD code fields, and these can also be specified exactly.
+#'   the comorbidity functions guess which columns are the identifiers and which
+#'   are ICD code fields. You may also specify these. Most 'long' or 'wide' data
+#'   can simply be passed directly, e.g.:
+#'   \code{\link{comorbid(patient_data_frame)}}.
 #'
 #'   \itemize{
 #'
@@ -28,10 +30,10 @@
 #'   Elixhauser comorbidities can be calculated directly from patient data using
 #'   \code{\link{comorbid_elix}}.
 #'
-#'   \item AHRQ publishes Hierarchical Condition Codes (HCC) which are
-#'   essentially comorbidity maps with very many comorbidities, complicated by a
-#'   single- or multi-level system. These categories can be computed using
-#'   \code{\link{comorbid_hcc}}.
+#'   \item The US Center for Medicare and Medicare services (CMS) publishes
+#'   Hierarchical Condition Codes (HCC) which are essentially comorbidity maps
+#'   with very many comorbidities, complicated by a single- or multi-level
+#'   system. These categories can be computed using \code{\link{comorbid_hcc}}.
 #'
 #'   \item AHRQ also publishes Clinical Classification Software (CCS) which
 #'   provides another set of disease groups, and this SAS code is implemented in
@@ -51,10 +53,26 @@
 #'
 #'   \item{Validation}{
 #'
-#'   \code{\link{is_valid}} checks whether ICD-9 codes are syntactically valid
-#'   (although not necessarily genuine ICD-9 diagnoses). In contrast,
-#'   \code{\link{is_defined}} checks whether ICD-9 codes correspond to diagnoses
-#'   in the current ICD-9-CM definition from CMS.}
+#'   \code{\link{is_valid}} checks whether ICD codes are syntactically valid
+#'   (although not necessarily genuine ICD diagnoses). In contrast,
+#'   \code{\link{is_defined}} checks whether ICD-9 codes correspond to defined
+#'   diagnoses or diagnostic groups in the hierarchy of ICD codes.
+#'   \code{link{is_leaf}} (and for the US, \code{link{is_billable}}) determine
+#'   whether given codes are leaves in the hierarchy, or not. These functions
+#'   (and \code{\link{explain_code}}) rely on the \CRANpkg{icd.data} package,
+#'   which is not installed by default.  \CRANpkg{icd.data} may need to download
+#'   data due to package size or copyright restrictions on redistributing data,
+#'   and needs a cache directory and your permission to do this. Use
+#'   \code{icd.data::setup_icd_data()} to do this, or
+#'   \code{icd.data::download_icd_data()} to download everything at once, which
+#'   will take a few minutes on a broadband connection.
+#'
+#'   Validation depends on the class of code, and is different if the code is
+#'   from France, Belgium, the USA, or the World Health Organization (WHO). Use
+#'   the functions \code{\link{as.icd10who}}, \code{\link{as.icd10fr}},
+#'   \code{\link{as.icd10be}}, and \code{\link{as.icd10cm}} to set the class of
+#'   a set of ICD codes. This doesn't affect comorbidity calculations, but will
+#'   change the result of the above validation functions, and }
 #'
 #'   \item{Conversion}{
 #'
@@ -62,7 +80,9 @@
 #'   different formats and structures. The most commonly used are:
 #'   \code{\link{decimal_to_short}}, \code{\link{short_to_decimal}} to convert,
 #'   e.g., 002.3 to 0023 and back again. See \link{convert} for other options.
-#'   Conversion between ICD-9, ICD-10, and ICD-11 codes is not yet supported.}
+#'   Conversion between ICD-9, ICD-10, and ICD-11 codes is not yet supported,
+#'   but is the subject of an upcoming US National Institutes of Health (NIH)
+#'   hackathon.}
 #'
 #'   \item{Manipulation}{
 #'
@@ -73,25 +93,24 @@
 #'   etc.) sorts in hierarchical, then numerical order, so '100.0' comes before
 #'   '100.00', for example.
 #'
-#'   \code{\link{wide_to_long}} and \code{\link{long_to_wide}} convert the two
-#'   most common data structures containing patient disease data. This is more
-#'   sophisticated and tailored to the problem than base reshaping or packages
-#'   like \CRANpkg{dplyr}, although these could no doubt be used.}
+#'   The comorbidity functions in \pkg{icd} accept 'wide' or 'long' format data,
+#'   but you may wish to use \code{\link{wide_to_long}} and
+#'   \code{\link{long_to_wide}}, which convert between these two most common
+#'   data structures containing patient disease data. This is more sophisticated
+#'   and tailored to the problem than base reshaping or packages like
+#'   \CRANpkg{dplyr}, although these could no doubt be used.} These functions
+#'   use base \R functions to avoid dependencies, so are not very fast for very
+#'   big datasets.
 #'
 #'   \item{Explanation and decoding}{
 #'
-#'   Use \code{\link{explain_code}} to convert a list of codes into
-#'   human-readable descriptions. This (and a number of other functions in this
-#'   package) relies on the \code{icd.data} package, which is not installed by
-#'   default. This function can optionally reduce the codes to a their top-level
-#'   groups if all the child members of a group are present.
-#'   \code{\link{diff_comorbid}} allows summary of the differences between
-#'   comorbidity mappings, e.g. to find what has changed from year-to-year or
-#'   between revisions by different authors.
-#'   \code{\link[icd.data]{icd9cm_hierarchy}} is a \code{data.frame} containing
-#'   the full ICD-9 classification for each diagnosis.
-#'   \code{\link[icd.data]{icd9_chapters}} contains definitions of chapters,
-#'   sub-chapters and three-digit groups.} }
+#'   Use \code{\link{explain_code}} to convert a set of ICD codes into
+#'   human-readable descriptions. See above for discussion on WHO, French,
+#'   Belgian and US ICD code classes. This function can can also reduce the
+#'   codes to their top-level groups if all the child members of a group are
+#'   present. \code{\link{diff_comorbid}} allows summary of the differences
+#'   between comorbidity mappings, e.g. between revisions by different authors.
+#'   } }
 #' @docType package
 #' @name icd-package
 #' @aliases icd icd-package package-icd package-icd9 icd9-package icd10-package
