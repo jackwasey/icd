@@ -62,3 +62,4 @@ testthat-disabled.R
 bench-refactor.html
 .gdb_history
 
+benchmarks/icd-JSS3447-replication/*.log

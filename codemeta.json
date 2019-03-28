@@ -246,7 +246,8 @@
       "identifier": "https://sysreqs.r-hub.io/get/pandoc"
     }
   ],
-  "releaseNotes": "ssh://git@github.com/jackwasey/icd/blob/master/NEWS.md",
+  "releaseNotes": "https://github.com/jackwasey/icd/blob/master/NEWS.md",
+  "readme": "https://github.com/jackwasey/icd/blob/master/README.md",
   "contIntegration": [
     "https://travis-ci.org/jackwasey/icd",
     "https://ci.appveyor.com/project/jackwasey/icd/branch/master",
@@ -256,6 +257,5 @@
     "https://www.tidyverse.org/lifecycle/#stable",
     "https://www.repostatus.org/#active"
   ],
-  "relatedLink": "https://CRAN.R-project.org/package=icd",
-  "readme": "https://github.com/jackwasey/icd/blob/master/README.md"
+  "relatedLink": "https://CRAN.R-project.org/package=icd"
 }
