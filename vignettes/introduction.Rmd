@@ -1,12 +1,12 @@
 ---
-title: 'Quick Introduction to icd'
+title: 'An Introduction to icd'
 author: "Jack O. Wasey"
 date: "`r Sys.Date()`"
 output:
   html_document:
     toc: yes
 vignette: >
-  %\VignetteIndexEntry{Quick Introduction to icd}
+  %\VignetteIndexEntry{An Introduction to icd}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteDepends{icd.data, magrittr, utils}
   %\VignetteEncoding{UTF-8}

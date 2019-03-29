@@ -43,6 +43,8 @@
 ^inst/doc/benchresults\.ods$
 ^inst\/extdata$
 ^inst\/extdata\/.*$
+^extdata$
+^extdata\/.*$
 ^lib-bench$
 ^man-roxygen$
 ^src\/.clang-format$

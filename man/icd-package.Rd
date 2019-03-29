@@ -31,7 +31,7 @@ Calculate comorbidities, medical risk scores, and
   the comorbidity functions guess which columns are the identifiers and which
   are ICD code fields. You may also specify these. Most 'long' or 'wide' data
   can simply be passed directly, e.g.:
-  \code{\link{comorbid(patient_data_frame)}}.
+  \code{comorbid(patient_data_frame)}.
 
   \itemize{
 

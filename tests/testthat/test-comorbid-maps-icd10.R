@@ -159,13 +159,13 @@ test_that("independently created list of Quan Elixhauser codes all appear", {
     indep <- quan_elix_independent[[i]]
     indep_kids <- children_defined.icd10cm(quan_elix_independent[[i]])
     canon <- icd10_map_quan_elix[[i]]
-    expect_equal(setdiff(indep, canon), character(),
+    expect_true(all(indep %in% canon),
       info = paste(
         "checking quan elix canonical in indep: ",
         i, " - ", names(quan_elix_independent)[i]
       )
     )
-    expect_equal(setdiff(indep_kids, canon), character(),
+    expect_true(all(indep_kids %in% canon),
       info = paste(
         "checking quan elix canonical in indep_kids: ",
         i, " - ", names(quan_elix_independent)[i]

@@ -399,7 +399,7 @@ capitalize_first <- function(x)
 #' @noRd
 #' @keywords internal
 get_raw_data_dir <- function()
-  system.file("extdata", package = "icd")
+  system.file("data-raw", package = "icd")
 
 #' return all matches for regular expression
 #' @noRd
