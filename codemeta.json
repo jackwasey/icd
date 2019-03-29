@@ -151,18 +151,6 @@
     },
     {
       "@type": "SoftwareApplication",
-      "identifier": "rticles",
-      "name": "rticles",
-      "provider": {
-        "@id": "https://cran.r-project.org",
-        "@type": "Organization",
-        "name": "Comprehensive R Archive Network (CRAN)",
-        "url": "https://cran.r-project.org"
-      },
-      "sameAs": "https://CRAN.R-project.org/package=rticles"
-    },
-    {
-      "@type": "SoftwareApplication",
       "identifier": "stats",
       "name": "stats"
     },
@@ -178,18 +166,6 @@
         "url": "https://cran.r-project.org"
       },
       "sameAs": "https://CRAN.R-project.org/package=testthat"
-    },
-    {
-      "@type": "SoftwareApplication",
-      "identifier": "tinytex",
-      "name": "tinytex",
-      "provider": {
-        "@id": "https://cran.r-project.org",
-        "@type": "Organization",
-        "name": "Comprehensive R Archive Network (CRAN)",
-        "url": "https://cran.r-project.org"
-      },
-      "sameAs": "https://CRAN.R-project.org/package=tinytex"
     },
     {
       "@type": "SoftwareApplication",

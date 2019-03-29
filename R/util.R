@@ -398,8 +398,9 @@ capitalize_first <- function(x)
 #' \code{inst/extdata}. \pkg{devtools} overrides \code{system.file}.
 #' @noRd
 #' @keywords internal
-get_raw_data_dir <- function()
+get_raw_data_dir <- function() {
   system.file("data-raw", package = "icd")
+}
 
 #' return all matches for regular expression
 #' @noRd

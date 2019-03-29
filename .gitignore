@@ -56,3 +56,4 @@ Efficient_calculation_of_comorbidities_from_medical_codes.R
 bench-versus-result*.rds
 .checkpoint
 tests/testthat/Rplots.pdf
+revdep

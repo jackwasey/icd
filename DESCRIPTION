@@ -55,10 +55,8 @@ Suggests:
     nhds,
     rmarkdown,
     roxygen2 (>= 5.0.0),
-    rticles,
     stats,
     testthat (>= 0.11.1),
-    tinytex,
     utils,
     xml2
 LinkingTo:

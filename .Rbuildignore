@@ -36,7 +36,6 @@
 ^bench-versus-result.*rds$
 ^codecov.yml$
 ^data-raw$
-^data-raw\/.*$
 ^doc$
 ^docs$
 ^icd.*\.out$
@@ -47,6 +46,7 @@
 ^extdata\/.*$
 ^lib-bench$
 ^man-roxygen$
+^revdep$
 ^src\/.clang-format$
 ^src\/test-cpp.*$
 ^tests-build$
@@ -54,7 +54,7 @@
 ^tests-slow$
 ^todo$
 ^tools$
-^vignettes\/PCCC\.Rmd$
+^vignettes\/efficiency\.Rmd$
 ^vignettes\/country-lang-vers\.Rmd$
 ^vignettes\/.*\.R$
 ^vignettes\/.*\.dvi$
@@ -70,6 +70,3 @@ icd.*\.aux$
 icd.*\.dll$
 icd.*\.so$
 icd.*tar\.gz
-icd9Billable[[:digit:]]+\.RData$
-icd9cm_billable[[:digit:]]+\.RData$
-scrape_icd10_who

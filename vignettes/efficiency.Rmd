@@ -50,7 +50,7 @@ bibliography:
   - all.bib
 vignette: >
   %\VignetteIndexEntry{icd: Efficient Computation of Comorbidities from ICD Codes Using Sparse Matrix Multiplication in R}
-  %\VignetteDepends{icd.data}
+  %\VignetteDepends{icd.data, rticles}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 editor_options:
@@ -69,6 +69,9 @@ pkgdown:
 ```{r setup, echo=FALSE, message=FALSE, warning=FALSE, cache=FALSE}
 library("icd")
 requireNamespace("knitr")
+# using this here and not compiling for CRAN etc saves a lot of dependencies
+requireNamespace("rticles")
+
 fig.width = 6.5
 fig.height = fig.width / ((1 + sqrt(5)) / 2)
 bitmap_dpi = 600
