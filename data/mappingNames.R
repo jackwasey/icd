@@ -267,6 +267,36 @@ names_cc <- list(
   "189" = "Amputation Status, Lower Limb/Amputation Complications"
 )
 
+names_pccc <- list(
+  "01" = "Neurologic and neuromuscular",
+  "02" = "Cardiovascular",
+  "03" = "Respiratory",
+  "04" = "Renal and urologic",
+  "05" = "Gastrointestinal",
+  "06" = "Hematologic or immunologic",
+  "07" = "Metabolic",
+  "08" = "Other congenital or Genetic defect",
+  "09" = "Malignancy",
+  "10" = "Premature and neonatal",
+  "11" = "Technology dependence",
+  "12" = "Transplantation"
+)
+
+names_pccc_abbrev <- list(
+  "01" = "Neuromusc",
+  "02" = "CVD",
+  "03" = "Respiratory",
+  "04" = "Renal",
+       "05" = "GI",
+  "06" = "HematoImmu",
+  "07" = "Metabolic",
+  "08" = "CongeniGenetic",
+       "09" = "Malignancy",
+  "10" = "Neonatal",
+  "11" = "TechDep",
+       "12" = "Transplant"
+)
+
 # deprecated copies follow:
 icd_names_charlson <- names_charlson
 icd_names_charlson_abbrev <- names_charlson_abbrev

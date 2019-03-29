@@ -228,3 +228,13 @@ hcc_test_invalid <- icd_long_data(
 hcc_test_simple10 <- hcc_test_simple9
 hcc_test_simple10$icd_code <- c("T410X2S", "M87071", "I82531", "I70232", "C434")
 hcc_test_simple10$date <- hcc_test_simple10$date + 6 * 365
+
+# Six random codes from each PCCC procedure code map. 'icd' will use
+# an heuristic to guess whether ICD-9 or ICD-10:
+pccc_pts <- data.frame(
+  encounters = c(10, 11, 12),
+  icd9_dx = c("31800", "41610", "27701"),
+  icd10_dx = c("K50", "B20", "E702"),
+  icd9_pcs = c("0152", "304", "0050"),
+  icd10_pcs = c("0B110Z4", "02YA0Z2", "031209D")
+)

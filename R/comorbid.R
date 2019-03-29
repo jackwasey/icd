@@ -78,17 +78,17 @@ poa_choices <- c("yes", "no", "notYes", "notNo")
 #'   # get first few rows and columns of Charlson comorbidities using Quan/Deyo
 #'   # mapping of ICD-9 or ICD-10 codes Charlson categories
 #'   comorbid_quan_deyo(icd.data::vermont_dx)[1:5, 1:14]
-#'
+#' 
 #'   # Note that the comorbidity calculations automatically finds the ICD code
 #'   # columns, and uses 'wide' or 'long' format data.
-#'
+#' 
 #'   stopifnot(
 #'     identical(
 #'       comorbid_quan_deyo(icd.data::vermont_dx),
 #'       comorbid_quan_deyo(wide_to_long(icd.data::vermont_dx))
 #'     )
 #'   )
-#'
+#' 
 #'   # get summary AHRQ (based on Elixhauser) comorbidities for the Uranium data:
 #'   summary(comorbid_ahrq(icd.data::uranium_pathology))
 #' }
@@ -105,10 +105,10 @@ poa_choices <- c("yes", "no", "notYes", "notNo")
 #'     "2011-01-04", "2011-01-04"
 #'   ))
 #' )
-#'
+#' 
 #' pt_hccs <- comorbid_hcc(pts, date_name = "date")
 #' head(pt_hccs)
-#'
+#' 
 #' pts10 <- icd_long_data(
 #'   visit_name = c("a", "b", "c", "d", "e"),
 #'   icd_name = c("I058", NA, "T82817A", "", "I69369"),
@@ -116,13 +116,13 @@ poa_choices <- c("yes", "no", "notYes", "notNo")
 #'     c("2011-01-01", "2011-01-02", "2011-01-03", "2011-01-03", "2011-01-03")
 #'   )
 #' )
-#'
+#' 
 #' icd10_comorbid(pts10, map = icd10_map_ahrq)
 #' # or if library(icd) hasn't been called first:
 #' icd::icd10_comorbid(pts10, map = icd::icd10_map_ahrq)
 #' # or most simply:
 #' icd::icd10_comorbid_ahrq(pts10)
-#'
+#' 
 #' # specify a simple custom comorbidity map:
 #' my_map <- list(
 #'   "malady" = c("100", "2000"),
@@ -285,7 +285,10 @@ icd9_comorbid <- function(x,
 #'   the user must call the \code{icd9_} or \code{icd10_} prefixed function
 #'   directly.
 #' @export
-icd9_comorbid_ahrq <- function(x, ..., abbrev_names = TRUE, hierarchy = TRUE) {
+icd9_comorbid_ahrq <- function(x,
+                               ...,
+                               abbrev_names = TRUE,
+                               hierarchy = TRUE) {
   cbd <- icd9_comorbid(x, map = icd::icd9_map_ahrq, short_map = TRUE, ...)
   apply_hier_ahrq(cbd, abbrev_names = abbrev_names, hierarchy = hierarchy)
 }
@@ -474,7 +477,7 @@ comorbid_charlson <- function(...)
 #' @template hierarchy
 #' @name apply_hier
 #' @keywords internal manip
-apply_hier_elix <- function(x, abbrev_names = TRUE, hierarchy = TRUE) {
+apply_hier_elix <- function(x, abbrev_names, hierarchy = TRUE) {
   false <- FALSE
   use_int <- FALSE
   if (is.numeric(x[, "Tumor"])) {
@@ -506,7 +509,7 @@ apply_hier_elix <- function(x, abbrev_names = TRUE, hierarchy = TRUE) {
 
 #' @rdname apply_hier
 #' @keywords internal manip
-apply_hier_quan_elix <- function(cbd, abbrev_names = TRUE, hierarchy = TRUE) {
+apply_hier_quan_elix <- function(cbd, abbrev_names, hierarchy = TRUE) {
   false <- FALSE
   use_int <- FALSE
   if (is.numeric(cbd[, "Tumor"])) {
@@ -546,7 +549,7 @@ apply_hier_quan_elix <- function(cbd, abbrev_names = TRUE, hierarchy = TRUE) {
 
 #' @rdname apply_hier
 #' @keywords internal manip
-apply_hier_quan_deyo <- function(cbd, abbrev_names = TRUE, hierarchy = TRUE) {
+apply_hier_quan_deyo <- function(cbd, abbrev_names, hierarchy = TRUE) {
   false <- FALSE
   if (is.numeric(cbd[, "Cancer"])) {
     false <- 0L
@@ -569,7 +572,7 @@ apply_hier_quan_deyo <- function(cbd, abbrev_names = TRUE, hierarchy = TRUE) {
 
 #' @rdname apply_hier
 #' @keywords internal manip
-apply_hier_ahrq <- function(cbd, abbrev_names = TRUE, hierarchy = TRUE) {
+apply_hier_ahrq <- function(cbd, abbrev_names, hierarchy = TRUE) {
   stopifnot(ncol(cbd) == 30 + is.data.frame(cbd))
   false <- FALSE
   use_int <- FALSE
@@ -600,6 +603,18 @@ apply_hier_ahrq <- function(cbd, abbrev_names = TRUE, hierarchy = TRUE) {
     } else {
       icd::names_ahrq_htn
     }
+  }
+  cbd
+}
+
+#' No hierarchy for PCCC, but we do want to apply the names correctly to matrices and data frames
+#' @keywords internal
+#' @noRd
+apply_hier_pccc <- function(cbd, abbrev_names) {
+  colnames(cbd)[cr(cbd)] <- if (abbrev_names) {
+    icd::names_pccc_abbrev
+  } else {
+    icd::names_pccc
   }
   cbd
 }

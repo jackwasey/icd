@@ -35,6 +35,8 @@
 \alias{icd9_names_multi_ccs}
 \alias{icd9_names_single_ccs}
 \alias{icd10_names_ccs}
+\alias{names_pccc}
+\alias{names_pccc_abbrev}
 \title{Comorbidity names}
 \format{list, with character/numeric code. 'Hypertension,
   uncomplicated' and 'Hypertension, complicated' are labelled '6a'

@@ -18,18 +18,18 @@ comorbid_pccc_pcs(x, visit_name = get_visit_name(x), icd_name,
 
 icd9_comorbid_pccc_dx(x, visit_name = NULL, icd_name = NULL,
   short_code = guess_short(x, icd_name = icd_name), return_df = FALSE,
-  return_binary = FALSE, ...)
+  return_binary = FALSE, ..., abbrev_names = TRUE)
 
 icd10_comorbid_pccc_dx(x, visit_name = NULL, icd_name = NULL,
   short_code = guess_short(x, icd_name = icd_name), return_df = FALSE,
-  return_binary = FALSE, ...)
+  return_binary = FALSE, ..., abbrev_names = TRUE)
 
 icd9_comorbid_pccc_pcs(x, visit_name = get_visit_name(x),
   icd_name = get_icd_pc_name(x), return_df = FALSE,
-  return_binary = FALSE, ...)
+  return_binary = FALSE, ..., abbrev_names = TRUE)
 
 icd10_comorbid_pccc_pcs(x, visit_name = get_visit_name(x), icd_name,
-  return_df = FALSE, return_binary = FALSE, ...)
+  return_df = FALSE, return_binary = FALSE, ..., abbrev_names = TRUE)
 }
 \arguments{
 \item{x}{\code{data.frame} containing a column of patient-visit identifiers
@@ -72,6 +72,10 @@ conversion can also be done by the internal functions
 other tools, e.g. \code{apply(x, 2, as.integer)}}
 
 \item{...}{arguments passed on to other functions}
+
+\item{abbrev_names}{single logical value that defaults to \code{TRUE}, in
+which case the shorter human-readable names stored in e.g.
+\code{ahrqComorbidNamesAbbrev} are applied to the data frame column names.}
 }
 \description{
 Unlike with ICD-9 and ICD-10 diagnostic codes, 'icd' doesn't
