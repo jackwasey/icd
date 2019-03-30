@@ -1,1 +1,4 @@
 ^COPYING$
+^vignettes\/.*\.Rmd$
+doc\/.*.Rmd
+

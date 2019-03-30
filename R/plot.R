@@ -38,7 +38,7 @@ plot_comorbid <- function(x,
 #' @export
 plot_comorbid_results <- function(x,
                                   sort = TRUE,
-                                  fix_margin = TRUE,
+                                  fix_margin = FALSE,
                                   las = 2,
                                   cex.names = 0.75,
                                   ...) {

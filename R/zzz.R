@@ -20,7 +20,8 @@
 }
 
 release_questions <- function() {
-  c(
+  c(# vignette
+    "manual rebuild of efficiency and country-lang-vers vignettes",
     # commands:
     "update_everything() on linux",
     "aspell_package_Rd_files('.')",

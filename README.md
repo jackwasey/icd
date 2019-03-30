@@ -108,6 +108,8 @@ function for more. Here’s a taste:
 ``` r
 # install.packages("icd")
 library(icd)
+browseVignettes("icd")
+help(package = "icd")
 
 # Typical diagnostic code data, with many-to-many relationship
 patient_data
@@ -226,8 +228,8 @@ suite which exercises all the key functions.
 ?explain_code
 ?is_valid
 
-# first show the list
-vignette(package = "icd")
+help(package = "icd")
+browseVignettes("icd")
 vignette("introduction", package = "icd")
 ```
 

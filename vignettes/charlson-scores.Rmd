@@ -3,7 +3,7 @@ title: "Charlson and Van Walraven scores"
 author: "Jack O. Wasey"
 date: "`r Sys.Date()`"
 output:
-  html_document:
+  html_vignette:
     toc: yes
 vignette: >
   %\VignetteIndexEntry{Charlson and Van Walraven scores}

@@ -3,7 +3,7 @@ title: "ICD-10 comorbidities"
 author: "Jack O. Wasey"
 date: "`r Sys.Date()`"
 output:
-  html_document
+  html_vignette
 vignette: >
   %\VignetteIndexEntry{ICD-10 comorbidities}
   %\VignetteEngine{knitr::rmarkdown}

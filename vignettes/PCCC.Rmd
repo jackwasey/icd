@@ -3,7 +3,7 @@ title: "Pediatric Complex Chronic Conditions"
 author: "Jack O. Wasey"
 date: "`r Sys.Date()`"
 output:
-  html_document:
+  html_vignette:
     toc: yes
 vignette: >
   %\VignetteIndexEntry{Pediatric Complex Chronic Conditions}
@@ -67,7 +67,7 @@ colSums(res)
 ```
 
 ```{r par, include = FALSE}
-graphics::par(mar = c(12, 4, 4, 2) + 0.1) # bottom, left, top, right
+#graphics::par(mar = c(12, 4, 4, 2) + 0.1) # bottom, left, top, right
 ```
 ```{r pcccbarplot, echo=FALSE}
 graphics::barplot(sort(colSums(res), decreasing = TRUE),

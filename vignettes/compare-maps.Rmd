@@ -4,7 +4,7 @@ author:
 - Andrew Cooper (original)
 - Jack Wasey (minor updates)
 date: "March 1, 2018"
-output: html_document
+output: html_vignette
 vignette: >
   %\VignetteIndexEntry{Comparing Comorbidity Mappings}
   %\VignetteEngine{knitr::rmarkdown}

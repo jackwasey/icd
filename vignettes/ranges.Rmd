@@ -3,7 +3,7 @@ title: "Ranges of ICD codes"
 author: "Jack O. Wasey"
 date: "`r Sys.Date()`"
 output:
-  html_document:
+  html_vignette:
     toc: yes
 vignette: >
   %\VignetteIndexEntry{Ranges of ICD codes}
