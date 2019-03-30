@@ -47,7 +47,9 @@ output:
   rticles::jss_article:
     keep_tex: true
 bibliography:
-  - all.bib
+  - gplv3.bib
+  - other.bib
+  - icdjss.bib
 vignette: >
   %\VignetteIndexEntry{icd: Efficient Computation of Comorbidities from ICD Codes Using Sparse Matrix Multiplication in R}
   %\VignetteDepends{icd.data, rticles}

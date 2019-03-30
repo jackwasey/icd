@@ -1,4 +1,4 @@
-I am submitting icd 4.0, icd.data 1.1.1 and a new pacakge nhds 1.0.1 simultaneously. Thank you for comments on previous submission, all of which have been addressed. All packages should now check independently, except 'icd' which has a Suggest dependency on the new package 'nhds'.
+I am submitting icd 4.0, icd.data 1.1.2 together. Thank you for comments on previous submission, all of which have been addressed. 'icd' and 'icd.data' versions need to be updated on CRAN together due to reverse dependency failure, but otherwise function regardless of the version of the other package, hence lack of version specifications in these DESCRIPTIONS.
 
 Please note that a pandoc version error prevents the automated CRAN checks from passing on some platforms. The Pandoc version dependency for building the vignettes is in the DESCRIPTION.
 

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-all=all.bib
+#all=all.bib
 
 command -v bibtool >/dev/null 2>&1 || { echo >&2 "I require bibtool but it's not installed. Aborting."; exit 1; }
 
@@ -25,5 +25,5 @@ do
   fi
 done
 
-bibtool -s gplv3.bib other.bib icdjss.bib -- preserve.key.case=on > "$all"
+#bibtool -s gplv3.bib other.bib icdjss.bib -- preserve.key.case=on > "$all"
 exit 0
