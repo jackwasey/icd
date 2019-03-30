@@ -36,7 +36,7 @@ build_script:
 
 environment:
   # temporarily work around a cache problem for old github version of icd.data
-  # APPVEYOR_CACHE_SKIP_RESTORE: true
+  APPVEYOR_CACHE_SKIP_RESTORE: true
   WARNINGS_ARE_ERRORS: 1
   _R_CHECK_EXIT_ON_FIRST_ERROR_: true
   USE_RTOOLS: true

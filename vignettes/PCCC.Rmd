@@ -14,23 +14,27 @@ bibliography: icdpkg.bib
 ---
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_knit$set(global.par = TRUE)
 library("icd")
 library("icd.data")
 n <- 10000
 set.seed(1441)
-nm <- "code"
+# load the dice with more PCCC diagnostic codes
+h <- c(
+  icd.data::icd10cm2016$code,
+  rep(unlist(unname(icd10_map_pccc_dx)), 10)
+)
 i <- if (icd:::icd_data_ver_ok()) {
-  icd:::.idget("icd10cm2016_pc", must_work = FALSE)
+  icd:::.idget("icd10cm2016_pc", must_work = FALSE)[["code"]]
 } else {
-  nm <- "pcs"
-  icd:::.idget("icd10_pcs_2016", must_work = FALSE)
+  icd:::.idget("icd10_pcs_2016", must_work = FALSE)[["pcs"]]
 }
 dat <- data.frame(
   id = n + seq(n),
-  icd_dx1 = sample(icd.data::icd10cm2016$code, n, replace = TRUE),
-  icd_dx2 = sample(icd.data::icd10cm2016$code, n, replace = TRUE),
-  icd_pcs1 = sample(i[[nm]], n, replace = TRUE),
-  icd_pcs2 = sample(i[[nm]], n, replace = TRUE)
+  icd_dx1 = sample(h, n, replace = TRUE),
+  icd_dx2 = sample(h, n, replace = TRUE),
+  icd_pcs1 = sample(i, n, replace = TRUE),
+  icd_pcs2 = sample(i, n, replace = TRUE)
 )
 ```
 
@@ -51,14 +55,27 @@ The data is in 'wide' format. `icd` no longer needs the data to be in 'long' for
 ```{r calc}
 pccc_dx <- comorbid_pccc_dx(dat)
 pccc_pcs <- icd10_comorbid_pccc_pcs(dat,
-                                    icd_name = c("icd_pcs1", "icd_pcs2"))
+  icd_name = c("icd_pcs1", "icd_pcs2")
+)
 res <- pccc_dx | pccc_pcs
+res[295:300, ]
+```
+Let's look at the summary results:
+
+```{r colsumpccc}
+colSums(res)
 ```
 
-```{r pcccbarplot, fig.asp=0.5, echo=FALSE}
-barplot(sort(colSums(res), decreasing = TRUE),
-        ylim = c(0, signif(max(colSums(res)), 1)),
-        ylab = "count", las = 2)
+```{r par, include = FALSE}
+par(mar = c(12, 4, 4, 2) + 0.1) # bottom, left, top, right
+```
+```{r pcccbarplot, echo=FALSE}
+graphics::barplot(sort(colSums(res), decreasing = TRUE),
+  names.arg = names_pccc,
+  ylab = "count",
+  las = 2,
+  cex.names = 0.75
+)
 ```
 
 # References

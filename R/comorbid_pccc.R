@@ -32,7 +32,8 @@ comorbid_pccc_dx <- function(x,
     icd_name = icd_name,
     short_code = short_code,
     return_df = return_df,
-    return_binary = return_binary, ...
+    return_binary = return_binary,
+    ...
   )
 }
 
@@ -126,27 +127,28 @@ icd9_comorbid_pccc_dx <-
 #' @describeIn comorbid_pccc_dx Calculate PCCC comorbidities from ICD-10
 #'   diagnosis codes
 #' @export
-icd10_comorbid_pccc_dx <- function(x,
-                                   visit_name = NULL,
-                                   icd_name = NULL,
-                                   short_code = guess_short(x, icd_name = icd_name),
-                                   return_df = FALSE,
-                                   return_binary = FALSE,
-                                   ...,
-                                   abbrev_names = TRUE) {
-  res <- icd10_comorbid(
-    x = x,
-    map = icd10_map_pccc_dx,
-    visit_name = visit_name,
-    icd_name = icd_name,
-    short_code = short_code,
-    short_map = TRUE,
-    return_df = return_df,
-    return_binary = return_binary,
-    ...
-  )
-  apply_hier_pccc(res, abbrev_names)
-}
+icd10_comorbid_pccc_dx <-
+  function(x,
+             visit_name = NULL,
+             icd_name = NULL,
+             short_code = guess_short(x, icd_name = icd_name),
+             return_df = FALSE,
+             return_binary = FALSE,
+             ...,
+             abbrev_names = TRUE) {
+    res <- icd10_comorbid(
+      x = x,
+      map = icd10_map_pccc_dx,
+      visit_name = visit_name,
+      icd_name = icd_name,
+      short_code = short_code,
+      short_map = TRUE,
+      return_df = return_df,
+      return_binary = return_binary,
+      ...
+    )
+    apply_hier_pccc(res, abbrev_names)
+  }
 
 #' @describeIn comorbid_pccc_dx Calculate PCCC comorbidities from ICD-9
 #'   procedure codes

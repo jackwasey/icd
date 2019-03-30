@@ -2,16 +2,16 @@
 % Please edit documentation in R/plot.R
 \name{plot_comorbid}
 \alias{plot_comorbid}
-\title{Basic bar plot showing counts of each comorbidity}
+\title{Basic ordered bar plot showing counts of each comorbidity}
 \usage{
 plot_comorbid(x, sort = TRUE, comorbid_fun = icd::comorbid_ahrq,
-  las = 2, cex = 0.75, ...)
+  las = 2, cex.names = 0.75, ...)
 }
 \arguments{
 \item{x}{input patient data}
 
-\item{sort}{Logical, default \code{TRUE} which sorts the frequencies from high to
-low.}
+\item{sort}{Logical, default \code{TRUE} which sorts the frequencies from
+high to low.}
 
 \item{comorbid_fun}{Character name of function or function itself, default
 being \code{comorbid_ahrq}}
@@ -19,13 +19,14 @@ being \code{comorbid_ahrq}}
 \item{las}{Integer, default is 2 which rotates the x axis labels
 appropriately}
 
-\item{cex}{Numeric, default is 0.75 which scales the text size for labels
-appropriately}
+\item{cex.names}{Numeric, default is 0.75 which scales the text size for
+labels appropriately}
 
-\item{...}{Passed to both \code{comorbid_fun} and \code{graphics::barplot}}
+\item{...}{Passed to both \code{comorbid_fun} and
+\code{\link[graphics]{barplot}}}
 }
 \description{
-Basic bar plot showing counts of each comorbidity
+Basic ordered bar plot showing counts of each comorbidity
 }
 \examples{
 \dontrun{
