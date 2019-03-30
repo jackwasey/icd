@@ -133,6 +133,7 @@ void buildVisitCodesSparseWide(
 //' dense matrix is then the comorbidity map
 //' \url{https://eigen.tuxfamily.org/dox/TopicMultiThreading.html}
 //' @keywords internal array algebra
+//' @noRd
 // [[Rcpp::export]]
 LogicalMatrix comorbidMatMulWide(const DataFrame &data,
                                  const List &map,

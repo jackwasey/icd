@@ -4,6 +4,7 @@
 #' @template ccs-single
 #' @template dotdotdot
 #' @keywords internal
+#' @noRd
 icd9_fetch_ahrq_ccs <- function(single = TRUE, ...) {
   assert_flag(single)
   ccs_base <- "https://www.hcup-us.ahrq.gov/toolssoftware/ccs"
@@ -26,6 +27,7 @@ icd9_fetch_ahrq_ccs <- function(single = TRUE, ...) {
 #' @param version Default \code{2018.1}
 #' @template dotdotdot
 #' @keywords internal
+#' @noRd
 icd10_fetch_ahrq_ccs <- function(version = "2018.1", ...) {
   assert_character(version, pattern = "^20[0-9]{2}\\.[1-9]$")
   version <- gsub(".", "_", version, fixed = TRUE)
@@ -59,6 +61,7 @@ icd10_fetch_ahrq_ccs <- function(version = "2018.1", ...) {
 #' icd:::icd9_parse_ahrq_ccs(single = FALSE, offline = TRUE)
 #' }
 #' @keywords internal manip
+#' @noRd
 icd9_parse_ahrq_ccs <- function(single = TRUE,
                                 save_data = FALSE,
                                 offline = getOption("icd.data.offline")) {
@@ -198,6 +201,7 @@ icd9_parse_ahrq_ccs <- function(single = TRUE,
 #' )
 #' }
 #' @keywords internal manip
+#' @noRd
 icd10_parse_ahrq_ccs <- function(version = "2018.1",
                                  save_data = FALSE,
                                  offline = TRUE,

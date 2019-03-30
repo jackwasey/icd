@@ -181,9 +181,9 @@ Clinical Classification Software (CCS) rules from AHRQ, see
 }
 \details{
 The order of visits may change depending on the original sequence,
-and the underlying algorithm used. Usually this would be the order of the
-first occurrence of each visit/patient identifier, but this is not
-guaranteed unless \code{restore_id_order} is set to \code{TRUE}.
+  and the underlying algorithm used. Usually this would be the order of the
+  first occurrence of each visit/patient identifier, but this is not
+  guaranteed unless \code{restore_id_order} is set to \code{TRUE}.
 
 \code{data.frame}s of patient data may have columns within them
   which are of class \code{icd9}, \code{icd10} etc., but do not themselves

@@ -2,19 +2,9 @@
 % Please edit documentation in R/guess.R
 \name{guess_version}
 \alias{guess_version}
-\alias{guess_version.factor}
-\alias{guess_version.character}
-\alias{guess_version.data.frame}
 \title{Guess version of ICD codes}
 \usage{
 guess_version(x, short_code, ...)
-
-\method{guess_version}{factor}(x, short_code = NULL, ...)
-
-\method{guess_version}{character}(x, short_code = NULL, ...)
-
-\method{guess_version}{data.frame}(x, short_code = NULL,
-  icd_name = NULL, ...)
 }
 \arguments{
 \item{x}{input data}
@@ -22,13 +12,6 @@ guess_version(x, short_code, ...)
 \item{short_code}{single logical value which determines whether the ICD-9
 code provided is in short (\code{TRUE}) or decimal (\code{FALSE}) form.
 Where reasonable, this is guessed from the input data.}
-
-\item{icd_name}{The name of the column in the \code{data.frame} which
-contains the ICD codes. This is a character vector of length one. If it is
-\code{NULL}, \code{icd9} will attempt to guess the column name, looking for
-progressively less likely possibilities until it matches a single column.
-Failing this, it will take the first column in the data frame. Specifying
-the column using this argument avoids the guesswork.}
 
 \item{n}{number of elements or rows to sample}
 }
@@ -43,14 +26,4 @@ Currently, ambiguous codes are guessed true or false, with no indication of
 uncertainty. Possible solutions are adding an attribute, warning, or
 optionally throwing an error.
 }
-\section{Methods (by class)}{
-\itemize{
-\item \code{factor}: Guess version of ICD codes in a factor
-
-\item \code{character}: Guess version of ICD codes in character vector
-
-\item \code{data.frame}: Guess version of ICD codes in a field in a
-\code{data.frame}
-}}
-
 \keyword{internal}

@@ -37,6 +37,7 @@ ahrq_order_all <- c(
 #' Get the SAS code from AHRQ and save in raw data directory, if not already
 #' there.
 #' @keywords internal
+#' @noRd
 icd9_fetch_ahrq_sas <- function(offline) {
   download_to_data_raw(
     url = paste0(.ahrq_url_base, "comorbidity/comformat2012-2013.txt"),
@@ -58,6 +59,7 @@ icd10_fetch_ahrq_sas <- function(offline) {
 #' in generating the package itself.
 #' @template parse-template
 #' @keywords internal manip
+#' @noRd
 icd9_parse_ahrq_sas <- function(save_data = FALSE, offline = TRUE) {
   assert_flag(save_data)
   # readLines make assumptions or guess about encoding, consider using
@@ -158,6 +160,7 @@ icd10_parse_ahrq_sas <- function(save_data = FALSE, offline = TRUE) {
 }
 
 #' @keywords internal
+#' @noRd
 icd9_fetch_quan_deyo_sas <- function(...) {
   download_to_data_raw(
     url =
@@ -185,6 +188,7 @@ icd9_fetch_quan_deyo_sas <- function(...) {
 #' @template parse-template
 #' @template offline
 #' @keywords internal manip
+#' @noRd
 icd9_parse_quan_deyo_sas <- function(save_data = FALSE, offline = TRUE) {
   assert_flag(save_data)
   # download the file and/or just get the path or file name, fails if missing

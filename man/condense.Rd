@@ -4,7 +4,6 @@
 \alias{condense}
 \alias{condense.character}
 \alias{icd9_condense_decimal}
-\alias{icd9_condense_short}
 \title{Condense ICD-9 code by replacing complete families with parent codes}
 \usage{
 condense(x, short_code = guess_short(x), defined = NULL, warn = TRUE,
@@ -15,24 +14,13 @@ condense(x, short_code = guess_short(x), defined = NULL, warn = TRUE,
 
 icd9_condense_decimal(x, defined = NULL, warn = TRUE,
   keep_factor_levels = FALSE)
-
-icd9_condense_short(x, defined = NULL, warn = TRUE,
-  keep_factor_levels = FALSE)
 }
 \arguments{
 \item{short_code}{single logical value which determines whether the ICD-9
 code provided is in short (\code{TRUE}) or decimal (\code{FALSE}) form.
 Where reasonable, this is guessed from the input data.}
 
-\item{warn}{single logical value, if \code{TRUE}, give warnings when
-there is discrepancy between \code{defined} being \code{TRUE} yet data
-containing undefined codes.}
-
 \item{...}{arguments passed on to other functions}
-
-\item{keep_factor_levels}{single logical value, default \code{FALSE}. If
-\code{TRUE}, will reuse the factor levels from the input data for the
-output data. This only applies if a factor is given for the input codes.}
 
 \item{icd9}{is a character vector or factor of ICD-9 codes. If fewer than five characters
 is given in a code, then the digits are greedily assigned to hundreds, then
@@ -85,7 +73,7 @@ if (requireNamespace("icd.data", quietly = TRUE)) {
 }
 \seealso{
 Other ICD-9 ranges: \code{\link{children}},
-  \code{\link{expand_minor}}, \code{\link{expand_range}}
+  \code{\link{expand_range}}
 }
 \concept{ICD-9 ranges}
 \keyword{internal}

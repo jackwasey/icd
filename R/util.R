@@ -20,13 +20,15 @@ strim <- function(x) {
 "%nin%" <- function(x, table)
   match(x, table, nomatch = 0L) == 0L
 
-#' @describeIn match_rcpp Use faster matching for %in%
+#' Use faster matching for %in%
 #' @keywords internal
+#' @noRd
 "%fin%" <- function(x, table)
   fin(x, table)
 
-#' @describeIn match_rcpp Use faster matching for %nin%
+#' Use faster matching for %nin%
 #' @keywords internal
+#' @noRd
 "%fnin%" <- function(x, table)
   !fin(x, table)
 
@@ -62,6 +64,7 @@ strip <- function(x, pattern = " ", use_bytes = TRUE)
 #' icd:::binary_to_logical(icd:::logical_to_binary(mat))
 #' @return \code{data.frame} without logical fields
 #' @keywords internal manip logical
+#' @noRd
 logical_to_binary <- function(x) {
   stopifnot(is.data.frame(x) || is.matrix(x))
   if (is.matrix(x)) {
@@ -85,6 +88,7 @@ logical_to_binary <- function(x) {
 }
 
 #' @describeIn logical_to_binary Convert integer columns to logical values
+#' @noRd
 binary_to_logical <- function(x) {
   stopifnot(is.data.frame(x) || is.matrix(x))
   if (is.matrix(x)) {
@@ -115,13 +119,15 @@ binary_to_logical <- function(x) {
 #' @param x input data, typically a data frame
 #' @template visit_name
 #' @keywords internal
+#' @noRd
 get_visit_name <- function(x, visit_name = NULL) {
   UseMethod("get_visit_name")
 }
 
-#' @describeIn get_visit_name Guess or get visit/patient column from data frame
+#' Guess or get visit/patient column from data frame
 #' @keywords internal
 #' @export
+#' @noRd
 get_visit_name.data.frame <- function(x, visit_name = NULL) {
   stopifnot(is.data.frame(x))
   stopifnot(is.null(visit_name) ||
@@ -148,12 +154,13 @@ get_visit_name.data.frame <- function(x, visit_name = NULL) {
   visit_name
 }
 
-#' @describeIn get_visit_name Give useful error message if matrix passed, as we
-#'   assume it is a comorbidity matrix. It is possible you have a character
-#'   matrix with all your patient data, and if so, please convert it to a
-#'   \code{data.frame} and file an issue on github.
+#' Give useful error message if matrix passed, as we assume it is a comorbidity
+#' matrix. It is possible you have a character matrix with all your patient
+#' data, and if so, please convert it to a \code{data.frame} and file an issue
+#' on github.
 #' @keywords internal
 #' @export
+#' @noRd
 get_visit_name.matrix <- function(x, visit_name = NULL) {
   if (is.logical(x)) {
     stop(
@@ -179,6 +186,7 @@ get_visit_name.matrix <- function(x, visit_name = NULL) {
 #'   of \code{x}'s columns) and returned unchanged
 #' @param multi If \code{TRUE}, allow multiple ICD field names to be returned.
 #' @keywords internal
+#' @noRd
 get_icd_dx_name <- function(x,
                             icd_name = NULL,
                             valid_codes = TRUE,
@@ -235,8 +243,9 @@ get_icd_dx_name <- function(x,
   icd_name
 }
 
-#' @rdname get_icd_dx_name
+#' deprecated synonym
 #' @keywords internal
+#' @noRd
 get_icd_name <- get_icd_dx_name
 
 #' Uses the columns which contain ICD-9 or ICD-10-CM procedure codes
@@ -247,8 +256,9 @@ get_icd_name <- get_icd_dx_name
 #' @param icd_name character vector of the column names containing the procedure
 #'   codes. This is usually not known in advance, but if known, will be passed
 #'   through.
-#' @seealso \code{\link{get_icd_dx_name}}
+#' @seealso \code{get_icd_dx_name}
 #' @keywords internal
+#' @noRd
 get_icd_pc_name <- function(x, icd_name = NULL) {
   if (!is.null(icd_name)) {
     stopifnot(all(icd_name %in% names(x)))
@@ -282,6 +292,7 @@ get_icd_pc_name <- function(x, icd_name = NULL) {
 #' @return Zero, one or many names of columns likely to contain ICD codes based
 #'   on the column names.
 #' @keywords internal
+#' @noRd
 guess_icd_col_by_name <- function(x,
                                   valid_codes = TRUE,
                                   defined_codes = FALSE,
@@ -345,6 +356,7 @@ guess_icd_pc_col_by_name <- function(x,
 
 #' @describeIn guess_icd_col_by_name Just use the class of columns
 #' @keywords internal
+#' @noRd
 guess_icd_col_by_class <- function(x, pattern) {
   cls <- lapply(x, class)
   clg <- vapply(cls, function(z) any(z %in% pattern), logical(1))
@@ -408,27 +420,6 @@ get_raw_data_dir <- function() {
 str_match_all <- function(string, pattern, ...) {
   string <- as.character(string)
   regmatches(x = string, m = regexec(pattern = pattern, text = string, ...))
-}
-
-# copied from icd.data version 1.1 until everything is on CRAN
-with_icd10cm_version <- function(ver, lang = c("en", "fr"), code) {
-  lang <- match.arg(lang)
-  var_name <- paste0(
-    "icd10cm",
-    ver,
-    ifelse(lang == "en", "", paste0("_", lang))
-  )
-  stopifnot(!is.null(getExportedValue(
-    ns = asNamespace("icd.data"),
-    name = var_name
-  )))
-  stopifnot(is.character(ver), length(ver) == 1)
-  old <- options(
-    "icd.data.icd10cm_active_ver" = ver,
-    "icd.data.icd10cm_active_lang" = lang
-  )
-  on.exit(options(old), add = TRUE)
-  force(code)
 }
 
 require_icd_data <- function(version = "1.0") {

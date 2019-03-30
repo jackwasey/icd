@@ -2,36 +2,55 @@
 % Please edit documentation in R/plot.R
 \name{plot_comorbid}
 \alias{plot_comorbid}
+\alias{plot_comorbid_results}
 \title{Basic ordered bar plot showing counts of each comorbidity}
 \usage{
-plot_comorbid(x, sort = TRUE, comorbid_fun = icd::comorbid_ahrq,
-  las = 2, cex.names = 0.75, ...)
+plot_comorbid(x, comorbid_fun = icd::comorbid_ahrq, ...)
+
+plot_comorbid_results(x, sort = TRUE, fix_margin = TRUE, las = 2,
+  cex.names = 0.75, ...)
 }
 \arguments{
 \item{x}{input patient data}
 
+\item{comorbid_fun}{Character name of function or function itself, default
+being \code{comorbid_ahrq}}
+
+\item{...}{Passed to \code{\link[graphics]{barplot}}}
+
 \item{sort}{Logical, default \code{TRUE} which sorts the frequencies from
 high to low.}
 
-\item{comorbid_fun}{Character name of function or function itself, default
-being \code{comorbid_ahrq}}
+\item{fix_margin}{Logical, default \code{TRUE}, which causes a
+\code{\link[graphics]{par}} margin to be set so the x axis labels are less
+likely to be truncated.}
 
 \item{las}{Integer, default is 2 which rotates the x axis labels
 appropriately}
 
 \item{cex.names}{Numeric, default is 0.75 which scales the text size for
 labels appropriately}
-
-\item{...}{Passed to both \code{comorbid_fun} and
-\code{\link[graphics]{barplot}}}
 }
 \description{
 Basic ordered bar plot showing counts of each comorbidity
 }
+\section{Functions}{
+\itemize{
+\item \code{plot_comorbid_results}: Plot the results of a call to one of the
+comorbidity settings.
+}}
+
 \examples{
 \dontrun{
 plot_comorbid(icd.data::vermont_dx)
 plot_comorbid(icd.data::uranium_pathology)
+# Or calculate the comorbidities, then plot the results
+cmb <- comorbid_ahrq(icd.data::vermont_dx)
+# plot with full, not abbreviated names
+plot_comorbid_results(cmb, names.arg = names_ahrq)
+# or return with full names, and plot those:
+cmb <- comormbid_ahrq(icd.data::vermont_dx, abbrev_names = FALSE) \%>\%
+  plot_comorbid_results()
 }
 }
 \keyword{hplot}

@@ -30,6 +30,7 @@ using namespace Rcpp;
 //'                              id_name = "case", code_name = "icd10"))
 //' }
 //' @keywords internal
+//' @noRd
 // [[Rcpp::export(simplify_map_lex)]]
 Rcpp::List simplifyMapLexicographic(const CV &pt_codes, const List map) {
   std::string ptCode;

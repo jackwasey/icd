@@ -30,6 +30,7 @@ bool icd9IsASingleVE(const char *s) {
 //' @param x \code{const char*} of choices of first character to match
 //' @param invert single logical, if TRUE, negates the condition
 //' @keywords internal
+//' @noRd
 // [[Rcpp::export]]
 std::vector<bool> icd9_is_n_rcpp(const VecStr &sv) {
   const int len = sv.size();
@@ -38,8 +39,9 @@ std::vector<bool> icd9_is_n_rcpp(const VecStr &sv) {
   return out;
 }
 
-//' @rdname icd9_is_n_rcpp
+//' @title icd9_is_n_rcpp
 //' @keywords internal
+//' @noRd
 // [[Rcpp::export]]
 std::vector<bool> icd9_is_v_rcpp(const VecStr &sv) {
   const int len = sv.size();
@@ -48,8 +50,9 @@ std::vector<bool> icd9_is_v_rcpp(const VecStr &sv) {
   return out;
 }
 
-//' @rdname icd9_is_n_rcpp
+//' @title icd9_is_n_rcpp
 //' @keywords internal
+//' @noRd
 // [[Rcpp::export]]
 std::vector<bool> icd9_is_e_rcpp(const VecStr &sv) {
   const int len = sv.size();

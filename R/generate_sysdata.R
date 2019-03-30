@@ -45,6 +45,7 @@ update_everything <- function() {
 #' @template save_data
 #' @return invisibly returns the data as a list
 #' @keywords internal
+#' @noRd
 generate_sysdata <- function(save_data = TRUE) {
   path <- file.path("R", "sysdata.rda")
   icd9_short_n <- icd9_generate_all_n()

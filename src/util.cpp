@@ -252,6 +252,7 @@ CharacterVector icd10cmSort(const CharacterVector &x) {
 //'   D3A, which falls after D48. C4A M1A Z3A are also problems within
 //'   sub-chapters.
 //' @keywords internal
+//' @noRd
 // [[Rcpp::export(icd10cm_order_rcpp)]]
 IntegerVector icd10cmOrder(const CharacterVector &x) {
   // see icd9Order for a different approach
@@ -265,11 +266,9 @@ IntegerVector matchFastTemplate(const Vector<RTYPE> &x,
   return (match(x, table));
 }
 
-// # nocov start
-
 //' @title Faster match
-//' @name match_rcpp
 //' @keywords internal
+//' @noRd
 // [[Rcpp::export(match_rcpp)]]
 SEXP matchFast(SEXP x, SEXP table) {
   switch (TYPEOF(x)) {
@@ -289,8 +288,9 @@ LogicalVector inFastTemplate(const Vector<RTYPE> &x,
   return (!is_na(match(x, table)));
 }
 
-//' @describeIn match_rcpp Use faster matching for %in% equivalent.
+//' Use faster matching for %in% equivalent
 //' @keywords internal
+//' @noRd
 // [[Rcpp::export(fin)]]
 SEXP inFast(SEXP x, SEXP table) {
   switch (TYPEOF(x)) {
@@ -304,4 +304,3 @@ SEXP inFast(SEXP x, SEXP table) {
   return R_NilValue;
 }
 
-// # nocov end

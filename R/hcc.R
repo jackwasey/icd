@@ -59,6 +59,7 @@ icd10_comorbid_hcc <- function(x,
 #' apply HCC rules to either ICD-9 or ICD-10 codes
 #'
 #' @keywords internal manip
+#' @noRd
 comorbid_hcc_worker <- function(x,
                                 map,
                                 date_name,

@@ -11,6 +11,7 @@
 #' CC crosswalks.
 #' @template parse-template
 #' @keywords internal manip
+#' @noRd
 icd9_parse_cc <- function(save_data = FALSE) {
   assert_flag(save_data)
   hcc_icd9_dir <- file.path(get_raw_data_dir(), "icd_hcc_rawdata", "icd9")
@@ -83,6 +84,7 @@ icd9_parse_cc <- function(save_data = FALSE) {
 #' Import the ICD10 to CC crosswalks
 #' @template parse-template
 #' @keywords internal manip
+#' @noRd
 icd10_parse_cc <- function(save_data = FALSE) {
   assert_flag(save_data)
   hcc_icd10_dir <- file.path(get_raw_data_dir(), "icd_hcc_rawdata", "icd10")
@@ -136,6 +138,7 @@ icd10_parse_cc <- function(save_data = FALSE) {
 #' CCs to HCC
 #' @template parse-template
 #' @keywords internal manip
+#' @noRd
 icd_parse_cc_hierarchy <- function(save_data = FALSE) {
   assert_flag(save_data)
   # Define Hierarchy

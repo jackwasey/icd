@@ -8,7 +8,7 @@
 #' @param file_name file name of the resource within the zip file
 #' @param save_path file path to save the first file from the zip
 #' @keywords internal
-#' @export
+#' @noRd
 unzip_single <- function(url, file_name, save_path) {
   assert_character(url, len = 1)
   assert_character(file_name, len = 1)

@@ -4,8 +4,6 @@
 \alias{expand_range}
 \alias{expand_range.character}
 \alias{expand_range.icd9}
-\alias{icd9_expand_range_short}
-\alias{icd9_expand_range_decimal}
 \alias{\%i9da\%}
 \alias{\%i9sa\%}
 \alias{\%i9d\%}
@@ -21,12 +19,6 @@ expand_range(start, end, ...)
 \method{expand_range}{icd9}(start, end, short_code = guess_short(c(start,
   end)), defined = TRUE, ex_ambig_start = TRUE, ex_ambig_end = TRUE,
   ...)
-
-icd9_expand_range_short(start, end, defined = TRUE,
-  ex_ambig_start = TRUE, ex_ambig_end = TRUE)
-
-icd9_expand_range_decimal(start, end, defined = TRUE,
-  ex_ambig_start = TRUE, ex_ambig_end = TRUE)
 
 start \%i9da\% end
 
@@ -78,8 +70,6 @@ When the class is not known, it must be guessed from the start and
   end codes. If this guessing fails, e.g. start is ICD-9 whereas end is
   ICD-10, then an error is thrown. Otherwise, the appropriate S3 method is
   called.
-
-Expand range of short_code-form ICD-9 codes
 }
 \section{Methods (by class)}{
 \itemize{
@@ -101,7 +91,7 @@ if (requireNamespace("icd.data", quietly = TRUE)) {
 }
 \seealso{
 Other ICD-9 ranges: \code{\link{children}},
-  \code{\link{condense}}, \code{\link{expand_minor}}
+  \code{\link{condense}}
 }
 \concept{ICD-9 ranges}
 \keyword{internal}

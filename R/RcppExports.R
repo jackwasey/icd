@@ -81,6 +81,7 @@ icd10_children_defined_rcpp <- function(x, lookup, nc, warn = TRUE) {
 #'                              id_name = "case", code_name = "icd10"))
 #' }
 #' @keywords internal
+#' @noRd
 simplify_map_lex <- function(pt_codes, map) {
     .Call(`_icd_simplifyMapLexicographic`, pt_codes, map)
 }
@@ -106,6 +107,7 @@ simplify_map_lex <- function(pt_codes, map) {
 #' dense matrix is then the comorbidity map
 #' \url{https://eigen.tuxfamily.org/dox/TopicMultiThreading.html}
 #' @keywords internal array algebra
+#' @noRd
 comorbidMatMulWide <- function(data, map, id_name, code_names, validate) {
     .Call(`_icd_comorbidMatMulWide`, data, map, id_name, code_names, validate)
 }
@@ -157,12 +159,13 @@ icd10DecimalToParts <- function(x, mnrEmpty = "") {
 }
 
 #' @title Convert integers to strings as quickly as possible
-#' @description Have tried R, \code{sprintf} with \pkg{Rcpp} and C++ standard
-#' library. Doesn't do bounds checking, but limited by length of integers.
+#' @description Have tried R, \code{sprintf} with \CRANpkg{Rcpp} and C++
+#'   standard library. Doesn't do bounds checking, but limited by length of
+#'   integers.
 #' @param x Vector of integers
 #' @return Vector of characters
-#' @md
 #' @keywords internal manip
+#' @noRd
 fastIntToStringRcpp <- function(x) {
     .Call(`_icd_fastIntToStringRcpp`, x)
 }
@@ -202,24 +205,28 @@ guess_short <- function(x_, short_code = NULL, n = 1000L, icd_name = NULL) {
 #' @param x \code{const char*} of choices of first character to match
 #' @param invert single logical, if TRUE, negates the condition
 #' @keywords internal
+#' @noRd
 icd9_is_n_rcpp <- function(sv) {
     .Call(`_icd_icd9_is_n_rcpp`, sv)
 }
 
-#' @rdname icd9_is_n_rcpp
+#' @title icd9_is_n_rcpp
 #' @keywords internal
+#' @noRd
 icd9_is_v_rcpp <- function(sv) {
     .Call(`_icd_icd9_is_v_rcpp`, sv)
 }
 
-#' @rdname icd9_is_n_rcpp
+#' @title icd9_is_n_rcpp
 #' @keywords internal
+#' @noRd
 icd9_is_e_rcpp <- function(sv) {
     .Call(`_icd_icd9_is_e_rcpp`, sv)
 }
 
 #' Simpler add leading zeroes without converting to parts and back
 #' @keywords internal manip
+#' @noRd
 icd9AddLeadingZeroesMajorSingle <- function(mjr) {
     .Call(`_icd_icd9AddLeadingZeroesMajorSingle`, mjr)
 }
@@ -240,6 +247,7 @@ icd9_add_leading_zeroes_major <- function(mjr) {
 #' @template short_code
 #' @return character vector of ICD-9 codes with leading zeroes
 #' @keywords internal manip
+#' @noRd
 icd9_add_leading_zeroes_rcpp <- function(x, short_code) {
     .Call(`_icd_icd9AddLeadingZeroes`, x, short_code)
 }
@@ -264,9 +272,10 @@ icd9ChildrenCpp <- function(icd9, isShort, icd9cmReal, onlyReal = TRUE) {
     .Call(`_icd_icd9ChildrenCpp`, icd9, isShort, icd9cmReal, onlyReal)
 }
 
-#' @describeIn factor_nosort \pkg{Rcpp} implementation, requiring character
-#' vector inputs only, no argument checking.
+#' @title Factor without sorting \CRANpkg{Rcpp} implementation
+#' @description Requiring character vector inputs only, no argument checking.
 #' @keywords internal manip
+#' @noRd
 factor_nosort_rcpp_worker <- function(x, levels, na_rm) {
     .Call(`_icd_factorNoSort`, x, levels, na_rm)
 }
@@ -276,7 +285,6 @@ factor_nosort_rcpp_worker <- function(x, levels, na_rm) {
 #'   version, too. Some work simply to mirror behavior of \code{base::factor},
 #'   e.g. when a level is not available, but NA level is available, NA is
 #'   inserted into the integer vector, not an index to the NA level.
-#' @md
 #' @keywords internal manip
 refactor_worker <- function(x, new_levels, exclude_na, validate) {
     .Call(`_icd_refactor`, x, new_levels, exclude_na, validate)
@@ -327,19 +335,21 @@ icd10cm_sort_rcpp <- function(x) {
 #'   D3A, which falls after D48. C4A M1A Z3A are also problems within
 #'   sub-chapters.
 #' @keywords internal
+#' @noRd
 icd10cm_order_rcpp <- function(x) {
     .Call(`_icd_icd10cmOrder`, x)
 }
 
 #' @title Faster match
-#' @name match_rcpp
 #' @keywords internal
+#' @noRd
 match_rcpp <- function(x, table) {
     .Call(`_icd_matchFast`, x, table)
 }
 
-#' @describeIn match_rcpp Use faster matching for %in% equivalent.
+#' Use faster matching for %in% equivalent
 #' @keywords internal
+#' @noRd
 fin <- function(x, table) {
     .Call(`_icd_inFast`, x, table)
 }

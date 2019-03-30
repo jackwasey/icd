@@ -99,7 +99,7 @@ if (requireNamespace("icd.data", quietly = TRUE)) {
 }
 \seealso{
 Other ICD-9 ranges: \code{\link{condense}},
-  \code{\link{expand_minor}}, \code{\link{expand_range}}
+  \code{\link{expand_range}}
 }
 \concept{ICD-9 ranges}
 \keyword{manip}

@@ -7,6 +7,7 @@
 #' \code{datadocs.R}.
 #' @template parse-template
 #' @keywords internal
+#' @noRd
 icd9_generate_map_elix <- function(save_data = TRUE) {
   icd9_map_elix <- list(
     chf = c(
@@ -108,6 +109,7 @@ icd9_generate_map_elix <- function(save_data = TRUE) {
 
 #' @rdname icd9_generate_map_elix
 #' @keywords internal
+#' @noRd
 icd10_generate_map_elix <- function(save_data = TRUE, verbose = FALSE) {
   icd10_map_elix <- list(
     chf = c(
@@ -252,6 +254,7 @@ icd10_generate_map_elix <- function(save_data = TRUE, verbose = FALSE) {
 #'   to include all possible ICD-9 codes.
 #' @template parse-template
 #' @keywords internal
+#' @noRd
 icd9_generate_map_quan_elix <- function(save_data = TRUE) {
   icd9_map_quan_elix <- list(
     chf = c(
@@ -353,6 +356,7 @@ icd9_generate_map_quan_elix <- function(save_data = TRUE) {
 #
 #' @template parse-template
 #' @keywords internal
+#' @noRd
 icd10_generate_map_quan_elix <- function(save_data = TRUE, verbose = FALSE) {
   quan_elix_raw <- list(
     c(
@@ -486,6 +490,7 @@ icd10_generate_map_quan_elix <- function(save_data = TRUE, verbose = FALSE) {
 #' Based on Quan's SAS lists, transcribed by wmurphyrd
 #' @template parse-template
 #' @keywords internal
+#' @noRd
 icd10_generate_map_quan_deyo <- function(save_data = TRUE, verbose = FALSE) {
   quan_charl_raw <- list(
     mi = c("I21", "I22", "I252"),

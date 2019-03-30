@@ -33,7 +33,7 @@
 #'   j <- categorize_simple(u, m, id_name = "case", code_name = "icd10")
 #' }
 #' @keywords internal
-#' @export
+#' @noRd
 categorize_simple <- function(x,
                               map,
                               id_name,

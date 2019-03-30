@@ -342,10 +342,13 @@ icd9_expand_range_worker <- function(start,
   sort.icd9(ls(out_env), short_code = TRUE)
 }
 
-#' @rdname expand_range
+#' Expand range of short ICD-9 codes
 #' @details  Expand range of short_code-form ICD-9 codes
 #' @keywords internal
-icd9_expand_range_short <- function(start, end, defined = TRUE,
+#' @noRd
+icd9_expand_range_short <- function(start,
+                                    end,
+                                    defined = TRUE,
                                     ex_ambig_start = TRUE,
                                     ex_ambig_end = TRUE) {
   assert_scalar(start) # i'll permit numeric but prefer char
@@ -353,10 +356,8 @@ icd9_expand_range_short <- function(start, end, defined = TRUE,
   assert_flag(defined)
   assert_flag(ex_ambig_start)
   assert_flag(ex_ambig_end)
-
   # potentially do some checks on start and end. Determine whether we are doing
   # N, V or E then lookup start and end indices in sysdata.rda lookup tables
-
   if (defined) {
     stopifnot(
       is_defined(start, short_code = TRUE),
@@ -429,8 +430,9 @@ expand_range_major.icd9 <- function(start, end, defined = TRUE) {
   }
 }
 
-#' @rdname expand_range
+#' Expand range of decimal ICD-9 codes
 #' @keywords internal
+#' @noRd
 icd9_expand_range_decimal <- function(start, end, defined = TRUE,
                                       ex_ambig_start = TRUE,
                                       ex_ambig_end = TRUE) {
@@ -478,11 +480,11 @@ icd9_expand_range_decimal <- function(start, end, defined = TRUE,
   expand_range.icd9(start, end, short_code = TRUE, defined = TRUE)
 }
 
-#' expand decimal part of ICD-9 code to cover all possible sub-codes
+#' Expand decimal part of ICD-9 code to cover all possible sub-codes
 #'
-#' Accepts a single number or character input starting point for
-#'   generation of all possible decimal parts of ICD9 code. e.g. giving an empty
-#'   input will fill out 111 combinations, e..g .1 .11 .12 .... .2 ....
+#' Accepts a single number or character input starting point for generation of
+#' all possible decimal parts of ICD9 code. e.g. giving an empty input will fill
+#' out 111 combinations, e..g .1 .11 .12 .... .2 ....
 #' @template mnr
 #' @param isE single logical, which if TRUE, treats the minor as part of an E
 #'   code (which is one character), as opposed to a V or numeric-only code,
@@ -498,19 +500,15 @@ icd9_expand_range_decimal <- function(start, end, defined = TRUE,
 #'   non-existent) sub-divisions.
 #' @family ICD-9 ranges
 #' @keywords internal manip
+#' @noRd
 expand_minor <- function(mnr, ...) {
   UseMethod("expand_minor")
 }
 
-#' @describeIn expand_minor expand minor parts of ICD-9 codes
+#' Expand minor parts of ICD-9 codes
 #' @export
+#' @keywords internal
+#' @noRd
 expand_minor.icd9 <- function(mnr, is_e = FALSE) {
   icd9_expand_minor_wrap(mnr, isE = is_e)
-}
-
-#' @describeIn expand_minor expand minor parts of ICD-10 codes. Not implemented,
-#'   no obvious need, and ICD-10 children can be very complex.
-#' @export
-expand_minor.icd10 <- function(x) {
-  .NotYetImplemented() # nocov
 }

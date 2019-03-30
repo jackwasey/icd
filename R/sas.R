@@ -12,6 +12,7 @@
 #' \url{http://support.sas.com/documentation/cdl/en/proc/61895/HTML/default/viewer.htm#a002473474.htm}
 #' @return list (of lists)
 #' @keywords programming list internal
+#' @noRd
 sas_format_extract <- function(sas_lines) {
   # collapse everything onto one big line, so we can filter multi-line
   # commments. No ability to do multiline regex along a vector.
@@ -56,6 +57,7 @@ sas_format_extract <- function(sas_lines) {
 #'
 #'   so \code{RENLFAIL} needs special treatment
 #' @keywords internal
+#' @noRd
 sas_format_extract_rcomfmt <- function(sas_lines) {
   # ignore DRG assignments
   sas_format_extract(sas_lines)[["$RCOMFMT"]]
@@ -80,6 +82,7 @@ sas_icd10_assignments_to_list <- function(x) {
 #' @return list with each list item containing a matrix of "char ranges",
 #'   "assigned value" pairs
 #' @keywords internal programming list
+#' @noRd
 sas_parse_assignments <- function(x, strip_whitespace = TRUE,
                                   strip_quotes = TRUE) {
   stopifnot(is.character(x), length(x) == 1)
@@ -158,6 +161,7 @@ sas_parse_assignments <- function(x, strip_whitespace = TRUE,
 #' @param x is a vector of character strings, typically taken from something
 #'   like \code{readLines(some_sas_file_path)}
 #' @keywords internal programming list
+#' @noRd
 sas_extract_let_strings <- function(x) {
   let_rex <-
     "%LET ([[:alnum:]]+)[[:space:]]*=[[:space:]]*%STR\\(([[:print:]]+?)\\)"

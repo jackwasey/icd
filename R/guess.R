@@ -40,6 +40,7 @@ guess_version.icd10who <- function(x, short_code, ...) "icd10who" # nocov
 #' @describeIn guess_version Guess version of ICD codes in a factor
 #' @export
 #' @keywords internal
+#' @noRd
 guess_version.factor <- function(x, short_code = NULL, ...) {
   guess_version.character(as_char_no_warn(x), short_code = short_code, ...)
 }
@@ -99,6 +100,7 @@ get_icd_defined_percent <- function(x, short_code = NULL, n = 100) {
 #' @describeIn guess_version Guess version of ICD codes in character vector
 #' @export
 #' @keywords internal
+#' @noRd
 guess_version.character <- function(x, short_code = NULL, ...) {
   assert_character(x)
   stopifnot(is.null(short_code) ||
@@ -121,6 +123,7 @@ guess_version.character <- function(x, short_code = NULL, ...) {
 #' @template icd_name
 #' @keywords internal
 #' @export
+#' @noRd
 guess_version.data.frame <- function(x, short_code = NULL,
                                      icd_name = NULL, ...) {
   if (is.null(icd_name)) {
@@ -137,6 +140,7 @@ guess_version.data.frame <- function(x, short_code = NULL,
 #' @template short_code
 #' @return the input data with appropriate ICD class set
 #' @keywords internal
+#' @noRd
 guess_version_update <- function(x, short_code = guess_short(x)) {
   # could either return a method from the guess version function (nice and
   # functional), use the returned string as a function name to invoke, or switch
@@ -162,6 +166,7 @@ guess_version_update <- function(x, short_code = guess_short(x)) {
 #' @return Type of codes as single character \code{"icd9"} or \code{"icd10"}, or
 #'   error if conflicting results
 #' @keywords internal
+#' @noRd
 guess_pair_version <- function(start, end, short_code = NULL) {
   start_guess <- guess_version.character(
     as_char_no_warn(start),

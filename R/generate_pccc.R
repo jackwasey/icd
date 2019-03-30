@@ -14,6 +14,7 @@
 #' icd:::generate_maps_pccc(save_data = FALSE)
 #' }
 #' @keywords internal
+#' @noRd
 generate_maps_pccc <- function(save_data = TRUE) {
   icd9_generate_map_pccc_dx(save_data)
   icd9_generate_map_pccc_pcs(save_data)
@@ -22,8 +23,9 @@ generate_maps_pccc <- function(save_data = TRUE) {
   # no icd10 fixed
 }
 
-#' @rdname generate_maps_pccc
+#' ICD-9 generate_maps_pccc
 #' @keywords internal
+#' @noRd
 icd9_generate_map_pccc_dx <- function(save_data = TRUE) {
   icd9_map_pccc_orig_dx <- list(
     neuromusc = c(
@@ -138,8 +140,9 @@ icd9_generate_map_pccc_dx <- function(save_data = TRUE) {
   invisible(icd9_map_pccc_dx)
 }
 
-#' @rdname generate_maps_pccc
+#' ICD-9 PCS generate_maps_pccc
 #' @keywords internal
+#' @noRd
 icd9_generate_map_pccc_pcs <- function(save_data = TRUE) {
   icd9_map_pccc_orig_pc <- list(
     neuromusc = c(
@@ -226,8 +229,9 @@ icd9_generate_map_pccc_pcs <- function(save_data = TRUE) {
   invisible(icd9_map_pccc_pcs)
 }
 
-#' @rdname generate_maps_pccc
+#' ICD-10 generate_maps_pccc
 #' @keywords internal
+#' @noRd
 icd10_generate_map_pccc_dx <- function(save_data, verbose = TRUE) {
   icd10_map_pccc_orig_dx <- list(
     neuromusc = c(
@@ -393,8 +397,9 @@ icd10_generate_map_pccc_dx <- function(save_data, verbose = TRUE) {
   invisible(icd10_map_pccc_dx)
 }
 
-#' @rdname generate_maps_pccc
+#' ICD-10 PCS generate_maps_pccc
 #' @keywords internal
+#' @noRd
 icd10_generate_map_pccc_pcs <- function(save_data = TRUE) {
   icd10_map_pccc_orig_pc <- list(
     neuromusc = c(

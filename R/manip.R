@@ -6,6 +6,7 @@
 #'   containing V, E or "". The second part contains the numeric parts of the
 #'   code, which may include a decimal point.
 #' @keywords internal manip
+#' @noRd
 icd9_extract_alpha_numeric <- function(x) {
   assert_fac_or_char(x)
   # generate list, then flip into a matrix with a row for each code, and the
@@ -33,6 +34,7 @@ icd9_extract_alpha_numeric <- function(x) {
 #' @return character vector of ICD-9 codes with extra zeroes dropped from major
 #'   part
 #' @keywords internal manip
+#' @noRd
 icd9_drop_leading_zeroes <- function(x, short_code = guess_short(x)) {
   assert_fac_or_char(x)
   stopifnot(is.null(short_code) ||
@@ -59,8 +61,9 @@ icd9_add_leading_zeroes <- function(x, short_code = guess_short(x)) {
   }
 }
 
-#' @rdname icd9_drop_leading_zeroes
+#' Drop leading zeroes from major parts of ICD-9 codes
 #' @keywords internal manip
+#' @noRd
 icd9_drop_leading_zeroes_major <- function(major) {
   # (valid) E codes from 000 exist. Dropping zeroes from E000 would require a
   # lot of logic for no current benefit. Defer this until it is a problem.

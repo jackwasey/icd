@@ -71,6 +71,7 @@ wrap_re <- function(x)
 #' Put ICD validation regular expressions in the \code{icd:::} name space
 #' @param env target environment to save the data
 #' @keywords internal sysdata data
+#' @noRd
 set_re_globals <- function(env = parent.frame()) {
   re_icd9_major_n <- "[[:digit:]]{1,3}"
   re_icd9_major_n_strict <- "[[:digit:]]{3}"

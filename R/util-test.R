@@ -24,7 +24,7 @@ expect_equal_no_class_order <- function(object, expected, ...) {
   eval(bquote(testthat::expect_equivalent(unclass(.(object)), unclass(.(expected)), ...)))
 }
 
-#' @describeIn classes_ordered \code{testthat} \code{expect} function
+#' classes ordered expectation \code{testthat} \code{expect} function
 #'   for ICD classes to be in correct order.
 #' @keywords internal debugging
 #' @noRd
@@ -34,6 +34,7 @@ expect_classes_ordered <- function(x)
 #' generate random ICD-9 codes
 #'
 #' @keywords internal debugging datagen
+#' @noRd
 generate_random_short_icd9 <- function(n = 50000)
   as.character(floor(stats::runif(min = 1, max = 99999, n = n)))
 
@@ -43,6 +44,7 @@ generate_random_short_icd9 <- function(n = 50000)
 #' @param n number to select, passed to \code{sample}
 #' @template short_code
 #' @keywords internal debugging datagen
+#' @noRd
 generate_random_short_icd10cm_bill <- function(n = 10, short_code = TRUE) {
   i <- icd.data::icd10cm2016
   x <- sample(
@@ -96,6 +98,7 @@ generate_random_short_ahrq_icd9 <- function(n = 50000)
 #'
 #' Mixed upper and lower case, with replacement
 #' @keywords internal debugging datagen
+#' @noRd
 random_string <- function(n, max_chars = 4) {
   rand_ch <- function()
     sample(c(LETTERS, letters, 0:9, rep("", times = 50)), replace = TRUE, size = n)
@@ -111,6 +114,7 @@ random_string <- function(n, max_chars = 4) {
 #' @param x list of values to compare for identity, e.g. results from evaluated
 #'   expression in \code{microbenchmark::microbenchmark}
 #' @keywords internal
+#' @noRd
 all_identical <- function(x)
   all(vapply(x[-1], function(y) identical(x[[1]], y), FUN.VALUE = logical(1)))
 
@@ -123,6 +127,7 @@ get_one_of_each <- function()
 
 #' Set up a test environment which also has the internal functions
 #' @keywords internal debugging data
+#' @noRd
 test_env <- function() {
   ns <- getNamespace("icd")
   list2env(as.list(ns, all.names = TRUE), parent = parent.env(ns))

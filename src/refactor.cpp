@@ -3,9 +3,10 @@
 
 using namespace Rcpp;
 
-//' @describeIn factor_nosort \pkg{Rcpp} implementation, requiring character
-//' vector inputs only, no argument checking.
+//' @title Factor without sorting \CRANpkg{Rcpp} implementation
+//' @description Requiring character vector inputs only, no argument checking.
 //' @keywords internal manip
+//' @noRd
 // [[Rcpp::export(factor_nosort_rcpp_worker)]]
 IntegerVector factorNoSort(const CharacterVector &x,
                            const CharacterVector &levels,
@@ -26,7 +27,6 @@ IntegerVector factorNoSort(const CharacterVector &x,
 //'   version, too. Some work simply to mirror behavior of \code{base::factor},
 //'   e.g. when a level is not available, but NA level is available, NA is
 //'   inserted into the integer vector, not an index to the NA level.
-//' @md
 //' @keywords internal manip
 // [[Rcpp::export(refactor_worker)]]
 IntegerVector refactor(const IntegerVector &x,

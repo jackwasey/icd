@@ -24,7 +24,7 @@
 #' identical(icd:::factor_nosort(x), x)
 #' # unless the levels change:
 #' icd:::factor_nosort(x, levels = c("a", "z"))
-#' 
+#'
 #' # existing factor levels aren't re-ordered without also moving elements
 #' f <- factor(c("a", "b", "b", "c"))
 #' g <- icd:::factor_nosort(f, levels = c("a", "c", "b"))
@@ -33,6 +33,7 @@
 #'   sorted in advance, especially not for ICD-9 codes where a simple
 #'   alphanumeric sorting will likely be completely wrong.
 #' @keywords internal
+#' @noRd
 factor_nosort <- function(x, levels) {
   if (missing(levels)) {
     if (is.factor(x)) return(x) else levels <- unique.default(x)
@@ -43,12 +44,12 @@ factor_nosort <- function(x, levels) {
   f
 }
 
-#' @describeIn factor_nosort R wrapper to the \pkg{Rcpp} function. Will
-#'   re-factor a factor with new levels without converting to string vector.
-#' @param na.rm Logical, if \code{TRUE}, simple drop all NA values, i.e., values with
-#'   no corresponding level.
-#' @md
+#' R wrapper to the \CRANpkg{Rcpp} function. Will re-factor a factor with new
+#' levels without converting to string vector.
+#' @param na.rm Logical, if \code{TRUE}, simple drop all NA values, i.e., values
+#'   with no corresponding level.
 #' @keywords internal
+#' @noRd
 factor_nosort_rcpp <- function(x, levels, na.rm = FALSE) {
   # TODO: if re-factoring, use my refactor code
   if (missing(levels)) {
@@ -88,8 +89,8 @@ factor_nosort_rcpp <- function(x, levels, na.rm = FALSE) {
 #' f <- factor(c(1, 2, NA))
 #' icd:::refactor(f, c("2", "3", NA))
 #' }
-#' @md
 #' @keywords internal manip
+#' @noRd
 refactor <- function(x,
                      levels,
                      na.rm = FALSE,

@@ -19,12 +19,12 @@
 #'   head(kids_with_undefined)
 #'   length(kids_with_undefined)
 #'   condense(kids, defined = FALSE)
-#' 
+#'
 #'   # what happens if we have additional codes?
 #'   # (condense will warn if we don't explicitly ask to condense
 #'   # based on defined or possible codes.)
 #'   condense(c(kids, "41100"), warn = FALSE)
-#' 
+#'
 #'   # a good use is to summarise the contents of a comorbidity:
 #'   icd9_map_elix$CHF
 #'   condense(icd9_map_elix$CHF, warn = FALSE)
@@ -87,12 +87,13 @@ icd9_condense_decimal <- function(x, defined = NULL, warn = TRUE,
     )
   )
 
-#' @rdname condense
+#' Condense short ICD-9 codes
 #' @template warn
 #' @param keep_factor_levels single logical value, default \code{FALSE}. If
 #'   \code{TRUE}, will reuse the factor levels from the input data for the
 #'   output data. This only applies if a factor is given for the input codes.
 #' @keywords internal manip
+#' @noRd
 icd9_condense_short <- function(x,
                                 defined = NULL,
                                 warn = TRUE,

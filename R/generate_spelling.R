@@ -5,6 +5,7 @@
 #' \code{R CMD check} which at least some of the CRAN people use.
 #' @template save_data
 #' @keywords internal
+#' @noRd
 generate_spelling <- function(save_data = TRUE) {
   medical <- c(
     "arrythmia", "Musculoskeletal", "Myocardial",
