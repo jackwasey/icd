@@ -38,7 +38,7 @@ test_that("expand icd9 range definition", {
     c("40100", "40101")
   )
   expect_equal_no_icd(
-    expand_range.icd9("40108", "40109", short_code = TRUE, defined = FALSE),
+    expand_range("40108", "40109", short_code = TRUE, defined = FALSE),
     c("40108", "40109")
   )
   expect_equal_no_icd(
@@ -66,13 +66,13 @@ test_that("expand icd9 range definition", {
 
   expect_equal(
     expand_range(short_code = TRUE, "401", "401", defined = FALSE),
-    sort(children.icd9("401", short_code = TRUE, defined = FALSE))
+    sort(children("401", short_code = TRUE, defined = FALSE))
   )
   # expand range should already be sorted. do i want to sort children by default
   # or with an option?
   expect_equal(
     expand_range(short_code = TRUE, "401", "402", defined = FALSE),
-    sort(children.icd9(c("401", "402"), short_code = TRUE, defined = FALSE))
+    sort(children(c("401", "402"), short_code = TRUE, defined = FALSE))
   )
   # the next two cases cover the HIV ranges in the co-morbidities, wherein the
   # final code is included, in which case the parent ("044" in this case) is
@@ -187,7 +187,7 @@ test_that("V code with ambiguous parent", {
   # descendants just to reach the specified codes, but not all the children of
   # the higher-level code.
   expect_equal_no_icd(
-    expand_range.icd9(
+    expand_range(
       short_code = TRUE, "V10", "V1001",
       defined = FALSE,
       ex_ambig_start = FALSE,
@@ -196,19 +196,19 @@ test_that("V code with ambiguous parent", {
     c("V10", "V100", "V1000", "V1001")
   )
   expect_equal_no_icd(
-    expand_range.icd9(short_code = TRUE, "V10", "V1001", defined = FALSE),
+    expand_range(short_code = TRUE, "V10", "V1001", defined = FALSE),
     c("V1000", "V1001")
   )
 })
 
 test_that("V code ranges", {
   expect_equal_no_icd(
-    expand_range.icd9(short_code = TRUE, "V1000", "V1002", defined = FALSE),
+    expand_range(short_code = TRUE, "V1000", "V1002", defined = FALSE),
     c("V1000", "V1001", "V1002")
   )
   # but we cap off the upper range correctly:
   expect_equal_no_icd(
-    expand_range.icd9(short_code = TRUE, "V1009", "V101", defined = FALSE),
+    expand_range(short_code = TRUE, "V1009", "V101", defined = FALSE),
     c(
       "V1009", "V101", "V1010", "V1011",
       "V1012", "V1013", "V1014", "V1015",
@@ -217,7 +217,7 @@ test_that("V code ranges", {
   )
   # and with narrower top end
   expect_equal_no_icd(
-    expand_range.icd9(
+    expand_range(
       short_code = TRUE, "V1009", "V1011",
       defined = FALSE, ex_ambig_start = TRUE,
       ex_ambig_end = TRUE
@@ -225,7 +225,7 @@ test_that("V code ranges", {
     c("V1009", "V1010", "V1011")
   )
   expect_equal_no_icd(
-    expand_range.icd9(
+    expand_range(
       short_code = TRUE, "V1009", "V1011",
       defined = FALSE, ex_ambig_start = FALSE,
       ex_ambig_end = FALSE
@@ -234,7 +234,7 @@ test_that("V code ranges", {
   )
   # but include those pesky parents when requested:
   expect_true(
-    all(c("V10", "V100") %in% expand_range.icd9("V099", "V1011",
+    all(c("V10", "V100") %in% expand_range("V099", "V1011",
       short_code = TRUE,
       defined = FALSE,
       ex_ambig_start = FALSE,
@@ -243,16 +243,16 @@ test_that("V code ranges", {
   )
 
   expect_identical(
-    expand_range.icd9(short_code = TRUE, "V1009", "V101", defined = FALSE),
-    expand_range.icd9(short_code = TRUE, "V1009", "V1019", defined = FALSE)
+    expand_range(short_code = TRUE, "V1009", "V101", defined = FALSE),
+    expand_range(short_code = TRUE, "V1009", "V1019", defined = FALSE)
   )
 
   # failed similar test in Elixhauser mapping generation.
-  expect_false("V11" %in% expand_range.icd9("V10.89", "V10.9",
+  expect_false("V11" %in% expand_range("V10.89", "V10.9",
     short_code = FALSE,
     defined = FALSE
   ))
-  expect_false("V11" %in% expand_range.icd9("V10.89", "V10.99",
+  expect_false("V11" %in% expand_range("V10.89", "V10.99",
     short_code = FALSE,
     defined = FALSE
   ))
@@ -260,11 +260,11 @@ test_that("V code ranges", {
 
 test_that("E code ranges", {
   expect_equal_no_icd(
-    expand_range.icd9(short_code = TRUE, "E9501", "E9502", defined = FALSE),
+    expand_range(short_code = TRUE, "E9501", "E9502", defined = FALSE),
     c("E9501", "E9502")
   )
   expect_equal_no_icd(
-    expand_range.icd9(short_code = TRUE, "E950", "E9509", defined = FALSE),
+    expand_range(short_code = TRUE, "E950", "E9509", defined = FALSE),
     c(
       "E950", "E9500", "E9501", "E9502", "E9503", "E9504",
       "E9505", "E9506", "E9507", "E9508", "E9509"
@@ -273,27 +273,27 @@ test_that("E code ranges", {
 })
 
 test_that("major ranges", {
-  resall <- expand_range_major.icd9("E000", "E999", defined = FALSE)
+  resall <- expand_range_major(as.icd9("E000"), "E999", defined = FALSE)
   expect_equal(length(resall), 1000)
   expect_true("E000" %in% resall)
   expect_true("E123" %in% resall)
   expect_true("E999" %in% resall)
-  resallbut <- expand_range_major.icd9("E001", "E998", defined = FALSE)
+  resallbut <- expand_range_major(as.icd9("E001"), "E998", defined = FALSE)
   expect_equal(length(resallbut), 998)
 
   expect_identical(
     "111" %i9mj% "789",
-    expand_range_major.icd9("111", "789", defined = TRUE)
+    expand_range_major("111", "789", defined = TRUE)
   )
 
   expect_identical(
     "V01" %i9mj% "V99",
-    expand_range_major.icd9("V01", "V99", defined = TRUE)
+    expand_range_major(as.icd9("V01"), "V99", defined = TRUE)
   )
 
   expect_identical(
     "E001" %i9mj% "E998",
-    expand_range_major.icd9("E001", "E998", defined = TRUE)
+    expand_range_major(as.icd9("E001"), "E998", defined = TRUE)
   )
 
   expect_false("E000" %in% resallbut)
@@ -303,7 +303,7 @@ test_that("major ranges", {
   expect_false("E999" %in% resallbut)
 
   expect_equal_no_icd(
-    expand_range_major.icd9("E99", "E101", defined = FALSE),
+    expand_range_major(as.icd9("E99"), "E101", defined = FALSE),
     c("E099", "E100", "E101")
   )
 })
@@ -340,28 +340,28 @@ test_that("range doesn't include parent", {
 
 test_that("ranges can include ambiguous parents, optionally", {
   expect_equal_no_icd(
-    expand_range.icd9("01006", "01010",
+    expand_range("01006", "01010",
       defined = TRUE,
       ex_ambig_start = TRUE, ex_ambig_end = TRUE
     ),
     c("01006", "01010")
   )
   expect_equal_no_icd(
-    expand_range.icd9("01006", "01010",
+    expand_range("01006", "01010",
       defined = TRUE,
       ex_ambig_start = FALSE, ex_ambig_end = FALSE
     ),
     c("01006", "0101", "01010")
   )
   expect_equal_no_icd(
-    expand_range.icd9("01006", "01010",
+    expand_range("01006", "01010",
       defined = FALSE,
       ex_ambig_start = TRUE, ex_ambig_end = TRUE
     ),
     c("01006", "01007", "01008", "01009", "01010")
   )
   expect_equal_no_icd(
-    expand_range.icd9("01006", "01010",
+    expand_range("01006", "01010",
       defined = FALSE,
       ex_ambig_start = FALSE, ex_ambig_end = FALSE
     ),
@@ -384,19 +384,19 @@ test_that("ranges can include ambiguous parents, optionally", {
 
 test_that("range abbrevs", {
   expect_identical(
-    expand_range.icd9("123", "123.6",
+    expand_range("123", "123.6",
       short_code = FALSE, defined = FALSE
     ),
     "123" %i9da% "123.6"
   )
   expect_identical(
-    expand_range.icd9("123", "123.6",
+    expand_range("123", "123.6",
       short_code = FALSE, defined = TRUE
     ),
     "123" %i9d% "123.6"
   )
   expect_identical(
-    expand_range.icd9("1234", "125",
+    expand_range("1234", "125",
       short_code = TRUE, defined = FALSE
     ),
     "1234" %i9sa% "125"
@@ -453,67 +453,67 @@ test_that("icd9 expand minor dispatches", {
 
 test_that("icd9 children decimal with valid input", {
   expect_equal_no_icd(
-    children.icd9(short_code = FALSE, "V10.0", defined = FALSE),
+    children(short_code = FALSE, "V10.0", defined = FALSE),
     append("V10.0", paste("V10.0", 0:9, sep = ""))
   )
   expect_equal(
-    toupper(children.icd9(short_code = FALSE, "v10.0", defined = FALSE)),
-    children.icd9(short_code = FALSE, "V10.0", defined = FALSE)
+    toupper(children(short_code = FALSE, "v10.0", defined = FALSE)),
+    children(short_code = FALSE, "V10.0", defined = FALSE)
   )
   expect_equal(
-    children.icd9(short_code = FALSE, "10.0", defined = FALSE),
-    children.icd9(short_code = FALSE, "010.0", defined = FALSE)
+    children(short_code = FALSE, "10.0", defined = FALSE),
+    children(short_code = FALSE, "010.0", defined = FALSE)
   )
   expect_equal_no_icd(
-    children.icd9(short_code = FALSE, "010.0", defined = FALSE),
+    children(short_code = FALSE, "010.0", defined = FALSE),
     append("010.0", paste("010.0", 0:9, sep = ""))
   )
   expect_equal(
-    children.icd9(short_code = FALSE, "010.0"),
-    children.icd9(short_code = FALSE, "10.0")
+    children(short_code = FALSE, "010.0"),
+    children(short_code = FALSE, "10.0")
   )
 })
 
 test_that("icd9 children short with valid input", {
   expect_equal_no_icd(
-    children.icd9(short_code = TRUE, "V100", defined = FALSE),
+    children(short_code = TRUE, "V100", defined = FALSE),
     paste("V100", c("", 0:9), sep = "")
   )
   expect_equal(
-    children.icd9(short_code = TRUE, "v100"),
-    children.icd9("V100")
+    children(short_code = TRUE, "v100"),
+    children("V100")
   )
   expect_equal_no_icd(
-    children.icd9(short_code = TRUE, "0100", defined = FALSE),
+    children(short_code = TRUE, "0100", defined = FALSE),
     paste("0100", c("", 0:9), sep = "")
   )
   expect_equal_no_icd(
-    children.icd9(short_code = TRUE, "1", defined = FALSE)[1], "001"
+    children(short_code = TRUE, "1", defined = FALSE)[1], "001"
   )
   expect_equal_no_icd(
-    children.icd9(short_code = TRUE, "01", defined = FALSE)[1], "001"
+    children(short_code = TRUE, "01", defined = FALSE)[1], "001"
   )
   expect_equal_no_icd(
-    children.icd9(short_code = TRUE, "001", defined = FALSE)[1], "001"
+    children(short_code = TRUE, "001", defined = FALSE)[1], "001"
   )
   expect_equal_no_icd(
-    children.icd9(short_code = TRUE, "023", defined = FALSE)[1], "023"
+    children(short_code = TRUE, "023", defined = FALSE)[1], "023"
   )
   expect_equal_no_icd(
-    children.icd9(short_code = TRUE, "23", defined = FALSE)[1], "023"
+    children(short_code = TRUE, "23", defined = FALSE)[1], "023"
   )
   expect_equal_no_icd(
-    children.icd9(short_code = TRUE, "456", defined = FALSE)[1], "456"
+    children(short_code = TRUE, "456", defined = FALSE)[1], "456"
   )
   expect_equal_no_icd(
-    children.icd9(short_code = TRUE, "E100", defined = FALSE),
+    children(short_code = TRUE, "E100", defined = FALSE),
     c(
       "E100", "E1000", "E1001", "E1002", "E1003", "E1004",
       "E1005", "E1006", "E1007", "E1008", "E1009"
     )
   )
   expect_equal_no_icd(
-    children.icd9(short_code = TRUE, "390", defined = TRUE), "390"
+    children(short_code = TRUE, "390", defined = TRUE), "390"
   )
 })
 

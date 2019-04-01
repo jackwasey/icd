@@ -76,16 +76,30 @@ condense.character <- function(x, short_code = guess_short(x),
   }
 }
 
+#' @describeIn condense Condense a factor of ICD codes
+#' @export
+#' @keywords internal manip
+condense.factor <- function(x,
+                            short_code = guess_short(x),
+                            defined = NULL,
+                            ...) {
+  condense.character(levels(x),
+                     short_code = short_code,
+                     defined = defined,
+                     ...)
+}
+
 #' @rdname condense
 #' @keywords internal manip
 icd9_condense_decimal <- function(x, defined = NULL, warn = TRUE,
-                                  keep_factor_levels = FALSE)
+                                  keep_factor_levels = FALSE) {
   short_to_decimal.icd9(
     icd9_condense_short(
       decimal_to_short.icd9(x),
       defined = defined, warn = warn, keep_factor_levels = keep_factor_levels
     )
   )
+}
 
 #' Condense short ICD-9 codes
 #' @template warn

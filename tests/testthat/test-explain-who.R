@@ -12,7 +12,7 @@ test_that("some codes not in ICD-10-CM", {
       "HIV",
       info = paste("HIV code: ", hiv)
     )
-    expect_identical(x, explain_code.icd10who(hiv))
+    expect_identical(x, explain_code(as.icd10who(hiv)))
     expect_length(x, 1)
   }
 })
@@ -21,7 +21,7 @@ test_that("hand-picked WHO-only codes okay", {
   skip_if_not_installed("icd.data", 1.1)
   skip_missing_icd10who()
   expect_identical(
-    explain_code.icd10who("U842"),
+    explain_code(as.icd10who("U842")),
     "Resistance to antiviral drug(s)"
   )
 })
@@ -48,7 +48,7 @@ test_that("hand-picked WHO-only codes okay", {
   skip_if_not_installed("icd.data", 1.1)
   skip_missing_icd10who()
   expect_identical(
-    explain_code.icd10who("F21", lang = "fr"),
+    explain_code(as.icd10who("F21"), lang = "fr"),
     "Trouble schizotypique"
   )
 })

@@ -3,6 +3,7 @@
 \name{condense}
 \alias{condense}
 \alias{condense.character}
+\alias{condense.factor}
 \alias{icd9_condense_decimal}
 \title{Condense ICD-9 code by replacing complete families with parent codes}
 \usage{
@@ -10,6 +11,9 @@ condense(x, short_code = guess_short(x), defined = NULL, warn = TRUE,
   ...)
 
 \method{condense}{character}(x, short_code = guess_short(x),
+  defined = NULL, ...)
+
+\method{condense}{factor}(x, short_code = guess_short(x),
   defined = NULL, ...)
 
 icd9_condense_decimal(x, defined = NULL, warn = TRUE,
@@ -47,6 +51,8 @@ of as the inverse operation to \code{children}.
 \itemize{
 \item \code{character}: Condense a set of ICD codes, guessing ICD version
 from input data
+
+\item \code{factor}: Condense a factor of ICD codes
 }}
 
 \examples{

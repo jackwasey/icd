@@ -15,7 +15,7 @@ expect_icd10cm_child_is_self <- function(...) {
         as.icd10cm(as.short_diag(.(i)))
       )
     ))
-    children.icd10(icd10(i)) # should not warn
+    children(icd10(i)) # should not warn
   }
 }
 
@@ -67,12 +67,12 @@ test_that("zero length ICD-10-CM children", {
 test_that("icd10cm children with one of several missing should not segfault", {
   skip_if_not_installed("icd.data")
   expect_identical(
-    children.icd10cm(c("I792", "K551")),
-    children.icd10cm("K551")
+    children(as.icd10cm(c("I792", "K551"))),
+    children(as.icd10cm("K551"))
   )
   expect_identical(
-    children.icd10cm(c("I790", "I792")),
-    children.icd10cm(c("I790"))
+    children(as.icd10cm(c("I790", "I792"))),
+    children(as.icd10cm(c("I790")))
   )
 })
 

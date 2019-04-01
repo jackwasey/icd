@@ -44,7 +44,10 @@ suppressWarnings({
 
 knitr::opts_chunk$set(
   collapse = TRUE,
-  comment = "#>"
+  comment = "#>",
+  out.width = "100%", 
+  fig.width = 14, 
+  fig.height = 10.5
 )
 
 patients_icd9 <- data.frame(
@@ -66,7 +69,7 @@ comorbid_charlson(uranium_pathology,
                   return_df = TRUE,
                   return_binary = TRUE)[1:5, 1:5]
 hist(charlson(uranium_pathology), 
-     main = "Histogram of Charlson scores in Uranium data",
+     main = "Uranium data",
      xlab = "Charlson Score")
 ```
 

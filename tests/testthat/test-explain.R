@@ -4,7 +4,7 @@ skip_if_not_installed("icd.data")
 
 test_that("explain a large set of ICD-9 codes succinctly", {
   expect_identical(
-    explain_code(children.icd9("391", defined = FALSE, short_code = TRUE),
+    explain_code(children(as.icd9("391"), defined = FALSE, short_code = TRUE),
       condense = FALSE, short_code = TRUE
     ),
     c(
@@ -16,7 +16,7 @@ test_that("explain a large set of ICD-9 codes succinctly", {
   )
 
   expect_identical(
-    explain_code.icd9(children.icd9(as.short_diag("391")),
+    explain_code(children(as.short_diag(as.icd9("391"))),
       condense = TRUE, short_code = TRUE
     ),
     "Rheumatic fever with heart involvement"
@@ -24,7 +24,9 @@ test_that("explain a large set of ICD-9 codes succinctly", {
 })
 test_that("explain a large set of ICD-9 codes succinctly, using factors", {
   expect_identical(
-    explain_code(factor(children.icd9("391", defined = FALSE, short_code = TRUE)),
+    explain_code(factor(children(as.icd9("391"),
+                                 defined = FALSE,
+                                 short_code = TRUE)),
       condense = FALSE, short_code = TRUE
     ),
     c(
@@ -36,7 +38,7 @@ test_that("explain a large set of ICD-9 codes succinctly, using factors", {
   )
 
   expect_identical(
-    explain_code.icd9(factor(children.icd9(as.short_diag("391"))),
+    explain_code(factor(children(as.short_diag(as.icd9("391")))),
       condense = TRUE, short_code = TRUE
     ),
     "Rheumatic fever with heart involvement"
@@ -44,32 +46,33 @@ test_that("explain a large set of ICD-9 codes succinctly, using factors", {
 })
 test_that("github issue #41", {
   expect_equal(
-    explain_code.icd9(get_defined.icd9(icd9_map_quan_deyo[["Dementia"]]), condense = TRUE),
-    explain_code.icd9(icd9_map_quan_deyo[["Dementia"]], condense = TRUE, warn = FALSE)
+    explain_code(get_defined(icd9_map_quan_deyo[["Dementia"]]), condense = TRUE),
+    explain_code(icd9_map_quan_deyo[["Dementia"]], condense = TRUE, warn = FALSE)
   )
   expect_equal(
-    explain_code.icd9(get_defined(icd9_map_quan_deyo[["Dementia"]]), condense = FALSE),
-    explain_code.icd9(icd9_map_quan_deyo[["Dementia"]], condense = FALSE)
+    explain_code(get_defined(icd9_map_quan_deyo[["Dementia"]]), condense = FALSE),
+    explain_code(icd9_map_quan_deyo[["Dementia"]], condense = FALSE)
   )
 })
 test_that("explain S3 dispatch", {
-  expect_equal(explain_code.icd9("003.21", short_code = FALSE), "Salmonella meningitis")
+  expect_equal(explain_code(as.icd9("003.21"), short_code = FALSE),
+               "Salmonella meningitis")
   expect_equal(
     explain_code("003.21", short_code = FALSE),
-    explain_code.icd9("003.21", short_code = FALSE)
+    explain_code(as.icd9("003.21"), short_code = FALSE)
   )
   expect_equal(
     explain_code.list(list(a = "003.21"), short_code = FALSE),
-    list(a = explain_code.icd9("00321", short_code = TRUE))
+    list(a = explain_code(as.icd9("00321"), short_code = TRUE))
   )
   expect_equal(
-    explain_code.list(list(a = "003.21", b = "390"), short_code = FALSE),
+    explain_code(list(a = "003.21", b = "390"), short_code = FALSE),
     list(
-      a = explain_code.icd9cm("00321", short_code = TRUE),
+      a = explain_code(as.icd9cm("00321"), short_code = TRUE),
       b = "Rheumatic fever without mention of heart involvement"
     )
   )
-  expect_warning(res <- explain_code.icd9(c(a = "not", b = "icd9code"), short_code = TRUE))
+  expect_warning(res <- explain_code(c(a = "not", b = "icd9code"), short_code = TRUE))
   expect_equal(res, NA_character_)
   expect_warning(
     res <- explain_code(list(a = icd9("not"), b = icd9("icd9code")),
@@ -78,12 +81,12 @@ test_that("explain S3 dispatch", {
   )
   expect_equal(res, list(a = NA_character_, b = NA_character_))
 
-  expect_equal(explain_code.icd9("00321", short_code = TRUE), "Salmonella meningitis")
+  expect_equal(explain_code("00321", short_code = TRUE), "Salmonella meningitis")
 })
 test_that("explain single top level code which is billable, has no children", {
   # the code "390" is a billable major: good test case.
   expect_identical(
-    explain_code.icd9("390"),
+    explain_code("390"),
     "Rheumatic fever without mention of heart involvement"
   )
 })
@@ -95,28 +98,28 @@ test_that("expalin a single top level code without a top level explanation", {
 })
 test_that("explain a single leaf node", {
   expect_equal(
-    explain_code.icd9("27800", condense = FALSE),
+    explain_code("27800", condense = FALSE),
     "Obesity, unspecified"
   )
   expect_equal(
-    explain_code.icd9("27800", condense = TRUE),
+    explain_code("27800", condense = TRUE),
     "Obesity, unspecified"
   )
   expect_equal(
-    explain_code.icd9("00329"),
+    explain_code("00329"),
     "Other localized salmonella infections"
   )
 })
 test_that("explain handles mix of valid and invalid", {
   expect_equal(
-    explain_code.icd9(c("radishes", "123"), warn = FALSE),
+    explain_code(c("radishes", "123"), warn = FALSE),
     "Other cestode infection"
   )
-  expect_warning(explain_code.icd9(c("radishes", "123")))
+  expect_warning(explain_code(c("radishes", "123")))
 })
 test_that("explain works when none ICD-9 codes are even valid", {
   expect_equal(
-    explain_code.icd9(c("radishes", "123123", NA), warn = FALSE),
+    explain_code(c("radishes", "123123", NA), warn = FALSE),
     NA_character_
   )
 })

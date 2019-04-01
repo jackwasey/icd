@@ -13,8 +13,14 @@ vignette: >
 bibliography: icdpkg.bib
 ---
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-knitr::opts_knit$set(global.par = TRUE)
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  out.width = "100%", 
+  fig.width = 14, 
+  fig.height = 10.5
+  # global.par = TRUE
+)
 library("icd")
 library("icd.data")
 n <- 10000

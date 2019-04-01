@@ -57,3 +57,4 @@ bench-versus-result*.rds
 .checkpoint
 tests/testthat/Rplots.pdf
 revdep
+icd-*build.log
