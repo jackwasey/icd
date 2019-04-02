@@ -38,8 +38,8 @@ poa_choices <- c("yes", "no", "notYes", "notNo")
 #' \code{\link{comorbid_ccs}}.
 #' @param x \code{data.frame} containing a column of patient-visit identifiers
 #'   and a column of ICD codes. The \code{data.frame} may be in \sQuote{long} or
-#'   \sQuote{wide} format, like the example \code{\link[icd.data]{vermont_dx}}
-#'   and \code{\link[icd.data]{uranium_pathology}} data.
+#'   \sQuote{wide} format, like the example \code{\link{vermont_dx}}
+#'   and \code{\link{uranium_pathology}} data.
 #' @param map A named list of the comorbidities with each list item containing a
 #'   vector of decimal ICD-9 codes. \pkg{icd} includes a number of these, e.g.,
 #'   \code{\link{icd9_map_elix}}. Alternatively, this can be omited if the
@@ -70,27 +70,24 @@ poa_choices <- c("yes", "no", "notYes", "notNo")
 #' @family comorbidity computations
 #' @family comorbidities
 #' @examples
-#' # Need icd.data for Vermont and Uranium patients,
-#' # not for the comorbidity calculations
-#' if (requireNamespace("icd.data", quietly = TRUE)) {
-#'   icd.data::vermont_dx[1:5, 1:10]
-#'   # get first few rows and columns of Charlson comorbidities using Quan/Deyo
-#'   # mapping of ICD-9 or ICD-10 codes Charlson categories
-#'   comorbid_quan_deyo(icd.data::vermont_dx)[1:5, 1:14]
-#'
-#'   # Note that the comorbidity calculations automatically finds the ICD code
-#'   # columns, and uses 'wide' or 'long' format data.
-#'
-#'   stopifnot(
-#'     identical(
-#'       comorbid_quan_deyo(icd.data::vermont_dx),
-#'       comorbid_quan_deyo(wide_to_long(icd.data::vermont_dx))
-#'     )
+#' vermont_dx[1:5, 1:10]
+#' # get first few rows and columns of Charlson comorbidities using Quan/Deyo
+#' # mapping of ICD-9 or ICD-10 codes Charlson categories
+#' comorbid_quan_deyo(vermont_dx)[1:5, 1:14]
+#' 
+#' # Note that the comorbidity calculations automatically finds the ICD code
+#' # columns, and uses 'wide' or 'long' format data.
+#' 
+#' stopifnot(
+#'   identical(
+#'     comorbid_quan_deyo(vermont_dx),
+#'     comorbid_quan_deyo(wide_to_long(vermont_dx))
 #'   )
-#'
-#'   # get summary AHRQ (based on Elixhauser) comorbidities for the Uranium data:
-#'   summary(comorbid_ahrq(icd.data::uranium_pathology))
-#' }
+#' )
+#' 
+#' # get summary AHRQ (based on Elixhauser) comorbidities for the Uranium data:
+#' summary(comorbid_ahrq(uranium_pathology))
+#' 
 #' pts <- icd_long_data(
 #'   visit_name = c("2", "1", "2", "3", "3"),
 #'   icd9 = c("39891", "40110", "09322", "41514", "39891")
@@ -104,10 +101,10 @@ poa_choices <- c("yes", "no", "notYes", "notNo")
 #'     "2011-01-04", "2011-01-04"
 #'   ))
 #' )
-#'
+#' 
 #' pt_hccs <- comorbid_hcc(pts, date_name = "date")
 #' head(pt_hccs)
-#'
+#' 
 #' pts10 <- icd_long_data(
 #'   visit_name = c("a", "b", "c", "d", "e"),
 #'   icd_name = c("I058", NA, "T82817A", "", "I69369"),
@@ -115,13 +112,13 @@ poa_choices <- c("yes", "no", "notYes", "notNo")
 #'     c("2011-01-01", "2011-01-02", "2011-01-03", "2011-01-03", "2011-01-03")
 #'   )
 #' )
-#'
+#' 
 #' icd10_comorbid(pts10, map = icd10_map_ahrq)
 #' # or if library(icd) hasn't been called first:
 #' icd::icd10_comorbid(pts10, map = icd::icd10_map_ahrq)
 #' # or most simply:
 #' icd::icd10_comorbid_ahrq(pts10)
-#'
+#' 
 #' # specify a simple custom comorbidity map:
 #' my_map <- list(
 #'   "malady" = c("100", "2000"),
@@ -634,15 +631,7 @@ cr <- function(x) {
   if (year %in% names(.lookup_chars_in_icd10cm)) {
     return(.lookup_chars_in_icd10cm[[year]])
   }
-  dat <- try(silent = TRUE, {
-    base::getExportedValue(
-      asNamespace("icd.data"),
-      paste0("icd10cm", year)
-    )
-  })
-  if (inherits(dat, "try-error")) {
-    stop("Unable to pre-calculate code lengths for ICD-10-CM version: ", year)
-  }
+  dat <- get_icd_data(paste0("icd10cm", year))
   n <- nchar(dat$code)
   assign(year, n, envir = .lookup_chars_in_icd10cm)
   n

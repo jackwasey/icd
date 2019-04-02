@@ -8,7 +8,6 @@ output:
 vignette: >
   %\VignetteIndexEntry{Pediatric Complex Chronic Conditions}
   %\VignetteEngine{knitr::rmarkdown}
-  %\VignetteDepends{icd.data}
   %\VignetteEncoding{UTF-8}
 bibliography: icdpkg.bib
 ---
@@ -22,19 +21,14 @@ knitr::opts_chunk$set(
   # global.par = TRUE
 )
 library("icd")
-library("icd.data")
 n <- 10000
 set.seed(1441)
 # load the dice with more PCCC diagnostic codes
 h <- c(
-  icd.data::icd10cm2016$code,
+  icd10cm2016$code,
   rep(unlist(unname(icd10_map_pccc_dx)), 10)
 )
-i <- if (icd:::icd_data_ver_ok()) {
-  icd:::.idget("icd10cm2016_pc", must_work = FALSE)[["code"]]
-} else {
-  icd:::.idget("icd10_pcs_2016", must_work = FALSE)[["pcs"]]
-}
+i <- icd10cm2016_pc$code
 dat <- data.frame(
   id = n + seq(n),
   icd_dx1 = sample(h, n, replace = TRUE),

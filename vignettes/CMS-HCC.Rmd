@@ -10,7 +10,6 @@ output:
 vignette: >
   %\VignetteIndexEntry{Using Hierarchical Condition Codes}
   %\VignetteEngine{knitr::rmarkdown}
-  %\VignetteDepends{icd.data}
   %\VignetteEncoding{UTF-8}
 ---
 

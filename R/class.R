@@ -212,11 +212,11 @@ classes_ordered <- function(x) {
 #' x
 #' attributes(x) <- list(icd_short_diag = NULL)
 #' x
-#' 
+#'
 #' y <- as.decimal_diag(as.icd10("A10.09"))
 #' y
 #' is.short_diag(y)
-#' 
+#'
 #' j <- as.short_diag(as.icd10(c("A11", "B2222")))
 #' j[2] <- "C33"
 #' stopifnot(is.short_diag(j))
@@ -454,7 +454,6 @@ icd10fr <- function(x) {
   x
 }
 
-
 #' @describeIn set_icd_class Use ICD-10-BE (Belgium) class for the given data
 #' @export
 as.icd10be <- function(x, short_code = NULL) {
@@ -515,10 +514,8 @@ icd10be <- function(x) {
 #'   dx02 = c("E9981", "V10", "44004")
 #' ))
 #' wide_to_long(w)
-#' if (requireNamespace("icd.data", quietly = TRUE)) {
-#'   class(icd.data::uranium_pathology)
-#'   class(icd.data::vermont_dx)
-#' }
+#' class(uranium_pathology)
+#' class(vermont_dx)
 #' @seealso \code{\link{long_to_wide}} and \code{\link{wide_to_long}}
 NULL
 
@@ -725,7 +722,7 @@ c.icd10 <- function(..., warn = FALSE) {
 #' # preserving the ICD class
 #' stopifnot(!inherits(x[[1]], "list"))
 #' stopifnot(!inherits(x[[1]][2], "list"))
-#' 
+#'
 #' y <- as.icd10(c("A01", "B0234"))
 #' y[2]
 #' y[[2]]
@@ -869,7 +866,7 @@ print.icd9 <- function(x, verbose = FALSE, ...)
 #' @rdname print.icd9
 #' @examples
 #' \dontrun{
-#' u <- icd.data::uranium_pathology[1:10, "icd10"]
+#' u <- uranium_pathology[1:10, "icd10"]
 #' print(u)
 #' print(u, verbose = TRUE)
 #' # as.character will unclass the 'icd' classes

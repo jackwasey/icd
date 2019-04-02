@@ -24,7 +24,7 @@
 #' identical(icd:::factor_nosort(x), x)
 #' # unless the levels change:
 #' icd:::factor_nosort(x, levels = c("a", "z"))
-#'
+#' 
 #' # existing factor levels aren't re-ordered without also moving elements
 #' f <- factor(c("a", "b", "b", "c"))
 #' g <- icd:::factor_nosort(f, levels = c("a", "c", "b"))
@@ -71,6 +71,7 @@ factor_nosort_rcpp <- function(x, levels, na.rm = FALSE) {
 #' Slightly slower for small factors, three times faster for one hundred million
 #' elements with two million new levels. Three times faster for any \code{n > 1e6}.
 #' With \code{NA} values, margin is smaller, but still beats base \code{factor}.
+#' @param levels character vector of new levels
 #' @param exclude_na Simpler equivalent to \code{base::factor} exclude. By default,
 #'   \code{refactor} will not count \code{NA} as a factor level if there are \code{NA} elements
 #'   in the input data. As with \code{base::factor}, if \code{exclude_na} is \code{TRUE}, an

@@ -135,7 +135,7 @@ icd9_generate_map_pccc_dx <- function(save_data = TRUE) {
   # TODO icd_names_pccc etc
   icd9_map_pccc_dx <- as.comorbidity_map(icd9_map_pccc_dx)
   if (save_data) {
-    save_in_data_dir(icd9_map_pccc_dx)
+    .save_in_data_dir(icd9_map_pccc_dx)
   }
   invisible(icd9_map_pccc_dx)
 }
@@ -224,7 +224,7 @@ icd9_generate_map_pccc_pcs <- function(save_data = TRUE) {
     c(icd9_map_pccc_orig_pc[["metabolic"]], "624")
   icd9_map_pccc_pcs <- as.comorbidity_map(icd9_map_pccc_orig_pc)
   if (save_data) {
-    save_in_data_dir(icd9_map_pccc_pcs)
+    .save_in_data_dir(icd9_map_pccc_pcs)
   }
   invisible(icd9_map_pccc_pcs)
 }
@@ -392,7 +392,7 @@ icd10_generate_map_pccc_dx <- function(save_data, verbose = TRUE) {
     c(icd10_map_pccc_dx[["neuromusc"]], "G80")
   icd10_map_pccc_dx <- as.comorbidity_map(icd10_map_pccc_dx)
   if (save_data) {
-    save_in_data_dir(icd10_map_pccc_dx)
+    .save_in_data_dir(icd10_map_pccc_dx)
   }
   invisible(icd10_map_pccc_dx)
 }
@@ -622,7 +622,7 @@ icd10_generate_map_pccc_pcs <- function(save_data = TRUE) {
   )
   icd10_map_pccc_pcs <- as.comorbidity_map(icd10_map_pccc_orig_pc)
   if (save_data) {
-    save_in_data_dir(icd10_map_pccc_pcs)
+    .save_in_data_dir(icd10_map_pccc_pcs)
   }
   invisible(icd10_map_pccc_pcs)
 }

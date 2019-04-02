@@ -12,9 +12,7 @@ globalVariables(c(
 #' @inheritParams comorbid
 #' @examples
 #' # not pediatric data, but let's look for this example
-#' if (requireNamespace("icd.data", quietly = TRUE)) {
-#'   head(icd9_comorbid_pccc_dx(icd.data::vermont_dx))
-#' }
+#' head(icd9_comorbid_pccc_dx(vermont_dx))
 #' @export
 comorbid_pccc_dx <- function(x,
                              visit_name = get_visit_name(x),

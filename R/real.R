@@ -12,7 +12,6 @@
 #' @return logical vector
 #' @export
 is_defined <- function(x, short_code = guess_short(x), ...) {
-  require_icd_data()
   UseMethod("is_defined")
 }
 
@@ -28,7 +27,7 @@ is_defined.icd9 <- function(x, short_code = guess_short(x),
   if (billable) {
     is_leaf.icd9cm(short_code = TRUE, as_char_no_warn(x))
   } else {
-    x %in% icd.data::icd9cm_hierarchy[["code"]]
+    x %in% icd9cm_hierarchy[["code"]]
   }
 }
 
@@ -44,7 +43,7 @@ is_defined.icd10cm <- function(x,
   stopifnot(is.factor(x) || is.character(x))
   stopifnot(is.logical(short_code), is.logical(leaf))
   if (!short_code) x <- decimal_to_short(x)
-  i <- icd_data_icd10cm_active()
+  i <- get_icd10cm_active()
   if (leaf) {
     is_leaf.icd10cm(x, short_code = short_code)
   } else {
@@ -93,7 +92,6 @@ get_defined <- function(x,
                         short_code = guess_short(x),
                         billable = FALSE,
                         leaf = billable) {
-  require_icd_data()
   UseMethod("get_defined")
 }
 
@@ -126,7 +124,6 @@ get_defined.icd9 <- function(x,
 #' @return logical vector of same length as input
 #' @export
 is_leaf <- function(x, short_code = guess_short(x), ...) {
-  require_icd_data()
   UseMethod("is_leaf")
 }
 
@@ -154,7 +151,7 @@ is_leaf.icd10cm <- function(x,
     x <- decimal_to_short(x)
   }
   # Workaround until next icd.data is on CRAN
-  ia <- icd_data_icd10cm_active()
+  ia <- get_icd10cm_active()
   leaf_name <- ifelse("leaf" %in% names(ia), "leaf", "billable")
   x %in% ia[ia[[leaf_name]] == 1L, "code"]
 }
@@ -181,13 +178,13 @@ is_leaf.icd9cm <- function(x,
     x <- decimal_to_short.icd9(x)
   }
   m <- match(x,
-    icd.data::icd9cm_hierarchy$code,
+    icd9cm_hierarchy$code,
     nomatch = NA_integer_,
     ...
   )
   res <- rep_len(FALSE, length(x))
   not_na <- !is.na(m)
-  res[not_na] <- icd.data::icd9cm_hierarchy[m[not_na], "billable"]
+  res[not_na] <- icd9cm_hierarchy[m[not_na], "billable"]
   res
 }
 
@@ -215,7 +212,6 @@ is_leaf.default <- function(x, short_code = guess_short(x), ...) {
 #' @template dotdotdot
 #' @export
 get_leaf <- function(...) {
-  require_icd_data()
   UseMethod("get_leaf")
 }
 

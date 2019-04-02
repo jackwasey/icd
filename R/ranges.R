@@ -7,14 +7,12 @@
 #' The default for the argument \code{defined} is \code{TRUE} since this is far
 #' more likely to be useful to the end user, dealing with real ICD codes.
 #' @examples
-#' if (requireNamespace("icd.data", quietly = TRUE)) {
-#'   expand_range("428.0", "428.9")
-#'   "4280" %i9s% "4289"
-#'   "4280" %i9s% "42821"
-#'   "42799" %i9sa% "42802" # doesn't include 428 or 4280
-#'   "427.99" %i9da% "428.02"
-#'   "V80" %i9s% "V810"
-#' }
+#' expand_range("428.0", "428.9")
+#' "4280" %i9s% "4289"
+#' "4280" %i9s% "42821"
+#' "42799" %i9sa% "42802" # doesn't include 428 or 4280
+#' "427.99" %i9da% "428.02"
+#' "V80" %i9s% "V810"
 #' @templateVar icd9ShortName start,end
 #' @template icd9-short
 #' @template defined
@@ -30,7 +28,6 @@
 #' @family ICD-9 ranges
 #' @export
 expand_range <- function(start, end, ...) {
-  require_icd_data()
   stopifnot(length(start) == 1)
   stopifnot(length(end) == 1)
   UseMethod("expand_range")
@@ -119,7 +116,7 @@ expand_range.icd10cm <- function(start,
   new_end <- end_kids[length(end_kids)]
 
   # find the start and end code positions in the master list
-  i <- icd_data_icd10cm_active()
+  i <- get_icd10cm_active()
   pos <- match(
     c(start, new_end),
     i[["code"]]
@@ -127,7 +124,7 @@ expand_range.icd10cm <- function(start,
   if (is.na(pos[1])) stop(sprintf("start code '%s' not found", start))
   if (is.na(pos[2])) stop(sprintf("calculated end code '%s' not found", end))
   stopifnot(pos[2] >= pos[1])
-  i <- icd_data_icd10cm_active()
+  i <- get_icd10cm_active()
   i[pos[1]:pos[2], "code"]
 }
 
@@ -136,13 +133,10 @@ expand_range.icd10cm <- function(start,
 #' Expand a pair of major codes into a range of major codes. Primarily for use
 #' by \code{icd.data}.
 #' @examples
-#' if (requireNamespace("icd.data", quietly = TRUE)) {
-#'   expand_range_major("100", "102")
-#' }
+#' expand_range_major("100", "102")
 #' @template dotdotdot
 #' @export
 expand_range_major <- function(start, end, defined) {
-  require_icd_data()
   UseMethod("expand_range_major")
 }
 
@@ -151,7 +145,6 @@ expand_range_major <- function(start, end, defined) {
 #' @keywords internal
 #' @export
 expand_range_major.default <- function(start, end, defined = TRUE) {
-  require_icd_data()
   icd_ver <- guess_pair_version(start, end, short_code = TRUE)
   if (icd_ver == "icd9") {
     expand_range_major.icd9(start, end)
@@ -188,14 +181,14 @@ expand_range_major.default <- function(start, end, defined = TRUE) {
 #' @keywords internal
 #' @export
 expand_range_major.icd10cm <- function(start, end, defined = TRUE) {
-  require_icd_data()
+
   # codes may have alphabetic characters in 3rd position, so can't just do
   # numeric. This may make ICD-10-CM different from ICD-10 WHO. It also makes
   # generating the lookup table of ICD-10-CM codes potentially circular, since
   # we expand the start to end range of chapter and sub-chapter definitions.
   se <- toupper(trimws(as_char_no_warn(c(start, end))))
   unique_mjrs <- if (defined) {
-    unique(icd.data::icd10cm2016$three_digit)
+    unique(icd10cm2016$three_digit)
   } else {
     .icd10cm_get_majors_possible("A00", "Z99")
   }
@@ -412,7 +405,6 @@ icd9_expand_range_short <- function(start,
 #'   major codes
 #' @export
 expand_range_major.icd9 <- function(start, end, defined = TRUE) {
-  require_icd_data()
   assert_scalar(start) # i'll permit numeric but prefer char
   assert_scalar(end)
   assert_flag(defined)

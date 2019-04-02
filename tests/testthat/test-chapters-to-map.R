@@ -2,7 +2,6 @@ context("slower tests")
 
 test_that("chapters to map", {
   # Slow for huge chapters, like II (Cancer)
-  skip_if_not_installed("icd.data")
   n <- 3:6
   codes <- icd:::get_one_of_each()[n]
   ooe <- icd_long_data(
@@ -13,7 +12,7 @@ test_that("chapters to map", {
   class(ooe[["code"]]) <- c("icd9", "icd_decimal_diag", "factor")
   expect_warning(
     test_map <- chapters_to_map(
-      icd.data::icd9_chapters[n],
+      icd9_chapters[n],
       defined = FALSE
     ),
     regexp = NA
@@ -28,7 +27,7 @@ test_that("chapters to map", {
     ),
     regexp = NA
   )
-  cmbcmp <- unname(as.matrix(icd:::logical_to_binary(cmb)[-1]))
+  cmbcmp <- unname(as.matrix(logical_to_binary(cmb)[-1]))
   expmat <- diag(nrow = length(ooe$code))
   expect_equivalent(cmbcmp, expmat)
 })

@@ -52,7 +52,7 @@ bibliography:
   - icdjss.bib
 vignette: >
   %\VignetteIndexEntry{icd: Efficient Computation of Comorbidities from ICD Codes Using Sparse Matrix Multiplication in R}
-  %\VignetteDepends{icd.data, rticles}
+  %\VignetteDepends{rticles}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 editor_options:
@@ -572,13 +572,13 @@ my_kable(
 The US State of Vermont offers anonymized public hospital discharge data [@VermontDepartmentofHealth_VermontHospitalDischarge_2016]. A sample is included in \pkg{icd} and is used here to illustrate a real-world comorbidity calculation.[^disclaimer]
 
 ```{r vermonthead}
-head(icd.data::vermont_dx[1:10])
+head(vermont_dx[1:10])
 ```
 
 The data is in 'wide' format. ICD codes have the 'short' structure, without the decimal divider. Diagnoses are spread across the `DX` columns.
 
 ```{r vermontlong}
-v <- icd.data::vermont_dx[-c(2:5)]
+v <- vermont_dx[-c(2:5)]
 v[1:5, 1:5]
 ```
 
@@ -748,7 +748,7 @@ Note that 497 -- 499 are undefined in ICD-9. What should be done if 497 appears 
 ```{r pulmonaryproblem}
 sc <- c("Chronic Obstructive Pulmonary Disease And Allied Conditions",
         "Pneumoconioses And Other Lung Diseases Due To External Agents")
-icd.data::icd9_sub_chapters[sc]
+icd9_sub_chapters[sc]
 ```
 
 497 is not a valid code itself. It could be a typo for any of the other combinations, of which four are completely different, yet valid codes:

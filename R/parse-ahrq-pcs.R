@@ -23,6 +23,6 @@ icd10_parse_ahrq_pcs <- function(save_data = FALSE) {
   dat$code <- gsub(dat$code, pattern = "'", replacement = "")
   icd10_map_ahrq_pcs <- split(dat$code, dat$class)
   if (save_data) {
-    save_in_data_dir(icd10_map_ahrq_pcs)
+    .save_in_data_dir(icd10_map_ahrq_pcs)
   }
 }

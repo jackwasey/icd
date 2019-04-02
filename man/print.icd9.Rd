@@ -33,7 +33,7 @@ print(x, verbose = TRUE)
 print(as.factor(x), verbose = TRUE)
 }
 \dontrun{
-u <- icd.data::uranium_pathology[1:10, "icd10"]
+u <- uranium_pathology[1:10, "icd10"]
 print(u)
 print(u, verbose = TRUE)
 # as.character will unclass the 'icd' classes

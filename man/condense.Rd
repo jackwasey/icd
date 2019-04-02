@@ -56,7 +56,6 @@ from input data
 }}
 
 \examples{
-if (requireNamespace("icd.data", quietly = TRUE)) {
   kids <- children("V40")
   kids
   condense(kids, defined = TRUE)
@@ -75,7 +74,6 @@ if (requireNamespace("icd.data", quietly = TRUE)) {
   condense(icd9_map_elix$CHF, warn = FALSE)
   # explaining big groups of codes takes advantage of this:
   explain_code(icd9_map_elix$CHF, condense = TRUE, warn = FALSE)
-}
 }
 \seealso{
 Other ICD-9 ranges: \code{\link{children}},

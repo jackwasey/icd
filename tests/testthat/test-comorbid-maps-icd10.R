@@ -45,7 +45,6 @@ test_that("the class of each element of the quan elix map is correct", {
   }
 })
 test_that("independently created list of Quan Elixhauser codes all appear", {
-  skip_if_not_installed("icd.data")
   quan_elix_independent <- list(
     chf = c(
       "I099", "I110", "I130", "I132", "I255", "I420", "I425", "I426",

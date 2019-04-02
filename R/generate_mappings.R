@@ -102,7 +102,7 @@ icd9_generate_map_elix <- function(save_data = TRUE) {
   names(icd9_map_elix) <- icd::names_elix_htn_abbrev
   icd9_map_elix <- as.comorbidity_map(icd9_map_elix)
   if (save_data) {
-    save_in_data_dir(icd9_map_elix)
+    .save_in_data_dir(icd9_map_elix)
   }
   invisible(icd9_map_elix)
 }
@@ -243,7 +243,7 @@ icd10_generate_map_elix <- function(save_data = TRUE, verbose = FALSE) {
   if (verbose) message("applied as.icd10")
   icd10_map_elix <- as.comorbidity_map(icd10_map_elix)
   if (save_data) {
-    save_in_data_dir(icd10_map_elix)
+    .save_in_data_dir(icd10_map_elix)
   }
   invisible(icd10_map_elix)
 }
@@ -344,7 +344,7 @@ icd9_generate_map_quan_elix <- function(save_data = TRUE) {
   names(icd9_map_quan_elix) <- icd::names_quan_elix_htn_abbrev
   icd9_map_quan_elix <- as.comorbidity_map(icd9_map_quan_elix)
   if (save_data) {
-    save_in_data_dir(icd9_map_quan_elix)
+    .save_in_data_dir(icd9_map_quan_elix)
   }
   invisible(icd9_map_quan_elix)
 }
@@ -480,7 +480,7 @@ icd10_generate_map_quan_elix <- function(save_data = TRUE, verbose = FALSE) {
   icd10_map_quan_elix <- lapply(icd10_map_quan_elix, as.icd10)
   icd10_map_quan_elix <- as.comorbidity_map(icd10_map_quan_elix)
   if (save_data) {
-    save_in_data_dir(icd10_map_quan_elix)
+    .save_in_data_dir(icd10_map_quan_elix)
   }
   invisible(icd10_map_quan_elix)
 }
@@ -591,8 +591,8 @@ icd10_generate_map_quan_deyo <- function(save_data = TRUE, verbose = FALSE) {
   # It does appear that there are numerous codes in the Quan Elixhauser scheme
   # which are not present (?anymore) in the ICD-10-CM 2016 list.
   if (save_data) {
-    save_in_data_dir(icd10_map_quan_deyo)
-    save_in_data_dir(icd10_map_charlson)
+    .save_in_data_dir(icd10_map_quan_deyo)
+    .save_in_data_dir(icd10_map_charlson)
   }
   invisible(icd10_map_quan_deyo)
 }
@@ -645,8 +645,8 @@ apply_over_icd10cm_vers <- function(raw, verbose = FALSE) {
 #' @examples
 #' # Codes have been added and removed since 2008
 #' \dontrun{
-#' setdiff(icd.data::icd10who2016$code, icd.data::icd10who2008fr$code)
-#' setdiff(icd.data::icd10who2008fr$code, icd.data::icd10who2016$code)
+#' setdiff(icd10who2016$code, icd10who2008fr$code)
+#' setdiff(icd10who2008fr$code, icd10who2016$code)
 #' }
 #' @keywords internal
 #' @noRd

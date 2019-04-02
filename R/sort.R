@@ -118,7 +118,11 @@ order.icd9 <- function(x) {
     x <- x[!is.na(x)]
     if (length(x) == 0) return(integer())
   }
-  icd9_order_rcpp(x)
+  if (!is.factor(x)) {
+    icd9_order_rcpp(x)
+  } else {
+    icd9_order_rcpp(.as_char_no_warn(x))
+  }
 }
 
 #' @rdname sort_icd

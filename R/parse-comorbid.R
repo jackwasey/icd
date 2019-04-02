@@ -130,7 +130,7 @@ icd9_parse_ahrq_sas <- function(save_data = FALSE, offline = TRUE) {
   names(icd9_map_ahrq) <- icd::names_ahrq_htn_abbrev
   icd9_map_ahrq <- comorbidity_map(icd9_map_ahrq)
   if (save_data) {
-    save_in_data_dir("icd9_map_ahrq")
+    .save_in_data_dir("icd9_map_ahrq")
   }
   invisible(icd9_map_ahrq)
 }
@@ -154,7 +154,7 @@ icd10_parse_ahrq_sas <- function(save_data = FALSE, offline = TRUE) {
   icd10_map_ahrq <- lapply(icd10_map_ahrq, as.icd10)
   icd10_map_ahrq <- comorbidity_map(icd10_map_ahrq)
   if (save_data) {
-    save_in_data_dir("icd10_map_ahrq")
+    .save_in_data_dir("icd10_map_ahrq")
   }
   invisible(icd10_map_ahrq)
 }
@@ -212,14 +212,14 @@ icd9_parse_quan_deyo_sas <- function(save_data = FALSE, offline = TRUE) {
     comorbidity_map(icd9(as.short_diag(icd9_map_quan_deyo)))
   icd9_map_charlson <- icd9_map_quan_deyo
   if (save_data) {
-    save_in_data_dir(icd9_map_quan_deyo)
-    save_in_data_dir(icd9_map_charlson)
+    .save_in_data_dir(icd9_map_quan_deyo)
+    .save_in_data_dir(icd9_map_charlson)
   }
   invisible(icd9_map_quan_deyo)
 }
 
 # mostly duplicated from icd.data, just saving the map here
-icd10_parse_ahrq_pcs <- function(save_data = TRUE) {
+.icd10_parse_ahrq_pcs <- function(save_data = TRUE) {
   f <- unzip_to_data_raw(
     url = paste0(
       "https://www.hcup-us.ahrq.gov/toolssoftware/",
@@ -244,7 +244,7 @@ icd10_parse_ahrq_pcs <- function(save_data = TRUE) {
   dat$code <- gsub(dat$code, pattern = "'", replacement = "")
   icd10_map_ahrq_pcs <- split(dat$code, dat$class)
   if (save_data) {
-    save_in_data_dir(icd10_map_ahrq_pcs)
+    .save_in_data_dir(icd10_map_ahrq_pcs)
   }
 }
 # nocov end

@@ -26,12 +26,10 @@
 #'   to be called to do the comorbidity calculation
 #' @template dotdotdot
 #' @examples
-#' if (requireNamespace("icd.data", quietly = TRUE)) {
-#'   u <- icd.data::uranium_pathology
-#'   m <- icd10_map_ahrq
-#'   u$icd10 <- decimal_to_short(u$icd10)
-#'   j <- categorize_simple(u, m, id_name = "case", code_name = "icd10")
-#' }
+#' u <- uranium_pathology
+#' m <- icd10_map_ahrq
+#' u$icd10 <- decimal_to_short(u$icd10)
+#' j <- categorize_simple(u, m, id_name = "case", code_name = "icd10")
 #' @keywords internal
 #' @noRd
 categorize_simple <- function(x,

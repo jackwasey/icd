@@ -1,7 +1,5 @@
 context("icd9 ranges")
 
-skip_if_not_installed("icd.data")
-
 test_that("expand icd9 range definition", {
   expect_equal_no_icd(
     expand_range(

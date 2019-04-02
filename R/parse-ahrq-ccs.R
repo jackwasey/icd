@@ -141,8 +141,8 @@ icd9_parse_ahrq_ccs <- function(single = TRUE,
       lvl4 = make_labels(4)
     )
     if (save_data) {
-      save_in_data_dir(icd9_map_multi_ccs)
-      save_in_data_dir(icd9_names_multi_ccs)
+      .save_in_data_dir(icd9_map_multi_ccs)
+      .save_in_data_dir(icd9_names_multi_ccs)
     }
     out <- icd9_map_multi_ccs
   } else {
@@ -166,8 +166,8 @@ icd9_parse_ahrq_ccs <- function(single = TRUE,
         clean_icd9
       ))
     if (save_data) {
-      save_in_data_dir(icd9_map_single_ccs)
-      save_in_data_dir("icd9_names_single_ccs")
+      .save_in_data_dir(icd9_map_single_ccs)
+      .save_in_data_dir("icd9_names_single_ccs")
     }
     out <- icd9_map_single_ccs
   }
@@ -281,8 +281,8 @@ icd10_parse_ahrq_ccs <- function(version = "2018.1",
   # nolint end
   # not applying over WHO codes because CCS is a US-oriented classification.
   if (save_data) {
-    save_in_data_dir(icd10_map_ccs)
-    save_in_data_dir(icd10_names_ccs)
+    .save_in_data_dir(icd10_map_ccs)
+    .save_in_data_dir(icd10_names_ccs)
   }
   invisible(icd10_map_ccs)
 }

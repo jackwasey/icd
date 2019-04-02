@@ -14,24 +14,23 @@
     Codes}
 \description{
 Calculate comorbidities, medical risk scores, and
-    work very quickly and precisely with ICD-9 and ICD-10 codes. This package
-    enables a work flow from raw tables of ICD codes in hospital databases
-    to comorbidities. ICD-9 and ICD-10 comorbidity mappings from Quan
-    (Deyo and Elixhauser versions), Elixhauser and AHRQ included.  Common
-    ambiguities and code formats are handled. Comorbidity computation
-    includes Hierarchical Condition Codes, and a reimplementation of the
-    AHRQ Clinical Classifications Software. Risk scores include those of
-    Charlson and van Walraven.  US Clinical Modification, Word Health
-    Organization, Belgian and French ICD-10 codes are supported through
-    the 'icd.data' package, some of which are downloaded on demand.
+    work very quickly and precisely with ICD-9 and ICD-10 codes. This
+    package enables a work flow from raw tables of ICD codes in hospital
+    databases to comorbidities. ICD-9 and ICD-10 comorbidity mappings from
+    Quan (Deyo and Elixhauser versions), Elixhauser and AHRQ included.
+    Common ambiguities and code formats are handled. Comorbidity
+    computation includes Hierarchical Condition Codes, and a
+    reimplementation of the AHRQ Clinical Classifications Software. Risk
+    scores include those of Charlson and van Walraven.  US Clinical
+    Modification, Word Health Organization, Belgian and French ICD-10
+    codes are supported, most of which are downloaded on demand.
 }
 \details{
 \describe{ \item{Comorbidities}{ \code{\link{comorbid}} determines
   comorbidities for a set of patients with one or more ICD codes each. All
   the comorbidity functions guess which columns are the identifiers and which
   are ICD code fields. You may also specify these. Most 'long' or 'wide' data
-  can simply be passed directly, e.g.:
-  \code{comorbid(patient_data_frame)}.
+  can simply be passed directly, e.g.: \code{comorbid(patient_data_frame)}.
 
   \itemize{
 
@@ -86,14 +85,12 @@ Calculate comorbidities, medical risk scores, and
   \code{\link{is_defined}} checks whether ICD-9 codes correspond to defined
   diagnoses or diagnostic groups in the hierarchy of ICD codes.
   \code{link{is_leaf}} (and for the US, \code{link{is_billable}}) determine
-  whether given codes are leaves in the hierarchy, or not. These functions
-  (and \code{\link{explain_code}}) rely on the \CRANpkg{icd.data} package,
-  which is not installed by default.  \CRANpkg{icd.data} may need to download
-  data due to package size or copyright restrictions on redistributing data,
-  and needs a cache directory and your permission to do this. Use
-  \code{icd.data::setup_icd_data()} to do this, or
-  \code{icd.data::download_icd_data()} to download everything at once, which
-  will take a few minutes on a broadband connection.
+  whether given codes are leaves in the hierarchy, or not. \pkg{icd} may need
+  to download data due to package size or copyright restrictions on
+  redistributing data, and needs a cache directory and your permission to do
+  this. Use \code{setup_icd_data()} to do this, or \code{download_icd_data()}
+  to download everything at once, which will take a few minutes on a
+  broadband connection.
 
   Validation depends on the class of code, and is different if the code is
   from France, Belgium, the USA, or the World Health Organization (WHO). Use
@@ -151,7 +148,7 @@ Useful links:
 \author{
 Jack O. Wasey \email{jack@jackwasey.com}
 }
-\concept{ICD-9 ICD-10 comorbidity comorbidities}
+\concept{comorbidity comorbidities comorbid ICD-9 ICD-10 ICD}
 \keyword{internal}
 \keyword{misc}
 \keyword{utilities}

@@ -1,5 +1,26 @@
 context("test hcc")
 
+test_that("can recreate the package data", {
+  if (!dir.exists(system.file("data-raw", "icd_hcc_rawdata",
+    package = "icd",
+    mustWork = FALSE
+  ))) {
+    skip("HCC raw data not available")
+  }
+  expect_identical(
+    icd_parse_cc_hierarchy(save_data = FALSE),
+    icd_map_cc_hcc
+  )
+  expect_identical(
+    icd9_parse_cc(save_data = FALSE),
+    icd9_map_cc
+  )
+  expect_identical(
+    icd10_parse_cc(save_data = FALSE),
+    icd10_map_cc
+  )
+})
+
 # Typical use case
 # Data as expected. Multiple visits (different patients encounters)
 # One of the patients with multiple visit dates, all valid ICDs

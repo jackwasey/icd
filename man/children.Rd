@@ -80,7 +80,6 @@ only applies to ICD-10-CM for now).
 library(magrittr, warn.conflicts = FALSE, quietly = TRUE)
 # magrittr not required by icd
 # icd.data package highly recommended, but not a depependency for comorbidity calculations
-if (requireNamespace("icd.data", quietly = TRUE)) {
   # no children other than self
   children("10201", short_code = TRUE, defined = FALSE)
 
@@ -95,7 +94,6 @@ if (requireNamespace("icd.data", quietly = TRUE)) {
   children(short_code = FALSE, "100.0")
   children(short_code = FALSE, "100.00")
   children(short_code = FALSE, "2.34")
-}
 }
 \seealso{
 Other ICD-9 ranges: \code{\link{condense}},

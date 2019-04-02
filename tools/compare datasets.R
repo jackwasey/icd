@@ -1,5 +1,4 @@
 # compare data-sets when data built on different platforms:
-library(icd.data)
 library(icd)
 library(crayon)
 if (!exists("e", mode = "environment") ||

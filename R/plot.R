@@ -14,14 +14,14 @@
 #' @param ... Passed to \code{\link[graphics]{barplot}}
 #' @examples
 #' \dontrun{
-#' plot_comorbid(icd.data::vermont_dx)
-#' plot_comorbid(icd.data::uranium_pathology)
+#' plot_comorbid(vermont_dx)
+#' plot_comorbid(uranium_pathology)
 #' # Or calculate the comorbidities, then plot the results
-#' cmb <- comorbid_ahrq(icd.data::vermont_dx)
+#' cmb <- comorbid_ahrq(vermont_dx)
 #' # plot with full, not abbreviated names
 #' plot_comorbid_results(cmb, names.arg = names_ahrq)
 #' # or return with full names, and plot those:
-#' cmb <- comormbid_ahrq(icd.data::vermont_dx, abbrev_names = FALSE) %>%
+#' cmb <- comormbid_ahrq(vermont_dx, abbrev_names = FALSE) %>%
 #'   plot_comorbid_results()
 #' }
 #' @keywords hplot

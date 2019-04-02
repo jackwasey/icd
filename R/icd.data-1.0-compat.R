@@ -1,40 +1,5 @@
-icd_data_ver_ok <- function(ver = "1.1") {
-  # requireNamespace only checks version
-  res <- requireNamespace("icd.data", quietly = TRUE)
-  # versionCheck = list(version = ver, op = ">="))
-  res && utils::packageVersion("icd.data") >= ver
-}
-
-icd_data_icd10cm_active <- function() {
-  if (!requireNamespace("icd.data")) {
-    message("icd.data doesn't appear to be available")
-    return()
-  }
-  if (!icd_data_ver_ok()) {
-    icd.data::icd10cm2016
-  } else {
-    get("get_icd10cm_active", envir = asNamespace("icd.data"))()
-  }
-}
-
 icd_data_icd9cm_leaf_v32 <- function() {
-  if (!requireNamespace("icd.data")) {
-    message("icd.data doesn't appear to be available")
-    return()
-  }
-  icd.data::icd9cm_billable[["32"]]
-}
-
-icd_data_get_icd10cm_active_ver <- function() {
-  if (!requireNamespace("icd.data")) {
-    message("icd.data package doesn't appear to be available at all.")
-    return()
-  }
-  if (!icd_data_ver_ok()) {
-    "2016"
-  } else {
-    get("get_icd10cm_active_ver", envir = asNamespace("icd.data"))()
-  }
+  icd9cm_billable[["32"]]
 }
 
 # alt is alternative data, not a variable name.
@@ -53,19 +18,19 @@ icd_data_get_icd10cm_active_ver <- function() {
 }
 
 .idget_lazy <- function(var_name) {
-  ns <- asNamespace("icd.data")
+  ns <- asNamespace("icd")
   lz <- ns$.__NAMESPACE__.$lazydata
   get(var_name, lz)
 }
 
 .idexists_lazy <- function(var_name) {
-  ns <- asNamespace("icd.data")
+  ns <- asNamespace("icd")
   lz <- ns$.__NAMESPACE__.$lazydata
   exists(var_name, lz)
 }
 
 .idget_either <- function(var_name) {
-  ns <- asNamespace("icd.data")
+  ns <- asNamespace("icd")
   if (.idexists_lazy(var_name)) return(.idget_lazy(var_name))
   if (exists(var_name, ns)) return(get(var_name, ns))
   var_name <- paste0("get_", var_name)
@@ -74,36 +39,8 @@ icd_data_get_icd10cm_active_ver <- function() {
 }
 
 .idexists_either <- function(var_name) {
-  ns <- asNamespace("icd.data")
+  ns <- asNamespace("icd")
   .idexists_lazy(var_name) ||
     exists(var_name, ns) ||
     exists(paste0("get_", var_name), ns, mode = "function")
-}
-
-with_icd10cm_version <- function(ver, code) {
-  stopifnot(is.character(ver), length(ver) == 1)
-  old <- options("icd.data.icd10cm_active_ver" = ver)
-  on.exit(options(old), add = TRUE)
-  force(code)
-}
-
-# copied from icd.data version 1.1 until everything is on CRAN
-with_icd10cm_version <- function(ver, lang = c("en", "fr"), code) {
-  lang <- match.arg(lang)
-  var_name <- paste0(
-    "icd10cm",
-    ver,
-    ifelse(lang == "en", "", paste0("_", lang))
-  )
-  stopifnot(!is.null(getExportedValue(
-    ns = asNamespace("icd.data"),
-    name = var_name
-  )))
-  stopifnot(is.character(ver), length(ver) == 1)
-  old <- options(
-    "icd.data.icd10cm_active_ver" = ver,
-    "icd.data.icd10cm_active_lang" = lang
-  )
-  on.exit(options(old), add = TRUE)
-  force(code)
 }

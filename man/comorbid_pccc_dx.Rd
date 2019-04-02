@@ -34,8 +34,8 @@ icd10_comorbid_pccc_pcs(x, visit_name = get_visit_name(x), icd_name,
 \arguments{
 \item{x}{\code{data.frame} containing a column of patient-visit identifiers
 and a column of ICD codes. The \code{data.frame} may be in \sQuote{long} or
-\sQuote{wide} format, like the example \code{\link[icd.data]{vermont_dx}}
-and \code{\link[icd.data]{uranium_pathology}} data.}
+\sQuote{wide} format, like the example \code{\link{vermont_dx}}
+and \code{\link{uranium_pathology}} data.}
 
 \item{visit_name}{The name of the column in the data frame which contains the
 patient or visit identifier. Typically this is the visit identifier, since
@@ -103,9 +103,7 @@ procedure codes
 
 \examples{
 # not pediatric data, but let's look for this example
-if (requireNamespace("icd.data", quietly = TRUE)) {
-  head(icd9_comorbid_pccc_dx(icd.data::vermont_dx))
-}
+  head(icd9_comorbid_pccc_dx(vermont_dx))
 # Six random codes from each PCCC procedure code map. 'icd' will use
 # an heuristic to guess whether ICD-9 or ICD-10:
 pts <- data.frame(

@@ -9,12 +9,6 @@ cache: packages
 r_packages:
   - covr
 
-r_github_packages:
-  - jackwasey/nhds
-# for testing against icd.data which is not yet updated in CRAN
-#  - jackwasey/icd.data
-
-
 cran: https://cloud.r-project.org
 
 warnings_are_errors: true
@@ -72,11 +66,6 @@ before_script:
 # - sed -i'' '/\.covrignore/d' .Rbuildignore
 # - sed -i'' '/\.lintr/d' .Rbuildignore
  - sed -i'' '/\benchmark/d' .Rbuildignore
- # otherwise, icd.data is installed from CRAN, and after the github install???
- #
- # Quoting and colons in YAML https://github.com/ansible/ansible/issues/2769
- #- 'echo "Remotes: jackwasey/icd.data" >> DESCRIPTION'
- #- cat DESCRIPTION
  - Rscript -e "Rcpp::compileAttributes()" # make sure Rcpp generated code is updated, ideally this is not be checked in repo...
 
 after_success:

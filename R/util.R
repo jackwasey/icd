@@ -211,11 +211,7 @@ get_icd_dx_name <- function(x,
   if (is.null(icd_name)) {
     icd_name <- character()
     for (n in names(x)) {
-      pc <- if (requireNamespace("icd.data", quietly = TRUE)) {
-        get_icd_defined_percent(x[[n]])
-      } else {
-        get_icd_valid_percent(x[[n]])
-      }
+      pc <- get_icd_defined_percent(x[[n]])
       if (pc$icd9 > 25 || pc$icd10 > 25) {
         icd_name <- c(icd_name, n)
       }
@@ -224,7 +220,7 @@ get_icd_dx_name <- function(x,
   if (nrow(x) < 2 || (!valid_codes && !defined_codes)) {
     return(icd_name)
   }
-  pc <- if (defined_codes && requireNamespace("icd.data", quietly = TRUE)) {
+  pc <- if (defined_codes) {
     get_icd_defined_percent(x[icd_name[1]])
   } # TODO vectorize this function
   else {
@@ -392,12 +388,23 @@ named_list <- function(...) {
 
 # nocov start
 
-#' \code{stringr} does this, but here we have a small amount of base R code
+#' \CRANpkg{stringr} does this, but here we have a small amount of base R code
+#' @param ... passed to regexec, e.g. \code{perl = TRUE}.
 #' @noRd
 #' @keywords internal
-str_extract <- function(string, pattern, ...)
-  vapply(regmatches(string, m = regexec(pattern = pattern, text = string, ...)),
-    FUN = `[[`, 1, FUN.VALUE = character(1L)
+str_extract <- function(string,
+                        pattern,
+                        fun = `[[`,
+                        ...)
+  vapply(
+    regmatches(string,
+               m = regexec(pattern = pattern,
+                           text = string,
+                           ...)
+    ),
+    FUN = fun,
+    1,
+    FUN.VALUE = character(1L)
   )
 
 capitalize_first <- function(x)
@@ -420,14 +427,4 @@ get_raw_data_dir <- function() {
 str_match_all <- function(string, pattern, ...) {
   string <- as.character(string)
   regmatches(x = string, m = regexec(pattern = pattern, text = string, ...))
-}
-
-require_icd_data <- function(version = "1.0") {
-  if (!icd_data_ver_ok(ver = version)) {
-    stop("Package \"icd.data\" version ", version,
-      " needed for this function to work. ",
-      "Please install it with install.packages(\"icd.data\")",
-      call. = FALSE
-    )
-  }
 }

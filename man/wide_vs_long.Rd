@@ -81,10 +81,8 @@ heuristics.
   dx02 = c("E9981", "V10", "44004")
 ))
 wide_to_long(w)
-if (requireNamespace("icd.data", quietly = TRUE)) {
-  class(icd.data::uranium_pathology)
-  class(icd.data::vermont_dx)
-}
+class(uranium_pathology)
+class(vermont_dx)
 }
 \seealso{
 \code{\link{long_to_wide}} and \code{\link{wide_to_long}}

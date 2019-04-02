@@ -1,5 +1,17 @@
 # nocov start
 
+.debug <- FALSE
+.verbose(.debug || getOption("icd.data.verbose", default = FALSE))
+.make_icd9cm_leaf_parsers(verbose = .debug)
+.make_icd9cm_rtf_parsers(verbose = .debug)
+.make_icd10cm_parsers(verbose = .debug)
+# get_ and .get_ functions only depend  on the data name
+.make_getters_and_fetchers(verbose = .debug)
+
+.onLoad <- function(libname, pkgname) {
+  .set_init_options()
+}
+
 # Set up an environment to cache chars_in_icd10cm
 .lookup_chars_in_icd10cm <- new.env(parent = emptyenv())
 
@@ -13,6 +25,21 @@
       "strongly recommended to run the command: remove.packages(\"icd9\")"
     ))
   }
+  if (interactive() && .interact()) {
+    packageStartupMessage(
+      "icd downloads and caches data when needed. Use
+setup_icd_data()
+    to initialize the cache and enable automated downloads. Use:
+download_icd_data()
+    to cache everything at once, or complete an interrupted download."
+    )
+  }
+  if (.interact() && !.all_cached()) {
+    packageStartupMessage(
+      "Not all the available ICD-9-CM data has been downloaded. To complete the download and parsing process use:
+download_icd_data()"
+    )
+  }
 }
 
 .onUnload <- function(libpath) {
@@ -20,7 +47,7 @@
 }
 
 release_questions <- function() {
-  c(# vignette
+  c( # vignette
     "manual rebuild of efficiency and country-lang-vers vignettes",
     # commands:
     "update_everything() on linux",
@@ -30,9 +57,12 @@ release_questions <- function() {
     "Do all examples look ok (not just run without errors)?",
     "Have all the fixed github issues been closed",
     # code quality:
+    "codetools::checkUsagePackage('icd', all = TRUE, suppressLocal = TRUE)",
+    "styler::style_pkg()",
     "Are all public S3 classes all exported? use devtools::missing_s3() http://r-pkgs.had.co.nz/namespace.html",
     "use LLVM static scan build, scan-build before compiler in .R/Makevars",
     # testing and compilation and different platforms:
+    "local install, all tests pass with data all downloaded and parsed",
     "Have you run tests in tests-deprecated and tests-build-code?",
     "Are there no skipped tests which should be run?",
     "Does it compile, test and check fine on travis and appveyor?",
@@ -44,4 +74,16 @@ release_questions <- function() {
     "Have all unnecessary files been ignored in built archive?"
   )
 }
+
+utils::globalVariables(c(
+  "icd9_sub_chapters",
+  "icd9_chapters",
+  "icd9_majors",
+  "icd10_sub_chapters",
+  "icd10_chapters",
+  "icd10cm2016",
+  "icd10cm2019",
+  "icd9cm_hierarchy"
+))
+
 # nocov end
