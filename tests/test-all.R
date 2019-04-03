@@ -23,3 +23,4 @@ on.exit(options(old_interact), add = TRUE)
 icd:::.show_options()
 
 testthat::test_check("icd")
+

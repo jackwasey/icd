@@ -1,60 +1,3 @@
-#' convert to character vector without warning
-#' @param x vector, typically numeric or a factor
-#' @return character vector
-#' @keywords internal
-#' @noRd
-.as_char_no_warn <- function(x) {
-  if (is.character(x)) return(x)
-  old <- options(warn = -1)
-  on.exit(options(old))
-  if (is.factor(x)) {
-    return(levels(x)[x])
-  }
-  as.character(x)
-}
-
-#' create environment from vector
-#'
-#' create an environment by inserting the value \code{val} with names taken from
-#' \code{x}
-#' @noRd
-#' @keywords internal
-.vec_to_env_true <- function(x, val = TRUE,
-                             env = new.env(hash = TRUE, parent = baseenv())) {
-  lapply(x, function(y) env[[y]] <- val)
-  env
-}
-
-#' in/match equivalent for two \code{Environment} arguments
-#'
-#' \code{x} and \code{table} are identical to match. Lookup is done based on
-#' environment element names; contents are ignored.
-#' @noRd
-#' @keywords internal
-"%eine%" <- function(x, table) {
-  vapply(ls(name = x),
-    function(y) !is.null(table[[y]]),
-    FUN.VALUE = logical(1L),
-    USE.NAMES = FALSE
-  )
-}
-
-"%ine%" <- function(x, table) {
-  !is.null(table[[x]])
-}
-
-# alt version to replace 'icd' version which uses C++
-.get_icd9_major <- function(y) {
-  if (startsWith(y, "E")) {
-    substr(trimws(y), 1L, 4L)
-  } else {
-    substr(trimws(y), 1L, 3L)
-  }
-}
-
-.get_icd10_major <- function(x) {
-  substr(trimws(x), 1L, 3L)
-}
 
 #' swap names and values of a vector
 #'
@@ -72,38 +15,6 @@
   x <- names(x)
   names(x) <- new_names
   x
-}
-
-#' mimic the \code{R CMD check} test
-#'
-#' \code{R CMD check} is quick to tell you where \code{UTF-8} characters are not
-#' encoded, but gives no way of finding out which or where
-#' @examples
-#' \dontrun{
-#' sapply(icd9cm_hierarchy, get_non_ascii)
-#' get_encodings(icd9cm_hierarchy)
-#' sapply(icd9cm_leaf_v32, get_non_ascii)
-#' sapply(icd9cm_leaf_v32, get_encodings)
-#' }
-#' @noRd
-#' @keywords internal
-get_non_ascii <- function(x)
-  x[is_non_ascii(.as_char_no_warn(x))]
-
-#' @rdname get_non_ascii
-#' @noRd
-#' @keywords internal
-is_non_ascii <- function(x)
-  is.na(iconv(.as_char_no_warn(x), from = "latin1", to = "ASCII"))
-
-#' @rdname get_non_ascii
-#' @noRd
-#' @keywords internal
-.get_encodings <- function(x) {
-  vapply(x,
-    FUN = function(y) unique(Encoding(.as_char_no_warn(y))),
-    FUN.VALUE = character(1)
-  )
 }
 
 #' Parse a (sub)chapter text description with parenthesised range

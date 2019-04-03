@@ -36,7 +36,6 @@ re_icd10_major_bare <- "[[:alpha:]][[:digit:]][[:alnum:]]"
 #' @param year from 1996 to 2012 (this is what CDC has published). Only 2012
 #'   implemented thus far
 #' @template save_data
-#' @template verbose
 #' @source \url{https://www.cdc.gov/nchs/icd/icd9cm.htm} Navigate to
 #' 'Dtab12.zip' in the 2011 data. and similar files run from 1996 to 2011.
 #' @keywords internal datagen
@@ -70,20 +69,20 @@ re_icd10_major_bare <- "[[:alpha:]][[:digit:]][[:alnum:]]"
 
 .lookup_icd9_hier <- function(x,
                               year = "2014",
-                              short_code = TRUE) {
-  verbose <- .verbose()
+                              short_code) {
   # keep in order, so merges don't screw things up
-  dat <- x[order.icd9(x$code), , drop = FALSE]
+  dat <- x
   if (!short_code) dat$code <- icd::decimal_to_short(dat$code)
+  dat <- dat[order.icd9(dat$code), , drop = FALSE]
   dat$code <- as.character(dat$code)
   dat$three_digit <- get_major.icd9(dat$code, short_code = TRUE)
-  if (verbose) message("Generating sub-chapter lookup for year: ", year)
+  if (.verbose()) message("Generating sub-chapter lookup for year: ", year)
   sc_lookup <- .icd9_generate_subchap_lookup()
-  if (verbose) message("Generating chap lookup for year: ", year)
+  if (.verbose()) message("Generating chap lookup for year: ", year)
   chap_lookup <- .icd9_generate_chap_lookup()
   mismatch_sub_chap <-
     dat$three_digit[which(dat$three_digit %nin% sc_lookup$sc_major)]
-  if (length(mismatch_sub_chap) != 0L) {
+  if (length(mismatch_sub_chap[!is.na(mismatch_sub_chap)]) != 0L) {
     stop(
       "mismatch: ",
       paste(mismatch_sub_chap, collapse = ", ")
@@ -162,22 +161,20 @@ re_icd10_major_bare <- "[[:alpha:]][[:digit:]][[:alnum:]]"
 #'
 #' \code{...} might include: \code{perl = TRUE, useBytes = TRUE}
 #' @param rtf_lines character vector containing RTF. Encoding?
-#' @template verbose
 #' @return named character vector, with names being the ICD-9 codes, and the
 #'   contents being the descriptions from the RTF source. Elsewhere I do this
 #'   the other way around, but the tests are now wired for this layout. 'Tidy'
 #'   data would favour having an unnamed two-column data frame.
 #' @keywords internal datagen
 #' @noRd
-.rtf_parse_lines <- function(rtf_lines, verbose = FALSE,
+.rtf_parse_lines <- function(rtf_lines,
                              save_pkg_data = FALSE,
                              ...) {
   stopifnot(is.character(rtf_lines))
-  stopifnot(is.logical(verbose), length(verbose) == 1)
   stopifnot(is.logical(save_pkg_data), length(save_pkg_data) == 1)
   filtered <- .rtf_pre_filter(rtf_lines, ...)
   majors <- .rtf_make_majors(filtered, save_pkg_data = save_pkg_data, ...)
-  if (verbose) message("Have ", length(majors), " majors.")
+  if (.verbose()) message("Have ", length(majors), " majors.")
   # this is so ghastly: find rows with sequare brackets containing definition of
   # subset of fourth or fifth digit codes. Need to pull code from previous row,
   # and create lookup, so we can exclude these when processing the fourth an
@@ -219,7 +216,7 @@ re_icd10_major_bare <- "[[:alpha:]][[:digit:]][[:alnum:]]"
   out <- .rtf_main_filter(filtered, ...)
   out <- c(out, .rtf_lookup_fourth(out = out, lookup_fourth = lookup_fourth))
   out <- c(out, .rtf_lookup_fifth(out, lookup_fifth))
-  out <- .rtf_fix_duplicates(out, verbose)
+  out <- .rtf_fix_duplicates(out)
   out <- out[-which(names(out) %in% invalid_qual)]
   .rtf_fix_quirks_2015(out)
 }
@@ -339,7 +336,7 @@ re_icd10_major_bare <- "[[:alpha:]][[:digit:]][[:alnum:]]"
 #'   descriptions
 #' @keywords internal datagen
 #' @noRd
-.rtf_generate_fourth_lookup <- function(filtered, fourth_rows, verbose = FALSE) {
+.rtf_generate_fourth_lookup <- function(filtered, fourth_rows) {
   lookup_fourth <- c()
   for (f in fourth_rows) {
     range <- .rtf_parse_fifth_digit_range(filtered[f])
@@ -364,7 +361,7 @@ re_icd10_major_bare <- "[[:alpha:]][[:digit:]][[:alnum:]]"
     }
     lookup_fourth <- c(lookup_fourth, range)
   }
-  if (verbose) {
+  if (.verbose()) {
     message("lookup_fourth has length: ", length(lookup_fourth), ", head: ")
     print(lookup_fourth[1:5, ])
   }
@@ -377,47 +374,27 @@ re_icd10_major_bare <- "[[:alpha:]][[:digit:]][[:alnum:]]"
 #'
 #' @keywords internal datagen
 #' @noRd
-.rtf_lookup_fourth <- function(out, lookup_fourth, verbose = FALSE) {
+.rtf_lookup_fourth <- function(out, lookup_fourth) {
   .rtf_lookup_fourth_alt_env(
     out = out,
-    lookup_fourth = lookup_fourth,
-    verbose = verbose
+    lookup_fourth = lookup_fourth
   )
 }
 
-.rtf_lookup_fourth_alt_base <- function(out, lookup_fourth, verbose = FALSE) {
-  out_fourth <- c()
-  for (f_num in seq_along(lookup_fourth)) {
-    lf <- lookup_fourth[f_num]
-    f <- names(lf)
-    parent_code <- .get_icd9_major(f)
-    if (parent_code %in% names(out)) {
-      pair_fourth <- paste(out[parent_code], lf, sep = ", ")
-      names(pair_fourth) <- f
-      out_fourth <- append(out_fourth, pair_fourth)
-    }
-  }
-  if (verbose) {
-    message("fourth output lines: length = ", length(out_fourth), ", head: ")
-    print(out_fourth[1:5, ])
-  }
-  out_fourth
-}
-
-.rtf_lookup_fourth_alt_env <- function(out, lookup_fourth, verbose = FALSE) {
+.rtf_lookup_fourth_alt_env <- function(out, lookup_fourth) {
   out_fourth <- c()
   out_env <- list2env(as.list(out))
   for (f_num in seq_along(lookup_fourth)) {
     lf <- lookup_fourth[f_num]
     f <- names(lf)
-    parent_code <- .get_icd9_major(f)
+    parent_code <- get_major.icd9(f, short_code = FALSE)
     if (!is.null(out_env[[parent_code]])) {
       pair_fourth <- paste(out[parent_code], lf, sep = ", ")
       names(pair_fourth) <- f
       out_fourth <- append(out_fourth, pair_fourth)
     }
   }
-  if (verbose) {
+  if (.verbose()) {
     message("fourth output lines: length = ", length(out_fourth), ", head: ")
     print(out_fourth[1:5])
   }
@@ -427,8 +404,7 @@ re_icd10_major_bare <- "[[:alpha:]][[:digit:]][[:alnum:]]"
 
 .rtf_make_lookup_fifth <- function(filtered,
                                    re_fifth_range_other,
-                                   ...,
-                                   verbose = FALSE) {
+                                   ...) {
   re_fifth_range <- "ifth-digit subclas|fifth-digits are for use with codes"
   re_fifth_rows <- paste(re_fifth_range, re_fifth_range_other, sep = "|")
   fifth_rows <- grep(pattern = re_fifth_rows, x = filtered, ...)
@@ -436,8 +412,8 @@ re_icd10_major_bare <- "[[:alpha:]][[:digit:]][[:alnum:]]"
   # they augment
   lookup_fifth <- c()
   for (f in fifth_rows) {
-    if (verbose) message("working on fifth-digit row:", f)
-    range <- .rtf_parse_fifth_digit_range(filtered[f], verbose = verbose)
+    if (.verbose()) message("working on fifth-digit row:", f)
+    range <- .rtf_parse_fifth_digit_range(filtered[f])
     f1 <- filtered[seq(f + 1, f + 20)]
     f2 <- grep(pattern = "^[[:digit:]][[:space:]].*", f1, value = TRUE, ...)
     fifth_suffices <- .str_pair_match(f2, "([[:digit:]])[[:space:]](.*)", ...)
@@ -485,35 +461,14 @@ re_icd10_major_bare <- "[[:alpha:]][[:digit:]][[:alnum:]]"
 }
 
 .rtf_lookup_fifth <- function(out,
-                              lookup_fifth,
-                              verbose = FALSE) {
+                              lookup_fifth) {
   .rtf_lookup_fifth_alt_env(
     out = out,
-    lookup_fifth = lookup_fifth,
-    verbose = verbose
-  )
+    lookup_fifth = lookup_fifth
+    )
 }
 
-.rtf_lookup_fifth_alt_base <- function(out, lookup_fifth, verbose = FALSE) {
-  out_fifth <- c()
-  for (f_num in seq_along(lookup_fifth)) {
-    lf <- lookup_fifth[f_num]
-    f <- names(lf)
-    parent_code <- substr(f, 0, nchar(f) - 1)
-    if (parent_code %in% names(out)) {
-      pair_fifth <- paste(out[parent_code], lf, sep = ", ")
-      names(pair_fifth) <- f
-      out_fifth <- c(out_fifth, pair_fifth)
-    }
-  }
-  if (verbose) {
-    message("fifth output lines: length = ", length(out_fifth), ", head: ")
-    print(out_fifth[1:5])
-  }
-  out_fifth
-}
-
-.rtf_lookup_fifth_alt_env <- function(out, lookup_fifth, verbose = FALSE) {
+.rtf_lookup_fifth_alt_env <- function(out, lookup_fifth) {
   out_fifth <- character(5000) # 2011 data is 4870 long
   n <- 1L
   out_env <- list2env(as.list(out))
@@ -528,7 +483,7 @@ re_icd10_major_bare <- "[[:alpha:]][[:digit:]][[:alnum:]]"
     }
   }
   out_fifth <- out_fifth[1:n - 1]
-  if (verbose) {
+  if (.verbose()) {
     message("fifth output lines: length = ", length(out_fifth), ", head: ")
     print(out_fifth[1:5])
   }
@@ -558,7 +513,7 @@ re_icd10_major_bare <- "[[:alpha:]][[:digit:]][[:alnum:]]"
 #' description and a correct longer one; or, identical descriptions
 #' @keywords internal datagen
 #' @noRd
-.rtf_fix_duplicates <- function(out, verbose) {
+.rtf_fix_duplicates <- function(out) {
   dupes <- out[duplicated(names(out)) | duplicated(names(out), fromLast = TRUE)]
   dupes <- unique(names(dupes))
   for (d in dupes) {
@@ -569,7 +524,7 @@ re_icd10_major_bare <- "[[:alpha:]][[:digit:]][[:alnum:]]"
     }
     desclengths <- nchar(out[dupe_rows])
     max_len <- max(desclengths)
-    if (verbose) {
+    if (.verbose()) {
       message("removing differing duplicates: ", paste(out[dupe_rows]))
     }
     out <- out[-dupe_rows[-which(desclengths != max_len)]]
@@ -604,22 +559,20 @@ re_icd10_major_bare <- "[[:alpha:]][[:digit:]][[:alnum:]]"
 
 #' parse a row of RTF source data for ranges to apply fifth digit
 #'
-#'   sub-classifications
-#' returns all the possible 5 digit codes encompassed by the given
-#'   definition. This needs to be whittled down to just those matching fifth
-#'   digits, but we haven't parsed them yet.
-#' @template verbose
+#' sub-classifications returns all the possible 5 digit codes encompassed by the
+#' given definition. This needs to be whittled down to just those matching fifth
+#' digits, but we haven't parsed them yet.
 #' @keywords internal datagen
 #' @noRd
-.rtf_parse_fifth_digit_range <- function(row_str, verbose = FALSE) {
+.rtf_parse_fifth_digit_range <- function(row_str) {
   stopifnot(is.character(row_str))
-  stopifnot(is.logical(verbose), length(verbose) == 1)
+  stopifnot(is.logical(.verbose()), length(.verbose()) == 1)
   out <- c()
   # get numbers and number ranges
   vals <- grep(unlist(strsplit(row_str, "[, :;]")),
     pattern = "[VvEe]?[0-9]", value = TRUE
   )
-  if (verbose) {
+  if (.verbose()) {
     message("vals are:", paste(vals, collapse = ", "))
   }
   # sometimes  we get things like:
@@ -629,15 +582,15 @@ re_icd10_major_bare <- "[[:alpha:]][[:digit:]][[:alnum:]]"
     base_code <- vals[1] # assume first is the base
     stopifnot(icd::is_valid(base_code, short_code = FALSE))
     for (dotmnr in vals[-1]) {
-      if (verbose) {
+      if (.verbose()) {
         message("dotmnr is: ", dotmnr)
       }
       if (grepl("-", dotmnr)) {
         # range of minors
         pair <- unlist(strsplit(dotmnr, "-", fixed = TRUE))
-        first <- paste0(.get_icd9_major(base_code), pair[1])
-        last <- paste0(.get_icd9_major(base_code), pair[2])
-        if (verbose) {
+        first <- paste0(get_major.icd9(base_code, short_code = FALSE), pair[1])
+        last <- paste0(get_major.icd9(base_code, short_code = FALSE), pair[2])
+        if (.verbose()) {
           message("expanding specified minor range from ", first, " to ", last)
         }
         out <- c(out, icd::expand_range(first,
@@ -646,7 +599,7 @@ re_icd10_major_bare <- "[[:alpha:]][[:digit:]][[:alnum:]]"
           defined = FALSE
         ))
       } else {
-        single <- paste0(.get_icd9_major(base_code), dotmnr)
+        single <- paste0(get_major.icd9(base_code, short_code = FALSE), dotmnr)
         out <- c(out, icd::children(single,
           short_code = FALSE,
           defined = FALSE
@@ -661,7 +614,7 @@ re_icd10_major_bare <- "[[:alpha:]][[:digit:]][[:alnum:]]"
       pair <- unlist(strsplit(v, "-", fixed = TRUE))
       # sanity check
       stopifnot(all(icd::is_valid(pair, short_code = FALSE)))
-      if (verbose) {
+      if (.verbose()) {
         message("expanding explicit range ", pair[1], " to ", pair[2])
       }
       # formatting errors can lead to huge range expansions, e.g. "8-679".
@@ -691,7 +644,7 @@ re_icd10_major_bare <- "[[:alpha:]][[:digit:]][[:alnum:]]"
 .rtf_parse_qualifier_subset <- function(qual) {
   stopifnot(is.character(qual), length(qual) == 1)
   out <- c()
-  s1 <- strsplit(.strip(qual), "[]\\[,]")
+  s1 <- strsplit(strip(qual), "[]\\[,]")
   s2 <- grep(pattern = "[[:digit:]]", unlist(s1), value = TRUE)
   vals <- unlist(strsplit(s2, ","))
   for (v in vals) {
@@ -729,7 +682,7 @@ re_icd10_major_bare <- "[[:alpha:]][[:digit:]][[:alnum:]]"
   # nolint end
 }
 
-.make_icd9cm_parse_rtf_fun <- function(year, verbose) {
+.make_icd9cm_parse_rtf_fun <- function(year) {
   # Must force, so that the values to the arguments are not promises which are
   # later evaluated in a different environment.
   force(year)
@@ -742,13 +695,12 @@ re_icd10_major_bare <- "[[:alpha:]][[:digit:]][[:alnum:]]"
   parse_fun
 }
 
-.make_icd9cm_rtf_parsers <- function(env = parent.frame(),
-                                     verbose = .verbose()) {
+.make_icd9cm_rtf_parsers <- function(env = parent.frame()) {
   for (y in .icd9cm_sources$f_year) {
     # TODO: special case for 2011 / v32?
     parse_fun_name <- .get_parser_icd9cm_rtf_name(y)
-    if (verbose) message("Making ICD-9-CM RTF parser: ", parse_fun_name)
-    parse_fun <- .make_icd9cm_parse_rtf_fun(y, verbose = verbose)
+    if (.verbose()) message("Making ICD-9-CM RTF parser: ", parse_fun_name)
+    parse_fun <- .make_icd9cm_parse_rtf_fun(y)
     assign(parse_fun_name, parse_fun, envir = env)
   }
 }

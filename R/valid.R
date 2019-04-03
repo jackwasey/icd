@@ -549,8 +549,9 @@ get_major <- function(x)
 #' @keywords internal
 #' @export
 #' @noRd
-get_major.icd10 <- function(x)
+get_major.icd10 <- function(x) {
   substr(trimws(x), 1L, 3L)
+}
 
 #' Check whether a code is major
 #' @param icd character vector of ICD codes.

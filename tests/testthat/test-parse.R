@@ -144,7 +144,7 @@ test_that("extraction from qualifier subset works", {
 # package doesn't have to include the big RTF source file
 context("RTF tests")
 
-test_year <- "2011"
+test_year <- "2014"
 
 # if we are in offline mode, and the data is not available, we can't proceed.
 # test whether the RTF is available offline. N.b. we skip in a 'context' so all
@@ -156,7 +156,8 @@ if (rtf_year_ok(test_year)) {
     url = rtf_dat$rtf_url,
     file_name = rtf_dat$rtf_filename
   )
-  rtf <- .rtf_parse_lines(readLines(f_info_short$file_path, warn = FALSE),
+  rtf <- .rtf_parse_lines(
+    readLines(f_info_short$file_path, warn = FALSE),
     perl = TRUE, useBytes = TRUE
   )
   nrtf <- names(rtf)
@@ -294,11 +295,9 @@ if (rtf_year_ok(test_year)) {
   })
 }
 
-context("test chapter sub-chapter lookup works")
-
 test_that("get chap and subchap for numeric, V, E", {
   df <- data.frame(code = c("V201", "E9990", "0101"))
-  res <- .lookup_icd9_hier(df)
+  res <- .lookup_icd9_hier(df, short_code = TRUE)
   expect_true(res[1, "chapter"] ==
     "Infectious And Parasitic Diseases")
 })

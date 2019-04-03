@@ -9,13 +9,13 @@ icd9_fetch_ahrq_ccs <- function(single = TRUE, ...) {
   assert_flag(single)
   ccs_base <- "https://www.hcup-us.ahrq.gov/toolssoftware/ccs"
   if (single) {
-    unzip_to_data_raw(
+    .unzip_to_data_raw(
       url = paste0(ccs_base, "Single_Level_CCS_2015.zip"),
       file_name = "$dxref 2015.csv",
       ...
     )
   } else {
-    unzip_to_data_raw(
+    .unzip_to_data_raw(
       url = paste0(ccs_base, "Multi_Level_CCS_2015.zip"),
       file_name = "ccs_multi_dx_tool_2015.csv",
       ...
@@ -32,7 +32,7 @@ icd10_fetch_ahrq_ccs <- function(version = "2018.1", ...) {
   assert_character(version, pattern = "^20[0-9]{2}\\.[1-9]$")
   version <- gsub(".", "_", version, fixed = TRUE)
   # all information in one file, no need for single vs multi
-  unzip_to_data_raw(
+  .unzip_to_data_raw(
     url = paste0(
       "https://www.hcup-us.ahrq.gov/toolssoftware/ccs10/ccs_dx_icd10cm_",
       version, ".zip"

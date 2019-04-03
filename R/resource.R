@@ -264,9 +264,8 @@
 }
 
 # called in zzz.R
-.make_getters_and_fetchers <- function(final_env = parent.frame(),
-                                       verbose = .verbose()) {
-  # for (var_name in names(.bindings)) {
+.make_getters_and_fetchers <- function(final_env = parent.frame()) {
+  verbose <- .verbose()
   for (var_name in .data_names) {
     if (verbose) message("Making getters and fetchers for ", var_name)
     getter_name <- .get_getter_name(var_name)

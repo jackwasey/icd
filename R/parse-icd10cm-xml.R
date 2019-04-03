@@ -23,8 +23,8 @@
 #' @template save_data
 #' @keywords internal datagen
 #' @noRd
-.icd10cm_extract_sub_chapters <- function(save_data = FALSE, ...) {
-  stopifnot(is.logical(save_data))
+.icd10cm_extract_sub_chapters <- function(save_pkg_data = FALSE, ...) {
+  stopifnot(is.logical(save_pkg_data))
   f_info <- .dl_icd10cm_xml(...)
   stopifnot(!is.null(f_info))
   j <- xml2::read_xml(f_info$file_path)
@@ -69,6 +69,6 @@
   d3a <- icd10_sub_chapters[41]
   icd10_sub_chapters[41] <- NULL
   icd10_sub_chapters <- append(icd10_sub_chapters, d3a, after = 41)
-  if (save_data) .save_in_data_dir(icd10_sub_chapters)
+  if (save_pkg_data) .save_in_data_dir(icd10_sub_chapters)
   invisible(icd10_sub_chapters)
 }

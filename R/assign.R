@@ -4,13 +4,13 @@
 #' be needed by users.
 #' @examples
 #' \dontrun{
-#' assign_icd_data()
-#' library(icd)
+#' icd:::assign_icd_data()
+#' ls()
 #' }
 #' @keywords internal
 #' @noRd
 assign_icd_data <- function(env = parent.frame()) {
-  data_names <- ls_icd_data()
+  data_names <- .ls_icd_data()
   lapply(
     data_names,
     function(x) {
@@ -18,12 +18,3 @@ assign_icd_data <- function(env = parent.frame()) {
     }
   )
 }
-
-#' List the data in this package
-#' @examples
-#' \dontrun{
-#' ls_icd_data()
-#' }
-#' @keywords datasets
-ls_icd_data <- function()
-  utils::data(package = "icd")$results[, "Item"]

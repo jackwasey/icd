@@ -15,14 +15,14 @@ update_everything <- function(offline = FALSE) {
     year = "2014",
     save_pkg_data = TRUE
   )
-  .icd9cm_gen_chap_hier(save_pkg_data = TRUE)
+  .parse_icd9cm_hierarchy_rtf(save_pkg_data = TRUE)
   # TODO: just need to save icd10cm2016 and icd10cm2019 in data, and have
   # special getter functions for them.
   .parse_icd10cm_all(
     save_data = TRUE,
     twentysixteen = TRUE
   )
-  .icd10cm_extract_sub_chapters(save_data = TRUE)
+  .icd10cm_extract_sub_chapters(.icd10cm_extract_sub_chapters = TRUE)
   icd9cm_billable <- list()
   icd9cm_billable[["32"]] <- get_icd9cm2014_leaf(must_work = TRUE)
   .save_in_data_dir(icd9cm_billable)

@@ -17,7 +17,7 @@ test_that("icd9cm_hierarchy as saved in data can be recreated as expected", {
     "sub_chapter",
     "chapter"
   )
-  cmh <- .icd9cm_gen_chap_hier(
+  cmh <- .parse_icd9cm_hierarchy_rtf(
     save_pkg_data = FALSE,
     verbose = FALSE
   )
@@ -55,7 +55,7 @@ test_that("codes and descriptions are valid and unique", {
 })
 
 test_that("some chapters are correct", {
-  chaps <- .as_char_no_warn(icd9cm_hierarchy$chapter)
+  chaps <- as_char_no_warn(icd9cm_hierarchy$chapter)
   expect_identical(unique(chaps), levels(icd9cm_hierarchy$chapter))
   codes <- icd9cm_hierarchy[["code"]]
   # first and last rows (E codes should be last)
@@ -80,7 +80,7 @@ test_that("some chapters are correct", {
 })
 
 test_that("some sub-chapters are correct", {
-  subchaps <- .as_char_no_warn(icd9cm_hierarchy$sub_chapter)
+  subchaps <- as_char_no_warn(icd9cm_hierarchy$sub_chapter)
   codes <- icd9cm_hierarchy[["code"]]
 
   # first and last
@@ -126,7 +126,7 @@ test_that("some randomly selected rows are correct", {
         icd9cm_hierarchy[
           icd9cm_hierarchy[["code"]] == "5060",
         ],
-        FUN = .as_char_no_warn, FUN.VALUE = character(1)
+        FUN = as_char_no_warn, FUN.VALUE = character(1)
       )
     ),
     c(

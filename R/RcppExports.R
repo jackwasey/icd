@@ -300,6 +300,62 @@ factor_is_valid <- function(f) {
     .Call(`_icd_factorIsValid`, f)
 }
 
+#' @title Order ICD-10-CM codes
+#' @description Currently required for C7A, C7B (which fall after C80), and
+#'   D3A, which falls after D48. C4A M1A Z3A are also problems within
+#'   sub-chapters.
+#' @keywords internal
+#' @noRd
+NULL
+
+icd9_compare_rcpp <- function(a, b) {
+    .Call(`_icd_icd9Compare`, a, b)
+}
+
+icd9_compare_std <- function(a, b) {
+    .Call(`_icd_icd9CompareStd`, a, b)
+}
+
+icd9_sort_rcpp <- function(x) {
+    .Call(`_icd_icd9Sort`, x)
+}
+
+icd9_order_rcpp <- function(x) {
+    .Call(`_icd_icd9Order`, x)
+}
+
+icd9_order_std <- function(x) {
+    .Call(`_icd_icd9OrderStd`, x)
+}
+
+icd10cm_compare_c <- function(xstr, ystr) {
+    .Call(`_icd_icd10cmCompareC`, xstr, ystr)
+}
+
+icd10cm_compare_rcpp <- function(x, y) {
+    .Call(`_icd_icd10cmCompare`, x, y)
+}
+
+icd10cm_compare_std <- function(x, y) {
+    .Call(`_icd_icd10cmCompareStd`, x, y)
+}
+
+icd10cm_sort_rcpp <- function(x) {
+    .Call(`_icd_icd10cmSort`, x)
+}
+
+icd10cm_sort_std <- function(x) {
+    .Call(`_icd_icd10cmSortStd`, x)
+}
+
+icd10cm_order_rcpp <- function(x) {
+    .Call(`_icd_icd10cmOrder`, x)
+}
+
+icd10cm_order_std <- function(x) {
+    .Call(`_icd_icd10cmOrderStd`, x)
+}
+
 trimLeftCpp <- function(s) {
     .Call(`_icd_trimLeftCpp`, s)
 }
@@ -310,32 +366,6 @@ strimCpp <- function(s) {
 
 trimCpp <- function(sv) {
     .Call(`_icd_trimCpp`, sv)
-}
-
-icd9_compare_rcpp <- function(a, b) {
-    .Call(`_icd_icd9Compare`, a, b)
-}
-
-icd9_order_rcpp <- function(x) {
-    .Call(`_icd_icd9Order`, x)
-}
-
-icd10cm_compare_rcpp <- function(x, y) {
-    .Call(`_icd_icd10cmCompare`, x, y)
-}
-
-icd10cm_sort_rcpp <- function(x) {
-    .Call(`_icd_icd10cmSort`, x)
-}
-
-#' @title Order ICD-10-CM codes
-#' @description currently required for C7A, C7B (which fall after C80), and
-#'   D3A, which falls after D48. C4A M1A Z3A are also problems within
-#'   sub-chapters.
-#' @keywords internal
-#' @noRd
-icd10cm_order_rcpp <- function(x) {
-    .Call(`_icd_icd10cmOrder`, x)
 }
 
 #' @title Faster match

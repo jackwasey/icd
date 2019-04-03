@@ -23,12 +23,6 @@ skip_no_icd_data_resource <- function() {
   }
 }
 
-skip_slow <- function(msg = "Slow test") {
-  if (getOption("icd.data.test_slow", default = FALSE)) {
-    skip(msg)
-  }
-}
-
 skip_if_offline <- function() {
   if (.offline()) {
     skip("Offline")

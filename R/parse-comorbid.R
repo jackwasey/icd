@@ -38,15 +38,15 @@ ahrq_order_all <- c(
 #' there.
 #' @keywords internal
 #' @noRd
-icd9_fetch_ahrq_sas <- function(offline) {
-  download_to_data_raw(
+icd9_fetch_ahrq_sas <- function() {
+  .download_to_data_raw(
     url = paste0(.ahrq_url_base, "comorbidity/comformat2012-2013.txt"),
     offline = offline
   )
 }
 
-icd10_fetch_ahrq_sas <- function(offline) {
-  download_to_data_raw(
+icd10_fetch_ahrq_sas <- function() {
+  .download_to_data_raw(
     url = paste0(.ahrq_url_base, "comorbidityicd10/comformat_icd10cm_2016.txt"),
     offline = offline
   )
@@ -60,7 +60,7 @@ icd10_fetch_ahrq_sas <- function(offline) {
 #' @template parse-template
 #' @keywords internal manip
 #' @noRd
-icd9_parse_ahrq_sas <- function(save_data = FALSE, offline = TRUE) {
+icd9_parse_ahrq_sas <- function(save_data = FALSE) {
   assert_flag(save_data)
   # readLines make assumptions or guess about encoding, consider using
   # Hadleyverse for this in future
@@ -161,8 +161,8 @@ icd10_parse_ahrq_sas <- function(save_data = FALSE, offline = TRUE) {
 
 #' @keywords internal
 #' @noRd
-icd9_fetch_quan_deyo_sas <- function(...) {
-  download_to_data_raw(
+.dl_icd9_quan_deyo_sas <- function(...) {
+  .download_to_data_raw(
     url =
       "http://mchp-appserv.cpe.umanitoba.ca/concept/ICD9_E_Charlson.sas.txt",
     file_name = "ICD9_E_Charlson.sas", ...
@@ -193,7 +193,7 @@ icd9_parse_quan_deyo_sas <- function(save_data = FALSE, offline = TRUE) {
   assert_flag(save_data)
   # download the file and/or just get the path or file name, fails if missing
   # by default
-  f_info <- icd9_fetch_quan_deyo_sas(offline = offline)
+  f_info <- .dl_icd9_quan_deyo_sas(offline = offline)
   quan_sas_lines <- readLines(f_info$file_path, warn = FALSE)
   let_statements <- sas_extract_let_strings(quan_sas_lines)
   icd9_map_quan_deyo <- let_statements[grepl(
@@ -220,7 +220,7 @@ icd9_parse_quan_deyo_sas <- function(save_data = FALSE, offline = TRUE) {
 
 # mostly duplicated from icd.data, just saving the map here
 .icd10_parse_ahrq_pcs <- function(save_data = TRUE) {
-  f <- unzip_to_data_raw(
+  f <- .unzip_to_data_raw(
     url = paste0(
       "https://www.hcup-us.ahrq.gov/toolssoftware/",
       "procedureicd10/pc_icd10pcs_2018_1.zip"

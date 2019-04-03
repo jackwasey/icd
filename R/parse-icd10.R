@@ -66,7 +66,7 @@
     icd::as.short_diag(
       icd::as.icd10cm(dat[["code"]])
     )
-  dat[["three_digit"]] <- factor(.get_icd10_major(dat[["code"]]))
+  dat[["three_digit"]] <- factor(get_major.icd10(dat[["code"]]))
   # here we must re-factor so we don't have un-used levels in major
   dat[["major"]] <- factor(
     merge(

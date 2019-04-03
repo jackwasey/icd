@@ -1,12 +1,10 @@
 # nocov start
-
-.debug <- FALSE
-.verbose(.debug || getOption("icd.data.verbose", default = FALSE))
-.make_icd9cm_leaf_parsers(verbose = .debug)
-.make_icd9cm_rtf_parsers(verbose = .debug)
-.make_icd10cm_parsers(verbose = .debug)
+.verbose(getOption("icd.data.verbose", default = FALSE))
+.make_icd9cm_leaf_parsers()
+.make_icd9cm_rtf_parsers()
+.make_icd10cm_parsers()
 # get_ and .get_ functions only depend  on the data name
-.make_getters_and_fetchers(verbose = .debug)
+.make_getters_and_fetchers()
 
 .onLoad <- function(libname, pkgname) {
   .set_init_options()

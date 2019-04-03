@@ -1,4 +1,6 @@
-context("slower tests")
+context("chapter to map")
+
+skip_slow("chapters to map")
 
 test_that("chapters to map", {
   # Slow for huge chapters, like II (Cancer)

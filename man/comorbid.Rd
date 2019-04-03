@@ -246,23 +246,23 @@ according to Quan/Deyo ICD categories. Synonymous with
 }}
 
 \examples{
-  vermont_dx[1:5, 1:10]
-  # get first few rows and columns of Charlson comorbidities using Quan/Deyo
-  # mapping of ICD-9 or ICD-10 codes Charlson categories
-  comorbid_quan_deyo(vermont_dx)[1:5, 1:14]
+vermont_dx[1:5, 1:10]
+# get first few rows and columns of Charlson comorbidities using Quan/Deyo
+# mapping of ICD-9 or ICD-10 codes Charlson categories
+comorbid_quan_deyo(vermont_dx)[1:5, 1:14]
 
-  # Note that the comorbidity calculations automatically finds the ICD code
-  # columns, and uses 'wide' or 'long' format data.
+# Note that the comorbidity calculations automatically finds the ICD code
+# columns, and uses 'wide' or 'long' format data.
 
-  stopifnot(
-    identical(
-      comorbid_quan_deyo(vermont_dx),
-      comorbid_quan_deyo(wide_to_long(vermont_dx))
-    )
+stopifnot(
+  identical(
+    comorbid_quan_deyo(vermont_dx),
+    comorbid_quan_deyo(wide_to_long(vermont_dx))
   )
+)
 
-  # get summary AHRQ (based on Elixhauser) comorbidities for the Uranium data:
-  summary(comorbid_ahrq(uranium_pathology))
+# get summary AHRQ (based on Elixhauser) comorbidities for the Uranium data:
+summary(comorbid_ahrq(uranium_pathology))
 
 pts <- icd_long_data(
   visit_name = c("2", "1", "2", "3", "3"),

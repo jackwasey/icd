@@ -68,9 +68,41 @@
 #' @return character vector of same length as input
 #' @keywords internal
 #' @noRd
-.strip <- function(x, pattern = " ", use_bytes = TRUE) {
+strip <- function(x, pattern = " ", use_bytes = TRUE) {
   gsub(
     pattern = pattern, replacement = "", x = x,
     fixed = TRUE, useBytes = use_bytes
+  )
+}
+
+#' mimic the \code{R CMD check} test
+#'
+#' \code{R CMD check} is quick to tell you where \code{UTF-8} characters are not
+#' encoded, but gives no way of finding out which or where
+#' @examples
+#' \dontrun{
+#' sapply(icd9cm_hierarchy, get_non_ascii)
+#' get_encodings(icd9cm_hierarchy)
+#' sapply(icd9cm_leaf_v32, get_non_ascii)
+#' sapply(icd9cm_leaf_v32, get_encodings)
+#' }
+#' @noRd
+#' @keywords internal
+get_non_ascii <- function(x)
+  x[is_non_ascii(as_char_no_warn(x))]
+
+#' @rdname get_non_ascii
+#' @noRd
+#' @keywords internal
+is_non_ascii <- function(x)
+  is.na(iconv(as_char_no_warn(x), from = "latin1", to = "ASCII"))
+
+#' @rdname get_non_ascii
+#' @noRd
+#' @keywords internal
+.get_encodings <- function(x) {
+  vapply(x,
+         FUN = function(y) unique(Encoding(as_char_no_warn(y))),
+         FUN.VALUE = character(1)
   )
 }

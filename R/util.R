@@ -32,23 +32,6 @@ strim <- function(x) {
 "%fnin%" <- function(x, table)
   !fin(x, table)
 
-#' Strip character(s) from character vector
-#'
-#' After benchmarking, \code{gsub} is probably quicker than
-#' \code{stringr}/\code{stringi}. For comorbidity processing.
-#' @param x character vector
-#' @param pattern passed to \code{gsub} default is " "
-#' @param use_bytes single logical passed to \code{base::gsub}, default is the
-#'   slightly quicker \code{TRUE}
-#' @return character vector of same length as input
-#' @keywords internal
-#' @noRd
-strip <- function(x, pattern = " ", use_bytes = TRUE)
-  gsub(
-    pattern = pattern, replacement = "", x = x,
-    fixed = TRUE, useBytes = use_bytes
-  )
-
 #' Encode \code{TRUE} as 1, and \code{FALSE} as 0 (integers)
 #'
 #' When saving data as text files for distribution, printing large amounts of
@@ -419,12 +402,4 @@ capitalize_first <- function(x)
 #' @keywords internal
 get_raw_data_dir <- function() {
   system.file("data-raw", package = "icd")
-}
-
-#' return all matches for regular expression
-#' @noRd
-#' @keywords internal manip
-str_match_all <- function(string, pattern, ...) {
-  string <- as.character(string)
-  regmatches(x = string, m = regexec(pattern = pattern, text = string, ...))
 }

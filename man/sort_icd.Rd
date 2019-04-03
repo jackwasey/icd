@@ -22,7 +22,7 @@ sort_icd(x, decreasing = FALSE, short_code = guess_short(x), ...)
 \method{sort}{icd9}(x, decreasing = FALSE, short_code = guess_short(x),
   ...)
 
-order.icd9(x)
+order.icd9(x, na.last = TRUE)
 
 order.icd10cm(x)
 
@@ -81,6 +81,7 @@ stopifnot(!identical(
   order.icd10cm(as.character(codes)),
   order(codes)
 ))
+icd::order.icd9(c("V20", NA, "100", NA, "E998", "101"))
 codes[order.icd10cm(codes)]
 # Note that base::order does NOT do S3 dispatch, so the following does not work:
 codes[order(codes)]

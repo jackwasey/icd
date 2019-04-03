@@ -40,7 +40,7 @@ if (n_order_default > 5L)
 
 get_pts <- function(n = 1e6, dz_per_pt = 20) {
   set.seed(1441)
-  diags <- sample(icd.data::icd9cm_hierarchy$code, size = n, replace = TRUE)
+  diags <- sample(icd9cm_hierarchy$code, size = n, replace = TRUE)
   data.frame(
     visit_id = as.character(floor(seq_len(n) / dz_per_pt)),
     code = diags,

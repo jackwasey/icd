@@ -107,23 +107,23 @@ ICD-10 WHO copyright workaround is available
 }}
 
 \examples{
-  # by default, just show parent code and ignore children (428.0 not shown
-  # because 428 is present):
-  explain_code(icd9_map_ahrq$CHF[1:3])
-  # same without condensing the list. In this case, 428.0 is shown:
-  explain_code(icd9_map_ahrq$CHF[1:3], brief = TRUE)
-  # The first three in the ICD-10 equivalent are a little different:
-  explain_code(icd10_map_ahrq$CHF[1:3], brief = TRUE)
+# by default, just show parent code and ignore children (428.0 not shown
+# because 428 is present):
+explain_code(icd9_map_ahrq$CHF[1:3])
+# same without condensing the list. In this case, 428.0 is shown:
+explain_code(icd9_map_ahrq$CHF[1:3], brief = TRUE)
+# The first three in the ICD-10 equivalent are a little different:
+explain_code(icd10_map_ahrq$CHF[1:3], brief = TRUE)
 \dontrun{
 # Belgian ICD-10 has three languages available
-  explain_code(as.icd10be("C20"))
-  # [1] "Malignant neoplasm of rectum"
-  explain_code(as.icd10be("C20"), lang = "en")
-  # [1] "Malignant neoplasm of rectum"
-  explain_code(as.icd10be("C20"), lang = "fr")
-  # [1] "néoplasme malin du rectum"
-  explain_code(as.icd10be("C20"), lang = "nl")
-  # [1] "maligne neoplasma van het rectum"
+explain_code(as.icd10be("C20"))
+# [1] "Malignant neoplasm of rectum"
+explain_code(as.icd10be("C20"), lang = "en")
+# [1] "Malignant neoplasm of rectum"
+explain_code(as.icd10be("C20"), lang = "fr")
+# [1] "néoplasme malin du rectum"
+explain_code(as.icd10be("C20"), lang = "nl")
+# [1] "maligne neoplasma van het rectum"
 }
 }
 \keyword{internal}

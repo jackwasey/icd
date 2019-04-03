@@ -30,6 +30,7 @@
 #'   order.icd10cm(as.character(codes)),
 #'   order(codes)
 #' ))
+#' icd::order.icd9(c("V20", NA, "100", NA, "E998", "101"))
 #' codes[order.icd10cm(codes)]
 #' # Note that base::order does NOT do S3 dispatch, so the following does not work:
 #' codes[order(codes)]
@@ -69,7 +70,6 @@ sort.icd10cm <- function(x,
                          ...) {
   # ignore short, it doesn't matter
   o <- icd10cm_order_rcpp(x)
-  o <- match(seq_along(x), o)
   if (decreasing) o <- rev(o)
   res <- x[o]
   attr(res, "icd_short_diag") <- attr(x, "icd_short_diag")
@@ -110,19 +110,27 @@ sort.icd9 <- function(x,
   res
 }
 
+# simple backport
+isFALSE <- function(x)
+  is.logical(x) && length(x) == 1L && !is.na(x) && !x
+
 #' @rdname sort_icd
 #' @export
-order.icd9 <- function(x) {
-  if (anyNA(x)) {
-    warning("Dropping NA values")
-    x <- x[!is.na(x)]
+order.icd9 <- function(x, na.last = TRUE) {
+  if (isFALSE(na.last))
+    stop("na.last = NA drops NA. na.last = FALSE not implemented.")
+  na <- is.na(x)
+  n_na <- sum(na)
+  if (is.na(na.last) && n_na != 0) {
+    x <- x[!na]
     if (length(x) == 0) return(integer())
   }
   if (!is.factor(x)) {
-    icd9_order_rcpp(x)
+    res <- icd9_order_rcpp(x)
   } else {
-    icd9_order_rcpp(.as_char_no_warn(x))
+    res <- icd9_order_rcpp(as_char_no_warn(x))
   }
+  res
 }
 
 #' @rdname sort_icd

@@ -16,22 +16,12 @@
   function(chapters = icd9_chapters,
              prefix = "chap") {
     stopifnot(is.list(chapters), is.character(prefix))
-    erm <- if (.have_memoise()) {
-      memoise::memoise(
-        expand_range_major.icd9,
-        cache = memoise::cache_filesystem(
-          file.path(icd_data_dir(), "memoise")
-        )
-      )
-    } else {
-      expand_range_major.icd9
-    }
     df_rows <- lapply(
       names(chapters),
       function(nm) {
         chap <- chapters[[nm]]
         data.frame(
-          erm(
+          .erm9(
             as.icd9cm(chap["start"]),
             as.icd9cm(chap["end"]),
             defined = FALSE
@@ -52,22 +42,12 @@
   function(chapters = icd10_chapters,
              prefix = "chap") {
     stopifnot(is.list(chapters), is.character(prefix))
-    erm <- if (.have_memoise()) {
-      memoise::memoise(
-        expand_range_major.icd10cm,
-        cache = memoise::cache_filesystem(
-          file.path(icd_data_dir(), "memoise")
-        )
-      )
-    } else {
-      expand_range_major.icd10cm
-    }
     df_rows <- lapply(
       names(chapters),
       function(nm) {
         chap <- chapters[[nm]]
         data.frame(
-          erm(
+          .erm10(
             as.icd10cm(chap["start"]),
             as.icd10cm(chap["end"]),
             defined = FALSE

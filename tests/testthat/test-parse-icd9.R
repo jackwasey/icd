@@ -1,4 +1,7 @@
 context("RTF ICD-9")
+
+skip_slow("RTF parsing for ICD-9-CM")
+
 j <- expect_icd9_sub_chap_equal
 test_that("some known sub vs chap confusion", {
   # some things shouldn't have been called sub-chapters, just chapters. Known
@@ -150,24 +153,23 @@ test_that("ICD-9-CM billable codes package data is recreated", {
 
 test_that("explain icd9GetChapters simple input", {
   skip_no_icd_data_resource()
-  skip_if_not_installed("icd", "4.0")
   skip_on_no_rtf("2014")
   chaps1 <- .icd9_get_chapters(c("410", "411", "412"), short_code = TRUE)
   expect_equal(nrow(chaps1), 3)
-  inf <- try(.icd9_get_chapters("418", short_code = TRUE))
+  inf <- try(.icd9_get_chapters("418", short_code = TRUE), silent = TRUE)
   expect_error(.icd9_get_chapters("418", short_code = TRUE), info = inf) # no such code 418
   chaps3 <- .icd9_get_chapters("417", short_code = FALSE)
-  expect_equal(.as_char_no_warn(chaps3$three_digit), "417")
+  expect_equal(as_char_no_warn(chaps3$three_digit), "417")
   expect_equal(
-    .as_char_no_warn(chaps3$major),
+    as_char_no_warn(chaps3$major),
     "Other diseases of pulmonary circulation"
   )
   expect_equal(
-    .as_char_no_warn(chaps3$sub_chapter),
+    as_char_no_warn(chaps3$sub_chapter),
     "Diseases Of Pulmonary Circulation"
   )
   expect_equal(
-    .as_char_no_warn(chaps3$chapter),
+    as_char_no_warn(chaps3$chapter),
     "Diseases Of The Circulatory System"
   )
 
@@ -181,4 +183,6 @@ test_that("explain icd9GetChapters simple input", {
   expect_equal(chaps3, chaps6)
   expect_equal(chaps3, chaps7)
   expect_equal(chaps3, chaps8)
+  chap9 <- .icd9_get_chapters(NA, short_code = FALSE)
+  expect_true(all(is.na(chap9)))
 })

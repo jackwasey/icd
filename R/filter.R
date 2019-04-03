@@ -159,7 +159,7 @@ filter_poa <- function(x, poa_name = "poa", poa = poa_choices) {
   )
 }
 
-.filter_poa <- function(x, poa_name, choice, invert = FALSE) {
+.filter_poa_worker <- function(x, poa_name, choice, invert = FALSE) {
   assert_data_frame(x, min.cols = 1, col.names = "named")
   stopifnot(is.character(poa_name), length(poa_name) == 1L, !is.na(poa_name))
   assert_character(choice, min.chars = 1, min.len = 1, any.missing = FALSE)
@@ -176,14 +176,14 @@ filter_poa <- function(x, poa_name = "poa", poa = poa_choices) {
 #'   explicitly 'Yes.'
 #' @export
 filter_poa_yes <- function(x, poa_name = "poa") {
-  .filter_poa(x, poa_name, choice = c("Y", "y"), invert = FALSE)
+  .filter_poa_worker(x, poa_name, choice = c("Y", "y"), invert = FALSE)
 }
 
 #' @describeIn filter_poa Select rows where Present-on-Arrival flag is
 #'   explicitly 'No.'
 #' @export
 filter_poa_no <- function(x, poa_name = "poa") {
-  .filter_poa(x, poa_name, choice = c("N", "n"), invert = FALSE)
+  .filter_poa_worker(x, poa_name, choice = c("N", "n"), invert = FALSE)
 }
 
 #' @describeIn filter_poa Select rows where Present-on-Arrival flag is
@@ -191,7 +191,7 @@ filter_poa_no <- function(x, poa_name = "poa") {
 #'   course all those marked 'Yes.'
 #' @export
 filter_poa_not_no <- function(x, poa_name = "poa") {
-  .filter_poa(x, poa_name, choice = c("N", "n"), invert = TRUE)
+  .filter_poa_worker(x, poa_name, choice = c("N", "n"), invert = TRUE)
 }
 
 #' @describeIn filter_poa Select rows where Present-on-Arrival flag is
@@ -201,5 +201,5 @@ filter_poa_not_no <- function(x, poa_name = "poa") {
 #'   out-of-hospital characteristics.
 #' @export
 filter_poa_not_yes <- function(x, poa_name = "poa") {
-  .filter_poa(x, poa_name, choice = c("Y", "y"), invert = TRUE)
+  .filter_poa_worker(x, poa_name, choice = c("Y", "y"), invert = TRUE)
 }

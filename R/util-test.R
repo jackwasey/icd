@@ -284,15 +284,9 @@ set_test_slow <- function(do_slow = TRUE) {
   Sys.setenv("ICD_TEST_SLOW" = do_slow)
 }
 
-get_test_slow <- function() {
-  substring(tolower(Sys.getenv("ICD_TEST_SLOW")), 1, 1) %in% c("t", "y")
-}
-
 skip_slow <- function(msg = "Skipping slow test") {
   testthat::skip_on_cran()
-  testthat::skip_on_travis()
-  testthat::skip_on_appveyor()
-  if (!get_test_slow()) {
-    testthat::skip(msg)
+  if (!getOption("icd.data.test_slow", default = FALSE)) {
+    skip(msg)
   }
 }

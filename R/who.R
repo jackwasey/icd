@@ -213,7 +213,7 @@
   var_name <- paste0("icd10who", year, ifelse(lang == "en", "", lang))
   .save_in_resource_dir(var_name, x = dat)
   # First, if three digit doesn't match code, then drop the row, as these are incorrectly assimilated rows.
-  thr <- .get_icd10_major(dat$code)
+  thr <- get_major.icd10(dat$code)
   dat <- dat[dat$three_digit == thr, ]
   # Then I think any remaining rows are plain duplicates
   dat[!duplicated(dat$code), ]

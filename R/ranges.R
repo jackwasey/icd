@@ -504,3 +504,25 @@ expand_minor <- function(mnr, ...) {
 expand_minor.icd9 <- function(mnr, is_e = FALSE) {
   icd9_expand_minor_wrap(mnr, isE = is_e)
 }
+
+.erm9 <- if (requireNamespace("memoise", quietly = TRUE)) {
+  memoise::memoise(
+    expand_range_major.icd9
+    # cache = memoise::cache_filesystem(
+    #   file.path(icd_data_dir(), "memoise")
+    # )
+  )
+} else {
+  expand_range_major.icd9
+}
+
+.erm10 <- if (requireNamespace("memoise", quietly = TRUE)) {
+  memoise::memoise(
+    expand_range_major.icd10cm
+    # cache = memoise::cache_filesystem(
+    #   file.path(icd_data_dir(), "memoise")
+    # )
+  )
+} else {
+  expand_range_major.icd10cm
+}

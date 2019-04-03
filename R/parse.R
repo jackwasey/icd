@@ -33,7 +33,6 @@
 #'   file will be saved in the raw data directory, otherwise (the default) the
 #'   data is simply returned invisibly.
 #' @template verbose
-#' @template offline
 #' @return data frame with \code{icd9}, \code{short_desc} and \code{long_desc}
 #'   columns. \code{NA} is placed in \code{long_desc} when not available.
 #' @source
@@ -255,10 +254,10 @@
   # assert all the same:
   stopifnot(all(x[congenital[1], "chapter"] == x[congenital[-1], "chapter"]))
   # insert a new level into the sub-chapter factor in the right place
-  previous_sub <- .as_char_no_warn(x[(which(congenital) - 1)[1], "sub_chapter"])
+  previous_sub <- as_char_no_warn(x[(which(congenital) - 1)[1], "sub_chapter"])
   previous_sub_pos <- which(levels(x$sub_chapter) == previous_sub)
-  congenital_title <- .as_char_no_warn(x[which(congenital)[1], "chapter"])
-  new_subs <- .as_char_no_warn(x$sub_chapter)
+  congenital_title <- as_char_no_warn(x[which(congenital)[1], "chapter"])
+  new_subs <- as_char_no_warn(x$sub_chapter)
   new_subs[congenital] <- congenital_title
   new_levels <- append(
     levels(x$sub_chapter),
@@ -277,21 +276,18 @@
 #' Thankfully, ICD-10-CM has machine readable data available.
 #' @template save_data
 #' @template verbose
-#' @template offline
 #' @keywords internal datagen
 #' @noRd
-.icd9cm_gen_chap_hier <- function(save_pkg_data = FALSE,
-                                  offline = .offline(),
+.parse_icd9cm_hierarchy_rtf <- function(save_pkg_data = FALSE,
                                   perl = TRUE,
                                   use_bytes = TRUE) {
   # TODO: Someday change 'billable' to 'leaf', and make consistent ICD-9 and
   # ICD-10, e.g. icd9cm2011 instead of icd9cm_hierarchy lookup tables
   stopifnot(is.logical(save_pkg_data), length(save_pkg_data) == 1)
-  stopifnot(is.logical(offline), length(offline) == 1)
   stopifnot(is.logical(perl), length(perl) == 1)
   stopifnot(is.logical(use_bytes), length(use_bytes) == 1)
   icd9_rtf <- .parse_icd9cm_rtf_year(
-    year = "2011",
+    year = "2014",
     perl = perl,
     useBytes = use_bytes,
     save_pkg_data = FALSE
@@ -301,7 +297,7 @@
     short_code = TRUE
   )
   icd9_order <- order.icd9
-  chaps <- chaps[icd9_order(.as_char_no_warn(chaps$three_digit)), ]
+  chaps <- chaps[icd9_order(as_char_no_warn(chaps$three_digit)), ]
   icd9_rtf <- icd9_rtf[icd9_order(icd9_rtf$code), ]
   out <- cbind(
     data.frame(
