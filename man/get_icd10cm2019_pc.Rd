@@ -3,11 +3,6 @@
 \docType{data}
 \name{get_icd10cm2019_pc}
 \alias{get_icd10cm2019_pc}
-\alias{get_icd10cm2014_pc}
-\alias{get_icd10cm2015_pc}
-\alias{get_icd10cm2016_pc}
-\alias{get_icd10cm2017_pc}
-\alias{get_icd10cm2018_pc}
 \title{ICD-10-CM Procedure Codes}
 \format{A named list of data frames. The elements of the list are named by
   the year, e.g., \code{"2018"}. Each data frame contains two character
@@ -18,6 +13,9 @@ ICD-10-PCS is the annually-updated set of procedure codes designed by 3M for
 the US CMS. There is no directory of WHO ICD procedure codes.
 }
 \seealso{
+\code{get_icd10cm2014_pc} \code{get_icd10cm2015_pc}
+  \code{get_icd10cm2016_pc} \code{get_icd10cm2017_pc}
+  \code{get_icd10cm2018_pc}
 \url{https://www.cms.gov/Medicare/Coding/ICD10/downloads/pcs_refman.pdf}
 }
 \keyword{datasets}

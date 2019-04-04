@@ -3,13 +3,13 @@
 \docType{data}
 \name{get_icd10cm2014_pc}
 \alias{get_icd10cm2014_pc}
-\alias{get_icd10cm2015_pc}
-\alias{get_icd10cm2016_pc}
-\alias{get_icd10cm2017_pc}
-\alias{get_icd10cm2018_pc}
-\alias{get_icd10cm2019_pc}
 \title{ICD-10-CM Procedure codes for 2014}
 \description{
 ICD-10-CM Procedure codes for 2014
+}
+\seealso{
+\code{get_icd10cm2015_pc} \code{get_icd10cm2016_pc}
+  \code{get_icd10cm2017_pc} \code{get_icd10cm2018_pc}
+  \code{get_icd10cm2019_pc}
 }
 \keyword{datasets}
