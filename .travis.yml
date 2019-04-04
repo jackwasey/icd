@@ -95,9 +95,13 @@ matrix:
   - r: devel
     os: osx
     osx_image: xcode10.2
+    # just to avoid matrix doing this twice with same xcode binary...
+    compiler: clang
   - r: devel
     os: osx
     # as of April 2019, default osx image is 9.4
+    # just to avoid matrix doing this twice with same xcode binary...
+    compiler: clang
   - r: oldrel
     os: linux
     dist: precise
