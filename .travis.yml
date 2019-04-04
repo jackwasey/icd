@@ -6,13 +6,22 @@ language: r
 # for RcppEigen to compile:
 fortran: true
 
-os:
-  - linux
-  - osx
+# os:
+#   - linux
+#   - osx
 
-dist:
-  - xenial
+# dist:
+#   - xenial
 
+# may need this for clang:
+# export LD_LIBRARY_PATH=/usr/local/clang/lib:$LD_LIBRARY_PATH
+#
+# See this for more recent compiler support than old defaults:
+# https://docs.travis-ci.com/user/languages/c/
+#
+# and
+#
+# https://docs.travis-ci.com/user/languages/cpp/
 sudo: false
 cache:
   - packages
@@ -32,11 +41,13 @@ warnings_are_errors: true
 
 # try to speed up compilation time
 before_install:
+      # do this with Travis environment variables?
+      #echo 'CC=clang' > ~/.R/Makevars ;
+      #echo 'CXX=clang++' >> ~/.R/Makevars ;
+      #echo 'CXX11=clang++' >> ~/.R/Makevars ;
+      # Flags should stay in Makevars?
   - if [[ "$TRAVIS_R_VERSION_STRING" = 'devel' ]]; then
       mkdir ~/.R ;
-      echo 'CC=clang' > ~/.R/Makevars ;
-      echo 'CXX=clang++' >> ~/.R/Makevars ;
-      echo 'CXX11=clang++' >> ~/.R/Makevars ;
       echo 'CFLAGS=-O0' >> ~/.R/Makevars ;
       echo 'CXXFLAGS=-O0' >> ~/.R/Makevars ;
       echo 'CXX11FLAGS=-O0' >> ~/.R/Makevars ;
@@ -52,28 +63,55 @@ env:
     - ICD_DATA_VERBOSE=true
     - ICD_DATA_OFFLINE=true
     - ICD_DATA_INTERACT=false
+    # 4 is the official travis suggestion
+    - OMP_NUM_THREADS=4
 #    env: LINTR_COMMENT_BOT=true
 
 matrix:
-  fast_finish: true
+  fast_finish: false
   include:
   - r: devel
     os: linux
     dist: xenial
-  - r: oldrel
+    compiler: gcc
+  - r: release
     os: linux
-    dist: trusty
+    dist: xenial
+    compiler: gcc
+  - r: devel
+    os: osx
+    osx_image: xcode10.2
+  - r: devel
+    os: osx
+    # as of April 2019, default osx image is 9.4
+  - r: release
+    os: linux
+    dist: precise
+  - r: devel
+    os: linux
+  - r: devel
+    os: osx
+    compiler: clang
+  - r: oldrel
     latex: false
     r_build_args: --no-build-vignettes --no-manual --resave-data=no
     r_check_args: --no-build-vignettes --no-vignettes --ignore-vignettes --no-codoc --no-manual
   - r: release
+    os: osx
+    compiler: clang
+    latex: false
+    r_build_args: --no-build-vignettes --no-manual --resave-data=no
+    r_check_args: --no-build-vignettes --no-vignettes --ignore-vignettes --no-codoc --no-manual
+    env:
+    - ICD_MINI_BENCH=true
+  - r: release
     os: linux
-    dist: xenial
     latex: false
     r_build_args: --no-build-vignettes --no-manual --resave-data=no
     r_check_args: --no-build-vignettes --no-vignettes --ignore-vignettes --no-codoc --no-manual --use-valgrind
     env:
     - ICD_COVERAGE=true
+    - ICD_MINI_BENCH=true
     - ICD_TEST_SLOW=true
   allow_failures:
   - r: devel
@@ -85,34 +123,34 @@ matrix:
   - r: release
     os: linux
     dist: precise
-  - r: release
-    os: osx
-    latex: false
-    r_build_args: --no-build-vignettes --no-manual --resave-data=no
-    r_check_args: --no-build-vignettes --no-vignettes --ignore-vignettes --no-codoc --no-manual
-    env:
-    - ICD_MINI_BENCH=true
   - r: oldrel
     latex: false
     r_build_args: --no-build-vignettes --no-manual --resave-data=no
     r_check_args: --no-build-vignettes --no-vignettes --ignore-vignettes --no-codoc --no-manual
   - r: release
+    os: osx
+    compiler: clang
+    latex: false
+    r_build_args: --no-build-vignettes --no-manual --resave-data=no
+    r_check_args: --no-build-vignettes --no-vignettes --ignore-vignettes --no-codoc --no-manual
+    env:
+    - ICD_MINI_BENCH=true
+  - r: release
     os: linux
-    dist: xenial
     latex: false
     r_build_args: --no-build-vignettes --no-manual --resave-data=no
     r_check_args: --no-build-vignettes --no-vignettes --ignore-vignettes --no-codoc --no-manual --use-valgrind
     env:
     - ICD_COVERAGE=true
+    - ICD_MINI_BENCH=true
     - ICD_TEST_SLOW=true
 
 before_script:
- - rm .Rinstignore  # do install everything for testing
+# - rm .Rinstignore  # do install everything for testing (we have source tree, so no need)
  - if [ "$TRAVIS_OS_NAME" = "osx" ]; then sed -i '' '/.*[Dd]ata.*/d' .Rbuildignore; fi
  - if [ "$TRAVIS_OS_NAME" = "linux" ]; then sed -i'' '/.*[Dd]ata.*/d' .Rbuildignore; fi
-# - sed -i'' '/\.covrignore/d' .Rbuildignore
-# - sed -i'' '/\.lintr/d' .Rbuildignore
- - Rscript -e "Rcpp::compileAttributes()" # make sure Rcpp generated code is updated, ideally this is not be checked in repo...
+# make sure Rcpp generated code is updated, ideally this is not be checked in repo...
+# - Rscript -e "Rcpp::compileAttributes()"
 
 after_success:
  - if [ "ICD_MINI_BENCH" = "true" ]; then
