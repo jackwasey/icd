@@ -38,6 +38,8 @@ code provided is in short (\code{TRUE}) or decimal (\code{FALSE}) form.
 Where reasonable, this is guessed from the input data.}
 
 \item{...}{arguments passed on to other functions}
+
+\item{na.last}{Logical, analogous to \code{order}, so \code{NA} drops NA. \code{FALSE} is not currently supported.}
 }
 \value{
 For sort, a sorted vector of ICD-9 codes. Numeric, then E codes, then

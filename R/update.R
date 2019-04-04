@@ -8,8 +8,8 @@
 #' mappings are generated from transcribed codes.
 #' @keywords internal datagen
 #' @noRd
-update_everything <- function(offline = FALSE) {
-  old_opt <- options(icd.data.offline = offline)
+update_everything <- function() {
+  old_opt <- options(icd.data.offline = FALSE)
   on.exit(options(old_opt), add = TRUE)
   .parse_icd9cm_leaf_year(
     year = "2014",
@@ -38,16 +38,16 @@ update_everything <- function(offline = FALSE) {
                        (Make sure lookup files are updated first.)
                        Depends on icd9cm_hierarchy being updated.")
   # ICD 9
-  icd9_parse_ahrq_sas(save_data = TRUE, offline = FALSE)
-  icd9_parse_quan_deyo_sas(save_data = TRUE, offline = FALSE)
+  icd9_parse_ahrq_sas(save_data = TRUE)
+  icd9_parse_quan_deyo_sas(save_data = TRUE)
   icd9_parse_cc(save_data = TRUE)
-  icd9_parse_ahrq_ccs(single = TRUE, save_data = TRUE, offline = FALSE)
-  icd9_parse_ahrq_ccs(single = FALSE, save_data = TRUE, offline = FALSE)
-  icd10_parse_ahrq_ccs(version = "2018.1", save_data = TRUE, offline = FALSE)
+  icd9_parse_ahrq_ccs(single = TRUE, save_data = TRUE)
+  icd9_parse_ahrq_ccs(single = FALSE, save_data = TRUE)
+  icd10_parse_ahrq_ccs(version = "2018.1", save_data = TRUE)
   icd9_generate_map_quan_elix(save_data = TRUE)
   icd9_generate_map_elix(save_data = TRUE)
   # ICD 10
-  icd10_parse_ahrq_sas(save_data = TRUE, offline = FALSE)
+  icd10_parse_ahrq_sas(save_data = TRUE)
   icd10_parse_cc(save_data = TRUE)
   icd10_generate_map_quan_elix(save_data = TRUE)
   icd10_generate_map_quan_deyo(save_data = TRUE)

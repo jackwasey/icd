@@ -15,6 +15,7 @@
 #'   not \code{sort.icd10cm}, etc..
 #' @param x vector of ICD codes to sort or order
 #' @param decreasing Logical See \code{\link[base]{sort}}.
+#' @param na.last Logical, analogous to \code{order}, so \code{NA} drops NA. \code{FALSE} is not currently supported.
 #' @template short_code
 #' @template dotdotdot
 #' @examples

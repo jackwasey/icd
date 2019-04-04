@@ -287,6 +287,6 @@ set_test_slow <- function(do_slow = TRUE) {
 skip_slow <- function(msg = "Skipping slow test") {
   testthat::skip_on_cran()
   if (!getOption("icd.data.test_slow", default = FALSE)) {
-    skip(msg)
+    testthat::skip(msg)
   }
 }

@@ -40,15 +40,13 @@ ahrq_order_all <- c(
 #' @noRd
 icd9_fetch_ahrq_sas <- function() {
   .download_to_data_raw(
-    url = paste0(.ahrq_url_base, "comorbidity/comformat2012-2013.txt"),
-    offline = offline
+    url = paste0(.ahrq_url_base, "comorbidity/comformat2012-2013.txt")
   )
 }
 
 icd10_fetch_ahrq_sas <- function() {
   .download_to_data_raw(
-    url = paste0(.ahrq_url_base, "comorbidityicd10/comformat_icd10cm_2016.txt"),
-    offline = offline
+    url = paste0(.ahrq_url_base, "comorbidityicd10/comformat_icd10cm_2016.txt")
   )
 }
 
@@ -64,7 +62,7 @@ icd9_parse_ahrq_sas <- function(save_data = FALSE) {
   assert_flag(save_data)
   # readLines make assumptions or guess about encoding, consider using
   # Hadleyverse for this in future
-  ahrq_info <- icd9_fetch_ahrq_sas(offline = offline)
+  ahrq_info <- icd9_fetch_ahrq_sas()
   ahrq_sas_lines <- readLines(ahrq_info$file_path)
   icd9_map_ahrq_working <- sas_format_extract_rcomfmt(ahrq_sas_lines)
   icd9_map_ahrq <- list()
@@ -139,7 +137,7 @@ icd9_parse_ahrq_sas <- function(save_data = FALSE) {
 # attempt to find all the child codes.
 icd10_parse_ahrq_sas <- function(save_data = FALSE, offline = TRUE) {
   assert_flag(save_data)
-  ahrq_info <- icd10_fetch_ahrq_sas(offline = offline)
+  ahrq_info <- icd10_fetch_ahrq_sas()
   ahrq_sas_lines <- readLines(ahrq_info$file_path)
   icd10_map_ahrq <- sas_format_extract_rcomfmt(ahrq_sas_lines)
   unun <- function(x) unname(unlist(x))
@@ -189,11 +187,11 @@ icd10_parse_ahrq_sas <- function(save_data = FALSE, offline = TRUE) {
 #' @template offline
 #' @keywords internal manip
 #' @noRd
-icd9_parse_quan_deyo_sas <- function(save_data = FALSE, offline = TRUE) {
+icd9_parse_quan_deyo_sas <- function(save_data = FALSE) {
   assert_flag(save_data)
   # download the file and/or just get the path or file name, fails if missing
   # by default
-  f_info <- .dl_icd9_quan_deyo_sas(offline = offline)
+  f_info <- .dl_icd9_quan_deyo_sas()
   quan_sas_lines <- readLines(f_info$file_path, warn = FALSE)
   let_statements <- sas_extract_let_strings(quan_sas_lines)
   icd9_map_quan_deyo <- let_statements[grepl(
@@ -219,7 +217,7 @@ icd9_parse_quan_deyo_sas <- function(save_data = FALSE, offline = TRUE) {
 }
 
 # mostly duplicated from icd.data, just saving the map here
-.icd10_parse_ahrq_pcs <- function(save_data = TRUE) {
+icd10_parse_ahrq_pcs <- function(save_data = TRUE) {
   f <- .unzip_to_data_raw(
     url = paste0(
       "https://www.hcup-us.ahrq.gov/toolssoftware/",

@@ -3,6 +3,13 @@ language: r
 # https://ropensci.org/blog/2016/07/12/travis-osx
 # https://docs.travis-ci.com/user/ci-environment/
 
+os:
+  - linux
+  - osx
+
+dist:
+  - xenial
+
 sudo: false
 cache: packages
 
@@ -39,23 +46,40 @@ matrix:
   fast_finish: true
   include:
   - r: devel
+    os: linux
+    dist: xenial
+  - r: devel
+    os: osx
+    osx_image: osx_image: xcode10.2
+  - r: devel
+    os: osx
+    # as of April 2019, default osx image is 9.4
+  - r: release
+    os: linux
+    dist: precise
 #    env: LINTR_COMMENT_BOT=true
-  - r: release
   - r: oldrel
+    os: linux
+    dist: precise
     r_build_args: --no-build-vignettes --no-manual --resave-data=no
     r_check_args: --no-build-vignettes --no-vignettes --ignore-vignettes --no-codoc --no-manual
   - r: release
+    os: linux
+    dist: xenial
     r_build_args: --no-build-vignettes --no-manual --resave-data=no
-    r_check_args: --no-build-vignettes --no-vignettes --ignore-vignettes --no-codoc --no-manual
+    r_check_args: --no-build-vignettes --no-vignettes --ignore-vignettes --no-codoc --no-manual --use-valgrind
     env:
     - ICD_COVERAGE=true
+    - ICD_TEST_SLOW=true
   allow_failures:
   - r: oldrel
     r_build_args: --no-build-vignettes --no-manual --resave-data=no
     r_check_args: --no-build-vignettes --no-vignettes --ignore-vignettes --no-codoc --no-manual
   - r: release
+    os: linux
+    dist: xenial
     r_build_args: --no-build-vignettes --no-manual --resave-data=no
-    r_check_args: --no-build-vignettes --no-vignettes --ignore-vignettes --no-codoc --no-manual
+    r_check_args: --no-build-vignettes --no-vignettes --ignore-vignettes --no-codoc --no-manual --use-valgrind
     env:
     - ICD_COVERAGE=true
     - ICD_TEST_SLOW=true
