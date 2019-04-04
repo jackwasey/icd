@@ -34,12 +34,11 @@ dat <- data.frame(
   icd_dx2 = sample(h, n, replace = TRUE)
 )
 # for builds without the ability to download or use cached data, ignore pcs
-ipcs <- get_icd10cm2016_pc(must_work = FALSE)
-if (!is.null(ipcs)) {
-  i <- ipcs$code
+if (!icd:::.available("icd10cm2016_pc")) {
+  i <- get_icd10cm2016_pc()$code
   dat <- cbind(dat, 
-    icd_pcs1 = sample(i, n, replace = TRUE),
-    icd_pcs2 = sample(i, n, replace = TRUE)
+               icd_pcs1 = sample(i, n, replace = TRUE),
+               icd_pcs2 = sample(i, n, replace = TRUE)
   )
 }
 ```

@@ -191,7 +191,7 @@
   force(var_name)
   parse_fun_name <- .get_parser_name(var_name)
   fetcher_fun <- function(alt = NULL,
-                            must_work = TRUE,
+                            must_work = is.null(alt),
                             msg = paste("Unable to find", var_name)) {
     verbose <- .verbose()
     if (verbose) message("Starting fetcher for ", var_name)
@@ -208,7 +208,7 @@
       if (verbose) message("Offline and not in cache")
       .absent_action_switch(
         "Offline so not attempting to download or parse",
-        must_work = is.null(alt)
+        must_work = must_work
       )
       return(alt)
     }
@@ -315,13 +315,13 @@
   }
 }
 
-.available <- function(var_name, verbose = .verbose(), ...) {
+.available <- function(var_name, ...) {
   with_offline(offline = TRUE, {
     !is.null(
       .fetch(
         var_name = var_name,
         must_work = FALSE,
-        verbose = verbose,
+        verbose = .verbose(),
         ...
       )
     )
