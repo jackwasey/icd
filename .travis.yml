@@ -13,6 +13,10 @@ fortran: true
 # dist:
 #   - xenial
 
+compiler:
+  - gcc
+  - clang
+
 # may need this for clang:
 # export LD_LIBRARY_PATH=/usr/local/clang/lib:$LD_LIBRARY_PATH
 #
@@ -77,14 +81,14 @@ matrix:
   - r: devel
     os: linux
     dist: xenial
-    compiler: gcc
   - r: release
     os: linux
     dist: xenial
-    compiler: gcc
   - r: release
     os: osx
     fortran: false
+    # just to avoid matrix doing this twice, state gcc here
+    compiler: gcc
     env:
       - MATRIX_EVAL="brew install gcc && echo 'CC=gcc-8' > ~/.R/Makevars && echo 'CXX=g++-8' > ~/.R/Makevars && echo 'CXX11=g++-8' > ~/.R/Makevars"
       - ICD_MINI_BENCH=true
@@ -118,23 +122,9 @@ matrix:
     - ICD_MINI_BENCH=true
     - ICD_TEST_SLOW=true
   allow_failures:
-  # allow any osx with r-devel to fail for now: error prone tool chain
-  - r: devel
-    os: osx
+  # allow any osx to fail for now: error prone tool chain
+  - os: osx
   - r: oldrel
-    os: linux
-    dist: precise
-    latex: false
-    r_build_args: --no-build-vignettes --no-manual --resave-data=no
-    r_check_args: --no-build-vignettes --no-vignettes --ignore-vignettes --no-codoc --no-manual
-  - r: release
-    os: osx
-    compiler: clang
-    latex: false
-    r_build_args: --no-build-vignettes --no-manual --resave-data=no
-    r_check_args: --no-build-vignettes --no-vignettes --ignore-vignettes --no-codoc --no-manual
-    env:
-    - ICD_MINI_BENCH=true
   - r: release
     os: linux
     latex: false
