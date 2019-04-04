@@ -10,7 +10,7 @@ bibliography:
 vignette: >
   %\VignetteIndexEntry{An Introduction to icd}
   %\VignetteEngine{knitr::rmarkdown}
-  %\VignetteDepends{icd.data, magrittr, utils}
+  %\VignetteDepends{magrittr, utils}
   %\VignetteEncoding{UTF-8}
 ---
 <!--

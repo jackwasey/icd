@@ -62,7 +62,7 @@ matrix:
     dist: xenial
   - r: oldrel
     os: linux
-    dist: precise
+    dist: trusty
     latex: false
     r_build_args: --no-build-vignettes --no-manual --resave-data=no
     r_check_args: --no-build-vignettes --no-vignettes --ignore-vignettes --no-codoc --no-manual
@@ -112,8 +112,6 @@ before_script:
  - if [ "$TRAVIS_OS_NAME" = "linux" ]; then sed -i'' '/.*[Dd]ata.*/d' .Rbuildignore; fi
 # - sed -i'' '/\.covrignore/d' .Rbuildignore
 # - sed -i'' '/\.lintr/d' .Rbuildignore
- - if [ "$TRAVIS_OS_NAME" = "osx" ]; then sed -i '' '/.*benchmark.*/d' .Rbuildignore; fi
- - if [ "$TRAVIS_OS_NAME" = "linux" ]; then sed -i'' '/.*benchmark.*/d' .Rbuildignore; fi
  - Rscript -e "Rcpp::compileAttributes()" # make sure Rcpp generated code is updated, ideally this is not be checked in repo...
 
 after_success:
