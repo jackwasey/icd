@@ -52,6 +52,7 @@ before_install:
       echo 'CXXFLAGS=-O0' >> ~/.R/Makevars ;
       echo 'CXX11FLAGS=-O0' >> ~/.R/Makevars ;
       fi
+  - eval "${MATRIX_EVAL}"
 
 env:
   global:
@@ -78,6 +79,12 @@ matrix:
     os: linux
     dist: xenial
     compiler: gcc
+  - r: release
+    os: osx
+    # see before_install for use of MATRIX_EVAL
+    env:
+      - MATRIX_EVAL="brew install gcc && CC=gcc-8 && CXX=g++-8"
+      - ICD_MINI_BENCH=true
   - r: devel
     os: osx
     osx_image: xcode10.2
@@ -87,6 +94,12 @@ matrix:
   - r: release
     os: linux
     dist: precise
+  - r: release
+    os: osx
+    # see before_install for use of MATRIX_EVAL
+    env:
+      - MATRIX_EVAL="brew install gcc && CC=gcc-8 && CXX=g++-8"
+      - ICD_MINI_BENCH=true
   - r: devel
     os: linux
   - r: devel
