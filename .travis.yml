@@ -3,6 +3,8 @@ language: r
 # https://ropensci.org/blog/2016/07/12/travis-osx
 # https://docs.travis-ci.com/user/ci-environment/
 
+fortran: false
+
 os:
   - linux
   - osx
@@ -63,6 +65,7 @@ matrix:
     dist: precise
   - r: release
     os: osx
+    latex: false
     r_build_args: --no-build-vignettes --no-manual --resave-data=no
     r_check_args: --no-build-vignettes --no-vignettes --ignore-vignettes --no-codoc --no-manual
     env:
@@ -70,11 +73,13 @@ matrix:
   - r: oldrel
     os: linux
     dist: precise
+    latex: false
     r_build_args: --no-build-vignettes --no-manual --resave-data=no
     r_check_args: --no-build-vignettes --no-vignettes --ignore-vignettes --no-codoc --no-manual
   - r: release
     os: linux
     dist: xenial
+    latex: false
     r_build_args: --no-build-vignettes --no-manual --resave-data=no
     r_check_args: --no-build-vignettes --no-vignettes --ignore-vignettes --no-codoc --no-manual --use-valgrind
     env:
@@ -82,11 +87,13 @@ matrix:
     - ICD_TEST_SLOW=true
   allow_failures:
   - r: oldrel
+    latex: false
     r_build_args: --no-build-vignettes --no-manual --resave-data=no
     r_check_args: --no-build-vignettes --no-vignettes --ignore-vignettes --no-codoc --no-manual
   - r: release
     os: linux
     dist: xenial
+    latex: false
     r_build_args: --no-build-vignettes --no-manual --resave-data=no
     r_check_args: --no-build-vignettes --no-vignettes --ignore-vignettes --no-codoc --no-manual --use-valgrind
     env:

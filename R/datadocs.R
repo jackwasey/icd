@@ -273,10 +273,55 @@ NULL
 #'   columns, the first, named \code{code} is the procedure code; the second,
 #'   named \code{desc}, has the description.
 #' @name get_icd10cm2019_pc
-#' @aliases get_icd10cm2014_pc get_icd10cm2015_pc get_icd10cm2016_pc get_icd10cm2017_pc
-#'   get_icd10cm2018_pc
+#' @aliases get_icd10cm2014_pc get_icd10cm2015_pc get_icd10cm2016_pc
+#'   get_icd10cm2017_pc get_icd10cm2018_pc
 #' @seealso
 #' \url{https://www.cms.gov/Medicare/Coding/ICD10/downloads/pcs_refman.pdf}
+#' @docType data
+#' @keywords datasets
+#' @export
+NULL
+
+#' ICD-10-CM Procedure codes for 2014
+#' @name get_icd10cm2014_pc
+#' @aliases get_icd10cm2015_pc get_icd10cm2016_pc get_icd10cm2017_pc
+#'   get_icd10cm2018_pc get_icd10cm2019_pc
+#' @docType data
+#' @keywords datasets
+#' @export
+NULL
+
+#' ICD-10-CM Procedure codes for 2015
+#' @name get_icd10cm2015_pc
+#' @aliases get_icd10cm2014_pc get_icd10cm2016_pc get_icd10cm2017_pc
+#'   get_icd10cm2018_pc get_icd10cm2019_pc
+#' @docType data
+#' @keywords datasets
+#' @export
+NULL
+
+#' ICD-10-CM Procedure codes for 2016
+#' @name get_icd10cm2016_pc
+#' @aliases get_icd10cm2014_pc get_icd10cm2015_pc get_icd10cm2017_pc
+#'   get_icd10cm2018_pc get_icd10cm2019_pc
+#' @docType data
+#' @keywords datasets
+#' @export
+NULL
+
+#' ICD-10-CM Procedure codes for 2017
+#' @name get_icd10cm2017_pc
+#' @aliases get_icd10cm2014_pc get_icd10cm2015_pc get_icd10cm2016_pc
+#'   get_icd10cm2018_pc get_icd10cm2019_pc
+#' @docType data
+#' @keywords datasets
+#' @export
+NULL
+
+#' ICD-10-CM Procedure codes for 2018
+#' @name get_icd10cm2018_pc
+#' @aliases get_icd10cm2014_pc get_icd10cm2015_pc get_icd10cm2016_pc
+#'   get_icd10cm2017_pc get_icd10cm2019_pc
 #' @docType data
 #' @keywords datasets
 #' @export

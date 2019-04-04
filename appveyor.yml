@@ -44,21 +44,24 @@ environment:
   matrix:
     - R_VERSION: release
       MINI_BENCH: "yes"
+      ICD_DATA_VERBOSE: true
+      ICD_DATA_OFFLINE: true
+      ICD_DATA_INTERACT: false
     - R_VERSION: devel
-    - ICD_DATA_VERBOSE: true
-    - ICD_DATA_OFFLINE: true
-    - ICD_DATA_INTERACT: false
+      ICD_DATA_VERBOSE: true
+      ICD_DATA_OFFLINE: true
+      ICD_DATA_INTERACT: false
 # by default, don't set environment, to be more like CRAN?
 #  ICD_DATA_ABSENT_ACTION: 'message'
 
 matrix:
   fast_finish: true
-  allow_failures:
-    - platform: x64
-      MINI_BENCH: "yes"
-  exclude:
-    - platform: x86
-      MINI_BENCH: "yes"
+#  allow_failures:
+#    - platform: x64
+#      MINI_BENCH: "yes"
+#  exclude:
+#    - platform: x86
+#      MINI_BENCH: "yes"
 
 test_script:
   - travis-tool.sh run_tests

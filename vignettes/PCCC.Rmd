@@ -28,14 +28,20 @@ h <- c(
   icd10cm2016$code,
   rep(unlist(unname(icd10_map_pccc_dx)), 10)
 )
-i <- icd10cm2016_pc$code
 dat <- data.frame(
   id = n + seq(n),
   icd_dx1 = sample(h, n, replace = TRUE),
-  icd_dx2 = sample(h, n, replace = TRUE),
-  icd_pcs1 = sample(i, n, replace = TRUE),
-  icd_pcs2 = sample(i, n, replace = TRUE)
+  icd_dx2 = sample(h, n, replace = TRUE)
 )
+# for builds without the ability to download or use cached data, ignore pcs
+ipcs <- get_icd10cm2016_pc(must_work = FALSE)
+if (!is.null(ipcs)) {
+  i <- ipcs$code
+  dat <- cbind(dat, 
+    icd_pcs1 = sample(i, n, replace = TRUE),
+    icd_pcs2 = sample(i, n, replace = TRUE)
+  )
+}
 ```
 
 # Pediatric Complex Chronic Conditions
