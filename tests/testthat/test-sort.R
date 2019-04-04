@@ -54,7 +54,7 @@ test_that("compare icd10", {
   expect_false(icd10cm_compare_rcpp("A190", "A100"))
   expect_true(icd10cm_compare_rcpp("A100", NA_character_))
   expect_false(icd10cm_compare_rcpp(NA_character_, "A100"))
-# std
+  # std
   expect_false(icd10cm_compare_std("A100", "A100"))
   expect_true(icd10cm_compare_std("A100", "A200"))
   expect_false(icd10cm_compare_std("A190", "A100"))
@@ -64,7 +64,8 @@ test_that("sort icd10", {
   i10 <- as.icd10cm(c("Z00", "A99", "J4C"))
   expect_equal(
     order.icd10cm(i10),
-               c(2, 3, 1))
+    c(2, 3, 1)
+  )
   expect_equal(
     sort(i10),
     as.icd10cm(c("A99", "J4C", "Z00"))

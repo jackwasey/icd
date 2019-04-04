@@ -216,20 +216,30 @@ icd9_parse_quan_deyo_sas <- function(save_data = FALSE) {
   invisible(icd9_map_quan_deyo)
 }
 
-# mostly duplicated from icd.data, just saving the map here
-icd10_parse_ahrq_pcs <- function(save_data = TRUE) {
-  f <- .unzip_to_data_raw(
+.dl_icd10ahrq_pc <- function() {
+  .unzip_to_data_raw(
     url = paste0(
       "https://www.hcup-us.ahrq.gov/toolssoftware/",
       "procedureicd10/pc_icd10pcs_2018_1.zip"
     ),
     file_name = "pc_icd10pcs_2018.csv", offline = !save_data
   )
+}
+
+# mostly duplicated from icd.data, just saving the map here
+icd10_parse_ahrq_pcs <- function(save_pkg_data = TRUE) {
+  f <- .dl_icd10ahrq_pc()
   dat <- read.csv(
-    file = f$file_path, skip = 1, stringsAsFactors = FALSE,
-    colClasses = "character", encoding = "latin1"
+    file = f$file_path,
+    skip = 1,
+    stringsAsFactors = FALSE,
+    colClasses = "character",
+    encoding = "latin1"
   )
-  names(dat) <- c("code", "desc", "class_number", "class")
+  names(dat) <- c("code",
+                  "desc",
+                  "class_number",
+                  "class")
   dat$class <- factor(dat$class,
     levels = c(
       "Minor Diagnostic",
@@ -241,7 +251,7 @@ icd10_parse_ahrq_pcs <- function(save_data = TRUE) {
   dat$class_number <- NULL
   dat$code <- gsub(dat$code, pattern = "'", replacement = "")
   icd10_map_ahrq_pcs <- split(dat$code, dat$class)
-  if (save_data) {
+  if (save_pkg_data) {
     .save_in_data_dir(icd10_map_ahrq_pcs)
   }
 }

@@ -67,12 +67,13 @@
 
 .download_to_data_raw <-
   function(url,
-           file_name = NULL,
-           data_raw_path = icd_data_dir(),
-           dl_msg = NULL,
-           ...) {
-    if (is.null(file_name))
+             file_name = NULL,
+             data_raw_path = icd_data_dir(),
+             dl_msg = NULL,
+             ...) {
+    if (is.null(file_name)) {
       file_name <- regmatches(url, regexpr("[^/]*$", url))
+    }
     stopifnot(is.character(url), length(url) == 1)
     stopifnot(is.character(file_name), length(file_name) == 1)
     if (is.null(data_raw_path) || !dir.exists(data_raw_path)) {
@@ -89,7 +90,7 @@
       file_name = file_name
     )
     if (!is.null(data_raw_path) &&
-        file.exists(save_path)) {
+      file.exists(save_path)) {
       return(f_info)
     }
     if (.offline()) return()

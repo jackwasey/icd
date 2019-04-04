@@ -279,8 +279,8 @@
 #' @keywords internal datagen
 #' @noRd
 .parse_icd9cm_hierarchy_rtf <- function(save_pkg_data = FALSE,
-                                  perl = TRUE,
-                                  use_bytes = TRUE) {
+                                        perl = TRUE,
+                                        use_bytes = TRUE) {
   # TODO: Someday change 'billable' to 'leaf', and make consistent ICD-9 and
   # ICD-10, e.g. icd9cm2011 instead of icd9cm_hierarchy lookup tables
   stopifnot(is.logical(save_pkg_data), length(save_pkg_data) == 1)

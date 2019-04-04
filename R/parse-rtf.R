@@ -465,7 +465,7 @@ re_icd10_major_bare <- "[[:alpha:]][[:digit:]][[:alnum:]]"
   .rtf_lookup_fifth_alt_env(
     out = out,
     lookup_fifth = lookup_fifth
-    )
+  )
 }
 
 .rtf_lookup_fifth_alt_env <- function(out, lookup_fifth) {

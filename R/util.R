@@ -381,9 +381,11 @@ str_extract <- function(string,
                         ...)
   vapply(
     regmatches(string,
-               m = regexec(pattern = pattern,
-                           text = string,
-                           ...)
+      m = regexec(
+        pattern = pattern,
+        text = string,
+        ...
+      )
     ),
     FUN = fun,
     1,

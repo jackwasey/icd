@@ -17,7 +17,10 @@
 #' }
 #' @keywords internal
 #' @export
-print.comorbidity_map <- function(x, ..., n_comorbidities = 7, n_codes = 7) {
+print.comorbidity_map <- function(x,
+                                  ...,
+                                  n_comorbidities = 7,
+                                  n_codes = 7) {
   stopifnot(is.list(x))
   assert_int(n_comorbidities)
   assert_int(n_codes)
@@ -29,7 +32,13 @@ print.comorbidity_map <- function(x, ..., n_comorbidities = 7, n_codes = 7) {
     n_comorbidities, " comorbidities, and first ",
     n_codes, " of each."
   )
-  print(get_n_or_len(lapply(x, get_n_or_len, n_codes), n_comorbidities), ...)
+  print(
+    get_n_or_len(
+      lapply(x, get_n_or_len, n_codes),
+      n_comorbidities
+    ),
+    ...
+  )
   if (length(x) > n_comorbidities) {
     writeLines("...")
   }

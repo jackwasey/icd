@@ -102,7 +102,7 @@ is_non_ascii <- function(x)
 #' @keywords internal
 .get_encodings <- function(x) {
   vapply(x,
-         FUN = function(y) unique(Encoding(as_char_no_warn(y))),
-         FUN.VALUE = character(1)
+    FUN = function(y) unique(Encoding(as_char_no_warn(y))),
+    FUN.VALUE = character(1)
   )
 }

@@ -145,7 +145,8 @@ icd_parse_cc_hierarchy <- function(save_data = FALSE) {
   # import raw hierarchy files from CMS
   hierarchy_path <- file.path(
     get_raw_data_dir(),
-    "icd_hcc_rawdata", "hierarchy")
+    "icd_hcc_rawdata", "hierarchy"
+  )
   stopifnot(dir.exists(hierarchy_path))
   hierarchy_files <- list.files(hierarchy_path)
   hierarchy_file_paths <- list.files(hierarchy_path, full.names = TRUE)
@@ -175,8 +176,9 @@ icd_parse_cc_hierarchy <- function(save_data = FALSE) {
   # Extract the HCC that is used in the if condition statement
   icd_map_cc_hcc[["ifcc"]] <- as.numeric(
     str_extract(icd_map_cc_hcc$condition,
-                "(?<=hcc)([0-9]*)|(?<=CC\\=)([0-9]*)",
-                perl = TRUE)
+      "(?<=hcc)([0-9]*)|(?<=CC\\=)([0-9]*)",
+      perl = TRUE
+    )
   )
   # Extract the HCCs that should be set to zero if the above condition is met
   todrop <- str_extract(

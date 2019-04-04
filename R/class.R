@@ -212,11 +212,11 @@ classes_ordered <- function(x) {
 #' x
 #' attributes(x) <- list(icd_short_diag = NULL)
 #' x
-#'
+#' 
 #' y <- as.decimal_diag(as.icd10("A10.09"))
 #' y
 #' is.short_diag(y)
-#'
+#' 
 #' j <- as.short_diag(as.icd10(c("A11", "B2222")))
 #' j[2] <- "C33"
 #' stopifnot(is.short_diag(j))
@@ -722,7 +722,7 @@ c.icd10 <- function(..., warn = FALSE) {
 #' # preserving the ICD class
 #' stopifnot(!inherits(x[[1]], "list"))
 #' stopifnot(!inherits(x[[1]][2], "list"))
-#'
+#' 
 #' y <- as.icd10(c("A01", "B0234"))
 #' y[2]
 #' y[[2]]

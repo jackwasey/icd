@@ -118,8 +118,9 @@ isFALSE <- function(x)
 #' @rdname sort_icd
 #' @export
 order.icd9 <- function(x, na.last = TRUE) {
-  if (isFALSE(na.last))
+  if (isFALSE(na.last)) {
     stop("na.last = NA drops NA. na.last = FALSE not implemented.")
+  }
   na <- is.na(x)
   n_na <- sum(na)
   if (is.na(na.last) && n_na != 0) {
