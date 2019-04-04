@@ -34,6 +34,7 @@ install_jss3447_deps <- function() {
   }
   install.packages("medicalrisk_1.2.tar.gz", repos = NULL)
   install.packages("comorbidity_0.1.1.tar.gz", repos = NULL)
+  # This relies on icd not already being loaded, or it will pass with any version
   if (!requireNamespace("icd",
                         quietly = TRUE,
                         versionCheck = list(version = "3.2.2",

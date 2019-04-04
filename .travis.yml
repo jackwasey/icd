@@ -34,8 +34,9 @@ addons:
     packages:
       - valgrind
 
-r_packages:
-  - covr
+# don't want overhead of installing for every matrix element
+# r_packages:
+#   - covr
 
 cran: https://cloud.r-project.org
 
@@ -43,7 +44,7 @@ warnings_are_errors: true
 
 # try to speed up compilation time
 before_install:
-      # do this with Travis environment variables?
+      # can partly do this with clang environment variables? MacOS funny.
       #echo 'CC=clang' > ~/.R/Makevars ;
       #echo 'CXX=clang++' >> ~/.R/Makevars ;
       #echo 'CXX11=clang++' >> ~/.R/Makevars ;
@@ -84,9 +85,8 @@ matrix:
   - r: release
     os: osx
     fortran: false
-    # see before_install for use of MATRIX_EVAL
     env:
-      - MATRIX_EVAL="brew install gcc && CC=gcc-8 && CXX=g++-8"
+      - MATRIX_EVAL="brew install gcc && echo 'CC=gcc-8' > ~/.R/Makevars && echo 'CXX=g++-8' > ~/.R/Makevars"
       - ICD_MINI_BENCH=true
   - r: devel
     os: osx
@@ -149,16 +149,16 @@ before_script:
 # - rm .Rinstignore  # do install everything for testing (we have source tree, so no need)
  - if [ "$TRAVIS_OS_NAME" = "osx" ]; then sed -i '' '/.*[Dd]ata.*/d' .Rbuildignore; fi
  - if [ "$TRAVIS_OS_NAME" = "linux" ]; then sed -i'' '/.*[Dd]ata.*/d' .Rbuildignore; fi
-# make sure Rcpp generated code is updated, ideally this is not be checked in repo...
-# - Rscript -e "Rcpp::compileAttributes()"
-
-after_success:
+ # should fail and stop travis if the benchmarking fails.
  - if [ "ICD_MINI_BENCH" = "true" ]; then
      cd benchmarks/icd-JSS3447-replication;
-     make bench3; make replmat;
+     make bench3 && make replmat;
+     cd ../..;
    fi
+
+after_success:
  - if [ "$ICD_COVERAGE" = "true" ]; then
-     Rscript -e "covr::codecov(quiet = FALSE)"; fi
+     Rscript -e "install.packages('covr'); covr::codecov(quiet = FALSE)"; fi
 # - if [ "$LINTR_COMMENT_BOT" = "true" ]; then
 #     Rscript -e "lintr::lint_package()"; fi
 
