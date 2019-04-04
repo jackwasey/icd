@@ -38,15 +38,16 @@
   stopifnot(is.numeric(year) || is.character(year))
   year <- as.character(year)
   stopifnot(as.character(year) %in% names(.icd10cm_sources))
-  f_info <- .dl_icd10cm_year(year = year, dx = TRUE, ...)
+  f_info <- .dl_icd10cm_year(year = year, dx = TRUE)
   if (is.null(f_info)) {
-    stop(
+    .absent_action_switch(
       paste("No path to downloaded data. Options are: "),
       paste(names(.show_options()), unname(.show_options()),
         collapse = ",",
         sep = ":"
       )
     )
+    return()
   }
   message("Working on parsing ICD-10-CM year: ", year)
   # readLines may muck up encoding, resulting in weird factor order generation

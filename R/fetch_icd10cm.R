@@ -109,7 +109,7 @@
   force(dx)
   force(verbose)
   parse_fun <- function() {
-    .parse_icd10cm_year(year = year, dx = dx, verbose = verbose)
+    .parse_icd10cm_year(year = year, dx = dx)
   }
   parse_fun_env <- environment(parse_fun)
   parse_fun_env$year <- as.character(year)

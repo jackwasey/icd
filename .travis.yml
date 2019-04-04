@@ -108,10 +108,12 @@ matrix:
 
 before_script:
  - rm .Rinstignore  # do install everything for testing
- - sed -i'' '/.*[Dd]ata.*/d' .Rbuildignore # do include data for testing
+ - if [ "$TRAVIS_OS_NAME" = "osx" ]; then sed -i '' '/.*[Dd]ata.*/d' .Rbuildignore; fi
+ - if [ "$TRAVIS_OS_NAME" = "linux" ]; then sed -i'' '/.*[Dd]ata.*/d' .Rbuildignore; fi
 # - sed -i'' '/\.covrignore/d' .Rbuildignore
 # - sed -i'' '/\.lintr/d' .Rbuildignore
- - sed -i'' '/\benchmark/d' .Rbuildignore
+ - if [ "$TRAVIS_OS_NAME" = "osx" ]; then sed -i '' '/.*benchmark.*/d' .Rbuildignore; fi
+ - if [ "$TRAVIS_OS_NAME" = "linux" ]; then sed -i'' '/.*benchmark.*/d' .Rbuildignore; fi
  - Rscript -e "Rcpp::compileAttributes()" # make sure Rcpp generated code is updated, ideally this is not be checked in repo...
 
 after_success:

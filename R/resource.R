@@ -58,7 +58,8 @@
     message("Seeing if ", sQuote(var_name), " exists in cache env or dir")
   }
   if (is.null(getOption("icd.data.resource", default = NULL))) {
-    message("Don't even have the icd.data.resource option defined.")
+    if (.verbose())
+      message("Don't even have the icd.data.resource option defined.")
     return(FALSE)
   }
   stopifnot(is.character(var_name))
@@ -299,33 +300,28 @@
 #' @noRd
 .fetch <- function(var_name,
                    must_work = TRUE,
-                   verbose = .verbose(),
                    ...) {
-  if (.exists_in_cache(var_name, verbose = verbose)) {
+  if (.exists_in_cache(var_name)) {
     .get_from_cache(var_name,
       must_work = TRUE
     )
   } else {
-    parser <- .get_parser_fun(var_name)
-    parser(
-      verbose = verbose,
-      # must_work = must_work,
-      ...
-    )
+    .get_parser_fun(var_name)()
   }
 }
 
 .available <- function(var_name, ...) {
-  with_offline(offline = TRUE, {
-    !is.null(
-      .fetch(
-        var_name = var_name,
-        must_work = FALSE,
-        verbose = .verbose(),
-        ...
+  with_absent_action(
+    absent_action = "silent",
+    with_offline(offline = TRUE, {
+      !is.null(
+        .fetch(
+          var_name = var_name,
+          ...
+        )
       )
-    )
-  })
+    })
+  )
 }
 
 .icd_data_default <- file.path("~", ".icd.data")
@@ -354,18 +350,18 @@ icd_data_dir <- function(path) {
     return(o)
   }
   if (.verbose()) print(.show_options())
-  stop(paste(
-    "The", sQuote("icd.data.resource"),
-    "option is not set. Use setup_icd_data() to get started."
-  ))
+  .absent_action_switch(
+    paste(
+      "The", sQuote("icd.data.resource"),
+      "option is not set. Use setup_icd_data() to get started."
+    )
+  )
 }
 
-.confirm_download <- function(absent_action = .absent_action(),
-                              interact = .interact(),
-                              msg = NULL) {
+.confirm_download <- function(msg = NULL) {
   if (!.offline()) return(TRUE)
   ok <- FALSE
-  if (interact) {
+  if (.interact()) {
     message("icd needs to download and/or parse data.")
     if (!is.null(msg)) message(msg)
     ok <- isTRUE(

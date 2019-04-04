@@ -34,7 +34,7 @@ dat <- data.frame(
   icd_dx2 = sample(h, n, replace = TRUE)
 )
 # for builds without the ability to download or use cached data, ignore pcs
-if (!icd:::.available("icd10cm2016_pc")) {
+if (icd:::.available("icd10cm2016_pc")) {
   i <- get_icd10cm2016_pc()$code
   dat <- cbind(dat,
                icd_pcs1 = sample(i, n, replace = TRUE),
@@ -57,9 +57,9 @@ The PCCC comorbidities may be derived from both diagnostic and procedure codes. 
 head(dat)
 ```
 The data is in 'wide' format. `icd` no longer needs the data to be in 'long' format. The PCCC comorbidity classes can be computed directly from the source data and summarized in a plot. Here we calculate the PCCC from ICD diagnostic codes and ICD procedure codes separately, and logically combine them to get the result.
-```{r calcpre, eval = TRUE}
+```{r calcpre, eval = TRUE, echo = FALSE}
 pccc_dx <- comorbid_pccc_dx(dat)
-if (!icd:::.available("icd10cm2016_pc")) {
+if (icd:::.available("icd10cm2016_pc")) {
   pccc_pcs <- icd10_comorbid_pccc_pcs(dat,
                                       icd_name = c("icd_pcs1", "icd_pcs2")
   )

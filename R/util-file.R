@@ -86,7 +86,6 @@
 #' @param insecure Logical value, wil disable certificate check which fails on
 #'   some platforms for some ICD data from CDC and CMS, probably because of TLS
 #'   version or certificate key length issues. Default is \code{TRUE}.
-#' @template verbose
 #' @param ... additional arguments passed to \code{utils::download.file}
 #' @keywords internal
 #' @noRd
@@ -94,7 +93,6 @@
                           file_name,
                           save_path,
                           insecure = TRUE,
-                          verbose = FALSE,
                           dl_msg = NULL,
                           ...) {
   stopifnot(is.character(url))
@@ -105,11 +103,11 @@
   zipfile <- tempfile(fileext = ".zip")
   on.exit(unlink(zipfile), add = TRUE)
   extra <- ifelse(insecure, "--insecure --silent", NULL)
-  if (verbose && !is.null(dl_msg)) message(dl_msg)
+  if (.verbose() && !is.null(dl_msg)) message(dl_msg)
   dl_code <- utils::download.file(
     url = url,
     destfile = zipfile,
-    quiet = !verbose,
+    quiet = !.verbose(),
     method = "curl",
     extra = extra,
     ...
