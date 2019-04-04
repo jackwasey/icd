@@ -1,5 +1,5 @@
 # nocov start
-.verbose(getOption("icd.data.verbose", default = FALSE))
+.verbose(NA)
 .make_icd9cm_leaf_parsers()
 .make_icd9cm_rtf_parsers()
 .make_icd10cm_parsers()

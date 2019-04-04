@@ -309,7 +309,7 @@
     parser <- .get_parser_fun(var_name)
     parser(
       verbose = verbose,
-      must_work = must_work,
+      # must_work = must_work,
       ...
     )
   }
@@ -353,6 +353,7 @@ icd_data_dir <- function(path) {
     if (any(grepl("tmp", o))) warning("Using a temporary directory")
     return(o)
   }
+  if (.verbose()) print(.show_options())
   stop(paste(
     "The", sQuote("icd.data.resource"),
     "option is not set. Use setup_icd_data() to get started."

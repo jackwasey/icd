@@ -140,36 +140,50 @@
     if (is.numeric(v)) return(v)
     return(isTRUE(v))
   }
-  options(icd.data.verbose = x)
-  invisible(x)
+  if (is.logical(x) && length(x) == 1L && !is.na(x))
+    options(icd.data.verbose = x)
+  else
+    options("icd.data.verbose" = .env_var_is_true("ICD_DATA_VERBOSE"))
+  invisible(getOption("icd.data.verbose"))
 }
 
 .interact <- function(x) {
   if (missing(x)) {
     return(isTRUE(getOption("icd.data.interact")))
   }
-  options(icd.data.interact = x)
-  invisible(x)
+  if (is.logical(x) && length(x) == 1L && !is.na(x))
+    options(icd.data.interact = x)
+  else
+    options("icd.data.interact" = .env_var_is_true("ICD_DATA_INTERACT"))
+  invisible(getOption("icd.data.interact"))
 }
 
 .offline <- function(x) {
   if (missing(x)) {
     return(isTRUE(getOption("icd.data.offline")))
   }
-  options(icd.data.offline = x)
-  invisible(x)
+  if (is.logical(x) && length(x) == 1L && !is.na(x))
+    options(icd.data.offline = x)
+  else
+    options("icd.data.offline" = !.env_var_is_false("ICD_DATA_OFFLINE"))
+  invisible(getOption("icd.data.offline"))
 }
 
 .absent_action <- function(x = c(
                              "stop",
                              "warning",
                              "message",
-                             "silent"
+                             "silent",
+                             "sysenv",
+                             NA
                            )) {
   if (!missing(x)) {
     x <- match.arg(x)
-    options("icd.data.absent_action" = x)
-    return(x)
+    if (is.na(x) || x == "sysenv")
+      options("icd.data.absent_action" = Sys.getenv("ICD_DATA_ABSENT_ACTION"))
+    else
+      options("icd.data.absent_action" = x)
+    return(getOption("icd.data.absent_action"))
   }
   a <- getOption("icd.data.absent_action")
   # default to silent, as I think R check uses empty options for various parts of check, which ignore anything I might have wanted to set in .onLoad .

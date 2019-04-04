@@ -227,7 +227,7 @@ icd9_parse_quan_deyo_sas <- function(save_data = FALSE) {
 }
 
 # mostly duplicated from icd.data, just saving the map here
-icd10_parse_ahrq_pcs <- function(save_pkg_data = TRUE) {
+icd10_parse_map_ahrq_pc <- function(save_pkg_data = TRUE) {
   f <- .dl_icd10ahrq_pc()
   dat <- read.csv(
     file = f$file_path,

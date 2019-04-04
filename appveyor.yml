@@ -41,21 +41,18 @@ environment:
   USE_RTOOLS: true
   R_BUILD_ARGS: ""
   NOT_CRAN: true
+  ICD_DATA_VERBOSE: true
+  ICD_DATA_OFFLINE: true
+  ICD_DATA_INTERACT: false
+# by default, don't set environment, to be more like CRAN?
+#  ICD_DATA_ABSENT_ACTION: 'message'
   matrix:
     - R_VERSION: release
       MINI_BENCH: "yes"
-      ICD_DATA_VERBOSE: true
-      ICD_DATA_OFFLINE: true
-      ICD_DATA_INTERACT: false
     - R_VERSION: devel
-      ICD_DATA_VERBOSE: true
-      ICD_DATA_OFFLINE: true
-      ICD_DATA_INTERACT: false
-# by default, don't set environment, to be more like CRAN?
-#  ICD_DATA_ABSENT_ACTION: 'message'
 
 matrix:
-  fast_finish: true
+  fast_finish: false
 #  allow_failures:
 #    - platform: x64
 #      MINI_BENCH: "yes"
