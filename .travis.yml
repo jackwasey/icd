@@ -86,7 +86,7 @@ matrix:
     os: osx
     fortran: false
     env:
-      - MATRIX_EVAL="brew install gcc && echo 'CC=gcc-8' > ~/.R/Makevars && echo 'CXX=g++-8' > ~/.R/Makevars"
+      - MATRIX_EVAL="brew install gcc && echo 'CC=gcc-8' > ~/.R/Makevars && echo 'CXX=g++-8' > ~/.R/Makevars && echo 'CXX11=g++-8' > ~/.R/Makevars"
       - ICD_MINI_BENCH=true
   - r: devel
     os: osx
