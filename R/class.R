@@ -212,11 +212,11 @@ classes_ordered <- function(x) {
 #' x
 #' attributes(x) <- list(icd_short_diag = NULL)
 #' x
-#' 
+#'
 #' y <- as.decimal_diag(as.icd10("A10.09"))
 #' y
 #' is.short_diag(y)
-#' 
+#'
 #' j <- as.short_diag(as.icd10(c("A11", "B2222")))
 #' j[2] <- "C33"
 #' stopifnot(is.short_diag(j))
@@ -626,15 +626,16 @@ as.comorbidity_map <- function(x) {
 
 #' Combine ICD codes
 #'
-#' These function implement ICD specific methods for \code{c}, i.e., combinations of lists or vectors of codes, while
-#' preserving ICD classes. Base R \code{c} just drops all user defined classes
-#' and casts down to lowest common denominator, e.g. if mixing numbers and
-#' characters. No attempt here to catch all possible combinations of feeding in
-#' mixed ICD types and other types. Let R do what it normally does, but just try
-#' to keep classes of the first item in the list.
+#' These function implement ICD specific methods for \code{c}, i.e.,
+#' combinations of lists or vectors of codes, while preserving ICD classes. Base
+#' \R \code{\link[base]{c}} just drops all user defined classes and casts down
+#' to lowest common denominator, e.g. if mixing numbers and characters. No
+#' attempt here to catch all possible combinations of feeding in mixed ICD types
+#' and other types. Let R do what it normally does, but just try to keep classes
+#' of the first item in the list.
 #' @param ... elements to combine
-#' @param warn single logical value, if TRUE, will give warnings when
-#'   incompatible types are combined using \code{c}
+#' @param warn single logical value, if \code{TRUE}, will give warnings when
+#'   incompatible types are combined using \code{\link[base]{c}}
 #' @examples
 #' # Care with the following:
 #' c(as.icd9("E998"), as.icd10("A10"))
@@ -722,7 +723,7 @@ c.icd10 <- function(..., warn = FALSE) {
 #' # preserving the ICD class
 #' stopifnot(!inherits(x[[1]], "list"))
 #' stopifnot(!inherits(x[[1]][2], "list"))
-#' 
+#'
 #' y <- as.icd10(c("A01", "B0234"))
 #' y[2]
 #' y[[2]]

@@ -10,10 +10,10 @@ get_icd10cm_version(ver, verbose = .verbose())
 get_icd10cm_active(verbose = FALSE)
 }
 \arguments{
-\item{ver}{Character version of ICD-10-CM to use, corresponding to the suffix
-of the \code{data.frame} name, e.g. for 2019 ICD-10-CM, use
-\code{"icd10cm2019"} for Dutch 2014 ICD-CM translations, use
-'icd10cm2014_nl"}
+\item{ver}{Character vector of length one: the version of ICD-10-CM to use,
+corresponding to the suffix of the \code{data.frame} name, e.g., for 2019
+ICD-10-CM, use \code{"icd10cm2019"} for Dutch 2014 ICD-CM translations, use
+\code{"icd10cm2014_nl"}}
 
 \item{verbose}{single logical value, defaults to \code{FALSE} in most functions.}
 }

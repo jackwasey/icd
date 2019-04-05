@@ -19,15 +19,15 @@ directly or indirectly, any individual patient or physician.
 
 2. The requestor agrees to incorporate the following, or a substantially
 similar, disclaimer in all reports or publications that include public use
-data: "Hospital discharge data for use in this study were supplied by the
-Vermont Association of Hospitals and Health Systems-Network Services
+data: \dQuote{Hospital discharge data for use in this study were supplied by
+the Vermont Association of Hospitals and Health Systems-Network Services
 Organization (VAHHS-NSO) and the Vermont Department of Banking, Insurance,
 Securities and Health Care Administration (BISHCA). All analyses,
 interpretations or conclusions based on these data are solely that of [the
 requestor]. VAHHS-NSO and BISHCA disclaim responsibility for any such
 analyses, interpretations or conclusions. In addition, as the data have been
 edited and processed by VAHHS-NSO, BISHCA assumes no responsibility for
-errors in the data due to coding or processing"
+errors in the data due to coding or processing}
 
 Format:  CSV original, minimally processed into R data frame.
 }

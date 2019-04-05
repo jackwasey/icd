@@ -1,8 +1,8 @@
-context("billable code lists")
+context("ICD-9-CM leaf/billable code lists")
 
 # cover the reverse dependency on icd 3.3
-test_that("billable codes for expected versions exist", {
-  skip("this is a breaking change in icd.data.")
+test_that("billable codes for expected versions availble", {
+  skip("this is a breaking change.")
   expect_true(all(as.character(23:32) %in% names(icd9cm_billable)))
   expect_true(all(vapply(icd9cm_billable, is.data.frame, logical(1))))
 })

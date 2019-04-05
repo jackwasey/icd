@@ -39,8 +39,8 @@
   }
   if (verbose > 1) message("Getting WHO data with JSON: ", json_url)
   http_response <- httr_retry("GET", json_url)
-  if (http_response$status_code >= 400) {
-    warning("Unable to fetch resource: ", json_url)
+  if (hs <- http_response$status_code >= 400) {
+    warning("Unable to fetch resource: ", json_url, " has HTTP status, ", hs)
     return()
   }
   json_data <- rawToChar(http_response$content)
@@ -79,14 +79,14 @@
   }
 }
 
-#' Use public interface to fetch ICD-10 WHO version
+#' Use public interface to fetch ICD-10 WHO data for a given version
 #'
 #' The user may call this function to install the full WHO ICD-10 definition on
-#' their machine, after which it will be available to \code{icd}. TODO: determine the
-#' best place to save this data.
-#' @param concept_id This is the id for the code or code group, e.g. "XI"
-#'   (Chapter 6), "T90-T98" (A sub-chapter), "E01" (A sub-sub-chapter). You
-#'   cannot query a single code with this interface.
+#' their machine, after which it will be available to \code{icd}. TODO:
+#' determine the best place to save this data.
+#' @param concept_id This is the id for the code or code group, e.g.,
+#'   \sQuote{XI} (Chapter 6), \sQuote{T90--T98} (A sub-chapter), \sQuote{E01} (A
+#'   sub-sub-chapter). You cannot query a single code with this interface.
 #' @param year integer 4-digit year
 #' @param lang Currently it seems only 'en' works
 #' @param verbose logical

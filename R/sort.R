@@ -4,9 +4,10 @@
 #'   unnecessary and ignored. All codes should consistently use the decimal
 #'   divider.
 #' @section ICD-9: Sorts lists of numeric, V or E codes. Note that a simple
-#'   numeric sort does not work for ICD-9 codes, since "162" > "1620", and also
-#'   V codes precede E codes. Numeric codes are first, then 'V', then 'E'. Will
-#'   return a factor if a factor is given.
+#'   numeric sort does not work for ICD-9 codes, since \code{162 > 1620}, and
+#'   also \sQuote{V} codes precede \sQuote{E} codes. Numeric codes are first,
+#'   then \sQuote{V}, then \sQuote{E}. A factor is returned if a factor is
+#'   given.
 #' @section ICD-10-CM and ICD-10-BE: There are some codes which are sequenced
 #'   out of lexicographic order, e.g., \code{C7A} and \code{C7B} are between
 #'   \code{C80} and \code{C81}; \code{D3A} is between \code{D48} and \code{D49}.
@@ -15,7 +16,8 @@
 #'   not \code{sort.icd10cm}, etc..
 #' @param x vector of ICD codes to sort or order
 #' @param decreasing Logical See \code{\link[base]{sort}}.
-#' @param na.last Logical, analogous to \code{order}, so \code{NA} drops NA. \code{FALSE} is not currently supported.
+#' @param na.last Logical, analogous to \code{order}, so \code{NA} drops NA.
+#'   \code{FALSE} is not currently supported.
 #' @template short_code
 #' @template dotdotdot
 #' @examples

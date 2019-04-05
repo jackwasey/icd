@@ -343,7 +343,7 @@ NULL
 #'   users, including pulling the data from the web pages directly. Despite my
 #'   best efforts, current locale can give different results, but this packaged
 #'   data is correct, with some \code{UTF-8} encoded strings.
-#'   \code{icd9cm_billable} has been deprecated, and now includes only the
+#'   \code{icd9cm_billable} has been removed, and is replaced by now includes only the
 #'   latest version (32).
 #' @docType data
 #' @keywords datasets
@@ -454,7 +454,7 @@ NULL
 #' @export
 NULL
 
-#' Deprecated name for the ICD-9-CM billable/leaf nodes
+#' Deprecated name for the list of annual ICD-9-CM billable/leaf descriptions
 #'
 #' This now just contains the final version (2014, version number 32). This is
 #' actually the same from 2011 to 2014. Use getter functions such as
@@ -462,9 +462,15 @@ NULL
 #' @docType data
 #' @keywords datasets
 #' @format list of data frames with columns \code{code}, \code{short_desc}, and
-#'   \code{long_desc}, containing just the leaf (in USA, "billable") codes, and
-#'   their descriptions. See \code{\link{icd9cm_hierarchy}} for a data frame
-#'   with more hierarchical information.
+#'   \code{long_desc}, containing just the leaf (in USA, \sQuote{billable})
+#'   codes, and their descriptions.
+#' @seealso For 2005 -- 2014, the following functions provide ICD-9-CM data:
+#'   \code{\link{get_icd9cm2009}} and \code{\link{get_icd9cm2013_leaf()}}. The
+#'   former includes three-digit \sQuote{major} down to the leaf/billable level,
+#'   and any intermediate descriptors, e.g. if a four-digit code is not
+#'   billable, and encompasses some five-digit codes, then the four digit code
+#'   would appear in \code{\link{get_icd9cm2014}} but not
+#'   \code{\link{get_icd9cm2014_leaf}}.
 #' @source
 #' \url{http://www.cms.gov/Medicare/Coding/ICD9ProviderDiagnosticCodes/codes.html}
 #' @name icd9cm_billable
@@ -492,15 +498,15 @@ get_icd10cm_latest <- function() {
 #'
 #' 2. The requestor agrees to incorporate the following, or a substantially
 #' similar, disclaimer in all reports or publications that include public use
-#' data: "Hospital discharge data for use in this study were supplied by the
-#' Vermont Association of Hospitals and Health Systems-Network Services
+#' data: \dQuote{Hospital discharge data for use in this study were supplied by
+#' the Vermont Association of Hospitals and Health Systems-Network Services
 #' Organization (VAHHS-NSO) and the Vermont Department of Banking, Insurance,
 #' Securities and Health Care Administration (BISHCA). All analyses,
 #' interpretations or conclusions based on these data are solely that of [the
 #' requestor]. VAHHS-NSO and BISHCA disclaim responsibility for any such
 #' analyses, interpretations or conclusions. In addition, as the data have been
 #' edited and processed by VAHHS-NSO, BISHCA assumes no responsibility for
-#' errors in the data due to coding or processing"
+#' errors in the data due to coding or processing}
 #' @source
 #' \url{http://www.healthvermont.gov/health-statistics-vital-records/health-care-systems-reporting/hospital-discharge-data}
 #' @details Format:  CSV original, minimally processed into R data frame.

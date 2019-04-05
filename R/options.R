@@ -5,27 +5,28 @@
 
 #' Set initial options for the package
 #'
-#' \code{icd.data.offline} - default is TRUE, unless ICD_DATA_OFFLINE is
-#' false/no. This will only ever be turned on with explicit user authorization
-#' (or by directly setting it). Turning this on also results in data being saved
-#' in the data directory. See below.
+#' \code{icd.data.offline} - default is \code{TRUE}, unless the system
+#' environment vairable \code{ICD_DATA_OFFLINE} is \sQuote{false} or
+#' \sQuote{no}. This will only ever be turned on with explicit user
+#' authorization (or by directly setting it). Turning this on also results in
+#' data being saved in the data directory. See below.
 #'
 #' \code{icd.data.interact} - default is based on interactive mode of R, as
-#' given by \code{base::interactive()}.
+#' given by \code{base::interactive()}, but can be overridden, e.g. to simulate
+#' non-interactive testing in an interactive environment.
 #'
 #' \code{icd.data.resource} - default is ~/.icd.data but won't write unless user
-#' gives permission
+#' gives permission, e.g., using \code{\link{setup_icd_data}}
 #'
-#' \code{icd.data.absent_action} - what to do if data is missing, "stop" or
-#' "message" consider removing this. Need to automate the hell out of this, but
-#' might be useful for testing.
+#' \code{icd.data.absent_action} - what to do if data is missing, \sQuote{stop},
+#' \sQuote{warning}, \sQuote{message"}, or \sQuote{silent}.
 #'
 #' \code{icd.data.icd10cm_active_ver} - which ICD-10-CM version is currently
-#' active. Default is 2019.
+#' active. Default is \sQuote{2019}.
 #'
-#' See also \code{.show_options()} \code{.clear_options()}
-#' \code{.set_dev_options()}
+#' See also \code{.show_options} \code{.clear_options} \code{.set_dev_options}
 #' @keywords internal
+#' @noRd
 .set_init_options <- function() {
   if (!("icd.data.verbose" %in% names(options()))) {
     options("icd.data.verbose" = .env_var_is_true("ICD_DATA_VERBOSE"))

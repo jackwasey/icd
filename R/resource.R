@@ -91,9 +91,9 @@
     return(.get(var_name))
   }
   if (!.exists_in_cache(var_name = var_name, verbose = verbose)) {
-    msg <- paste("Unable to get cached data for:", var_name)
+    msg <- paste("Unable to get cached data for:", sQuote(var_name))
     .absent_action_switch(msg, must_work = must_work)
-    return()
+    return(invisible())
   }
   fp <- .rds_path(var_name)
   if (verbose) message("Checking if we have file path for get")

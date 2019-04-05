@@ -1,10 +1,10 @@
-#' extract alphabetic, and numeric part of ICD-9 code prefix
+#' Extract alphabetic, and numeric part of ICD-9 code prefix
 #'
-#' removes white space and separates V or E if present.
+#' Removes white space and separates a \sQuote{V} or \sQuote{E} if present.
 #' @template icd9-any
 #' @return vector or matrix, with first item of each row (or whole vector)
-#'   containing V, E or "". The second part contains the numeric parts of the
-#'   code, which may include a decimal point.
+#'   containing \sQuote{V}, \sQuote{E} or \sQuote{}. The second part contains
+#'   the numeric parts of the code, which may include a decimal point.
 #' @keywords internal manip
 #' @noRd
 icd9_extract_alpha_numeric <- function(x) {

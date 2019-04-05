@@ -3,11 +3,10 @@
 \docType{data}
 \name{icd9cm_billable}
 \alias{icd9cm_billable}
-\title{Deprecated name for the ICD-9-CM billable/leaf nodes}
+\title{Deprecated name for the list of annual ICD-9-CM billable/leaf descriptions}
 \format{list of data frames with columns \code{code}, \code{short_desc}, and
-  \code{long_desc}, containing just the leaf (in USA, "billable") codes, and
-  their descriptions. See \code{\link{icd9cm_hierarchy}} for a data frame
-  with more hierarchical information.}
+  \code{long_desc}, containing just the leaf (in USA, \sQuote{billable})
+  codes, and their descriptions.}
 \source{
 \url{http://www.cms.gov/Medicare/Coding/ICD9ProviderDiagnosticCodes/codes.html}
 }
@@ -15,5 +14,14 @@
 This now just contains the final version (2014, version number 32). This is
 actually the same from 2011 to 2014. Use getter functions such as
 \code{\link{get_icd9cm2014_leaf}} instead.
+}
+\seealso{
+For 2005 -- 2014, the following functions provide ICD-9-CM data:
+  \code{\link{get_icd9cm2009}} and \code{\link{get_icd9cm2013_leaf()}}. The
+  former includes three-digit \sQuote{major} down to the leaf/billable level,
+  and any intermediate descriptors, e.g. if a four-digit code is not
+  billable, and encompasses some five-digit codes, then the four digit code
+  would appear in \code{\link{get_icd9cm2014}} but not
+  \code{\link{get_icd9cm2014_leaf}}.
 }
 \keyword{datasets}

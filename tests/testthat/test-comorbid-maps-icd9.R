@@ -505,6 +505,7 @@ test_that("disordered visit ids", {
 })
 
 test_that("diff comorbid works", {
+  skip_slow("diff comorbidity maps is relatively slow to test")
   expect_warning(
     utils::capture.output(
       res <- diff_comorbid(icd9_map_ahrq, icd9_map_elix, show = FALSE)

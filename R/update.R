@@ -23,9 +23,9 @@ update_everything <- function() {
     twentysixteen = TRUE
   )
   .icd10cm_extract_sub_chapters(.icd10cm_extract_sub_chapters = TRUE)
-  icd9cm_billable <- list()
-  icd9cm_billable[["32"]] <- get_icd9cm2014_leaf(must_work = TRUE)
-  .save_in_data_dir(icd9cm_billable)
+#  icd9cm_billable <- list()
+#  icd9cm_billable[["32"]] <- get_icd9cm2014_leaf(must_work = TRUE)
+#  .save_in_data_dir(icd9cm_billable)
 
   # this is not strictly a parsing step, but is quite slow. It relies on picking
   # up already saved files from previous steps. It can take hours to complete,

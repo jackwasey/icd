@@ -5,11 +5,11 @@
 #' published an updated set of scores, but it seems most people use the original
 #' scores for easier comparison between studies, even though Quan's were more
 #' predictive.
-#' @details When used, hierarchy is applied per Quan, "The following comorbid
-#'   conditions were mutually exclusive: diabetes with chronic complications and
-#'   diabetes without chronic complications; mild liver disease and moderate or
-#'   severe liver disease; and any malignancy and metastatic solid tumor." The
-#'   Quan scoring weights come from the 2011 paper
+#' @details When used, hierarchy is applied per Quan, \dQuote{The following
+#'   comorbid conditions were mutually exclusive: diabetes with chronic
+#'   complications and diabetes without chronic complications; mild liver
+#'   disease and moderate or severe liver disease; and any malignancy and
+#'   metastatic solid tumor.} The Quan scoring weights come from the 2011 paper
 #'   (dx.doi.org/10.1093/aje/kwq433). The comorbidity weights were recalculated
 #'   using updated discharge data, and some changes, such as Myocardial
 #'   Infarction decreasing from 1 to 0, may reflect improved outcomes due to
@@ -20,9 +20,9 @@
 #'   If \code{visit_name} is not specified, the first column is used.
 #' @template visit_name
 #' @template scoring-system
-#' @param return_df single logical value, if true, a two column data frame will
-#'   be returned, with the first column named as in input data frame (i.e.
-#'   \code{visit_name}), containing all the visits, and the second column
+#' @param return_df single logical value, if \code{TRUE}, a two column data
+#'   frame will be returned, with the first column named as in input data frame
+#'   (i.e., \code{visit_name}), containing all the visits, and the second column
 #'   containing the Charlson Comorbidity Index.
 #' @param stringsAsFactors single logical, passed on when constructing
 #'   data.frame if \code{return_df} is \code{TRUE}. If the input data frame
@@ -168,10 +168,10 @@ charlson_from_comorbid <- function(x,
 #' )
 #' count_codes(mydf, return_df = TRUE)
 #' count_codes(mydf)
-#' 
+#'
 #' cmb <- icd9_comorbid_quan_deyo(mydf, short_code = FALSE, return_df = TRUE)
 #' count_comorbid(cmb)
-#' 
+#'
 #' wide <- data.frame(
 #'   visit_name = c("r", "s", "t"),
 #'   icd9_1 = c("0011", "441", "456"),
@@ -291,9 +291,9 @@ count_codes_wide <- function(x,
 #'   By default, the first column is the patient identifier and is not counted.
 #'   If \code{visit_name} is not specified, the first column is used.
 #' @template visit_name
-#' @param return_df single logical value, if true, a two column data frame will
-#'   be returned, with the first column named as in input data frame (i.e.
-#'   \code{visit_name}), containing all the visits, and the second column
+#' @param return_df single logical value, if \code{TRUE}, a two column data
+#'   frame will be returned, with the first column named as in input data frame
+#'   (i.e., \code{visit_name}), containing all the visits, and the second column
 #'   containing the Charlson Comorbidity Index.
 #' @template stringsAsFactors
 #' @template dotdotdot
@@ -307,7 +307,7 @@ count_codes_wide <- function(x,
 #' cmb <- icd9_comorbid_quan_elix(mydf, short_code = FALSE, hierarchy = TRUE)
 #' vwr <- van_walraven_from_comorbid(cmb)
 #' stopifnot(identical(van_walraven(mydf), vwr))
-#' 
+#'
 #' # alternatively return as data frame in 'tidy' format
 #' van_walraven(mydf, return_df = TRUE)
 #' @author wmurphyrd

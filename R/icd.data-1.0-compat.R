@@ -1,5 +1,5 @@
 icd_data_icd9cm_leaf_v32 <- function() {
-  icd9cm_billable[["32"]]
+  get_icd9cm2014_leaf(must_work = TRUE)
 }
 
 # alt is alternative data, not a variable name.

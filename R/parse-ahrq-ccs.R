@@ -174,15 +174,15 @@ icd9_parse_ahrq_ccs <- function(single = TRUE,
   invisible(out)
 }
 
-#' parse AHRQ CCS for mapping - ICD10
+#' Parse AHRQ CCS for mapping - ICD10
 #'
 #' Data is downloaded from AHRQ website. ICD10 codes are continually being
 #' updated so a parameter for \code{version} is provided. This parameter should
 #' mimic those found in
 #' \url{https://www.hcup-us.ahrq.gov/toolssoftware/ccs10/ccs10.jsp#archive}.
 #' These are in the format of \code{YYYY.1}, \code{YYYY.2} etc.
-#' @param version string in format like "2018.1" where 1 is the version number
-#'   as shown on the website
+#' @param version string in format like \sQuote{2018.1} where \sQuote{1} is the
+#'   version number as shown on the website
 #' @param save_data logical whether to save the result in the source tree.
 #'   Defaults to \code{FALSE}.
 #' @template verbose

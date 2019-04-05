@@ -62,7 +62,7 @@
 #' After benchmarking, \code{gsub} is probably quicker than
 #' \code{stringr}/\code{stringi}. For comorbidity processing.
 #' @param x character vector
-#' @param pattern passed to \code{gsub} default is " "
+#' @param pattern passed to \code{gsub} default is \sQuote{ }
 #' @param use_bytes single logical passed to \code{base::gsub}, default is the
 #'   slightly quicker \code{TRUE}
 #' @return character vector of same length as input
@@ -75,7 +75,7 @@ strip <- function(x, pattern = " ", use_bytes = TRUE) {
   )
 }
 
-#' mimic the \code{R CMD check} test
+#' Mimic the \code{R CMD check} test for non-ASCII characters
 #'
 #' \code{R CMD check} is quick to tell you where \code{UTF-8} characters are not
 #' encoded, but gives no way of finding out which or where
@@ -88,14 +88,16 @@ strip <- function(x, pattern = " ", use_bytes = TRUE) {
 #' }
 #' @noRd
 #' @keywords internal
-get_non_ascii <- function(x)
+get_non_ascii <- function(x) {
   x[is_non_ascii(as_char_no_warn(x))]
+}
 
 #' @rdname get_non_ascii
 #' @noRd
 #' @keywords internal
-is_non_ascii <- function(x)
+is_non_ascii <- function(x) {
   is.na(iconv(as_char_no_warn(x), from = "latin1", to = "ASCII"))
+}
 
 #' @rdname get_non_ascii
 #' @noRd

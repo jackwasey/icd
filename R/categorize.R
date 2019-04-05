@@ -11,7 +11,7 @@
 #' @param code_name String with name(s) of column(s) containing the codes.
 #' @template return_df
 #' @param return_binary Logical value, if \code{TRUE}, the output will be in 0s
-#'   and 1s instead of TRUE and FALSE.
+#'   and 1s instead of \code{TRUE} and \code{FALSE}.
 #' @param restore_id_order Logical value, if \code{TRUE}, the default, the order
 #'   of the visit IDs will match the order of visit IDs first encountered in the
 #'   input data. This takes a third of the time in calculations on data with

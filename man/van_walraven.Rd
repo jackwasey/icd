@@ -32,9 +32,9 @@ many matching fields, so to avoid false positives, anything but a single
 match is rejected. If there are no successful guesses, and \code{visit_id}
 was not specified, then the first column of the data frame is used.}
 
-\item{return_df}{single logical value, if true, a two column data frame will
-be returned, with the first column named as in input data frame (i.e.
-\code{visit_name}), containing all the visits, and the second column
+\item{return_df}{single logical value, if \code{TRUE}, a two column data
+frame will be returned, with the first column named as in input data frame
+(i.e., \code{visit_name}), containing all the visits, and the second column
 containing the Charlson Comorbidity Index.}
 
 \item{stringsAsFactors}{Single logical value, describing whether the resulting data frame should have strings, e.g.

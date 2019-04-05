@@ -1,8 +1,8 @@
 #' Generate a set of codes between two ICD codes including encompassed children
 #'
 #' Great care is taken not to include codes which have children not in the
-#' range. E.g., \code{100.9} to \code{101.1} would _not_ include code "101". See
-#' the extensive tests covering this area for much more detail.
+#' range. E.g., \code{100.9} to \code{101.1} would \strong{not} include code
+#' \code{101}. See the extensive tests covering this area for much more detail.
 #'
 #' The default for the argument \code{defined} is \code{TRUE} since this is far
 #' more likely to be useful to the end user, dealing with real ICD codes.
@@ -23,8 +23,8 @@
 #'   by default (\code{FALSE}) include \code{V10} even though \code{V10} itself
 #'   is parent to everything up to \code{V11}.
 #' @param ex_ambig_end single logical, same as \code{ex_ambig_start} but affects
-#'   codes at the end of the range. E.g. 99.99 to 101.01 would by default
-#'   exclude 101 and 101.0
+#'   codes at the end of the range. E.g. \sQuote{99.99} to \sQuote{101.01} would
+#'   by default exclude 101 and 101.0
 #' @family ICD-9 ranges
 #' @export
 expand_range <- function(start, end, ...) {
@@ -478,8 +478,8 @@ icd9_expand_range_decimal <- function(start, end, defined = TRUE,
 #' all possible decimal parts of ICD9 code. e.g. giving an empty input will fill
 #' out 111 combinations, e..g .1 .11 .12 .... .2 ....
 #' @template mnr
-#' @param isE single logical, which if TRUE, treats the minor as part of an E
-#'   code (which is one character), as opposed to a V or numeric-only code,
+#' @param isE single logical, which if \code{TRUE}, treats the minor as part of
+#'   an E code (which is one character), as opposed to a V or numeric-only code,
 #'   which is two character. Default is \code{FALSE}.
 #' @examples
 #' \dontrun{

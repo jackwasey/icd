@@ -1,6 +1,7 @@
 context("data fun")
 
 test_that("download and parse generated data functions", {
+  skip_slow("checking all data fetch/download/get")
   ns <- asNamespace("icd")
   for (b in c(
     .data_names,

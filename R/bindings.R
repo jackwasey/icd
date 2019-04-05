@@ -1,10 +1,6 @@
 # Set up an environemnt to cache ICD data
 .icd_data_env <- new.env(parent = emptyenv())
 
-# This is an environment with active bindings to get ICD-9-CM leaves and descriptions. Previously, icd9cm_billable was a named list
-# TODO: ? icd9cm_billable <- new.env(parent = emptyenv())
-
-
 .data_names <- c(
   # WHO
   "icd10who2016",

@@ -35,9 +35,9 @@ was not specified, then the first column of the data frame is used.}
 \code{quan}. The first two will give the original Charlson weights for each
 comorbidity, whereas \code{quan} uses the updated weights from Quan 2011.}
 
-\item{return_df}{single logical value, if true, a two column data frame will
-be returned, with the first column named as in input data frame (i.e.
-\code{visit_name}), containing all the visits, and the second column
+\item{return_df}{single logical value, if \code{TRUE}, a two column data
+frame will be returned, with the first column named as in input data frame
+(i.e., \code{visit_name}), containing all the visits, and the second column
 containing the Charlson Comorbidity Index.}
 
 \item{stringsAsFactors}{single logical, passed on when constructing
@@ -57,11 +57,11 @@ scores for easier comparison between studies, even though Quan's were more
 predictive.
 }
 \details{
-When used, hierarchy is applied per Quan, "The following comorbid
-  conditions were mutually exclusive: diabetes with chronic complications and
-  diabetes without chronic complications; mild liver disease and moderate or
-  severe liver disease; and any malignancy and metastatic solid tumor." The
-  Quan scoring weights come from the 2011 paper
+When used, hierarchy is applied per Quan, \dQuote{The following
+  comorbid conditions were mutually exclusive: diabetes with chronic
+  complications and diabetes without chronic complications; mild liver
+  disease and moderate or severe liver disease; and any malignancy and
+  metastatic solid tumor.} The Quan scoring weights come from the 2011 paper
   (dx.doi.org/10.1093/aje/kwq433). The comorbidity weights were recalculated
   using updated discharge data, and some changes, such as Myocardial
   Infarction decreasing from 1 to 0, may reflect improved outcomes due to

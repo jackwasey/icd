@@ -17,15 +17,15 @@
 #' # icd.data package highly recommended, but not a depependency for comorbidity calculations
 #' # no children other than self
 #' children("10201", short_code = TRUE, defined = FALSE)
-#' 
+#'
 #' # guess it was ICD-9 and a short, not decimal code
 #' children("0032")
-#' 
+#'
 #' # empty because 102.01 is not meaningful
 #' children("10201", short_code = TRUE, defined = TRUE)
 #' x <- children("003", short_code = TRUE, defined = TRUE)
 #' explain_code(x, condense = FALSE, short_code = TRUE)
-#' 
+#'
 #' children(short_code = FALSE, "100.0")
 #' children(short_code = FALSE, "100.00")
 #' children(short_code = FALSE, "2.34")
@@ -146,9 +146,9 @@ children.icd10who <- function(x,
 
 #' Find only the defined children of ICD codes
 #'
-#' Find defined ICD-10 children based on 2016 ICD-10-CM list. "defined" may be a
-#' three digit code, or a leaf node. This is distinct from 'billable'.
-#'
+#' Find defined ICD-10 children based on 2016 ICD-10-CM list. \sQuote{Defined}
+#' may mean a three-digit code, a non-leaf three- or four-digit code, or a leaf
+#' (\dQuote{billable} code).
 #' @keywords internal
 #' @noRd
 children_defined <- function(x)

@@ -105,7 +105,7 @@
 #' The RTFs are parsed by this package to produce the icd9cm2011 etc data,
 #' formerly called icd9cm_hierarchy.
 #' @param version character vector of length one containing the ICD-9 version,
-#'   e.g. \code{"32"}.
+#'   e.g., \code{"32"}.
 #' @template save_data
 #' @param path Absolute path in which to save parsed data
 #' @param ... Arguments passed to other functions, e.g., \code{offline} for
@@ -113,19 +113,17 @@
 #' @return invisibly return the result
 #' @keywords internal datagen
 #' @noRd
-.parse_icd9cm_leaf_year <- function(year,
-                                    verbose = .verbose(),
-                                    ...) {
+.parse_icd9cm_leaf_year <- function(year, ...) {
   stopifnot(length(year) == 1L)
   year <- as.character(year)
   stopifnot(grepl("^[[:digit:]]{4}$", year))
-  if (verbose) message("Fetching billable codes version: ", year)
+  if (.verbose()) message("Fetching billable codes version: ", year)
   # 2009 version 27 is exceptionally badly formatted:
   if (year == "2009") {
     return(invisible(.parse_leaf_desc_icd9cm_v27(...)))
   }
   stopifnot(year %in% .icd9cm_sources$f_year)
-  f_info <- .dl_icd9cm_leaf_year(year = year, verbose = verbose, ...)
+  f_info <- .dl_icd9cm_leaf_year(year = year, ...)
   # Below, yes, specify encoding twice, once to declare the source format, and
   # again to tell R to flag (apparently only where necessary), the destination
   # strings: in our case this is about ten accented character in long
@@ -159,14 +157,14 @@
       )
     )
   }
-  if (verbose) message("codes and descs separated")
+  if (.verbose()) message("codes and descs separated")
   out <- data.frame(
     code = short_codes,
     short_desc = short_descs,
     long_desc = long_descs,
     stringsAsFactors = FALSE
   )
-  if (verbose) message("now sort so that E is after V")
+  if (.verbose()) message("now sort so that E is after V")
   new_order <- order.icd9(out[["code"]])
   stopifnot(!anyNA(out[["code"]]))
   stopifnot(!anyNA(new_order))
@@ -177,11 +175,11 @@
   stopifnot(length(setdiff(seq_len(nrow(out)), new_order)) == 0)
   stopifnot(length(setdiff(new_order, seq_len(nrow(out)))) == 0)
   out <- out[new_order, ]
-  oldwarn <- options(warn = ifelse(verbose, 1, -1))
+  oldwarn <- options(warn = ifelse(.verbose(), 1, -1))
   on.exit(options(oldwarn), add = TRUE)
   if (!is.na(f_info["long"])) {
     encs <- Encoding(out[["long_desc"]])
-    if (verbose) {
+    if (.verbose()) {
       message(
         "Found labelled encodings in long_desc: ",
         paste(unique(encs), collapse = ", ")
@@ -275,7 +273,6 @@
 #' for the 2011 ICD-9-CM after which there have been minimal changes.
 #' Thankfully, ICD-10-CM has machine readable data available.
 #' @template save_data
-#' @template verbose
 #' @keywords internal datagen
 #' @noRd
 .parse_icd9cm_hierarchy_rtf <- function(save_pkg_data = FALSE,

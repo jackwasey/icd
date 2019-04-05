@@ -39,7 +39,8 @@ Where reasonable, this is guessed from the input data.}
 
 \item{...}{arguments passed on to other functions}
 
-\item{na.last}{Logical, analogous to \code{order}, so \code{NA} drops NA. \code{FALSE} is not currently supported.}
+\item{na.last}{Logical, analogous to \code{order}, so \code{NA} drops NA.
+\code{FALSE} is not currently supported.}
 }
 \value{
 For sort, a sorted vector of ICD-9 codes. Numeric, then E codes, then
@@ -59,9 +60,10 @@ Note that \code{\link[base]{sort}} is an S3 generic, whereas
 }
 \section{ICD-9}{
  Sorts lists of numeric, V or E codes. Note that a simple
-  numeric sort does not work for ICD-9 codes, since "162" > "1620", and also
-  V codes precede E codes. Numeric codes are first, then 'V', then 'E'. Will
-  return a factor if a factor is given.
+  numeric sort does not work for ICD-9 codes, since \code{162 > 1620}, and
+  also \sQuote{V} codes precede \sQuote{E} codes. Numeric codes are first,
+  then \sQuote{V}, then \sQuote{E}. A factor is returned if a factor is
+  given.
 }
 
 \section{ICD-10-CM and ICD-10-BE}{
