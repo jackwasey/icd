@@ -90,7 +90,7 @@ matrix:
     # just to avoid matrix doing this twice, state gcc here
     compiler: gcc
     env:
-      - MATRIX_EVAL="brew install gcc && echo 'CC=gcc-8' > ~/.R/Makevars && echo 'CXX=g++-8' > ~/.R/Makevars && echo 'CXX11=g++-8' > ~/.R/Makevars"
+      - MATRIX_EVAL="brew install gcc && mkdir -p ~/.R && echo 'CC=gcc-8' >> ~/.R/Makevars && echo 'CXX=g++-8' >> ~/.R/Makevars && echo 'CXX11=g++-8' >> ~/.R/Makevars"
       - ICD_MINI_BENCH=true
   - r: devel
     os: osx

@@ -8,26 +8,26 @@
 using namespace Rcpp;
 
 // icd9MajMinToCode
-CV icd9MajMinToCode(const CV mjr, const CV mnr, bool isShort);
+CV icd9MajMinToCode(const CV& mjr, const CV& mnr, const bool isShort);
 RcppExport SEXP _icd_icd9MajMinToCode(SEXP mjrSEXP, SEXP mnrSEXP, SEXP isShortSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const CV >::type mjr(mjrSEXP);
-    Rcpp::traits::input_parameter< const CV >::type mnr(mnrSEXP);
-    Rcpp::traits::input_parameter< bool >::type isShort(isShortSEXP);
+    Rcpp::traits::input_parameter< const CV& >::type mjr(mjrSEXP);
+    Rcpp::traits::input_parameter< const CV& >::type mnr(mnrSEXP);
+    Rcpp::traits::input_parameter< const bool >::type isShort(isShortSEXP);
     rcpp_result_gen = Rcpp::wrap(icd9MajMinToCode(mjr, mnr, isShort));
     return rcpp_result_gen;
 END_RCPP
 }
 // icd9MajMinToShort
-CV icd9MajMinToShort(const CV mjr, const CV mnr);
+CV icd9MajMinToShort(const CV& mjr, const CV& mnr);
 RcppExport SEXP _icd_icd9MajMinToShort(SEXP mjrSEXP, SEXP mnrSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const CV >::type mjr(mjrSEXP);
-    Rcpp::traits::input_parameter< const CV >::type mnr(mnrSEXP);
+    Rcpp::traits::input_parameter< const CV& >::type mjr(mjrSEXP);
+    Rcpp::traits::input_parameter< const CV& >::type mnr(mnrSEXP);
     rcpp_result_gen = Rcpp::wrap(icd9MajMinToShort(mjr, mnr));
     return rcpp_result_gen;
 END_RCPP

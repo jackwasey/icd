@@ -20,5 +20,4 @@ stopifnot(
     code = icd:::get_icd10cm_active_ver() == "2014"
   )
 )
-testthat::test_check("icd", filter = "icd10cm-ver", reporter = "summary")
 testthat::test_check("icd")
