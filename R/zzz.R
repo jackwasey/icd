@@ -1,15 +1,8 @@
 # nocov start
-.verbose(NA)
 .make_icd9cm_leaf_parsers()
 .make_icd9cm_rtf_parsers()
 .make_icd10cm_parsers()
-# get_ and .get_ functions only depend  on the data name
 .make_getters_and_fetchers()
-
-.onLoad <- function(libname, pkgname) {
-  .set_init_options()
-}
-
 # Set up an environment to cache chars_in_icd10cm
 .lookup_chars_in_icd10cm <- new.env(parent = emptyenv())
 
@@ -23,13 +16,19 @@
       "strongly recommended to run the command: remove.packages(\"icd9\")"
     ))
   }
+  extra_msg <- if (system.file(package = "icd.data") != "") {
+    paste("The ", sQuote("icd.data"), "")
+  } else {
+    ""
+  }
   if (interactive() && .interact()) {
     packageStartupMessage(
       "icd downloads and caches data when needed. Use
 setup_icd_data()
     to initialize the cache and enable automated downloads. Use:
 download_icd_data()
-    to cache everything at once, or complete an interrupted download."
+    to cache everything at once, or complete an interrupted download. ",
+      extra_msg
     )
   }
   if (.interact() && !.all_cached()) {

@@ -359,6 +359,14 @@ NULL
 #' @export
 NULL
 
+#' The final ICD-9-CM list of leaf (\sQuote{billable}) codes
+#'
+#' Other years are available from \code{\link{get_icd9cm2013_leaf}}, etc..
+#' @name icd9cm2014_leaf
+#' @docType data
+#' @keywords datasets
+NULL
+
 #' @name get_icd9cm2005
 #' @rdname icd9cm_hierarchy
 #' @export
@@ -465,7 +473,7 @@ NULL
 #'   \code{long_desc}, containing just the leaf (in USA, \sQuote{billable})
 #'   codes, and their descriptions.
 #' @seealso For 2005 -- 2014, the following functions provide ICD-9-CM data:
-#'   \code{\link{get_icd9cm2009}} and \code{\link{get_icd9cm2013_leaf()}}. The
+#'   \code{\link{get_icd9cm2009}} and \code{\link{get_icd9cm2013_leaf}}. The
 #'   former includes three-digit \sQuote{major} down to the leaf/billable level,
 #'   and any intermediate descriptors, e.g. if a four-digit code is not
 #'   billable, and encompasses some five-digit codes, then the four digit code

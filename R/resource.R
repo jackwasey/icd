@@ -58,8 +58,9 @@
     message("Seeing if ", sQuote(var_name), " exists in cache env or dir")
   }
   if (is.null(getOption("icd.data.resource", default = NULL))) {
-    if (.verbose())
+    if (.verbose()) {
       message("Don't even have the icd.data.resource option defined.")
+    }
     return(FALSE)
   }
   stopifnot(is.character(var_name))
@@ -340,16 +341,25 @@
 #'   do nothing.
 #' @export
 icd_data_dir <- function(path) {
+  if (.verbose()) {
+    message("icd_data_dir: ")
+    print(.show_options())
+  }
   if (!missing(path) && dir.exists(path)) {
     options("icd.data.resource" = path)
     return(path)
   }
   o <- getOption("icd.data.resource", default = NULL)
+  if (dir.exists(.icd_data_default)) {
+    o <- .icd_data_default
+  }
   if (!is.null(o)) {
-    if (any(grepl("tmp", o))) warning("Using a temporary directory")
+    if (.verbose() && regexec("tmp", o) == -1) {
+      message("Using a temporary directory")
+    }
     return(o)
   }
-  if (.verbose()) print(.show_options())
+  # TODO: if .icd.data already exists, then use it!
   .absent_action_switch(
     paste(
       "The", sQuote("icd.data.resource"),

@@ -102,6 +102,6 @@
   class(dat$code) <- c("icd10cm", "icd10", "character")
   row.names(dat) <- NULL
   .save_in_resource_dir(var_name = paste0("icd10cm", year), x = dat)
-  if (save_pkg_data && year == "2016") .save_in_data_dir("icd10cm2016")
+  if (save_pkg_data && year == "2016") .save_in_data_dir("icd10cm2016", compress = "xz")
   invisible(dat)
 }

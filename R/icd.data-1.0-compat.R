@@ -1,5 +1,6 @@
 icd_data_icd9cm_leaf_v32 <- function() {
-  get_icd9cm2014_leaf(must_work = TRUE)
+  if (exists("icd9cm2014_leaf")) return(get("icd9cm2014_leaf"))
+  get_icd9cm2014_leaf()
 }
 
 # alt is alternative data, not a variable name.

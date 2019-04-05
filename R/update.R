@@ -23,9 +23,9 @@ update_everything <- function() {
     twentysixteen = TRUE
   )
   .icd10cm_extract_sub_chapters(.icd10cm_extract_sub_chapters = TRUE)
-#  icd9cm_billable <- list()
-#  icd9cm_billable[["32"]] <- get_icd9cm2014_leaf(must_work = TRUE)
-#  .save_in_data_dir(icd9cm_billable)
+  #  icd9cm_billable <- list()
+  #  icd9cm_billable[["32"]] <- get_icd9cm2014_leaf(must_work = TRUE)
+  #  .save_in_data_dir(icd9cm_billable)
 
   # this is not strictly a parsing step, but is quite slow. It relies on picking
   # up already saved files from previous steps. It can take hours to complete,
@@ -55,6 +55,9 @@ update_everything <- function() {
   generate_maps_pccc(save_data = TRUE)
   icd10_parse_map_ahrq_pc(save_pkg_data = TRUE)
   icd_parse_cc_hierarchy(save_data = TRUE)
+  # formerly "icd9cm_billable[[version_number]]"
+  icd9cm2014_leaf <- get_icd9cm2014_leaf()
+  .save_in_data_dir(icd9cm2014_leaf)
 }
 
 #' Generate \code{sysdata.rda}

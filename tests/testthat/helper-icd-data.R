@@ -27,7 +27,7 @@ skip_if_offline <- function() {
   if (.offline()) {
     skip("Offline")
   }
-  if (!.interactive()) {
+  if (!.interact()) {
     skip("Not interactive")
   }
 }

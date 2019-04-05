@@ -20,6 +20,12 @@ set_icd10cm_active_ver <- function(ver, check_exists = TRUE) {
 #' @rdname set_icd10cm_active_ver
 #' @export
 get_icd10cm_active_ver <- function() {
+  if (.verbose()) {
+    message(
+      "icd.data.icd10cm_active_ver: ",
+      getOption("icd.data.icd10cm_active_ver")
+    )
+  }
   ver <- getOption("icd.data.icd10cm_active_ver", default = "2019")
   ver <- as.character(ver)
   if (!grepl("^[[:digit:]]+$", ver)) {
@@ -125,9 +131,14 @@ get_icd10cm2019 <- function() {
 
 #' Evaluate code with a particular version of ICD-10-CM
 #'
-#' Temporarily sets and restores the option \code{icd.data.icd10cm_active_ver}
+#' Temporarily sets and restores the option \code{icd.data.icd10cm_active_ver},
+#' analogous to functions in \CRANpkg{withr}.
 #' @template ver
-#' @param code Code block to execute
+#' @param code Code block to execute, may be in braces, or a single statement
+#'   without braces.
+#' @examples
+#' icd:::.show_options()
+#' with_icd10cm_version("2014", icd:::.show_options())
 #' @export
 with_icd10cm_version <- function(ver, code) {
   stopifnot(is.character(ver), length(ver) == 1)
@@ -144,9 +155,7 @@ with_icd10cm_version <- function(ver, code) {
 #'   for testing.
 #' @keywords internal
 #' @noRd
-.get_icd10cm_ver <- function(ver,
-                             dx,
-                             interact = .interact()) {
+.get_icd10cm_ver <- function(ver, dx) {
   ver <- as.character(ver)
   stopifnot(grepl("^[[:digit:]]{4}$", ver))
   var_name <- paste0("icd10cm", ver)

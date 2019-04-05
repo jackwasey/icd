@@ -1,3 +1,17 @@
+
+context("WHO ICD-10 children")
+
+test_that("basic", {
+  skip_missing_icd10who()
+  expect_identical(
+    children(as.icd10who("A01")),
+    structure(c("A01", "A010", "A011", "A012", "A013", "A014"),
+      class = c("icd10who", "icd10", "character"),
+      icd_short_diag = TRUE
+    )
+  )
+})
+
 context("generate defined child codes for ICD-10-CM")
 
 expect_icd10cm_child_is_self <- function(...) {
@@ -99,18 +113,5 @@ test_that("class of children same as input class", {
   expect_identical(
     class(as.icd10cm("T27.6XXD")),
     class(children(as.icd10cm("T27.6XXD")))
-  )
-})
-
-context("WHO ICD-10 children")
-
-test_that("basic", {
-  skip_missing_icd10who()
-  expect_identical(
-    children(as.icd10who("A01")),
-    structure(c("A01", "A010", "A011", "A012", "A013", "A014"),
-      class = c("icd10who", "icd10", "character"),
-      icd_short_diag = TRUE
-    )
   )
 })

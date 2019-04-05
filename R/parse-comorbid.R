@@ -222,7 +222,7 @@ icd9_parse_quan_deyo_sas <- function(save_data = FALSE) {
       "https://www.hcup-us.ahrq.gov/toolssoftware/",
       "procedureicd10/pc_icd10pcs_2018_1.zip"
     ),
-    file_name = "pc_icd10pcs_2018.csv", offline = !save_data
+    file_name = "pc_icd10pcs_2018.csv"
   )
 }
 
@@ -236,10 +236,12 @@ icd10_parse_map_ahrq_pc <- function(save_pkg_data = TRUE) {
     colClasses = "character",
     encoding = "latin1"
   )
-  names(dat) <- c("code",
-                  "desc",
-                  "class_number",
-                  "class")
+  names(dat) <- c(
+    "code",
+    "desc",
+    "class_number",
+    "class"
+  )
   dat$class <- factor(dat$class,
     levels = c(
       "Minor Diagnostic",

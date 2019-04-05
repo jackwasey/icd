@@ -7,10 +7,10 @@ test_that("No ranges or NA in code section of WHO data", {
   # assign somehow forces binding to work when doing R CMD check, otherwise it
   # tries to subset the function
   for (nm in c("icd10who2016", "icd10who2008fr")) {
-    if (.offline() && !.exists_in_cache(nm)) {
+    if (!.exists_in_cache(nm)) {
       skip(paste(nm, "not available for testing."))
     }
-    i <- .get_fetcher_fun(nm)()
+    i <- get_icd_data(nm)
     # structure tests
     expect_true(is.data.frame(i), info = nm)
     expect_false(any(grepl("-", i$code)), info = nm)

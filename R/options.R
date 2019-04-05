@@ -113,19 +113,6 @@
   )
 }
 
-# Simulate the empty world of CRAN and R CMD check
-# .set_check_options <- function() {
-#   .set_hard(
-#     interact = FALSE,
-#     absent_action = "silent",
-#     verbose = FALSE
-#   )
-#   if (is.null(icd_data_dir())) {
-#     .set(resource = td <- tempdir())
-#     message("Created temporary resource directory: ", td)
-#   }
-# }
-
 .set_dev_options <- function() {
   .set_default_options(hard = TRUE)
   .set(
@@ -138,13 +125,14 @@
 .verbose <- function(x) {
   if (missing(x)) {
     v <- getOption("icd.data.verbose")
-    if (is.numeric(v)) return(v)
+    if (is.numeric(v)) return(as.integer(v))
     return(isTRUE(v))
   }
-  if (is.logical(x) && length(x) == 1L && !is.na(x))
+  if (is.logical(x) && length(x) == 1L && !is.na(x)) {
     options(icd.data.verbose = x)
-  else
+  } else {
     options("icd.data.verbose" = .env_var_is_true("ICD_DATA_VERBOSE"))
+  }
   invisible(getOption("icd.data.verbose"))
 }
 
@@ -152,10 +140,11 @@
   if (missing(x)) {
     return(isTRUE(getOption("icd.data.interact")))
   }
-  if (is.logical(x) && length(x) == 1L && !is.na(x))
+  if (is.logical(x) && length(x) == 1L && !is.na(x)) {
     options(icd.data.interact = x)
-  else
+  } else {
     options("icd.data.interact" = .env_var_is_true("ICD_DATA_INTERACT"))
+  }
   invisible(getOption("icd.data.interact"))
 }
 
@@ -163,10 +152,11 @@
   if (missing(x)) {
     return(isTRUE(getOption("icd.data.offline")))
   }
-  if (is.logical(x) && length(x) == 1L && !is.na(x))
+  if (is.logical(x) && length(x) == 1L && !is.na(x)) {
     options(icd.data.offline = x)
-  else
+  } else {
     options("icd.data.offline" = !.env_var_is_false("ICD_DATA_OFFLINE"))
+  }
   invisible(getOption("icd.data.offline"))
 }
 
@@ -180,10 +170,11 @@
                            )) {
   if (!missing(x)) {
     x <- match.arg(x)
-    if (is.na(x) || x == "sysenv")
+    if (is.na(x) || x == "sysenv") {
       options("icd.data.absent_action" = Sys.getenv("ICD_DATA_ABSENT_ACTION"))
-    else
+    } else {
       options("icd.data.absent_action" = x)
+    }
     return(getOption("icd.data.absent_action"))
   }
   a <- getOption("icd.data.absent_action")

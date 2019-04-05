@@ -12,8 +12,14 @@ corresponding to the suffix of the \code{data.frame} name, e.g., for 2019
 ICD-10-CM, use \code{"icd10cm2019"} for Dutch 2014 ICD-CM translations, use
 \code{"icd10cm2014_nl"}}
 
-\item{code}{Code block to execute}
+\item{code}{Code block to execute, may be in braces, or a single statement
+without braces.}
 }
 \description{
-Temporarily sets and restores the option \code{icd.data.icd10cm_active_ver}
+Temporarily sets and restores the option \code{icd.data.icd10cm_active_ver},
+analogous to functions in \CRANpkg{withr}.
+}
+\examples{
+icd:::.show_options()
+with_icd10cm_version("2014", icd:::.show_options())
 }

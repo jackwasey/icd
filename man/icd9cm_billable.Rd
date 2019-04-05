@@ -17,7 +17,7 @@ actually the same from 2011 to 2014. Use getter functions such as
 }
 \seealso{
 For 2005 -- 2014, the following functions provide ICD-9-CM data:
-  \code{\link{get_icd9cm2009}} and \code{\link{get_icd9cm2013_leaf()}}. The
+  \code{\link{get_icd9cm2009}} and \code{\link{get_icd9cm2013_leaf}}. The
   former includes three-digit \sQuote{major} down to the leaf/billable level,
   and any intermediate descriptors, e.g. if a four-digit code is not
   billable, and encompasses some five-digit codes, then the four digit code
