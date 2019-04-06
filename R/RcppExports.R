@@ -2,8 +2,6 @@
 # Generator token: 10BE3573-1514-4C36-9D1C-5A225CD40393
 
 #' Convert \code{mjr} and \code{mnr} vectors to single code
-#'
-#' In debug mode, will check that \code{mjr} and \code{mnr} are same length.
 #' @template mjr
 #' @template mnr
 #' @template isShort

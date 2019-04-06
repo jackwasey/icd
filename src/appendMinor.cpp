@@ -9,8 +9,6 @@
 using namespace Rcpp;
 
 //' Convert \code{mjr} and \code{mnr} vectors to single code
-//'
-//' In debug mode, will check that \code{mjr} and \code{mnr} are same length.
 //' @template mjr
 //' @template mnr
 //' @template isShort

@@ -10,7 +10,7 @@ PKG_LIBS=$(SHLIB_OPENMP_CXXFLAGS)
 #
 # Don't forget to comment out for debugging...
 #
-strippedLib: $(SHLIB)
-	if test -e "/usr/bin/strip" & test -e "/bin/uname" & [[ `uname` == "Linux" || `uname` == "Darwin" ]] ; \
-		then /usr/bin/strip -S $(SHLIB); fi
-.phony: strippedLib
+#strippedLib: $(SHLIB)
+#	if test -e "/usr/bin/strip" & test -e "/bin/uname" & [[ `uname` == "Linux" || `uname` == "Darwin" ]] ; \
+#		then /usr/bin/strip -S $(SHLIB); fi
+#.phony: strippedLib
