@@ -86,18 +86,23 @@ matrix:
     dist: xenial
   - r: release
     os: osx
+    # this xcode so stuff like _stdio.h are available to GCC.
+    osx_image: xcode10.1
     fortran: false
     # just to avoid matrix doing this twice, state gcc here
     compiler: gcc
     env:
       - MATRIX_EVAL="brew install gcc && mkdir -p ~/.R && echo 'CC=gcc-8' >> ~/.R/Makevars && echo 'CXX=g++-8' >> ~/.R/Makevars && echo 'CXX11=g++-8' >> ~/.R/Makevars"
       - ICD_MINI_BENCH=true
-  - r: devel
+  # r-devel currently failing to download for macos, so release for now.
+  # also see https://docs.travis-ci.com/user/reference/osx
+  - r: release
     os: osx
     osx_image: xcode10.2
-    # just to avoid matrix doing this twice with same xcode binary...
-    compiler: clang
-  - r: devel
+    compiler: gcc
+    env:
+      - MATRIX_EVAL="brew install gcc && mkdir -p ~/.R && echo 'CC=gcc-8' >> ~/.R/Makevars && echo 'CXX=g++-8' >> ~/.R/Makevars && echo 'CXX11=g++-8' >> ~/.R/Makevars"
+  - r: release
     os: osx
     # as of April 2019, default osx image is 9.4
     # just to avoid matrix doing this twice with same xcode binary...

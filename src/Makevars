@@ -3,7 +3,10 @@ PKG_CPPFLAGS=-DEIGEN_PERMANENTLY_DISABLE_STUPID_WARNINGS $(SHLIB_OPENMP_CXXFLAGS
 PKG_LIBS=$(SHLIB_OPENMP_CXXFLAGS)
 
 # size is about 10% of unstripped on Linux, about 90% on Mac. CRAN Windows DLL is already small.
-strippedLib: $(SHLIB)
-	if test -e "/usr/bin/strip" & test -e "/bin/uname" & [[ `uname` == "Linux" || `uname` == "Darwin" ]] ; \
-		then /usr/bin/strip -S $(SHLIB); fi
-.phony: strippedLib
+#
+# Don't forget to comment out for debugging...
+#
+#strippedLib: $(SHLIB)
+#	if test -e "/usr/bin/strip" & test -e "/bin/uname" & [[ `uname` == "Linux" || `uname` == "Darwin" ]] ; \
+#		then /usr/bin/strip -S $(SHLIB); fi
+#.phony: strippedLib
