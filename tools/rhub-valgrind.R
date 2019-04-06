@@ -2,16 +2,10 @@
 
 # source from package root after setting `dry_run` to `FALSE`
 
-# Adjust the following as required:
-base_name <- "test-all" # testthat is default from usethis_testthat
-dry_run = TRUE
-restore = FALSE
-
-test_all <- file.path("tests", paste0(base_name, ".R"))
-test_all_disabled <- file.path(paste0(base_name, "-disabled.R"))
-prefix <- "testthat-split-"
-
 testthat_split <- function() {
+  prefix <- "testthat-split-"
+  test_all <- file.path("tests", paste0(base_name, ".R"))
+  test_all_disabled <- file.path(paste0(base_name, "-disabled.R"))
   test_files <- list.files(
     file.path("tests", "testthat"),
     pattern = "^test-"
@@ -34,16 +28,30 @@ testthat_split <- function() {
 }
 
 testthat_restore <- function() {
+  test_all <- file.path("tests", paste0(base_name, ".R"))
+  test_all_disabled <- file.path(paste0(base_name, "-disabled.R"))
+  prefix <- "testthat-split-"
   file.rename(test_all_disabled, test_all)
   ok <- all(file.remove(list.files("tests", pattern = paste0(prefix),
-                         full.names = TRUE)))
+                                   full.names = TRUE)))
   stopifnot(ok)
 }
 
-if (restore) {
-  testthat_restore()
-} else {
-  testthat_split()
-  rhub::check_with_valgrind()
-  testthat_restore()
+check_split_tests <- function(
+  base_name = "test-all", # testthat is default from usethis_testthat
+  dry_run = TRUE,
+  restore = FALSE,
+  valgrind = TRUE,
+  torture = FALSE) {
+  if (!requireNamespace("rcmdCheck")) install.packages("rcmdcheck")
+  if (!requireNamespace("rhub")) install.packages("rhub")
+
+  if (restore) {
+    testthat_restore()
+  } else {
+    testthat_split()
+    if (valgrind) rhub::check_with_valgrind()
+    if (torture) rcmdcheck::rcmdcheck(args = "--use-gct")
+    testthat_restore()
+  }
 }
