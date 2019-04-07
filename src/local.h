@@ -1,4 +1,10 @@
 // [[Rcpp::plugins(cpp11)]]
+
+// add the openmp plugin experimentally, with hope that
+// Eigen uses it, but not needed directly by this package.
+
+// [[Rcpp::plugins(openmp)]]
+
 #ifndef LOCAL_H_
 #define LOCAL_H_
 #include "icd_types.h"

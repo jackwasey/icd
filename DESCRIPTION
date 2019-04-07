@@ -1,7 +1,7 @@
 Package: icd
 Title: Comorbidity Calculations and Tools for ICD-9 and ICD-10
     Codes
-Version: 4.0.3
+Version: 4.0.4
 Authors@R: 
     c(person(given = "Jack O.",
              family = "Wasey",
@@ -29,7 +29,7 @@ Authors@R:
              comment = "explain codes in table format"),
       person(given = "R Core Team",
              role = c("aut", "cph"),
-             comment = "utils::askYesNo backport for older R versions."))
+             comment = "utils::askYesNo backport and m4 script for OpenMP detection."))
 Maintainer: Jack O. Wasey <jack@jackwasey.com>
 Description: Calculate comorbidities, medical risk scores, and
     work very quickly and precisely with ICD-9 and ICD-10 codes. This
@@ -79,4 +79,5 @@ Copyright: See file (inst/)COPYRIGHTS
 Encoding: UTF-8
 Language: en-US
 LazyData: true
-RoxygenNote: 6.1.1
+LazyDataCompression: xz
+RoxygenNote: 6.0.1

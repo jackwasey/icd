@@ -8,4 +8,5 @@
 .cproject
 .settings/
 *.gch
+Makevars
 

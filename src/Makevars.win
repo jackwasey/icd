@@ -1,3 +1,4 @@
 CXX_STD=CXX11
 PKG_CPPFLAGS=-DEIGEN_PERMANENTLY_DISABLE_STUPID_WARNINGS
-# no openmp, since thread model is different, and I haven't tested performance.
+# no openmp, since thread model is different, and is likely to be much slower,
+# although perhaps Eigen is clever enough to account for this.
