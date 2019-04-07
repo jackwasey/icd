@@ -2,7 +2,9 @@
 
 # source from package root after setting `dry_run` to `FALSE`
 
-testthat_split <- function() {
+testthat_split <- function(base_name,
+                           dry_run,
+                           filter) {
   prefix <- "testthat-split-"
   test_all <- file.path("tests", paste0(base_name, ".R"))
   test_all_disabled <- file.path(paste0(base_name, "-disabled.R"))
@@ -11,6 +13,8 @@ testthat_split <- function() {
     pattern = "^test-"
   )
   for (f in test_files) {
+    if (regexec(pattern = filter, text = f, ignore.case = TRUE) == -1)
+      next
     test_name <- sub(".R", "", x = sub("test-", "", x = f))
     new_test <- file.path("tests", paste0(prefix, test_name, ".R"))
     new_test_lines <- readLines(test_all)
@@ -27,7 +31,7 @@ testthat_split <- function() {
   stopifnot(ok)
 }
 
-testthat_restore <- function() {
+testthat_restore <- function(base_name = "testthat") {
   test_all <- file.path("tests", paste0(base_name, ".R"))
   test_all_disabled <- file.path(paste0(base_name, "-disabled.R"))
   prefix <- "testthat-split-"
@@ -38,20 +42,24 @@ testthat_restore <- function() {
 }
 
 check_split_tests <- function(
-  base_name = "test-all", # testthat is default from usethis_testthat
+  base_name = "testthat", # testthat is default from usethis_testthat
   dry_run = TRUE,
   restore = FALSE,
   valgrind = TRUE,
-  torture = FALSE) {
-  if (!requireNamespace("rcmdCheck")) install.packages("rcmdcheck")
+  torture = FALSE,
+  filter = ".*",
+  check_args = c("--ignore-vignettes", "--no-vignettes", "--no-build-vignettes", "--no-manual", "--timings", "--no-codoc")) {
+  if (!requireNamespace("rcmdcheck")) install.packages("rcmdcheck")
   if (!requireNamespace("rhub")) install.packages("rhub")
-
   if (restore) {
-    testthat_restore()
+    testthat_restore(base_name = base_name)
   } else {
-    testthat_split()
-    if (valgrind) rhub::check_with_valgrind()
-    if (torture) rcmdcheck::rcmdcheck(args = "--use-gct")
-    testthat_restore()
+    testthat_split(base_name = base_name,
+                   dry_run = dry_run,
+                   filter = filter
+    )
+    if (valgrind) rhub::check_with_valgrind(check_args = check_args)
+    if (torture) rcmdcheck::rcmdcheck(args = c("--use-gct", check_args))
+    testthat_restore(base_name = base_name)
   }
 }
