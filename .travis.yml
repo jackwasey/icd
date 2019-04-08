@@ -57,8 +57,8 @@ before_install:
   # - sudo chmod 2777 /usr/lib/R/library
   # ready for Makevars
   - mkdir ~/.R ;
-  - echo 'CXXFLAGS=-Wno-unused-parameter -Wno-unused-variable -Wno-ignored-attributes -Wno-cast-function-type' >> ~/.R/Makevars ;
-  - echo 'CXX11FLAGS=-Wno-unused-parameter -Wno-unused-variable -Wno-ignored-attributes -Wno-cast-function-type' >> ~/.R/Makevars ;
+  - echo 'CXXFLAGS=-Wno-unused-parameter -Wno-unused-variable -Wno-ignored-attributes -Wno-cast-function-type -Wno-unknown-warning-option' >> ~/.R/Makevars ;
+  - echo 'CXX11FLAGS=-Wno-unused-parameter -Wno-unused-variable -Wno-ignored-attributes -Wno-cast-function-type -Wno-unknown-warning-option' >> ~/.R/Makevars ;
   - if [[ "$TRAVIS_R_VERSION_STRING" = 'devel' ]]; then
       echo 'CFLAGS=-O0' >> ~/.R/Makevars ;
       echo 'CXXFLAGS=-O0' >> ~/.R/Makevars ;
