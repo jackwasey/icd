@@ -50,9 +50,9 @@ warnings_are_errors: true
 before_install:
   # Set library directory so R CMD check finds packages installed by travis and by R itself (e.g. Rcpp rebuilt for MacOS builds)
   # https://stackoverflow.com/questions/31879011/r-cant-find-packages-installed-by-travis
-  - sudo mkdir -p /usr/lib/R/library
-  - echo 'R_LIBS=/usr/lib/R/library:/usr/lib/R/site-library/' > ~/.Renviron
-  - sudo chmod 2777 /usr/lib/R/library
+  # cannot sudo in docker! - sudo mkdir -p /usr/lib/R/library
+  # - echo 'R_LIBS=/usr/lib/R/library:/usr/lib/R/site-library/' > ~/.Renviron
+  # - sudo chmod 2777 /usr/lib/R/library
   # ready for Makevars
   - mkdir ~/.R ;
   - echo 'CXXFLAGS=-Wno-unused-parameter -Wno-unused-variable -Wno-ignored-attributes -Wno-cast-function-type' >> ~/.R/Makevars ;
