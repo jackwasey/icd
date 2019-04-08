@@ -35,6 +35,9 @@
 ^bench-versus-result.*rds$
 ^codecov.yml$
 ^codemeta\.json$
+^configure.ac
+^config\.log$
+^config\.status$
 ^data-raw$
 ^doc$
 ^docs$
@@ -45,6 +48,7 @@
 ^inst\/extdata$
 ^inst\/extdata\/.*$
 ^lib-bench$
+^Makevars$
 ^man-roxygen$
 ^revdep$
 ^src\/.clang-format$

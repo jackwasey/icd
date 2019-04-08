@@ -77,14 +77,14 @@ env:
     - _R_CHECK_LENGTH_1_CONDITION_="verbose,abort"
     - _R_CHECK_LENGTH_1_LOGIC2_="verbose,abort"
     - _R_CHECK_NO_STOP_ON_TEST_ERROR_=FALSE
-    # the following is ignored if --as-cran is set
+    # some of the following are ignored if --as-cran is set
     - _R_CHECK_COMPILATION_FLAGS_=FALSE
 # the following are to simulate cran, and help debugging, esp if we didn't use --as-cran
     - _R_CHECK_ALL_NON_ISO_C_=TRUE
     - _R_CHECK_ALWAYS_LOG_VIGNETTE_OUTPUT_=TRUE
     - _R_CHECK_CODE_ASSIGN_TO_GLOBALENV_=TRUE
     - _R_CHECK_CODETOOLS_PROFILE_="suppressLocalUnused=FALSE"
-    - _R_CHECK_EXIT_ON_FIRST_ERROR_=TRUE
+    - _R_CHECK_EXIT_ON_FIRST_ERROR_=FALSE
     - _R_CHECK_NATIVE_ROUTINE_REGISTRATION_=TRUE
     - _R_CHECK_NO_STOP_ON_TEST_ERROR_=TRUE
     - _R_CHECK_RD_EXAMPLES_T_AND_F_=TRUE
