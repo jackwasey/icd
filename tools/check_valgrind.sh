@@ -23,8 +23,10 @@ ${ICD_HOME:-$HOME/rprojects/icd}/tools/build.sh --no-build-vignettes --no-manual
 #--show-leak-kinds=all
 
 #export VALGRIND_OPTS="--leak-check=full --track-origins=yes --show-leak-kinds=all --callgrind:instr-atstart=no"
-R CMD check \
-  --no-build-vignettes \
-  --use-valgrind \
-  "$(ls -t $tmpd/icd*.tar.gz | head -1)"
+_R_CHECK_NO_STOP_ON_TEST_ERROR_=TRUE \
+_R_CHECK_COMPILATION_FLAGS_=FALSE \
+  R CMD check \
+    --no-build-vignettes \
+    --use-valgrind \
+    "$(ls -t $tmpd/icd*.tar.gz | head -1)"
 popd

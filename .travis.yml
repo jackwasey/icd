@@ -48,24 +48,34 @@ warnings_are_errors: true
 
 # try to speed up compilation time
 before_install:
-      # can partly do this with clang environment variables? MacOS funny.
-      #echo 'CC=clang' > ~/.R/Makevars ;
-      #echo 'CXX=clang++' >> ~/.R/Makevars ;
-      #echo 'CXX11=clang++' >> ~/.R/Makevars ;
-      # Flags should stay in Makevars?
+  # Set library directory so R CMD check finds packages installed by travis and by R itself (e.g. Rcpp rebuilt for MacOS builds)
+  # https://stackoverflow.com/questions/31879011/r-cant-find-packages-installed-by-travis
+  - sudo mkdir -p /usr/lib/R/library
+  - echo 'R_LIBS=/usr/lib/R/library:/usr/lib/R/site-library/' > ~/.Renviron
+  - sudo chmod 2777 /usr/lib/R/library
+  # ready for Makevars
+  - mkdir ~/.R ;
+  - echo 'CXXFLAGS=-Wno-unused-parameter -Wno-unused-variable -Wno-ignored-attributes -Wno-cast-function-type' >> ~/.R/Makevars ;
+  - echo 'CXX11FLAGS=-Wno-unused-parameter -Wno-unused-variable -Wno-ignored-attributes -Wno-cast-function-type' >> ~/.R/Makevars ;
   - if [[ "$TRAVIS_R_VERSION_STRING" = 'devel' ]]; then
-      mkdir ~/.R ;
       echo 'CFLAGS=-O0' >> ~/.R/Makevars ;
       echo 'CXXFLAGS=-O0' >> ~/.R/Makevars ;
       echo 'CXX11FLAGS=-O0' >> ~/.R/Makevars ;
       fi
   - eval "${MATRIX_EVAL}"
+  - cat ~/.R/Makevars
+  - Rscript -e '.libPaths()'
 
 env:
   global:
     - _R_CHECK_CRAN_INCOMING_=FALSE
     - _R_CHECK_CRAN_INCOMING_REMOTE_=FALSE
     - _R_CHECK_FORCE_SUGGESTS_=FALSE
+    - _R_CHECK_USE_INSTALL_LOG_=TRUE
+    - _R_CHECK_LENGTH_1_CONDITION_="verbose,abort"
+    - _R_CHECK_LENGTH_1_LOGIC2_="verbose,abort"
+    - _R_CHECK_NO_STOP_ON_TEST_ERROR_=FALSE
+    - _R_CHECK_COMPILATION_FLAGS_=FALSE
     - ICD_COVERAGE=false
     - ICD_MINI_BENCH=false
     - ICD_DATA_VERBOSE=true
@@ -93,7 +103,7 @@ matrix:
     compiler: gcc
     # ?have to reinstall Rcpp with compiler and libc++ -> libstdc++ change
     env:
-      - MATRIX_EVAL="brew install gcc && mkdir -p ~/.R && echo 'CC=gcc-8' >> ~/.R/Makevars && echo 'CXX=g++-8' >> ~/.R/Makevars && echo 'CXX11=g++-8' >> ~/.R/Makevars && Rscript -e 'install.packages(\"Rcpp\")'"
+      - MATRIX_EVAL="brew install gcc && echo 'CC=gcc-8' >> ~/.R/Makevars && echo 'CXX=g++-8' >> ~/.R/Makevars && echo 'CXX11=g++-8' >> ~/.R/Makevars && Rscript -e 'install.packages(\"Rcpp\", type = \"source\")'"
       - ICD_MINI_BENCH=true
   # r-devel currently failing to download for macos, so release for now.
   # also see https://docs.travis-ci.com/user/reference/osx
@@ -102,7 +112,7 @@ matrix:
     osx_image: xcode10.2
     compiler: gcc
     env:
-      - MATRIX_EVAL="brew install gcc && mkdir -p ~/.R && echo 'CC=gcc-8' >> ~/.R/Makevars && echo 'CXX=g++-8' >> ~/.R/Makevars && echo 'CXX11=g++-8' >> ~/.R/Makevars && Rscript -e 'install.packages(\"Rcpp\")'"
+      - MATRIX_EVAL="brew install gcc && echo 'CC=gcc-8' >> ~/.R/Makevars && echo 'CXX=g++-8' >> ~/.R/Makevars && echo 'CXX11=g++-8' >> ~/.R/Makevars && Rscript -e 'install.packages(\"Rcpp\", type = \"source\")'"
   - r: release
     os: osx
     # as of April 2019, default osx image is 9.4
