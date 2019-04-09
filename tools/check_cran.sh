@@ -17,7 +17,7 @@ ${ICD_HOME:-$HOME/rprojects/icd}/tools/build.sh
 
 # some flags are set by R-devel, so added here when using R-release
 
-# also, CRAN sets it's own compilation flags, so we don't need to check them now and produce a spurious warning.
+# also, CRAN sets it's own compilation flags, so we don't need to check them now and produce a spurious warning, and I think --as-cran overwrites what I might set here, anyway. see tools/check_plus.sh to simulate CRAN and have more control about avoiding development warnings.
 
 MAKEFLAGS=-j$(getconf _NPROCESSORS_ONLN) \
   #_R_CHECK_ALWAYS_LOG_VIGNETTE_OUTPUT_=TRUE \
@@ -26,5 +26,6 @@ MAKEFLAGS=-j$(getconf _NPROCESSORS_ONLN) \
   _R_CHECK_LENGTH_1_LOGIC2_="verbose,abort" \
   _R_CHECK_NO_STOP_ON_TEST_ERROR_=TRUE \
   _R_CHECK_COMPILATION_FLAGS_=FALSE \
+  _R_CHECK_PKG_SIZES_=false \
   R CMD check --as-cran "$(ls -t $tmpd/icd*.tar.gz | head -1)"
 popd

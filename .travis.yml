@@ -55,6 +55,10 @@ before_install:
   # cannot sudo in docker! - sudo mkdir -p /usr/lib/R/library
   # - echo 'R_LIBS=/usr/lib/R/library:/usr/lib/R/site-library/' > ~/.Renviron
   # - sudo chmod 2777 /usr/lib/R/library
+  #
+  # Work-around r-lib/remotes bug which prevents travis building.
+  # https://github.com/r-lib/devtools/issues/2020#issuecomment-481219296
+  - R -e 'source("https://install-github.me/r-lib/remotes")'
   # ready for Makevars
   - mkdir ~/.R ;
   - echo 'CXXFLAGS=-Wno-unused-parameter -Wno-unused-variable -Wno-ignored-attributes -Wno-cast-function-type -Wno-unknown-warning-option' >> ~/.R/Makevars ;

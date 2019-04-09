@@ -21,7 +21,8 @@ AC_COPYRIGHT(Copyright (C) 2014 - 2019  Jack O. Wasey)
 AC_CONFIG_SRCDIR([src])
 #AC_CONFIG_HEADERS([src/config.h:src/config.h.in])
 AC_CONFIG_FILES([src/Makevars])
-AC_CONFIG_MACRO_DIR([tools/m4])
+AC_CONFIG_MACRO_DIR([m4])
+AC_CONFIG_MACRO_DIR([inst/m4])
 
 : ${R_HOME=$(R RHOME)}
 AC_MSG_CHECKING([R_HOME already set])

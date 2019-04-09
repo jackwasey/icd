@@ -14,10 +14,10 @@
   "programmingLanguage": {
     "@type": "ComputerLanguage",
     "name": "R",
-    "version": "3.5.2",
+    "version": "3.5.3",
     "url": "https://r-project.org"
   },
-  "runtimePlatform": "R version 3.5.2 (2018-12-20)",
+  "runtimePlatform": "R version 3.5.3 (2019-03-11)",
   "provider": {
     "@id": "https://cran.r-project.org",
     "@type": "Organization",
@@ -295,5 +295,6 @@
     "https://www.tidyverse.org/lifecycle/#stable",
     "https://www.repostatus.org/#active"
   ],
-  "relatedLink": "https://CRAN.R-project.org/package=icd"
+  "relatedLink": "https://CRAN.R-project.org/package=icd",
+  "fileSize": "2947.474KB"
 }

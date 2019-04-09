@@ -19,6 +19,6 @@ BuildType: Package
 PackageUseDevtools: Yes
 PackageInstallArgs: --with-keep.source --install-tests
 PackageBuildArgs: --compact-vignettes=gs+qpdf
-PackageBuildBinaryArgs: --install-tests
-PackageCheckArgs: --as-cran --ignore-vignettes --no-build-vignettes
+PackageBuildBinaryArgs: --preclean --example --install-tests --no-clean-on-error --with-keep.source --data-compress=none
+PackageCheckArgs: --ignore-vignettes --no-build-vignettes --no-vignettes
 PackageRoxygenize: rd,namespace

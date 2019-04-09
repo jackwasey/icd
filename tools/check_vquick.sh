@@ -35,6 +35,7 @@ R_MAKEVARS_USER=${HOME}/.R/Makevars.quick \
   _R_CHECK_PKG_SIZES_THRESHOLD_=50 \
   _R_CHECK_LENGTH_1_CONDITION_="verbose,abort" \
   _R_CHECK_LENGTH_1_LOGIC2_="verbose,abort" \
+  _R_CHECK_PKG_SIZES_=false \
   R_MAKEVARS_USER=${HOME}/.R/Makevars.quick \
  R CMD check \
    --no-vignettes \

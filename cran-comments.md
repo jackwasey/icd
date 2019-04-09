@@ -4,13 +4,11 @@ Please note that a pandoc version error prevents the automated CRAN checks from 
 
 # Test environments
 
-  * Ubuntu 18.10 R 3.5.2, clang 7.0
-  * Ubuntu 14.04 (Travis) R-devel, gcc
+  * Ubuntu 18.10 R 3.5.3, clang 7.0, gcc 8.2, 
+  * Travis CI: MacOS, Ubuntu 16.04, 18.04 (Travis) R-devel, R-release, gcc, clang
   * Windows Server 2012 R2 x64 (Appveyor), R devel 32 and 64 bit
-  * MacOS High Sierra, brew clang 7.0
-  * rocker/r-devel-ubsan-clang
-  * win-builder release and devel
-  * R-hub (sanitizer)
+  * MacOS Mojave, R 3.5.3 brew clang 7.0, GCC-8.3, GCC-9.0.1-HEAD
+  * R-hub (sanitizer, valgrind)
 
 # CRAN checks
  
@@ -23,8 +21,8 @@ Sometimes I get a URL download fail for the URL http://ftp.cdc.gov/pub/Health_St
 There is one note:
 
 * checking installed package size ... NOTE
-    installed size is  8.8Mb
+    installed size is  7.5Mb
     sub-directories of 1Mb or more:
-      R      1.5Mb
-      doc    5.5Mb
-      libs   1.0Mb
+      R      1.7Mb
+      data   3.0Mb
+      libs   2.2Mb
