@@ -30,7 +30,6 @@
 ^codemeta\.json$
 ^config\.log$
 ^config\.status$
-^configure.ac
 ^cran-comments\.md$
 ^data-raw$
 ^doc$
