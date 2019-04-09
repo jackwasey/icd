@@ -180,7 +180,7 @@ before_script:
 # - if [ "$TRAVIS_OS_NAME" = "osx" ]; then sed -i '' '/.*[Dd]ata.*/d' .Rbuildignore; fi
 # - if [ "$TRAVIS_OS_NAME" = "linux" ]; then sed -i'' '/.*[Dd]ata.*/d' .Rbuildignore; fi
  # should fail and stop travis if the benchmarking fails.
- - if [ "ICD_MINI_BENCH" = "true" ]; then
+ - if [[ "$ICD_MINI_BENCH" = "true" ]]; then
      cd benchmarks/icd-JSS3447-replication;
      make bench3 && make replmat;
      cd ../..;
