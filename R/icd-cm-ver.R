@@ -11,7 +11,7 @@ set_icd10cm_active_ver <- function(ver, check_exists = TRUE) {
   if (check_exists &&
     !exists(v_name, envir = asNamespace("icd"))) {
     stopifnot(v %in% names(.icd10cm_sources))
-    stopifnot(.exists_in_ns(v_name))
+    stopifnot(.exists_in_cache(v_name))
   }
   options("icd.data.icd10cm_active_ver" = v)
   invisible(old_v)

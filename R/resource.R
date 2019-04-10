@@ -53,14 +53,28 @@
   match.fun(.get_fetcher_name(var_name))
 }
 
+.icd_data_dir_exists <- function() {
+  path <- getOption("icd.data.resource", default = .icd_data_default)
+  dir.exists(path)
+}
+
+.get_data_dir <- function() {
+  if (.icd_data_dir_exists())
+    getOption("icd.data.resource", default = .icd_data_default)
+  else
+    NULL
+}
+
 .exists_in_cache <- function(var_name) {
   verbose <- .verbose()
   if (verbose > 1) {
     message("Seeing if ", sQuote(var_name), " exists in cache env or dir")
   }
-  if (is.null(getOption("icd.data.resource", default = NULL))) {
+  if (!.icd_data_dir_exists()) {
     if (.verbose()) {
-      message("Don't even have the icd.data.resource option defined.")
+      message("Don't even have the icd.data.resource option defined,",
+              " and default location of ", sQuote(.icd_data_default),
+              " is missing.")
     }
     return(FALSE)
   }
