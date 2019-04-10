@@ -29,7 +29,8 @@ summary(icd::comorbid_pccc_dx(neds))
 \dontrun{
 # original size data for PCCC benchmarking:
 set.seed(1441)
-neds <- icd:::generate_neds_pts(28584301L)
+# Large NEDS simulation: neds <- icd:::generate_neds_pts(28584301L)
+neds <- icd:::generate_neds_pts(2858L)
 neds_comorbid <- icd::comorbid_pccc_dx(neds)
 }
 }
