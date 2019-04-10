@@ -56,19 +56,15 @@ release_questions <- function() {
     # code quality:
     "codetools::checkUsagePackage('icd', all = TRUE, suppressLocal = TRUE)",
     "styler::style_pkg()",
-    "Are all public S3 classes all exported? use devtools::missing_s3() http://r-pkgs.had.co.nz/namespace.html",
-    "use LLVM static scan build, scan-build before compiler in .R/Makevars",
+    "devtools::missing_s3()", # http://r-pkgs.had.co.nz/namespace.html
+    "jwutil::jw_scan_build() or use .R/Makevars.clang.scan-build",
     # testing and compilation and different platforms:
-    "local install, all tests pass with data all downloaded and parsed",
-    "Have you run tests in tests-deprecated and tests-build-code?",
     "Are there no skipped tests which should be run?",
     "Does it compile, test and check fine on travis and appveyor?",
-    "Have you checked on Windows, win_builder,
-      Mac, Ubuntu, rhub::check_with_sanitizers() etc",
-    "Consider whether to include Catch headers in submitted package",
+    "Have you checked on Windows, win_builder (if possible with configure script), Mac, Ubuntu, rhub::check_with_sanitizers() etc", #nolint
+    "Did you check with verbose, offline, interact all T/F",
     # final manual check:
-    "Are all NOTES from R CMD check documented in cran-comments.md",
-    "Have all unnecessary files been ignored in built archive?"
+    "Have all unnecessary files been ignored in built source package?"
   )
 }
 
