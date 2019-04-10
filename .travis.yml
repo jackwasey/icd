@@ -160,7 +160,7 @@ matrix:
     os: linux
     latex: false
     r_build_args: --no-build-vignettes --no-manual --resave-data=no
-    r_check_args: --no-build-vignettes --no-vignettes --ignore-vignettes --no-codoc --no-manual --use-valgrind
+    r_check_args: --no-build-vignettes --no-vignettes --ignore-vignettes --no-codoc --no-manual
     env:
     - ICD_COVERAGE=true
     - ICD_MINI_BENCH=false
