@@ -48,7 +48,7 @@ summary(get_icd10who2016())
 ```{r quicklookeval, echo = FALSE}
 get_icd10who2016()[1:5, ]
 get_icd10fr2019()[1:5, ]
-summary(icd10who2016)
+summary(get_icd10who2016())
 ```
 
 # French edition of ICD-10
