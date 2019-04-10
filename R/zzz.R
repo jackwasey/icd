@@ -53,6 +53,7 @@ release_questions <- function() {
     "Check all TODO comments, make into github issues",
     "Do all examples look ok (not just run without errors)?",
     "Have all the fixed github issues been closed",
+    "pkgdown::build_site()",
     # code quality:
     "codetools::checkUsagePackage('icd', all = TRUE, suppressLocal = TRUE)",
     "styler::style_pkg()",
@@ -60,9 +61,11 @@ release_questions <- function() {
     "jwutil::jw_scan_build() or use .R/Makevars.clang.scan-build",
     # testing and compilation and different platforms:
     "Are there no skipped tests which should be run?",
-    "Does it compile, test and check fine on travis and appveyor?",
+    "Travis and appveyor?",
+    "rhub::check_with_sanitizers()",
+    "rhub::check_for_cran()",
     "Have you checked on Windows, win_builder (if possible with configure script), Mac, Ubuntu, rhub::check_with_sanitizers() etc", #nolint
-    "Did you check with verbose, offline, interact all T/F",
+    "Did you check with verbose, offline, interact, with undefined, TRUE and FALSE", #nolint
     # final manual check:
     "Have all unnecessary files been ignored in built source package?"
   )
