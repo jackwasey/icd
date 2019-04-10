@@ -30,7 +30,7 @@ ahrq_order_all <- c(
 )
 
 
-.ahrq_url_base <- "http://www.hcup-us.ahrq.gov/toolssoftware/"
+.ahrq_url_base <- "https://www.hcup-us.ahrq.gov/toolssoftware/"
 
 #' get the SAS code from AHRQ
 #'
@@ -44,9 +44,12 @@ icd9_fetch_ahrq_sas <- function() {
   )
 }
 
-icd10_fetch_ahrq_sas <- function() {
+icd10_fetch_ahrq_sas <- function(ver = "2016") {
   .download_to_data_raw(
-    url = paste0(.ahrq_url_base, "comorbidityicd10/comformat_icd10cm_2016.txt")
+    url = paste0(.ahrq_url_base, "comorbidityicd10/comformat_icd10cm_2016.txt"),
+    file_name = .get_versioned_raw_file_name("ahrq-comformat_icd10cm_2016.txt",
+      ver = "2016"
+    )
   )
 }
 
@@ -138,7 +141,7 @@ icd9_parse_ahrq_sas <- function(save_data = FALSE) {
 icd10_parse_ahrq_sas <- function(save_data = FALSE, offline = TRUE) {
   assert_flag(save_data)
   ahrq_info <- icd10_fetch_ahrq_sas()
-  ahrq_sas_lines <- readLines(ahrq_info$file_path)
+  ahrq_sas_lines <- readLines(ahrq_info$file_path, warn = FALSE)
   icd10_map_ahrq <- sas_format_extract_rcomfmt(ahrq_sas_lines)
   unun <- function(x) unname(unlist(x))
   icd10_map_ahrq[["HTNCX"]] <- unun(icd10_map_ahrq[ahrq_htn])

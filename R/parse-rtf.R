@@ -363,7 +363,7 @@ re_icd10_major_bare <- "[[:alpha:]][[:digit:]][[:alnum:]]"
   }
   if (.verbose()) {
     message("lookup_fourth has length: ", length(lookup_fourth), ", head: ")
-    print(lookup_fourth[1:5, ])
+    print(lookup_fourth[1:5])
   }
   lookup_fourth
 }

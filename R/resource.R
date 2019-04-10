@@ -53,7 +53,8 @@
   match.fun(.get_fetcher_name(var_name))
 }
 
-.exists_in_cache <- function(var_name, verbose = .verbose()) {
+.exists_in_cache <- function(var_name) {
+  verbose <- .verbose()
   if (verbose > 1) {
     message("Seeing if ", sQuote(var_name), " exists in cache env or dir")
   }
@@ -91,7 +92,7 @@
     if (verbose) message("Found in env cache")
     return(.get(var_name))
   }
-  if (!.exists_in_cache(var_name = var_name, verbose = verbose)) {
+  if (!.exists_in_cache(var_name = var_name)) {
     msg <- paste("Unable to get cached data for:", sQuote(var_name))
     .absent_action_switch(msg, must_work = must_work)
     return(invisible())
@@ -197,13 +198,9 @@
                             msg = paste("Unable to find", var_name)) {
     verbose <- .verbose()
     if (verbose) message("Starting fetcher for ", var_name)
-    dat <- .get_from_cache(
-      var_name = var_name,
-      must_work = FALSE
-    )
-    if (!is.null(dat)) {
+    if (.exists_in_cache(var_name)) {
       if (verbose) message("Found ", var_name, " in cache.")
-      return(dat)
+      return(.get_from_cache(var_name = var_name))
     }
     # strictly speaking, we could be offline and already have the raw data, but this is a weird corner case:
     if (.offline()) {
@@ -341,7 +338,7 @@
 #'   do nothing.
 #' @export
 icd_data_dir <- function(path) {
-  if (.verbose()) {
+  if (.verbose() > 1) {
     message("icd_data_dir: ")
     print(.show_options())
   }
@@ -354,7 +351,7 @@ icd_data_dir <- function(path) {
     o <- .icd_data_default
   }
   if (!is.null(o)) {
-    if (.verbose() && regexec("tmp", o) == -1) {
+    if (.verbose() > 1 && regexec("tmp", o) != -1) {
       message("Using a temporary directory")
     }
     return(o)

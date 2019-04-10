@@ -23,7 +23,7 @@ install_jss3447_deps <- function() {
     "tidyr",
     #    "comorbidity", # CRAN version has incompatible updates
     #    "medicalrisk", # CRAN version from 2016 unchanged at time of submission
-    "icd.data"
+    "icd.data" # TODO: discontinue, but currently required with submitted icd version
   )) {
     if (!require(p, character.only = TRUE,
                  quietly = TRUE, warn.conflicts = FALSE)) {

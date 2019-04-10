@@ -185,10 +185,15 @@ before_script:
      make bench3 && make replmat;
      cd ../..;
    fi
+ - if [[ "$ICD_TEST_SLOW" = "true" ]]; then
+     Rscript -e 'source("tools/split-tests.R"); testthat_split();'
+   fi
 
 after_success:
  - if [ "$ICD_COVERAGE" = "true" ]; then
-     Rscript -e "install.packages('covr'); covr::codecov(quiet = FALSE)"; fi
+     Rscript -e 'source("tools/split-tests.R"); testthat_split();'
+     Rscript -e "install.packages('covr'); covr::codecov(quiet = FALSE)"
+   fi
 
 notifications:
   email:

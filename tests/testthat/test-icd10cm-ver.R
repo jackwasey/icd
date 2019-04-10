@@ -22,9 +22,8 @@ test_that("temporarily set active version", {
   skip_icd10cm_flat_avail("2014")
   expect_equal(with_icd10cm_version("2014", get_icd10cm_active_ver()), "2014")
   expect_identical(
-    with_icd10cm_version("2014", nrow(get_icd10cm_active())),
-    nrow(get_icd10cm_active()),
-    nrow(get_icd10cm2014()),
+    object = with_icd10cm_version("2014", nrow(get_icd10cm_active())),
+    expected = nrow(get_icd10cm2014()),
     info = paste(
       "With icd10-cm-ver set: ",
       with_icd10cm_version(

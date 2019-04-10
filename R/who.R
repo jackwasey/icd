@@ -8,7 +8,6 @@
 #' @param edition icd10
 #' @param year Four-digit year as integer or character
 #' @template lang
-#' @template verbose
 #' @return
 #' \code{.who_api} returns the JSON data, or fails with NULL
 #' @keywords internal datasets
@@ -16,9 +15,7 @@
 .who_api <- function(resource,
                      edition = "icd10",
                      year = 2016,
-                     lang = "en",
-                     offline = .offline(),
-                     verbose = .verbose()) {
+                     lang = "en") {
   httr_retry <- httr::RETRY
   if (.have_memoise()) {
     httr_retry <- memoise::memoise(
@@ -32,12 +29,12 @@
   who_base <- "https://apps.who.int/classifications"
   json_url <- paste(who_base, edition, "browse", year, lang, resource, sep = "/")
   # TODO: this stops us using the memoised data, even if available. Seems an unlikely situation, except maybe for local testing. memoise::has_cache(f, ...) lets us test whether a memoise call is cached already.
-  if (.offline() || !.interact()) {
+  if (.offline() && !.interact()) {
     msg <- "Offline and not interactive, so not attempting WHO data download."
     .absent_action_switch(msg)
     return(NULL)
   }
-  if (verbose > 1) message("Getting WHO data with JSON: ", json_url)
+  if (.verbose() > 1) message("Getting WHO data with JSON: ", json_url)
   http_response <- httr_retry("GET", json_url)
   if (hs <- http_response$status_code >= 400) {
     warning("Unable to fetch resource: ", json_url, " has HTTP status, ", hs)
@@ -55,13 +52,11 @@
 #' @noRd
 .who_api_chapter_names <- function(ver = "icd10",
                                    year = 2016,
-                                   lang = "en",
-                                   verbose = .verbose()) {
+                                   lang = "en") {
   .who_api_children(
     ver = ver,
     year = year,
-    lang = lang,
-    verbose = verbose
+    lang = lang
   )[["label"]]
 }
 
@@ -82,14 +77,12 @@
 #' Use public interface to fetch ICD-10 WHO data for a given version
 #'
 #' The user may call this function to install the full WHO ICD-10 definition on
-#' their machine, after which it will be available to \code{icd}. TODO:
-#' determine the best place to save this data.
+#' their machine, after which it will be available to \CRANpkg{icd}.
 #' @param concept_id This is the id for the code or code group, e.g.,
 #'   \sQuote{XI} (Chapter 6), \sQuote{T90--T98} (A sub-chapter), \sQuote{E01} (A
 #'   sub-sub-chapter). You cannot query a single code with this interface.
 #' @param year integer 4-digit year
 #' @param lang Currently it seems only 'en' works
-#' @param verbose logical
 #' @param ... further arguments passed to self recursively, or \code{.who_api}
 #' @keywords internal
 #' @noRd
@@ -97,14 +90,13 @@
                          year = 2016,
                          lang = "en",
                          progress = TRUE,
-                         verbose = .verbose(),
                          hier_code = character(),
                          hier_desc = character(),
-                         offline = .offline(),
                          ...) {
+  verbose <- .verbose()
   if (verbose > 1) print(hier_code)
   if (verbose > 1) message(".who_api_tree with concept_id = ", concept_id)
-  if (offline) {
+  if (.offline()) {
     if (verbose) message("Returning NULL because offline")
     return()
   }
@@ -112,7 +104,6 @@
     concept_id = concept_id,
     year = year,
     lang = lang,
-    verbose = verbose,
     ...
   )
   if (is.null(tree_json)) {
@@ -178,7 +169,6 @@
           concept_id = child_code,
           year = year,
           lang = lang,
-          verbose = verbose,
           hier_code = hier_code,
           hier_desc = hier_desc,
           ...
