@@ -180,19 +180,19 @@ before_script:
 # - if [ "$TRAVIS_OS_NAME" = "osx" ]; then sed -i '' '/.*[Dd]ata.*/d' .Rbuildignore; fi
 # - if [ "$TRAVIS_OS_NAME" = "linux" ]; then sed -i'' '/.*[Dd]ata.*/d' .Rbuildignore; fi
  # should fail and stop travis if the benchmarking fails.
- - if [[ "$ICD_MINI_BENCH" = "true" ]]; then
+ - if [ x"$ICD_MINI_BENCH" = x"true" ]; then
      cd benchmarks/icd-JSS3447-replication;
      make bench3 && make replmat;
      cd ../..;
    fi
- - if [[ "$ICD_TEST_SLOW" = "true" ]]; then
-     Rscript -e 'source("tools/split-tests.R"); testthat_split();'
+ - if [ x"$ICD_TEST_SLOW" = x"true" ]; then
+     Rscript -e 'source("tools/split-tests.R"); testthat_split();';
    fi
 
 after_success:
  - if [ "$ICD_COVERAGE" = "true" ]; then
-     Rscript -e 'source("tools/split-tests.R"); testthat_split();'
-     Rscript -e "install.packages('covr'); covr::codecov(quiet = FALSE)"
+     Rscript -e 'source("tools/split-tests.R"); testthat_split();';
+     Rscript -e 'install.packages("covr"); covr::codecov(quiet = FALSE)';
    fi
 
 notifications:
