@@ -34,7 +34,7 @@ update_everything <- function() {
   # ICD 9
   icd9_parse_ahrq_sas(save_pkg_data = TRUE)
   icd9_parse_quan_deyo_sas(save_pkg_data = TRUE)
-  icd9_parse_cc(save_pkg_data = TRUE)
+  .parse_icd9cm_cc(save_pkg_data = TRUE)
   icd9_parse_ahrq_ccs(single = TRUE, save_pkg_data = TRUE)
   icd9_parse_ahrq_ccs(single = FALSE, save_pkg_data = TRUE)
   icd10_parse_ahrq_ccs(version = "2018.1", save_pkg_data = TRUE)
@@ -43,13 +43,13 @@ update_everything <- function() {
   # ICD 10
   .parse_icd10cm_all(save_pkg_data = TRUE)
   icd10_parse_ahrq_sas(save_pkg_data = TRUE)
-  icd10_parse_cc(save_pkg_data = TRUE)
+  .parse_icd10cm_cc(save_pkg_data = TRUE)
   icd10_generate_map_quan_elix(save_pkg_data = TRUE)
   icd10_generate_map_quan_deyo(save_pkg_data = TRUE)
   icd10_generate_map_elix(save_pkg_data = TRUE)
   generate_maps_pccc(save_pkg_data = TRUE)
   icd10_parse_map_ahrq_pc(save_pkg_data = TRUE)
-  icd_parse_cc_hierarchy(save_pkg_data = TRUE)
+  .parse_cc_hierarchy(save_pkg_data = TRUE)
   # icd9cm2014_leaf was formerly "icd9cm_billable[[version_number]]"
   icd9cm2014_leaf <- get_icd9cm2014_leaf()
   .save_in_data_dir(icd9cm2014_leaf)
@@ -122,7 +122,10 @@ generate_sysdata <- function(save_pkg_data = TRUE) {
   # because these are probably not of interest to a user and would clutter an
   # already busy namespace.
   if (save_pkg_data) {
-    save(list = sysdata_names, file = path, compress = "xz")
+    save(list = sysdata_names,
+         file = path,
+         compress = "xz",
+         version = 2)
   }
   invisible(mget(sysdata_names))
 }

@@ -45,7 +45,7 @@ generate_spelling <- function(save_pkg_data = TRUE) {
   words <- c(medical, proper_nouns, acronyms, french, other)
   if (save_pkg_data) {
     # per http://dirk.eddelbuettel.com/blog/2017/08/10/#008_aspell_cran_incoming
-    saveRDS(words, file = ".aspell/icdwords.rds")
+    saveRDS(words, file = ".aspell/icdwords.rds", version = 2)
     # for spelling package, write out a simple WORDLIST. This package checks
     # more stuff than the base R, but many false positives, e.g. latex figure
     # labels.

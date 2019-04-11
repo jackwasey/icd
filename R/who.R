@@ -30,7 +30,7 @@
     res <- .dl_icd10who_json(year, lang, resource)
     .trc(paste("Saving memoised data for ", year, lang, resource,
                "in", mem_path))
-    saveRDS(res, mem_path)
+    saveRDS(res, mem_path, version = 2)
     res
   }
 }

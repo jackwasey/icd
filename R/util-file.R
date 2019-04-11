@@ -65,8 +65,8 @@
       "Saving old to: ", old_file,
       " and new to: ", new_file
     )
-    saveRDS(oldx, old_file)
-    saveRDS(x, new_file)
+    saveRDS(oldx, old_file, version = 2)
+    saveRDS(x, new_file, version = 2)
     if (!askYesNo("Proceed?", default = FALSE)) {
       message(
         "Examine differences. Consider:",
@@ -84,7 +84,8 @@
       list = var_name,
       envir = envir,
       file = out_file,
-      compress = compress
+      compress = compress,
+      version = 2
     )
     message("Now reload package to enable updated/new data: ", var_name)
   } else {
@@ -107,7 +108,8 @@
   .assign(var_name, x)
   saveRDS(x,
     .rds_path(var_name),
-    compress = "gzip"
+    compress = "gzip",
+    version = 2
   )
   invisible(.get(var_name))
 }

@@ -220,38 +220,6 @@
   invisible(icd9cm_billable27[reorder, ])
 }
 
-#' Fix NA sub-chapters in RTF parsing
-#'
-#' Fixes a couple of corner cases in parsing the 2011 ICD-9-CM RTF
-#' @keywords internal datagen
-#' @noRd
-.fix_sub_chap_na <- function(x, start, end) {
-  stop("no longer needed: icd9_sub_chapters.R in data is now correct")
-  # 280, 740 (CONGENITAL ANOMALIES) are chapters with no sub-chapters defined.
-  # For consistency, assign the same name to sub-chapters
-  rng <- icd::expand_range(icd::as.icd9cm(start),
-    icd::as.icd9cm(end),
-    short_code = TRUE,
-    defined = FALSE
-  )
-  congenital <- x[["code"]] %in% rng
-  # assert all the same:
-  stopifnot(all(x[congenital[1], "chapter"] == x[congenital[-1], "chapter"]))
-  # insert a new level into the sub-chapter factor in the right place
-  previous_sub <- as_char_no_warn(x[(which(congenital) - 1)[1], "sub_chapter"])
-  previous_sub_pos <- which(levels(x$sub_chapter) == previous_sub)
-  congenital_title <- as_char_no_warn(x[which(congenital)[1], "chapter"])
-  new_subs <- as_char_no_warn(x$sub_chapter)
-  new_subs[congenital] <- congenital_title
-  new_levels <- append(
-    levels(x$sub_chapter),
-    congenital_title,
-    previous_sub_pos
-  )
-  x$sub_chapter <- factor(new_subs, new_levels)
-  x
-}
-
 .make_icd9cm_parse_leaf_fun <- function(year) {
   # Must force, so that the values to the arguments are not promises which are
   # later evaluated in a different environment.

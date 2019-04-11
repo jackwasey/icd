@@ -8,15 +8,15 @@ test_that("can recreate the package data", {
     skip("HCC raw data not available")
   }
   expect_identical(
-    icd_parse_cc_hierarchy(save_pkg_data = FALSE),
+    .parse_cc_hierarchy(save_pkg_data = FALSE),
     icd_map_cc_hcc
   )
   expect_identical(
-    icd9_parse_cc(save_pkg_data = FALSE),
+    .parse_icd9cm_cc(save_pkg_data = FALSE),
     icd9_map_cc
   )
   expect_identical(
-    icd10_parse_cc(save_pkg_data = FALSE),
+    .parse_icd10cm_cc(save_pkg_data = FALSE),
     icd10_map_cc
   )
 })

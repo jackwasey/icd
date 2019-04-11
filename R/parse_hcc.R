@@ -12,7 +12,7 @@
 #' @template parse-template
 #' @keywords internal manip
 #' @noRd
-icd9_parse_cc <- function(save_pkg_data = FALSE) {
+.parse_icd9cm_cc <- function(save_pkg_data = FALSE) {
   assert_flag(save_pkg_data)
   hcc_icd9_dir <- file.path(get_raw_data_dir(), "icd_hcc_rawdata", "icd9")
   icd9_map_cc <- lapply(
@@ -81,11 +81,26 @@ icd9_parse_cc <- function(save_pkg_data = FALSE) {
   invisible(icd9_map_cc)
 }
 
+.icd10_hcc_fix_tabs <- function() {
+  .fix <- function(x) {
+  p1 <- sub("[[:space:]]+.*", "", x)
+  p2 <- sub("[[:alnum:]]*[[:space:]]+", "", x)
+  p2 <- sub("[[:space:]]+", "", p2)
+  p2 <- sub("[[:alpha:]]$", "", trimws(p2))
+  sprintf("%-8s%-4s", p1, p2)
+  }
+  hcc_icd10_dir <- file.path(get_raw_data_dir(), "icd_hcc_rawdata", "icd10")
+  for (f in  list.files(hcc_icd10_dir, full.names = TRUE)) {
+    tabbed <- readLines(f)
+    writeLines(.fix(tabbed), f)
+  }
+}
+
 #' Import the ICD10 to CC crosswalks
 #' @template parse-template
 #' @keywords internal manip
 #' @noRd
-icd10_parse_cc <- function(save_pkg_data = FALSE) {
+.parse_icd10cm_cc <- function(save_pkg_data = FALSE) {
   assert_flag(save_pkg_data)
   hcc_icd10_dir <- file.path(get_raw_data_dir(), "icd_hcc_rawdata", "icd10")
   # Import raw CMS data for ICD-9
@@ -120,7 +135,11 @@ icd10_parse_cc <- function(save_pkg_data = FALSE) {
   icd10_map_cc <- do.call(rbind, icd10_map_cc)
   colnames(icd10_map_cc) <- c("icd_code", "cc", "year")
   # Convert CC to numeric format, remove whitespace from ICD codes
-  icd10_map_cc$cc <- as.numeric(icd10_map_cc$cc)
+  cc_as_num <- as.integer(trimws(icd10_map_cc$cc))
+  if (any(is.na(cc_as_num))) {
+    browser(); stop("Some condition codes are not integers")
+  }
+  icd10_map_cc$cc <- cc_as_num
   icd10_map_cc$icd_code <- trimws(icd10_map_cc$icd_code)
   # Per CMS instructions, some ICDs may to be manually assigned additional CCs
   # Currently, no rules exist for ICD10, but if they need to be added,
@@ -145,7 +164,7 @@ icd10_parse_cc <- function(save_pkg_data = FALSE) {
 #' @template parse-template
 #' @keywords internal manip
 #' @noRd
-icd_parse_cc_hierarchy <- function(save_pkg_data = FALSE) {
+.parse_cc_hierarchy <- function(save_pkg_data = FALSE) {
   assert_flag(save_pkg_data)
   # Define Hierarchy
   # import raw hierarchy files from CMS

@@ -109,7 +109,8 @@ saveRDS(
       sep = "-"
     ),
     ".rds"
-  )
+  ),
+  version = 2
 )
 # now take the medians and make suitable for the article:
 res <- tidyr::spread(bres[c(1, 2, 5)], expression, median)
