@@ -17,6 +17,9 @@ test_that("the icd-10 elix comorbidity map is reproduced", {
 
 test_that("icd-10 ahrq map is reproduced", {
   skip_if_offline()
+  skip_on_appveyor()
+  skip_on_travis()
+  skip_on_cran()
   if (is.null(icd10_fetch_ahrq_sas())) {
     skip("AHRQ ICD-10 SAS must be downloaded with icd10_fetch_ahrq_sas")
   }

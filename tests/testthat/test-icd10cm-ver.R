@@ -39,6 +39,9 @@ test_that("all available ICD-10-CM data is reported and gettable", {
       info = paste("procedure code =", pc)
     )
     skip_if_offline()
+    skip_on_appveyor()
+    skip_on_travis()
+    skip_on_cran()
     for (r in res) {
       expect_error(
         regexp = NA,
