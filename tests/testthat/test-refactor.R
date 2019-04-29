@@ -153,8 +153,13 @@ test_that("new factor has empty levels when necessary", {
   }
 })
 
+test_that("refactor doesn't accept duplicate target levels with validate", {
+  expect_error(
+    refactor(factor("jj"), levels = c("jj", "jj"), validate = TRUE)
+  )
+})
+
 test_that("NA anywhere in middle of input levels ok", {
-  # todo: duplicate target levels should fail or drop silenetly?
   v <- c("a", "b", NA)
   f_perms <- unname(expand.grid(v, v, v))
   l_perms <- unique(apply(f_perms, 1, unique))

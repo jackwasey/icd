@@ -8,25 +8,25 @@
 #'
 #' The 'fixed' data are those identified in the JAMA Pediatrics letter which
 #' required exact matching to avoid overly broad capture of diagnoses.
-#' @template save_data
+#' @template save_pkg_data
 #' @examples
 #' \dontrun{
-#' icd:::generate_maps_pccc(save_data = FALSE)
+#' icd:::generate_maps_pccc(save_pkg_data = FALSE)
 #' }
 #' @keywords internal
 #' @noRd
-generate_maps_pccc <- function(save_data = TRUE) {
-  icd9_generate_map_pccc_dx(save_data)
-  icd9_generate_map_pccc_pcs(save_data)
-  icd10_generate_map_pccc_dx(save_data)
-  icd10_generate_map_pccc_pcs(save_data)
+generate_maps_pccc <- function(save_pkg_data = TRUE) {
+  icd9_generate_map_pccc_dx(save_pkg_data)
+  icd9_generate_map_pccc_pcs(save_pkg_data)
+  icd10_generate_map_pccc_dx(save_pkg_data)
+  icd10_generate_map_pccc_pcs(save_pkg_data)
   # no icd10 fixed
 }
 
 #' ICD-9 generate_maps_pccc
 #' @keywords internal
 #' @noRd
-icd9_generate_map_pccc_dx <- function(save_data = TRUE) {
+icd9_generate_map_pccc_dx <- function(save_pkg_data = TRUE) {
   icd9_map_pccc_orig_dx <- list(
     neuromusc = c(
       "3180", "3181", "3182", "330", "331", "3320", "3321",
@@ -134,8 +134,8 @@ icd9_generate_map_pccc_dx <- function(save_data = TRUE) {
     c(icd9_map_pccc_dx[["respiratory"]], "5163")
   # TODO icd_names_pccc etc
   icd9_map_pccc_dx <- as.comorbidity_map(icd9_map_pccc_dx)
-  if (save_data) {
-    save_in_data_dir(icd9_map_pccc_dx)
+  if (save_pkg_data) {
+    .save_in_data_dir(icd9_map_pccc_dx)
   }
   invisible(icd9_map_pccc_dx)
 }
@@ -143,7 +143,7 @@ icd9_generate_map_pccc_dx <- function(save_data = TRUE) {
 #' ICD-9 PCS generate_maps_pccc
 #' @keywords internal
 #' @noRd
-icd9_generate_map_pccc_pcs <- function(save_data = TRUE) {
+icd9_generate_map_pccc_pcs <- function(save_pkg_data = TRUE) {
   icd9_map_pccc_orig_pc <- list(
     neuromusc = c(
       "0152", "0153", "0221", "0222", "0231",
@@ -223,8 +223,8 @@ icd9_generate_map_pccc_pcs <- function(save_data = TRUE) {
   icd9_map_pccc_orig_pc[["metabolic"]] <-
     c(icd9_map_pccc_orig_pc[["metabolic"]], "624")
   icd9_map_pccc_pcs <- as.comorbidity_map(icd9_map_pccc_orig_pc)
-  if (save_data) {
-    save_in_data_dir(icd9_map_pccc_pcs)
+  if (save_pkg_data) {
+    .save_in_data_dir(icd9_map_pccc_pcs)
   }
   invisible(icd9_map_pccc_pcs)
 }
@@ -232,7 +232,7 @@ icd9_generate_map_pccc_pcs <- function(save_data = TRUE) {
 #' ICD-10 generate_maps_pccc
 #' @keywords internal
 #' @noRd
-icd10_generate_map_pccc_dx <- function(save_data, verbose = TRUE) {
+icd10_generate_map_pccc_dx <- function(save_pkg_data) {
   icd10_map_pccc_orig_dx <- list(
     neuromusc = c(
       "E75", "F71", "F72", "F73", "F842", "G111", "G112", "G114",
@@ -381,18 +381,14 @@ icd10_generate_map_pccc_dx <- function(save_data, verbose = TRUE) {
       "T86851", "T86859", "T865", "T8690", "T8691", "T8692", "T8699"
     )
   )
-  icd10_map_pccc_dx <- apply_over_icd10cm_vers(icd10_map_pccc_orig_dx,
-    verbose = verbose
-  )
-  icd10_map_pccc_dx <- apply_over_icd10who_vers(icd10_map_pccc_orig_dx,
-    verbose = verbose
-  )
+  icd10_map_pccc_dx <- .apply_over_icd10cm_vers(icd10_map_pccc_orig_dx)
+  icd10_map_pccc_dx <- .apply_over_icd10who_vers(icd10_map_pccc_orig_dx)
   # add the fixed code, per JAMA Pediatrics Letter
   icd10_map_pccc_dx[["neuromusc"]] <-
     c(icd10_map_pccc_dx[["neuromusc"]], "G80")
   icd10_map_pccc_dx <- as.comorbidity_map(icd10_map_pccc_dx)
-  if (save_data) {
-    save_in_data_dir(icd10_map_pccc_dx)
+  if (save_pkg_data) {
+    .save_in_data_dir(icd10_map_pccc_dx)
   }
   invisible(icd10_map_pccc_dx)
 }
@@ -400,7 +396,7 @@ icd10_generate_map_pccc_dx <- function(save_data, verbose = TRUE) {
 #' ICD-10 PCS generate_maps_pccc
 #' @keywords internal
 #' @noRd
-icd10_generate_map_pccc_pcs <- function(save_data = TRUE) {
+icd10_generate_map_pccc_pcs <- function(save_pkg_data = TRUE) {
   icd10_map_pccc_orig_pc <- list(
     neuromusc = c(
       "0016070", "0016071", "0016072", "0016073", "0016074", "0016075", "0016076", "0016077",
@@ -621,8 +617,8 @@ icd10_generate_map_pccc_pcs <- function(save_data = TRUE) {
     )
   )
   icd10_map_pccc_pcs <- as.comorbidity_map(icd10_map_pccc_orig_pc)
-  if (save_data) {
-    save_in_data_dir(icd10_map_pccc_pcs)
+  if (save_pkg_data) {
+    .save_in_data_dir(icd10_map_pccc_pcs)
   }
   invisible(icd10_map_pccc_pcs)
 }

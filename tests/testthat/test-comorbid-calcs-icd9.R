@@ -451,11 +451,10 @@ test_that("dispatch from column class when not specified", {
 })
 
 test_that("if we try to do comorbidity calc on wide data, it works!", {
-  skip_if_not_installed("icd.data")
-  expect_error(comorbid_elix(icd.data::vermont_dx),
+  expect_error(comorbid_elix(vermont_dx),
     regexp = NA
   )
-  expect_error(comorbid_charlson(long_to_wide(icd.data::uranium_pathology)),
+  expect_error(comorbid_charlson(long_to_wide(uranium_pathology)),
     regexp = NA
   )
 })
@@ -578,13 +577,12 @@ test_that("float visit IDs", {
 })
 
 test_that("plot comorbid", {
-  skip_if_not_installed("icd.data")
   expect_error(
     regexp = NA,
-    plot_comorbid(icd.data::vermont_dx[1:1000, ])
+    plot_comorbid(vermont_dx[1:1000, ])
   )
   expect_error(
     regexp = NA,
-    plot_comorbid(icd.data::uranium_pathology)
+    plot_comorbid(uranium_pathology)
   )
 })

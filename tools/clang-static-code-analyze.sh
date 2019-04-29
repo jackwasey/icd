@@ -2,8 +2,8 @@
 set -euo pipefail
 IFS=$'\n\t'
 
-#--use-c++=/usr/local/bin/clang++ \
-#--use-cc=/usr/local/bin/clang \
+#--use-c++=/usr/local/bin/clang-8 \
+#--use-cc=/usr/local/bin/clang-8 \
 
 # alternative is to set CXX and CC to scan-build
 

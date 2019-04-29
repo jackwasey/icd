@@ -3,91 +3,201 @@ language: r
 # https://ropensci.org/blog/2016/07/12/travis-osx
 # https://docs.travis-ci.com/user/ci-environment/
 
+# for RcppEigen to compile, (but disable if brew gcc on mac to avoid conflict)
+fortran: true
+
+# os:
+#   - linux
+#   - osx
+
+# dist:
+#   - xenial
+
+compiler:
+  - gcc
+  - clang
+
+# may need this for clang:
+# export LD_LIBRARY_PATH=/usr/local/clang/lib:$LD_LIBRARY_PATH
+#
+# See this for more recent compiler support than old defaults:
+# https://docs.travis-ci.com/user/languages/c/
+#
+# and
+#
+# https://docs.travis-ci.com/user/languages/cpp/
+
+# TODO: "eval"" the benchmark step to error if it fails with bad return code.
 sudo: false
-cache: packages
+cache:
+  - packages
+  - ccache
 
-r_packages:
-  - covr
+addons:
+  apt:
+    packages:
+      - valgrind
 
-r_github_packages:
-  - jackwasey/nhds
-# for testing against icd.data which is not yet updated in CRAN
-#  - jackwasey/icd.data
-
+# don't want overhead of installing for every matrix element
+# r_packages:
+#   - covr
 
 cran: https://cloud.r-project.org
-
+# by default, DON'T do --as-cran, as it stops us using environment variables
+# that conflict. Instead, state approximate CRAN check environment variables explicitly.
+r_check_args: ""
 warnings_are_errors: true
 
 # try to speed up compilation time
 before_install:
+  # Set library directory so R CMD check finds packages installed by travis and by R itself (e.g. Rcpp rebuilt for MacOS builds)
+  # https://stackoverflow.com/questions/31879011/r-cant-find-packages-installed-by-travis
+  # cannot sudo in docker! - sudo mkdir -p /usr/lib/R/library
+  # - echo 'R_LIBS=/usr/lib/R/library:/usr/lib/R/site-library/' > ~/.Renviron
+  # - sudo chmod 2777 /usr/lib/R/library
+  #
+  # Work-around r-lib/remotes bug which prevents travis building.
+  # https://github.com/r-lib/devtools/issues/2020#issuecomment-481219296
+  - R -e 'source("https://install-github.me/r-lib/remotes")'
+  # ready for Makevars
+  - mkdir ~/.R ;
+  - echo 'CXXFLAGS=-Wno-unused-parameter -Wno-unused-variable -Wno-ignored-attributes -Wno-cast-function-type -Wno-unknown-warning-option' >> ~/.R/Makevars ;
+  - echo 'CXX11FLAGS=-Wno-unused-parameter -Wno-unused-variable -Wno-ignored-attributes -Wno-cast-function-type -Wno-unknown-warning-option' >> ~/.R/Makevars ;
   - if [[ "$TRAVIS_R_VERSION_STRING" = 'devel' ]]; then
-      mkdir ~/.R ;
-      echo 'CC=clang' > ~/.R/Makevars ;
-      echo 'CXX=clang++' >> ~/.R/Makevars ;
-      echo 'CXX11=clang++' >> ~/.R/Makevars ;
       echo 'CFLAGS=-O0' >> ~/.R/Makevars ;
       echo 'CXXFLAGS=-O0' >> ~/.R/Makevars ;
       echo 'CXX11FLAGS=-O0' >> ~/.R/Makevars ;
       fi
+  - eval "${MATRIX_EVAL}"
+  - cat ~/.R/Makevars
+  - Rscript -e '.libPaths()'
 
 env:
   global:
     - _R_CHECK_CRAN_INCOMING_=FALSE
     - _R_CHECK_CRAN_INCOMING_REMOTE_=FALSE
     - _R_CHECK_FORCE_SUGGESTS_=FALSE
+    - _R_CHECK_USE_INSTALL_LOG_=TRUE
+    - _R_CHECK_LENGTH_1_CONDITION_="verbose,abort"
+    - _R_CHECK_LENGTH_1_LOGIC2_="verbose,abort"
+    - _R_CHECK_NO_STOP_ON_TEST_ERROR_=FALSE
+    # some of the following are ignored if --as-cran is set
+    - _R_CHECK_COMPILATION_FLAGS_=FALSE
+# the following are to simulate cran, and help debugging, esp if we didn't use --as-cran
+    - _R_CHECK_ALL_NON_ISO_C_=TRUE
+    - _R_CHECK_ALWAYS_LOG_VIGNETTE_OUTPUT_=TRUE
+    - _R_CHECK_CODE_ASSIGN_TO_GLOBALENV_=TRUE
+    - _R_CHECK_CODETOOLS_PROFILE_="suppressLocalUnused=FALSE"
+    - _R_CHECK_EXIT_ON_FIRST_ERROR_=FALSE
+    - _R_CHECK_NATIVE_ROUTINE_REGISTRATION_=TRUE
+    - _R_CHECK_NO_STOP_ON_TEST_ERROR_=TRUE
+    - _R_CHECK_RD_EXAMPLES_T_AND_F_=TRUE
+    - _R_CHECK_RD_LINE_WIDTHS_=true
+    - _R_CHECK_TESTS_NLINES_=0
+    - _R_CHECK_USE_INSTALL_LOG_=TRUE
+    - _R_CHECK_VIGNETTES_NLINES_=0
+    - _R_CHECK_PKG_SIZES_THRESHOLD_=50
     - ICD_COVERAGE=false
+    - ICD_MINI_BENCH=false
     - ICD_DATA_VERBOSE=true
     - ICD_DATA_OFFLINE=true
     - ICD_DATA_INTERACT=false
+    # 4 is the official travis suggestion, but the docker images only have access to two cores/threads.
+    - OMP_NUM_THREADS=2
 
 matrix:
-  fast_finish: true
+  fast_finish: false
   include:
   - r: devel
-#    env: LINTR_COMMENT_BOT=true
+    os: linux
+    dist: xenial
+    env:
+      - ICD_MINI_BENCH=true
   - r: release
+    os: linux
+    dist: xenial
+    env:
+      - ICD_MINI_BENCH=true
+  - r: release
+    os: osx
+    # this xcode so stuff like _stdio.h are available to GCC.
+    osx_image: xcode10.1
+    fortran: false
+    # just to avoid matrix doing this twice, state gcc here
+    compiler: gcc
+    # ?have to reinstall Rcpp with compiler and libc++ -> libstdc++ change
+    env:
+      - MATRIX_EVAL="command -v g++-8 >/dev/null 2>&1 || brew install gcc && echo 'CC=gcc-8' >> ~/.R/Makevars && echo 'CXX=g++-8' >> ~/.R/Makevars && echo 'CXX11=g++-8' >> ~/.R/Makevars && Rscript -e 'install.packages(\"Rcpp\", type = \"source\")'"
+      - ICD_MINI_BENCH=true
+  # r-devel currently failing to download for macos, so release for now.
+  # also see https://docs.travis-ci.com/user/reference/osx
+  - r: release
+    os: osx
+    osx_image: xcode10.2
+    compiler: gcc
+    env:
+      - MATRIX_EVAL="command -v g++-8 >/dev/null 2>&1 || brew install gcc && echo 'CC=gcc-8' >> ~/.R/Makevars && echo 'CXX=g++-8' >> ~/.R/Makevars && echo 'CXX11=g++-8' >> ~/.R/Makevars && Rscript -e 'install.packages(\"Rcpp\", type = \"source\")'"
+  - r: release
+    os: osx
+    # as of April 2019, default osx image is 9.4
+    # just to avoid matrix doing this twice with same xcode binary...
+    compiler: clang
   - r: oldrel
+    os: linux
+    dist: precise
+    latex: false
     r_build_args: --no-build-vignettes --no-manual --resave-data=no
     r_check_args: --no-build-vignettes --no-vignettes --ignore-vignettes --no-codoc --no-manual
   - r: release
+    os: osx
+    compiler: clang
+    latex: false
+    r_build_args: --no-build-vignettes --no-manual --resave-data=no
+    r_check_args: --no-build-vignettes --no-vignettes --ignore-vignettes --no-codoc --no-manual
+    env:
+    - ICD_MINI_BENCH=true
+  - r: release
+    os: linux
+    latex: false
     r_build_args: --no-build-vignettes --no-manual --resave-data=no
     r_check_args: --no-build-vignettes --no-vignettes --ignore-vignettes --no-codoc --no-manual
     env:
     - ICD_COVERAGE=true
+    - ICD_MINI_BENCH=false
+    - ICD_TEST_SLOW=true
   allow_failures:
+  # allow any osx to fail for now: error prone tool chain
+  - os: osx
   - r: oldrel
-    r_build_args: --no-build-vignettes --no-manual --resave-data=no
-    r_check_args: --no-build-vignettes --no-vignettes --ignore-vignettes --no-codoc --no-manual
   - r: release
+    os: linux
+    latex: false
     r_build_args: --no-build-vignettes --no-manual --resave-data=no
     r_check_args: --no-build-vignettes --no-vignettes --ignore-vignettes --no-codoc --no-manual
     env:
     - ICD_COVERAGE=true
+    - ICD_MINI_BENCH=false
     - ICD_TEST_SLOW=true
 
 before_script:
- - rm .Rinstignore  # do install everything for testing
- - sed -i'' '/.*[Dd]ata.*/d' .Rbuildignore # do include data for testing
-# - sed -i'' '/\.covrignore/d' .Rbuildignore
-# - sed -i'' '/\.lintr/d' .Rbuildignore
- - sed -i'' '/\benchmark/d' .Rbuildignore
- # otherwise, icd.data is installed from CRAN, and after the github install???
- #
- # Quoting and colons in YAML https://github.com/ansible/ansible/issues/2769
- #- 'echo "Remotes: jackwasey/icd.data" >> DESCRIPTION'
- #- cat DESCRIPTION
- - Rscript -e "Rcpp::compileAttributes()" # make sure Rcpp generated code is updated, ideally this is not be checked in repo...
+# - rm .Rinstignore  # do install everything for testing (we have source tree, so no need)
+# - if [ "$TRAVIS_OS_NAME" = "osx" ]; then sed -i '' '/.*[Dd]ata.*/d' .Rbuildignore; fi
+# - if [ "$TRAVIS_OS_NAME" = "linux" ]; then sed -i'' '/.*[Dd]ata.*/d' .Rbuildignore; fi
+ # should fail and stop travis if the benchmarking fails.
+ - if [ x"$ICD_MINI_BENCH" = x"true" ]; then
+     cd benchmarks/icd-JSS3447-replication;
+     make bench3 && make replmat;
+     cd ../..;
+   fi
+ - if [ x"$ICD_TEST_SLOW" = x"true" ]; then
+     Rscript -e 'source("tools/split-tests.R"); testthat_split();';
+   fi
 
 after_success:
  - if [ "$ICD_COVERAGE" = "true" ]; then
-     cd benchmarks/icd-JSS3447-replication;
-     make bench3; make replmat;
+     Rscript -e 'source("tools/split-tests.R"); testthat_split();';
+     Rscript -e 'install.packages("covr"); covr::codecov(quiet = FALSE)';
    fi
- - if [ "$ICD_COVERAGE" = "true" ]; then
-     Rscript -e "covr::codecov(quiet = FALSE)"; fi
-# - if [ "$LINTR_COMMENT_BOT" = "true" ]; then
-#     Rscript -e "lintr::lint_package()"; fi
 
 notifications:
   email:

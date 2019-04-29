@@ -247,14 +247,13 @@ test_that("icd9 short to major part, E codes", {
 })
 
 test_that("short to decimal before and after expansion of ICD-9 codes same", {
-  icd9List <- icd9_map_ahrq # todo SUBSET OR EXTRA MAPPINGS?
+  icd9List <- icd9_map_ahrq
   for (i in names(icd9List)) {
     expect_equal_no_icd(
       decimal_to_short.icd9(short_to_decimal.icd9(icd9List[[i]])),
       icd9_add_leading_zeroes(icd9List[[i]], short_code = TRUE),
       info = paste("step 1, iteration:", i)
     )
-
     expect_equal_no_icd(
       decimal_to_short(short_to_decimal(icd9List[[i]])),
       icd9_add_leading_zeroes(icd9List[[i]], short_code = TRUE),

@@ -1,13 +1,15 @@
 context("content of icd-10 to comorbidity maps")
 
 test_that("the classes of the ICD-10 maps are correct", {
-  maps <- named_list(
-    icd10_map_ahrq,
-    icd10_map_elix,
-    icd10_map_quan_deyo,
-    icd10_map_quan_elix
+  map_names <- list(
+    "icd10_map_ahrq",
+    "icd10_map_elix",
+    "icd10_map_quan_deyo",
+    "icd10_map_quan_elix"
   )
-  for (m in names(maps)) {
+  maps <- lapply(map_names, get)
+  names(maps) <- map_names
+  for (m in map_names) {
     # for each map, verify it has class map,
     # and that all it's elements are ICD-10 short diag format
     expect_identical(class(maps[[m]]), c("comorbidity_map", "list"),
@@ -45,7 +47,6 @@ test_that("the class of each element of the quan elix map is correct", {
   }
 })
 test_that("independently created list of Quan Elixhauser codes all appear", {
-  skip_if_not_installed("icd.data")
   quan_elix_independent <- list(
     chf = c(
       "I099", "I110", "I130", "I132", "I255", "I420", "I425", "I426",
@@ -155,20 +156,24 @@ test_that("independently created list of Quan Elixhauser codes all appear", {
   )
   # this list is just parent codes, whereas I store, for ICD-10, the icd-10-cm
   # children also.
-  for (i in 1:30) {
+  for (i in seq_along(quan_elix_independent)) {
     indep <- quan_elix_independent[[i]]
     indep_kids <- children_defined.icd10cm(quan_elix_independent[[i]])
     canon <- icd10_map_quan_elix[[i]]
+    missing_from_canon <- paste(head(setdiff(canon, indep)), collapse = ", ")
+    missing_from_canon_kids <- paste(head(setdiff(canon, indep_kids)), collapse = ", ")
     expect_true(all(indep %in% canon),
       info = paste(
         "checking quan elix canonical in indep: ",
-        i, " - ", names(quan_elix_independent)[i]
+        i, " - ", names(quan_elix_independent)[i],
+        " - First few missing are: ", missing_from_canon
       )
     )
     expect_true(all(indep_kids %in% canon),
       info = paste(
         "checking quan elix canonical in indep_kids: ",
-        i, " - ", names(quan_elix_independent)[i]
+        i, " - ", names(quan_elix_independent)[i],
+        " - First few missing are: ", missing_from_canon_kids
       )
     )
     # yes, there are non-ICD-10-CM codes which are not in the ICD-10-CM children

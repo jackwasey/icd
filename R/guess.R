@@ -5,9 +5,9 @@
 #' whether the codes exist in any definitions (ICD-9 CM or WHO, for example),
 #' just whether they are valid.
 #'
-#' Currently, ambiguous codes are guessed true or false, with no indication of
-#' uncertainty. Possible solutions are adding an attribute, warning, or
-#' optionally throwing an error.
+#' Currently, ambiguous codes are guessed as being ICD-9 or ICD-10, with no
+#' indication of uncertainty. Possible solutions are adding an attribute,
+#' warning, or optionally throwing an error.
 #'
 #' @param x input data
 #' @template short_code

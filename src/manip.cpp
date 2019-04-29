@@ -45,6 +45,8 @@ String icd9AddLeadingZeroesMajorSingle(String mjr) {
     case 4:
       if (icd9IsASingleE(m.c_str())) return (m);
       // # nocov start
+      // avoid fallthrough warning
+      stop("Major length invalid");
     default:
       stop("Major length invalid");
       // # nocov end

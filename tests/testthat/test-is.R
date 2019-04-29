@@ -14,7 +14,12 @@ test_that("find codes", {
   expect_false(is_major.icd9("E900.3"))
   expect_false(is_major.icd9("V903"))
   expect_false(is_major.icd9("E9003"))
-  # todo, what about "E800." or "100." ?
+  expect_true(is_major.icd9("E800."))
+  expect_false(is_major.icd9("E800.2"))
+  expect_true(is_major.icd9("100."))
+  expect_false(is_major.icd9("V20.3"))
+  expect_true(is_major.icd9("100."))
+  expect_false(is_major.icd9("V20.3"))
   expect_false(icd9_is_v(" E900.3 "))
   expect_false(icd9_is_e(" 80.2"))
   expect_false(icd9_is_n(" V10.1"))

@@ -505,6 +505,7 @@ test_that("disordered visit ids", {
 })
 
 test_that("diff comorbid works", {
+  skip_slow("diff comorbidity maps is relatively slow to test")
   expect_warning(
     utils::capture.output(
       res <- diff_comorbid(icd9_map_ahrq, icd9_map_elix, show = FALSE)
@@ -525,7 +526,6 @@ test_that("diff comorbid works", {
   expect_identical(res$Depression[[3]], character(0))
   # both, also with elements in either side set diff
   expect_equal(res$PUD$both, c("53170", "53270", "53370", "53470"))
-  skip_if_not_installed("icd.data")
   expect_warning(
     expect_output(
       resq <- diff_comorbid(icd9_map_quan_elix, icd9_map_elix, show = TRUE),
@@ -542,12 +542,11 @@ ac <- lapply(icd9_map_ahrq, function(x) {
 })
 
 test_that("comorbidities created from source data frame coded as factors", {
-  skip_if_not_installed("icd.data")
-  v2 <- wide_to_long(icd.data::vermont_dx)
+  v2 <- wide_to_long(vermont_dx)
   v2$visit_id <- as.factor(v2$visit_id)
   v2$icd_code <- as.factor(v2$icd_code)
   res <- icd9_comorbid_ahrq(v2)
-  res_nofactor <- icd9_comorbid_ahrq(wide_to_long(icd.data::vermont_dx))
+  res_nofactor <- icd9_comorbid_ahrq(wide_to_long(vermont_dx))
   expect_identical(res, res_nofactor)
 })
 

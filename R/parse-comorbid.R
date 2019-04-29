@@ -30,7 +30,7 @@ ahrq_order_all <- c(
 )
 
 
-.ahrq_url_base <- "http://www.hcup-us.ahrq.gov/toolssoftware/"
+.ahrq_url_base <- "https://www.hcup-us.ahrq.gov/toolssoftware/"
 
 #' get the SAS code from AHRQ
 #'
@@ -38,17 +38,18 @@ ahrq_order_all <- c(
 #' there.
 #' @keywords internal
 #' @noRd
-icd9_fetch_ahrq_sas <- function(offline) {
-  download_to_data_raw(
-    url = paste0(.ahrq_url_base, "comorbidity/comformat2012-2013.txt"),
-    offline = offline
+icd9_fetch_ahrq_sas <- function() {
+  .download_to_data_raw(
+    url = paste0(.ahrq_url_base, "comorbidity/comformat2012-2013.txt")
   )
 }
 
-icd10_fetch_ahrq_sas <- function(offline) {
-  download_to_data_raw(
+icd10_fetch_ahrq_sas <- function(ver = "2016") {
+  .download_to_data_raw(
     url = paste0(.ahrq_url_base, "comorbidityicd10/comformat_icd10cm_2016.txt"),
-    offline = offline
+    file_name = .get_versioned_raw_file_name("ahrq-comformat_icd10cm_2016.txt",
+      ver = "2016"
+    )
   )
 }
 
@@ -60,11 +61,11 @@ icd10_fetch_ahrq_sas <- function(offline) {
 #' @template parse-template
 #' @keywords internal manip
 #' @noRd
-icd9_parse_ahrq_sas <- function(save_data = FALSE, offline = TRUE) {
-  assert_flag(save_data)
+icd9_parse_ahrq_sas <- function(save_pkg_data = FALSE) {
+  assert_flag(save_pkg_data)
   # readLines make assumptions or guess about encoding, consider using
   # Hadleyverse for this in future
-  ahrq_info <- icd9_fetch_ahrq_sas(offline = offline)
+  ahrq_info <- icd9_fetch_ahrq_sas()
   ahrq_sas_lines <- readLines(ahrq_info$file_path)
   icd9_map_ahrq_working <- sas_format_extract_rcomfmt(ahrq_sas_lines)
   icd9_map_ahrq <- list()
@@ -129,18 +130,19 @@ icd9_parse_ahrq_sas <- function(save_data = FALSE, offline = TRUE) {
   }
   names(icd9_map_ahrq) <- icd::names_ahrq_htn_abbrev
   icd9_map_ahrq <- comorbidity_map(icd9_map_ahrq)
-  if (save_data) {
-    save_in_data_dir("icd9_map_ahrq")
+  if (save_pkg_data) {
+    .save_in_data_dir("icd9_map_ahrq")
   }
   invisible(icd9_map_ahrq)
 }
 
 # This is in some ways simpler than that ICD-9 equivalent because I make no
 # attempt to find all the child codes.
-icd10_parse_ahrq_sas <- function(save_data = FALSE, offline = TRUE) {
-  assert_flag(save_data)
-  ahrq_info <- icd10_fetch_ahrq_sas(offline = offline)
-  ahrq_sas_lines <- readLines(ahrq_info$file_path)
+icd10_parse_ahrq_sas <- function(save_pkg_data = FALSE,
+                                 offline = TRUE) {
+  assert_flag(save_pkg_data)
+  ahrq_info <- icd10_fetch_ahrq_sas()
+  ahrq_sas_lines <- readLines(ahrq_info$file_path, warn = FALSE)
   icd10_map_ahrq <- sas_format_extract_rcomfmt(ahrq_sas_lines)
   unun <- function(x) unname(unlist(x))
   icd10_map_ahrq[["HTNCX"]] <- unun(icd10_map_ahrq[ahrq_htn])
@@ -153,16 +155,16 @@ icd10_parse_ahrq_sas <- function(save_data = FALSE, offline = TRUE) {
   icd10_map_ahrq <- lapply(icd10_map_ahrq, as.short_diag)
   icd10_map_ahrq <- lapply(icd10_map_ahrq, as.icd10)
   icd10_map_ahrq <- comorbidity_map(icd10_map_ahrq)
-  if (save_data) {
-    save_in_data_dir("icd10_map_ahrq")
+  if (save_pkg_data) {
+    .save_in_data_dir("icd10_map_ahrq")
   }
   invisible(icd10_map_ahrq)
 }
 
 #' @keywords internal
 #' @noRd
-icd9_fetch_quan_deyo_sas <- function(...) {
-  download_to_data_raw(
+.dl_icd9_quan_deyo_sas <- function(...) {
+  .download_to_data_raw(
     url =
       "http://mchp-appserv.cpe.umanitoba.ca/concept/ICD9_E_Charlson.sas.txt",
     file_name = "ICD9_E_Charlson.sas", ...
@@ -189,11 +191,11 @@ icd9_fetch_quan_deyo_sas <- function(...) {
 #' @template offline
 #' @keywords internal manip
 #' @noRd
-icd9_parse_quan_deyo_sas <- function(save_data = FALSE, offline = TRUE) {
-  assert_flag(save_data)
+icd9_parse_quan_deyo_sas <- function(save_pkg_data = FALSE) {
+  assert_flag(save_pkg_data)
   # download the file and/or just get the path or file name, fails if missing
   # by default
-  f_info <- icd9_fetch_quan_deyo_sas(offline = offline)
+  f_info <- .dl_icd9_quan_deyo_sas()
   quan_sas_lines <- readLines(f_info$file_path, warn = FALSE)
   let_statements <- sas_extract_let_strings(quan_sas_lines)
   icd9_map_quan_deyo <- let_statements[grepl(
@@ -211,27 +213,39 @@ icd9_parse_quan_deyo_sas <- function(save_data = FALSE, offline = TRUE) {
   icd9_map_quan_deyo <-
     comorbidity_map(icd9(as.short_diag(icd9_map_quan_deyo)))
   icd9_map_charlson <- icd9_map_quan_deyo
-  if (save_data) {
-    save_in_data_dir(icd9_map_quan_deyo)
-    save_in_data_dir(icd9_map_charlson)
+  if (save_pkg_data) {
+    .save_in_data_dir(icd9_map_quan_deyo)
+    .save_in_data_dir(icd9_map_charlson)
   }
   invisible(icd9_map_quan_deyo)
 }
 
-# mostly duplicated from icd.data, just saving the map here
-icd10_parse_ahrq_pcs <- function(save_data = TRUE) {
-  f <- unzip_to_data_raw(
+.dl_icd10ahrq_pc <- function() {
+  .unzip_to_data_raw(
     url = paste0(
       "https://www.hcup-us.ahrq.gov/toolssoftware/",
       "procedureicd10/pc_icd10pcs_2018_1.zip"
     ),
-    file_name = "pc_icd10pcs_2018.csv", offline = !save_data
+    file_name = "pc_icd10pcs_2018.csv"
   )
+}
+
+# mostly duplicated from icd.data, just saving the map here
+icd10_parse_map_ahrq_pc <- function(save_pkg_data = TRUE) {
+  f <- .dl_icd10ahrq_pc()
   dat <- read.csv(
-    file = f$file_path, skip = 1, stringsAsFactors = FALSE,
-    colClasses = "character", encoding = "latin1"
+    file = f$file_path,
+    skip = 1,
+    stringsAsFactors = FALSE,
+    colClasses = "character",
+    encoding = "latin1"
   )
-  names(dat) <- c("code", "desc", "class_number", "class")
+  names(dat) <- c(
+    "code",
+    "desc",
+    "class_number",
+    "class"
+  )
   dat$class <- factor(dat$class,
     levels = c(
       "Minor Diagnostic",
@@ -243,8 +257,8 @@ icd10_parse_ahrq_pcs <- function(save_data = TRUE) {
   dat$class_number <- NULL
   dat$code <- gsub(dat$code, pattern = "'", replacement = "")
   icd10_map_ahrq_pcs <- split(dat$code, dat$class)
-  if (save_data) {
-    save_in_data_dir(icd10_map_ahrq_pcs)
+  if (save_pkg_data) {
+    .save_in_data_dir(icd10_map_ahrq_pcs)
   }
 }
 # nocov end

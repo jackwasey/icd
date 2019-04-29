@@ -26,19 +26,21 @@ Where reasonable, this is guessed from the input data.}
 
 \item{...}{arguments passed on to other functions}
 
-\item{icd9}{is a character vector or factor of ICD-9 codes. If fewer than five characters
+\item{icd9}{is
+a character vector or factor of ICD-9 codes. If fewer than five characters
 is given in a code, then the digits are greedily assigned to hundreds, then
-tens, then units, before the decimal parts. E.g. "10" becomes "010", not
-"0010".}
+tens, then units, before the decimal parts. E.g., \code{10} becomes
+\code{010}, not \code{0010} or \code{00010}.}
 
-\item{icd9Short}{is a character vector of ICD-9 codes. If fewer than five characters is
-given in a code, then the digits are greedily assigned to hundreds, then
-tens, then units, before the decimal parts. E.g. "10" becomes "010", not
-"0010"}
+\item{icd9Short}{is a character vector of ICD-9 codes. If fewer than five
+characters is given in a code, then the digits are greedily assigned to
+hundreds, then tens, then units, before the decimal parts. E.g., \code{10}
+becomes \code{010}, not \code{0010} or \code{00010}.}
 
-\item{icd9Decimal}{character vector of ICD-9 codes. If fewer than five characters is given in a
-code, then the digits are greedily assigned to hundreds, then tens, then
-units, before the decimal parts. E.g. "10" becomes "010", not "0010"}
+\item{character}{vector of ICD-9 codes. If fewer than five
+characters is given in a code, then the digits are greedily assigned to
+hundreds, then tens, then units, before the decimal parts. E.g., \code{10}
+becomes \code{010}, not \code{0010} or \code{00010}.}
 }
 \description{
 These functions take a set of ICD codes, and look for parent ICD codes in the
@@ -56,26 +58,24 @@ from input data
 }}
 
 \examples{
-if (requireNamespace("icd.data", quietly = TRUE)) {
-  kids <- children("V40")
-  kids
-  condense(kids, defined = TRUE)
-  kids_with_undefined <- children("V40", defined = FALSE)
-  head(kids_with_undefined)
-  length(kids_with_undefined)
-  condense(kids, defined = FALSE)
+kids <- children("V40")
+kids
+condense(kids, defined = TRUE)
+kids_with_undefined <- children("V40", defined = FALSE)
+head(kids_with_undefined)
+length(kids_with_undefined)
+condense(kids, defined = FALSE)
 
-  # what happens if we have additional codes?
-  # (condense will warn if we don't explicitly ask to condense
-  # based on defined or possible codes.)
-  condense(c(kids, "41100"), warn = FALSE)
+# what happens if we have additional codes?
+# (condense will warn if we don't explicitly ask to condense
+# based on defined or possible codes.)
+condense(c(kids, "41100"), warn = FALSE)
 
-  # a good use is to summarise the contents of a comorbidity:
-  icd9_map_elix$CHF
-  condense(icd9_map_elix$CHF, warn = FALSE)
-  # explaining big groups of codes takes advantage of this:
-  explain_code(icd9_map_elix$CHF, condense = TRUE, warn = FALSE)
-}
+# a good use is to summarise the contents of a comorbidity:
+icd9_map_elix$CHF
+condense(icd9_map_elix$CHF, warn = FALSE)
+# explaining big groups of codes takes advantage of this:
+explain_code(icd9_map_elix$CHF, condense = TRUE, warn = FALSE)
 }
 \seealso{
 Other ICD-9 ranges: \code{\link{children}},

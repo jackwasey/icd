@@ -1,0 +1,153 @@
+---
+title: "Benchmark refactoring"
+author: "Jack O. Wasey"
+date: "`r Sys.Date()`"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(icd)
+library(bench)
+requireNamespace("stringr")
+
+# lower this number for testing
+bign <- 179
+```
+
+## match with Rcpp
+
+```{r}
+n <- bign
+random_short_icd10_codes <- unname(
+  sample(
+    unlist(icd::icd10_map_elix),
+    replace = TRUE, size = n
+  )
+)
+lookup <- unique(unname(unlist(icd10_map_quan_deyo)))
+bench::mark(
+  match(random_short_icd10_codes, lookup),
+  icd:::match_rcpp(random_short_icd10_codes, lookup)
+)
+```
+
+## benchmarking factor generation with known levels and no sorting: getting unique levels is fast, 0.1 seconds for 1e7 codes
+```{r}
+system.time(lvls <- unique(random_short_icd10_codes))
+bench::mark(
+  icd:::factor_nosort_rcpp(random_short_icd10_codes, lvls),
+  icd:::factor_nosort(random_short_icd10_codes, lvls),
+  factor(random_short_icd10_codes, lvls)
+)
+```
+
+## factor_nosort
+
+```{r factor_nosort_basic_usage}
+x <- c("z", "a", "123")
+icd:::factor_nosort(x)
+# should return a factor without modification
+x <- as.factor(x)
+identical(icd:::factor_nosort(x), x)
+# unless the levels change:
+icd:::factor_nosort(x, levels = c("a", "z"))
+# existing factor levels aren't re-ordered without also moving elements
+f <- factor(c("a", "b", "b", "c"))
+g <- icd:::factor_nosort(f, levels = c("a", "c", "b"))
+stopifnot(g[4] == "c")
+pts <- icd:::generate_random_unordered_pts(bign)
+u <- unique.default(pts$code)
+```
+
+## stringr::str_sort vs base R sort
+
+```{r}
+bench::mark(
+  base::sort(u),
+  stringr::str_sort(u)
+)
+```
+
+## refactor
+
+The first test can't compare results fully because we deliberately don't sort.
+```{r}
+bench::mark(
+  icd:::factor_nosort(pts$code),
+  icd:::factor_nosort_rcpp(pts$code),
+  base::factor(pts$code),
+  check = FALSE
+)
+bench::mark(
+  icd:::factor_nosort(pts$code),
+  icd:::factor_nosort_rcpp(pts$code)
+)
+```
+
+## refactor complex
+
+```{r test_refactor_complex}
+# test various combos with NAs and mis-matches
+n <- bign
+nl <- as.integer(log(n)) # %/% 50L
+set.seed(1441)
+v1 <- icd:::generate_random_short_icd9(n)
+v2 <- v1
+v2[1] <- "@999INVALID"
+l1 <- sample(v1, size = nl)
+l2 <- c(NA_character_, l1)
+l3 <- c(l1, NA_character_)
+l4 <- c(l1, "XXX")
+l5 <- unique(icd:::generate_random_short_icd9(n * 2))
+bnona <- bench::press(
+  lm = list(v1, v2),
+  lnl = list(l1, l2, l3, l4, l5),
+  lpl = list(l1, l2, l3, l4, l5),
+  {
+    m <- unlist(lm)
+    nl <- unique(unlist(lnl))
+    pl <- unique(unlist(lpl))
+    f <- factor(m, levels = pl)
+    bench::mark(
+      icd:::refactor(f, nl),
+      base::factor(f, levels = nl)
+    )
+  }
+)
+plot(bnona)
+lm <- list(v1, v2)
+lnl <- lapply(list(l1, l2, l3, l4, l5), unique)
+lpl <- lapply(list(l1, l2, l3, l4, l5), unique)
+bwithna <- bench::press(
+  lmi = seq_along(lm),
+  lnli = seq_along(lnl),
+  lpli = seq_along(lpl),
+  {
+    f <- factor(lm[[lmi]], levels = lpl[[lpli]])
+    nl <- lnl[[lnli]]
+    bench::mark(
+      icd:::refactor(f, levels = nl, na.rm = FALSE, exclude_na = FALSE),
+      base::factor(f, levels = nl, exclude = NULL)
+    )
+  }
+)
+plot(bwithna)
+```
+
+## test one huge factor
+
+```{r huge_factor}
+n <- bign * 100
+nl <- n %/% 50L
+set.seed(1441)
+v1 <- icd:::generate_random_short_icd9(n)
+l1 <- unique(sample(v1, size = nl))
+l2 <- unique(sample(v1, size = nl))
+f <- factor(v1, l1)
+bhugefactor <- bench::mark(
+  icd:::refactor(f, l2),
+  base::factor(f, levels = l2)
+)
+plot(bhugefactor)
+```

@@ -15,27 +15,24 @@
 #' library(magrittr, warn.conflicts = FALSE, quietly = TRUE)
 #' # magrittr not required by icd
 #' # icd.data package highly recommended, but not a depependency for comorbidity calculations
-#' if (requireNamespace("icd.data", quietly = TRUE)) {
-#'   # no children other than self
-#'   children("10201", short_code = TRUE, defined = FALSE)
+#' # no children other than self
+#' children("10201", short_code = TRUE, defined = FALSE)
 #' 
-#'   # guess it was ICD-9 and a short, not decimal code
-#'   children("0032")
+#' # guess it was ICD-9 and a short, not decimal code
+#' children("0032")
 #' 
-#'   # empty because 102.01 is not meaningful
-#'   children("10201", short_code = TRUE, defined = TRUE)
-#'   x <- children("003", short_code = TRUE, defined = TRUE)
-#'   explain_code(x, condense = FALSE, short_code = TRUE)
+#' # empty because 102.01 is not meaningful
+#' children("10201", short_code = TRUE, defined = TRUE)
+#' x <- children("003", short_code = TRUE, defined = TRUE)
+#' explain_code(x, condense = FALSE, short_code = TRUE)
 #' 
-#'   children(short_code = FALSE, "100.0")
-#'   children(short_code = FALSE, "100.00")
-#'   children(short_code = FALSE, "2.34")
-#' }
+#' children(short_code = FALSE, "100.0")
+#' children(short_code = FALSE, "100.00")
+#' children(short_code = FALSE, "2.34")
 #' @return Returns a vector of ICD codes, with class of \code{character} and the
 #'   class of the identified or specified ICD code, e.g. \code{icd9}
 #' @export
 children <- function(x, ...) {
-  require_icd_data()
   UseMethod("children")
 }
 
@@ -43,7 +40,6 @@ children <- function(x, ...) {
 #'   versus decimal format
 #' @export
 children.character <- function(x, ...) {
-  require_icd_data()
   ver <- guess_version(x)
   # eventually UseMethod again, but this would be circular until the icd10
   # method is defined.
@@ -69,21 +65,25 @@ children.icd9cm <- function(x,
   stopifnot(is.logical(short_code))
   stopifnot(is.logical(defined))
   stopifnot(is.logical(billable))
-  require_icd_data()
-  res <- if (short_code) {
-    .Call("_icd_icd9ChildrenShortUnordered",
-      icd9Short = toupper(x),
-      # TODO: update to use new icd.data naming scheme
-      icd9cmReal = icd.data::icd9cm_hierarchy$code,
-      onlyReal = defined
-    )
-  } else {
-    .Call("_icd_icd9ChildrenDecimalCpp",
-      icd9Decimal = toupper(x),
-      icd9cmReal = icd.data::icd9cm_hierarchy$code,
-      onlyReal = defined
-    )
-  }
+  res <-
+    if (short_code) {
+      if (defined) {
+        icd9_children_short_unordered_defined_rcpp(
+          icd9Short = toupper(x),
+          icd9cmReal = icd9cm_hierarchy$code
+        )
+      } else {
+        icd9_children_short_unordered_undefined_rcpp(toupper(x))
+      }
+    } else {
+      # TODO: unordered variant
+      icd9_children_decimal_rcpp(
+        icd9Decimal = toupper(x),
+        icd9cmReal = icd9cm_hierarchy$code,
+        onlyReal = defined
+      )
+    }
+  # ICD-9 and ICD-9-CM sort the same, I think.
   res <- sort.icd9(res)
   res <- if (billable) {
     get_billable.icd9cm(icd9cm(res), short_code)
@@ -99,11 +99,15 @@ children.icd9cm <- function(x,
 #' @describeIn children Get children of ICD-9 codes, based on the super-set
 #'   ICD-9-CM at present
 #' @export
-children.icd9 <- function(x, short_code = guess_short(x),
-                          defined = TRUE, billable = FALSE, ...)
+children.icd9 <- function(x,
+                          short_code = guess_short(x),
+                          defined = TRUE,
+                          billable = FALSE,
+                          ...)
   children.icd9cm(x,
     short_code = short_code,
-    defined = defined, billable = billable
+    defined = defined,
+    billable = billable
   )
 
 #' @describeIn children Get children of ICD-10 codes (warns because this
@@ -113,7 +117,6 @@ children.icd10 <- function(x,
                            short_code = guess_short(x),
                            defined,
                            billable = FALSE, ...) {
-  require_icd_data()
   res <- children.icd10cm(x, short_code, defined, billable, ...)
   if (!is.icd10cm(x)) {
     cl <- class(res)
@@ -130,7 +133,6 @@ children.icd10cm <- function(x,
                              defined,
                              billable = FALSE,
                              ...) {
-  require_icd_data()
   if (!missing(defined) && !defined) {
     stop("Only finding children of 'defined' ICD-10-CM codes is supported.")
   }
@@ -145,7 +147,6 @@ children.icd10who <- function(x,
                               billable = NULL,
                               leaf = NULL,
                               ...) {
-  require_icd_data()
   if (!missing(defined) && !defined) {
     stop("Only finding children of 'defined' ICD-10-CM codes is supported.")
   }
@@ -154,9 +155,9 @@ children.icd10who <- function(x,
 
 #' Find only the defined children of ICD codes
 #'
-#' Find defined ICD-10 children based on 2016 ICD-10-CM list. "defined" may be a
-#' three digit code, or a leaf node. This is distinct from 'billable'.
-#'
+#' Find defined ICD-10 children based on 2016 ICD-10-CM list. \sQuote{Defined}
+#' may mean a three-digit code, a non-leaf three- or four-digit code, or a leaf
+#' (\dQuote{billable} code).
 #' @keywords internal
 #' @noRd
 children_defined <- function(x)
@@ -174,7 +175,6 @@ children_defined.icd10cm <- function(x,
                                      short_code = guess_short(x),
                                      warn = FALSE,
                                      verbose = FALSE) {
-  require_icd_data()
   stopifnot(is.factor(x) || is.character(unclass(x)))
   stopifnot(is.logical(short_code))
   stopifnot(is.logical(warn))
@@ -182,11 +182,11 @@ children_defined.icd10cm <- function(x,
   if (!short_code) {
     x <- decimal_to_short.icd10cm(x)
   }
-  ver <- icd_data_get_icd10cm_active_ver()
+  ver <- get_icd10cm_active_year()
   if (verbose) message("Using ICD-10-CM version: ", ver)
   nc <- .icd10cm_get_nchars(ver)
-  lu <- icd_data_icd10cm_active()
-  if (length(nc) != nrow(lu)) browser()
+  lu <- get_icd10cm_active()
+  stopifnot(!is.null(lu))
   kids <- icd10_children_defined_rcpp(
     x = x,
     lookup = lu,
@@ -215,7 +215,6 @@ children_defined.icd10who <- function(x,
                                       short_code = guess_short(x),
                                       who_ver = "icd10who2016",
                                       warn = FALSE) {
-  require_icd_data(version = "1.1")
   stopifnot(is.factor(x) || is.character(unclass(x)))
   stopifnot(is.logical(short_code))
   stopifnot(is.logical(warn))
@@ -224,9 +223,9 @@ children_defined.icd10who <- function(x,
     x <- decimal_to_short.icd10cm(x)
   }
   d <- if (who_ver == "icd10who2008fr") {
-    .idget("icd10who2008fr")
+    get_icd10who2008fr()
   } else {
-    .idget("icd10who2016")
+    get_icd10who2016()
   }
   stopifnot(!is.null(d))
   stopifnot(!is.null(d[["code"]]))

@@ -1,12 +1,12 @@
-# nocov start
-
-expect_no_warn <- function(object, expected, ...)
+expect_no_warn <- function(object, expected, ...) {
   testthat::expect_warning(object, regexp = NA, ...)
+}
 
-expect_no_error <- function(object, expected, ...)
+expect_no_error <- function(object, expected, ...) {
   testthat::expect_error(object, regexp = NA, ...)
+}
 
-#' expect equal, ignoring any ICD classes
+#' Expect equal, ignoring any ICD classes
 #'
 #' Strips any \code{icd} classes (but not others) before making comparison
 #' @noRd
@@ -28,43 +28,29 @@ expect_equal_no_class_order <- function(object, expected, ...) {
 #'   for ICD classes to be in correct order.
 #' @keywords internal debugging
 #' @noRd
-expect_classes_ordered <- function(x)
+expect_classes_ordered <- function(x) {
   eval(bquote(testthat::expect_true(classes_ordered(.(x)))))
-
-#' generate random ICD-9 codes
-#'
-#' @keywords internal debugging datagen
-#' @noRd
-generate_random_short_icd9 <- function(n = 50000)
-  as.character(floor(stats::runif(min = 1, max = 99999, n = n)))
-
-#' generate random ICD-9 codes
-#'
-#' Uses billable ICD-10-CM codes from current master list
-#' @param n number to select, passed to \code{sample}
-#' @template short_code
-#' @keywords internal debugging datagen
-#' @noRd
-generate_random_short_icd10cm_bill <- function(n = 10, short_code = TRUE) {
-  i <- icd.data::icd10cm2016
-  x <- sample(
-    unlist(
-      i[i$billable == 1, "code"]
-    ),
-    replace = TRUE, size = n
-  )
-  if (short_code) x else short_to_decimal(x)
 }
 
-generate_random_decimal_icd9 <- function(n = 50000)
+#' generate random ICD-9 codes
+#'
+#' @keywords internal debugging datagen
+#' @noRd
+generate_random_short_icd9 <- function(n = 50000) {
+  as.character(floor(stats::runif(min = 1, max = 99999, n = n)))
+}
+
+generate_random_decimal_icd9 <- function(n = 50000) {
   paste(
     round(stats::runif(min = 1, max = 999, n = n)),
     sample(expand_minor.icd9(""), replace = TRUE, size = n),
     sep = "."
   )
+}
 
-generate_random_pts <- function(...)
+generate_random_pts <- function(...) {
   generate_random_ordered_pts(...)
+}
 
 generate_random_ordered_pts <- function(...) {
   x <- generate_random_unordered_pts(...)
@@ -141,19 +127,16 @@ test_env <- function() {
 #'   \code{FALSE} gives \code{ICD-9}
 #' @template verbose
 #' @examples
-#' if (requireNamespace("icd.data", quietly = TRUE)) {
-#'   summary(icd::comorbid_pccc_dx(icd:::generate_neds_pts()))
-#'   neds <- icd:::generate_neds_pts(n = 100, ncol = 10L, icd10 = FALSE)
-#'   stopifnot(dim(neds) == c(100L, 11L))
-#'   summary(icd::comorbid_pccc_dx(neds))
-#' }
+#' summary(icd::comorbid_pccc_dx(icd:::generate_neds_pts()))
+#' neds <- icd:::generate_neds_pts(n = 100, ncol = 10L, icd10 = FALSE)
+#' stopifnot(dim(neds) == c(100L, 11L))
+#' summary(icd::comorbid_pccc_dx(neds))
 #' \dontrun{
-#' if (requireNamespace("icd.data", quietly = TRUE)) {
-#'   # original size data for PCCC benchmarking:
-#'   set.seed(1441)
-#'   neds <- icd:::generate_neds_pts(28584301L)
-#'   neds_comorbid <- icd::comorbid_pccc_dx(neds)
-#' }
+#' # original size data for PCCC benchmarking:
+#' set.seed(1441)
+#' # Large NEDS simulation: neds <- icd:::generate_neds_pts(28584301L)
+#' neds <- icd:::generate_neds_pts(2858L)
+#' neds_comorbid <- icd::comorbid_pccc_dx(neds)
 #' }
 #' @keywords internal
 generate_neds_pts <- function(n = 1000L,
@@ -161,10 +144,10 @@ generate_neds_pts <- function(n = 1000L,
                               icd10 = TRUE,
                               verbose = FALSE) {
   codes <- if (icd10) {
-    i <- icd.data::icd10cm2016
+    i <- icd10cm2016
     unclass(as_char_no_warn(i$code))
   } else {
-    unclass(as_char_no_warn(icd.data::icd9cm_hierarchy$code))
+    unclass(as_char_no_warn(icd9cm_hierarchy$code))
   }
   dat <- data.frame(
     id = as.character(n + seq(n)),
@@ -195,8 +178,6 @@ generate_neds_pts <- function(n = 1000L,
   }
   dat_wide_str
 }
-
-# nocov end
 
 assert_flag <- function(x) {
   stopifnot(is.logical(x), length(x) == 1L)
@@ -266,56 +247,25 @@ with_absent_action <- function(absent_action, code) {
   force(code)
 }
 
-is_missing_icd_data <- function(var_name) {
-  if (!icd_data_ver_ok()) return(TRUE)
-  with_absent_action(
-    absent_action = "silent",
-    with_offline(
-      offline = TRUE,
-      with_interact(
-        interact = FALSE, {
-          d <- .idget(var_name, must_work = FALSE)
-          i <- if (is.function(d)) {
-            d()
-          } else {
-            d
-          }
-          is.null(i)
-        }
-      )
-    )
-  )
-}
-
 # workaround so icd.data 1.0 will not cause CRAN or user errors
 skip_missing_icd10who <- function() {
-  if (is_missing_icd_data("icd10who2016")) {
+  if (!.exists_anywhere("icd10who2016")) {
     testthat::skip("No WHO ICD-10 2016 English data")
   }
-  if (is_missing_icd_data("icd10who2008fr")) {
+  if (!.exists_anywhere("icd10who2008fr")) {
     testthat::skip("No WHO ICD-10 2008 French data")
   }
 }
 
 skip_missing_icd10fr <- function() {
-  if (is_missing_icd_data("icd10fr2019")) {
+  if (!.exists_anywhere("icd10fr2019")) {
     testthat::skip("No ICD-10-FR 2019 French data")
   }
 }
 
-set_test_slow <- function(do_slow = TRUE) {
-  Sys.setenv("ICD_TEST_SLOW" = do_slow)
-}
-
-get_test_slow <- function() {
-  substring(tolower(Sys.getenv("ICD_TEST_SLOW")), 1, 1) %in% c("t", "y")
-}
-
 skip_slow <- function(msg = "Skipping slow test") {
   testthat::skip_on_cran()
-  testthat::skip_on_travis()
-  testthat::skip_on_appveyor()
-  if (!get_test_slow()) {
+  if (!.get_opt("test_slow", default = FALSE)) {
     testthat::skip(msg)
   }
 }

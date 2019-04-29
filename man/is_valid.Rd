@@ -3,6 +3,7 @@
 \name{is_valid}
 \alias{is_valid}
 \alias{is_valid.icd10}
+\alias{is_valid.icd10fr}
 \alias{is_valid.icd9}
 \alias{is_valid.comorbidity_map}
 \title{Check whether ICD-9 codes are syntactically valid}
@@ -10,6 +11,10 @@
 is_valid(x, ...)
 
 \method{is_valid}{icd10}(x, short_code = guess_short(x),
+  whitespace_ok = TRUE, re_short = re_icd10_short,
+  re_decimal = re_icd10_decimal, ...)
+
+\method{is_valid}{icd10fr}(x, short_code = guess_short(x),
   whitespace_ok = TRUE, ...)
 
 \method{is_valid}{icd9}(x, short_code = guess_short(x),
@@ -49,6 +54,8 @@ Leading zeroes in the decimal form are not ambiguous. Although
 \section{Methods (by class)}{
 \itemize{
 \item \code{icd10}: Test whether generic ICD-10 code is valid
+
+\item \code{icd10fr}: Test whether generic ICD-10-FR code is valid
 
 \item \code{icd9}: Test whether generic ICD-10 code is valid
 

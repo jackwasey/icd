@@ -1,7 +1,5 @@
 context("explain in table format")
 
-skip_if_not_installed("icd.data")
-
 test_that("with and without condense returns correct structure", {
   codes <- c("362.5", "413.9", "414.01", "584.9", "357.2", "588.81", "414")
   expect_equal(dim(explain_table(codes, condense = FALSE)), c(7, 11))
@@ -12,9 +10,9 @@ test_that("with and without condense returns correct structure", {
   )
 })
 
-test_that("reproduces explain_code.list,  mixed major and minor", {
+test_that("reproduces explain_code.list, mixed major and minor", {
   codes <- c("362.5", "413.9", "010.02", "584.9", "357.2", "588.81", "010")
-  method1 <- unlist(explain_code.list(codes))
+  method1 <- explain_code(codes, condense = FALSE)
   method2 <- explain_table(codes, condense = FALSE)[["long_desc"]]
   expect_identical(method1, method2)
 })
@@ -125,7 +123,7 @@ test_that("explain_table num_condense sum after condense equals input length", {
 test_that("appropriately convert mixed code character vector,
           casted icd9, and casted icd10 vectors:", {
   codes <- c("N18.3", "414", "362.5")
-  res <- explain_table(icd9(codes))
+  res <- explain_table(as.icd9(codes))
   expect_equal(is.na(res$short_desc), c(TRUE, FALSE, FALSE))
 
   res <- explain_table(icd10(codes))
@@ -140,11 +138,19 @@ test_that("explain_table works with factor input", {
 
 test_that("same columns returned for ICD-9 and ICD-10 codes", {
   expect_identical(
-    colnames(explain_table.icd9(
-      c("E879", "E932", "E915", "E947", "E939", "E911", "E928")
-    )),
-    colnames(explain_table.icd10(
-      c("M97", "V07", "E934")
-    ))
+    colnames(
+      explain_table(
+        as.icd9(
+          c("E879", "E932", "E915", "E947", "E939", "E911", "E928")
+        )
+      )
+    ),
+    colnames(
+      explain_table(
+        as.icd10(
+          c("M97", "V07", "E934")
+        )
+      )
+    )
   )
 })

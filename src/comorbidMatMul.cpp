@@ -6,7 +6,6 @@
 #include "mapplus.h"
 #include "refactor.h"
 #include "relevant.h"
-#include "valgrind_icd.h"
 #include <cstring>
 #include <string>
 #include <unordered_set>
@@ -134,7 +133,7 @@ void buildVisitCodesSparseWide(
 //' \url{https://eigen.tuxfamily.org/dox/TopicMultiThreading.html}
 //' @keywords internal array algebra
 //' @noRd
-// [[Rcpp::export]]
+// [[Rcpp::export(comorbid_mat_mul_wide_rcpp)]]
 LogicalMatrix comorbidMatMulWide(const DataFrame &data,
                                  const List &map,
                                  const std::string id_name,
@@ -142,9 +141,6 @@ LogicalMatrix comorbidMatMulWide(const DataFrame &data,
                                  const bool validate) {
   VecStr out_row_names;           // size is reserved in buildVisitCodesVec
   RObject visits = data[id_name]; // does this copy??? RObject instead?
-
-  // TODO: Relevant requires CV right now, not factor
-  // Does making a data.frame with subset of columns make a deep copy?
   Relevant r(map, data, code_names);
   MapPlus m(map, r);
   PtsSparse visMat; // reservation and sizing done within next function

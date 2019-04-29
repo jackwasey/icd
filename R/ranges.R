@@ -1,20 +1,18 @@
 #' Generate a set of codes between two ICD codes including encompassed children
 #'
 #' Great care is taken not to include codes which have children not in the
-#' range. E.g., \code{100.9} to \code{101.1} would _not_ include code "101". See
-#' the extensive tests covering this area for much more detail.
+#' range. E.g., \code{100.9} to \code{101.1} would \strong{not} include code
+#' \code{101}. See the extensive tests covering this area for much more detail.
 #'
 #' The default for the argument \code{defined} is \code{TRUE} since this is far
 #' more likely to be useful to the end user, dealing with real ICD codes.
 #' @examples
-#' if (requireNamespace("icd.data", quietly = TRUE)) {
-#'   expand_range("428.0", "428.9")
-#'   "4280" %i9s% "4289"
-#'   "4280" %i9s% "42821"
-#'   "42799" %i9sa% "42802" # doesn't include 428 or 4280
-#'   "427.99" %i9da% "428.02"
-#'   "V80" %i9s% "V810"
-#' }
+#' expand_range("428.0", "428.9")
+#' "4280" %i9s% "4289"
+#' "4280" %i9s% "42821"
+#' "42799" %i9sa% "42802" # doesn't include 428 or 4280
+#' "427.99" %i9da% "428.02"
+#' "V80" %i9s% "V810"
 #' @templateVar icd9ShortName start,end
 #' @template icd9-short
 #' @template defined
@@ -25,12 +23,11 @@
 #'   by default (\code{FALSE}) include \code{V10} even though \code{V10} itself
 #'   is parent to everything up to \code{V11}.
 #' @param ex_ambig_end single logical, same as \code{ex_ambig_start} but affects
-#'   codes at the end of the range. E.g. 99.99 to 101.01 would by default
-#'   exclude 101 and 101.0
+#'   codes at the end of the range. E.g. \sQuote{99.99} to \sQuote{101.01} would
+#'   by default exclude 101 and 101.0
 #' @family ICD-9 ranges
 #' @export
 expand_range <- function(start, end, ...) {
-  require_icd_data()
   stopifnot(length(start) == 1)
   stopifnot(length(end) == 1)
   UseMethod("expand_range")
@@ -119,7 +116,7 @@ expand_range.icd10cm <- function(start,
   new_end <- end_kids[length(end_kids)]
 
   # find the start and end code positions in the master list
-  i <- icd_data_icd10cm_active()
+  i <- get_icd10cm_active()
   pos <- match(
     c(start, new_end),
     i[["code"]]
@@ -127,7 +124,7 @@ expand_range.icd10cm <- function(start,
   if (is.na(pos[1])) stop(sprintf("start code '%s' not found", start))
   if (is.na(pos[2])) stop(sprintf("calculated end code '%s' not found", end))
   stopifnot(pos[2] >= pos[1])
-  i <- icd_data_icd10cm_active()
+  i <- get_icd10cm_active()
   i[pos[1]:pos[2], "code"]
 }
 
@@ -136,13 +133,10 @@ expand_range.icd10cm <- function(start,
 #' Expand a pair of major codes into a range of major codes. Primarily for use
 #' by \code{icd.data}.
 #' @examples
-#' if (requireNamespace("icd.data", quietly = TRUE)) {
-#'   expand_range_major("100", "102")
-#' }
+#' expand_range_major("100", "102")
 #' @template dotdotdot
 #' @export
 expand_range_major <- function(start, end, defined) {
-  require_icd_data()
   UseMethod("expand_range_major")
 }
 
@@ -151,7 +145,6 @@ expand_range_major <- function(start, end, defined) {
 #' @keywords internal
 #' @export
 expand_range_major.default <- function(start, end, defined = TRUE) {
-  require_icd_data()
   icd_ver <- guess_pair_version(start, end, short_code = TRUE)
   if (icd_ver == "icd9") {
     expand_range_major.icd9(start, end)
@@ -160,10 +153,10 @@ expand_range_major.default <- function(start, end, defined = TRUE) {
   }
 }
 
-
 # Expand range of all (currently) possible ICD-10 major, three-digit part of
 # codes.
 .icd10cm_get_majors_possible <- function(s, e) {
+  .dbg(".icd10cm_get_majors_possible: ", s, ", ", e)
   ss <- substr(s, 1L, 1L)
   es <- substr(e, 1L, 1L)
   lets <- LETTERS[which(LETTERS == ss):which(LETTERS == es)]
@@ -188,14 +181,14 @@ expand_range_major.default <- function(start, end, defined = TRUE) {
 #' @keywords internal
 #' @export
 expand_range_major.icd10cm <- function(start, end, defined = TRUE) {
-  require_icd_data()
+
   # codes may have alphabetic characters in 3rd position, so can't just do
   # numeric. This may make ICD-10-CM different from ICD-10 WHO. It also makes
   # generating the lookup table of ICD-10-CM codes potentially circular, since
   # we expand the start to end range of chapter and sub-chapter definitions.
   se <- toupper(trimws(as_char_no_warn(c(start, end))))
   unique_mjrs <- if (defined) {
-    unique(icd.data::icd10cm2016$three_digit)
+    unique(icd10cm2016$three_digit)
   } else {
     .icd10cm_get_majors_possible("A00", "Z99")
   }
@@ -239,17 +232,16 @@ expand_range.icd9 <- function(start, end,
   }
 }
 
-#' expand range worker
+#' Expand range worker
 #'
 #' Expands a range of short ICD-9 codes, dropping ambiguous codes in the middle
 #' of ranges
-#'
 #' @section Ambiguous terminal parent codes: At the end of the output, we may
 #'   not want any higher-level codes at the end which would have children beyond
 #'   the specified range. There could be lots of lower level codes at the end,
 #'   so we actually have to search the whole list to be sure. One parent code
-#'   could have maximum of 110 child codes, so we just search the last 110
-#'   (TODO). This means that even if trying to preserve the ambiguous start,
+#'   could have maximum of 110 child codes, so we could just search the last
+#'   110? This means that even if trying to preserve the ambiguous start,
 #'   setting \code{ex_ambig_end} will have to kill it, if it spills over.
 #' @section Ambiguous starting parent codes: Excluding ambiguous parent codes
 #'   from the start is easier than those near the end of the result. Just remove
@@ -299,8 +291,8 @@ icd9_expand_range_worker <- function(start,
   # end code
   out_env <- vec_to_env_true(lookup$vec[start_index:end_index])
   # do not want to check a load of leaf nodes for children, since they have
-  # none. # TODO: pre-calculate
-  leaf_codes <- icd_data_icd9cm_leaf_v32()[["code"]]
+  # none.
+  leaf_codes <- icd9cm_hierarchy[icd9cm_hierarchy$billable, "code"]
   leaf_env <- vec_to_env_true(leaf_codes)
   is_parent <- function(x, defined) {
     if (!defined) {
@@ -309,7 +301,7 @@ icd9_expand_range_worker <- function(start,
       is.null(leaf_env[[x]])
     }
   }
-  icd_get_missing_kids <- function(code, defined) {
+  get_missing_kids <- function(code, defined) {
     s_kids <- children.icd9(code, short_code = TRUE, defined = defined)
     s_kids_in <- vapply(s_kids, function(x) !is.null(out_env[[x]]), logical(1))
     s_kids[!s_kids_in]
@@ -319,13 +311,10 @@ icd9_expand_range_worker <- function(start,
     if (!is_parent(x, defined)) {
       return()
     }
-    kids <- icd_get_missing_kids(x, defined)
-    if (length(kids) == 0L) {
-      return()
-    }
+    kids <- get_missing_kids(x, defined)
+    if (length(kids) == 0L) return()
     suppressWarnings(rm(list = x, envir = out_env))
   }
-
   if (ex_ambig_end) {
     lapply(ls(out_env), exclude_ambiguous_parent, defined)
   }
@@ -356,8 +345,6 @@ icd9_expand_range_short <- function(start,
   assert_flag(defined)
   assert_flag(ex_ambig_start)
   assert_flag(ex_ambig_end)
-  # potentially do some checks on start and end. Determine whether we are doing
-  # N, V or E then lookup start and end indices in sysdata.rda lookup tables
   if (defined) {
     stopifnot(
       is_defined(start, short_code = TRUE),
@@ -412,7 +399,6 @@ icd9_expand_range_short <- function(start,
 #'   major codes
 #' @export
 expand_range_major.icd9 <- function(start, end, defined = TRUE) {
-  require_icd_data()
   assert_scalar(start) # i'll permit numeric but prefer char
   assert_scalar(end)
   assert_flag(defined)
@@ -433,14 +419,17 @@ expand_range_major.icd9 <- function(start, end, defined = TRUE) {
 #' Expand range of decimal ICD-9 codes
 #' @keywords internal
 #' @noRd
-icd9_expand_range_decimal <- function(start, end, defined = TRUE,
+icd9_expand_range_decimal <- function(start,
+                                      end,
+                                      defined = TRUE,
                                       ex_ambig_start = TRUE,
                                       ex_ambig_end = TRUE) {
   as.decimal_diag(
     icd9(
       short_to_decimal.icd9(
         icd9_expand_range_short(
-          decimal_to_short.icd9(start), decimal_to_short.icd9(end),
+          decimal_to_short.icd9(start),
+          decimal_to_short.icd9(end),
           defined = defined,
           ex_ambig_start = ex_ambig_start,
           ex_ambig_end = ex_ambig_end
@@ -486,8 +475,8 @@ icd9_expand_range_decimal <- function(start, end, defined = TRUE,
 #' all possible decimal parts of ICD9 code. e.g. giving an empty input will fill
 #' out 111 combinations, e..g .1 .11 .12 .... .2 ....
 #' @template mnr
-#' @param isE single logical, which if TRUE, treats the minor as part of an E
-#'   code (which is one character), as opposed to a V or numeric-only code,
+#' @param isE single logical, which if \code{TRUE}, treats the minor as part of
+#'   an E code (which is one character), as opposed to a V or numeric-only code,
 #'   which is two character. Default is \code{FALSE}.
 #' @examples
 #' \dontrun{
@@ -510,5 +499,5 @@ expand_minor <- function(mnr, ...) {
 #' @keywords internal
 #' @noRd
 expand_minor.icd9 <- function(mnr, is_e = FALSE) {
-  icd9_expand_minor_wrap(mnr, isE = is_e)
+  icd9_expand_minor_rcpp(mnr, isE = is_e)
 }

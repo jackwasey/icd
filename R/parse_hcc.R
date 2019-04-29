@@ -6,14 +6,14 @@
 #' \href{https://www.cms.gov/Medicare/Health-Plans/MedicareAdvtgSpecRateStats/Risk-Adjustors.html}{
 #' Medicare Risk Adjustors}. Due to the complex file structure of the original
 #' data (many nested zip files), they have been organized in the folder
-#' \code{data/icd_hcc_rawdata/} available in the source repository but not the
+#' \code{data-raw/icd_hcc_rawdata/} available in the source repository but not the
 #' installed package. This function creates a data file containing ICD-9/10 to
 #' CC crosswalks.
 #' @template parse-template
 #' @keywords internal manip
 #' @noRd
-icd9_parse_cc <- function(save_data = FALSE) {
-  assert_flag(save_data)
+icd9_parse_cc <- function(save_pkg_data = FALSE) {
+  assert_flag(save_pkg_data)
   hcc_icd9_dir <- file.path(get_raw_data_dir(), "icd_hcc_rawdata", "icd9")
   icd9_map_cc <- lapply(
     list.files(hcc_icd9_dir, full.names = TRUE),
@@ -75,8 +75,8 @@ icd9_parse_cc <- function(save_data = FALSE) {
   # combine with full icd9_map_cc listing
   icd9_map_cc <- rbind(icd9_map_cc, extracodes)
   rm(extracodes)
-  if (save_data) {
-    save_in_data_dir(icd9_map_cc)
+  if (save_pkg_data) {
+    .save_in_data_dir(icd9_map_cc)
   }
   invisible(icd9_map_cc)
 }
@@ -85,15 +85,19 @@ icd9_parse_cc <- function(save_data = FALSE) {
 #' @template parse-template
 #' @keywords internal manip
 #' @noRd
-icd10_parse_cc <- function(save_data = FALSE) {
-  assert_flag(save_data)
+icd10_parse_cc <- function(save_pkg_data = FALSE) {
+  assert_flag(save_pkg_data)
   hcc_icd10_dir <- file.path(get_raw_data_dir(), "icd_hcc_rawdata", "icd10")
-  # Import raw CMS data for ICD9
+  # Import raw CMS data for ICD-9
   icd10_map_cc <- lapply(
-    list.files(hcc_icd10_dir, full.names = TRUE),
-    FUN = read.fwf, widths = c(7, 4), header = FALSE, stringsAsFactors = FALSE
+    list.files(hcc_icd10_dir,
+      full.names = TRUE
+    ),
+    FUN = read.fwf,
+    widths = c(7, 4),
+    header = FALSE,
+    stringsAsFactors = FALSE
   )
-
   # TODO: do use factors, as there is much duplication in "year" and "cc" which
   # shaves 20% off the memory requirement of the data.frame. This is likely to
   # improve speed downstream since more of the lookup table can be held in cache
@@ -106,8 +110,10 @@ icd10_parse_cc <- function(save_data = FALSE) {
   )
   # Assign year to each dataframe within the list of dataframes
   icd10_map_cc <- mapply(
-    cbind, icd10_map_cc,
-    "year" = years$icd10, SIMPLIFY = FALSE
+    cbind,
+    icd10_map_cc,
+    "year" = years$icd10,
+    SIMPLIFY = FALSE
   )
   rm(years)
   # Combine lsit of DFs into a single DF
@@ -119,8 +125,8 @@ icd10_parse_cc <- function(save_data = FALSE) {
   # Per CMS instructions, some ICDs may to be manually assigned additional CCs
   # Currently, no rules exist for ICD10, but if they need to be added,
   # can adapt the code from icd9_map_cc()
-  if (save_data) {
-    save_in_data_dir(icd10_map_cc)
+  if (save_pkg_data) {
+    .save_in_data_dir(icd10_map_cc)
   }
   invisible(icd10_map_cc)
 }
@@ -139,14 +145,15 @@ icd10_parse_cc <- function(save_data = FALSE) {
 #' @template parse-template
 #' @keywords internal manip
 #' @noRd
-icd_parse_cc_hierarchy <- function(save_data = FALSE) {
-  assert_flag(save_data)
+icd_parse_cc_hierarchy <- function(save_pkg_data = FALSE) {
+  assert_flag(save_pkg_data)
   # Define Hierarchy
   # import raw hierarchy files from CMS
-  hierarchy_path <- system.file(get_raw_data_dir(),
-    "icd_hcc_rawdata", "hierarchy",
-    package = "icd"
+  hierarchy_path <- file.path(
+    get_raw_data_dir(),
+    "icd_hcc_rawdata", "hierarchy"
   )
+  stopifnot(dir.exists(hierarchy_path))
   hierarchy_files <- list.files(hierarchy_path)
   hierarchy_file_paths <- list.files(hierarchy_path, full.names = TRUE)
   icd_map_cc_hcc <- lapply(hierarchy_file_paths, FUN = readLines)
@@ -174,12 +181,18 @@ icd_parse_cc_hierarchy <- function(save_data = FALSE) {
   colnames(icd_map_cc_hcc)[1] <- "condition"
   # Extract the HCC that is used in the if condition statement
   icd_map_cc_hcc[["ifcc"]] <- as.numeric(
-    str_extract(icd_map_cc_hcc$condition, "(?<=hcc)([0-9]*)|(?<=CC\\=)([0-9]*)")
+    str_extract(icd_map_cc_hcc$condition,
+      "(?<=hcc)([0-9]*)|(?<=CC\\=)([0-9]*)",
+      perl = TRUE
+    )
   )
   # Extract the HCCs that should be set to zero if the above condition is met
   todrop <- str_extract(
-    icd_map_cc_hcc$condition,
-    "(?<=i\\=)([:print:]*)(?=;hcc)|(?<=STR\\()([:print:]*)(?= \\)\\);)"
+    string = icd_map_cc_hcc$condition,
+    pattern =
+      "(?<=i\\=)([[:print:]]*)(?=;hcc)|(?<=STR\\()([[:print:]]*)(?= \\)\\);)",
+    perl = TRUE,
+    fun = `[`
   )
   # convert it to a dataframe and bind it with the original icd_map_cc_ data
   # identify the maximum number of CC hierarchy rules
@@ -196,8 +209,8 @@ icd_parse_cc_hierarchy <- function(save_data = FALSE) {
   )
   # combine CC requirements with CCs to zero
   icd_map_cc_hcc <- cbind(icd_map_cc_hcc[, c("year", "ifcc")], todrop)
-  if (save_data) {
-    save_in_data_dir(icd_map_cc_hcc)
+  if (save_pkg_data) {
+    .save_in_data_dir(icd_map_cc_hcc)
   }
   invisible(icd_map_cc_hcc)
 }

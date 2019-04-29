@@ -22,15 +22,16 @@ filter_poa_not_yes(x, poa_name = "poa")
 \item{x}{input vector of ICD codes}
 
 \item{poa_name}{The name of column in the data frame which contains the
-Present On Arrival (POA) flag. The flag itself is a single character, typically
-one of "Y", "N", "E", "X", "U" or empty.}
+Present On Arrival (POA) flag. The flag itself is a single character,
+typically one of \sQuote{Y}, \sQuote{N}, \sQuote{E}, \sQuote{X},
+\sQuote{U}, or empty.}
 
 \item{poa}{single character value, being one of \code{Yes}, \code{No},
 \code{NotYes}, and \code{NotNo}, indicating whether to account for
 comorbidities flagged as present-on-arrival. This is not a simple flag,
 because many codes are exempt, unspecified, or unknown. The intermediate
-codes, such as "exempt", "unknown" and \code{NA} mean that "yes" is not the
-same as "not no."}
+codes, such as \sQuote{exempt}, \sQuote{unknown} and \code{NA} mean that
+\sQuote{yes} is not the same as \sQuote{not no}.}
 }
 \description{
 Present On Arrival (POA) is not a simple flag, since many codes are exempt,
@@ -75,12 +76,15 @@ myData \%>\%
     icd_name = "diag", visit_name = "visit_id",
     short_code = TRUE
   )
+my_map <- head(icd9_map_elix)
 # can call the core comorbid() function with an arbitrary mapping
 myData \%>\%
   filter_poa_yes() \%>\%
-  comorbid_elix(
-    icd_name = "diag", visit_name = "visit_id",
-    short_mapping = TRUE
+  comorbid(
+    icd_name = "diag",
+    visit_name = "visit_id",
+    map = my_map,
+    short_map = TRUE
   )
 }
 }

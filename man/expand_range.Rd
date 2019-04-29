@@ -31,10 +31,10 @@ start \%i9mj\% end
 start \%i9s\% end
 }
 \arguments{
-\item{start, end}{is a character vector of ICD-9 codes. If fewer than five characters is
-given in a code, then the digits are greedily assigned to hundreds, then
-tens, then units, before the decimal parts. E.g. "10" becomes "010", not
-"0010"}
+\item{start, end}{is a character vector of ICD-9 codes. If fewer than five
+characters is given in a code, then the digits are greedily assigned to
+hundreds, then tens, then units, before the decimal parts. E.g., \code{10}
+becomes \code{010}, not \code{0010} or \code{00010}.}
 
 \item{short_code}{single logical value which determines whether the ICD-9
 code provided is in short (\code{TRUE}) or decimal (\code{FALSE}) form.
@@ -54,13 +54,13 @@ by default (\code{FALSE}) include \code{V10} even though \code{V10} itself
 is parent to everything up to \code{V11}.}
 
 \item{ex_ambig_end}{single logical, same as \code{ex_ambig_start} but affects
-codes at the end of the range. E.g. 99.99 to 101.01 would by default
-exclude 101 and 101.0}
+codes at the end of the range. E.g. \sQuote{99.99} to \sQuote{101.01} would
+by default exclude 101 and 101.0}
 }
 \description{
 Great care is taken not to include codes which have children not in the
-range. E.g., \code{100.9} to \code{101.1} would _not_ include code "101". See
-the extensive tests covering this area for much more detail.
+range. E.g., \code{100.9} to \code{101.1} would \strong{not} include code
+\code{101}. See the extensive tests covering this area for much more detail.
 }
 \details{
 The default for the argument \code{defined} is \code{TRUE} since this is far
@@ -80,14 +80,12 @@ class is not known
 }}
 
 \examples{
-if (requireNamespace("icd.data", quietly = TRUE)) {
-  expand_range("428.0", "428.9")
-  "4280" \%i9s\% "4289"
-  "4280" \%i9s\% "42821"
-  "42799" \%i9sa\% "42802" # doesn't include 428 or 4280
-  "427.99" \%i9da\% "428.02"
-  "V80" \%i9s\% "V810"
-}
+expand_range("428.0", "428.9")
+"4280" \%i9s\% "4289"
+"4280" \%i9s\% "42821"
+"42799" \%i9sa\% "42802" # doesn't include 428 or 4280
+"427.99" \%i9da\% "428.02"
+"V80" \%i9s\% "V810"
 }
 \seealso{
 Other ICD-9 ranges: \code{\link{children}},

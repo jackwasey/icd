@@ -1,19 +1,29 @@
-#source("install-dependencies.R")
+# source("install-dependencies.R")
 if (!require("icd", versionCheck(version = "3.2", op = ">="))) {
   yn <- readline("'icd' >= 3.2 not installed. Install from CRAN? (y/n)")
   if (tolower(yn) == "y") install.packages("icd")
 }
 args <- commandArgs(trailingOnly = TRUE)
 n_order <- 5L
-if (length(args) > 1L) stop("Only one argument is accepted, which is the order",
-                            " of magitude of the biggest benchmark")
-if (length(args) == 1L)
+if (length(args) > 1L) {
+  stop(
+    "Only one argument is accepted, which is the order",
+    " of magitude of the biggest benchmark"
+  )
+}
+if (length(args) == 1L) {
   n_order <- as.integer(args[1])
-message("Running benchmarks, with biggest synthetic data set having 10^",
-        n_order, " rows.")
-if (n_order > 5L)
-  warning("Depending on hardware, running these benchmarks with 10^6 or more",
-          " rows may take hours.")
+}
+message(
+  "Running benchmarks, with biggest synthetic data set having 10^",
+  n_order, " rows."
+)
+if (n_order > 5L) {
+  warning(
+    "Depending on hardware, running these benchmarks with 10^6 or more",
+    " rows may take hours."
+  )
+}
 
 requireNamespace("comorbidity")
 requireNamespace("medicalrisk")
@@ -35,21 +45,27 @@ generate_pts <- function(num_patients, dz_per_patient = 20,
     visit_id = as_char_no_warn(sample(seq(1, pts), replace = TRUE, size = n)),
     code = fun(n),
     poa = as.factor(
-      sample(x = c("Y", "N", "n", "n", "y", "X", "E", "", NA),
-             replace = TRUE, size = n)),
+      sample(
+        x = c("Y", "N", "n", "n", "y", "X", "E", "", NA),
+        replace = TRUE, size = n
+      )
+    ),
     stringsAsFactors = FALSE
   )
 }
 
 get_ten_million_icd9_pts <- function() {
   ten_million_random_pts <-
-    R.cache::loadCache(key = list("ten_million_random_pts"),
-                       suffix = "icd.Rcache")
+    R.cache::loadCache(
+      key = list("ten_million_random_pts"),
+      suffix = "icd.Rcache"
+    )
   if (is.null(ten_million_random_pts)) {
     ten_million_random_pts <- generate_pts(1e7)
     R.cache::saveCache(ten_million_random_pts,
-                       key = list("ten_million_random_pts"),
-                       suffix = "icd.Rcache")
+      key = list("ten_million_random_pts"),
+      suffix = "icd.Rcache"
+    )
   }
   invisible(ten_million_random_pts)
 }
@@ -71,9 +87,12 @@ bres <- bench::press(n = n, {
     comorbid_charlson(pts),
     comorbidity::comorbidity(
       x = pts, id = "visit_id", code = "code", score = "charlson",
-      parallel = n >= 1e5),
+      parallel = n >= 1e5
+    ),
     medicalrisk::generate_comorbidity_df(
-      pts_mr, icd9mapfn = medicalrisk::icd9cm_charlson_quan),
+      pts_mr,
+      icd9mapfn = medicalrisk::icd9cm_charlson_quan
+    ),
     touch::cmbd(pts), # AHRQ, Charlson not available.
     check = FALSE
   )
@@ -82,11 +101,15 @@ bres <- bench::press(n = n, {
 host <- Sys.info()["nodename"]
 
 # keep the results (Makefile will look for updated dput results below)
-saveRDS(bres,
-        paste0(
-          paste("bench-versus-result", n_order, host,
-                make.names(Sys.Date()), sep = "-"),
-          ".rds")
+saveRDS(
+  bres,
+  paste0(
+    paste("bench-versus-result", n_order, host,
+      make.names(Sys.Date()),
+      sep = "-"
+    ),
+    ".rds"
+  )
 )
 # now take the medians and make suitable for the article:
 res <- tidyr::spread(bres[c(1, 2, 5)], expression, median)
@@ -100,9 +123,11 @@ res <- as.data.frame(res)
 old_opt_dml <- options(deparse.max.lines = 0)
 dput(res)
 # keep file name the same so Makefile will keep track
-dput(res,
-     paste0(
-       paste("bench-versus-dput", n_order, host, sep = "-"),
-       ".R")
+dput(
+  res,
+  paste0(
+    paste("bench-versus-dput", n_order, host, sep = "-"),
+    ".R"
+  )
 )
 options(old_opt_dml)

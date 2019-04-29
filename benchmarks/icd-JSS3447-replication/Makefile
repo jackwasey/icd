@@ -15,6 +15,7 @@ RES7 := dput-latest-n-7.R
 RES8 := dput-latest-n-8.R
 NAME := icd-JSS3447-replication
 DTAG := icdjss3447repl
+RMD := efficiency
 ARTICLE := Efficient_calculation_of_comorbidities_from_medical_codes
 UPDATED := $(ARTICLE).UPDATED
 ARTICLEPDF := $(UPDATED).pdf
@@ -36,12 +37,12 @@ $(SUB): .icd.built $(NAME).tar.gz purl readme $(ARTICLEPDF)
 	$(ARTICLEPDF)
 
 $(ARTICLEPDF):
-	$(RSCRIPT) -e 'rmarkdown::render("../../vignettes/$(ARTICLE).Rmd", output_dir = getwd(), output_file = "$(ARTICLEPDF)")'
+	$(RSCRIPT) -e 'rmarkdown::render("../../vignettes/$(RMD).Rmd", output_dir = getwd(), output_file = "$(ARTICLEPDF)")'
 
-../../vignettes/$(ARTICLE).Rmd: ;
+../../vignettes/$(RMD).Rmd: ;
 
-$(ARTICLE).R: ../../vignettes/$(ARTICLE).Rmd
-	$(RSCRIPT) -e 'knitr::purl("../../vignettes/$(ARTICLE).Rmd", output = "$(ARTICLE).R")'
+$(ARTICLE).R: ../../vignettes/$(RMD).Rmd
+	$(RSCRIPT) -e 'knitr::purl("../../vignettes/$(RMD).Rmd", output = "$(ARTICLE).R")'
 
 $(README).html:
 	$(RSCRIPT) -e 'rmarkdown::render("$(README).Rmd")'

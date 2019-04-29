@@ -27,7 +27,7 @@ leading zeroes which may be inferred; the last two characters represent the
 Character vector
 }
 \description{
-In debug mode, will check that \code{mjr} and \code{mnr} are same length.
+Convert \code{mjr} and \code{mnr} vectors to single code
 }
 \keyword{internal}
 \keyword{manip}

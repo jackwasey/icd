@@ -5,19 +5,19 @@
   ],
   "@type": "SoftwareSourceCode",
   "identifier": "icd",
-  "description": "Calculate comorbidities, medical risk scores, and\n    work very quickly and precisely with ICD-9 and ICD-10 codes. This package\n    enables a work flow from raw tables of ICD codes in hospital databases\n    to comorbidities. ICD-9 and ICD-10 comorbidity mappings from Quan\n    (Deyo and Elixhauser versions), Elixhauser and AHRQ included.  Common\n    ambiguities and code formats are handled. Comorbidity computation\n    includes Hierarchical Condition Codes, and a reimplementation of the\n    AHRQ Clinical Classifications Software. Risk scores include those of\n    Charlson and van Walraven.  US Clinical Modification, Word Health\n    Organization, Belgian and French ICD-10 codes are supported through\n    the 'icd.data' package, some of which are downloaded on demand.",
+  "description": "Calculate comorbidities, medical risk scores, and\n    work very quickly and precisely with ICD-9 and ICD-10 codes. This\n    package enables a work flow from raw tables of ICD codes in hospital\n    databases to comorbidities. ICD-9 and ICD-10 comorbidity mappings from\n    Quan (Deyo and Elixhauser versions), Elixhauser and AHRQ included.\n    Common ambiguities and code formats are handled. Comorbidity\n    computation includes Hierarchical Condition Codes, and an\n    implementation of AHRQ Clinical Classifications. Risk\n    scores include those of Charlson and van Walraven.  US Clinical\n    Modification, Word Health Organization, Belgian and French ICD-10\n    codes are supported, most of which are downloaded on demand.",
   "name": "icd: Comorbidity Calculations and Tools for ICD-9 and ICD-10\n    Codes",
   "codeRepository": "https://jackwasey.github.io/icd/",
   "issueTracker": "https://github.com/jackwasey/icd/issues",
   "license": "https://spdx.org/licenses/GPL-3.0",
-  "version": "4.0.2",
+  "version": "4.0.4",
   "programmingLanguage": {
     "@type": "ComputerLanguage",
     "name": "R",
-    "version": "3.5.2",
+    "version": "3.5.3",
     "url": "https://r-project.org"
   },
-  "runtimePlatform": "R version 3.5.2 (2018-12-20)",
+  "runtimePlatform": "R version 3.5.3 (2019-03-11)",
   "provider": {
     "@id": "https://cran.r-project.org",
     "@type": "Organization",
@@ -31,6 +31,10 @@
       "familyName": "Wasey",
       "email": "jack@jackwasey.com",
       "@id": "https://orcid.org/0000-0003-3738-4637"
+    },
+    {
+      "@type": "Organization",
+      "name": "R Core Team"
     }
   ],
   "contributor": [
@@ -65,6 +69,10 @@
       "familyName": "Wasey",
       "email": "jack@jackwasey.com",
       "@id": "https://orcid.org/0000-0003-3738-4637"
+    },
+    {
+      "@type": "Organization",
+      "name": "R Core Team"
     }
   ],
   "funder": {},
@@ -85,15 +93,27 @@
     },
     {
       "@type": "SoftwareApplication",
-      "identifier": "icd.data",
-      "name": "icd.data",
+      "identifier": "httr",
+      "name": "httr",
       "provider": {
         "@id": "https://cran.r-project.org",
         "@type": "Organization",
         "name": "Comprehensive R Archive Network (CRAN)",
         "url": "https://cran.r-project.org"
       },
-      "sameAs": "https://CRAN.R-project.org/package=icd.data"
+      "sameAs": "https://CRAN.R-project.org/package=httr"
+    },
+    {
+      "@type": "SoftwareApplication",
+      "identifier": "jsonlite",
+      "name": "jsonlite",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=jsonlite"
     },
     {
       "@type": "SoftwareApplication",
@@ -122,7 +142,31 @@
     {
       "@type": "SoftwareApplication",
       "identifier": "nhds",
-      "name": "nhds"
+      "name": "nhds",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=nhds"
+    },
+    {
+      "@type": "SoftwareApplication",
+      "identifier": "parallel",
+      "name": "parallel"
+    },
+    {
+      "@type": "SoftwareApplication",
+      "identifier": "readxl",
+      "name": "readxl",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=readxl"
     },
     {
       "@type": "SoftwareApplication",
@@ -136,6 +180,18 @@
         "url": "https://cran.r-project.org"
       },
       "sameAs": "https://CRAN.R-project.org/package=rmarkdown"
+    },
+    {
+      "@type": "SoftwareApplication",
+      "identifier": "RODBC",
+      "name": "RODBC",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=RODBC"
     },
     {
       "@type": "SoftwareApplication",
@@ -200,6 +256,18 @@
     },
     {
       "@type": "SoftwareApplication",
+      "identifier": "rappdirs",
+      "name": "rappdirs",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=rappdirs"
+    },
+    {
+      "@type": "SoftwareApplication",
       "identifier": "Rcpp",
       "name": "Rcpp",
       "version": ">= 0.12.3",
@@ -227,5 +295,6 @@
     "https://www.tidyverse.org/lifecycle/#stable",
     "https://www.repostatus.org/#active"
   ],
-  "relatedLink": "https://CRAN.R-project.org/package=icd"
+  "relatedLink": "https://CRAN.R-project.org/package=icd",
+  "fileSize": "5108.876KB"
 }

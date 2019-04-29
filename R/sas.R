@@ -32,7 +32,7 @@ sas_format_extract <- function(sas_lines) {
     value = TRUE
   )
   # put each VALUE declaration in a vector element
-  sma1 <- str_match_all(
+  sma1 <- .str_match_all(
     string = sas_lines,
     pattern =
       "^V(?:ALUE|alue)[[:space:]]+([[:graph:]]+)[[:space:]]+(.+)[[:space:]]*$"
@@ -114,7 +114,7 @@ sas_parse_assignments <- function(x, strip_whitespace = TRUE,
   }
   mid_tmp <- unlist(
     lapply(
-      str_match_all(
+      .str_match_all(
         halfway[seq(2, length(halfway) - 1)],
         pattern = '^([^"]|"[^"]*")*? (.*)'
       ),
@@ -165,7 +165,7 @@ sas_parse_assignments <- function(x, strip_whitespace = TRUE,
 sas_extract_let_strings <- function(x) {
   let_rex <-
     "%LET ([[:alnum:]]+)[[:space:]]*=[[:space:]]*%STR\\(([[:print:]]+?)\\)"
-  a <- str_match_all(x, let_rex)
+  a <- .str_match_all(x, let_rex)
   a <- lapply(a, trimws)
   a <- a[vapply(a, FUN = function(x) length(x) != 0, FUN.VALUE = logical(1))]
 

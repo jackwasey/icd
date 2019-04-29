@@ -11,7 +11,7 @@
 #' @param code_name String with name(s) of column(s) containing the codes.
 #' @template return_df
 #' @param return_binary Logical value, if \code{TRUE}, the output will be in 0s
-#'   and 1s instead of TRUE and FALSE.
+#'   and 1s instead of \code{TRUE} and \code{FALSE}.
 #' @param restore_id_order Logical value, if \code{TRUE}, the default, the order
 #'   of the visit IDs will match the order of visit IDs first encountered in the
 #'   input data. This takes a third of the time in calculations on data with
@@ -26,12 +26,10 @@
 #'   to be called to do the comorbidity calculation
 #' @template dotdotdot
 #' @examples
-#' if (requireNamespace("icd.data", quietly = TRUE)) {
-#'   u <- icd.data::uranium_pathology
-#'   m <- icd10_map_ahrq
-#'   u$icd10 <- decimal_to_short(u$icd10)
-#'   j <- categorize_simple(u, m, id_name = "case", code_name = "icd10")
-#' }
+#' u <- uranium_pathology
+#' m <- icd10_map_ahrq
+#' u$icd10 <- decimal_to_short(u$icd10)
+#' j <- categorize_simple(u, m, id_name = "case", code_name = "icd10")
 #' @keywords internal
 #' @noRd
 categorize_simple <- function(x,
@@ -128,12 +126,13 @@ comorbid_common <- function(...,
   )
 }
 
+# need to wrap just for validate default option
 comorbid_mat_mul_wide <- function(data,
                                   map,
                                   id_name,
                                   code_name,
                                   validate = FALSE) {
-  comorbidMatMulWide(
+  comorbid_mat_mul_wide_rcpp(
     data = data,
     map = map,
     id_name = id_name,

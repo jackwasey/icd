@@ -1,11 +1,12 @@
-*.o
-*.so
 *.dll
 *.gcda
+*.gch
 *.gcno
 *.gcov
+*.o
 *.out
+*.so
 .cproject
 .settings/
-*.gch
-
+Makevars
+prof

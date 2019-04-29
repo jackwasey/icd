@@ -28,7 +28,6 @@
 #'   invalid input codes
 #' @export
 explain_table <- function(...) {
-  require_icd_data()
   UseMethod("explain_table")
 }
 
@@ -37,9 +36,12 @@ explain_table <- function(...) {
 #' @details If the input x is of mixed type it will choose to convert by
 #' @export
 #' @keywords internal
-explain_table.default <- function(x, short_code = guess_short(x),
-                                  condense = FALSE, brief = TRUE,
-                                  warn = TRUE, ...) {
+explain_table.default <- function(x,
+                                  short_code = guess_short(x),
+                                  condense = FALSE,
+                                  brief = TRUE,
+                                  warn = TRUE,
+                                  ...) {
   ver <- guess_version(x, short_code = short_code)
   if (ver %in% icd9_classes) {
     return(
@@ -107,7 +109,8 @@ explain_table_worker <- function(x, hierarchy, short_code, condense,
     all.x = TRUE
   )
   # merge has reordered...
-  exptable[["is_major"]] <- exptable[["three_digit"]] == exptable[["code"]]
+  exptable[["is_major"]] <-
+    as_char_no_warn(exptable[["three_digit"]]) == exptable[["code"]]
   exptable[["valid_icd9"]] <- is_valid.icd9(xs, short_code = TRUE)
   exptable[["valid_icd10"]] <- is_valid.icd10(xs, short_code = TRUE)
   if (condense) {
@@ -121,13 +124,20 @@ explain_table_worker <- function(x, hierarchy, short_code, condense,
 #' @author Ed Lee
 #' @export
 #' @keywords internal
-explain_table.icd9cm <- function(x, short_code = guess_short(x),
-                                 condense = FALSE, brief = TRUE,
-                                 warn = TRUE, ...) {
+explain_table.icd9cm <- function(x,
+                                 short_code = guess_short(x),
+                                 condense = FALSE,
+                                 brief = TRUE,
+                                 warn = TRUE,
+                                 ...) {
   explain_table_worker(
-    x = x, hierarchy = icd.data::icd9cm_hierarchy,
-    short_code = short_code, condense = condense,
-    brief = brief, warn = warn, ...
+    x = x,
+    hierarchy = icd9cm_hierarchy,
+    short_code = short_code,
+    condense = condense,
+    brief = brief,
+    warn = warn,
+    ...
   )
 }
 
@@ -143,7 +153,7 @@ explain_table.icd10cm <- function(x,
                                   ...) {
   explain_table_worker(
     x = x,
-    hierarchy = icd_data_icd10cm_active(),
+    hierarchy = get_icd10cm_active(),
     short_code = short_code,
     condense = condense,
     brief = brief,
@@ -163,7 +173,7 @@ explain_table.icd10who <- function(x,
                                    ...) {
   explain_table_worker(
     x = x,
-    hierarchy = .idget("icd10who2016"),
+    hierarchy = get_icd10who2016(),
     short_code = short_code,
     condense = condense,
     brief = brief,

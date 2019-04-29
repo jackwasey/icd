@@ -15,9 +15,9 @@ function finish {
 trap finish EXIT
 
 #Rscript --vanilla --default-packages=jwutil -e 'jwutil::reqinst("pkgdown"); pkgdown::build_site()'
-Rscript --vanilla -e 'jwutil::reqinst("pkgdown"); library(icd.data); devtools::load_all(); pkgdown::build_site()'
+Rscript --vanilla -e 'jwutil::reqinst("pkgdown"); devtools::load_all(); pkgdown::build_site()'
 mkdir -p "$GH_PAGES"
-cp -r docs/* "$GH_PAGES" 
+cp -r docs/* "$GH_PAGES"
 git -C "$GH_PAGES" status
 git -C "$GH_PAGES" commit -am "pkgdown rerun"
 git -C "$GH_PAGES" push origin gh-pages

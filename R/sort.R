@@ -4,9 +4,10 @@
 #'   unnecessary and ignored. All codes should consistently use the decimal
 #'   divider.
 #' @section ICD-9: Sorts lists of numeric, V or E codes. Note that a simple
-#'   numeric sort does not work for ICD-9 codes, since "162" > "1620", and also
-#'   V codes precede E codes. Numeric codes are first, then 'V', then 'E'. Will
-#'   return a factor if a factor is given.
+#'   numeric sort does not work for ICD-9 codes, since \code{162 > 1620}, and
+#'   also \sQuote{V} codes precede \sQuote{E} codes. Numeric codes are first,
+#'   then \sQuote{V}, then \sQuote{E}. A factor is returned if a factor is
+#'   given.
 #' @section ICD-10-CM and ICD-10-BE: There are some codes which are sequenced
 #'   out of lexicographic order, e.g., \code{C7A} and \code{C7B} are between
 #'   \code{C80} and \code{C81}; \code{D3A} is between \code{D48} and \code{D49}.
@@ -15,6 +16,8 @@
 #'   not \code{sort.icd10cm}, etc..
 #' @param x vector of ICD codes to sort or order
 #' @param decreasing Logical See \code{\link[base]{sort}}.
+#' @param na.last Logical, analogous to \code{order}, so \code{NA} drops NA.
+#'   \code{FALSE} is not currently supported.
 #' @template short_code
 #' @template dotdotdot
 #' @examples
@@ -30,6 +33,7 @@
 #'   order.icd10cm(as.character(codes)),
 #'   order(codes)
 #' ))
+#' icd::order.icd9(c("V20", NA, "100", NA, "E998", "101"))
 #' codes[order.icd10cm(codes)]
 #' # Note that base::order does NOT do S3 dispatch, so the following does not work:
 #' codes[order(codes)]
@@ -55,7 +59,7 @@ sort_icd <- function(x,
 sort.icd10 <- function(x,
                        decreasing = FALSE,
                        ...) {
-  res <- sort(x)
+  res <- sort.default(x)
   # names are preserved, but using attributes would overwrite
   attr(res, "icd_short_diag") <- attr(x, "icd_short_diag")
   class(res) <- class(x)
@@ -69,7 +73,6 @@ sort.icd10cm <- function(x,
                          ...) {
   # ignore short, it doesn't matter
   o <- icd10cm_order_rcpp(x)
-  o <- match(seq_along(x), o)
   if (decreasing) o <- rev(o)
   res <- x[o]
   attr(res, "icd_short_diag") <- attr(x, "icd_short_diag")
@@ -110,15 +113,28 @@ sort.icd9 <- function(x,
   res
 }
 
+# simple backport
+isFALSE <- function(x)
+  is.logical(x) && length(x) == 1L && !is.na(x) && !x
+
 #' @rdname sort_icd
 #' @export
-order.icd9 <- function(x) {
-  if (anyNA(x)) {
-    warning("Dropping NA values")
-    x <- x[!is.na(x)]
+order.icd9 <- function(x, na.last = TRUE) {
+  if (isFALSE(na.last)) {
+    stop("na.last = NA drops NA. na.last = FALSE not implemented.")
+  }
+  na <- is.na(x)
+  n_na <- sum(na)
+  if (is.na(na.last) && n_na != 0) {
+    x <- x[!na]
     if (length(x) == 0) return(integer())
   }
-  icd9_order_rcpp(x)
+  if (!is.factor(x)) {
+    res <- icd9_order_rcpp(x)
+  } else {
+    res <- icd9_order_rcpp(as_char_no_warn(x))
+  }
+  res
 }
 
 #' @rdname sort_icd
@@ -131,4 +147,90 @@ order.icd10cm <- function(x) {
 #' @export
 order.icd10be <- function(x) {
   order.icd10cm(x)
+}
+
+#' @keywords internal
+#' @noRd
+#' @export
+Ops.icd9 <- function(e1, e2) {
+  switch(.Generic,
+    "<" = {
+      e1 != e2 & icd9_compare_vector_rcpp(e1, e2)
+    },
+    "<=" = {
+      e1 == e2 | icd9_compare_vector_rcpp(e1, e2)
+    },
+    ">" = {
+      e1 != e2 & !icd9_compare_vector_rcpp(e1, e2)
+    },
+    ">=" = {
+      !icd10cm_compare_vector_rcpp(e1, e2)
+    },
+    NextMethod()
+  )
+}
+
+#' @keywords internal
+#' @noRd
+#' @export
+Ops.icd10cm <- function(e1, e2) {
+  switch(.Generic,
+    "<" = {
+      e1 != e2 & icd10cm_compare_vector_rcpp(e1, e2)
+    },
+    "<=" = {
+      e1 == e2 | icd10cm_compare_vector_rcpp(e1, e2)
+    },
+    ">" = {
+      e1 != e2 & !icd10cm_compare_vector_rcpp(e1, e2)
+    },
+    ">=" = {
+      !icd10cm_compare_vector_rcpp(e1, e2)
+    },
+    NextMethod()
+  )
+}
+
+#' @keywords internal
+#' @noRd
+#' @export
+Ops.icd10be <- function(e1, e2) {
+  switch(.Generic,
+    "<" = {
+      e1 != e2 & icd10cm_compare_vector_rcpp(e1, e2)
+    },
+    "<=" = {
+      e1 == e2 | icd10cm_compare_vector_rcpp(e1, e2)
+    },
+    ">" = {
+      e1 != e2 & !icd10cm_compare_vector_rcpp(e1, e2)
+    },
+    ">=" = {
+      !icd10cm_compare_vector_rcpp(e1, e2)
+    },
+    NextMethod()
+  )
+}
+
+is_unsorted <- function(x) {
+  if (.verbose() && identical(class(x), "character")) {
+    warning("checking is_unsorted on a character vector without ICD classes")
+  }
+  if (is.factor(x)) {
+    cl <- class(x)
+    x <- as_char_no_warn(x)
+    class(x) <- sub("factor", "character", cl)
+  }
+  if (!inherits(x, icd_version_classes)) {
+    return(is.unsorted(x))
+  }
+  lenx <- length(x)
+  # fails if NA present
+  for (i in seq.int(2, lenx)) {
+    if (x[i] < x[i - 1]) {
+      # message("i = ", i, ": ", x[i], " < ", x[i - 1])
+      return(TRUE)
+    }
+  }
+  FALSE
 }

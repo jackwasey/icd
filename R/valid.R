@@ -60,13 +60,42 @@ justify_re <- function(x, whitespace_ok = FALSE) {
 }
 
 # Allow white space
-jws <- function(x)
+.jws <- function(x) {
   justify_re(x, whitespace_ok = TRUE)
+}
 
-# contain any | options within a regular expression, applies to ICD codes
-# without ^ and $
-wrap_re <- function(x)
+# non-capturing expression to contain any | options within a regular expression,
+# applies to ICD codes without ^ and $, (and avoids counting the parenthesis in
+# matched parts)
+nce <- function(x) {
   paste0("(?:", x, ")")
+}
+
+wrap_short_re <- function(maj, min) {
+  paste0(maj, nce(min), "?")
+}
+
+wrap_decimal_re <- function(maj, min) {
+  paste0(
+    maj,
+    nce(
+      paste0(
+        "\\.|",
+        nce(
+          paste0(
+            "\\.",
+            nce(min)
+          )
+        )
+      )
+    ),
+    "?"
+  )
+}
+
+wrap_any_re <- function(maj, min) {
+  paste0(maj, "\\.?", min, "?")
+}
 
 #' Put ICD validation regular expressions in the \code{icd:::} name space
 #' @param env target environment to save the data
@@ -80,13 +109,13 @@ set_re_globals <- function(env = parent.frame()) {
   re_icd9_major_e <- "[Ee][[:digit:]]{1,3}"
   re_icd9_major_e_strict <- "E[[:digit:]]{3}"
   re_icd9_major <- paste0(c(
-    jws(re_icd9_major_n),
-    jws(re_icd9_major_v),
-    jws(re_icd9_major_e)
+    .jws(re_icd9_major_n),
+    .jws(re_icd9_major_v),
+    .jws(re_icd9_major_e)
   ),
   collapse = "|"
   )
-  re_icd9_major_bare <- wrap_re(paste0(c(
+  re_icd9_major_bare <- nce(paste0(c(
     re_icd9_major_n,
     re_icd9_major_v,
     re_icd9_major_e
@@ -94,13 +123,13 @@ set_re_globals <- function(env = parent.frame()) {
   collapse = "|"
   ))
   re_icd9_major_strict <- paste0(c(
-    jws(re_icd9_major_n_strict),
-    jws(re_icd9_major_v_strict),
-    jws(re_icd9_major_e_strict)
+    .jws(re_icd9_major_n_strict),
+    .jws(re_icd9_major_v_strict),
+    .jws(re_icd9_major_e_strict)
   ),
   collapse = "|"
   )
-  re_icd9_major_strict_bare <- wrap_re(paste0(c(
+  re_icd9_major_strict_bare <- nce(paste0(c(
     re_icd9_major_n_strict,
     re_icd9_major_v_strict,
     re_icd9_major_e_strict
@@ -113,47 +142,25 @@ set_re_globals <- function(env = parent.frame()) {
     re_icd9_major_n, "(?:\\.(?:",
     re_icd9_minor_nv, ")?)?"
   )
-  re_icd9_decimal_v_bare <- paste0(
-    re_icd9_major_v, "(?:\\.(?:",
-    re_icd9_minor_nv, ")?)?"
-  )
-  re_icd9_decimal_e_bare <- paste0(
-    re_icd9_major_e, "(?:\\.(?:",
-    re_icd9_minor_e, ")?)?"
-  )
-  re_icd9_decimal_n_strict_bare <- paste0(
-    re_icd9_major_n_strict, "(?:\\.(?:",
-    re_icd9_minor_nv, ")?)?"
-  )
-  re_icd9_decimal_v_strict_bare <- paste0(
-    re_icd9_major_v_strict, "(?:\\.(?:",
-    re_icd9_minor_nv, ")?)?"
-  )
-  re_icd9_decimal_e_strict_bare <- paste0(
-    re_icd9_major_e_strict, "(?:\\.(?:",
-    re_icd9_minor_e, ")?)?"
-  )
-  re_icd9_decimal_n <- jws(re_icd9_decimal_n_bare)
-  re_icd9_decimal_v <- jws(re_icd9_decimal_v_bare)
-  re_icd9_decimal_e <- jws(re_icd9_decimal_e_bare)
-  re_icd9_short_n <- jws(
-    paste0(re_icd9_major_n, "(?:", re_icd9_minor_nv, ")?")
-  )
-  re_icd9_short_v <- jws(
-    paste0(re_icd9_major_v, "(?:", re_icd9_minor_nv, ")?")
-  )
-  re_icd9_short_e <- jws(
-    paste0(re_icd9_major_e, "(?:", re_icd9_minor_e, ")?")
-  )
-  re_icd9_any_n <- jws(
-    paste0(re_icd9_major_n, "\\.?(?:", re_icd9_minor_nv, ")?")
-  )
-  re_icd9_any_v <- jws(
-    paste0(re_icd9_major_v, "\\.?(?:", re_icd9_minor_nv, ")?")
-  )
-  re_icd9_any_e <- jws(
-    paste0(re_icd9_major_e, "\\.?(?:", re_icd9_minor_e, ")?")
-  )
+  re_icd9_decimal_v_bare <-
+    wrap_decimal_re(re_icd9_major_v, re_icd9_minor_nv)
+  re_icd9_decimal_e_bare <-
+    wrap_decimal_re(re_icd9_major_e, re_icd9_minor_e)
+  re_icd9_decimal_n_strict_bare <-
+    wrap_decimal_re(re_icd9_major_n_strict, re_icd9_minor_nv)
+  re_icd9_decimal_v_strict_bare <-
+    wrap_decimal_re(re_icd9_major_v_strict, re_icd9_minor_nv)
+  re_icd9_decimal_e_strict_bare <-
+    wrap_decimal_re(re_icd9_major_e_strict, re_icd9_minor_e)
+  re_icd9_decimal_n <- .jws(re_icd9_decimal_n_bare)
+  re_icd9_decimal_v <- .jws(re_icd9_decimal_v_bare)
+  re_icd9_decimal_e <- .jws(re_icd9_decimal_e_bare)
+  re_icd9_short_n <- .jws(wrap_short_re(re_icd9_major_n, re_icd9_minor_nv))
+  re_icd9_short_v <- .jws(wrap_short_re(re_icd9_major_v, re_icd9_minor_nv))
+  re_icd9_short_e <- .jws(wrap_short_re(re_icd9_major_e, re_icd9_minor_e))
+  re_icd9_any_n <- .jws(wrap_any_re(re_icd9_major_n, re_icd9_minor_nv))
+  re_icd9_any_v <- .jws(wrap_any_re(re_icd9_major_v, re_icd9_minor_nv))
+  re_icd9_any_e <- .jws(wrap_any_re(re_icd9_major_e, re_icd9_minor_e))
   re_icd9_decimal <- paste0(c(
     re_icd9_decimal_n,
     re_icd9_decimal_v,
@@ -189,31 +196,51 @@ set_re_globals <- function(env = parent.frame()) {
   ),
   collapse = "|"
   )
-  re_icd10cm_major_bare <- "[[:alpha:]][[:digit:]][[:alnum:]]"
+  re_icd10_major_bare <- "[[:alpha:]][[:digit:]][[:alnum:]]"
   # use slightly broader definition for generic:
-  re_icd10_major_bare <- re_icd10cm_major_bare
-  re_icd10cm_major <- jws(re_icd10cm_major_bare)
-  re_icd10_major <- jws(re_icd10_major_bare)
-  re_icd10cm_short <- paste0(re_icd10_major_bare, "[[:alnum:]]{0,4}")
-  re_icd10cm_decimal <- paste0(re_icd10_major_bare, "(?:\\.[[:alnum:]]{0,4})?")
-  re_icd10cm_any <- paste0(re_icd10_major_bare, "\\.?[[:alnum:]]{0,4}")
-  re_icd10_short <- re_icd10cm_short
-  re_icd10_decimal <- re_icd10cm_decimal
-  re_icd10_any <- re_icd10cm_any
+  re_icd10_major <- .jws(re_icd10_major_bare)
+  re_icd10_minor <- "[[:alnum:]]{0,4}"
+  re_icd10_short <- paste0(re_icd10_major_bare, re_icd10_minor)
+  re_icd10_decimal <-
+    wrap_decimal_re(re_icd10_major_bare, re_icd10_minor)
+  re_icd10_any <- wrap_any_re(re_icd10_major_bare, re_icd10_minor)
+  # ICD-10-CM, ICD-10-BE
+  re_icd10cm_major_bare <- re_icd10_major_bare
+  re_icd10cm_major <- .jws(re_icd10cm_major_bare)
+  re_icd10cm_minor <- re_icd10_minor
+  re_icd10cm_short <- paste0(re_icd10cm_major_bare, re_icd10cm_minor)
+  re_icd10cm_decimal <-
+    wrap_decimal_re(re_icd10cm_major_bare, re_icd10cm_minor)
+  re_icd10cm_any <- wrap_any_re(re_icd10cm_major_bare, re_icd10cm_minor)
+  # ICD-10-FR see cim.pdf in the zip from <https://www.atih.sante.fr/plateformes-de-transmission-et-logiciels/logiciels-espace-de-telechargement/telecharger/gratuit/11616/456>
+  re_icd10fr_major_bare <- re_icd10_major_bare
+  re_icd10fr_major <- .jws(re_icd10fr_major_bare)
+  re_icd10fr_minor <- "[[:digit:]+]{1,2}[[:digit:]]?"
+  re_icd10fr_short <- wrap_short_re(re_icd10fr_major_bare, re_icd10fr_minor)
+  re_icd10fr_decimal <- wrap_decimal_re(re_icd10fr_major_bare, re_icd10fr_minor)
+  re_icd10fr_any <- wrap_any_re(re_icd10fr_major_bare, re_icd10fr_minor)
   cur_env <- environment()
   for (re in ls(envir = cur_env, pattern = "re_.+"))
     assign(re, get(re, envir = cur_env), envir = env)
   list(
     re_icd10_any,
-    re_icd10_decimal,
-    re_icd10_short,
     re_icd10cm_any,
+    re_icd10fr_any,
+    re_icd10_decimal,
     re_icd10cm_decimal,
+    re_icd10fr_decimal,
+    re_icd10_short,
     re_icd10cm_short,
+    re_icd10fr_short,
     re_icd10_major,
     re_icd10cm_major,
+    re_icd10fr_major,
+    re_icd10_minor,
+    re_icd10cm_minor,
+    re_icd10fr_minor,
     re_icd10_major_bare,
     re_icd10cm_major_bare,
+    re_icd10fr_major_bare,
     re_icd9_any,
     re_icd9_short,
     re_icd9_decimal_strict_bare,
@@ -300,17 +327,25 @@ set_re_globals()
 #'   "V2", "V34", "V567", "E", "E1", "E70", "E"
 #' ))
 #' @export
-is_valid <- function(x, ...)
+is_valid <- function(x, ...) {
   UseMethod("is_valid")
+}
 
-icd_valid_worker <- function(x, whitespace_ok, regex, regex_no_ws = regex) {
+icd_valid_worker <- function(x,
+                             whitespace_ok,
+                             regex,
+                             regex_no_ws = regex) {
   assert_flag(whitespace_ok)
   if (length(x) == 0) return(logical())
   assert_fac_or_char(x)
   if (whitespace_ok) {
-    na_to_false(grepl(jws(regex), x, perl = TRUE))
+    na_to_false(
+      grepl(pattern = .jws(regex), x = x, perl = TRUE)
+    )
   } else {
-    na_to_false(grepl(justify_re(regex_no_ws), x, perl = TRUE))
+    na_to_false(
+      grepl(pattern = justify_re(regex_no_ws), x = x, perl = TRUE)
+    )
   }
 }
 
@@ -332,22 +367,44 @@ is_valid.default <- function(x, short_code = guess_short(x), ...) {
 #' @export
 #' @keywords internal
 is_valid.icd10 <- function(x, short_code = guess_short(x),
-                           whitespace_ok = TRUE, ...) {
+                           whitespace_ok = TRUE,
+                           re_short = re_icd10_short,
+                           re_decimal = re_icd10_decimal,
+                           ...) {
   assert_flag(short_code)
   # SOMEDAY: check whether code has 'year' attribute. This is maybe more for
   # testing 'realness' start with a broad regular expression
   if (short_code) {
-    grepl(pattern = justify_re(re_icd10_short), trimws(x), perl = TRUE)
+    grepl(pattern = justify_re(re_short), trimws(x), perl = TRUE)
   } else {
-    grepl(pattern = justify_re(re_icd10_decimal), trimws(x), perl = TRUE)
+    grepl(pattern = justify_re(re_decimal), trimws(x), perl = TRUE)
   }
+}
+
+#' @describeIn is_valid Test whether generic ICD-10-FR code is valid
+#' @export
+#' @keywords internal
+is_valid.icd10fr <- function(x,
+                             short_code = guess_short(x),
+                             whitespace_ok = TRUE,
+                             ...) {
+  is_valid.icd10(
+    x = x,
+    short_code = short_code,
+    whitespace_ok = whitespace_ok,
+    re_short = re_icd10fr_short,
+    re_decimal = re_icd10fr_decimal,
+    ...
+  )
 }
 
 #' @describeIn is_valid Test whether generic ICD-10 code is valid
 #' @export
 #' @keywords internal
-is_valid.icd9 <- function(x, short_code = guess_short(x),
-                          whitespace_ok = TRUE, ...) {
+is_valid.icd9 <- function(x,
+                          short_code = guess_short(x),
+                          whitespace_ok = TRUE,
+                          ...) {
   if (short_code) {
     icd9_is_valid_short(x, whitespace_ok = whitespace_ok)
   } else {
@@ -355,29 +412,37 @@ is_valid.icd9 <- function(x, short_code = guess_short(x),
   }
 }
 
-icd9_is_valid_decimal <- function(x, whitespace_ok = TRUE)
+icd9_is_valid_decimal <- function(x, whitespace_ok = TRUE) {
   icd_valid_worker(x, whitespace_ok, re_icd9_decimal)
+}
 
-icd9_is_valid_short <- function(x, whitespace_ok = TRUE)
+icd9_is_valid_short <- function(x, whitespace_ok = TRUE) {
   icd_valid_worker(x, whitespace_ok, re_icd9_short)
+}
 
-icd9_is_valid_short_n <- function(x, whitespace_ok = TRUE)
+icd9_is_valid_short_n <- function(x, whitespace_ok = TRUE) {
   icd_valid_worker(x, whitespace_ok, re_icd9_short_n)
+}
 
-icd9_is_valid_short_v <- function(x, whitespace_ok = TRUE)
+icd9_is_valid_short_v <- function(x, whitespace_ok = TRUE) {
   icd_valid_worker(x, whitespace_ok, re_icd9_short_v)
+}
 
-icd9_is_valid_short_e <- function(x, whitespace_ok = TRUE)
+icd9_is_valid_short_e <- function(x, whitespace_ok = TRUE) {
   icd_valid_worker(x, whitespace_ok, re_icd9_short_e)
+}
 
-icd9_is_valid_decimal_n <- function(x, whitespace_ok = TRUE)
+icd9_is_valid_decimal_n <- function(x, whitespace_ok = TRUE) {
   icd_valid_worker(x, whitespace_ok, re_icd9_decimal_n)
+}
 
-icd9_is_valid_decimal_v <- function(x, whitespace_ok = TRUE)
+icd9_is_valid_decimal_v <- function(x, whitespace_ok = TRUE) {
   icd_valid_worker(x, whitespace_ok, re_icd9_decimal_v)
+}
 
-icd9_is_valid_decimal_e <- function(x, whitespace_ok = TRUE)
+icd9_is_valid_decimal_e <- function(x, whitespace_ok = TRUE) {
   icd_valid_worker(x, whitespace_ok, re_icd9_decimal_e)
+}
 
 #' Test whether an ICD code is major
 #'
@@ -542,15 +607,56 @@ get_invalid.comorbidity_map <- function(x, short_code = guess_short(x), ...) {
 get_major <- function(x)
   UseMethod("get_major")
 
-#' @describeIn get_major Get major part of an ICD-10 code
+#' @describeIn get_major Get major part of an ICD-10 (of any kind) code
 #' @details For ICD-10, this is an initial implementation. If speed needed, then
 #'   can re-use C++ ICD-9 version: just grabbing the first three characters,
 #'   after all, and this is much easier in ICD-10 then ICD-9
 #' @keywords internal
 #' @export
 #' @noRd
-get_major.icd10 <- function(x)
+get_major.icd10 <- function(x) {
   substr(trimws(x), 1L, 3L)
+}
+
+#' @describeIn get_major Get major part of an ICD-10-CM code
+#' @keywords internal
+#' @export
+#' @noRd
+get_major.icd10cm <- function(x) {
+  get_major.icd10(x)
+}
+
+#' @describeIn get_major Get major part of a French (country, not language) ICD-10-FR code
+#' @keywords internal
+#' @export
+#' @noRd
+get_major.icd10fr <- function(x) {
+  get_major.icd10(x)
+}
+
+#' @describeIn get_major Get major part of a Belgian ICD-10-BE code
+#' @keywords internal
+#' @export
+#' @noRd
+get_major.icd10be <- function(x) {
+  get_major.icd10(x)
+}
+
+#' @describeIn get_major Get major part of a WHO ICD-10 code
+#' @keywords internal
+#' @export
+#' @noRd
+get_major.icd10who <- function(x) {
+  get_major.icd10(x)
+}
+
+#' @describeIn get_major Get major part of an ICD-10-CM procedure code
+#' @keywords internal
+#' @noRd
+#' @export
+get_major.icd10cm_pc <- function(x) {
+  substr(trimws(x), 1L, 3L)
+}
 
 #' Check whether a code is major
 #' @param icd character vector of ICD codes.
@@ -568,8 +674,8 @@ is_major.default <- function(x) {
     guess_version(x),
     "icd9" = is_major.icd9(x),
     "icd9cm" = is_major.icd9(x),
-    "icd10" = is_major.icd10(x),
-    "icd10cm" = is_major.icd10(x),
+    "icd10" = is_major.icd10cm(x),
+    "icd10cm" = is_major.icd10cm(x),
     stop("ICD version not known")
   )
 }
@@ -592,7 +698,7 @@ is_major.icd10 <- function(x) {
 #' @noRd
 is_major.icd10cm <- function(x) {
   assert_character(x)
-  grepl(jws(re_icd10cm_major), trimws(x), perl = TRUE)
+  grepl(re_icd10cm_major, trimws(x), perl = TRUE)
 }
 
 #' @describeIn is_major check whether a code is an ICD-9 major
@@ -600,6 +706,7 @@ is_major.icd10cm <- function(x) {
 #' @export
 #' @noRd
 is_major.icd9 <- function(x) {
+  x <- sub(pattern = "\\.", replacement = "", x)
   nchar(x) - icd9_is_e(x) < 4
 }
 

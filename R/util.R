@@ -32,23 +32,6 @@ strim <- function(x) {
 "%fnin%" <- function(x, table)
   !fin(x, table)
 
-#' Strip character(s) from character vector
-#'
-#' After benchmarking, \code{gsub} is probably quicker than
-#' \code{stringr}/\code{stringi}. For comorbidity processing.
-#' @param x character vector
-#' @param pattern passed to \code{gsub} default is " "
-#' @param use_bytes single logical passed to \code{base::gsub}, default is the
-#'   slightly quicker \code{TRUE}
-#' @return character vector of same length as input
-#' @keywords internal
-#' @noRd
-strip <- function(x, pattern = " ", use_bytes = TRUE)
-  gsub(
-    pattern = pattern, replacement = "", x = x,
-    fixed = TRUE, useBytes = use_bytes
-  )
-
 #' Encode \code{TRUE} as 1, and \code{FALSE} as 0 (integers)
 #'
 #' When saving data as text files for distribution, printing large amounts of
@@ -211,11 +194,7 @@ get_icd_dx_name <- function(x,
   if (is.null(icd_name)) {
     icd_name <- character()
     for (n in names(x)) {
-      pc <- if (requireNamespace("icd.data", quietly = TRUE)) {
-        get_icd_defined_percent(x[[n]])
-      } else {
-        get_icd_valid_percent(x[[n]])
-      }
+      pc <- get_icd_defined_percent(x[[n]])
       if (pc$icd9 > 25 || pc$icd10 > 25) {
         icd_name <- c(icd_name, n)
       }
@@ -224,7 +203,7 @@ get_icd_dx_name <- function(x,
   if (nrow(x) < 2 || (!valid_codes && !defined_codes)) {
     return(icd_name)
   }
-  pc <- if (defined_codes && requireNamespace("icd.data", quietly = TRUE)) {
+  pc <- if (defined_codes) {
     get_icd_defined_percent(x[icd_name[1]])
   } # TODO vectorize this function
   else {
@@ -370,34 +349,27 @@ na_to_false <- function(x) {
   x
 }
 
-#' make a list using input argument names as names
-#' @param ... arguments whose names become list item names, and whose values
-#'   become the values in the list
-#' @examples
-#' a <- c(1, 2)
-#' b <- c("c", "d")
-#' stopifnot(
-#'   identical(
-#'     named_list(a, b),
-#'     list(a = a, b = b)
-#'   )
-#' )
-#' @noRd
-#' @keywords internal
-named_list <- function(...) {
-  x <- list(...)
-  names(x) <- as.character(match.call()[-1])
-  x
-}
-
 # nocov start
 
-#' \code{stringr} does this, but here we have a small amount of base R code
+#' \CRANpkg{stringr} does this, but here we have a small amount of base R code
+#' @param ... passed to regexec, e.g. \code{perl = TRUE}.
 #' @noRd
 #' @keywords internal
-str_extract <- function(string, pattern, ...)
-  vapply(regmatches(string, m = regexec(pattern = pattern, text = string, ...)),
-    FUN = `[[`, 1, FUN.VALUE = character(1L)
+str_extract <- function(string,
+                        pattern,
+                        fun = `[[`,
+                        ...)
+  vapply(
+    regmatches(string,
+      m = regexec(
+        pattern = pattern,
+        text = string,
+        ...
+      )
+    ),
+    FUN = fun,
+    1,
+    FUN.VALUE = character(1L)
   )
 
 capitalize_first <- function(x)
@@ -414,20 +386,34 @@ get_raw_data_dir <- function() {
   system.file("data-raw", package = "icd")
 }
 
-#' return all matches for regular expression
-#' @noRd
-#' @keywords internal manip
-str_match_all <- function(string, pattern, ...) {
-  string <- as.character(string)
-  regmatches(x = string, m = regexec(pattern = pattern, text = string, ...))
+.stopifnot_year <- function(year) {
+  if (!all(grepl("^[[:digit:]]{4}$", as.character(year)))) {
+    stop(year, " is not a four-digit year.", call. = FALSE)
+  }
 }
 
-require_icd_data <- function(version = "1.0") {
-  if (!icd_data_ver_ok(ver = version)) {
-    stop("Package \"icd.data\" version ", version,
-      " needed for this function to work. ",
-      "Please install it with install.packages(\"icd.data\")",
-      call. = FALSE
+.m <- function(threshold, ..., print = FALSE) {
+  v <- as.integer(.verbose())
+  if (v < threshold) return()
+  if (print) {
+    dots <- list(...)
+    print(
+      lapply(dots, paste, collapse = ", ")
     )
+    return()
   }
+  message(...)
+  invisible()
+}
+
+.msg <- function(...) {
+  .m(1, ...)
+}
+
+.dbg <- function(...) {
+  .m(2, ...)
+}
+
+.trc <- function(...) {
+  .m(3, ...)
 }

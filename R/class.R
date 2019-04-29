@@ -12,7 +12,9 @@ icd9_classes <- c(icd9_sub_classes, "icd9")
 # ICD-10
 icd10_dx_sub_classes <- c(
   "icd10cm",
-  "icd10who"
+  "icd10who",
+  "icd10fr",
+  "icd10be"
 )
 icd10_pc_sub_classes <- "icd10cm_pc"
 icd10_sub_classes <- c(
@@ -341,6 +343,8 @@ icd10cm <- function(x) {
 #' @describeIn set_icd_class Use ICD-10-CM (USA) class for the given data
 #' @export
 as.icd10cm <- function(x, short_code = NULL) {
+  # TODO: as.icd10cm(as.icd10be("A00)) works, but gives both classes, which the
+  # print method fails on.
   stopifnot(is.atomic(x))
   if (inherits(x, "icd10cm")) return(x)
   icd10_pos <- match("icd10", class(x))
@@ -454,7 +458,6 @@ icd10fr <- function(x) {
   x
 }
 
-
 #' @describeIn set_icd_class Use ICD-10-BE (Belgium) class for the given data
 #' @export
 as.icd10be <- function(x, short_code = NULL) {
@@ -515,10 +518,8 @@ icd10be <- function(x) {
 #'   dx02 = c("E9981", "V10", "44004")
 #' ))
 #' wide_to_long(w)
-#' if (requireNamespace("icd.data", quietly = TRUE)) {
-#'   class(icd.data::uranium_pathology)
-#'   class(icd.data::vermont_dx)
-#' }
+#' class(uranium_pathology)
+#' class(vermont_dx)
 #' @seealso \code{\link{long_to_wide}} and \code{\link{wide_to_long}}
 NULL
 
@@ -629,15 +630,16 @@ as.comorbidity_map <- function(x) {
 
 #' Combine ICD codes
 #'
-#' These function implement ICD specific methods for \code{c}, i.e., combinations of lists or vectors of codes, while
-#' preserving ICD classes. Base R \code{c} just drops all user defined classes
-#' and casts down to lowest common denominator, e.g. if mixing numbers and
-#' characters. No attempt here to catch all possible combinations of feeding in
-#' mixed ICD types and other types. Let R do what it normally does, but just try
-#' to keep classes of the first item in the list.
+#' These function implement ICD specific methods for \code{c}, i.e.,
+#' combinations of lists or vectors of codes, while preserving ICD classes. Base
+#' \R \code{\link[base]{c}} just drops all user defined classes and casts down
+#' to lowest common denominator, e.g. if mixing numbers and characters. No
+#' attempt here to catch all possible combinations of feeding in mixed ICD types
+#' and other types. Let R do what it normally does, but just try to keep classes
+#' of the first item in the list.
 #' @param ... elements to combine
-#' @param warn single logical value, if TRUE, will give warnings when
-#'   incompatible types are combined using \code{c}
+#' @param warn single logical value, if \code{TRUE}, will give warnings when
+#'   incompatible types are combined using \code{\link[base]{c}}
 #' @examples
 #' # Care with the following:
 #' c(as.icd9("E998"), as.icd10("A10"))
@@ -861,15 +863,16 @@ is.comorbidity_map <- function(x) inherits(x, "comorbidity_map")
 #' @template dotdotdot
 #' @export
 print.icd9 <- function(x, verbose = FALSE, ...)
-  print_codes(x,
+  print_codes(
+    x,
     ifelse(is.icd9cm(x), "ICD-9-CM", "ICD-9"),
-    verbose = verbose, ...
+    ...
   )
 
 #' @rdname print.icd9
 #' @examples
 #' \dontrun{
-#' u <- icd.data::uranium_pathology[1:10, "icd10"]
+#' u <- uranium_pathology[1:10, "icd10"]
 #' print(u)
 #' print(u, verbose = TRUE)
 #' # as.character will unclass the 'icd' classes

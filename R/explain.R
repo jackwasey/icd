@@ -16,19 +16,21 @@
 #'   which do not correspond to diagnoses, or to three-digit codes, will trigger
 #'   a warning.
 #' @param lang For WHO ICD-10 codes, the 2016 English and 2008 French
-#'   translations are available. Use 'en' or 'fr' respectively. For ICD-10-CM
-#'   codes, Dutch is also available, indicated by 'nl'. If \code{icd.data} 1.0
-#'   is installed, English descriptions are returned.
+#'   translations are available. Use \code{en} or \code{fr} respectively.
+#'   For ICD-10-CM codes, Dutch is also available, indicated by \code{nl}.
 #' @template dotdotdot
 #' @examples
-#' if (requireNamespace("icd.data", quietly = TRUE)) {
-#'   # by default, just show parent code and ignore children (428.0 not shown
-#'   # because 428 is present):
-#'   explain_code(icd9_map_ahrq$CHF[1:3])
-#'   # same without condensing the list. In this case, 428.0 is shown:
-#'   explain_code(icd9_map_ahrq$CHF[1:3], brief = TRUE)
-#'   # The first three in the ICD-10 equivalent are a little different:
-#'   explain_code(icd10_map_ahrq$CHF[1:3], brief = TRUE)
+#' # by default, just show parent code and ignore children (428.0 not shown
+#' # because 428 is present):
+#' explain_code(icd9_map_ahrq$CHF[1:3])
+#' # same without condensing the list. In this case, 428.0 is shown:
+#' explain_code(icd9_map_ahrq$CHF[1:3], brief = TRUE)
+#' # The first three in the ICD-10 equivalent are a little different:
+#' explain_code(icd10_map_ahrq$CHF[1:3], brief = TRUE)
+#' \dontrun{
+#' # these may need to download the WHO data first:
+#' explain_code(as.icd10who("B219"), lang = "fr")
+#' explain_code(as.icd10who("B219"))
 #' }
 #' @return data frame, or list of data frames, with fields for ICD-9 code, name
 #'   and description. There is no guarantee on the order of the returned
@@ -36,7 +38,6 @@
 #'   reliable order (when not condensing codes, at least).
 #' @export
 explain_code <- function(...) {
-  require_icd_data()
   UseMethod("explain_code")
 }
 
@@ -78,8 +79,16 @@ explain_code.default <- function(x,
 
 #' @describeIn explain_code Explain all ICD-9 codes in a list of vectors
 #' @export
-explain_code.list <- function(x, ...)
+explain_code.list <- function(x, ...) {
   lapply(x, explain_code, ...)
+}
+
+slowmatch <- function(x, table) {
+  xs <- seq(along = x)
+  names(xs) <- x
+  o <- xs[as.character(table)]
+  o[!is.na(o)]
+}
 
 #' @describeIn explain_code explain character vector of ICD-9 codes.
 #' @export
@@ -95,7 +104,7 @@ explain_code.icd9cm <- function(x,
                                 brief = FALSE,
                                 warn = TRUE,
                                 ...) {
-  if (is.numeric(x)) {
+  if (is.numeric(x) && !is.factor(x)) {
     warning(
       "data is in numeric format. This can easily lead to errors in ",
       "short or decimal codes, e.g. short_code code 1000: is it 10.00 ",
@@ -130,23 +139,10 @@ explain_code.icd9cm <- function(x,
       defined = TRUE, short_code = TRUE
     )
   }
-  mj <- unique(get_major.icd9(x, short_code = TRUE))
-  mjexplain <-
-    names(icd.data::icd9_majors)[icd.data::icd9_majors %in% mj[mj %in% x]]
-  # don't double count when major is also billable
-  x <- x[x %nin% mj]
   desc_field <- ifelse(brief, "short_desc", "long_desc")
-  res <- c(
-    mjexplain,
-    icd.data::icd9cm_hierarchy[
-      icd.data::icd9cm_hierarchy[["code"]] %in% x, desc_field
-    ]
-  )
-  if (length(res) != 0) {
-    res
-  } else {
-    NA_character_
-  }
+  m <- match(x, icd9cm_hierarchy$code)
+  if (condense) m <- m[!is.na(m)]
+  icd9cm_hierarchy[m, desc_field]
 }
 
 #' @describeIn explain_code ICD-10-CM explanation, current a minimal
@@ -172,14 +168,14 @@ explain_code.icd10cm <- function(x,
   }
   # this is a alow linear lookup, but usually only
   # "explaining" one or a few codes at a time.
-  i <- icd_data_icd10cm_active()
+  i <- get_icd10cm_active()
   i[
     i[["code"]] %in% unique(as_char_no_warn(x)),
     ifelse(brief, "short_desc", "long_desc")
   ]
 }
 
-#' @describeIn explain_code WHO ICD-10 explanation
+#' @describeIn explain_code WHO ICD-10 explanation in French or English
 #' @export
 explain_code.icd10who <- function(x,
                                   short_code = guess_short(x),
@@ -198,6 +194,8 @@ explain_code.icd10who <- function(x,
   stopifnot(is.logical(short_code), length(short_code) == 1)
   lang <- match.arg(lang)
   if (!missing(condense)) {
+    # minimally condense by dropping duplicates
+    x <- unique(x)
     .NotYetUsed("condense", error = FALSE)
   }
   if (!missing(warn)) {
@@ -207,14 +205,14 @@ explain_code.icd10who <- function(x,
     x <- decimal_to_short.icd10(x)
   }
   # this is a slow linear lookup, but usually only
-  # "explaining" one or a few codes at a time.
+  # "explaining" one or a few codes at a time. Can use a hashed algorithm if this becomes a problem, maybe when used for explain_table on bigger data?
   i <- if (lang == "fr") {
-    .idget("icd10who2008fr")
+    get_icd10who2008fr()
   } else {
-    .idget("icd10who2016")
+    get_icd10who2016()
   }
   i[
-    i[["code"]] %in% unique(as_char_no_warn(x)),
+    i[["code"]] %in% as_char_no_warn(x),
     "desc"
   ]
 }
@@ -227,16 +225,16 @@ explain_code.icd10fr <- function(x, ...) {
 
 #' @describeIn explain_code ICD-10-BE explanation, initial implementation, subject to change
 #' @examples
+#' \dontrun{
 #' # Belgian ICD-10 has three languages available
-#' if (icd:::icd_data_ver_ok()) {
-#'   explain_code(as.icd10be("C20"))
-#'   # [1] "Malignant neoplasm of rectum"
-#'   explain_code(as.icd10be("C20"), lang = "en")
-#'   # [1] "Malignant neoplasm of rectum"
-#'   explain_code(as.icd10be("C20"), lang = "fr")
-#'   # [1] "néoplasme malin du rectum"
-#'   explain_code(as.icd10be("C20"), lang = "nl")
-#'   # [1] "maligne neoplasma van het rectum"
+#' explain_code(as.icd10be("C20"))
+#' # [1] "Malignant neoplasm of rectum"
+#' explain_code(as.icd10be("C20"), lang = "en")
+#' # [1] "Malignant neoplasm of rectum"
+#' explain_code(as.icd10be("C20"), lang = "fr")
+#' # [1] "néoplasme malin du rectum"
+#' explain_code(as.icd10be("C20"), lang = "nl")
+#' # [1] "maligne neoplasma van het rectum"
 #' }
 #' @export
 explain_code.icd10be <- function(x,
@@ -299,10 +297,11 @@ explain_code_worker <- function(x,
   if (missing(var_name)) {
     i <- var
   } else {
-    if (substring(var_name, 1, 4) != "get_") {
-      var_name <- paste0("get_", var_name)
+    if (substring(var_name, 1, 4) == "get_") {
+      # probably can remove this
+      stop("var_name should be e.g. icd10cm2015, not get_icd10cm2015")
     }
-    i <- .idget(var_name)()
+    i <- .get_anywhere(var_name)
   }
   i[
     i[["code"]] %in% unique(as_char_no_warn(x)),
@@ -312,16 +311,16 @@ explain_code_worker <- function(x,
 
 icd9_expand_chapter_majors <- function(chap) {
   expand_range_major.icd9(
-    icd.data::icd9_chapters[[chap]]["start"],
-    icd.data::icd9_chapters[[chap]]["end"],
+    icd9_chapters[[chap]]["start"],
+    icd9_chapters[[chap]]["end"],
     defined = FALSE
   )
 }
 
 icd9_expand_sub_chapter_majors <- function(subchap) {
   expand_range_major.icd9(
-    icd.data::icd9_sub_chapters[[subchap]]["start"],
-    icd.data::icd9_sub_chapters[[subchap]]["end"],
+    icd9_sub_chapters[[subchap]]["start"],
+    icd9_sub_chapters[[subchap]]["end"],
     defined = FALSE
   )
 }

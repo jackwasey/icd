@@ -51,7 +51,11 @@ test_that("ahrq comorbidities found for test data", {
     icd10_all_ahrq_one_pt$icd10_code,
     random_string(nrow(test_three), max_chars = 5)
   )
-  td <- named_list(icd10_all_ahrq_one_pt, test_two, test_three)
+  td <- list(
+    icd10_all_ahrq_one_pt = icd10_all_ahrq_one_pt,
+    test_two = test_two,
+    test_three = test_three
+  )
   for (test_name in names(td)) {
     expect_error(res <- comorbid(td[[test_name]], map = icd10_map_ahrq), regexp = NA, info = test_name)
     for (n in colnames(res))
@@ -121,9 +125,8 @@ test_that("cmb from a ICD-10, no infinite recursion with Elix", {
 })
 
 test_that("ICD-10 map reduction is sane", {
-  skip_if_not_installed("icd.data")
   uranium_short_codes <- as_char_no_warn(
-    decimal_to_short.icd10(icd.data::uranium_pathology$icd10)
+    decimal_to_short.icd10(uranium_pathology$icd10)
   )
   red_map <- simplify_map_lex(uranium_short_codes, icd10_map_ahrq)
   # the map should not have its original contents, but only those codes which
@@ -212,22 +215,21 @@ test_that("NA example which crashed during devel", {
 })
 
 test_that("ICD-10 comorbidities from uranium", {
-  skip_if_not_installed("icd.data")
   expect_error(
     regexp = NA,
-    comorbid(icd.data::uranium_pathology, icd10_map_quan_elix)
+    comorbid(uranium_pathology, icd10_map_quan_elix)
   )
   expect_error(
     regexp = NA,
-    comorbid(icd.data::uranium_pathology, icd10_map_quan_deyo)
+    comorbid(uranium_pathology, icd10_map_quan_deyo)
   )
   expect_error(
     regexp = NA,
-    comorbid(icd.data::uranium_pathology, icd10_map_elix)
+    comorbid(uranium_pathology, icd10_map_elix)
   )
   expect_error(
     regexp = NA,
-    comorbid(icd.data::uranium_pathology, icd10_map_ahrq)
+    comorbid(uranium_pathology, icd10_map_ahrq)
   )
 })
 

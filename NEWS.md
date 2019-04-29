@@ -69,7 +69,7 @@
  * fixed github #133 - segfault with empty ICD-10 string in icd10_comorbid
  * add Suggested dependency on microbenchmark, now CRAN is sensibly not requiring Suggests to be installed even for testing
  * re-enabled testthat C++ Catch tests and make examples tests run correctly
- * drop Wecker continuous integration support
+ * drop Wercker continuous integration support
  * fixed #108 - when no valid codes are given to icd_explain_table
 
 # Version 2.3
@@ -138,7 +138,7 @@
  * C++ optimization using simpler, faster STL structures, working with R factors (converted automatically) so comorbidity assignment is done using integer logic only
  * drop unwanted old vignette from the build. Fixes #42
  * refinement of many functions to specifically accept factors or character vectors, but not integers in most cases. Fixes #38
- * more natural use of matrix for comorbidities, with option to return data frames. Allow matrix or data.frame in fuctions which accept comorbidities
+ * more natural use of matrix for comorbidities, with option to return data frames. Allow matrix or data.frame in functions which accept comorbidities
  * bug fixes with thanks to @wmurhpyrd. Fixes #44, fixes #46
  * fixes #41
  * extensive use of the excellent and very efficient checkmate package for validating function arguments
