@@ -197,11 +197,11 @@
 #' @keywords internal datagen
 #' @noRd
 .parse_leaf_desc_icd9cm_v27 <- function(...) {
-  message("working on version 27 (2009)  quirk")
+  .msg("working on version 27 (2009)  quirk")
   v27_dat <- .icd9cm_sources[.icd9cm_sources$version == "27", ]
   fn_orig <- v27_dat$other_filename
   url <- v27_dat$url
-  message("original v27 file name = '", fn_orig, "'. URL = ", url)
+  .msg("original v27 file name = '", fn_orig, "'. URL = ", url)
   f27_info <- .unzip_to_data_raw(
     url = url,
     file_name = fn_orig,

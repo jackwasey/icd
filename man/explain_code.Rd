@@ -98,9 +98,11 @@ implementation
 
 \item \code{icd10who}: WHO ICD-10 explanation in French or English
 
-\item \code{icd10fr}: ICD-10-FR explanation, initial implementation, subject to change
+\item \code{icd10fr}: ICD-10-FR explanation, initial implementation,
+subject to change
 
-\item \code{icd10be}: ICD-10-BE explanation, initial implementation, subject to change
+\item \code{icd10be}: ICD-10-BE explanation, initial implementation,
+subject to change
 
 \item \code{icd10}: ICD-10 explanation, falls back on ICD-10-CM until
 ICD-10 WHO copyright workaround is available

@@ -1,4 +1,5 @@
-#' Get or check existence of a getter function, returning the name of, or the function itself
+#' Get or check existence of a getter function, returning the name of, or the
+#' function itself
 #'
 #' The getter looks first in the environment cache, then file cache for a parsed
 #' \code{.rds} file. It does not try to download or parse data. For that, see
@@ -14,7 +15,8 @@
 }
 
 #' Parse ICD data (downloading data if needed)
-#' @seealso \code{\link{.get}}, \code{.get_getter_name} and \code{.get_parser_icd10cm_name}
+#' @seealso \code{\link{.get}}, \code{.get_getter_name} and
+#'   \code{.get_parser_icd10cm_name}
 #' @keywords internal
 #' @noRd
 .get_parser_name <- function(var_name) {
@@ -119,8 +121,9 @@
   if (is.null(.get_opt("resource"))) return(FALSE)
   vec <- vapply(.data_names_cache, .exists_in_cache, logical(1))
   res <- all(vec)
-  if (!res)
+  if (!res) {
     .dbg("missing data is: ", paste(.data_names[!vec], collapse = ", "))
+  }
   res
 }
 
@@ -307,12 +310,18 @@
   invisible(path)
 }
 
+#' Get a default data directory for any platform
+#' @examples
+#' # Consider to allow versioned data directories
+#' utils::packageVersion("icd")
+#' @keywords internal
+#' @noRd
 .default_icd_data_dir <- function() {
   rappdirs::user_data_dir(appname = "icd")
-  # version = utils::packageVersion("icd")
 }
 
-#' @describeIn set_icd_data_dir Get the currently active data directory, and check it exists and is writable.
+#' @describeIn set_icd_data_dir Get the currently active data directory, and
+#'   check it exists and is writable.
 #' @export
 get_icd_data_dir <- function(must_work = TRUE) {
   get_started <- paste(
@@ -373,6 +382,7 @@ get_icd_data_dir <- function(must_work = TRUE) {
 }
 
 .clean <- function(env = TRUE,
+                   opts = FALSE,
                    rds = FALSE,
                    memoise = FALSE,
                    raw = FALSE,
@@ -391,10 +401,21 @@ get_icd_data_dir <- function(must_work = TRUE) {
       )
     }
   }
+  if (opts) {
+    icd_data_opts <- names(.show_options())
+    icd_data_opts <- sapply(
+      icd_data_opts,
+      simplify = FALSE,
+      USE.NAMES = TRUE,
+      FUN = function(x) NULL
+    )
+    options(icd_data_opts)
+  }
   if (destroy) {
     if (askYesNo("Destroy entire resource directory? (Consider hiding?)")) {
-      if (!dry_run)
+      if (!dry_run) {
         unlink(get_icd_data_dir(), recursive = TRUE)
+      }
     }
     return(invisible())
   }
@@ -405,8 +426,9 @@ get_icd_data_dir <- function(must_work = TRUE) {
         file.path(get_icd_data_dir(), "memoise"),
         recursive = TRUE
       )
-    } else
+    } else {
       message("dry run")
+    }
   }
   if (raw) {
     raw_files <- list.files(get_icd_data_dir(),
@@ -419,10 +441,11 @@ get_icd_data_dir <- function(must_work = TRUE) {
     )
     message("Deleting:")
     print(raw_files)
-    if (!dry_run)
+    if (!dry_run) {
       unlink(raw_files, recursive = FALSE)
-    else
+    } else {
       message("dry run")
+    }
   }
   if (rds) {
     rds_files <- list.files(get_icd_data_dir(),
@@ -435,8 +458,9 @@ get_icd_data_dir <- function(must_work = TRUE) {
       unlink(rds_files,
         recursive = FALSE
       )
-    }       else
+    } else {
       message("dry run")
+    }
   }
 }
 
@@ -547,9 +571,10 @@ get_icd_data_dir <- function(must_work = TRUE) {
   ns <- asNamespace("icd")
   lz <- ns$.__NAMESPACE__.$lazydata
   vapply(var_name,
-         exists,
-         FUN.VALUE = logical(1),
-         lz)
+    exists,
+    FUN.VALUE = logical(1),
+    lz
+  )
 }
 
 .get_anywhere <- function(var_name, fetch = FALSE) {

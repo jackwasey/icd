@@ -1,6 +1,6 @@
 ---
 title: "Working with World Health Organization ICD codes and national editions, and different languages"
-output: rmarkdown::html_vignette
+output: rmarkdown::pdf_document
 vignette: >
   %\VignetteIndexEntry{Working with World Health Organization ICD codes and national editions}
   %\VignetteEngine{knitr::rmarkdown}
@@ -19,6 +19,9 @@ All of this should be considered beta quality, and I would much appreciate testi
 Function and variable names are likely to change in the future. The current versions are more consistent with naming of data files.
 
 ```{r setup, include=FALSE}
+# not building automatically with CRAN, devtools, because of dependency on downloaded data. Create like this:
+# rmarkdown::render("vignettes/country-lang-vers.Rmd", output_dir = "inst/doc")
+
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"

@@ -204,8 +204,9 @@ explain_code.icd10who <- function(x,
   if (!short_code) {
     x <- decimal_to_short.icd10(x)
   }
-  # this is a slow linear lookup, but usually only
-  # "explaining" one or a few codes at a time. Can use a hashed algorithm if this becomes a problem, maybe when used for explain_table on bigger data?
+  # this is a slow linear lookup, but usually only "explaining" one or a few
+  # codes at a time. Can use a hashed algorithm if this becomes a problem, maybe
+  # when used for explain_table on bigger data?
   i <- if (lang == "fr") {
     get_icd10who2008fr()
   } else {
@@ -217,13 +218,15 @@ explain_code.icd10who <- function(x,
   ]
 }
 
-#' @describeIn explain_code ICD-10-FR explanation, initial implementation, subject to change
+#' @describeIn explain_code ICD-10-FR explanation, initial implementation,
+#'   subject to change
 #' @export
 explain_code.icd10fr <- function(x, ...) {
   explain_code_worker(x, "icd10fr2019")
 }
 
-#' @describeIn explain_code ICD-10-BE explanation, initial implementation, subject to change
+#' @describeIn explain_code ICD-10-BE explanation, initial implementation,
+#'   subject to change
 #' @examples
 #' \dontrun{
 #' # Belgian ICD-10 has three languages available

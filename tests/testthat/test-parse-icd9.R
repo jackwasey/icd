@@ -10,8 +10,8 @@ test_that("some known sub vs chap confusion", {
     "Supplementary Classification Of External Causes Of Injury And Poisoning"
   )
   expect_icd9_only_chap(
-    "Supplementary Classification Of Factors Influencing Health Status And Contact With Health Services"
-  ) # nolint
+    "Supplementary Classification Of Factors Influencing Health Status And Contact With Health Services" # nolint
+  )
 })
 
 test_that("sub_chapter parsing went okay, tricky cases", {
@@ -157,7 +157,8 @@ test_that("explain icd9GetChapters simple input", {
   chaps1 <- .icd9_get_chapters(c("410", "411", "412"), short_code = TRUE)
   expect_equal(nrow(chaps1), 3)
   inf <- try(.icd9_get_chapters("418", short_code = TRUE), silent = TRUE)
-  expect_error(.icd9_get_chapters("418", short_code = TRUE), info = inf) # no such code 418
+  # no such code 418
+  expect_error(.icd9_get_chapters("418", short_code = TRUE), info = inf)
   chaps3 <- .icd9_get_chapters("417", short_code = FALSE)
   expect_equal(as_char_no_warn(chaps3$three_digit), "417")
   expect_equal(

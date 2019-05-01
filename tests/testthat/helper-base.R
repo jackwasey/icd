@@ -248,7 +248,9 @@ skip_multi <- function() {
   if (!.icd_data_dir_okay()) {
     skip("Don't have icd data cache directory.")
   }
-  # could let the functions download automatically, which may be useful for automated testing on new platforms, but probably not suitable for CI, and certainly not CRAN.
+  # could let the functions download automatically, which may be useful for
+  # automated testing on new platforms, but probably not suitable for CI, and
+  # certainly not CRAN.
   if (!.all_cached()) {
     skip("Don't have all data cached, yet.")
   }

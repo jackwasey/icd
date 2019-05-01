@@ -33,10 +33,11 @@ Rich text descriptions here:
 \url{http://wonder.cdc.gov/wonder/sci_data/codes/icd9/type_txt/icd9abb.asp}
 }
 \description{
-Unlike \code{\link{get_icd9cm2014_leaf}} and friends, these data frames contain
-the full structure of the ICD-9-CM scheme up to the three-digit codes. Unlike
-the equivalent ICD-10-CM data frames (e.g., \code{\link{icd10cm2019}}), they
-do not have columns indicating billable/leaf status, or chapter designations.
+Unlike \code{\link{get_icd9cm2014_leaf}} and friends, these data frames
+contain the full structure of the ICD-9-CM scheme up to the three-digit
+codes. Unlike the equivalent ICD-10-CM data frames (e.g.,
+\code{\link{icd10cm2019}}), they do not have columns indicating billable/leaf
+status, or chapter designations.
 }
 \details{
 \code{icd9cm_hierarchy} is the deprecated name, which currently points to the

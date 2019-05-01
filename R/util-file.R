@@ -106,10 +106,10 @@
     x <- get(var_name, envir = envir)
   }
   .assign(var_name, x)
+  # gzip is not the best, but fastest decompression
   saveRDS(x,
     .rds_path(var_name),
-    compress = "gzip",
-    version = 2
+    compress = "gzip"
   )
   invisible(.get(var_name))
 }

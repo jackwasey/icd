@@ -5,9 +5,9 @@ test_that("bookmark ends only", {
     .rtf_strip(
       paste(
         "{\\*\\bkmkend 200.05}{\\*\\bkmkend 200.06}{\\*\\bkmkend 200.07}{\\*\\bkmkend 200.08}", # nolint
-        "{\\*\\bkmkend 200.0}\\hich\\af1\\dbch\\af31505\\loch\\f1 200.0\\tab Reticulosarcoma"
+        "{\\*\\bkmkend 200.0}\\hich\\af1\\dbch\\af31505\\loch\\f1 200.0\\tab Reticulosarcoma" # nolint
       )
-    ), # nolint
+    ),
     "200.0 Reticulosarcoma"
   )
 })
@@ -48,9 +48,9 @@ test_that(".rtf_strip does what it says on the tin", {
     .rtf_strip(
       paste(
         "The following fifth-digit subclassification is for use with categories", # nolint
-        "67\\hich\\af1\\dbch\\af31505\\loch\\f1 8-679 to denote the current episode of care:"
+        "67\\hich\\af1\\dbch\\af31505\\loch\\f1 8-679 to denote the current episode of care:" # nolint
       )
-    ), # nolint
+    ),
     paste(
       "The following fifth-digit subclassification is for use with categories 678-679", # nolint
       "to denote the current episode of care:"

@@ -246,6 +246,7 @@ according to Quan/Deyo ICD categories. Synonymous with
 }}
 
 \examples{
+library(icd)
 vermont_dx[1:5, 1:10]
 # get first few rows and columns of Charlson comorbidities using Quan/Deyo
 # mapping of ICD-9 or ICD-10 codes Charlson categories

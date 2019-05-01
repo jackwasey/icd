@@ -32,7 +32,7 @@ abstract: >
   Medical research often describes the existing diseases (comorbidities) in its study populations, and retrospective research may rely on this information for risk adjustment. Sets of International Classification of Diseases (ICD) codes are often used for high-level classification of patients into comorbidities (e.g., 'Cancer' or 'Heart Disease') to help summarize characteristics of a population. Similar tools were not available in \proglang{R}, and do not scale to big data sets. The \pkg{icd} extension for \proglang{R} includes validated mappings of ICD codes to comorbidities, and uses an efficient, fast and scalable algorithm to apply these mappings to patient data. This enables reproducible workflows with hundreds of millions of patient records as are increasingly seen in large national and international databases.
 keywords:
   formatted: [medical informatics, administrative data, matrix algebra, "\\proglang{R}", "\\proglang{C++}", "ICD", "mapping"]
-  plain:     [medical informatics, administrative data, matrix algebra, R, C++, ICD, mapping]
+  plain:     [biomedical informatics, administrative data, matrix algebra, R, C++, ICD, mapping]
 preamble: |
   \usepackage{amsmath}
   \usepackage{longtable}
@@ -55,6 +55,7 @@ vignette: >
   %\VignetteDepends{rticles}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
+  %\VignetteKeyword{comorbidity, comorbidities, biomedical informatics, administrative data, matrix algebra, ICD-9, ICD-10, ICD-9-CM, ICD-10-CM, mapping, algorithm}
 editor_options:
   chunk_output_type: inline
 pkgdown:
@@ -64,8 +65,14 @@ pkgdown:
 ```{r comments, purl=FALSE, eval=FALSE, echo=FALSE}
 # https://www.jstatsoft.org/pages/view/authors
 # https://www.jstatsoft.org/pages/view/style
-# generate replication code:
+# generate replication code (done in Makefile for JSS submission, also manually
+# for vignette index)
 # knitr::purl("Efficient_calculation_of_comorbidities_from_medical_codes.Rmd")
+# build vignette for package (not done by CRAN, devotols, etc), to avoid a
+# pandoc 2.something dependency which r-hub, CRAN etc do not have April 2019.
+# rmarkdown::render("vignettes/efficiency.Rmd", output_dir = "inst/doc")
+# # or, to juggle pkgbuild::build trashing inst/doc..., using .install_extras
+# rmarkdown::render("vignettes/efficiency.Rmd")
 ```
 
 ```{r setup, echo=FALSE, message=FALSE, warning=FALSE, cache=FALSE}

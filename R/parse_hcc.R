@@ -3,12 +3,14 @@
 #' Generate ICD to HCC Crosswalks from CMS
 #'
 #' The ICD/HCC mappings were obtained from CMS
+# nolint start
 #' \href{https://www.cms.gov/Medicare/Health-Plans/MedicareAdvtgSpecRateStats/Risk-Adjustors.html}{
 #' Medicare Risk Adjustors}. Due to the complex file structure of the original
+# nolint end
 #' data (many nested zip files), they have been organized in the folder
-#' \code{data-raw/icd_hcc_rawdata/} available in the source repository but not the
-#' installed package. This function creates a data file containing ICD-9/10 to
-#' CC crosswalks.
+#' \code{data-raw/icd_hcc_rawdata/} available in the source repository but not
+#' the installed package. This function creates a data file containing ICD-9/10
+#' to CC crosswalks.
 #' @template parse-template
 #' @keywords internal manip
 #' @noRd
@@ -83,14 +85,14 @@
 
 .icd10_hcc_fix_tabs <- function() {
   .fix <- function(x) {
-  p1 <- sub("[[:space:]]+.*", "", x)
-  p2 <- sub("[[:alnum:]]*[[:space:]]+", "", x)
-  p2 <- sub("[[:space:]]+", "", p2)
-  p2 <- sub("[[:alpha:]]$", "", trimws(p2))
-  sprintf("%-8s%-4s", p1, p2)
+    p1 <- sub("[[:space:]]+.*", "", x)
+    p2 <- sub("[[:alnum:]]*[[:space:]]+", "", x)
+    p2 <- sub("[[:space:]]+", "", p2)
+    p2 <- sub("[[:alpha:]]$", "", trimws(p2))
+    sprintf("%-8s%-4s", p1, p2)
   }
   hcc_icd10_dir <- file.path(get_raw_data_dir(), "icd_hcc_rawdata", "icd10")
-  for (f in  list.files(hcc_icd10_dir, full.names = TRUE)) {
+  for (f in list.files(hcc_icd10_dir, full.names = TRUE)) {
     tabbed <- readLines(f)
     writeLines(.fix(tabbed), f)
   }
@@ -137,7 +139,7 @@
   # Convert CC to numeric format, remove whitespace from ICD codes
   cc_as_num <- as.integer(trimws(icd10_map_cc$cc))
   if (any(is.na(cc_as_num))) {
-    browser(); stop("Some condition codes are not integers")
+    stop("Some condition codes are not integers")
   }
   icd10_map_cc$cc <- cc_as_num
   icd10_map_cc$icd_code <- trimws(icd10_map_cc$icd_code)

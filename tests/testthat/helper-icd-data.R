@@ -145,7 +145,6 @@ eee <- function(x, desc, ...) {
     icd9cm_hierarchy$code %in% x,
     "long_desc"
   ]
-  # eval(bquote(expect_equal(icd::explain_code(.(x)), .(desc), ...)))
   expect_equal(desc, res, ...)
 }
 

@@ -121,6 +121,8 @@ icd10_filter_invalid <- function(x, icd_name = get_icd_name(x),
 #' @template poa
 #' @examples
 #' \dontrun{
+#' library(icd)
+#' # magrittr not required for icd to work, just for this example
 #' library(magrittr, warn.conflicts = FALSE, quietly = TRUE)
 #' myData <- data.frame(
 #'   visit_id = c("v1", "v2", "v3", "v4"),

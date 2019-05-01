@@ -124,8 +124,8 @@
     )
   }
   mj_lookup <- data.frame(
-    three_digit = unname(icd9_majors),
-    mj_major = names(icd9_majors)
+    three_digit = unname(icd::icd9_majors),
+    mj_major = names(icd::icd9_majors)
   )
   major_merge <- merge(
     x = dat["three_digit"],
@@ -221,11 +221,6 @@
   # fix annual quirks apparing from the invalid exclusion step: e.g., 2008 has
   # typo in the original RTF: fix it here, which is the only reason to pass year
   # to this function
-  # if (year == "2007") {
-  #   # bizarre parse error just for this code, due to mark-up that Norwalk is
-  #   # geographic. Thanks. Will try to fix at source rather than here.
-  #   filtered <- sub(pattern = "Cityplace", replacement = " ", filtered)
-  # }
   if (year == "2008") {
     # replace 945.09 with 945.0{7,8}
     for (f945 in 0:5) {
@@ -347,7 +342,6 @@
 }
 
 .rtf_make_majors <- function(filtered, save_pkg_majors = FALSE) {
-  use_bytes <- NULL # list(...)[["useBytes"]]
   major_lines <- grep(paste0("^(", re_icd9_major_strict_bare, ") "),
     filtered,
     value = TRUE
@@ -355,11 +349,11 @@
   re_major_split <- "([^[:space:]]+)[[:space:]]+(.+)"
   icd9_majors <- gsub(
     pattern = re_major_split, replacement = "\\1",
-    x = major_lines, perl = TRUE, useBytes = use_bytes
+    x = major_lines, perl = TRUE
   )
   names(icd9_majors) <- gsub(
     pattern = re_major_split, replacement = "\\2",
-    x = major_lines, perl = TRUE, useBytes = use_bytes
+    x = major_lines, perl = TRUE
   )
   # this sub-chapter is simply missing from the otherwise consistent RTF way
   # 'major' types are reported:

@@ -5,14 +5,7 @@ test_that("row numbers and factors are sequential for data frames", {
     base::print(..., quote = FALSE)
   }
   skip_slow()
-  data_names <- c(
-    "icd10be2014",
-    "icd10who2016",
-    "icd10who2008fr",
-    "icd9cm2008",
-    "icd10fr2019"
-  )
-  # data_names <- c(rev(.ls()), .ls_lazy())
+  data_names <- c(.ls(), .ls_lazy())
   for (data_name in data_names) {
     dinfo <- paste0("get_", data_name, "()")
     if (.verbose()) print(paste0("data frame: ", data_name))
@@ -37,7 +30,8 @@ test_that("row numbers and factors are sequential for data frames", {
       if (.verbose() > 2) {
         print(paste(info, "checking code and three_digit"))
       }
-      if (col_name %in% c("code", "three_digit")) {
+      if (col_name %in% c("code", "three_digit") &&
+          !grepl(".*_pc", data_name)) {
         expect_true(inherits(col_dat, c("icd9", "icd10")), info = info)
         j <- d[[col_name]]
         expect_valid(j, whitespace_ok = FALSE, info = info)

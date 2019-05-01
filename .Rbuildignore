@@ -7,8 +7,6 @@
 ^.*\.rprof.*$
 ^.*\.xcworkspace$
 ^CONTRIBUTING\.md$
-^Efficient.*\.md$
-^Makevars$
 ^Meta$
 ^README-*\.png$
 ^README\.Rmd$
@@ -40,7 +38,9 @@
 ^icd.*\.out$
 ^icd\.Rcheck$
 ^icd_.*tar\.gz
-^inst/doc/benchresults\.ods$
+^inst\/doc\/benchresults\\.ods$
+^inst\/doc\/efficiency_files$
+^inst\/doc\/efficiency_files\/.*$
 ^inst\/extdata$
 ^inst\/extdata\/.*$
 ^lib-bench$
@@ -62,12 +62,12 @@
 ^src\/icd.*\.dll$
 ^src\/icd.*\.so$
 ^tools$
-^vignettes\/.*\.R$
 ^vignettes\/.*\.dvi$
 ^vignettes\/.*\.fls$
 ^vignettes\/.*_latexmk$
 ^vignettes\/country-lang-vers\.Rmd$
 ^vignettes\/efficiency\.Rmd$
+^vignettes\/efficiency\.tex$
 ^vignettes\/efficiency_files$
 ^vignettes\/jss\.bst$
 ^vignettes\/jss\.cls$

@@ -12,8 +12,7 @@
 #' \dontrun{
 #' print(icd9_map_ahrq)
 #' print(icd9_map_ahrq, n_comorbidities = 3, n_codes = 3)
-#' print.list(icd9_map_ahrq)
-#' print(list(icd9_map_ahrq))
+#' print(unclass(icd9_map_ahrq))
 #' }
 #' @keywords internal
 #' @export

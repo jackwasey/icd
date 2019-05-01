@@ -18,18 +18,24 @@
   mem_file_name <- paste(
     "WHO", year, lang,
     gsub("JsonGetChildrenConcepts\\?ConceptId=|&useHtml=false", "", resource),
-    "json", sep = ".")
+    "json",
+    sep = "."
+  )
   mem_dir <- file.path(get_icd_data_dir(), "memoise")
   dir.create(mem_dir, showWarnings = FALSE)
   mem_path <- file.path(mem_dir, mem_file_name)
   if (file.exists(mem_path)) {
-    .trc(paste("Have memoised data for ", year, lang, resource,
-               "from", mem_path))
+    .trc(paste(
+      "Have memoised data for ", year, lang, resource,
+      "from", mem_path
+    ))
     readRDS(mem_path)
   } else {
     res <- .dl_icd10who_json(year, lang, resource)
-    .trc(paste("Saving memoised data for ", year, lang, resource,
-               "in", mem_path))
+    .trc(paste(
+      "Saving memoised data for ", year, lang, resource,
+      "in", mem_path
+    ))
     saveRDS(res, mem_path, version = 2)
     res
   }
@@ -118,10 +124,12 @@
 #'   sub-sub-chapter). You cannot query a single code with this interface.
 #' @param year integer 4-digit year
 #' @param lang Currently it seems only 'en' works
-#' @param ... further arguments passed to self recursively, or \code{.dl_icd10who_memoise}
+#' @param ... further arguments passed to self recursively, or
+#'   \code{.dl_icd10who_memoise}
 #' @examples
-#' .make_make_httr_retry()
+#' \dontrun{
 #' .dl_icd10who_walk(year = 2016, lang = "en", concept_id = "B20-B24")
+#' }
 #' @keywords internal
 #' @noRd
 .dl_icd10who_walk <- function(concept_id = NULL,
@@ -129,16 +137,7 @@
                               lang = "en",
                               hier_code = character(),
                               hier_desc = character(),
-                              parallel = TRUE,
                               ...) {
-  if (parallel) {
-    if (.verbose() > 1) {
-      .dbg("Parallel WHO processing disabled with this verbosity level")
-      parallel <- FALSE
-    } else {
-      .msg("Parallel WHO prevents messages in child processes")
-    }
-  }
   .dbg(
     ".dl_icd10who_memoise with concept_id = ",
     ifelse(is.null(concept_id), "NULL", concept_id)
@@ -164,9 +163,8 @@
   .dbg("hier level = ", length(hier_code))
   new_hier <- length(hier_code) + 1
   # parallel mclapply is about 2-3x as fast, but may get throttled for multiple
-  # connections. It seems to get up to about 10-15, which is reasonable.
-  ap <- if (parallel) parallel::mclapply else lapply
-  all_new_rows <- ap(
+  # connections, and error handling and debugging is much harder.
+  all_new_rows <- lapply(
     seq_len(nrow(tree_json)),
     function(branch) {
       new_rows <- data.frame(
@@ -188,7 +186,7 @@
       hier_desc[new_hier] <- child_desc
       sub_sub_chapter <- NA
       hier_three_digit_idx <- which(nchar(hier_code) == 3 &
-                                      !grepl("[XVI-]", hier_code))
+        !grepl("[XVI-]", hier_code))
       if (length(hier_code) >= 3 && nchar(hier_code[3]) > 3) {
         sub_sub_chapter <- hier_desc[3]
       }
@@ -241,9 +239,13 @@
   # just return the rows (we are recursing so can't save anything in this
   # function). Parser can do this.
   if (!all(vapply(all_new_rows, is.data.frame, logical(1))) ||
-      !all(vapply(all_new_rows, ncol, integer(1)) == ncol(all_new_rows[[1]]))
+    !all(vapply(all_new_rows, ncol, integer(1)) == ncol(all_new_rows[[1]]))
   ) {
-    browser()
+    stop(
+      "Error when downloading WHO ICD data. ",
+      "(Concept ID = ", concept_id, ") ",
+      "This may be a temporary download failure. Please re-try the command."
+    )
   }
   do.call(rbind, all_new_rows)
 }

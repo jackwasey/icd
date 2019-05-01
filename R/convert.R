@@ -316,7 +316,8 @@ short_to_decimal.icd10cm <- function(x) {
 #' Convert Decimal format ICD codes to short format
 #'
 #' This usually just entails removing the decimal point, but also does some
-#' limited validation and tidying up. Missing leading zeroes will be added for correctness of the shortened codes.
+#' limited validation and tidying up. Missing leading zeroes will be added for
+#' correctness of the shortened codes.
 #'
 #' @param x ICD codes
 #' @export

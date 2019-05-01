@@ -98,11 +98,14 @@ get_defined <- function(x,
 #' @export
 #' @keywords internal
 get_defined.default <- function(x, short_code = guess_short(x), ...) {
-  icd_ver <- guess_version(x)
-  if (icd_ver != "icd9") {
-    stop("testing whether ICD codes are defined is currently only implemented for ICD-9-CM")
-  }
-  x[is_defined.icd9(x, short_code, ...)]
+  # this may need some work to handle WHO or national variations
+  def <- switch(
+    guess_version(x, short_code = short_code),
+    "icd9" = is_defined.icd9(x, short_code = short_code, ...),
+    "icd10" = is_defined.icd10(x, short_code = short_code, ...),
+    stop("ICD version not identified")
+  )
+  x[def]
 }
 
 #' @export

@@ -53,7 +53,11 @@ test_that("Charlson score", {
   )
   expect_equal(
     charlson_from_comorbid(
-      icd9_comorbid_quan_deyo(mydf, short_code = FALSE, hierarchy = TRUE, return_df = TRUE)
+      icd9_comorbid_quan_deyo(mydf,
+        short_code = FALSE,
+        hierarchy = TRUE,
+        return_df = TRUE
+      )
     ),
     charlson(mydf, short_code = FALSE, return_df = FALSE)
   )

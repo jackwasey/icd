@@ -32,7 +32,7 @@ These are derived from the final CMS published version 32 for 2014,
   users, including pulling the data from the web pages directly. Despite my
   best efforts, current locale can give different results, but this packaged
   data is correct, with some \code{UTF-8} encoded strings.
-  \code{icd9cm_billable} has been removed, and is replaced by now includes only the
-  latest version (32).
+  \code{icd9cm_billable} has been removed, and is replaced by now includes
+  only the latest version (32).
 }
 \keyword{datasets}

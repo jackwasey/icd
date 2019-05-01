@@ -58,7 +58,6 @@ Suggests:
     knitr,
     magrittr,
     nhds,
-    parallel,
     readxl,
     rmarkdown (>= 1.11),
     RODBC,

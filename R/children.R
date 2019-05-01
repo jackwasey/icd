@@ -12,9 +12,8 @@
 #' @keywords manip
 #' @family ICD-9 ranges
 #' @examples
+#' # N.b. magrittr not required by icd
 #' library(magrittr, warn.conflicts = FALSE, quietly = TRUE)
-#' # magrittr not required by icd
-#' # icd.data package highly recommended, but not a depependency for comorbidity calculations
 #' # no children other than self
 #' children("10201", short_code = TRUE, defined = FALSE)
 #' 

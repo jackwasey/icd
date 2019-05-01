@@ -86,7 +86,6 @@
       "\nsave_name = ", save_name
     )
   }
-  # if (!file.exists(save_name) && !.confirm_download()) return()
   fp <- .unzip_to_data_raw(
     url = url,
     file_name = file_name,

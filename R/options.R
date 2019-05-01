@@ -52,7 +52,8 @@
 #' @noRd
 NULL
 
-# the whole point of this is to have 'enum' like behavior, so I can't mistype an option name string elsewhere.
+# the whole point of this is to have 'enum' like behavior, so I can't mistype an
+# option name string elsewhere.
 .set_opt <- function(..., overwrite = FALSE) {
   f <- list(...)
   invisible(
@@ -137,7 +138,6 @@ NULL
     .set_opt("offline" = x, overwrite = TRUE)
   } else {
     stop("offline() requires a single logical value, or a missing value.")
-    # options("icd.data.offline" = !.env_var_is_false("ICD_DATA_OFFLINE"))
   }
   invisible(.get_opt("offline"))
 }
@@ -214,17 +214,6 @@ NULL
   )
 }
 
-.clean_options <- function() {
-  icd_data_opts <- names(.show_options())
-  icd_data_opts <- sapply(
-    icd_data_opts,
-    simplify = FALSE,
-    USE.NAMES = TRUE,
-    FUN = function(x) NULL
-  )
-  options(icd_data_opts)
-}
-
 with_offline <- function(offline, code) {
   old <- options("icd.data.offline" = offline)
   on.exit(options(old))
@@ -261,9 +250,11 @@ with_absent_action <- function(absent_action = c(
 #' @examples
 #' \dontrun{
 #' set_icd_data_dir()
-#' set_icd_data_dir("/var/cache/icd.data")
-#' set_icd_data_dir(path = ".local/icd.data")
-#' get_icd_data_dir()
+#' # or choose another directory:
+#' #set_icd_data_dir("/var/cache/icd.data")
+#' # then you may use:
+#' # download_all_icd_data()
+#' # or let 'icd' download data when needed.
 #' }
 #' @return The path to the resource directory, or \code{NULL} if it could not be
 #'   found.
@@ -299,7 +290,7 @@ set_icd_data_dir <- function(path = NULL) {
     if (!created) stop("Unable to create directory at: ", path)
   }
   options("icd.data.resource" = path)
-  if (!.all_cached()) {
+  if (!.all_cached() && "download_all_icd_data" %nin% names(sys.calls())) {
     message(
       "Not all available data is currently downloaded. ",
       "You may use: ", sQuote("download_all_icd_data()"),
@@ -312,22 +303,24 @@ set_icd_data_dir <- function(path = NULL) {
 
 #' Download all the additional data at once
 #'
-#' It will download and
-#' parse WHO ICD-10, French, and Belgian codes and descriptions. It will also
-#' get years 2014, 2015, 2017, and 2018 for ICD-10-CM (diagnostic codes), and
-#' 2014--2019 procedure codes. 2016 and 2019 diagnostic codes are included in
-#' the package data. The total amount of data is about 340Mb. It is not necessary to do call \code{download_all_icd_data} for normal use: you may simply call the functions like \code{get_icd10cm2014}, which will download data when needed.
+#' It will download and parse WHO ICD-10, French, and Belgian codes and
+#' descriptions. It will also get years 2014, 2015, 2017, and 2018 for ICD-10-CM
+#' (diagnostic codes), and 2014--2019 procedure codes. 2016 and 2019 diagnostic
+#' codes are included in the package data. The total amount of data is about
+#' 340Mb. It is not necessary to do call \code{download_all_icd_data} for normal
+#' use: you may simply call the functions like \code{get_icd10cm2014}, which
+#' will download data when needed.
 #' @seealso \code{\link{set_icd_data_dir}}
 #' @examples
 #' \dontrun{
 #' set_icd_data_dir()
-#' download_all_icd_data()
 #' # or configure a directory to us:
-#' options("icd.data.resource" = "/tmp/icd")
+#' # options("icd.data.resource" = "/tmp/icd")
 #' # or
-#' set_icd_data_dir("/tmp/icd")
-#' # then
-#' download_all_icd_data()
+#' # set_icd_data_dir("/tmp/icd")
+#'
+#' # The following would download, and make all the known ICD data available
+#' # download_all_icd_data()
 #' }
 #' @export
 download_all_icd_data <- function() {

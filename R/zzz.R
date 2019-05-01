@@ -57,28 +57,31 @@
 }
 
 release_questions <- function() {
-  c( # vignette
-    "manual rebuild of efficiency and country-lang-vers vignettes",
+  c(
+    # vignette
+    "manual rebuild efficiency & country-lang-vers vignettes, check in tarball",
     # commands:
-    ".clean(destroy = TRUE), then update_everything() on win, linux and mac: should be identical results including encoding - check with digest",
+    ".clean(destroy = TRUE), then update_everything() on all platforms",
     "aspell_package_Rd_files('.')",
     # documentation:
     "Check all TODO comments, make into github issues",
     "Do all examples look ok (not just run without errors)?",
     "Have all the fixed github issues been closed",
-    "pkgdown::build_site()",
+    "pkgdown::build_site() reports no errors",
     # code quality:
+    "icd::download_all_icd_data() and other major functions pre-library call",
     "codetools::checkUsagePackage('icd', all = TRUE, suppressLocal = TRUE)",
-    "styler::style_pkg()",
     "devtools::missing_s3()", # http://r-pkgs.had.co.nz/namespace.html
-    "jwutil::jw_scan_build() or use .R/Makevars.clang.scan-build",
+    "Use clang scan-build, with latest version of clang",
     # testing and compilation and different platforms:
     "Are there no skipped tests which should be run?",
-    "Travis and appveyor?",
     "rhub::check_with_sanitizers()",
     "rhub::check_for_cran()",
-    "Have you checked on Windows, win_builder (if possible with configure script), Mac, Ubuntu, rhub::check_with_sanitizers() etc", # nolint
-    "Did you check with verbose, offline, interact, with undefined, TRUE and FALSE", # nolint
+    "Windows? Appveyor, win_builder, r-hub all okay?",
+    "MacOS? Travis and local okay?",
+    "Linux? Travis, r-hub okay?",
+    "Check with verbose, offline, interact all undefined in vanilla R",
+    "styler::style_pkg()",
     # final manual check:
     "Have all unnecessary files been ignored in built source package?"
   )

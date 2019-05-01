@@ -9,7 +9,9 @@
 #' @param sas_lines is a character vector, with one item per line, e.g. from
 #'   \code{readLines}
 #' @references
+# nolint start
 #' \url{http://support.sas.com/documentation/cdl/en/proc/61895/HTML/default/viewer.htm#a002473474.htm}
+# nolint end
 #' @return list (of lists)
 #' @keywords programming list internal
 #' @noRd

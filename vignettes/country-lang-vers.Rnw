@@ -1,0 +1,7 @@
+%\VignetteIndexEntry{Working with World Health Organization ICD codes and national editions}
+%\VignetteEncoding{UTF-8}
+%\VignetteKeyword{World Health Organization, World Health Organisation, WHO, OMS, Organisation Mondiale de la Santé, ICD-9, ICD-10, ICD-11}
+\documentclass{article}
+\begin{document}
+\end{document}
+

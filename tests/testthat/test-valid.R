@@ -185,7 +185,8 @@ test_that("icd9IsValidDecimal valid E codes", {
   expect_true(is_valid.icd9(short_code = FALSE, " E999"))
   expect_true(is_valid.icd9(short_code = FALSE, "E999 "))
   expect_true(is_valid.icd9(short_code = FALSE, "E999. "))
-  expect_true(is_valid.icd9(short_code = FALSE, "E100")) # E001-E999 are okay, not just E800-E999
+  # E001-E999 are okay, not just E800-E999
+  expect_true(is_valid.icd9(short_code = FALSE, "E100"))
   expect_true(is_valid.icd9(short_code = FALSE, "E100.1"))
   expect_true(is_valid.icd9(short_code = FALSE, "E100."))
   expect_true(is_valid.icd9(short_code = FALSE, "E010"))

@@ -25,7 +25,9 @@
 #' @keywords datasets list category
 #' @docType data
 #' @source
+# nolint start
 #' \url{http://www.cms.gov/Medicare/Coding/ICD9ProviderDiagnosticCodes/codes.html}
+# nolint end
 #'
 #' @details Format: list with chapter/sub-chapter or major names stored in list
 #'   names, each with two element named character vector with start and end
@@ -78,10 +80,11 @@ NULL
 #' ICD-9-CM diagnosis codes including leaf nodes and branch names up to the
 #' three-digit codes.
 #'
-#' Unlike \code{\link{get_icd9cm2014_leaf}} and friends, these data frames contain
-#' the full structure of the ICD-9-CM scheme up to the three-digit codes. Unlike
-#' the equivalent ICD-10-CM data frames (e.g., \code{\link{icd10cm2019}}), they
-#' do not have columns indicating billable/leaf status, or chapter designations.
+#' Unlike \code{\link{get_icd9cm2014_leaf}} and friends, these data frames
+#' contain the full structure of the ICD-9-CM scheme up to the three-digit
+#' codes. Unlike the equivalent ICD-10-CM data frames (e.g.,
+#' \code{\link{icd10cm2019}}), they do not have columns indicating billable/leaf
+#' status, or chapter designations.
 #'
 #' \code{icd9cm_hierarchy} is the deprecated name, which currently points to the
 #' final ICD-9-CM 2014 release. 2011 -- 2014 are in fact identical. These are
@@ -94,7 +97,9 @@ NULL
 #' \url{http://wonder.cdc.gov/wonder/sci_data/codes/icd9/type_txt/icd9cm.asp}
 #' @source Rich text descriptions here:
 #'   \url{http://www.cdc.gov/nchs/icd/icd9cm.htm}
+# nolint start
 #'   \url{http://www.cms.gov/Medicare/Coding/ICD9ProviderDiagnosticCodes/codes.html}
+# nolint end
 #'    This page has versions 23 to 32 (2005 to 2014). At present, only the 2014
 #'   data is included in this package.
 #' @source
@@ -125,6 +130,7 @@ NULL
 #' @details Format:  data frame, with columns for code, leaf status (0 or 1),
 #'   short and long descriptions.
 #' @references \url{https://www.cms.gov/Medicare/Coding/ICD10/}
+# nolint start
 #'   \url{https://www.cms.gov/Medicare/Coding/ICD10/Downloads/2018-ICD-10-PCS-Tables-And-Index.zip}
 #'   \url{https://www.cms.gov/Medicare/Coding/ICD10/Downloads/2018-ICD-10-PCS-Order-File.zip}
 #'   \url{https://www.cms.gov/Medicare/Coding/ICD10/Downloads/2017-PCS-Code-Tables.zip}
@@ -138,6 +144,7 @@ NULL
 #'   \url{https://www.cms.gov/Medicare/Coding/ICD10/Downloads/2014-ICD10-Code-Tables-and-Index.zip}
 #'   \url{https://www.cms.gov/Medicare/Coding/ICD10/Downloads/2014-Code-Tables-and-Index.zip}
 #'   \url{https://www.cms.gov/Medicare/Coding/ICD10/Downloads/2014-PCS-long-and-abbreviated-titles.zip}
+# nolint end
 #' @name icd10cm2019
 NULL
 
@@ -209,8 +216,10 @@ NULL
 #' Définitions CIM-10-FR de l'OMS (WHO ICD-10 definitions)
 #' @source \url{https://www.atih.sante.fr/cim-10-fr-2018-usage-pmsi}
 #' @references
+# nolint start
 #'   \href{https://www.atih.sante.fr/nomenclatures-de-recueil-de-linformation/cim}{ATIH
 #'   CIM-10-FR}
+# nolint end
 #' @docType data
 #' @keywords datasets
 #' @name get_icd10fr2019
@@ -226,8 +235,10 @@ NULL
 #' as Present-on-Arrival (POA).
 #' @source
 #' \url{https://www.health.belgium.be/en/node/30433}
+# nolint start
 #' \url{https://www.health.belgium.be/sites/default/files/uploads/fields/fpshealth_theme_file/fy2017_reflist_icd-10-be.xlsx_last_updatet_28-07-2017_1.xlsx}
 #' \url{https://www.health.belgium.be/fr/sante/organisation-des-soins-de-sante/hopitaux/systemes-denregistrement/icd-10-be}
+# nolint end
 #' \url{https://www.health.belgium.be/fr/fy2014reflisticd-10-bexlsx}
 #' @name get_icd10be2014
 #' @seealso \code{\link{get_icd10be2017}} \code{\link{get_icd10be2014_pc}}
@@ -343,14 +354,16 @@ NULL
 #'   users, including pulling the data from the web pages directly. Despite my
 #'   best efforts, current locale can give different results, but this packaged
 #'   data is correct, with some \code{UTF-8} encoded strings.
-#'   \code{icd9cm_billable} has been removed, and is replaced by now includes only the
-#'   latest version (32).
+#'   \code{icd9cm_billable} has been removed, and is replaced by now includes
+#'   only the latest version (32).
 #' @docType data
 #' @keywords datasets
 #' @format data frames with columns \code{code}, \code{short_desc}, and
 #'   \code{long_desc}.
 #' @source
+# nolint start
 #' \url{http://www.cms.gov/Medicare/Coding/ICD9ProviderDiagnosticCodes/codes.html}
+# nolint end
 #' @name get_icd9cm2014_leaf
 #' @aliases iget_cd9cm2005_leaf get_icd9cm2006_leaf get_icd9cm2007_leaf
 #'   get_icd9cm2008_leaf get_icd9cm2009_leaf get_icd9cm2010_leaf
@@ -480,7 +493,9 @@ NULL
 #'   would appear in \code{\link{get_icd9cm2014}} but not
 #'   \code{\link{get_icd9cm2014_leaf}}.
 #' @source
+# nolint start
 #' \url{http://www.cms.gov/Medicare/Coding/ICD9ProviderDiagnosticCodes/codes.html}
+# nolint end
 #' @name icd9cm_billable
 NULL
 
@@ -516,7 +531,9 @@ get_icd10cm_latest <- function() {
 #' edited and processed by VAHHS-NSO, BISHCA assumes no responsibility for
 #' errors in the data due to coding or processing}
 #' @source
+# nolint start
 #' \url{http://www.healthvermont.gov/health-statistics-vital-records/health-care-systems-reporting/hospital-discharge-data}
+# nolint end
 #' @details Format:  CSV original, minimally processed into R data frame.
 #' @keywords datasets
 #' @author Vermont Division of Health Care Administration

@@ -1,0 +1,7 @@
+%\VignetteIndexEntry{icd: Efficient Computation of Comorbidities from ICD Codes Using Sparse Matrix Multiplication in R}
+%\VignetteEncoding{UTF-8}
+%\VignetteKeyword{comorbidity, comorbidities, biomedical informatics, administrative data, matrix algebra, ICD-9, ICD-10, ICD-9-CM, ICD-10-CM, mapping, algorithm}
+\documentclass{article}
+\begin{document}
+\end{document}
+

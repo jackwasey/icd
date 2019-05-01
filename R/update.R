@@ -22,9 +22,6 @@ update_everything <- function() {
   .set_icd_data_dir()
   .print_options()
   .icd10cm_extract_sub_chapters(save_pkg_data = TRUE)
-  #  icd9cm_billable <- list()
-  #  icd9cm_billable[["32"]] <- get_icd9cm2014_leaf(must_work = TRUE)
-  #  .save_in_data_dir(icd9cm_billable)
   generate_sysdata()
   load(file.path("R", "sysdata.rda"))
   generate_spelling()
@@ -122,10 +119,12 @@ generate_sysdata <- function(save_pkg_data = TRUE) {
   # because these are probably not of interest to a user and would clutter an
   # already busy namespace.
   if (save_pkg_data) {
-    save(list = sysdata_names,
-         file = path,
-         compress = "xz",
-         version = 2)
+    save(
+      list = sysdata_names,
+      file = path,
+      compress = "xz",
+      version = 2
+    )
   }
   invisible(mget(sysdata_names))
 }

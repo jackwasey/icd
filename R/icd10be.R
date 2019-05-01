@@ -53,8 +53,10 @@
 #' translated from English. Between 2014 and 2017, ICDLST and ICDLSTR fields 13
 #' and 14 were removed.
 #' @references
+# nolint start
 #' \url{https://www.health.belgium.be/fr/sante/organisation-des-soins-de-sante/hopitaux/systemes-denregistrement/icd-10-be}
 #' \url{https://www.health.belgium.be/sites/default/files/uploads/fields/fpshealth_theme_file/fy2017_reflist_icd-10-be.xlsx_last_updatet_28-07-2017_1.xlsx}
+# nolint end
 #' \url{https://www.health.belgium.be/fr/fy2014reflisticd-10-bexlsx}
 #' @param ... passed to \code{.download_to_data_raw}, e.g., \code{offline =
 #'   FALSE}.
@@ -124,7 +126,9 @@
 
 #' Get 2014 French and Dutch translations of ICD-10-CM for Beglian coding
 #' @references
+# nolint start
 #'   \url{https://www.health.belgium.be/fr/sante/organisation-des-soins-de-sante/hopitaux/systemes-denregistrement/icd-10-be}
+# nolint end
 #'    \url{https://www.health.belgium.be/fr/fy2014reflisticd-10-bexlsx}
 #' @param ... passed to \code{.download_to_data_raw}, e.g., \code{offline =
 #'   FALSE}.

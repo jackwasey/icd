@@ -228,7 +228,6 @@ is_unsorted <- function(x) {
   # fails if NA present
   for (i in seq.int(2, lenx)) {
     if (x[i] < x[i - 1]) {
-      # message("i = ", i, ": ", x[i], " < ", x[i - 1])
       return(TRUE)
     }
   }

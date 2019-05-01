@@ -1,10 +1,5 @@
 context("ahrq ccs calculations")
 
-test_that("icd9 CCS map is valid", {
-  # is the empty first element somehow needed?
-  # expect_true(is_valid(icd9_map_single_ccs, short_code = TRUE))
-})
-
 test_that("one code from each single level", {
   first_from_each <-
     vapply(icd9_map_single_ccs,

@@ -61,6 +61,8 @@ out-of-hospital characteristics.
 
 \examples{
 \dontrun{
+library(icd)
+# magrittr not required for icd to work, just for this example
 library(magrittr, warn.conflicts = FALSE, quietly = TRUE)
 myData <- data.frame(
   visit_id = c("v1", "v2", "v3", "v4"),

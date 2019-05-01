@@ -52,7 +52,10 @@ test_that("all available ICD-10-CM data is reported and gettable", {
       expect_is(
         object = do.call(cache_getter_name, args = list()),
         class = "data.frame",
-        info = paste("Calling cache getter :", cache_getter_name, "for: r =", r, "and pc =", pc)
+        info = paste(
+          "Calling cache getter :", cache_getter_name,
+          "for: r =", r, "and pc =", pc
+        )
       )
     }
     expect_true(
@@ -77,9 +80,6 @@ test_that("temporarily set active version", {
   )
   expect_identical(
     object = with_icd10cm_version("2014", {
-      writeLines(paste(as.character(icd:::.show_options()), collapse = ", "),
-        con = "~/icddebug.txt"
-      )
       nrow(get_icd10cm_active())
     }),
     expected = nrow(get_icd10cm2014()),
@@ -94,7 +94,6 @@ test_that("temporarily set active version", {
               sep = "=",
               collapse = ", \n"
             )
-            # writeLines(debugtxt, con = "~/icddebug.txt")
             message(debugtxt)
           }
           paste(names(.show_options()), .show_options(), sep = "=", collapse = ", ")

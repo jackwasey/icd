@@ -1,18 +1,18 @@
 .icd9_generate_subchap_lookup <- function() {
   .icd9_generate_chap_lookup(
-    chapters = icd9_sub_chapters,
+    chapters = icd::icd9_sub_chapters,
     prefix = "sc"
   )
 }
 
 .icd10_generate_subchap_lookup <- function() {
   .icd10_generate_chap_lookup(
-    chapters = icd10_sub_chapters,
+    chapters = icd::icd10_sub_chapters,
     prefix = "sc"
   )
 }
 
-.icd9_generate_chap_lookup <- function(chapters = icd9_chapters,
+.icd9_generate_chap_lookup <- function(chapters = icd::icd9_chapters,
                                        prefix = "chap") {
   stopifnot(is.list(chapters), is.character(prefix))
   df_rows <- lapply(
@@ -37,7 +37,7 @@
   chap_lookup
 }
 
-.icd10_generate_chap_lookup <- function(chapters = icd10_chapters,
+.icd10_generate_chap_lookup <- function(chapters = icd::icd10_chapters,
                                         prefix = "chap") {
   stopifnot(is.list(chapters), is.character(prefix))
   df_rows <- lapply(

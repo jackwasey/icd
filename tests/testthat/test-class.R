@@ -198,7 +198,14 @@ test_that("data frame subsetting doesn't incorrectly set class on columns", {
   )
   expect_equal(
     lapply(pts_invalid_mix[c(TRUE, TRUE, TRUE), ], class),
-    structure(list(visit_id = "numeric", icd9 = c("icd9", "character"), poa = "factor"), .Names = c("visit_id", "icd9", "poa"))
+    structure(
+      list(
+        visit_id = "numeric",
+        icd9 = c("icd9", "character"),
+        poa = "factor"
+      ),
+      .Names = c("visit_id", "icd9", "poa")
+    )
   )
 })
 
