@@ -16,7 +16,8 @@ Function and variable names are likely to change in the future. The current vers
 
 ```{r setup, include=FALSE}
 # not building automatically with CRAN, devtools, because of dependency on downloaded data. Create like this:
-# rmarkdown::render("vignettes/country-lang-vers.Rmd", output_dir = "inst/doc")
+# rmarkdown::render("vignettes/country-lang-vers.Rmd")
+#  then compact or R CMD build --compact-vignettes
 
 knitr::opts_chunk$set(
   collapse = TRUE,

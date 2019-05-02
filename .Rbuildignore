@@ -36,9 +36,6 @@
 ^icd_.*tar\.gz
 ^inst\/doc\/benchresults\\.ods$
 ^.*efficiency_files$
-^JACKinst\/doc\/\.install_extras$
-^JACKinst\/extdata$
-^JACKinst\/extdata\/.*$
 ^lib-bench$
 ^man-roxygen$
 ^revdep$
@@ -54,7 +51,7 @@
 ^src\/icd.*\.dll$
 ^src\/icd.*\.so$
 ^tools$
-^vignettes\/efficiency.Rmd$
-^vignettes\/country-lang-vers.Rmd$
+^vignettes\/efficiency.(Rmd|tex)$
+^vignettes\/country-lang-vers.(Rmd|tex)$
 ^vignettes\/jss\..*$
 

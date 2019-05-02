@@ -1,4 +1,3 @@
-
 *.R
 *.aux
 *.bbl
@@ -21,3 +20,5 @@ Charlson_and_other_scores_files
 icd.bib
 test*.Rmd
 test2
+*.tex
+

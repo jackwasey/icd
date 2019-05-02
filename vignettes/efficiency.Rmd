@@ -52,11 +52,11 @@ bibliography:
   - icdjss.bib
 vignette: >
   % The resuling PDF is included by vignettes/efficiency-vignette.Rnw which contains the Vignette info
-  %\VignetteIndexEntry{icd: Efficient Computation of Comorbidities from ICD Codes Using Sparse Matrix Multiplication in R}
-  %\VignetteDepends{rticles}
-  %\VignetteEngine{knitr::rmarkdown}
-  %\VignetteEncoding{UTF-8}
-  %\VignetteKeyword{comorbidity, comorbidities, biomedical informatics, administrative data, matrix algebra, ICD-9, ICD-10, ICD-9-CM, ICD-10-CM, mapping, algorithm}
+  %\ %VignetteIndexEntry{icd: Efficient Computation of Comorbidities from ICD Codes Using Sparse Matrix Multiplication in R}
+  %\ %VignetteDepends{rticles}
+  %\ %VignetteEngine{knitr::rmarkdown}
+  %\ %VignetteEncoding{UTF-8}
+  %\ %VignetteKeyword{comorbidity, comorbidities, biomedical informatics, administrative data, matrix algebra, ICD-9, ICD-10, ICD-9-CM, ICD-10-CM, mapping, algorithm}
 editor_options:
   chunk_output_type: inline
 pkgdown:
