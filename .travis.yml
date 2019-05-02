@@ -29,6 +29,7 @@ addons:
   apt:
     packages:
       - valgrind
+      - r-cran-tinytex
 
 r_packages:
   - tinytex
@@ -63,8 +64,9 @@ before_install:
   - cat ~/.R/Makevars
   - Rscript -e '.libPaths()'
   # for the pre-built static vignette stubs to include the actual vignettes, try:
-  - Rscript -e 'tinytex::install_tinytex(); tinytex::tlmgr_install("pdfpages")'
-  - tlmgr install pdfpages
+  # - Rscript -e 'if (require("tinytex")) {tinytex::install_tinytex(); tinytex::tlmgr_install("pdfpages", "ae")}'
+  # tlmgr --user-mode doesn't seem to be necessary
+  - tlmgr install pdfpages ae
 
 env:
   global:
