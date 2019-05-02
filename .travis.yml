@@ -6,13 +6,6 @@ language: r
 # for RcppEigen to compile, (but disable if brew gcc on mac to avoid conflict)
 fortran: true
 
-# os:
-#   - linux
-#   - osx
-
-# dist:
-#   - xenial
-
 compiler:
   - gcc
   - clang
@@ -27,7 +20,6 @@ compiler:
 #
 # https://docs.travis-ci.com/user/languages/cpp/
 
-# TODO: "eval"" the benchmark step to error if it fails with bad return code.
 sudo: false
 cache:
   - packages
@@ -71,6 +63,8 @@ before_install:
   - eval "${MATRIX_EVAL}"
   - cat ~/.R/Makevars
   - Rscript -e '.libPaths()'
+  # for the pre-built static vignette stubs to include the actual vignettes:
+  - tlmgr install pdfpages
 
 env:
   global:
@@ -180,17 +174,17 @@ matrix:
     - ICD_TEST_SLOW=true
 
 before_script:
-# - rm .Rinstignore  # do install everything for testing (we have source tree, so no need)
-# - if [ "$TRAVIS_OS_NAME" = "osx" ]; then sed -i '' '/.*[Dd]ata.*/d' .Rbuildignore; fi
-# - if [ "$TRAVIS_OS_NAME" = "linux" ]; then sed -i'' '/.*[Dd]ata.*/d' .Rbuildignore; fi
- # should fail and stop travis if the benchmarking fails.
- - if [ x"$ICD_MINI_BENCH" = x"true" ]; then
-     cd benchmarks/icd-JSS3447-replication;
-     make bench3 && make replmat;
-     cd ../..;
-   fi
  - if [ x"$ICD_TEST_SLOW" = x"true" ]; then
      Rscript -e 'source("tools/split-tests.R"); testthat_split();';
+   fi
+
+after_script:
+ # should fail and stop travis with error if the quick benchmark code fails
+ - if [ x"$ICD_MINI_BENCH" = x"true" ]; then
+     cd benchmarks/icd-JSS3447-replication;
+     eval "make bench3"
+     eval "make replmat"
+     cd ../..;
    fi
 
 after_success:
