@@ -30,9 +30,8 @@ addons:
     packages:
       - valgrind
 
-# don't want overhead of installing for every matrix element
-# r_packages:
-#   - covr
+r_packages:
+  - tinytex
 
 cran: https://cloud.r-project.org
 # by default, DON'T do --as-cran, as it stops us using environment variables
@@ -63,7 +62,8 @@ before_install:
   - eval "${MATRIX_EVAL}"
   - cat ~/.R/Makevars
   - Rscript -e '.libPaths()'
-  # for the pre-built static vignette stubs to include the actual vignettes:
+  # for the pre-built static vignette stubs to include the actual vignettes, try:
+  - Rscript -e 'tinytex::install_tinytex(); tinytex::tlmgr_install("pdfpages")'
   - tlmgr install pdfpages
 
 env:
