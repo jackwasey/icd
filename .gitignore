@@ -65,3 +65,5 @@ testthat-disabled.R
 todo
 bench-refactor.html
 .gdb_history
+**/efficiency_files/*
+

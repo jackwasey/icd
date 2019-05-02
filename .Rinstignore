@@ -1,1 +1,7 @@
 ^COPYING$
+^doc\/efficiency.Rnw$
+^doc\/country-lang-vers.Rnw$
+^doc\/.install_extras
+^inst\/doc\/efficiency.Rnw$
+^inst\/doc\/country-lang-vers.Rnw$
+^inst\/doc\/.install_extras

@@ -1,10 +1,6 @@
 ---
 title: "Working with World Health Organization ICD codes and national editions, and different languages"
 output: rmarkdown::pdf_document
-vignette: >
-  %\VignetteIndexEntry{Working with World Health Organization ICD codes and national editions}
-  %\VignetteEngine{knitr::rmarkdown}
-  %\VignetteEncoding{UTF-8}
 ---
 
 `icd` 4.0+ offers some international support.

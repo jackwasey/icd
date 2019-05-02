@@ -1,3 +1,7 @@
 ^efficiency\.pdf$
-^efficiency\.Rmd$
+^country-lang-vers\.pdf$
+^index\.html$
+^vignettes\/efficiency\.pdf$
+^vignettes\/country-lang-vers\.pdf$
+^vignettes\/index\.html$
 

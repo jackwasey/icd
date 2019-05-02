@@ -58,6 +58,44 @@ update_everything <- function() {
   icd9cm_hierarchy <- get_icd9cm2014()
   names(icd9cm_hierarchy)[names(icd9cm_hierarchy) == "leaf"] <- "billable"
   .save_in_data_dir(icd9cm_hierarchy)
+  .generate_vigette_index
+}
+
+# this is sadly very complicated in order to pass R CMD check --as-cran
+#
+# Look in .Rinstignore, .Rbuildignore, /build/vignette.rds vignettes/ vignettes-prebuilt vignettes/.install_extras
+#
+# https://stackoverflow.com/questions/51792384
+.generate_vigette_index <- function() {
+  vi_col_names <- c("File", "Title", "PDF", "R", "Depends", "Keywords")
+  vignette_index <- matrix(
+      ncol = 4, byrow = TRUE,
+      c(
+        "charlson-scores.Rmd", "Charlson and Van Walraven scores", "charlson-scores.html", "charlson-scores.R",
+
+        "CMS-HCC.Rmd", "Using Hierarchical Condition Codes", "CMS-HCC.html", "CMS-HCC.R",
+
+        "compare-maps.Rmd", "Comparing Comorbidity Mappings", "compare-maps.html", "compare-maps.R",
+
+        "custom-maps.Rmd", "Quick custom comorbidity maps are helpful", "custom-maps.html", "custom-maps.R",
+
+        "ICD-10.Rmd", "ICD-10 comorbidities", "ICD-10.html", "ICD-10.R",
+
+        "introduction.Rmd", "An Introduction to icd", "introduction.html", "introduction.R",
+
+        "PCCC.Rmd", "Pediatric Complex Chronic Conditions", "PCCC.html", "PCCC.R",
+
+        "ranges.Rmd", "Ranges of ICD codes", "ranges.html", "ranges.R"
+    )
+  )
+  # keywords and dependsall empty (for now), and depends not essential.
+  vignette_index <- cbind(vignette_index,
+                          matrix(nrow = nrow(vignette_index), ncol = 2, ""))
+  vignette_index <- as.data.frame(vignette_index, stringsAsFactors = FALSE)
+  names(vignette_index) <- vi_col_names
+  dir.create("build", showWarnings = FALSE)
+  saveRDS(vignette_index, "build/vignette.rds", version = 2)
+  vignette_index
 }
 
 #' Generate \code{sysdata.rda}

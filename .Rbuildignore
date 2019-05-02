@@ -62,13 +62,4 @@
 ^src\/icd.*\.dll$
 ^src\/icd.*\.so$
 ^tools$
-^vignettes\/.*\.dvi$
-^vignettes\/.*\.fls$
-^vignettes\/.*_latexmk$
-^vignettes\/country-lang-vers\.Rmd$
-^vignettes\/efficiency\.Rmd$
-^vignettes\/efficiency\.tex$
-^vignettes\/efficiency_files$
-^vignettes\/jss\.bst$
-^vignettes\/jss\.cls$
-^vignettes\/jsslogo\.jpg$
+^vignettes-prebuilt$
