@@ -144,7 +144,7 @@ matrix:
     compiler: clang
   - r: oldrel
     os: linux
-    dist: precise
+    dist: trusty
     latex: false
     r_build_args: --no-manual --resave-data=no
     r_check_args: --no-manual

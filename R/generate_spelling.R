@@ -6,7 +6,7 @@
 #' @template save_pkg_data
 #' @keywords internal
 #' @noRd
-generate_spelling <- function(save_pkg_data = TRUE) {
+.generate_spelling <- function(save_pkg_data = TRUE) {
   medical <- c(
     "anonymized",
     "arrythmia",

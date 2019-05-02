@@ -20,7 +20,6 @@ PackageUseDevtools: Yes
 PackageInstallArgs: --with-keep.source --install-tests
 PackageBuildArgs: --compact-vignettes=gs+qpdf
 PackageBuildBinaryArgs: --preclean --example --install-tests --no-clean-on-error --with-keep.source --data-compress=none
-PackageCheckArgs: --ignore-vignettes --no-build-vignettes --no-vignettes
 PackageRoxygenize: rd,namespace
 
 QuitChildProcessesOnExit: Yes

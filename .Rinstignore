@@ -1,7 +1,7 @@
 ^COPYING$
-^doc\/efficiency.Rnw$
-^doc\/country-lang-vers.Rnw$
-^doc\/.install_extras
-^inst\/doc\/efficiency.Rnw$
-^inst\/doc\/country-lang-vers.Rnw$
-^inst\/doc\/.install_extras
+^JACKdoc\/efficiency.Rnw$
+^JACKdoc\/country-lang-vers.Rnw$
+^JACKdoc\/.install_extras
+^JACKinst\/doc\/efficiency.Rnw$
+^JACKinst\/doc\/country-lang-vers.Rnw$
+^JACKinst\/doc\/.install_extras
