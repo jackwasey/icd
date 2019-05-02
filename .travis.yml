@@ -146,21 +146,21 @@ matrix:
     os: linux
     dist: precise
     latex: false
-    r_build_args: --no-build-vignettes --no-manual --resave-data=no
-    r_check_args: --no-build-vignettes --no-vignettes --ignore-vignettes --no-codoc --no-manual
+    r_build_args: --no-manual --resave-data=no
+    r_check_args: --no-manual
   - r: release
     os: osx
     compiler: clang
     latex: false
-    r_build_args: --no-build-vignettes --no-manual --resave-data=no
-    r_check_args: --no-build-vignettes --no-vignettes --ignore-vignettes --no-codoc --no-manual
+    r_build_args: --no-manual --resave-data=no
+    r_check_args: --no-manual
     env:
     - ICD_MINI_BENCH=true
   - r: release
     os: linux
     latex: false
-    r_build_args: --no-build-vignettes --no-manual --resave-data=no
-    r_check_args: --no-build-vignettes --no-vignettes --ignore-vignettes --no-codoc --no-manual
+    r_build_args: --no-manual --resave-data=no
+    r_check_args: --no-manual
     env:
     - ICD_COVERAGE=true
     - ICD_MINI_BENCH=false
@@ -172,8 +172,8 @@ matrix:
   - r: release
     os: linux
     latex: false
-    r_build_args: --no-build-vignettes --no-manual --resave-data=no
-    r_check_args: --no-build-vignettes --no-vignettes --ignore-vignettes --no-codoc --no-manual
+    r_build_args: --no-manual --resave-data=no
+    r_check_args: --no-manual
     env:
     - ICD_COVERAGE=true
     - ICD_MINI_BENCH=false
