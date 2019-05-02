@@ -60,13 +60,15 @@ before_install:
       echo 'CXXFLAGS=-O0' >> ~/.R/Makevars ;
       echo 'CXX11FLAGS=-O0' >> ~/.R/Makevars ;
       fi
-  - eval "${MATRIX_EVAL}"
+  - if [[ "$(uname -s)" = 'Darwin' ]]; then
+      command -v g++-8 >/dev/null 2>&1 || brew install gcc && echo 'CC=gcc-8' >> ~/.R/Makevars && echo 'CXX=g++-8' >> ~/.R/Makevars && echo 'CXX11=g++-8' >> ~/.R/Makevars && Rscript -e 'install.packages(\"Rcpp\", type = \"source\")';
+    fi
   - cat ~/.R/Makevars
   - Rscript -e '.libPaths()'
   # for the pre-built static vignette stubs to include the actual vignettes, try:
   # - Rscript -e 'if (require("tinytex")) {tinytex::install_tinytex(); tinytex::tlmgr_install("pdfpages", "ae")}'
   # tlmgr --user-mode doesn't seem to be necessary
-  - Rscript -e 'if (!require(\"tinytex\")) {quit(status=1)} else {tinytex::install_tinytex(); tinytex::tlmgr_install(\"pdfpages\", \"ae\")}' || hash tlmgr 2>/dev/null && { tlmgr install pdfpages ae; }
+  - Rscript -e 'if (!require("tinytex")) {quit(status=1)} else {tinytex::install_tinytex(); tinytex::tlmgr_install("pdfpages", "ae")}' || hash tlmgr 2>/dev/null && { tlmgr install pdfpages ae; }
 
 env:
   global:
@@ -123,7 +125,6 @@ matrix:
     compiler: gcc
     # ?have to reinstall Rcpp with compiler and libc++ -> libstdc++ change
     env:
-      - MATRIX_EVAL="command -v g++-8 >/dev/null 2>&1 || brew install gcc && echo 'CC=gcc-8' >> ~/.R/Makevars && echo 'CXX=g++-8' >> ~/.R/Makevars && echo 'CXX11=g++-8' >> ~/.R/Makevars && Rscript -e 'install.packages(\"Rcpp\", type = \"source\")'"
       - ICD_MINI_BENCH=true
   # r-devel currently failing to download for macos, so release for now.
   # also see https://docs.travis-ci.com/user/reference/osx
@@ -131,8 +132,6 @@ matrix:
     os: osx
     osx_image: xcode10.2
     compiler: gcc
-    env:
-      - MATRIX_EVAL="command -v g++-8 >/dev/null 2>&1 || brew install gcc && echo 'CC=gcc-8' >> ~/.R/Makevars && echo 'CXX=g++-8' >> ~/.R/Makevars && echo 'CXX11=g++-8' >> ~/.R/Makevars && Rscript -e 'install.packages(\"Rcpp\", type = \"source\")'"
   - r: release
     os: osx
     # as of April 2019, default osx image is 9.4
