@@ -71,7 +71,7 @@ then an ICD-9 class (icd9) is also set." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Comorbidity calculations and tools for ICD-9 and ICD-10 codes</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">4.0.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">4.0.4</span>
       </span>
     </div>
 
@@ -100,6 +100,9 @@ then an ICD-9 class (icd9) is also set." />
       <a href="../articles/ICD-10.html">ICD-10 comorbidities</a>
     </li>
     <li>
+      <a href="../articles/PCCC.html">Pediatric Complex Chronic Conditions</a>
+    </li>
+    <li>
       <a href="../articles/charlson-scores.html">Charlson and Van Walraven scores</a>
     </li>
     <li>
@@ -115,7 +118,7 @@ then an ICD-9 class (icd9) is also set." />
       <a href="../articles/efficiency.pdf">icd: Efficient Computation of Comorbidities from ICD Codes Using Sparse Matrix Multiplication in R (PDF)</a>
     </li>
     <li>
-      <a href="../articles/introduction.html">Quick Introduction to icd</a>
+      <a href="../articles/introduction.html">An Introduction to icd</a>
     </li>
     <li>
       <a href="../articles/ranges.html">Ranges of ICD codes</a>
@@ -206,11 +209,11 @@ which is much faster.</p>
 
     <ul>
 <li><p><code>as.icd9</code>: Use generic ICD-9 class for this data. Ideally, use
-the more specific `icd9cm` or other sub-classes (when available).</p></li>
+the more specific <code>icd9cm</code> or other sub-classes (when available).</p></li>
 <li><p><code>as.icd9cm</code>: Use ICD-9-CM</p></li>
 <li><p><code>as.icd9cm_pc</code>: Indicate the data are ICD-9-CM procedure codes.</p></li>
 <li><p><code>as.icd10</code>: Use generic ICD-10 class for this data. If
-possible, use the more specific `icd10who` or `icd10cm`.</p></li>
+possible, use the more specific <code>icd10who</code> or <code>icd10cm</code>.</p></li>
 <li><p><code>as.icd10cm</code>: Use ICD-10-CM (USA) class for the given data</p></li>
 <li><p><code>as.icd10cm_pc</code>: Indicate the data are ICD-10-CM procedure codes.</p></li>
 <li><p><code>as.icd10who</code>: Use WHO ICD-10 class for the given data</p></li>
@@ -258,7 +261,7 @@ possible, use the more specific `icd10who` or `icd10cm`.</p></li>
 
       <footer>
       <div class="copyright">
-  <p>Developed by Jack O. Wasey.</p>
+  <p>Developed by Jack O. Wasey, R Core Team.</p>
 </div>
 
 <div class="pkgdown">

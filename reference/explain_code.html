@@ -38,9 +38,9 @@
 
 <meta property="og:title" content="Explain ICD-9 and ICD-10 codes in English — explain_code" />
 
-<meta property="og:description" content="Convert 'decimal' format (123.45 style) ICD-9 codes into the name and
-description for human review there are official ICD9-CM data tables, not with
-conversion to decimal notation, but to the textual format." />
+<meta property="og:description" content="Converts a vector of ICD codes to a vector of descriptions of these codes.
+The conversion is based on the edition (ICD-9 or ICD-10), and class (e.g.,
+icd10who) of the input vector. See examples." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -71,7 +71,7 @@ conversion to decimal notation, but to the textual format." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Comorbidity calculations and tools for ICD-9 and ICD-10 codes</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">4.0.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">4.0.4</span>
       </span>
     </div>
 
@@ -100,6 +100,9 @@ conversion to decimal notation, but to the textual format." />
       <a href="../articles/ICD-10.html">ICD-10 comorbidities</a>
     </li>
     <li>
+      <a href="../articles/PCCC.html">Pediatric Complex Chronic Conditions</a>
+    </li>
+    <li>
       <a href="../articles/charlson-scores.html">Charlson and Van Walraven scores</a>
     </li>
     <li>
@@ -115,7 +118,7 @@ conversion to decimal notation, but to the textual format." />
       <a href="../articles/efficiency.pdf">icd: Efficient Computation of Comorbidities from ICD Codes Using Sparse Matrix Multiplication in R (PDF)</a>
     </li>
     <li>
-      <a href="../articles/introduction.html">Quick Introduction to icd</a>
+      <a href="../articles/introduction.html">An Introduction to icd</a>
     </li>
     <li>
       <a href="../articles/ranges.html">Ranges of ICD codes</a>
@@ -154,9 +157,9 @@ conversion to decimal notation, but to the textual format." />
 
     <div class="ref-description">
     
-    <p>Convert 'decimal' format (123.45 style) ICD-9 codes into the name and
-description for human review there are official ICD9-CM data tables, not with
-conversion to decimal notation, but to the textual format.</p>
+    <p>Converts a vector of ICD codes to a vector of descriptions of these codes.
+The conversion is based on the edition (ICD-9 or ICD-10), and class (e.g.,
+<code>icd10who</code>) of the input vector. See examples.</p>
     
     </div>
 
@@ -236,9 +239,8 @@ a warning.</p></td>
     <tr>
       <th>lang</th>
       <td><p>For WHO ICD-10 codes, the 2016 English and 2008 French
-translations are available. Use 'en' or 'fr' respectively. For ICD-10-CM
-codes, Dutch is also available, indicated by 'nl'. If `icd.data` 1.0 is
-installed, English descriptions are returned.</p></td>
+translations are available. Use <code>en</code> or <code>fr</code> respectively.
+For ICD-10-CM codes, Dutch is also available, indicated by <code>nl</code>.</p></td>
     </tr>
     </table>
     
@@ -263,9 +265,11 @@ ICD version</p></li>
 <li><p><code>icd9cm</code>: explain character vector of ICD-9-CM codes</p></li>
 <li><p><code>icd10cm</code>: ICD-10-CM explanation, current a minimal
 implementation</p></li>
-<li><p><code>icd10who</code>: WHO ICD-10 explanation</p></li>
-<li><p><code>icd10fr</code>: ICD-10-FR explanation, initial implementation, subject to change</p></li>
-<li><p><code>icd10be</code>: ICD-10-BE explanation, initial implementation, subject to change</p></li>
+<li><p><code>icd10who</code>: WHO ICD-10 explanation in French or English</p></li>
+<li><p><code>icd10fr</code>: ICD-10-FR explanation, initial implementation,
+subject to change</p></li>
+<li><p><code>icd10be</code>: ICD-10-BE explanation, initial implementation,
+subject to change</p></li>
 <li><p><code>icd10</code>: ICD-10 explanation, falls back on ICD-10-CM until
 ICD-10 WHO copyright workaround is available</p></li>
 </ul>
@@ -281,8 +285,12 @@ ICD-10 WHO copyright workaround is available</p></li>
 #&gt; [3] "Benign hyp ht dis w hf" </div><div class='input'><span class='co'># The first three in the ICD-10 equivalent are a little different:</span>
 <span class='fu'>explain_code</span>(<span class='no'>icd10_map_ahrq</span>$<span class='no'>CHF</span>[<span class='fl'>1</span>:<span class='fl'>3</span>], <span class='kw'>brief</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt; [1] "Rheumatic heart failure"                        
 #&gt; [2] "Left ventricular failure, unspecified"          
-#&gt; [3] "Unspecified systolic (congestive) heart failure"</div><div class='input'># Belgian ICD-10 has three languages available
-</div><span class='co'># NOT RUN {</span>
+#&gt; [3] "Unspecified systolic (congestive) heart failure"</div><span class='co'># NOT RUN {</span>
+<span class='co'># these may need to download the WHO data first:</span>
+<span class='fu'>explain_code</span>(<span class='fu'><a href='set_icd_class.html'>as.icd10who</a></span>(<span class='st'>"B219"</span>), <span class='kw'>lang</span> <span class='kw'>=</span> <span class='st'>"fr"</span>)
+<span class='fu'>explain_code</span>(<span class='fu'><a href='set_icd_class.html'>as.icd10who</a></span>(<span class='st'>"B219"</span>))
+<span class='co'># }</span><span class='co'># NOT RUN {</span>
+<span class='co'># Belgian ICD-10 has three languages available</span>
 <span class='fu'>explain_code</span>(<span class='fu'><a href='set_icd_class.html'>as.icd10be</a></span>(<span class='st'>"C20"</span>))
 <span class='co'># [1] "Malignant neoplasm of rectum"</span>
 <span class='fu'>explain_code</span>(<span class='fu'><a href='set_icd_class.html'>as.icd10be</a></span>(<span class='st'>"C20"</span>), <span class='kw'>lang</span> <span class='kw'>=</span> <span class='st'>"en"</span>)
@@ -312,7 +320,7 @@ ICD-10 WHO copyright workaround is available</p></li>
 
       <footer>
       <div class="copyright">
-  <p>Developed by Jack O. Wasey.</p>
+  <p>Developed by Jack O. Wasey, R Core Team.</p>
 </div>
 
 <div class="pkgdown">

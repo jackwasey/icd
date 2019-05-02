@@ -78,7 +78,7 @@ comorbid_ccs." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Comorbidity calculations and tools for ICD-9 and ICD-10 codes</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">4.0.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">4.0.4</span>
       </span>
     </div>
 
@@ -107,6 +107,9 @@ comorbid_ccs." />
       <a href="../articles/ICD-10.html">ICD-10 comorbidities</a>
     </li>
     <li>
+      <a href="../articles/PCCC.html">Pediatric Complex Chronic Conditions</a>
+    </li>
+    <li>
       <a href="../articles/charlson-scores.html">Charlson and Van Walraven scores</a>
     </li>
     <li>
@@ -122,7 +125,7 @@ comorbid_ccs." />
       <a href="../articles/efficiency.pdf">icd: Efficient Computation of Comorbidities from ICD Codes Using Sparse Matrix Multiplication in R (PDF)</a>
     </li>
     <li>
-      <a href="../articles/introduction.html">Quick Introduction to icd</a>
+      <a href="../articles/introduction.html">An Introduction to icd</a>
     </li>
     <li>
       <a href="../articles/ranges.html">Ranges of ICD codes</a>
@@ -211,7 +214,7 @@ Clinical Classification Software (CCS) rules from AHRQ, see
 
 <span class='fu'>icd10_comorbid_charlson</span>(<span class='no'>...</span>)
 
-<span class='fu'>comorbid_ccs</span>(<span class='no'>x</span>, <span class='kw'>icd_name</span> <span class='kw'>=</span> <span class='fu'><a href='get_icd_dx_name.html'>get_icd_name</a></span>(<span class='no'>x</span>), <span class='no'>...</span>)
+<span class='fu'>comorbid_ccs</span>(<span class='no'>x</span>, <span class='kw'>icd_name</span> <span class='kw'>=</span> <span class='fu'>get_icd_name</span>(<span class='no'>x</span>), <span class='no'>...</span>)
 
 <span class='fu'>icd9_comorbid_ccs</span>(<span class='no'>x</span>, <span class='no'>...</span>, <span class='kw'>single</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>lvl</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>map</span> <span class='kw'>=</span> <span class='kw pkg'>icd</span><span class='kw ns'>::</span><span class='no'><a href='https://jackwasey.github.io/icd//reference/icd9_map_single_ccs.html'>icd9_map_single_ccs</a></span>, <span class='kw'>short_map</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
@@ -234,21 +237,23 @@ Clinical Classification Software (CCS) rules from AHRQ, see
     <tr>
       <th>x</th>
       <td><p><code>data.frame</code> containing a column of patient-visit identifiers
-and a column of ICD codes. The <code>data.frame</code> should be in &#8216;long&#8217;
-format, like the example <code><a href='https://www.rdocumentation.org/packages/icd.data/topics/vermont_dx'>icd.data::vermont_dx</a></code> data. If it is in
-&#8216;wide&#8217; format, it must be converted to &#8216;long&#8217; using
-<code><a href='wide_to_long.html'>wide_to_long</a></code> before calling any comorbidity functions.</p></td>
+and a column of ICD codes. The <code>data.frame</code> may be in &#8216;long&#8217; or
+&#8216;wide&#8217; format, like the example <code><a href='vermont_dx.html'>vermont_dx</a></code>
+and <code><a href='uranium_pathology.html'>uranium_pathology</a></code> data.</p></td>
     </tr>
     <tr>
       <th>map</th>
-      <td><p>list of the comorbidities with each list item containing a vector
-of decimal ICD-9 codes. This is in the form of a list, with the names of
-the items corresponding to the comorbidities (e.g. &#8216;HTN&#8217;, or
+      <td><p>A named list of the comorbidities with each list item containing a
+vector of decimal ICD-9 codes. <span class="pkg">icd</span> includes a number of these, e.g.,
+<code><a href='icd9_map_elix.html'>icd9_map_elix</a></code>. Alternatively, this can be omitted if the
+convenience functions, such as <code>icd10_comorbid_charlson</code> are used
+directly. <code>map</code> should be in the form of a list, with the names of the
+items corresponding to the comorbidities (e.g. &#8216;HTN&#8217;, or
 &#8216;diabetes&#8217;) and the contents of each list item being a character
 vector of short-form (no decimal place, zero left-padded) ICD codes. There
 is no default: the user should use the family of functions, e.g.
-<code>comorbid_ahrq</code>, since these also name the fields correctly, apply any
-hierarchical rules (see <code>hierarchy</code> below)</p></td>
+<code>comorbid_ahrq</code>, since these also name the fields correctly, and these
+functions also apply any hierarchical rules (see <code>hierarchy</code> below)</p></td>
     </tr>
     <tr>
       <th>visit_name</th>
@@ -306,7 +311,7 @@ other tools, e.g. <code><a href='https://www.rdocumentation.org/packages/base/to
     </tr>
     <tr>
       <th>...</th>
-      <td><p>arguments passed on to other functions</p></td>
+      <td><p>Arguments passed through to <code>comorbid</code></p></td>
     </tr>
     <tr>
       <th>icd10_comorbid_fun</th>
@@ -356,9 +361,9 @@ between one and four.</p></td>
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>The order of visits may change depending on the original sequence,
-and the underlying algorithm used. Usually this would be the order of the
-first occurrence of each visit/patient identifier, but this is not
-guaranteed unless <code>restore_id_order</code> is set to <code>TRUE</code>.</p>
+  and the underlying algorithm used. Usually this would be the order of the
+  first occurrence of each visit/patient identifier, but this is not
+  guaranteed unless <code>restore_id_order</code> is set to <code>TRUE</code>.</p>
 <p><code>data.frame</code>s of patient data may have columns within them
   which are of class <code>icd9</code>, <code>icd10</code> etc., but do not themselves
   have a class: therefore, the S3 mechanism for dispatch is not suitable. I
@@ -420,15 +425,15 @@ according to Quan/Deyo ICD categories. Synonymous with
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>library</a></span>(<span class='no'>icd.data</span>) <span class='co'># for Vermont data</span>
+    <pre class="examples"><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>library</a></span>(<span class='no'>icd</span>)
 <span class='no'>vermont_dx</span>[<span class='fl'>1</span>:<span class='fl'>5</span>, <span class='fl'>1</span>:<span class='fl'>10</span>]</div><div class='output co'>#&gt;   visit_id   age_group    sex death DRG   DX1   DX2   DX3   DX4   DX5
 #&gt; 1        7       40-44   male  TRUE 640 27801 03842 51881 41519 99591
 #&gt; 2       10 75 and over female FALSE 470 71526 25000 42830  4280  4019
 #&gt; 3       13 75 and over female FALSE 470 71535 59651 78052 27800 V8537
 #&gt; 4       16       55-59 female FALSE 470 71535 49390 53081 27800  V140
-#&gt; 5       37       70-74   male FALSE 462 71536  4241  2859  2720  4414</div><div class='input'><span class='no'>vd</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='wide_to_long.html'>wide_to_long</a></span>(<span class='no'>vermont_dx</span>)
-<span class='co'># get first few rows and columns of Charlson comorbidities using Quan mapping</span>
-<span class='fu'>comorbid_quan_deyo</span>(<span class='no'>vd</span>)[<span class='fl'>1</span>:<span class='fl'>5</span>, <span class='fl'>1</span>:<span class='fl'>14</span>]</div><div class='output co'>#&gt;       MI   CHF   PVD Stroke Dementia Pulmonary Rheumatic   PUD LiverMild    DM
+#&gt; 5       37       70-74   male FALSE 462 71536  4241  2859  2720  4414</div><div class='input'><span class='co'># get first few rows and columns of Charlson comorbidities using Quan/Deyo</span>
+<span class='co'># mapping of ICD-9 or ICD-10 codes Charlson categories</span>
+<span class='fu'>comorbid_quan_deyo</span>(<span class='no'>vermont_dx</span>)[<span class='fl'>1</span>:<span class='fl'>5</span>, <span class='fl'>1</span>:<span class='fl'>14</span>]</div><div class='output co'>#&gt;       MI   CHF   PVD Stroke Dementia Pulmonary Rheumatic   PUD LiverMild    DM
 #&gt; 7  FALSE  TRUE FALSE  FALSE    FALSE     FALSE     FALSE FALSE     FALSE FALSE
 #&gt; 10 FALSE  TRUE FALSE  FALSE    FALSE      TRUE     FALSE FALSE     FALSE  TRUE
 #&gt; 13 FALSE FALSE FALSE  FALSE    FALSE     FALSE     FALSE FALSE     FALSE FALSE
@@ -440,6 +445,16 @@ according to Quan/Deyo ICD categories. Synonymous with
 #&gt; 13 FALSE     FALSE FALSE  FALSE
 #&gt; 16 FALSE     FALSE FALSE  FALSE
 #&gt; 37 FALSE     FALSE FALSE  FALSE</div><div class='input'>
+<span class='co'># Note that the comorbidity calculations automatically finds the ICD code</span>
+<span class='co'># columns, and uses 'wide' or 'long' format data.</span>
+
+<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/stopifnot'>stopifnot</a></span>(
+  <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/identical'>identical</a></span>(
+    <span class='fu'>comorbid_quan_deyo</span>(<span class='no'>vermont_dx</span>),
+    <span class='fu'>comorbid_quan_deyo</span>(<span class='fu'><a href='wide_to_long.html'>wide_to_long</a></span>(<span class='no'>vermont_dx</span>))
+  )
+)
+
 <span class='co'># get summary AHRQ (based on Elixhauser) comorbidities for the Uranium data:</span>
 <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/summary'>summary</a></span>(<span class='fu'>comorbid_ahrq</span>(<span class='no'>uranium_pathology</span>))</div><div class='output co'>#&gt;     CHF           Valvular          PHTN            PVD         
 #&gt;  Mode :logical   Mode :logical   Mode :logical   Mode :logical  
@@ -620,7 +635,7 @@ according to Quan/Deyo ICD categories. Synonymous with
 
       <footer>
       <div class="copyright">
-  <p>Developed by Jack O. Wasey.</p>
+  <p>Developed by Jack O. Wasey, R Core Team.</p>
 </div>
 
 <div class="pkgdown">

@@ -73,7 +73,7 @@ of as the inverse operation to children." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Comorbidity calculations and tools for ICD-9 and ICD-10 codes</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">4.0.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">4.0.4</span>
       </span>
     </div>
 
@@ -102,6 +102,9 @@ of as the inverse operation to children." />
       <a href="../articles/ICD-10.html">ICD-10 comorbidities</a>
     </li>
     <li>
+      <a href="../articles/PCCC.html">Pediatric Complex Chronic Conditions</a>
+    </li>
+    <li>
       <a href="../articles/charlson-scores.html">Charlson and Van Walraven scores</a>
     </li>
     <li>
@@ -117,7 +120,7 @@ of as the inverse operation to children." />
       <a href="../articles/efficiency.pdf">icd: Efficient Computation of Comorbidities from ICD Codes Using Sparse Matrix Multiplication in R (PDF)</a>
     </li>
     <li>
-      <a href="../articles/introduction.html">Quick Introduction to icd</a>
+      <a href="../articles/introduction.html">An Introduction to icd</a>
     </li>
     <li>
       <a href="../articles/ranges.html">Ranges of ICD codes</a>
@@ -171,10 +174,11 @@ of as the inverse operation to <code>children</code>.</p>
 <span class='fu'>condense</span>(<span class='no'>x</span>, <span class='kw'>short_code</span> <span class='kw'>=</span> <span class='fu'><a href='guess_short.html'>guess_short</a></span>(<span class='no'>x</span>),
   <span class='kw'>defined</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>...</span>)
 
-<span class='fu'>icd9_condense_decimal</span>(<span class='no'>x</span>, <span class='kw'>defined</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>warn</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-  <span class='kw'>keep_factor_levels</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
+<span class='co'># S3 method for factor</span>
+<span class='fu'>condense</span>(<span class='no'>x</span>, <span class='kw'>short_code</span> <span class='kw'>=</span> <span class='fu'><a href='guess_short.html'>guess_short</a></span>(<span class='no'>x</span>),
+  <span class='kw'>defined</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>...</span>)
 
-<span class='fu'>icd9_condense_short</span>(<span class='no'>x</span>, <span class='kw'>defined</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>warn</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
+<span class='fu'>icd9_condense_decimal</span>(<span class='no'>x</span>, <span class='kw'>defined</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>warn</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
   <span class='kw'>keep_factor_levels</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
@@ -187,40 +191,30 @@ code provided is in short (<code>TRUE</code>) or decimal (<code>FALSE</code>) fo
 Where reasonable, this is guessed from the input data.</p></td>
     </tr>
     <tr>
-      <th>warn</th>
-      <td><p>single logical value, if <code>TRUE</code>, give warnings when
-there is discrepancy between <code>defined</code> being <code>TRUE</code> yet data
-containing undefined codes.</p></td>
-    </tr>
-    <tr>
       <th>...</th>
       <td><p>arguments passed on to other functions</p></td>
     </tr>
     <tr>
-      <th>keep_factor_levels</th>
-      <td><p>single logical value, default <code>FALSE</code>. If
-<code>TRUE</code>, will reuse the factor levels from the input data for the
-output data. This only applies if a factor is given for the input codes.</p></td>
-    </tr>
-    <tr>
       <th>icd9</th>
-      <td><p>is a character vector or factor of ICD-9 codes. If fewer than five characters
+      <td><p>is
+a character vector or factor of ICD-9 codes. If fewer than five characters
 is given in a code, then the digits are greedily assigned to hundreds, then
-tens, then units, before the decimal parts. E.g. "10" becomes "010", not
-"0010".</p></td>
+tens, then units, before the decimal parts. E.g., <code>10</code> becomes
+<code>010</code>, not <code>0010</code> or <code>00010</code>.</p></td>
     </tr>
     <tr>
       <th>icd9Short</th>
-      <td><p>is a character vector of ICD-9 codes. If fewer than five characters is
-given in a code, then the digits are greedily assigned to hundreds, then
-tens, then units, before the decimal parts. E.g. "10" becomes "010", not
-"0010"</p></td>
+      <td><p>is a character vector of ICD-9 codes. If fewer than five
+characters is given in a code, then the digits are greedily assigned to
+hundreds, then tens, then units, before the decimal parts. E.g., <code>10</code>
+becomes <code>010</code>, not <code>0010</code> or <code>00010</code>.</p></td>
     </tr>
     <tr>
-      <th>icd9Decimal</th>
-      <td><p>character vector of ICD-9 codes. If fewer than five characters is given in a
-code, then the digits are greedily assigned to hundreds, then tens, then
-units, before the decimal parts. E.g. "10" becomes "010", not "0010"</p></td>
+      <th>character</th>
+      <td><p>vector of ICD-9 codes. If fewer than five
+characters is given in a code, then the digits are greedily assigned to
+hundreds, then tens, then units, before the decimal parts. E.g., <code>10</code>
+becomes <code>010</code>, not <code>0010</code> or <code>00010</code>.</p></td>
     </tr>
     </table>
     
@@ -229,12 +223,13 @@ units, before the decimal parts. E.g. "10" becomes "010", not "0010"</p></td>
     <ul>
 <li><p><code>character</code>: Condense a set of ICD codes, guessing ICD version
 from input data</p></li>
+<li><p><code>factor</code>: Condense a factor of ICD codes</p></li>
 </ul>
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p>Other ICD-9 ranges: <code><a href='children.html'>children</a></code>,
-  <code><a href='expand_minor.html'>expand_minor</a></code>, <code><a href='expand_range.html'>expand_range</a></code></p></div>
+  <code><a href='expand_range.html'>expand_range</a></code></p></div>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
@@ -259,14 +254,14 @@ from input data</p></li>
 #&gt;  [91] "42875" "42876" "42877" "42878" "42879" "4288"  "42880" "42881" "42882"
 #&gt; [100] "42883" "42884" "42885" "42886" "42887" "42888" "42889" "4289"  "42890"
 #&gt; [109] "42891" "42892" "42893" "42894" "42895" "42896" "42897" "42898" "42899"</div><div class='input'><span class='fu'>condense</span>(<span class='no'>icd9_map_elix</span>$<span class='no'>CHF</span>, <span class='kw'>warn</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; [1] "39891" "40211" "40291" "40411" "40413" "40491" "40493" "428"  </div><div class='input'><span class='co'># explaining big groups of codes takes advantage of this:</span>
-<span class='fu'><a href='explain_code.html'>explain_code</a></span>(<span class='no'>icd9_map_elix</span>$<span class='no'>CHF</span>, <span class='kw'>condense</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>warn</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; [1] "Heart failure"                                                                                                                                          
-#&gt; [2] "Rheumatic heart failure (congestive)"                                                                                                                   
-#&gt; [3] "Benign hypertensive heart disease with heart failure"                                                                                                   
-#&gt; [4] "Unspecified hypertensive heart disease with heart failure"                                                                                              
-#&gt; [5] "Hypertensive heart and chronic kidney disease, benign, with heart failure and with chronic kidney disease stage I through stage IV, or unspecified"     
-#&gt; [6] "Hypertensive heart and chronic kidney disease, benign, with heart failure and chronic kidney disease stage V or end stage renal disease"                
-#&gt; [7] "Hypertensive heart and chronic kidney disease, unspecified, with heart failure and with chronic kidney disease stage I through stage IV, or unspecified"
-#&gt; [8] "Hypertensive heart and chronic kidney disease, unspecified, with heart failure and chronic kidney disease stage V or end stage renal disease"           </div></pre>
+<span class='fu'><a href='explain_code.html'>explain_code</a></span>(<span class='no'>icd9_map_elix</span>$<span class='no'>CHF</span>, <span class='kw'>condense</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>warn</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)</div><div class='output co'>#&gt; [1] "Rheumatic heart failure (congestive)"                                                                                                                   
+#&gt; [2] "Benign hypertensive heart disease with heart failure"                                                                                                   
+#&gt; [3] "Unspecified hypertensive heart disease with heart failure"                                                                                              
+#&gt; [4] "Hypertensive heart and chronic kidney disease, benign, with heart failure and with chronic kidney disease stage I through stage IV, or unspecified"     
+#&gt; [5] "Hypertensive heart and chronic kidney disease, benign, with heart failure and chronic kidney disease stage V or end stage renal disease"                
+#&gt; [6] "Hypertensive heart and chronic kidney disease, unspecified, with heart failure and with chronic kidney disease stage I through stage IV, or unspecified"
+#&gt; [7] "Hypertensive heart and chronic kidney disease, unspecified, with heart failure and chronic kidney disease stage V or end stage renal disease"           
+#&gt; [8] "Heart failure"                                                                                                                                          </div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
@@ -285,7 +280,7 @@ from input data</p></li>
 
       <footer>
       <div class="copyright">
-  <p>Developed by Jack O. Wasey.</p>
+  <p>Developed by Jack O. Wasey, R Core Team.</p>
 </div>
 
 <div class="pkgdown">

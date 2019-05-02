@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>List of annual versions of billable leaf nodes of ICD-9-CM — icd9cm_billable • Comorbidity calculations and tools for ICD-9 and ICD-10 codes</title>
+<title>Deprecated name for the list of annual ICD-9-CM billable/leaf descriptions — icd9cm_billable • Comorbidity calculations and tools for ICD-9 and ICD-10 codes</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -36,17 +36,11 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/jquery.mark.min.js" integrity="sha256-4HLtjeVgH0eIB3aZ9mLYF6E8oU5chNdjU6p6rrXpl9U=" crossorigin="anonymous"></script>
 
 
-<meta property="og:title" content="List of annual versions of billable leaf nodes of ICD-9-CM — icd9cm_billable" />
+<meta property="og:title" content="Deprecated name for the list of annual ICD-9-CM billable/leaf descriptions — icd9cm_billable" />
 
-<meta property="og:description" content="These are derived from the CMS published updates, with versions 23 to 32
-currently available going back to 2004/5. The source files back to version 27
-have short and long descriptions. The short descriptions are in ASCII with no
-special characters, whereas the long descriptions contain accented characters
-which seem to be interpreted as Unicode, latin-1 or cp1252.
-This all done during package creation, but can be repeated by package users,
-including pulling the data from the web pages directly. Despite my best
-efforts, current locale can give different results, but this packaged data is
-correct, with some UTF-8 encoded strings." />
+<meta property="og:description" content="This now just contains the final version (2014, version number 32). This is
+actually the same from 2011 to 2014. Use get_xxx functions such as
+get_icd9cm2014 instead." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -77,7 +71,7 @@ correct, with some UTF-8 encoded strings." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Comorbidity calculations and tools for ICD-9 and ICD-10 codes</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">4.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">4.0.4</span>
       </span>
     </div>
 
@@ -124,7 +118,7 @@ correct, with some UTF-8 encoded strings." />
       <a href="../articles/efficiency.pdf">icd: Efficient Computation of Comorbidities from ICD Codes Using Sparse Matrix Multiplication in R (PDF)</a>
     </li>
     <li>
-      <a href="../articles/introduction.html">Quick Introduction to icd</a>
+      <a href="../articles/introduction.html">An Introduction to icd</a>
     </li>
     <li>
       <a href="../articles/ranges.html">Ranges of ICD codes</a>
@@ -156,35 +150,39 @@ correct, with some UTF-8 encoded strings." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>List of annual versions of billable leaf nodes of ICD-9-CM</h1>
+    <h1>Deprecated name for the list of annual ICD-9-CM billable/leaf descriptions</h1>
     
     <div class="hidden name"><code>icd9cm_billable.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>These are derived from the CMS published updates, with versions 23 to 32
-currently available going back to 2004/5. The source files back to version 27
-have short and long descriptions. The short descriptions are in ASCII with no
-special characters, whereas the long descriptions contain accented characters
-which seem to be interpreted as Unicode, <code>latin-1</code> or <code>cp1252</code>.
-This all done during package creation, but can be repeated by package users,
-including pulling the data from the web pages directly. Despite my best
-efforts, current locale can give different results, but this packaged data is
-correct, with some <code>UTF-8</code> encoded strings.</p>
+    <p>This now just contains the final version (2014, version number 32). This is
+actually the same from 2011 to 2014. Use <code>get_xxx</code> functions such as
+<code><a href='icd9cm_hierarchy.html'>get_icd9cm2014</a></code> instead.</p>
     
     </div>
 
         
-    <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
+    <h2 class="hasAnchor" id="format"><a class="anchor" href="#format"></a>Format</h2>
 
-    <p>Format:  list of data frames. Each list item is named by the version as a
-string, e.g. "32". The constituent data frames have columns <code>icd9</code>,
-<code>shortDesc</code>, and <code>longDesc</code>.</p>
+    <p>list of data frames with columns <code>code</code>, <code>short_desc</code>, and
+  <code>long_desc</code>, containing just the leaf (in USA, &#8216;billable&#8217;)
+  codes, and their descriptions.</p>
+    
+    <h2 class="hasAnchor" id="source"><a class="anchor" href="#source"></a>Source</h2>
+
+    <p><a href='http://www.cms.gov/Medicare/Coding/ICD9ProviderDiagnosticCodes/codes.html'>http://www.cms.gov/Medicare/Coding/ICD9ProviderDiagnosticCodes/codes.html</a></p>
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p><code><a href='https://www.rdocumentation.org/packages/icd.data/topics/ls_icd_data'>ls_icd_data</a></code></p></div>
+    <div class='dont-index'><p>For 2005 -- 2014, the following functions provide ICD-9-CM data:
+  <code><a href='icd9cm_hierarchy.html'>get_icd9cm2009</a></code> and <code><a href='get_icd9cm2014_leaf.html'>get_icd9cm2013_leaf</a></code>. The
+  former includes three-digit &#8216;major&#8217; down to the leaf/billable level,
+  and any intermediate descriptors, e.g. if a four-digit code is not
+  billable, and encompasses some five-digit codes, then the four digit code
+  would appear in <code><a href='icd9cm_hierarchy.html'>get_icd9cm2014</a></code> but not
+  <code><a href='get_icd9cm2014_leaf.html'>get_icd9cm2014_leaf</a></code>.</p></div>
     
 
   </div>
@@ -192,7 +190,9 @@ string, e.g. "32". The constituent data frames have columns <code>icd9</code>,
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       
-      <li><a href="#details">Details</a></li>
+      <li><a href="#format">Format</a></li>
+
+      <li><a href="#source">Source</a></li>
 
       <li><a href="#see-also">See also</a></li>
           </ul>
@@ -202,7 +202,7 @@ string, e.g. "32". The constituent data frames have columns <code>icd9</code>,
 
       <footer>
       <div class="copyright">
-  <p>Developed by Jack O. Wasey.</p>
+  <p>Developed by Jack O. Wasey, R Core Team.</p>
 </div>
 
 <div class="pkgdown">

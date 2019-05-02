@@ -39,8 +39,8 @@
 <meta property="og:title" content="Generate a set of codes between two ICD codes including encompassed children — expand_range" />
 
 <meta property="og:description" content="Great care is taken not to include codes which have children not in the
-range. E.g., 100.9 to 101.1 would _not_ include code &quot;101&quot;. See
-the extensive tests covering this area for much more detail." />
+range. E.g., 100.9 to 101.1 would not include code
+101. See the extensive tests covering this area for much more detail." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -71,7 +71,7 @@ the extensive tests covering this area for much more detail." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Comorbidity calculations and tools for ICD-9 and ICD-10 codes</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">4.0.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">4.0.4</span>
       </span>
     </div>
 
@@ -100,6 +100,9 @@ the extensive tests covering this area for much more detail." />
       <a href="../articles/ICD-10.html">ICD-10 comorbidities</a>
     </li>
     <li>
+      <a href="../articles/PCCC.html">Pediatric Complex Chronic Conditions</a>
+    </li>
+    <li>
       <a href="../articles/charlson-scores.html">Charlson and Van Walraven scores</a>
     </li>
     <li>
@@ -115,7 +118,7 @@ the extensive tests covering this area for much more detail." />
       <a href="../articles/efficiency.pdf">icd: Efficient Computation of Comorbidities from ICD Codes Using Sparse Matrix Multiplication in R (PDF)</a>
     </li>
     <li>
-      <a href="../articles/introduction.html">Quick Introduction to icd</a>
+      <a href="../articles/introduction.html">An Introduction to icd</a>
     </li>
     <li>
       <a href="../articles/ranges.html">Ranges of ICD codes</a>
@@ -155,8 +158,8 @@ the extensive tests covering this area for much more detail." />
     <div class="ref-description">
     
     <p>Great care is taken not to include codes which have children not in the
-range. E.g., <code>100.9</code> to <code>101.1</code> would _not_ include code "101". See
-the extensive tests covering this area for much more detail.</p>
+range. E.g., <code>100.9</code> to <code>101.1</code> would <strong>not</strong> include code
+<code>101</code>. See the extensive tests covering this area for much more detail.</p>
     
     </div>
 
@@ -170,12 +173,6 @@ the extensive tests covering this area for much more detail.</p>
 <span class='fu'>expand_range</span>(<span class='no'>start</span>, <span class='no'>end</span>, <span class='kw'>short_code</span> <span class='kw'>=</span> <span class='fu'><a href='guess_short.html'>guess_short</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='no'>start</span>,
   <span class='no'>end</span>)), <span class='kw'>defined</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>ex_ambig_start</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>ex_ambig_end</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
   <span class='no'>...</span>)
-
-<span class='fu'>icd9_expand_range_short</span>(<span class='no'>start</span>, <span class='no'>end</span>, <span class='kw'>defined</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-  <span class='kw'>ex_ambig_start</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>ex_ambig_end</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
-
-<span class='fu'>icd9_expand_range_decimal</span>(<span class='no'>start</span>, <span class='no'>end</span>, <span class='kw'>defined</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
-  <span class='kw'>ex_ambig_start</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>ex_ambig_end</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
 
 <span class='no'>start</span> <span class='kw'>%i9da%</span> <span class='no'>end</span>
 
@@ -192,10 +189,10 @@ the extensive tests covering this area for much more detail.</p>
     <colgroup><col class="name" /><col class="desc" /></colgroup>
     <tr>
       <th>start, end</th>
-      <td><p>is a character vector of ICD-9 codes. If fewer than five characters is
-given in a code, then the digits are greedily assigned to hundreds, then
-tens, then units, before the decimal parts. E.g. "10" becomes "010", not
-"0010"</p></td>
+      <td><p>is a character vector of ICD-9 codes. If fewer than five
+characters is given in a code, then the digits are greedily assigned to
+hundreds, then tens, then units, before the decimal parts. E.g., <code>10</code>
+becomes <code>010</code>, not <code>0010</code> or <code>00010</code>.</p></td>
     </tr>
     <tr>
       <th>short_code</th>
@@ -223,8 +220,8 @@ is parent to everything up to <code>V11</code>.</p></td>
     <tr>
       <th>ex_ambig_end</th>
       <td><p>single logical, same as <code>ex_ambig_start</code> but affects
-codes at the end of the range. E.g. 99.99 to 101.01 would by default
-exclude 101 and 101.0</p></td>
+codes at the end of the range. E.g. &#8216;99.99&#8217; to &#8216;101.01&#8217; would
+by default exclude 101 and 101.0</p></td>
     </tr>
     </table>
     
@@ -236,7 +233,6 @@ more likely to be useful to the end user, dealing with real ICD codes.</p>
   end codes. If this guessing fails, e.g. start is ICD-9 whereas end is
   ICD-10, then an error is thrown. Otherwise, the appropriate S3 method is
   called.</p>
-<p>Expand range of short_code-form ICD-9 codes</p>
     
     <h2 class="hasAnchor" id="methods-by-class-"><a class="anchor" href="#methods-by-class-"></a>Methods (by class)</h2>
 
@@ -249,7 +245,7 @@ class is not known</p></li>
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p>Other ICD-9 ranges: <code><a href='children.html'>children</a></code>,
-  <code><a href='condense.html'>condense</a></code>, <code><a href='expand_minor.html'>expand_minor</a></code></p></div>
+  <code><a href='condense.html'>condense</a></code></p></div>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
@@ -277,7 +273,7 @@ class is not known</p></li>
 
       <footer>
       <div class="copyright">
-  <p>Developed by Jack O. Wasey.</p>
+  <p>Developed by Jack O. Wasey, R Core Team.</p>
 </div>
 
 <div class="pkgdown">

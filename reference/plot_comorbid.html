@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Basic bar plot showing counts of each comorbidity — plot_comorbid • Comorbidity calculations and tools for ICD-9 and ICD-10 codes</title>
+<title>Basic ordered bar plot showing counts of each comorbidity — plot_comorbid • Comorbidity calculations and tools for ICD-9 and ICD-10 codes</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -36,9 +36,9 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/jquery.mark.min.js" integrity="sha256-4HLtjeVgH0eIB3aZ9mLYF6E8oU5chNdjU6p6rrXpl9U=" crossorigin="anonymous"></script>
 
 
-<meta property="og:title" content="Basic bar plot showing counts of each comorbidity — plot_comorbid" />
+<meta property="og:title" content="Basic ordered bar plot showing counts of each comorbidity — plot_comorbid" />
 
-<meta property="og:description" content="Basic bar plot showing counts of each comorbidity" />
+<meta property="og:description" content="Basic ordered bar plot showing counts of each comorbidity" />
 <meta name="twitter:card" content="summary" />
 
 
@@ -69,7 +69,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Comorbidity calculations and tools for ICD-9 and ICD-10 codes</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">4.0.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">4.0.4</span>
       </span>
     </div>
 
@@ -98,6 +98,9 @@
       <a href="../articles/ICD-10.html">ICD-10 comorbidities</a>
     </li>
     <li>
+      <a href="../articles/PCCC.html">Pediatric Complex Chronic Conditions</a>
+    </li>
+    <li>
       <a href="../articles/charlson-scores.html">Charlson and Van Walraven scores</a>
     </li>
     <li>
@@ -113,7 +116,7 @@
       <a href="../articles/efficiency.pdf">icd: Efficient Computation of Comorbidities from ICD Codes Using Sparse Matrix Multiplication in R (PDF)</a>
     </li>
     <li>
-      <a href="../articles/introduction.html">Quick Introduction to icd</a>
+      <a href="../articles/introduction.html">An Introduction to icd</a>
     </li>
     <li>
       <a href="../articles/ranges.html">Ranges of ICD codes</a>
@@ -145,19 +148,21 @@
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Basic bar plot showing counts of each comorbidity</h1>
+    <h1>Basic ordered bar plot showing counts of each comorbidity</h1>
     
     <div class="hidden name"><code>plot_comorbid.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Basic bar plot showing counts of each comorbidity</p>
+    <p>Basic ordered bar plot showing counts of each comorbidity</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>plot_comorbid</span>(<span class='no'>x</span>, <span class='kw'>sort</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>comorbid_fun</span> <span class='kw'>=</span> <span class='kw pkg'>icd</span><span class='kw ns'>::</span><span class='no'><a href='https://jackwasey.github.io/icd//reference/comorbid.html'>comorbid_ahrq</a></span>,
-  <span class='kw'>las</span> <span class='kw'>=</span> <span class='fl'>2</span>, <span class='kw'>cex</span> <span class='kw'>=</span> <span class='fl'>0.75</span>, <span class='no'>...</span>)</pre>
+    <pre class="usage"><span class='fu'>plot_comorbid</span>(<span class='no'>x</span>, <span class='kw'>comorbid_fun</span> <span class='kw'>=</span> <span class='kw pkg'>icd</span><span class='kw ns'>::</span><span class='no'><a href='https://jackwasey.github.io/icd//reference/comorbid.html'>comorbid_ahrq</a></span>, <span class='no'>...</span>)
+
+<span class='fu'>plot_comorbid_results</span>(<span class='no'>x</span>, <span class='kw'>sort</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>fix_margin</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>las</span> <span class='kw'>=</span> <span class='fl'>2</span>,
+  <span class='kw'>cex.names</span> <span class='kw'>=</span> <span class='fl'>0.75</span>, <span class='no'>...</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -167,14 +172,24 @@
       <td><p>input patient data</p></td>
     </tr>
     <tr>
-      <th>sort</th>
-      <td><p>Logical, default <code>TRUE</code> which sorts the frequencies from high to
-low.</p></td>
-    </tr>
-    <tr>
       <th>comorbid_fun</th>
       <td><p>Character name of function or function itself, default
 being <code>comorbid_ahrq</code></p></td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td><p>Passed to <code><a href='https://www.rdocumentation.org/packages/graphics/topics/barplot'>barplot</a></code></p></td>
+    </tr>
+    <tr>
+      <th>sort</th>
+      <td><p>Logical, default <code>TRUE</code> which sorts the frequencies from
+high to low.</p></td>
+    </tr>
+    <tr>
+      <th>fix_margin</th>
+      <td><p>Logical, default <code>TRUE</code>, which causes a
+<code><a href='https://www.rdocumentation.org/packages/graphics/topics/par'>par</a></code> margin to be set so the x axis labels are less
+likely to be truncated.</p></td>
     </tr>
     <tr>
       <th>las</th>
@@ -182,28 +197,41 @@ being <code>comorbid_ahrq</code></p></td>
 appropriately</p></td>
     </tr>
     <tr>
-      <th>cex</th>
-      <td><p>Numeric, default is 0.75 which scales the text size for labels
-appropriately</p></td>
-    </tr>
-    <tr>
-      <th>...</th>
-      <td><p>Passed to both <code>comorbid_fun</code> and <code><a href='https://www.rdocumentation.org/packages/graphics/topics/barplot'>graphics::barplot</a></code></p></td>
+      <th>cex.names</th>
+      <td><p>Numeric, default is 0.75 which scales the text size for
+labels appropriately</p></td>
     </tr>
     </table>
+    
+    <h2 class="hasAnchor" id="functions"><a class="anchor" href="#functions"></a>Functions</h2>
+
+    <ul>
+<li><p><code>plot_comorbid_results</code>: Plot the results of a call to one of the
+comorbidity settings.</p></li>
+</ul>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><span class='co'># NOT RUN {</span>
-<span class='fu'>plot_comorbid</span>(<span class='kw pkg'>icd.data</span><span class='kw ns'>::</span><span class='no'><a href='https://www.rdocumentation.org/packages/icd.data/topics/vermont_dx'>vermont_dx</a></span>)
-<span class='fu'>plot_comorbid</span>(<span class='kw pkg'>icd.data</span><span class='kw ns'>::</span><span class='no'><a href='https://www.rdocumentation.org/packages/icd.data/topics/uranium_pathology'>uranium_pathology</a></span>)
+<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>library</a></span>(<span class='no'>icd</span>)
+<span class='fu'>plot_comorbid</span>(<span class='no'>vermont_dx</span>)
+<span class='fu'>plot_comorbid</span>(<span class='no'>uranium_pathology</span>)
+<span class='co'># Or calculate the comorbidities, then plot the results</span>
+<span class='no'>cmb</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='comorbid.html'>comorbid_ahrq</a></span>(<span class='no'>vermont_dx</span>)
+<span class='co'># plot with full, not abbreviated names</span>
+<span class='fu'>plot_comorbid_results</span>(<span class='no'>cmb</span>, <span class='kw'>names.arg</span> <span class='kw'>=</span> <span class='no'>names_ahrq</span>)
+<span class='co'># or return with full names, and plot those:</span>
+<span class='fu'><a href='comorbid.html'>comorbid_ahrq</a></span>(<span class='no'>vermont_dx</span>, <span class='kw'>abbrev_names</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>) <span class='kw'>%&gt;%</span>
+  <span class='fu'>plot_comorbid_results</span>()
 <span class='co'># }</span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       <li><a href="#arguments">Arguments</a></li>
-            
+      
+      <li><a href="#functions">Functions</a></li>
+      
       <li><a href="#examples">Examples</a></li>
     </ul>
 
@@ -212,7 +240,7 @@ appropriately</p></td>
 
       <footer>
       <div class="copyright">
-  <p>Developed by Jack O. Wasey.</p>
+  <p>Developed by Jack O. Wasey, R Core Team.</p>
 </div>
 
 <div class="pkgdown">

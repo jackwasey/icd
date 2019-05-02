@@ -32,7 +32,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Comorbidity calculations and tools for ICD-9 and ICD-10 codes</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">4.0.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">4.0.4</span>
       </span>
     </div>
 
@@ -61,6 +61,9 @@
       <a href="../articles/ICD-10.html">ICD-10 comorbidities</a>
     </li>
     <li>
+      <a href="../articles/PCCC.html">Pediatric Complex Chronic Conditions</a>
+    </li>
+    <li>
       <a href="../articles/charlson-scores.html">Charlson and Van Walraven scores</a>
     </li>
     <li>
@@ -76,7 +79,7 @@
       <a href="../articles/efficiency.pdf">icd: Efficient Computation of Comorbidities from ICD Codes Using Sparse Matrix Multiplication in R (PDF)</a>
     </li>
     <li>
-      <a href="../articles/introduction.html">Quick Introduction to icd</a>
+      <a href="../articles/introduction.html">An Introduction to icd</a>
     </li>
     <li>
       <a href="../articles/ranges.html">Ranges of ICD codes</a>
@@ -139,10 +142,10 @@ along with icd. If not, see <http:#www.gnu.org/licenses/>.
 <p>When deciding which comorbidity mapping to use in research, it might be useful to compare mapping schemes. For instance, it would be useful to know which comorbidities a pair of mapping schemes share, and which comorbidities only exist in only one mapping scheme. For comorbidites that exist in both mapping schemes, how many ICD codes assigned to those comorbidities overlap? In other words, how similar are the mapping schemes structurally?</p>
 <p>To answer these questions, we can use the function <code>diff_comorbid</code> in the “ICD” package. This function takes in two mapping schemes and outputs a comorbidity-by-comorbidity comparison of the two assignments. The function identifies comorbidities that are shared by both mapping schemes. It then takes each shared comorbidity and returns a list of codes that both mapping schemes assign to that comorbidity. The function returns a list of character lists, and condenses it into a summary of comparisons.</p>
 <p>The following example demonstrates the comparison of two different mapping schemes. Say we were interested in comparing the mapping schemes of Elixhauser (1998) and Agency for Healthcare Research and Quality (AHRQ) in classifying ICD-9 codes. We can first use basic set operations to compare the comorbidity names.</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1">Elix_comor &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/names">names</a></span>(icd9_map_ahrq)</a>
-<a class="sourceLine" id="cb1-2" data-line-number="2">AHRQ_comor &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/names">names</a></span>(icd9_map_elix)</a></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1">Elix_comor &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/names">names</a></span>(icd9_map_ahrq)</a>
+<a class="sourceLine" id="cb1-2" title="2">AHRQ_comor &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/names">names</a></span>(icd9_map_elix)</a></code></pre></div>
 <p>These comorbidities are shared:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/sets">intersect</a></span>(AHRQ_comor, Elix_comor)</a></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" title="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/sets">intersect</a></span>(AHRQ_comor, Elix_comor)</a></code></pre></div>
 <pre><code>##  [1] "CHF"          "Valvular"     "PHTN"         "PVD"         
 ##  [5] "HTN"          "HTNcx"        "Paralysis"    "NeuroOther"  
 ##  [9] "Pulmonary"    "DM"           "DMcx"         "Hypothyroid" 
@@ -152,31 +155,31 @@ along with icd. If not, see <http:#www.gnu.org/licenses/>.
 ## [25] "BloodLoss"    "Anemia"       "Alcohol"      "Drugs"       
 ## [29] "Psychoses"    "Depression"</code></pre>
 <p>These comorbidities are in AHRQ but not in the Elixhauser sets:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/sets">setdiff</a></span>(AHRQ_comor, Elix_comor)</a></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" title="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/sets">setdiff</a></span>(AHRQ_comor, Elix_comor)</a></code></pre></div>
 <pre><code>## [1] "Arrhythmia"</code></pre>
 <p>Finally, these comorbidities are in Elixhauser but not in the AHRQ sets:</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/sets">setdiff</a></span>(Elix_comor, AHRQ_comor)</a></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" title="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/sets">setdiff</a></span>(Elix_comor, AHRQ_comor)</a></code></pre></div>
 <pre><code>## character(0)</code></pre>
 <p>We see that the comorbidity names are almost exactly the same except for Arrhythmia, which exists in the AHRQ mapping but not the Elixhauser mapping.</p>
 <p>Now we run the function <code>diff_comorbid</code> and input the ICD-9 mappings from Elixhauser and AHRQ that are included in the package. The <code>all_names</code> option can be used if one wants to compare only a selection of comorbidities, in which case one can give a list of comorbidity names. By default, the function will compare all comorbidites in both mapping schemes. Similarly, <code>x_names</code> and <code>y_names</code> can be used to specify the comorbidities to compare in the first and second mapping schemes, respectively. Setting the option <code>show</code> to <code>TRUE</code> tells the function to print out the comparison summary, and setting the option <code>explain</code> to <code>TRUE</code> tells the function to attempt to combine many low-level ICD codes to form just their parent codes for the output, which can be much more concise.</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1">comp &lt;-<span class="st"> </span><span class="kw"><a href="../reference/diff_comorbid.html">diff_comorbid</a></span>(icd9_map_ahrq, icd9_map_elix, </a>
-<a class="sourceLine" id="cb8-2" data-line-number="2">                      <span class="dt">show =</span> <span class="ot">TRUE</span>, <span class="dt">explain =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" title="1">comp &lt;-<span class="st"> </span><span class="kw"><a href="../reference/diff_comorbid.html">diff_comorbid</a></span>(icd9_map_ahrq, icd9_map_elix, </a>
+<a class="sourceLine" id="cb8-2" title="2">                      <span class="dt">show =</span> <span class="ot">TRUE</span>, <span class="dt">explain =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
 <pre><code>## Comorbidity CHF: 
-## icd9_map_ahrq has 4 codes not in icd9_map_elix. First few are: 'Heart failure' 'Mal hypert hrt dis w hf' 'Mal hyp ht/kd I-IV w hf' 'Mal hyp ht/kd stg V w hf' 
+## icd9_map_ahrq has 4 codes not in icd9_map_elix. First few are: 'Mal hypert hrt dis w hf' 'Mal hyp ht/kd I-IV w hf' 'Mal hyp ht/kd stg V w hf' 'Heart failure' 
 ## Comorbidity Valvular: 
-## icd9_map_ahrq has 28 codes not in icd9_map_elix. First few are: 'Diseases of mitral valve' 'Other diseases of endocardium' 'Syphilitic endocarditis' 'Rheum endocarditis NOS' 
+## icd9_map_ahrq has 28 codes not in icd9_map_elix. First few are: 'Syphilitic endocarditis' 'Diseases of mitral valve' 'Rheum endocarditis NOS' 'Other diseases of endocardium' 
 ## Comorbidity PHTN: 
-## icd9_map_ahrq has 12 codes not in icd9_map_elix. First few are: 'Chronic pulmonary heart disease' 'Pulmonary embolism and infarction' 
+## icd9_map_ahrq has 12 codes not in icd9_map_elix. First few are: 'Pulmonary embolism and infarction' 'Chronic pulmonary heart disease' 
 ## Comorbidity PVD: 
-## icd9_map_ahrq has 301 codes not in icd9_map_elix. First few are: 'Atherosclerosis' 'Aortic aneurysm and dissection' 'Other aneurysm' 'Septic arterial embolism' 'Of arteries of the extremities' 
+## icd9_map_ahrq has 301 codes not in icd9_map_elix. First few are: 'Atherosclerosis' 'Aortic aneurysm and dissection' 'Other aneurysm' 'Of arteries of the extremities' 'Septic arterial embolism' 
 ## Comorbidity HTN: 
 ## icd9_map_ahrq has 11 codes not in icd9_map_elix. First few are: 'Benign essential hypertension complicating pregnancy, childbirth, and the puerperium' 
 ## Comorbidity HTNcx: 
-## icd9_map_ahrq has 88 codes not in icd9_map_elix. First few are: 'Hypertensive chronic kidney disease' 'Malignant hypertension' 'Malignant' 'Benign hyp ht dis w hf' 'Hyp ht dis NOS w ht fail' 
+## icd9_map_ahrq has 88 codes not in icd9_map_elix. First few are: 'Malignant hypertension' 'Malignant' 'Benign hyp ht dis w hf' 'Hyp ht dis NOS w ht fail' 'Hypertensive chronic kidney disease' 
 ## Comorbidity Paralysis: 
 ## icd9_map_ahrq has 132 codes not in icd9_map_elix. First few are: 'Hemiplegia and hemiparesis' 'Other paralytic syndromes' 'Hemiplegia/hemiparesis' 'Monoplegia of upper limb' 'Monoplegia of lower limb' 
 ## Comorbidity NeuroOther: 
-## icd9_map_ahrq has 357 codes not in icd9_map_elix. First few are: 'Cerebral degenerations usually manifest in childhood' 'Other cerebral degenerations' 'Spinocerebellar disease' 'Anterior horn cell disease' 'Epilepsy and recurrent seizures' 
+## icd9_map_ahrq has 357 codes not in icd9_map_elix. First few are: 'Cerebral degenerations usually manifest in childhood' 'Other cerebral degenerations' 'Acquired torsion dystonia' 'Subac dyskinesa d/t drug' 'Restless legs syndrome' 
 ## icd9_map_elix has 22 codes not in icd9_map_ahrq. First few are: 'Anoxic brain damage' 'Encephalopathy, not elsewhere classified' 
 ## Comorbidity Pulmonary: 
 ## icd9_map_ahrq has 24 codes not in icd9_map_elix. First few are: 'Emphysema' 'Asthma' 'Extrinsic allergic alveolitis' 
@@ -196,7 +199,7 @@ along with icd. If not, see <http:#www.gnu.org/licenses/>.
 ## Comorbidity HIV: 
 ## icd9_map_elix has 221 codes not in icd9_map_ahrq. First few are: 
 ## Comorbidity Lymphoma: 
-## icd9_map_ahrq has 100 codes not in icd9_map_elix. First few are: 'Lymphosarcoma and reticulosarcoma and other specified malignant tumors of lymphatic tissue' 'Multiple myeloma and immunoproliferative neoplasms' 'Malignant histiocytosis' 'Letterer-Siwe disease' 'Multiple myeloma' 
+## icd9_map_ahrq has 100 codes not in icd9_map_elix. First few are: 'Lymphosarcoma and reticulosarcoma and other specified malignant tumors of lymphatic tissue' 'Malignant histiocytosis' 'Letterer-Siwe disease' 'Multiple myeloma and immunoproliferative neoplasms' 'Multiple myeloma' 
 ## icd9_map_elix has 3 codes not in icd9_map_ahrq. First few are: 'Other lymphatic and hematopoietic neoplasms' 
 ## Comorbidity Mets: 
 ## icd9_map_ahrq has 9 codes not in icd9_map_elix. First few are: 'Secondary and unspecified malignant neoplasm of lymph nodes' 'Secondary neuroendocrine tumors' 'Malignant ascites' 
@@ -218,7 +221,7 @@ along with icd. If not, see <http:#www.gnu.org/licenses/>.
 ## Comorbidity Anemia: 
 ## icd9_map_ahrq has 12 codes not in icd9_map_elix. First few are: 'Other deficiency anemias' 'Anemia of chronic disease' 
 ## Comorbidity Alcohol: 
-## icd9_map_ahrq has 136 codes not in icd9_map_elix. First few are: 'Alcohol dependence syndrome' 'Delirium tremens' 'Alcoh psy dis w hallucin' 'Alcohol abuse' 
+## icd9_map_ahrq has 136 codes not in icd9_map_elix. First few are: 'Delirium tremens' 'Alcoh psy dis w hallucin' 'Alcohol dependence syndrome' 'Alcohol abuse' 
 ## icd9_map_elix has 11 codes not in icd9_map_ahrq. First few are: 'Hx of alcoholism' 
 ## Comorbidity Drugs: 
 ## icd9_map_ahrq has 28 codes not in icd9_map_elix. First few are: 'Drug dependence' 'Cannabis abuse' 'Other, mixed, or unspecified drug abuse' 'Drug dependence' 
@@ -227,7 +230,7 @@ along with icd. If not, see <http:#www.gnu.org/licenses/>.
 ## Comorbidity Depression: match.
 ## Comorbidities only defined in icd9_map_elix are: Arrhythmia</code></pre>
 <p>The comparison summary provides the size of the asymmetric difference between mapping schemes for each shared comorbidity, along with a list of a few code descriptions in that difference. This summary doesn’t provide a very detailed look at the similarities between comorbidity mappings. We can get a more detailed look at a particular comorbidity by specifying it.</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" data-line-number="1">comp<span class="op">$</span>CHF</a></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" title="1">comp<span class="op">$</span>CHF</a></code></pre></div>
 <pre><code>## $both
 ##   [1] "39891" "40211" "40291" "40411" "40413" "40491" "40493" "4280" 
 ##   [9] "42800" "42801" "42802" "42803" "42804" "42805" "42806" "42807"
@@ -261,7 +264,7 @@ along with icd. If not, see <http:#www.gnu.org/licenses/>.
 
 
       <footer><div class="copyright">
-  <p>Developed by Jack O. Wasey.</p>
+  <p>Developed by Jack O. Wasey, R Core Team.</p>
 </div>
 
 <div class="pkgdown">

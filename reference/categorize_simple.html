@@ -71,7 +71,7 @@ pure data manipulation and generalizable beyond medical data." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Comorbidity calculations and tools for ICD-9 and ICD-10 codes</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">4.0.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">4.0.2</span>
       </span>
     </div>
 
@@ -231,12 +231,12 @@ to be called to do the comorbidity calculation</p></td>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><span class='co'># NOT RUN {</span>
-<span class='no'>u</span> <span class='kw'>&lt;-</span> <span class='no'>uranium_pathology</span>
-<span class='no'>m</span> <span class='kw'>&lt;-</span> <span class='no'>icd10_map_ahrq</span>
-<span class='no'>u</span>$<span class='no'>icd10</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='decimal_to_short.html'>decimal_to_short</a></span>(<span class='no'>u</span>$<span class='no'>icd10</span>)
-<span class='no'>j</span> <span class='kw'>&lt;-</span> <span class='fu'>categorize_simple</span>(<span class='no'>u</span>, <span class='no'>m</span>, <span class='kw'>id_name</span> <span class='kw'>=</span> <span class='st'>"case"</span>, <span class='kw'>code_name</span> <span class='kw'>=</span> <span class='st'>"icd10"</span>)
-<span class='co'># }</span></pre>
+    <pre class="examples"><div class='input'><span class='kw'>if</span> (<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/ns-load'>requireNamespace</a></span>(<span class='st'>"icd.data"</span>, <span class='kw'>quietly</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)) {
+  <span class='no'>u</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>icd.data</span><span class='kw ns'>::</span><span class='no'><a href='https://www.rdocumentation.org/packages/icd.data/topics/uranium_pathology'>uranium_pathology</a></span>
+  <span class='no'>m</span> <span class='kw'>&lt;-</span> <span class='no'>icd10_map_ahrq</span>
+  <span class='no'>u</span>$<span class='no'>icd10</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='decimal_to_short.html'>decimal_to_short</a></span>(<span class='no'>u</span>$<span class='no'>icd10</span>)
+  <span class='no'>j</span> <span class='kw'>&lt;-</span> <span class='fu'>categorize_simple</span>(<span class='no'>u</span>, <span class='no'>m</span>, <span class='kw'>id_name</span> <span class='kw'>=</span> <span class='st'>"case"</span>, <span class='kw'>code_name</span> <span class='kw'>=</span> <span class='st'>"icd10"</span>)
+}</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>

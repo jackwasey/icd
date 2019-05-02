@@ -32,7 +32,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Comorbidity calculations and tools for ICD-9 and ICD-10 codes</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">4.0.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">4.0.4</span>
       </span>
     </div>
 
@@ -61,6 +61,9 @@
       <a href="../articles/ICD-10.html">ICD-10 comorbidities</a>
     </li>
     <li>
+      <a href="../articles/PCCC.html">Pediatric Complex Chronic Conditions</a>
+    </li>
+    <li>
       <a href="../articles/charlson-scores.html">Charlson and Van Walraven scores</a>
     </li>
     <li>
@@ -76,7 +79,7 @@
       <a href="../articles/efficiency.pdf">icd: Efficient Computation of Comorbidities from ICD Codes Using Sparse Matrix Multiplication in R (PDF)</a>
     </li>
     <li>
-      <a href="../articles/introduction.html">Quick Introduction to icd</a>
+      <a href="../articles/introduction.html">An Introduction to icd</a>
     </li>
     <li>
       <a href="../articles/ranges.html">Ranges of ICD codes</a>
@@ -115,7 +118,7 @@
 
     
     
-<p><code>icd.data</code> version 1.1, and <code>icd</code> 3.4 together offer some basic international support.</p>
+<p><code>icd</code> 4.0+ offers some international support.</p>
 <ul>
 <li>World Health Organization (WHO) codes for 2016 in English, the latest release.</li>
 <li>World Health Organization (WHO) codes for 2008 in French, the latest available online data.</li>
@@ -128,67 +131,184 @@
 <h1 class="hasAnchor">
 <a href="#who" class="anchor"></a>WHO</h1>
 <p>Surprisingly, there are potential copyright restrictions on redistributing the WHO ICD-9 and ICD-10 definitions, which form the basis of ICD code systems around the world. These definitions are themselves also used as the internationally standard way to codify morbidity and mortality for public health.</p>
-<p><code>icd</code> now includes the ability to work with these codes more easily via the companion <code>icd.data</code> package. The data is not available in the package so <code>icd.data</code> asks the user whether they wish to download the data from the WHO web site, whereupon it is made available just like any other R data, but the name <code><a href="https://www.rdocumentation.org/packages/icd.data/topics/icd10who2016">icd.data::icd10who2016</a></code>, which is the latest ICD-10 release from the WHO at the time of writing. For French codes, <code>icd.data::icd10fr2016</code>, this would ideally have a synonym <code>icd.data::cim10fr2016</code> with internationalized column names, but this would duplicate the data making package storage and loading bigger, which is increasingly a problem as more data is included.</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1">icd.data<span class="op">::</span>icd10who2016[<span class="dv">1</span><span class="op">:</span><span class="dv">5</span>, ]</a>
-<a class="sourceLine" id="cb1-2" data-line-number="2">icd.data<span class="op">::</span>icd10fr2019[<span class="dv">1</span><span class="op">:</span><span class="dv">5</span>, ]</a>
-<a class="sourceLine" id="cb1-3" data-line-number="3"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(icd.data)</a>
-<a class="sourceLine" id="cb1-4" data-line-number="4"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/summary">summary</a></span>(icd10who2016)</a></code></pre></div>
-<pre><code>#&gt;      code              leaf             desc           three_digit       
-#&gt;  Length:10759       Mode :logical   Length:10759       Length:10759      
-#&gt;  Class :character   FALSE:1413      Class :character   Class :character  
-#&gt;  Mode  :character   TRUE :9346      Mode  :character   Mode  :character  
+<p><code>icd</code> now includes the ability to work with these codes more easily via the companion <code>icd.data</code> package. <code>icd</code> asks the user whether they wish to download the data from the WHO web site, whereupon it is made available as functions, named similarly to existing data, e.g., <code><a href="../reference/get_icd10who2016.html">get_icd10who2016()</a></code>, which is the latest ICD-10 release from the WHO at the time of writing. For French codes, <code>get_icd10fr2016()</code>, with the localized synonym <code>get_cim10fr2016()</code> having internationalized column names, but this would duplicate the data making package storage and loading bigger, which is increasingly a problem as more data is included.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1"><span class="co"># if not already done, set up the downloaded data cache:</span></a>
+<a class="sourceLine" id="cb1-2" title="2"><span class="kw">setup_icd_data</span>()</a>
+<a class="sourceLine" id="cb1-3" title="3"><span class="co"># or setup and optionally download everything at once (currently ~350 MB)</span></a>
+<a class="sourceLine" id="cb1-4" title="4"><span class="co"># and a few minutes to generate the data structures.</span></a>
+<a class="sourceLine" id="cb1-5" title="5"><span class="kw"><a href="../reference/download_all_icd_data.html">download_all_icd_data</a></span>()</a></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" title="1"><span class="kw"><a href="../reference/get_icd10who2016.html">get_icd10who2016</a></span>()[<span class="dv">1</span><span class="op">:</span><span class="dv">5</span>, ]</a>
+<a class="sourceLine" id="cb2-2" title="2"><span class="co">#&gt;   code  leaf                                               desc</span></a>
+<a class="sourceLine" id="cb2-3" title="3"><span class="co">#&gt; 1  A00 FALSE                                            Cholera</span></a>
+<a class="sourceLine" id="cb2-4" title="4"><span class="co">#&gt; 2 A000  TRUE Cholera due to Vibrio cholerae 01, biovar cholerae</span></a>
+<a class="sourceLine" id="cb2-5" title="5"><span class="co">#&gt; 3 A001  TRUE    Cholera due to Vibrio cholerae 01, biovar eltor</span></a>
+<a class="sourceLine" id="cb2-6" title="6"><span class="co">#&gt; 4 A009  TRUE                               Cholera, unspecified</span></a>
+<a class="sourceLine" id="cb2-7" title="7"><span class="co">#&gt; 5  A01 FALSE                     Typhoid and paratyphoid fevers</span></a>
+<a class="sourceLine" id="cb2-8" title="8"><span class="co">#&gt;   three_digit                          major sub_sub_chapter</span></a>
+<a class="sourceLine" id="cb2-9" title="9"><span class="co">#&gt; 1         A00                        Cholera            &lt;NA&gt;</span></a>
+<a class="sourceLine" id="cb2-10" title="10"><span class="co">#&gt; 2         A00                        Cholera            &lt;NA&gt;</span></a>
+<a class="sourceLine" id="cb2-11" title="11"><span class="co">#&gt; 3         A00                        Cholera            &lt;NA&gt;</span></a>
+<a class="sourceLine" id="cb2-12" title="12"><span class="co">#&gt; 4         A00                        Cholera            &lt;NA&gt;</span></a>
+<a class="sourceLine" id="cb2-13" title="13"><span class="co">#&gt; 5         A01 Typhoid and paratyphoid fevers            &lt;NA&gt;</span></a>
+<a class="sourceLine" id="cb2-14" title="14"><span class="co">#&gt;                      sub_chapter                                   chapter</span></a>
+<a class="sourceLine" id="cb2-15" title="15"><span class="co">#&gt; 1 Intestinal infectious diseases Certain infectious and parasitic diseases</span></a>
+<a class="sourceLine" id="cb2-16" title="16"><span class="co">#&gt; 2 Intestinal infectious diseases Certain infectious and parasitic diseases</span></a>
+<a class="sourceLine" id="cb2-17" title="17"><span class="co">#&gt; 3 Intestinal infectious diseases Certain infectious and parasitic diseases</span></a>
+<a class="sourceLine" id="cb2-18" title="18"><span class="co">#&gt; 4 Intestinal infectious diseases Certain infectious and parasitic diseases</span></a>
+<a class="sourceLine" id="cb2-19" title="19"><span class="co">#&gt; 5 Intestinal infectious diseases Certain infectious and parasitic diseases</span></a>
+<a class="sourceLine" id="cb2-20" title="20"><span class="kw"><a href="../reference/get_icd10fr2019.html">get_icd10fr2019</a></span>()[<span class="dv">1</span><span class="op">:</span><span class="dv">5</span>, ]</a>
+<a class="sourceLine" id="cb2-21" title="21"><span class="co">#&gt;   code                                    short_desc</span></a>
+<a class="sourceLine" id="cb2-22" title="22"><span class="co">#&gt; 1  A00                                       CHOLERA</span></a>
+<a class="sourceLine" id="cb2-23" title="23"><span class="co">#&gt; 2 A000 CHOLERA A VIBRIO CHOLERAE 01, BIOVAR CHOLERAE</span></a>
+<a class="sourceLine" id="cb2-24" title="24"><span class="co">#&gt; 3 A001   CHOLERA A VIBRIO CHOLERAE 01, BIOVAR EL TOR</span></a>
+<a class="sourceLine" id="cb2-25" title="25"><span class="co">#&gt; 4 A009                                  CHOLERA, SAI</span></a>
+<a class="sourceLine" id="cb2-26" title="26"><span class="co">#&gt; 5  A01              FIEVRES TYPHOIDE ET PARATYPHOIDE</span></a>
+<a class="sourceLine" id="cb2-27" title="27"><span class="co">#&gt;                                       long_desc</span></a>
+<a class="sourceLine" id="cb2-28" title="28"><span class="co">#&gt; 1                                       Choléra</span></a>
+<a class="sourceLine" id="cb2-29" title="29"><span class="co">#&gt; 2 Choléra à Vibrio cholerae 01, biovar cholerae</span></a>
+<a class="sourceLine" id="cb2-30" title="30"><span class="co">#&gt; 3   Choléra à Vibrio cholerae 01, biovar El Tor</span></a>
+<a class="sourceLine" id="cb2-31" title="31"><span class="co">#&gt; 4                       Choléra, sans précision</span></a>
+<a class="sourceLine" id="cb2-32" title="32"><span class="co">#&gt; 5              Fièvres typhoïde et paratyphoïde</span></a>
+<a class="sourceLine" id="cb2-33" title="33"><span class="co">#&gt;                              major three_digit</span></a>
+<a class="sourceLine" id="cb2-34" title="34"><span class="co">#&gt; 1                          Choléra         A00</span></a>
+<a class="sourceLine" id="cb2-35" title="35"><span class="co">#&gt; 2                          Choléra         A00</span></a>
+<a class="sourceLine" id="cb2-36" title="36"><span class="co">#&gt; 3                          Choléra         A00</span></a>
+<a class="sourceLine" id="cb2-37" title="37"><span class="co">#&gt; 4                          Choléra         A00</span></a>
+<a class="sourceLine" id="cb2-38" title="38"><span class="co">#&gt; 5 Fièvres typhoïde et paratyphoïde         A01</span></a>
+<a class="sourceLine" id="cb2-39" title="39"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/summary">summary</a></span>(<span class="kw"><a href="../reference/get_icd10who2016.html">get_icd10who2016</a></span>())</a>
+<a class="sourceLine" id="cb2-40" title="40"><span class="co">#&gt;      code              leaf             desc            three_digit   </span></a>
+<a class="sourceLine" id="cb2-41" title="41"><span class="co">#&gt;  Length:10759       Mode :logical   Length:10759       A04    :   11  </span></a>
+<a class="sourceLine" id="cb2-42" title="42"><span class="co">#&gt;  Class1:icd10who    FALSE:1413      Class :character   A06    :   11  </span></a>
+<a class="sourceLine" id="cb2-43" title="43"><span class="co">#&gt;  Class2:icd10       TRUE :9346      Mode  :character   A15    :   11  </span></a>
+<a class="sourceLine" id="cb2-44" title="44"><span class="co">#&gt;  Class3:character                                      A66    :   11  </span></a>
+<a class="sourceLine" id="cb2-45" title="45"><span class="co">#&gt;  Mode  :character                                      B20    :   11  </span></a>
+<a class="sourceLine" id="cb2-46" title="46"><span class="co">#&gt;                                                        B37    :   11  </span></a>
+<a class="sourceLine" id="cb2-47" title="47"><span class="co">#&gt;                                                        (Other):10693  </span></a>
+<a class="sourceLine" id="cb2-48" title="48"><span class="co">#&gt;     major           sub_sub_chapter    sub_chapter       </span></a>
+<a class="sourceLine" id="cb2-49" title="49"><span class="co">#&gt;  Length:10759       Length:10759       Length:10759      </span></a>
+<a class="sourceLine" id="cb2-50" title="50"><span class="co">#&gt;  Class :character   Class :character   Class :character  </span></a>
+<a class="sourceLine" id="cb2-51" title="51"><span class="co">#&gt;  Mode  :character   Mode  :character   Mode  :character  </span></a>
+<a class="sourceLine" id="cb2-52" title="52"><span class="co">#&gt;                                                          </span></a>
+<a class="sourceLine" id="cb2-53" title="53"><span class="co">#&gt;                                                          </span></a>
+<a class="sourceLine" id="cb2-54" title="54"><span class="co">#&gt;                                                          </span></a>
+<a class="sourceLine" id="cb2-55" title="55"><span class="co">#&gt;                                                          </span></a>
+<a class="sourceLine" id="cb2-56" title="56"><span class="co">#&gt;    chapter         </span></a>
+<a class="sourceLine" id="cb2-57" title="57"><span class="co">#&gt;  Length:10759      </span></a>
+<a class="sourceLine" id="cb2-58" title="58"><span class="co">#&gt;  Class :character  </span></a>
+<a class="sourceLine" id="cb2-59" title="59"><span class="co">#&gt;  Mode  :character  </span></a>
+<a class="sourceLine" id="cb2-60" title="60"><span class="co">#&gt;                    </span></a>
+<a class="sourceLine" id="cb2-61" title="61"><span class="co">#&gt;                    </span></a>
+<a class="sourceLine" id="cb2-62" title="62"><span class="co">#&gt;                    </span></a>
+<a class="sourceLine" id="cb2-63" title="63"><span class="co">#&gt; </span></a></code></pre></div>
+<pre><code>#&gt;   code  leaf                                               desc
+#&gt; 1  A00 FALSE                                            Cholera
+#&gt; 2 A000  TRUE Cholera due to Vibrio cholerae 01, biovar cholerae
+#&gt; 3 A001  TRUE    Cholera due to Vibrio cholerae 01, biovar eltor
+#&gt; 4 A009  TRUE                               Cholera, unspecified
+#&gt; 5  A01 FALSE                     Typhoid and paratyphoid fevers
+#&gt;   three_digit                          major sub_sub_chapter
+#&gt; 1         A00                        Cholera            &lt;NA&gt;
+#&gt; 2         A00                        Cholera            &lt;NA&gt;
+#&gt; 3         A00                        Cholera            &lt;NA&gt;
+#&gt; 4         A00                        Cholera            &lt;NA&gt;
+#&gt; 5         A01 Typhoid and paratyphoid fevers            &lt;NA&gt;
+#&gt;                      sub_chapter                                   chapter
+#&gt; 1 Intestinal infectious diseases Certain infectious and parasitic diseases
+#&gt; 2 Intestinal infectious diseases Certain infectious and parasitic diseases
+#&gt; 3 Intestinal infectious diseases Certain infectious and parasitic diseases
+#&gt; 4 Intestinal infectious diseases Certain infectious and parasitic diseases
+#&gt; 5 Intestinal infectious diseases Certain infectious and parasitic diseases
+#&gt;   code                                    short_desc
+#&gt; 1  A00                                       CHOLERA
+#&gt; 2 A000 CHOLERA A VIBRIO CHOLERAE 01, BIOVAR CHOLERAE
+#&gt; 3 A001   CHOLERA A VIBRIO CHOLERAE 01, BIOVAR EL TOR
+#&gt; 4 A009                                  CHOLERA, SAI
+#&gt; 5  A01              FIEVRES TYPHOIDE ET PARATYPHOIDE
+#&gt;                                       long_desc
+#&gt; 1                                       Choléra
+#&gt; 2 Choléra à Vibrio cholerae 01, biovar cholerae
+#&gt; 3   Choléra à Vibrio cholerae 01, biovar El Tor
+#&gt; 4                       Choléra, sans précision
+#&gt; 5              Fièvres typhoïde et paratyphoïde
+#&gt;                              major three_digit
+#&gt; 1                          Choléra         A00
+#&gt; 2                          Choléra         A00
+#&gt; 3                          Choléra         A00
+#&gt; 4                          Choléra         A00
+#&gt; 5 Fièvres typhoïde et paratyphoïde         A01
+#&gt;      code              leaf             desc            three_digit   
+#&gt;  Length:10759       Mode :logical   Length:10759       A04    :   11  
+#&gt;  Class1:icd10who    FALSE:1413      Class :character   A06    :   11  
+#&gt;  Class2:icd10       TRUE :9346      Mode  :character   A15    :   11  
+#&gt;  Class3:character                                      A66    :   11  
+#&gt;  Mode  :character                                      B20    :   11  
+#&gt;                                                        B37    :   11  
+#&gt;                                                        (Other):10693  
 #&gt;     major           sub_sub_chapter    sub_chapter       
 #&gt;  Length:10759       Length:10759       Length:10759      
 #&gt;  Class :character   Class :character   Class :character  
 #&gt;  Mode  :character   Mode  :character   Mode  :character  
+#&gt;                                                          
+#&gt;                                                          
+#&gt;                                                          
+#&gt;                                                          
 #&gt;    chapter         
 #&gt;  Length:10759      
 #&gt;  Class :character  
-#&gt;  Mode  :character</code></pre>
+#&gt;  Mode  :character  
+#&gt;                    
+#&gt;                    
+#&gt;                    
+#&gt; </code></pre>
 </div>
 <div id="french-edition-of-icd-10" class="section level1">
 <h1 class="hasAnchor">
 <a href="#french-edition-of-icd-10" class="anchor"></a>French edition of ICD-10</h1>
 <p>ICD-10-FR is significantly different from the WHO version, and is used by official bodies and health systems in France. As with all the features in this document, this is an early attempt at the complex problem of providing all the codes, transtatlanguages,</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1">fr &lt;-<span class="st"> </span>icd.data<span class="op">::</span>icd10fr2019</a>
-<a class="sourceLine" id="cb3-2" data-line-number="2">fr[fr<span class="op">$</span>code <span class="op">==</span><span class="st"> "C43"</span>, ]</a></code></pre></div>
-<pre><code>     code                                          desc_short
-1151 C431 MELANOME MALIN DE LA PAUPIERE, Y COMPRIS LE CANTHUS
-                                               desc_long                     major three_digit
-1151 Mélanome malin de la paupière, y compris le canthus Mélanome malin de la peau         C43</code></pre>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" title="1">fr &lt;-<span class="st"> </span><span class="kw"><a href="../reference/get_icd10fr2019.html">get_icd10fr2019</a></span>()</a>
+<a class="sourceLine" id="cb4-2" title="2">fr[fr<span class="op">$</span>code <span class="op">==</span><span class="st"> "C43"</span>, ]</a>
+<a class="sourceLine" id="cb4-3" title="3"><span class="co">#&gt;      code                short_desc                 long_desc</span></a>
+<a class="sourceLine" id="cb4-4" title="4"><span class="co">#&gt; 1149  C43 MELANOME MALIN DE LA PEAU Mélanome malin de la peau</span></a>
+<a class="sourceLine" id="cb4-5" title="5"><span class="co">#&gt;                          major three_digit</span></a>
+<a class="sourceLine" id="cb4-6" title="6"><span class="co">#&gt; 1149 Mélanome malin de la peau         C43</span></a></code></pre></div>
 </div>
 <div id="working-with-different-icd-10-cm-annual-versions" class="section level1">
 <h1 class="hasAnchor">
 <a href="#working-with-different-icd-10-cm-annual-versions" class="anchor"></a>Working with different ICD-10-CM annual versions</h1>
 <p>There is an initial beta-quality mechanism for selecting a particular version of ICD-10-CM to use. This is a US coding system, but Belgian authorities provide translations into French and Dutch, and appear to have made no modifications.</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1">  <span class="co"># get the active version</span></a>
-<a class="sourceLine" id="cb5-2" data-line-number="2">  icd.data<span class="op">::</span><span class="kw">get_icd10cm_active_ver</span>()</a>
-<a class="sourceLine" id="cb5-3" data-line-number="3">  set the active version</a>
-<a class="sourceLine" id="cb5-4" data-line-number="4">  <span class="co"># icd.data::set_icd10cm_active_ver("2015")</span></a></code></pre></div>
-<p>The following code is wrapped in some protections in case the latest icd.data isn’t available (notably for CRAN checks).</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1"><span class="cf">if</span> (icd<span class="op">:::</span><span class="kw">icd_data_ver_ok</span>()) {</a>
-<a class="sourceLine" id="cb6-2" data-line-number="2">  <span class="co"># The code "C4311" goes from being a leaf in 2018, to a parent in 2019</span></a>
-<a class="sourceLine" id="cb6-3" data-line-number="3">  icd.data<span class="op">::</span><span class="kw">with_icd10cm_version</span>(<span class="dt">ver =</span> <span class="st">"2018"</span>,</a>
-<a class="sourceLine" id="cb6-4" data-line-number="4">                                 icd<span class="op">::</span><span class="kw"><a href="https://jackwasey.github.io/icd//reference/is_leaf.html">is_leaf</a></span>(<span class="st">"C4311"</span>)</a>
-<a class="sourceLine" id="cb6-5" data-line-number="5">  )</a>
-<a class="sourceLine" id="cb6-6" data-line-number="6">  icd.data<span class="op">::</span><span class="kw">with_icd10cm_version</span>(<span class="dt">ver =</span> <span class="st">"2019"</span>, </a>
-<a class="sourceLine" id="cb6-7" data-line-number="7">                                 icd<span class="op">::</span><span class="kw"><a href="https://jackwasey.github.io/icd//reference/is_leaf.html">is_leaf</a></span>(<span class="st">"C4311"</span>)</a>
-<a class="sourceLine" id="cb6-8" data-line-number="8">  )</a>
-<a class="sourceLine" id="cb6-9" data-line-number="9">  <span class="co"># In 2018 the following code was not even defined, but in 2019 was a new child</span></a>
-<a class="sourceLine" id="cb6-10" data-line-number="10">  <span class="co"># code of "C4311"s</span></a>
-<a class="sourceLine" id="cb6-11" data-line-number="11">  icd.data<span class="op">::</span><span class="kw">with_icd10cm_version</span>(<span class="dt">ver =</span> <span class="st">"2018"</span>, </a>
-<a class="sourceLine" id="cb6-12" data-line-number="12">                                 {</a>
-<a class="sourceLine" id="cb6-13" data-line-number="13">                                   <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/print">print</a></span>(icd<span class="op">::</span><span class="kw"><a href="https://jackwasey.github.io/icd//reference/is_defined.html">is_defined</a></span>(<span class="st">"C43111"</span>))</a>
-<a class="sourceLine" id="cb6-14" data-line-number="14">                                   <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/print">print</a></span>(icd<span class="op">::</span><span class="kw"><a href="https://jackwasey.github.io/icd//reference/is_leaf.html">is_leaf</a></span>(<span class="st">"C43111"</span>))</a>
-<a class="sourceLine" id="cb6-15" data-line-number="15">                                 }</a>
-<a class="sourceLine" id="cb6-16" data-line-number="16">  )</a>
-<a class="sourceLine" id="cb6-17" data-line-number="17">  icd.data<span class="op">::</span><span class="kw">with_icd10cm_version</span>(<span class="dt">ver =</span> <span class="st">"2019"</span>, </a>
-<a class="sourceLine" id="cb6-18" data-line-number="18">                                 icd<span class="op">::</span><span class="kw"><a href="https://jackwasey.github.io/icd//reference/is_leaf.html">is_leaf</a></span>(<span class="st">"C43111"</span>)</a>
-<a class="sourceLine" id="cb6-19" data-line-number="19">  )</a>
-<a class="sourceLine" id="cb6-20" data-line-number="20">}</a>
-<a class="sourceLine" id="cb6-21" data-line-number="21"><span class="co">#&gt; [1] TRUE</span></a>
-<a class="sourceLine" id="cb6-22" data-line-number="22"><span class="co">#&gt; [1] TRUE</span></a>
-<a class="sourceLine" id="cb6-23" data-line-number="23"><span class="co">#&gt; [1] TRUE</span></a></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" title="1">  <span class="co"># get the active version string</span></a>
+<a class="sourceLine" id="cb5-2" title="2">  <span class="kw"><a href="../reference/set_icd10cm_active_year.html">get_icd10cm_active_year</a></span>()</a>
+<a class="sourceLine" id="cb5-3" title="3"><span class="co">#&gt; [1] "2019"</span></a>
+<a class="sourceLine" id="cb5-4" title="4">  <span class="co"># get the data itself:</span></a>
+<a class="sourceLine" id="cb5-5" title="5">  devnull &lt;-<span class="st"> </span><span class="kw"><a href="../reference/get_icd10cm_version.html">get_icd10cm_active</a></span>()</a>
+<a class="sourceLine" id="cb5-6" title="6">  <span class="co">#set the active version, and check it is the one we expected</span></a>
+<a class="sourceLine" id="cb5-7" title="7">  <span class="kw"><a href="../reference/set_icd10cm_active_year.html">set_icd10cm_active_year</a></span>(<span class="st">"2015"</span>)</a>
+<a class="sourceLine" id="cb5-8" title="8">  <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/identical">identical</a></span>(<span class="kw"><a href="../reference/get_icd10cm_version.html">get_icd10cm_active</a></span>(), <span class="kw"><a href="../reference/get_icd10cm2015.html">get_icd10cm2015</a></span>())</a>
+<a class="sourceLine" id="cb5-9" title="9"><span class="co">#&gt; [1] TRUE</span></a></code></pre></div>
+<p>The function <code>with_icd10cm_version</code> allows temporarily using a particular data set for a computation, analogous to the functions in the <code>withr</code> package:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" title="1">  <span class="co"># The code "C4311" goes from being a leaf in 2018, to a parent in 2019</span></a>
+<a class="sourceLine" id="cb6-2" title="2">  <span class="kw"><a href="../reference/with_icd10cm_version.html">with_icd10cm_version</a></span>(<span class="dt">ver =</span> <span class="st">"2018"</span>,</a>
+<a class="sourceLine" id="cb6-3" title="3">                                 <span class="kw"><a href="../reference/is_leaf.html">is_leaf</a></span>(<span class="kw"><a href="../reference/set_icd_class.html">as.icd10cm</a></span>(<span class="st">"C4311"</span>))</a>
+<a class="sourceLine" id="cb6-4" title="4">  )</a>
+<a class="sourceLine" id="cb6-5" title="5"><span class="co">#&gt; [1] TRUE</span></a>
+<a class="sourceLine" id="cb6-6" title="6">  <span class="kw"><a href="../reference/with_icd10cm_version.html">with_icd10cm_version</a></span>(<span class="dt">ver =</span> <span class="st">"2019"</span>, </a>
+<a class="sourceLine" id="cb6-7" title="7">                                 <span class="kw"><a href="../reference/is_leaf.html">is_leaf</a></span>(<span class="kw"><a href="../reference/set_icd_class.html">as.icd10cm</a></span>(<span class="st">"C4311"</span>))</a>
+<a class="sourceLine" id="cb6-8" title="8">  )</a>
+<a class="sourceLine" id="cb6-9" title="9"><span class="co">#&gt; [1] FALSE</span></a>
+<a class="sourceLine" id="cb6-10" title="10">  <span class="co"># In 2018 the following code was not even defined, but in 2019 was a new child</span></a>
+<a class="sourceLine" id="cb6-11" title="11">  <span class="co"># code of "C4311"s</span></a>
+<a class="sourceLine" id="cb6-12" title="12">  <span class="kw"><a href="../reference/with_icd10cm_version.html">with_icd10cm_version</a></span>(<span class="dt">ver =</span> <span class="st">"2018"</span>, </a>
+<a class="sourceLine" id="cb6-13" title="13">                                 {</a>
+<a class="sourceLine" id="cb6-14" title="14">                                   <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/print">print</a></span>(<span class="kw"><a href="../reference/is_defined.html">is_defined</a></span>(<span class="kw"><a href="../reference/set_icd_class.html">as.icd10cm</a></span>(<span class="st">"C4311"</span>)))</a>
+<a class="sourceLine" id="cb6-15" title="15">                                   <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/print">print</a></span>(<span class="kw"><a href="../reference/is_leaf.html">is_leaf</a></span>(<span class="kw"><a href="../reference/set_icd_class.html">as.icd10cm</a></span>(<span class="st">"C4311"</span>)))</a>
+<a class="sourceLine" id="cb6-16" title="16">                                 }</a>
+<a class="sourceLine" id="cb6-17" title="17">  )</a>
+<a class="sourceLine" id="cb6-18" title="18"><span class="co">#&gt; [1] TRUE</span></a>
+<a class="sourceLine" id="cb6-19" title="19"><span class="co">#&gt; [1] TRUE</span></a>
+<a class="sourceLine" id="cb6-20" title="20">  <span class="kw"><a href="../reference/with_icd10cm_version.html">with_icd10cm_version</a></span>(<span class="dt">ver =</span> <span class="st">"2019"</span>, </a>
+<a class="sourceLine" id="cb6-21" title="21">                                 <span class="kw"><a href="../reference/is_leaf.html">is_leaf</a></span>(<span class="st">"C43111"</span>)</a>
+<a class="sourceLine" id="cb6-22" title="22">  )</a>
+<a class="sourceLine" id="cb6-23" title="23"><span class="co">#&gt; [1] TRUE</span></a></code></pre></div>
 </div>
   </div>
 
@@ -208,7 +328,7 @@
 
 
       <footer><div class="copyright">
-  <p>Developed by Jack O. Wasey.</p>
+  <p>Developed by Jack O. Wasey, R Core Team.</p>
 </div>
 
 <div class="pkgdown">

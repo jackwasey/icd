@@ -72,7 +72,7 @@ functions." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Comorbidity calculations and tools for ICD-9 and ICD-10 codes</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">4.0.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">4.0.4</span>
       </span>
     </div>
 
@@ -101,6 +101,9 @@ functions." />
       <a href="../articles/ICD-10.html">ICD-10 comorbidities</a>
     </li>
     <li>
+      <a href="../articles/PCCC.html">Pediatric Complex Chronic Conditions</a>
+    </li>
+    <li>
       <a href="../articles/charlson-scores.html">Charlson and Van Walraven scores</a>
     </li>
     <li>
@@ -116,7 +119,7 @@ functions." />
       <a href="../articles/efficiency.pdf">icd: Efficient Computation of Comorbidities from ICD Codes Using Sparse Matrix Multiplication in R (PDF)</a>
     </li>
     <li>
-      <a href="../articles/introduction.html">Quick Introduction to icd</a>
+      <a href="../articles/introduction.html">An Introduction to icd</a>
     </li>
     <li>
       <a href="../articles/ranges.html">Ranges of ICD codes</a>
@@ -162,27 +165,27 @@ functions.</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>comorbid_pccc_dx</span>(<span class='no'>x</span>, <span class='kw'>visit_name</span> <span class='kw'>=</span> <span class='fu'><a href='get_visit_name.html'>get_visit_name</a></span>(<span class='no'>x</span>),
-  <span class='kw'>icd_name</span> <span class='kw'>=</span> <span class='fu'><a href='get_icd_dx_name.html'>get_icd_name</a></span>(<span class='no'>x</span>), <span class='kw'>short_code</span> <span class='kw'>=</span> <span class='fu'><a href='guess_short.html'>guess_short</a></span>(<span class='no'>x</span>, <span class='kw'>icd_name</span> <span class='kw'>=</span>
+    <pre class="usage"><span class='fu'>comorbid_pccc_dx</span>(<span class='no'>x</span>, <span class='kw'>visit_name</span> <span class='kw'>=</span> <span class='fu'>get_visit_name</span>(<span class='no'>x</span>),
+  <span class='kw'>icd_name</span> <span class='kw'>=</span> <span class='fu'>get_icd_name</span>(<span class='no'>x</span>), <span class='kw'>short_code</span> <span class='kw'>=</span> <span class='fu'><a href='guess_short.html'>guess_short</a></span>(<span class='no'>x</span>, <span class='kw'>icd_name</span> <span class='kw'>=</span>
   <span class='no'>icd_name</span>), <span class='kw'>return_df</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>return_binary</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='no'>...</span>)
 
-<span class='fu'>comorbid_pccc_pcs</span>(<span class='no'>x</span>, <span class='kw'>visit_name</span> <span class='kw'>=</span> <span class='fu'><a href='get_visit_name.html'>get_visit_name</a></span>(<span class='no'>x</span>), <span class='no'>icd_name</span>,
+<span class='fu'>comorbid_pccc_pcs</span>(<span class='no'>x</span>, <span class='kw'>visit_name</span> <span class='kw'>=</span> <span class='fu'>get_visit_name</span>(<span class='no'>x</span>), <span class='no'>icd_name</span>,
   <span class='kw'>return_df</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>return_binary</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='no'>...</span>)
 
 <span class='fu'>icd9_comorbid_pccc_dx</span>(<span class='no'>x</span>, <span class='kw'>visit_name</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>icd_name</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>short_code</span> <span class='kw'>=</span> <span class='fu'><a href='guess_short.html'>guess_short</a></span>(<span class='no'>x</span>, <span class='kw'>icd_name</span> <span class='kw'>=</span> <span class='no'>icd_name</span>), <span class='kw'>return_df</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>return_binary</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='no'>...</span>)
+  <span class='kw'>return_binary</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='no'>...</span>, <span class='kw'>abbrev_names</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
 
 <span class='fu'>icd10_comorbid_pccc_dx</span>(<span class='no'>x</span>, <span class='kw'>visit_name</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>icd_name</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>short_code</span> <span class='kw'>=</span> <span class='fu'><a href='guess_short.html'>guess_short</a></span>(<span class='no'>x</span>, <span class='kw'>icd_name</span> <span class='kw'>=</span> <span class='no'>icd_name</span>), <span class='kw'>return_df</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>return_binary</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='no'>...</span>)
+  <span class='kw'>return_binary</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='no'>...</span>, <span class='kw'>abbrev_names</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
 
-<span class='fu'>icd9_comorbid_pccc_pcs</span>(<span class='no'>x</span>, <span class='kw'>visit_name</span> <span class='kw'>=</span> <span class='fu'><a href='get_visit_name.html'>get_visit_name</a></span>(<span class='no'>x</span>),
-  <span class='kw'>icd_name</span> <span class='kw'>=</span> <span class='fu'><a href='get_icd_pc_name.html'>get_icd_pc_name</a></span>(<span class='no'>x</span>), <span class='kw'>return_df</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>return_binary</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='no'>...</span>)
+<span class='fu'>icd9_comorbid_pccc_pcs</span>(<span class='no'>x</span>, <span class='kw'>visit_name</span> <span class='kw'>=</span> <span class='fu'>get_visit_name</span>(<span class='no'>x</span>),
+  <span class='kw'>icd_name</span> <span class='kw'>=</span> <span class='fu'>get_icd_pc_name</span>(<span class='no'>x</span>), <span class='kw'>return_df</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>return_binary</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='no'>...</span>, <span class='kw'>abbrev_names</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
 
-<span class='fu'>icd10_comorbid_pccc_pcs</span>(<span class='no'>x</span>, <span class='kw'>visit_name</span> <span class='kw'>=</span> <span class='fu'><a href='get_visit_name.html'>get_visit_name</a></span>(<span class='no'>x</span>), <span class='no'>icd_name</span>,
-  <span class='kw'>return_df</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>return_binary</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='no'>...</span>)</pre>
+<span class='fu'>icd10_comorbid_pccc_pcs</span>(<span class='no'>x</span>, <span class='kw'>visit_name</span> <span class='kw'>=</span> <span class='fu'>get_visit_name</span>(<span class='no'>x</span>), <span class='no'>icd_name</span>,
+  <span class='kw'>return_df</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>return_binary</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='no'>...</span>, <span class='kw'>abbrev_names</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -190,10 +193,9 @@ functions.</p>
     <tr>
       <th>x</th>
       <td><p><code>data.frame</code> containing a column of patient-visit identifiers
-and a column of ICD codes. The <code>data.frame</code> should be in &#8216;long&#8217;
-format, like the example <code><a href='https://www.rdocumentation.org/packages/icd.data/topics/vermont_dx'>icd.data::vermont_dx</a></code> data. If it is in
-&#8216;wide&#8217; format, it must be converted to &#8216;long&#8217; using
-<code><a href='wide_to_long.html'>wide_to_long</a></code> before calling any comorbidity functions.</p></td>
+and a column of ICD codes. The <code>data.frame</code> may be in &#8216;long&#8217; or
+&#8216;wide&#8217; format, like the example <code><a href='vermont_dx.html'>vermont_dx</a></code>
+and <code><a href='uranium_pathology.html'>uranium_pathology</a></code> data.</p></td>
     </tr>
     <tr>
       <th>visit_name</th>
@@ -241,7 +243,13 @@ other tools, e.g. <code><a href='https://www.rdocumentation.org/packages/base/to
     </tr>
     <tr>
       <th>...</th>
-      <td><p>arguments passed on to other functions</p></td>
+      <td><p>Arguments passed through to <code>comorbid</code></p></td>
+    </tr>
+    <tr>
+      <th>abbrev_names</th>
+      <td><p>single logical value that defaults to <code>TRUE</code>, in
+which case the shorter human-readable names stored in e.g.
+<code>ahrqComorbidNamesAbbrev</code> are applied to the data frame column names.</p></td>
     </tr>
     </table>
     
@@ -275,48 +283,48 @@ procedure codes</p></li>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># not pediatric data, but let's look for this example</span>
-<span class='fu'><a href='https://www.rdocumentation.org/packages/utils/topics/head'>head</a></span>(<span class='fu'>icd9_comorbid_pccc_dx</span>(<span class='kw pkg'>icd.data</span><span class='kw ns'>::</span><span class='no'><a href='https://www.rdocumentation.org/packages/icd.data/topics/vermont_dx'>vermont_dx</a></span>[<span class='fl'>1</span>:<span class='fl'>1000</span>, ]))</div><div class='output co'>#&gt;    neuromusc   cvd respiratory renal    gi hemato_immu metabolic
-#&gt; 7      FALSE  TRUE       FALSE  TRUE FALSE       FALSE     FALSE
-#&gt; 10     FALSE  TRUE       FALSE FALSE FALSE       FALSE      TRUE
-#&gt; 13     FALSE FALSE       FALSE FALSE FALSE       FALSE     FALSE
-#&gt; 16     FALSE FALSE       FALSE FALSE FALSE       FALSE     FALSE
-#&gt; 37     FALSE FALSE       FALSE FALSE FALSE       FALSE      TRUE
-#&gt; 41     FALSE FALSE       FALSE FALSE FALSE       FALSE     FALSE
-#&gt;    congeni_genetic malignancy neonatal tech_dep transplant
-#&gt; 7            FALSE       TRUE    FALSE    FALSE      FALSE
-#&gt; 10           FALSE      FALSE    FALSE    FALSE      FALSE
-#&gt; 13           FALSE      FALSE    FALSE    FALSE      FALSE
-#&gt; 16           FALSE      FALSE    FALSE    FALSE      FALSE
-#&gt; 37           FALSE      FALSE    FALSE    FALSE      FALSE
-#&gt; 41           FALSE      FALSE    FALSE    FALSE      FALSE</div><div class='input'><span class='co'># Six random codes from each PCCC procedure code map. 'icd' will use</span>
+<span class='fu'><a href='https://www.rdocumentation.org/packages/utils/topics/head'>head</a></span>(<span class='fu'>icd9_comorbid_pccc_dx</span>(<span class='no'>vermont_dx</span>))</div><div class='output co'>#&gt;    Neuromusc   CVD Respiratory Renal    GI HematoImmu Metabolic CongeniGenetic
+#&gt; 7      FALSE  TRUE       FALSE  TRUE FALSE      FALSE     FALSE          FALSE
+#&gt; 10     FALSE  TRUE       FALSE FALSE FALSE      FALSE      TRUE          FALSE
+#&gt; 13     FALSE FALSE       FALSE FALSE FALSE      FALSE     FALSE          FALSE
+#&gt; 16     FALSE FALSE       FALSE FALSE FALSE      FALSE     FALSE          FALSE
+#&gt; 37     FALSE FALSE       FALSE FALSE FALSE      FALSE      TRUE          FALSE
+#&gt; 41     FALSE FALSE       FALSE FALSE FALSE      FALSE     FALSE          FALSE
+#&gt;    Malignancy Neonatal TechDep Transplant
+#&gt; 7        TRUE    FALSE   FALSE      FALSE
+#&gt; 10      FALSE    FALSE   FALSE      FALSE
+#&gt; 13      FALSE    FALSE   FALSE      FALSE
+#&gt; 16      FALSE    FALSE   FALSE      FALSE
+#&gt; 37      FALSE    FALSE   FALSE      FALSE
+#&gt; 41      FALSE    FALSE   FALSE      FALSE</div><div class='input'><span class='co'># Six random codes from each PCCC procedure code map. 'icd' will use</span>
 <span class='co'># an heuristic to guess whether ICD-9 or ICD-10:</span>
 <span class='no'>pts</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/data.frame'>data.frame</a></span>(
   <span class='kw'>encounters</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>10</span>, <span class='fl'>11</span>, <span class='fl'>12</span>),
   <span class='kw'>icd9_pcs</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"0152"</span>, <span class='st'>"304"</span>, <span class='st'>"0050"</span>),
   <span class='kw'>icd10_pcs</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"0B110Z4"</span>, <span class='st'>"02YA0Z2"</span>, <span class='st'>"031209D"</span>)
 )
-<span class='fu'>comorbid_pccc_pcs</span>(<span class='no'>pts</span>, <span class='kw'>icd_name</span> <span class='kw'>=</span> <span class='st'>"icd9_pcs"</span>, <span class='kw'>return_binary</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt;    neuromusc cvd respiratory renal gi hemato_immu metabolic congeni_genetic
-#&gt; 10         1   0           0     0  0           0         0               0
-#&gt; 11         0   0           1     0  0           0         0               0
-#&gt; 12         0   1           0     0  0           0         0               0
-#&gt;    malignancy neonatal tech_dep transplant
-#&gt; 10          0        0        0          0
-#&gt; 11          0        0        0          0
-#&gt; 12          0        0        1          0</div><div class='input'><span class='fu'>comorbid_pccc_pcs</span>(<span class='no'>pts</span>, <span class='kw'>icd_name</span> <span class='kw'>=</span> <span class='st'>"icd10_pcs"</span>, <span class='kw'>return_binary</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt;    neuromusc cvd respiratory renal gi hemato_immu metabolic congeni_genetic
-#&gt; 10         0   0           1     0  0           0         0               0
-#&gt; 11         0   1           0     0  0           0         0               0
-#&gt; 12         0   0           0     1  0           0         0               0
-#&gt;    malignancy neonatal tech_dep transplant
-#&gt; 10          0        0        0          0
-#&gt; 11          0        0        0          1
-#&gt; 12          0        0        1          0</div><div class='input'>
+<span class='fu'>comorbid_pccc_pcs</span>(<span class='no'>pts</span>, <span class='kw'>icd_name</span> <span class='kw'>=</span> <span class='st'>"icd9_pcs"</span>, <span class='kw'>return_binary</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt;    Neuromusc CVD Respiratory Renal GI HematoImmu Metabolic CongeniGenetic
+#&gt; 10         1   0           0     0  0          0         0              0
+#&gt; 11         0   0           1     0  0          0         0              0
+#&gt; 12         0   1           0     0  0          0         0              0
+#&gt;    Malignancy Neonatal TechDep Transplant
+#&gt; 10          0        0       0          0
+#&gt; 11          0        0       0          0
+#&gt; 12          0        0       1          0</div><div class='input'><span class='fu'>comorbid_pccc_pcs</span>(<span class='no'>pts</span>, <span class='kw'>icd_name</span> <span class='kw'>=</span> <span class='st'>"icd10_pcs"</span>, <span class='kw'>return_binary</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt;    Neuromusc CVD Respiratory Renal GI HematoImmu Metabolic CongeniGenetic
+#&gt; 10         0   0           1     0  0          0         0              0
+#&gt; 11         0   1           0     0  0          0         0              0
+#&gt; 12         0   0           0     1  0          0         0              0
+#&gt;    Malignancy Neonatal TechDep Transplant
+#&gt; 10          0        0       0          0
+#&gt; 11          0        0       0          1
+#&gt; 12          0        0       1          0</div><div class='input'>
 <span class='co'># All ICD-9 procedure codes are numeric, some ICD-10 procedure codes</span>
 <span class='co'># are numeric, so best to call functions directly:</span>
 <span class='no'>pts</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/data.frame'>data.frame</a></span>(<span class='kw'>encounters</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='fl'>100</span>), <span class='kw'>icd10_pcs</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"0016070"</span>))
-<span class='fu'>icd10_comorbid_pccc_pcs</span>(<span class='no'>pts</span>, <span class='kw'>icd_name</span> <span class='kw'>=</span> <span class='st'>"icd10_pcs"</span>)</div><div class='output co'>#&gt;     neuromusc   cvd respiratory renal    gi hemato_immu metabolic
-#&gt; 100      TRUE FALSE       FALSE FALSE FALSE       FALSE     FALSE
-#&gt;     congeni_genetic malignancy neonatal tech_dep transplant
-#&gt; 100           FALSE      FALSE    FALSE    FALSE      FALSE</div></pre>
+<span class='fu'>icd10_comorbid_pccc_pcs</span>(<span class='no'>pts</span>, <span class='kw'>icd_name</span> <span class='kw'>=</span> <span class='st'>"icd10_pcs"</span>)</div><div class='output co'>#&gt;     Neuromusc   CVD Respiratory Renal    GI HematoImmu Metabolic CongeniGenetic
+#&gt; 100      TRUE FALSE       FALSE FALSE FALSE      FALSE     FALSE          FALSE
+#&gt;     Malignancy Neonatal TechDep Transplant
+#&gt; 100      FALSE    FALSE   FALSE      FALSE</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
@@ -335,7 +343,7 @@ procedure codes</p></li>
 
       <footer>
       <div class="copyright">
-  <p>Developed by Jack O. Wasey.</p>
+  <p>Developed by Jack O. Wasey, R Core Team.</p>
 </div>
 
 <div class="pkgdown">

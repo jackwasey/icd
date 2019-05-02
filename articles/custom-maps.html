@@ -32,7 +32,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Comorbidity calculations and tools for ICD-9 and ICD-10 codes</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">4.0.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">4.0.4</span>
       </span>
     </div>
 
@@ -61,6 +61,9 @@
       <a href="../articles/ICD-10.html">ICD-10 comorbidities</a>
     </li>
     <li>
+      <a href="../articles/PCCC.html">Pediatric Complex Chronic Conditions</a>
+    </li>
+    <li>
       <a href="../articles/charlson-scores.html">Charlson and Van Walraven scores</a>
     </li>
     <li>
@@ -76,7 +79,7 @@
       <a href="../articles/efficiency.pdf">icd: Efficient Computation of Comorbidities from ICD Codes Using Sparse Matrix Multiplication in R (PDF)</a>
     </li>
     <li>
-      <a href="../articles/introduction.html">Quick Introduction to icd</a>
+      <a href="../articles/introduction.html">An Introduction to icd</a>
     </li>
     <li>
       <a href="../articles/ranges.html">Ranges of ICD codes</a>
@@ -108,7 +111,7 @@
       <h1>Quick custom comorbidity maps are helpful</h1>
                         <h4 class="author">Jack O. Wasey</h4>
             
-            <h4 class="date">2019-03-22</h4>
+            <h4 class="date">2019-05-02</h4>
       
       
       <div class="hidden name"><code>custom-maps.Rmd</code></div>
@@ -124,116 +127,116 @@
 </ul>
 <p><code>icd</code> has a simple mechanism to use custom category-ICD maps. A comorbidity map is a list of character vectors. Each list must be named to reflect the ICD codes it contains; the character vector contains the ICD codes themselves.</p>
 <p>Let’s take a look at the first few items in the Charlson map from Quan and Deyo:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/print">print</a></span>(icd<span class="op">::</span>icd10_map_quan_deyo, <span class="dt">n_comorbidities =</span> <span class="dv">3</span>, <span class="dt">n_codes =</span> <span class="dv">8</span>)</a>
-<a class="sourceLine" id="cb1-2" data-line-number="2"><span class="co">#&gt; Showing first 3 comorbidities, and first 8 of each.</span></a>
-<a class="sourceLine" id="cb1-3" data-line-number="3"><span class="co">#&gt; $MI</span></a>
-<a class="sourceLine" id="cb1-4" data-line-number="4"><span class="co">#&gt; [1] "I21"   "I210"  "I2101" "I2102" "I2109" "I211"  "I2111" "I2119"</span></a>
-<a class="sourceLine" id="cb1-5" data-line-number="5"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb1-6" data-line-number="6"><span class="co">#&gt; $CHF</span></a>
-<a class="sourceLine" id="cb1-7" data-line-number="7"><span class="co">#&gt; [1] "I099" "I110" "I130" "I132" "I255" "I420" "I425" "I426"</span></a>
-<a class="sourceLine" id="cb1-8" data-line-number="8"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb1-9" data-line-number="9"><span class="co">#&gt; $PVD</span></a>
-<a class="sourceLine" id="cb1-10" data-line-number="10"><span class="co">#&gt; [1] "I70"    "I700"   "I701"   "I702"   "I7020"  "I70201" "I70202" "I70203"</span></a>
-<a class="sourceLine" id="cb1-11" data-line-number="11"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb1-12" data-line-number="12"><span class="co">#&gt; ...</span></a></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/print">print</a></span>(icd<span class="op">::</span>icd10_map_quan_deyo, <span class="dt">n_comorbidities =</span> <span class="dv">3</span>, <span class="dt">n_codes =</span> <span class="dv">8</span>)</a>
+<a class="sourceLine" id="cb1-2" title="2"><span class="co">#&gt; Showing first 3 comorbidities, and first 8 of each.</span></a>
+<a class="sourceLine" id="cb1-3" title="3"><span class="co">#&gt; $MI</span></a>
+<a class="sourceLine" id="cb1-4" title="4"><span class="co">#&gt; [1] "I21"   "I210"  "I2101" "I2102" "I2109" "I211"  "I2111" "I2119"</span></a>
+<a class="sourceLine" id="cb1-5" title="5"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb1-6" title="6"><span class="co">#&gt; $CHF</span></a>
+<a class="sourceLine" id="cb1-7" title="7"><span class="co">#&gt; [1] "I099" "I110" "I130" "I132" "I255" "I420" "I425" "I426"</span></a>
+<a class="sourceLine" id="cb1-8" title="8"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb1-9" title="9"><span class="co">#&gt; $PVD</span></a>
+<a class="sourceLine" id="cb1-10" title="10"><span class="co">#&gt; [1] "I70"    "I700"   "I701"   "I702"   "I7020"  "I70201" "I70202" "I70203"</span></a>
+<a class="sourceLine" id="cb1-11" title="11"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb1-12" title="12"><span class="co">#&gt; ...</span></a></code></pre></div>
 <div id="obesity-example" class="section level2">
 <h2 class="hasAnchor">
 <a href="#obesity-example" class="anchor"></a>Obesity example</h2>
 <p>Now we can make our own comorbidity map, and apply it to <a href="https://stackoverflow.com/questions/53954537/creating-categorical-variable-in-r/53954950#53954950">a question on ‘Stackoverflow’</a>.</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(icd)</a>
-<a class="sourceLine" id="cb2-2" data-line-number="2">obesity_map &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/list">list</a></span>(</a>
-<a class="sourceLine" id="cb2-3" data-line-number="3">  <span class="st">"1"</span> =<span class="st"> "E663"</span>,</a>
-<a class="sourceLine" id="cb2-4" data-line-number="4">  <span class="st">"2"</span> =<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"E669"</span>, <span class="st">"E668"</span>, <span class="st">"E6609"</span>),</a>
-<a class="sourceLine" id="cb2-5" data-line-number="5">  <span class="st">"3"</span> =<span class="st"> "E661"</span>,</a>
-<a class="sourceLine" id="cb2-6" data-line-number="6">  <span class="st">"4"</span> =<span class="st"> "E662"</span>)</a>
-<a class="sourceLine" id="cb2-7" data-line-number="7"></a>
-<a class="sourceLine" id="cb2-8" data-line-number="8">obesity &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/data.frame">data.frame</a></span>(</a>
-<a class="sourceLine" id="cb2-9" data-line-number="9">  <span class="dt">ICD.10.Code =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"E6601"</span>, <span class="st">"E663"</span>, <span class="st">"E663"</span>, <span class="st">"E6609"</span>),</a>
-<a class="sourceLine" id="cb2-10" data-line-number="10">  <span class="dt">Encounter.ID =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"408773"</span>, <span class="st">"542207"</span>, <span class="st">"358741"</span>, <span class="st">"342534"</span>)</a>
-<a class="sourceLine" id="cb2-11" data-line-number="11">)</a>
-<a class="sourceLine" id="cb2-12" data-line-number="12"></a>
-<a class="sourceLine" id="cb2-13" data-line-number="13">custom_map_result &lt;-<span class="st"> </span>icd<span class="op">::</span><span class="kw"><a href="https://jackwasey.github.io/icd//reference/comorbid.html">icd10_comorbid</a></span>(</a>
-<a class="sourceLine" id="cb2-14" data-line-number="14">  obesity,</a>
-<a class="sourceLine" id="cb2-15" data-line-number="15">  <span class="dt">map =</span> obesity_map)</a>
-<a class="sourceLine" id="cb2-16" data-line-number="16"></a>
-<a class="sourceLine" id="cb2-17" data-line-number="17">custom_map_result</a>
-<a class="sourceLine" id="cb2-18" data-line-number="18"><span class="co">#&gt;            1     2     3     4</span></a>
-<a class="sourceLine" id="cb2-19" data-line-number="19"><span class="co">#&gt; 408773 FALSE FALSE FALSE FALSE</span></a>
-<a class="sourceLine" id="cb2-20" data-line-number="20"><span class="co">#&gt; 542207  TRUE FALSE FALSE FALSE</span></a>
-<a class="sourceLine" id="cb2-21" data-line-number="21"><span class="co">#&gt; 358741  TRUE FALSE FALSE FALSE</span></a>
-<a class="sourceLine" id="cb2-22" data-line-number="22"><span class="co">#&gt; 342534 FALSE  TRUE FALSE FALSE</span></a>
-<a class="sourceLine" id="cb2-23" data-line-number="23"></a>
-<a class="sourceLine" id="cb2-24" data-line-number="24"><span class="co"># finally, format as requested by the user</span></a>
-<a class="sourceLine" id="cb2-25" data-line-number="25"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/apply">apply</a></span>(custom_map_result, <span class="dv">1</span>, <span class="cf">function</span>(x) {</a>
-<a class="sourceLine" id="cb2-26" data-line-number="26">  <span class="cf">if</span> (<span class="op">!</span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/any">any</a></span>(x)) <span class="dv">4</span> <span class="cf">else</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/which">which</a></span>(x)[<span class="dv">1</span>]</a>
-<a class="sourceLine" id="cb2-27" data-line-number="27">  })</a>
-<a class="sourceLine" id="cb2-28" data-line-number="28"><span class="co">#&gt; 408773 542207 358741 342534 </span></a>
-<a class="sourceLine" id="cb2-29" data-line-number="29"><span class="co">#&gt;      4      1      1      2</span></a>
-<a class="sourceLine" id="cb2-30" data-line-number="30"></a>
-<a class="sourceLine" id="cb2-31" data-line-number="31"><span class="co"># see also:</span></a>
-<a class="sourceLine" id="cb2-32" data-line-number="32">icd<span class="op">::</span>icd10_map_ahrq<span class="op">$</span>Obesity</a>
-<a class="sourceLine" id="cb2-33" data-line-number="33"><span class="co">#&gt;  [1] "E6601"  "E6609"  "E661"   "E662"   "E668"   "E669"   "O99210"</span></a>
-<a class="sourceLine" id="cb2-34" data-line-number="34"><span class="co">#&gt;  [8] "O99211" "O99212" "O99213" "O99214" "O99215" "R939"   "Z6830" </span></a>
-<a class="sourceLine" id="cb2-35" data-line-number="35"><span class="co">#&gt; [15] "Z6831"  "Z6832"  "Z6833"  "Z6834"  "Z6835"  "Z6836"  "Z6837" </span></a>
-<a class="sourceLine" id="cb2-36" data-line-number="36"><span class="co">#&gt; [22] "Z6838"  "Z6839"  "Z6841"  "Z6842"  "Z6843"  "Z6844"  "Z6845" </span></a>
-<a class="sourceLine" id="cb2-37" data-line-number="37"><span class="co">#&gt; [29] "Z6854"</span></a>
-<a class="sourceLine" id="cb2-38" data-line-number="38">icd<span class="op">::</span>icd10_map_quan_elix<span class="op">$</span>Obesity</a>
-<a class="sourceLine" id="cb2-39" data-line-number="39"><span class="co">#&gt; [1] "E66"   "E660"  "E6601" "E6609" "E661"  "E662"  "E663"  "E668"  "E669"</span></a>
-<a class="sourceLine" id="cb2-40" data-line-number="40">icd<span class="op">::</span><span class="kw"><a href="https://jackwasey.github.io/icd//reference/comorbid.html">icd10_comorbid_quan_elix</a></span>(</a>
-<a class="sourceLine" id="cb2-41" data-line-number="41">  obesity,</a>
-<a class="sourceLine" id="cb2-42" data-line-number="42">  <span class="dt">return_df =</span> <span class="ot">TRUE</span>)[<span class="st">"Obesity"</span>]</a>
-<a class="sourceLine" id="cb2-43" data-line-number="43"><span class="co">#&gt;   Obesity</span></a>
-<a class="sourceLine" id="cb2-44" data-line-number="44"><span class="co">#&gt; 1    TRUE</span></a>
-<a class="sourceLine" id="cb2-45" data-line-number="45"><span class="co">#&gt; 2    TRUE</span></a>
-<a class="sourceLine" id="cb2-46" data-line-number="46"><span class="co">#&gt; 3    TRUE</span></a>
-<a class="sourceLine" id="cb2-47" data-line-number="47"><span class="co">#&gt; 4    TRUE</span></a></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" title="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(icd)</a>
+<a class="sourceLine" id="cb2-2" title="2">obesity_map &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/list">list</a></span>(</a>
+<a class="sourceLine" id="cb2-3" title="3">  <span class="st">"1"</span> =<span class="st"> "E663"</span>,</a>
+<a class="sourceLine" id="cb2-4" title="4">  <span class="st">"2"</span> =<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"E669"</span>, <span class="st">"E668"</span>, <span class="st">"E6609"</span>),</a>
+<a class="sourceLine" id="cb2-5" title="5">  <span class="st">"3"</span> =<span class="st"> "E661"</span>,</a>
+<a class="sourceLine" id="cb2-6" title="6">  <span class="st">"4"</span> =<span class="st"> "E662"</span>)</a>
+<a class="sourceLine" id="cb2-7" title="7"></a>
+<a class="sourceLine" id="cb2-8" title="8">obesity &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/data.frame">data.frame</a></span>(</a>
+<a class="sourceLine" id="cb2-9" title="9">  <span class="dt">ICD.10.Code =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"E6601"</span>, <span class="st">"E663"</span>, <span class="st">"E663"</span>, <span class="st">"E6609"</span>),</a>
+<a class="sourceLine" id="cb2-10" title="10">  <span class="dt">Encounter.ID =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"408773"</span>, <span class="st">"542207"</span>, <span class="st">"358741"</span>, <span class="st">"342534"</span>)</a>
+<a class="sourceLine" id="cb2-11" title="11">)</a>
+<a class="sourceLine" id="cb2-12" title="12"></a>
+<a class="sourceLine" id="cb2-13" title="13">custom_map_result &lt;-<span class="st"> </span>icd<span class="op">::</span><span class="kw"><a href="https://jackwasey.github.io/icd//reference/comorbid.html">icd10_comorbid</a></span>(</a>
+<a class="sourceLine" id="cb2-14" title="14">  obesity,</a>
+<a class="sourceLine" id="cb2-15" title="15">  <span class="dt">map =</span> obesity_map)</a>
+<a class="sourceLine" id="cb2-16" title="16"></a>
+<a class="sourceLine" id="cb2-17" title="17">custom_map_result</a>
+<a class="sourceLine" id="cb2-18" title="18"><span class="co">#&gt;            1     2     3     4</span></a>
+<a class="sourceLine" id="cb2-19" title="19"><span class="co">#&gt; 408773 FALSE FALSE FALSE FALSE</span></a>
+<a class="sourceLine" id="cb2-20" title="20"><span class="co">#&gt; 542207  TRUE FALSE FALSE FALSE</span></a>
+<a class="sourceLine" id="cb2-21" title="21"><span class="co">#&gt; 358741  TRUE FALSE FALSE FALSE</span></a>
+<a class="sourceLine" id="cb2-22" title="22"><span class="co">#&gt; 342534 FALSE  TRUE FALSE FALSE</span></a>
+<a class="sourceLine" id="cb2-23" title="23"></a>
+<a class="sourceLine" id="cb2-24" title="24"><span class="co"># finally, format as requested by the user</span></a>
+<a class="sourceLine" id="cb2-25" title="25"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/apply">apply</a></span>(custom_map_result, <span class="dv">1</span>, <span class="cf">function</span>(x) {</a>
+<a class="sourceLine" id="cb2-26" title="26">  <span class="cf">if</span> (<span class="op">!</span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/any">any</a></span>(x)) <span class="dv">4</span> <span class="cf">else</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/which">which</a></span>(x)[<span class="dv">1</span>]</a>
+<a class="sourceLine" id="cb2-27" title="27">  })</a>
+<a class="sourceLine" id="cb2-28" title="28"><span class="co">#&gt; 408773 542207 358741 342534 </span></a>
+<a class="sourceLine" id="cb2-29" title="29"><span class="co">#&gt;      4      1      1      2</span></a>
+<a class="sourceLine" id="cb2-30" title="30"></a>
+<a class="sourceLine" id="cb2-31" title="31"><span class="co"># see also:</span></a>
+<a class="sourceLine" id="cb2-32" title="32">icd<span class="op">::</span>icd10_map_ahrq<span class="op">$</span>Obesity</a>
+<a class="sourceLine" id="cb2-33" title="33"><span class="co">#&gt;  [1] "E6601"  "E6609"  "E661"   "E662"   "E668"   "E669"   "O99210"</span></a>
+<a class="sourceLine" id="cb2-34" title="34"><span class="co">#&gt;  [8] "O99211" "O99212" "O99213" "O99214" "O99215" "R939"   "Z6830" </span></a>
+<a class="sourceLine" id="cb2-35" title="35"><span class="co">#&gt; [15] "Z6831"  "Z6832"  "Z6833"  "Z6834"  "Z6835"  "Z6836"  "Z6837" </span></a>
+<a class="sourceLine" id="cb2-36" title="36"><span class="co">#&gt; [22] "Z6838"  "Z6839"  "Z6841"  "Z6842"  "Z6843"  "Z6844"  "Z6845" </span></a>
+<a class="sourceLine" id="cb2-37" title="37"><span class="co">#&gt; [29] "Z6854"</span></a>
+<a class="sourceLine" id="cb2-38" title="38">icd<span class="op">::</span>icd10_map_quan_elix<span class="op">$</span>Obesity</a>
+<a class="sourceLine" id="cb2-39" title="39"><span class="co">#&gt; [1] "E66"   "E660"  "E6601" "E6609" "E661"  "E662"  "E663"  "E668"  "E669"</span></a>
+<a class="sourceLine" id="cb2-40" title="40">icd<span class="op">::</span><span class="kw"><a href="https://jackwasey.github.io/icd//reference/comorbid.html">icd10_comorbid_quan_elix</a></span>(</a>
+<a class="sourceLine" id="cb2-41" title="41">  obesity,</a>
+<a class="sourceLine" id="cb2-42" title="42">  <span class="dt">return_df =</span> <span class="ot">TRUE</span>)[<span class="st">"Obesity"</span>]</a>
+<a class="sourceLine" id="cb2-43" title="43"><span class="co">#&gt;   Obesity</span></a>
+<a class="sourceLine" id="cb2-44" title="44"><span class="co">#&gt; 1    TRUE</span></a>
+<a class="sourceLine" id="cb2-45" title="45"><span class="co">#&gt; 2    TRUE</span></a>
+<a class="sourceLine" id="cb2-46" title="46"><span class="co">#&gt; 3    TRUE</span></a>
+<a class="sourceLine" id="cb2-47" title="47"><span class="co">#&gt; 4    TRUE</span></a></code></pre></div>
 </div>
 <div id="maps-with-ranges-of-codes" class="section level2">
 <h2 class="hasAnchor">
 <a href="#maps-with-ranges-of-codes" class="anchor"></a>Maps with ranges of codes</h2>
 <p>Sometimes there are a large number of ICD codes, and they can be defined more succinctly with ranges, then by specifying every single code. In addition, as new codes are added to ICD-10-CM, (especially ICD-10-CM – it moves much faster than ICD-10 from the WHO) having specific hard-coded ICD-10 codes will miss closely related codes in the future. Using the ranges functions from <code>icd</code> helps with both these problems.</p>
 <p>Again, using a <a href="https://stackoverflow.com/questions/54245282/how-to-compare-icd-10-character-string-or-search-whether-a-diagnosis-fall-into-t/54277842#54277842">Stackoverflow question</a>:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(icd)</a>
-<a class="sourceLine" id="cb3-2" data-line-number="2">diagnoses &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"C349"</span>, <span class="st">"A219"</span>, <span class="st">"B003"</span>, <span class="st">"C509"</span>, <span class="st">"B700"</span>, <span class="st">"A090"</span>)</a>
-<a class="sourceLine" id="cb3-3" data-line-number="3">one_pt &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/data.frame">data.frame</a></span>(<span class="dt">id =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/rep">rep</a></span>(<span class="st">"patient1"</span>, <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/length">length</a></span>(diagnoses)),</a>
-<a class="sourceLine" id="cb3-4" data-line-number="4">                     diagnoses)</a>
-<a class="sourceLine" id="cb3-5" data-line-number="5">dif_pt &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/data.frame">data.frame</a></span>(<span class="dt">id =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/paste">paste0</a></span>(<span class="st">"patient"</span>, <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/seq">seq_along</a></span>(diagnoses)),</a>
-<a class="sourceLine" id="cb3-6" data-line-number="6">                     diagnoses)</a>
-<a class="sourceLine" id="cb3-7" data-line-number="7">my_map &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/list">list</a></span>(<span class="dt">c01to17 =</span> <span class="kw"><a href="../reference/expand_range.html">expand_range</a></span>(<span class="st">"C01"</span>, <span class="st">"C17"</span>),</a>
-<a class="sourceLine" id="cb3-8" data-line-number="8">               <span class="dt">a74to75 =</span> <span class="kw"><a href="../reference/expand_range.html">expand_range</a></span>(<span class="st">"A748"</span>, <span class="st">"A759"</span>),</a>
-<a class="sourceLine" id="cb3-9" data-line-number="9">               <span class="dt">b00to33 =</span> <span class="kw"><a href="../reference/expand_range.html">expand_range</a></span>(<span class="st">"B001"</span>, <span class="st">"B331"</span>),</a>
-<a class="sourceLine" id="cb3-10" data-line-number="10">               <span class="dt">b69to72 =</span> <span class="kw"><a href="../reference/expand_range.html">expand_range</a></span>(<span class="st">"B69"</span>, <span class="st">"B72"</span>),</a>
-<a class="sourceLine" id="cb3-11" data-line-number="11">               <span class="dt">c00to94 =</span> <span class="kw"><a href="../reference/expand_range.html">expand_range</a></span>(<span class="st">"C000"</span>, <span class="st">"C942"</span>))</a>
-<a class="sourceLine" id="cb3-12" data-line-number="12"><span class="co"># optionally use as.comorbidity_map which ensures it is valid, and let's it</span></a>
-<a class="sourceLine" id="cb3-13" data-line-number="13"><span class="co"># print more pleasantly</span></a>
-<a class="sourceLine" id="cb3-14" data-line-number="14">my_map &lt;-<span class="st"> </span><span class="kw"><a href="../reference/as.comorbidity_map.html">as.comorbidity_map</a></span>(my_map)</a>
-<a class="sourceLine" id="cb3-15" data-line-number="15"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/print">print</a></span>(my_map)</a>
-<a class="sourceLine" id="cb3-16" data-line-number="16"><span class="co">#&gt; Showing first 7 comorbidities, and first 7 of each.</span></a>
-<a class="sourceLine" id="cb3-17" data-line-number="17"><span class="co">#&gt; $c01to17</span></a>
-<a class="sourceLine" id="cb3-18" data-line-number="18"><span class="co">#&gt; [1] "C01"  "C02"  "C020" "C021" "C022" "C023" "C024"</span></a>
-<a class="sourceLine" id="cb3-19" data-line-number="19"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb3-20" data-line-number="20"><span class="co">#&gt; $a74to75</span></a>
-<a class="sourceLine" id="cb3-21" data-line-number="21"><span class="co">#&gt; [1] "A748"  "A7481" "A7489" "A749"  "A75"   "A750"  "A751" </span></a>
-<a class="sourceLine" id="cb3-22" data-line-number="22"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb3-23" data-line-number="23"><span class="co">#&gt; $b00to33</span></a>
-<a class="sourceLine" id="cb3-24" data-line-number="24"><span class="co">#&gt; [1] "B001"  "B002"  "B003"  "B004"  "B005"  "B0050" "B0051"</span></a>
-<a class="sourceLine" id="cb3-25" data-line-number="25"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb3-26" data-line-number="26"><span class="co">#&gt; $b69to72</span></a>
-<a class="sourceLine" id="cb3-27" data-line-number="27"><span class="co">#&gt; [1] "B69"   "B690"  "B691"  "B698"  "B6981" "B6989" "B699" </span></a>
-<a class="sourceLine" id="cb3-28" data-line-number="28"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb3-29" data-line-number="29"><span class="co">#&gt; $c00to94</span></a>
-<a class="sourceLine" id="cb3-30" data-line-number="30"><span class="co">#&gt; [1] "C000" "C001" "C002" "C003" "C004" "C005" "C006"</span></a>
-<a class="sourceLine" id="cb3-31" data-line-number="31">icd<span class="op">::</span><span class="kw"><a href="https://jackwasey.github.io/icd//reference/comorbid.html">comorbid</a></span>(one_pt, <span class="dt">map =</span> my_map)</a>
-<a class="sourceLine" id="cb3-32" data-line-number="32"><span class="co">#&gt;          c01to17 a74to75 b00to33 b69to72 c00to94</span></a>
-<a class="sourceLine" id="cb3-33" data-line-number="33"><span class="co">#&gt; patient1   FALSE   FALSE    TRUE    TRUE    TRUE</span></a>
-<a class="sourceLine" id="cb3-34" data-line-number="34">(six_pts_cmb &lt;-<span class="st"> </span>icd<span class="op">::</span><span class="kw"><a href="https://jackwasey.github.io/icd//reference/comorbid.html">comorbid</a></span>(dif_pt, <span class="dt">map =</span> my_map))</a>
-<a class="sourceLine" id="cb3-35" data-line-number="35"><span class="co">#&gt;          c01to17 a74to75 b00to33 b69to72 c00to94</span></a>
-<a class="sourceLine" id="cb3-36" data-line-number="36"><span class="co">#&gt; patient1   FALSE   FALSE   FALSE   FALSE    TRUE</span></a>
-<a class="sourceLine" id="cb3-37" data-line-number="37"><span class="co">#&gt; patient2   FALSE   FALSE   FALSE   FALSE   FALSE</span></a>
-<a class="sourceLine" id="cb3-38" data-line-number="38"><span class="co">#&gt; patient3   FALSE   FALSE    TRUE   FALSE   FALSE</span></a>
-<a class="sourceLine" id="cb3-39" data-line-number="39"><span class="co">#&gt; patient4   FALSE   FALSE   FALSE   FALSE    TRUE</span></a>
-<a class="sourceLine" id="cb3-40" data-line-number="40"><span class="co">#&gt; patient5   FALSE   FALSE   FALSE    TRUE   FALSE</span></a>
-<a class="sourceLine" id="cb3-41" data-line-number="41"><span class="co">#&gt; patient6   FALSE   FALSE   FALSE   FALSE   FALSE</span></a></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" title="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(icd)</a>
+<a class="sourceLine" id="cb3-2" title="2">diagnoses &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"C349"</span>, <span class="st">"A219"</span>, <span class="st">"B003"</span>, <span class="st">"C509"</span>, <span class="st">"B700"</span>, <span class="st">"A090"</span>)</a>
+<a class="sourceLine" id="cb3-3" title="3">one_pt &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/data.frame">data.frame</a></span>(<span class="dt">id =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/rep">rep</a></span>(<span class="st">"patient1"</span>, <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/length">length</a></span>(diagnoses)),</a>
+<a class="sourceLine" id="cb3-4" title="4">                     diagnoses)</a>
+<a class="sourceLine" id="cb3-5" title="5">dif_pt &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/data.frame">data.frame</a></span>(<span class="dt">id =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/paste">paste0</a></span>(<span class="st">"patient"</span>, <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/seq">seq_along</a></span>(diagnoses)),</a>
+<a class="sourceLine" id="cb3-6" title="6">                     diagnoses)</a>
+<a class="sourceLine" id="cb3-7" title="7">my_map &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/list">list</a></span>(<span class="dt">c01to17 =</span> <span class="kw"><a href="../reference/expand_range.html">expand_range</a></span>(<span class="st">"C01"</span>, <span class="st">"C17"</span>),</a>
+<a class="sourceLine" id="cb3-8" title="8">               <span class="dt">a74to75 =</span> <span class="kw"><a href="../reference/expand_range.html">expand_range</a></span>(<span class="st">"A748"</span>, <span class="st">"A759"</span>),</a>
+<a class="sourceLine" id="cb3-9" title="9">               <span class="dt">b00to33 =</span> <span class="kw"><a href="../reference/expand_range.html">expand_range</a></span>(<span class="st">"B001"</span>, <span class="st">"B331"</span>),</a>
+<a class="sourceLine" id="cb3-10" title="10">               <span class="dt">b69to72 =</span> <span class="kw"><a href="../reference/expand_range.html">expand_range</a></span>(<span class="st">"B69"</span>, <span class="st">"B72"</span>),</a>
+<a class="sourceLine" id="cb3-11" title="11">               <span class="dt">c00to94 =</span> <span class="kw"><a href="../reference/expand_range.html">expand_range</a></span>(<span class="st">"C000"</span>, <span class="st">"C942"</span>))</a>
+<a class="sourceLine" id="cb3-12" title="12"><span class="co"># optionally use as.comorbidity_map which ensures it is valid, and let's it</span></a>
+<a class="sourceLine" id="cb3-13" title="13"><span class="co"># print more pleasantly</span></a>
+<a class="sourceLine" id="cb3-14" title="14">my_map &lt;-<span class="st"> </span><span class="kw"><a href="../reference/as.comorbidity_map.html">as.comorbidity_map</a></span>(my_map)</a>
+<a class="sourceLine" id="cb3-15" title="15"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/print">print</a></span>(my_map)</a>
+<a class="sourceLine" id="cb3-16" title="16"><span class="co">#&gt; Showing first 7 comorbidities, and first 7 of each.</span></a>
+<a class="sourceLine" id="cb3-17" title="17"><span class="co">#&gt; $c01to17</span></a>
+<a class="sourceLine" id="cb3-18" title="18"><span class="co">#&gt; [1] "C01"  "C02"  "C020" "C021" "C022" "C023" "C024"</span></a>
+<a class="sourceLine" id="cb3-19" title="19"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb3-20" title="20"><span class="co">#&gt; $a74to75</span></a>
+<a class="sourceLine" id="cb3-21" title="21"><span class="co">#&gt; [1] "A748"  "A7481" "A7489" "A749"  "A75"   "A750"  "A751" </span></a>
+<a class="sourceLine" id="cb3-22" title="22"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb3-23" title="23"><span class="co">#&gt; $b00to33</span></a>
+<a class="sourceLine" id="cb3-24" title="24"><span class="co">#&gt; [1] "B001"  "B002"  "B003"  "B004"  "B005"  "B0050" "B0051"</span></a>
+<a class="sourceLine" id="cb3-25" title="25"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb3-26" title="26"><span class="co">#&gt; $b69to72</span></a>
+<a class="sourceLine" id="cb3-27" title="27"><span class="co">#&gt; [1] "B69"   "B690"  "B691"  "B698"  "B6981" "B6989" "B699" </span></a>
+<a class="sourceLine" id="cb3-28" title="28"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb3-29" title="29"><span class="co">#&gt; $c00to94</span></a>
+<a class="sourceLine" id="cb3-30" title="30"><span class="co">#&gt; [1] "C000" "C001" "C002" "C003" "C004" "C005" "C006"</span></a>
+<a class="sourceLine" id="cb3-31" title="31">icd<span class="op">::</span><span class="kw"><a href="https://jackwasey.github.io/icd//reference/comorbid.html">comorbid</a></span>(one_pt, <span class="dt">map =</span> my_map)</a>
+<a class="sourceLine" id="cb3-32" title="32"><span class="co">#&gt;          c01to17 a74to75 b00to33 b69to72 c00to94</span></a>
+<a class="sourceLine" id="cb3-33" title="33"><span class="co">#&gt; patient1   FALSE   FALSE    TRUE    TRUE    TRUE</span></a>
+<a class="sourceLine" id="cb3-34" title="34">(six_pts_cmb &lt;-<span class="st"> </span>icd<span class="op">::</span><span class="kw"><a href="https://jackwasey.github.io/icd//reference/comorbid.html">comorbid</a></span>(dif_pt, <span class="dt">map =</span> my_map))</a>
+<a class="sourceLine" id="cb3-35" title="35"><span class="co">#&gt;          c01to17 a74to75 b00to33 b69to72 c00to94</span></a>
+<a class="sourceLine" id="cb3-36" title="36"><span class="co">#&gt; patient1   FALSE   FALSE   FALSE   FALSE    TRUE</span></a>
+<a class="sourceLine" id="cb3-37" title="37"><span class="co">#&gt; patient2   FALSE   FALSE   FALSE   FALSE   FALSE</span></a>
+<a class="sourceLine" id="cb3-38" title="38"><span class="co">#&gt; patient3   FALSE   FALSE    TRUE   FALSE   FALSE</span></a>
+<a class="sourceLine" id="cb3-39" title="39"><span class="co">#&gt; patient4   FALSE   FALSE   FALSE   FALSE    TRUE</span></a>
+<a class="sourceLine" id="cb3-40" title="40"><span class="co">#&gt; patient5   FALSE   FALSE   FALSE    TRUE   FALSE</span></a>
+<a class="sourceLine" id="cb3-41" title="41"><span class="co">#&gt; patient6   FALSE   FALSE   FALSE   FALSE   FALSE</span></a></code></pre></div>
 <p><img src="custom-maps_files/figure-html/matriximage-1.png" width="576"></p>
 </div>
   </div>
@@ -253,7 +256,7 @@
 
 
       <footer><div class="copyright">
-  <p>Developed by Jack O. Wasey.</p>
+  <p>Developed by Jack O. Wasey, R Core Team.</p>
 </div>
 
 <div class="pkgdown">

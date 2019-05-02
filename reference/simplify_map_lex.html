@@ -73,7 +73,7 @@ with such a large number of codes in it." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Comorbidity calculations and tools for ICD-9 and ICD-10 codes</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">4.0.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">4.0.2</span>
       </span>
     </div>
 
@@ -218,37 +218,13 @@ the column using this argument avoids the guesswork.</p></td>
 <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/stopifnot'>stopifnot</a></span>(<span class='no'>simple_map</span>$<span class='no'>CHF</span> <span class='kw'>==</span> <span class='st'>"I0981"</span>)
 <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/stopifnot'>stopifnot</a></span>(<span class='no'>simple_map</span>$<span class='no'>PHTN</span> <span class='kw'>!=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/character'>character</a></span>(<span class='fl'>0</span>))
 <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/stopifnot'>stopifnot</a></span>(<span class='no'>simple_map</span>$<span class='no'>PVD</span> <span class='kw'>==</span> <span class='st'>"I26019"</span>)
+<span class='kw'>if</span> (<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/ns-load'>requireNamespace</a></span>(<span class='st'>"icd.data"</span>, <span class='kw'>quietly</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)) {
 <span class='no'>umap</span> <span class='kw'>&lt;-</span> <span class='kw pkg'>icd</span><span class='kw ns'>:::</span><span class='fu'><a href='https://jackwasey.github.io/icd//reference/simplify_map_lex.html'>simplify_map_lex</a></span>(<span class='kw pkg'>icd.data</span><span class='kw ns'>::</span><span class='no'><a href='https://www.rdocumentation.org/packages/icd.data/topics/uranium_pathology'>uranium_pathology</a></span>$<span class='no'>icd10</span>, <span class='no'>icd10_map_ahrq</span>)
 <span class='fu'><a href='https://www.rdocumentation.org/packages/utils/topics/head'>head</a></span>(<span class='kw pkg'>icd</span><span class='kw ns'>:::</span><span class='fu'><a href='https://jackwasey.github.io/icd//reference/categorize_simple.html'>categorize_simple</a></span>(<span class='kw pkg'>icd.data</span><span class='kw ns'>::</span><span class='no'><a href='https://www.rdocumentation.org/packages/icd.data/topics/uranium_pathology'>uranium_pathology</a></span>, <span class='no'>icd10_map_ahrq</span>,
-                      <span class='kw'>id_name</span> <span class='kw'>=</span> <span class='st'>"case"</span>, <span class='kw'>code_name</span> <span class='kw'>=</span> <span class='st'>"icd10"</span>))</div><div class='output co'>#&gt;     CHF Valvular  PHTN   PVD   HTN HTNcx Paralysis NeuroOther Pulmonary    DM
-#&gt; 1 FALSE    FALSE FALSE FALSE FALSE FALSE     FALSE      FALSE     FALSE FALSE
-#&gt; 2 FALSE    FALSE FALSE FALSE FALSE FALSE     FALSE      FALSE     FALSE FALSE
-#&gt; 3 FALSE    FALSE FALSE FALSE FALSE FALSE     FALSE      FALSE     FALSE FALSE
-#&gt; 4 FALSE    FALSE FALSE FALSE FALSE FALSE     FALSE      FALSE     FALSE FALSE
-#&gt; 5 FALSE    FALSE FALSE FALSE FALSE FALSE     FALSE      FALSE     FALSE FALSE
-#&gt; 6 FALSE    FALSE FALSE FALSE FALSE FALSE     FALSE      FALSE     FALSE FALSE
-#&gt;    DMcx Hypothyroid Renal Liver   PUD   HIV Lymphoma  Mets Tumor Rheumatic
-#&gt; 1 FALSE       FALSE FALSE FALSE FALSE FALSE    FALSE FALSE FALSE     FALSE
-#&gt; 2 FALSE       FALSE FALSE FALSE FALSE FALSE    FALSE FALSE FALSE     FALSE
-#&gt; 3 FALSE       FALSE FALSE FALSE FALSE FALSE    FALSE FALSE FALSE     FALSE
-#&gt; 4 FALSE       FALSE FALSE FALSE FALSE FALSE    FALSE FALSE FALSE     FALSE
-#&gt; 5 FALSE       FALSE FALSE FALSE FALSE FALSE    FALSE FALSE FALSE     FALSE
-#&gt; 6 FALSE       FALSE FALSE FALSE FALSE FALSE    FALSE FALSE FALSE     FALSE
-#&gt;   Coagulopathy Obesity WeightLoss FluidsLytes BloodLoss Anemia Alcohol Drugs
-#&gt; 1        FALSE   FALSE      FALSE       FALSE     FALSE  FALSE   FALSE FALSE
-#&gt; 2        FALSE   FALSE      FALSE       FALSE     FALSE  FALSE   FALSE FALSE
-#&gt; 3        FALSE   FALSE      FALSE       FALSE     FALSE  FALSE   FALSE FALSE
-#&gt; 4        FALSE   FALSE      FALSE       FALSE     FALSE  FALSE   FALSE FALSE
-#&gt; 5        FALSE   FALSE      FALSE       FALSE     FALSE  FALSE   FALSE FALSE
-#&gt; 6        FALSE   FALSE      FALSE       FALSE     FALSE  FALSE   FALSE FALSE
-#&gt;   Psychoses Depression
-#&gt; 1     FALSE      FALSE
-#&gt; 2     FALSE      FALSE
-#&gt; 3     FALSE      FALSE
-#&gt; 4     FALSE      FALSE
-#&gt; 5     FALSE      FALSE
-#&gt; 6     FALSE      FALSE</div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/utils/topics/head'>head</a></span>(<span class='kw pkg'>icd</span><span class='kw ns'>:::</span><span class='fu'><a href='https://jackwasey.github.io/icd//reference/categorize_simple.html'>categorize_simple</a></span>(<span class='kw pkg'>icd.data</span><span class='kw ns'>::</span><span class='no'><a href='https://www.rdocumentation.org/packages/icd.data/topics/uranium_pathology'>uranium_pathology</a></span>, <span class='no'>umap</span>,
-                             <span class='kw'>id_name</span> <span class='kw'>=</span> <span class='st'>"case"</span>, <span class='kw'>code_name</span> <span class='kw'>=</span> <span class='st'>"icd10"</span>))</div><div class='output co'>#&gt;     CHF Valvular  PHTN   PVD   HTN HTNcx Paralysis NeuroOther Pulmonary    DM
+                      <span class='kw'>id_name</span> <span class='kw'>=</span> <span class='st'>"case"</span>, <span class='kw'>code_name</span> <span class='kw'>=</span> <span class='st'>"icd10"</span>))
+<span class='fu'><a href='https://www.rdocumentation.org/packages/utils/topics/head'>head</a></span>(<span class='kw pkg'>icd</span><span class='kw ns'>:::</span><span class='fu'><a href='https://jackwasey.github.io/icd//reference/categorize_simple.html'>categorize_simple</a></span>(<span class='kw pkg'>icd.data</span><span class='kw ns'>::</span><span class='no'><a href='https://www.rdocumentation.org/packages/icd.data/topics/uranium_pathology'>uranium_pathology</a></span>, <span class='no'>umap</span>,
+                             <span class='kw'>id_name</span> <span class='kw'>=</span> <span class='st'>"case"</span>, <span class='kw'>code_name</span> <span class='kw'>=</span> <span class='st'>"icd10"</span>))
+}</div><div class='output co'>#&gt;     CHF Valvular  PHTN   PVD   HTN HTNcx Paralysis NeuroOther Pulmonary    DM
 #&gt; 1 FALSE    FALSE FALSE FALSE FALSE FALSE     FALSE      FALSE     FALSE FALSE
 #&gt; 2 FALSE    FALSE FALSE FALSE FALSE FALSE     FALSE      FALSE     FALSE FALSE
 #&gt; 3 FALSE    FALSE FALSE FALSE FALSE FALSE     FALSE      FALSE     FALSE FALSE

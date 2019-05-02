@@ -4,6 +4,7 @@ pkgdown_sha: ~
 articles:
   CMS-HCC: CMS-HCC.html
   ICD-10: ICD-10.html
+  PCCC: PCCC.html
   charlson-scores: charlson-scores.html
   compare-maps: compare-maps.html
   country-lang-vers: country-lang-vers.html

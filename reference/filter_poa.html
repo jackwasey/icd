@@ -73,7 +73,7 @@ set unless all codes were either Y or N." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Comorbidity calculations and tools for ICD-9 and ICD-10 codes</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">4.0.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">4.0.4</span>
       </span>
     </div>
 
@@ -102,6 +102,9 @@ set unless all codes were either Y or N." />
       <a href="../articles/ICD-10.html">ICD-10 comorbidities</a>
     </li>
     <li>
+      <a href="../articles/PCCC.html">Pediatric Complex Chronic Conditions</a>
+    </li>
+    <li>
       <a href="../articles/charlson-scores.html">Charlson and Van Walraven scores</a>
     </li>
     <li>
@@ -117,7 +120,7 @@ set unless all codes were either Y or N." />
       <a href="../articles/efficiency.pdf">icd: Efficient Computation of Comorbidities from ICD Codes Using Sparse Matrix Multiplication in R (PDF)</a>
     </li>
     <li>
-      <a href="../articles/introduction.html">Quick Introduction to icd</a>
+      <a href="../articles/introduction.html">An Introduction to icd</a>
     </li>
     <li>
       <a href="../articles/ranges.html">Ranges of ICD codes</a>
@@ -184,8 +187,9 @@ set unless all codes were either Y or N.</p>
     <tr>
       <th>poa_name</th>
       <td><p>The name of column in the data frame which contains the
-Present On Arrival (POA) flag. The flag itself is a single character, typically
-one of "Y", "N", "E", "X", "U" or empty.</p></td>
+Present On Arrival (POA) flag. The flag itself is a single character,
+typically one of &#8216;Y&#8217;, &#8216;N&#8217;, &#8216;E&#8217;, &#8216;X&#8217;,
+&#8216;U&#8217;, or empty.</p></td>
     </tr>
     <tr>
       <th>poa</th>
@@ -193,8 +197,8 @@ one of "Y", "N", "E", "X", "U" or empty.</p></td>
 <code>NotYes</code>, and <code>NotNo</code>, indicating whether to account for
 comorbidities flagged as present-on-arrival. This is not a simple flag,
 because many codes are exempt, unspecified, or unknown. The intermediate
-codes, such as "exempt", "unknown" and <code>NA</code> mean that "yes" is not the
-same as "not no."</p></td>
+codes, such as &#8216;exempt&#8217;, &#8216;unknown&#8217; and <code>NA</code> mean that
+&#8216;yes&#8217; is not the same as &#8216;not no&#8217;.</p></td>
     </tr>
     </table>
     
@@ -218,6 +222,8 @@ out-of-hospital characteristics.</p></li>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><span class='co'># NOT RUN {</span>
+<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>library</a></span>(<span class='no'>icd</span>)
+<span class='co'># magrittr not required for icd to work, just for this example</span>
 <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>library</a></span>(<span class='no'>magrittr</span>, <span class='kw'>warn.conflicts</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>quietly</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
 <span class='no'>myData</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/data.frame'>data.frame</a></span>(
   <span class='kw'>visit_id</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"v1"</span>, <span class='st'>"v2"</span>, <span class='st'>"v3"</span>, <span class='st'>"v4"</span>),
@@ -233,12 +239,15 @@ out-of-hospital characteristics.</p></li>
     <span class='kw'>icd_name</span> <span class='kw'>=</span> <span class='st'>"diag"</span>, <span class='kw'>visit_name</span> <span class='kw'>=</span> <span class='st'>"visit_id"</span>,
     <span class='kw'>short_code</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>
   )
+<span class='no'>my_map</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/utils/topics/head'>head</a></span>(<span class='no'>icd9_map_elix</span>)
 <span class='co'># can call the core comorbid() function with an arbitrary mapping</span>
 <span class='no'>myData</span> <span class='kw'>%&gt;%</span>
   <span class='fu'>filter_poa_yes</span>() <span class='kw'>%&gt;%</span>
-  <span class='fu'><a href='comorbid.html'>comorbid_elix</a></span>(
-    <span class='kw'>icd_name</span> <span class='kw'>=</span> <span class='st'>"diag"</span>, <span class='kw'>visit_name</span> <span class='kw'>=</span> <span class='st'>"visit_id"</span>,
-    <span class='kw'>short_mapping</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>
+  <span class='fu'><a href='comorbid.html'>comorbid</a></span>(
+    <span class='kw'>icd_name</span> <span class='kw'>=</span> <span class='st'>"diag"</span>,
+    <span class='kw'>visit_name</span> <span class='kw'>=</span> <span class='st'>"visit_id"</span>,
+    <span class='kw'>map</span> <span class='kw'>=</span> <span class='no'>my_map</span>,
+    <span class='kw'>short_map</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>
   )
 <span class='co'># }</span></pre>
   </div>
@@ -257,7 +266,7 @@ out-of-hospital characteristics.</p></li>
 
       <footer>
       <div class="copyright">
-  <p>Developed by Jack O. Wasey.</p>
+  <p>Developed by Jack O. Wasey, R Core Team.</p>
 </div>
 
 <div class="pkgdown">

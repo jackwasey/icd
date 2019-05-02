@@ -6,7 +6,8 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Latest ICD-9-CM diagnosis codes, in flat <code>data.frame</code> format — icd9cm_hierarchy • Comorbidity calculations and tools for ICD-9 and ICD-10 codes</title>
+<title>ICD-9-CM diagnosis codes including leaf nodes and branch names up to the
+three-digit codes. — icd9cm_hierarchy • Comorbidity calculations and tools for ICD-9 and ICD-10 codes</title>
 
 <!-- jquery -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
@@ -36,10 +37,14 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/jquery.mark.min.js" integrity="sha256-4HLtjeVgH0eIB3aZ9mLYF6E8oU5chNdjU6p6rrXpl9U=" crossorigin="anonymous"></script>
 
 
-<meta property="og:title" content="Latest ICD-9-CM diagnosis codes, in flat <code>data.frame</code> format — icd9cm_hierarchy" />
+<meta property="og:title" content="ICD-9-CM diagnosis codes including leaf nodes and branch names up to the
+three-digit codes. — icd9cm_hierarchy" />
 
-<meta property="og:description" content="Short-form ICD-9 codes with short and long descriptions, and description of
-each hierarchy level containing each code." />
+<meta property="og:description" content="Unlike get_icd9cm2014_leaf and friends, these data frames
+contain the full structure of the ICD-9-CM scheme up to the three-digit
+codes. Unlike the equivalent ICD-10-CM data frames (e.g.,
+icd10cm2019), they do not have columns indicating billable/leaf
+status, or chapter designations." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -70,7 +75,7 @@ each hierarchy level containing each code." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Comorbidity calculations and tools for ICD-9 and ICD-10 codes</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">4.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">4.0.4</span>
       </span>
     </div>
 
@@ -117,7 +122,7 @@ each hierarchy level containing each code." />
       <a href="../articles/efficiency.pdf">icd: Efficient Computation of Comorbidities from ICD Codes Using Sparse Matrix Multiplication in R (PDF)</a>
     </li>
     <li>
-      <a href="../articles/introduction.html">Quick Introduction to icd</a>
+      <a href="../articles/introduction.html">An Introduction to icd</a>
     </li>
     <li>
       <a href="../articles/ranges.html">Ranges of ICD codes</a>
@@ -149,26 +154,43 @@ each hierarchy level containing each code." />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>Latest ICD-9-CM diagnosis codes, in flat <code>data.frame</code> format</h1>
+    <h1>ICD-9-CM diagnosis codes including leaf nodes and branch names up to the
+three-digit codes.</h1>
     
     <div class="hidden name"><code>icd9cm_hierarchy.Rd</code></div>
     </div>
 
     <div class="ref-description">
     
-    <p>Short-form ICD-9 codes with short and long descriptions, and description of
-each hierarchy level containing each code.</p>
+    <p>Unlike <code><a href='get_icd9cm2014_leaf.html'>get_icd9cm2014_leaf</a></code> and friends, these data frames
+contain the full structure of the ICD-9-CM scheme up to the three-digit
+codes. Unlike the equivalent ICD-10-CM data frames (e.g.,
+<code><a href='icd10cm2019.html'>icd10cm2019</a></code>), they do not have columns indicating billable/leaf
+status, or chapter designations.</p>
     
     </div>
 
         
+    <h2 class="hasAnchor" id="source"><a class="anchor" href="#source"></a>Source</h2>
+
+    <p><a href='http://wonder.cdc.gov/wonder/sci_data/codes/icd9/type_txt/icd9cm.asp'>http://wonder.cdc.gov/wonder/sci_data/codes/icd9/type_txt/icd9cm.asp</a></p>
+<p>Rich text descriptions here:
+  <a href='http://www.cdc.gov/nchs/icd/icd9cm.htm'>http://www.cdc.gov/nchs/icd/icd9cm.htm</a>
+  <a href='http://www.cms.gov/Medicare/Coding/ICD9ProviderDiagnosticCodes/codes.html'>http://www.cms.gov/Medicare/Coding/ICD9ProviderDiagnosticCodes/codes.html</a>
+   This page has versions 23 to 32 (2005 to 2014). At present, only the 2014
+  data is included in this package.</p>
+<p><a href='http://wonder.cdc.gov/wonder/sci_data/codes/icd9/type_txt/icd9abb.asp'>http://wonder.cdc.gov/wonder/sci_data/codes/icd9/type_txt/icd9abb.asp</a></p>
+<p><a href='http://wonder.cdc.gov/wonder/sci_data/codes/icd9/type_txt/icd9cm.asp'>http://wonder.cdc.gov/wonder/sci_data/codes/icd9/type_txt/icd9cm.asp</a></p>
+<p><a href='http://wonder.cdc.gov/wonder/sci_data/codes/icd9/type_txt/icdcm.asp'>http://wonder.cdc.gov/wonder/sci_data/codes/icd9/type_txt/icdcm.asp</a></p>
+<p><a href='http://wonder.cdc.gov/wonder/sci_data/codes/icd9/type_txt/icd9abb.asp'>http://wonder.cdc.gov/wonder/sci_data/codes/icd9/type_txt/icd9abb.asp</a></p>
+    
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>Format:  data frame</p>
-    
-    <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
-
-    <div class='dont-index'><p><code><a href='https://www.rdocumentation.org/packages/icd.data/topics/ls_icd_data'>ls_icd_data</a></code></p></div>
+    <p><code>icd9cm_hierarchy</code> is the deprecated name, which currently points to the
+final ICD-9-CM 2014 release. 2011 -- 2014 are in fact identical. These are
+generated dynamically by parsing an awkward RTF file, and only the 2011 --
+2014 data has been tested and used thoroughly.</p>
+<p>Format:  data frame</p>
     
 
   </div>
@@ -176,9 +198,9 @@ each hierarchy level containing each code.</p>
     <h2>Contents</h2>
     <ul class="nav nav-pills nav-stacked">
       
-      <li><a href="#details">Details</a></li>
+      <li><a href="#source">Source</a></li>
 
-      <li><a href="#see-also">See also</a></li>
+      <li><a href="#details">Details</a></li>
           </ul>
 
   </div>
@@ -186,7 +208,7 @@ each hierarchy level containing each code.</p>
 
       <footer>
       <div class="copyright">
-  <p>Developed by Jack O. Wasey.</p>
+  <p>Developed by Jack O. Wasey, R Core Team.</p>
 </div>
 
 <div class="pkgdown">

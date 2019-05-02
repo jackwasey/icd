@@ -72,7 +72,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Comorbidity calculations and tools for ICD-9 and ICD-10 codes</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">4.0.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">4.0.4</span>
       </span>
     </div>
 
@@ -101,6 +101,9 @@
       <a href="../articles/ICD-10.html">ICD-10 comorbidities</a>
     </li>
     <li>
+      <a href="../articles/PCCC.html">Pediatric Complex Chronic Conditions</a>
+    </li>
+    <li>
       <a href="../articles/charlson-scores.html">Charlson and Van Walraven scores</a>
     </li>
     <li>
@@ -116,7 +119,7 @@
       <a href="../articles/efficiency.pdf">icd: Efficient Computation of Comorbidities from ICD Codes Using Sparse Matrix Multiplication in R (PDF)</a>
     </li>
     <li>
-      <a href="../articles/introduction.html">Quick Introduction to icd</a>
+      <a href="../articles/introduction.html">An Introduction to icd</a>
     </li>
     <li>
       <a href="../articles/ranges.html">Ranges of ICD codes</a>
@@ -177,7 +180,7 @@
 <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/sort'>sort</a></span>(<span class='no'>x</span>, <span class='kw'>decreasing</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>short_code</span> <span class='kw'>=</span> <span class='fu'><a href='guess_short.html'>guess_short</a></span>(<span class='no'>x</span>),
   <span class='no'>...</span>)
 
-<span class='fu'>order.icd9</span>(<span class='no'>x</span>)
+<span class='fu'>order.icd9</span>(<span class='no'>x</span>, <span class='kw'>na.last</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
 
 <span class='fu'>order.icd10cm</span>(<span class='no'>x</span>)
 
@@ -204,6 +207,11 @@ Where reasonable, this is guessed from the input data.</p></td>
       <th>...</th>
       <td><p>arguments passed on to other functions</p></td>
     </tr>
+    <tr>
+      <th>na.last</th>
+      <td><p>Logical, analogous to <code>order</code>, so <code>NA</code> drops NA.
+<code>FALSE</code> is not currently supported.</p></td>
+    </tr>
     </table>
     
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
@@ -221,9 +229,10 @@ Where reasonable, this is guessed from the input data.</p></td>
     <h2 class="hasAnchor" id="icd-"><a class="anchor" href="#icd-"></a>ICD-9</h2>
 
     <p>Sorts lists of numeric, V or E codes. Note that a simple
-  numeric sort does not work for ICD-9 codes, since "162" &gt; "1620", and also
-  V codes precede E codes. Numeric codes are first, then 'V', then 'E'. Will
-  return a factor if a factor is given.</p>
+  numeric sort does not work for ICD-9 codes, since <code>162 &gt; 1620</code>, and
+  also &#8216;V&#8217; codes precede &#8216;E&#8217; codes. Numeric codes are first,
+  then &#8216;V&#8217;, then &#8216;E&#8217;. A factor is returned if a factor is
+  given.</p>
     
     <h2 class="hasAnchor" id="icd-cm-and-icd-be"><a class="anchor" href="#icd-cm-and-icd-be"></a>ICD-10-CM and ICD-10-BE</h2>
 
@@ -236,15 +245,15 @@ Where reasonable, this is guessed from the input data.</p></td>
     <pre class="examples"><div class='input'><span class='co'># order ICD-10-CM is not lexicographic:</span>
 <span class='no'>codes</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='set_icd_class.html'>as.icd10cm</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"C7A"</span>, <span class='st'>"C79"</span>, <span class='st'>"C80"</span>, <span class='st'>"C81"</span>, <span class='st'>"C7B"</span>))
 <span class='co'># as the class is set, use S3 dispatch to get the right answer</span>
-<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/sort'>sort</a></span>(<span class='no'>codes</span>)</div><div class='output co'>#&gt; [1] "C7A" "C7B" "C79" "C80" "C81"</div><div class='input'><span class='co'># or call directly, but recall S3 dispatch will only work once 'icd' is</span>
+<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/sort'>sort</a></span>(<span class='no'>codes</span>)</div><div class='output co'>#&gt; [1] "C7A" "C79" "C80" "C81" "C7B"</div><div class='input'><span class='co'># or call directly, but recall S3 dispatch will only work once 'icd' is</span>
 <span class='co'># attached using:</span>
 <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>library</a></span>(<span class='no'>icd</span>)
-<span class='kw pkg'>icd</span><span class='kw ns'>:::</span><span class='fu'><a href='https://jackwasey.github.io/icd//reference/sort_icd.html'>sort.icd10cm</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"C7A"</span>, <span class='st'>"C79"</span>, <span class='st'>"C80"</span>, <span class='st'>"C81"</span>, <span class='st'>"C7B"</span>))</div><div class='output co'>#&gt; [1] "C7A" "C7B" "C79" "C80" "C81"</div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/stopifnot'>stopifnot</a></span>(!<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/identical'>identical</a></span>(
+<span class='kw pkg'>icd</span><span class='kw ns'>:::</span><span class='fu'><a href='https://jackwasey.github.io/icd//reference/sort_icd.html'>sort.icd10cm</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"C7A"</span>, <span class='st'>"C79"</span>, <span class='st'>"C80"</span>, <span class='st'>"C81"</span>, <span class='st'>"C7B"</span>))</div><div class='output co'>#&gt; [1] "C7A" "C79" "C80" "C81" "C7B"</div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/stopifnot'>stopifnot</a></span>(!<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/identical'>identical</a></span>(
   <span class='fu'>order.icd10cm</span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/character'>as.character</a></span>(<span class='no'>codes</span>)),
   <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/order'>order</a></span>(<span class='no'>codes</span>)
 ))
-<span class='no'>codes</span>[<span class='fu'>order.icd10cm</span>(<span class='no'>codes</span>)]</div><div class='output co'>#&gt; [1] "C7A" "C80" "C81" "C7B" "C79"</div><div class='input'><span class='co'># Note that base::order does NOT do S3 dispatch, so the following does not work:</span>
-<span class='no'>codes</span>[<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/order'>order</a></span>(<span class='no'>codes</span>)]</div><div class='output co'>#&gt; [1] "C79" "C7A" "C7B" "C80" "C81"</div></pre>
+<span class='kw pkg'>icd</span><span class='kw ns'>::</span><span class='fu'><a href='https://jackwasey.github.io/icd//reference/sort_icd.html'>order.icd9</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"V20"</span>, <span class='fl'>NA</span>, <span class='st'>"100"</span>, <span class='fl'>NA</span>, <span class='st'>"E998"</span>, <span class='st'>"101"</span>))</div><div class='output co'>#&gt; [1] 3 6 1 5 2 4</div><div class='input'><span class='no'>codes</span>[<span class='fu'>order.icd10cm</span>(<span class='no'>codes</span>)]</div><div class='output co'>#&gt; [1] "C7A" "C79" "C80" "C81" "C7B"</div><div class='input'><span class='co'># Note that base::order does NOT do S3 dispatch, so the following does not work:</span>
+<span class='no'>codes</span>[<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/order'>order</a></span>(<span class='no'>codes</span>)]</div><div class='output co'>#&gt; [1] "C7A" "C7B" "C79" "C80" "C81"</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
@@ -267,7 +276,7 @@ Where reasonable, this is guessed from the input data.</p></td>
 
       <footer>
       <div class="copyright">
-  <p>Developed by Jack O. Wasey.</p>
+  <p>Developed by Jack O. Wasey, R Core Team.</p>
 </div>
 
 <div class="pkgdown">

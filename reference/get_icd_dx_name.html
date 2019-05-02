@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>get the name of a <code>data.frame</code> column which is most likely to contain
+<title>Get the name of a <code>data.frame</code> column which is most likely to contain
 the ICD codes — get_icd_dx_name • Comorbidity calculations and tools for ICD-9 and ICD-10 codes</title>
 
 <!-- jquery -->
@@ -37,10 +37,10 @@ the ICD codes — get_icd_dx_name • Comorbidity calculations and tools for ICD
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/jquery.mark.min.js" integrity="sha256-4HLtjeVgH0eIB3aZ9mLYF6E8oU5chNdjU6p6rrXpl9U=" crossorigin="anonymous"></script>
 
 
-<meta property="og:title" content="get the name of a <code>data.frame</code> column which is most likely to contain
+<meta property="og:title" content="Get the name of a <code>data.frame</code> column which is most likely to contain
 the ICD codes — get_icd_dx_name" />
 
-<meta property="og:description" content="guess which field contains the (only) ICD code, in order of preference, the
+<meta property="og:description" content="Guess which field contains the (only) ICD code, in order of preference, the
 column name has an icd code class, case-insensitive regular expressions of
 commonly used names for ICD code fields, a single column has more than 10
 valid ICD codes. If the result is not specified by class, or exactly with
@@ -76,7 +76,7 @@ codes in there" />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Comorbidity calculations and tools for ICD-9 and ICD-10 codes</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">4.0.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">4.0.2</span>
       </span>
     </div>
 
@@ -152,7 +152,7 @@ codes in there" />
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-    <h1>get the name of a <code>data.frame</code> column which is most likely to contain
+    <h1>Get the name of a <code>data.frame</code> column which is most likely to contain
 the ICD codes</h1>
     
     <div class="hidden name"><code>get_icd_dx_name.Rd</code></div>
@@ -160,7 +160,7 @@ the ICD codes</h1>
 
     <div class="ref-description">
     
-    <p>guess which field contains the (only) ICD code, in order of preference, the
+    <p>Guess which field contains the (only) ICD code, in order of preference, the
 column name has an icd code class, case-insensitive regular expressions of
 commonly used names for ICD code fields, a single column has more than 10<!-- % -->
 valid ICD codes. If the result is not specified by class, or exactly with
@@ -184,7 +184,7 @@ codes in there</p>
     </tr>
     <tr>
       <th>icd_name</th>
-      <td><p>usually <code>NULL</code> but if specified, will be checked it is
+      <td><p>Usually <code>NULL</code> but if specified, will be checked it is
 valid (i.e. a character vector of length one, which is indeed a name of one
 of <code>x</code>'s columns) and returned unchanged</p></td>
     </tr>

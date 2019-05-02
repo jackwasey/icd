@@ -71,7 +71,7 @@ that, see is_defined." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Comorbidity calculations and tools for ICD-9 and ICD-10 codes</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">4.0.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">4.0.4</span>
       </span>
     </div>
 
@@ -100,6 +100,9 @@ that, see is_defined." />
       <a href="../articles/ICD-10.html">ICD-10 comorbidities</a>
     </li>
     <li>
+      <a href="../articles/PCCC.html">Pediatric Complex Chronic Conditions</a>
+    </li>
+    <li>
       <a href="../articles/charlson-scores.html">Charlson and Van Walraven scores</a>
     </li>
     <li>
@@ -115,7 +118,7 @@ that, see is_defined." />
       <a href="../articles/efficiency.pdf">icd: Efficient Computation of Comorbidities from ICD Codes Using Sparse Matrix Multiplication in R (PDF)</a>
     </li>
     <li>
-      <a href="../articles/introduction.html">Quick Introduction to icd</a>
+      <a href="../articles/introduction.html">An Introduction to icd</a>
     </li>
     <li>
       <a href="../articles/ranges.html">Ranges of ICD codes</a>
@@ -163,6 +166,11 @@ that, see <code><a href='is_defined.html'>is_defined</a></code>.</p>
     <pre class="usage"><span class='fu'>is_valid</span>(<span class='no'>x</span>, <span class='no'>...</span>)
 
 <span class='co'># S3 method for icd10</span>
+<span class='fu'>is_valid</span>(<span class='no'>x</span>, <span class='kw'>short_code</span> <span class='kw'>=</span> <span class='fu'><a href='guess_short.html'>guess_short</a></span>(<span class='no'>x</span>),
+  <span class='kw'>whitespace_ok</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>re_short</span> <span class='kw'>=</span> <span class='no'>re_icd10_short</span>,
+  <span class='kw'>re_decimal</span> <span class='kw'>=</span> <span class='no'>re_icd10_decimal</span>, <span class='no'>...</span>)
+
+<span class='co'># S3 method for icd10fr</span>
 <span class='fu'>is_valid</span>(<span class='no'>x</span>, <span class='kw'>short_code</span> <span class='kw'>=</span> <span class='fu'><a href='guess_short.html'>guess_short</a></span>(<span class='no'>x</span>),
   <span class='kw'>whitespace_ok</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='no'>...</span>)
 
@@ -215,6 +223,7 @@ zeroes), and includes V or E prefix.</p></td>
 
     <ul>
 <li><p><code>icd10</code>: Test whether generic ICD-10 code is valid</p></li>
+<li><p><code>icd10fr</code>: Test whether generic ICD-10-FR code is valid</p></li>
 <li><p><code>icd9</code>: Test whether generic ICD-10 code is valid</p></li>
 <li><p><code>comorbidity_map</code>: Validate a mapping of ICD codes to comorbidities.</p></li>
 </ul>
@@ -291,7 +300,7 @@ zeroes), and includes V or E prefix.</p></td>
 
       <footer>
       <div class="copyright">
-  <p>Developed by Jack O. Wasey.</p>
+  <p>Developed by Jack O. Wasey, R Core Team.</p>
 </div>
 
 <div class="pkgdown">

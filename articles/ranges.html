@@ -32,7 +32,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Comorbidity calculations and tools for ICD-9 and ICD-10 codes</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">4.0.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">4.0.4</span>
       </span>
     </div>
 
@@ -61,6 +61,9 @@
       <a href="../articles/ICD-10.html">ICD-10 comorbidities</a>
     </li>
     <li>
+      <a href="../articles/PCCC.html">Pediatric Complex Chronic Conditions</a>
+    </li>
+    <li>
       <a href="../articles/charlson-scores.html">Charlson and Van Walraven scores</a>
     </li>
     <li>
@@ -76,7 +79,7 @@
       <a href="../articles/efficiency.pdf">icd: Efficient Computation of Comorbidities from ICD Codes Using Sparse Matrix Multiplication in R (PDF)</a>
     </li>
     <li>
-      <a href="../articles/introduction.html">Quick Introduction to icd</a>
+      <a href="../articles/introduction.html">An Introduction to icd</a>
     </li>
     <li>
       <a href="../articles/ranges.html">Ranges of ICD codes</a>
@@ -108,7 +111,7 @@
       <h1>Ranges of ICD codes</h1>
                         <h4 class="author">Jack O. Wasey</h4>
             
-            <h4 class="date">2019-03-22</h4>
+            <h4 class="date">2019-05-02</h4>
       
       
       <div class="hidden name"><code>ranges.Rmd</code></div>
@@ -141,80 +144,80 @@ along with icd. If not, see <http:#www.gnu.org/licenses/>.
 <p>These internal functions generate ranges of valid ICD-9 codes, without including parent codes when the range limit would subset the parent. These were primarily designed to accurately reflect definitions for comorbidity maps. For example, the published article defining Quan’s version of the Elixhauser comorbidities includes the following expression as part of the definition of the arrythmia comorbidity: <em>746.3 – 746.6</em>.</p>
 <p>The functions can be used by running <code><a href="https://www.rdocumentation.org/packages/devtools/topics/load_all">devtools::load_all()</a></code> from the icd source tree available from <a href="https://github.com/jackwasey/icd">github</a>, or by using the</p>
 <p>Using icd, we can use this shortcut to expand decimal ICD-9 codes to all possible child codes:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="st">"746.3"</span> <span class="op">%i9da%</span><span class="st"> "746.6"</span></a>
-<a class="sourceLine" id="cb1-2" data-line-number="2"><span class="co"># equivalent to:</span></a>
-<a class="sourceLine" id="cb1-3" data-line-number="3"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/identical">identical</a></span>(<span class="st">"746.3"</span> <span class="op">%i9da%</span><span class="st"> "746.6"</span>,</a>
-<a class="sourceLine" id="cb1-4" data-line-number="4">  icd<span class="op">:::</span><span class="kw"><a href="../reference/expand_range.html">expand_range</a></span>(<span class="st">"746.3"</span>, <span class="st">"746.6"</span>, <span class="dt">defined =</span> <span class="ot">FALSE</span>))</a></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1"><span class="st">"746.3"</span> <span class="op">%i9da%</span><span class="st"> "746.6"</span></a>
+<a class="sourceLine" id="cb1-2" title="2"><span class="co"># equivalent to:</span></a>
+<a class="sourceLine" id="cb1-3" title="3"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/identical">identical</a></span>(<span class="st">"746.3"</span> <span class="op">%i9da%</span><span class="st"> "746.6"</span>,</a>
+<a class="sourceLine" id="cb1-4" title="4">  icd<span class="op">:::</span><span class="kw"><a href="../reference/expand_range.html">expand_range</a></span>(<span class="st">"746.3"</span>, <span class="st">"746.6"</span>, <span class="dt">defined =</span> <span class="ot">FALSE</span>))</a></code></pre></div>
 <p>This includes all possible codes, not just the ones that have been explicitly defined: this is important in correctly assigning new or slightly incorrect ICD codes in the right comorbidity). In contrast, the same expression using just defined codes gives:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="st">"746.3"</span> <span class="op">%i9d%</span><span class="st"> "746.6"</span></a></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" title="1"><span class="st">"746.3"</span> <span class="op">%i9d%</span><span class="st"> "746.6"</span></a></code></pre></div>
 <p>If a country adds more detail, e.g., a new code <code>746.60</code>, we want to capture this as an arrythmia comorbidity, even though the USA or WHO schemes do not include it. For this reason, icd expands out all the possible codes for each ICD-9 comorbidity in the included maps. (ICD-10 codes cannot be expanded this way in the maps due to the very large number of permutations, but the equivalent is done during the computation of comorbidities.)</p>
 <div id="ranges-spanning-higher-level-codes" class="section level2">
 <h2 class="hasAnchor">
 <a href="#ranges-spanning-higher-level-codes" class="anchor"></a>Ranges spanning higher-level codes</h2>
 <p>Another problem is whether to include broader parent codes when a range does not include all the children: e.g., <code>"100.99" %i9da% "101.01"</code> does not include <code>100</code> or <code>100.0</code>, both of which imply larger subsets than requested by the range command (i.e., every code from <code>100.00</code> to <code>100.99</code>). The shorter forms <code>%i9s%</code> and <code>%i9d%</code> return only <em>real</em> codes (i.e., listed in the CMS definitions as either three-digit codes or diagnoses), whereas <code>%i9sa%</code> and <code>%i9da%</code> return all possible syntactically valid ICD-9 codes:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="co"># get all possible codes</span></a>
-<a class="sourceLine" id="cb3-2" data-line-number="2"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/head">head</a></span>(<span class="st">"003"</span> <span class="op">%i9sa%</span><span class="st"> "0033"</span>, <span class="dt">n =</span> <span class="dv">9</span>) <span class="co"># show first 9 of 111 values</span></a>
-<a class="sourceLine" id="cb3-3" data-line-number="3"><span class="co"># just get the ones which correspond to diagnoses (keeping the 3-digit chapters)</span></a>
-<a class="sourceLine" id="cb3-4" data-line-number="4"><span class="st">"494"</span> <span class="op">%i9s%</span><span class="st"> "4941"</span></a>
-<a class="sourceLine" id="cb3-5" data-line-number="5"></a>
-<a class="sourceLine" id="cb3-6" data-line-number="6"><span class="st">"10099"</span> <span class="op">%i9sa%</span><span class="st"> "10101"</span></a>
-<a class="sourceLine" id="cb3-7" data-line-number="7"><span class="st">"V10"</span> <span class="op">%i9da%</span><span class="st"> "V10.02"</span></a>
-<a class="sourceLine" id="cb3-8" data-line-number="8"><span class="st">"E987"</span> <span class="op">%i9da%</span><span class="st"> "E988.1"</span></a>
-<a class="sourceLine" id="cb3-9" data-line-number="9"></a>
-<a class="sourceLine" id="cb3-10" data-line-number="10"><span class="co"># can't range between different types:</span></a>
-<a class="sourceLine" id="cb3-11" data-line-number="11"><span class="st">"V10"</span> <span class="op">%i9s%</span><span class="st"> "E800"</span> <span class="co"># should throw an error</span></a></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" title="1"><span class="co"># get all possible codes</span></a>
+<a class="sourceLine" id="cb3-2" title="2"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/head">head</a></span>(<span class="st">"003"</span> <span class="op">%i9sa%</span><span class="st"> "0033"</span>, <span class="dt">n =</span> <span class="dv">9</span>) <span class="co"># show first 9 of 111 values</span></a>
+<a class="sourceLine" id="cb3-3" title="3"><span class="co"># just get the ones which correspond to diagnoses (keeping the 3-digit chapters)</span></a>
+<a class="sourceLine" id="cb3-4" title="4"><span class="st">"494"</span> <span class="op">%i9s%</span><span class="st"> "4941"</span></a>
+<a class="sourceLine" id="cb3-5" title="5"></a>
+<a class="sourceLine" id="cb3-6" title="6"><span class="st">"10099"</span> <span class="op">%i9sa%</span><span class="st"> "10101"</span></a>
+<a class="sourceLine" id="cb3-7" title="7"><span class="st">"V10"</span> <span class="op">%i9da%</span><span class="st"> "V10.02"</span></a>
+<a class="sourceLine" id="cb3-8" title="8"><span class="st">"E987"</span> <span class="op">%i9da%</span><span class="st"> "E988.1"</span></a>
+<a class="sourceLine" id="cb3-9" title="9"></a>
+<a class="sourceLine" id="cb3-10" title="10"><span class="co"># can't range between different types:</span></a>
+<a class="sourceLine" id="cb3-11" title="11"><span class="st">"V10"</span> <span class="op">%i9s%</span><span class="st"> "E800"</span> <span class="co"># should throw an error</span></a></code></pre></div>
 <p>This is used internally to interpret ranges of ICD-9 codes specified in the literature. Sometimes it is not clear exactly what an ICD-9 range presented in a paper means, but at least we can explicitly decide what should be included in our interpretation, and the ranges can be reused even when the underlying codes may be different, as codes are added and removed from time-to-time, and although the original papers would have been based on their ICD-9 ranges resolving to a specific set of codes, they are likely to be valid for new diagnoses in the given subgroups. Ultimately, this needs detailed attention, but the strategy in  is to give a good best guess, given these limitations.</p>
 </div>
 <div id="alternative-way-to-expand-ranges" class="section level2">
 <h2 class="hasAnchor">
 <a href="#alternative-way-to-expand-ranges" class="anchor"></a>Alternative way to expand ranges</h2>
 <p>Another way of specifying ranges are to use function calls. These are exactly equivalent to the <code>%i9s%</code> and <code>%i9d%</code> range operators. This example shows the result when the user specifies a range which would include parents but not all their children:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1">icd<span class="op">:::</span><span class="kw"><a href="../reference/expand_range.html">expand_range</a></span>(<span class="st">"4820"</span>, <span class="st">"4823"</span>) <span class="co"># default, equivalent to %i9s%</span></a>
-<a class="sourceLine" id="cb4-2" data-line-number="2"><span class="co">#&gt; [1] "4820"  "4821"  "4822"  "4823"  "48230" "48231" "48232" "48239"</span></a>
-<a class="sourceLine" id="cb4-3" data-line-number="3">icd<span class="op">:::</span><span class="kw"><a href="../reference/expand_range.html">expand_range</a></span>(<span class="st">"4820"</span>, <span class="st">"4823"</span>, <span class="dt">defined =</span> <span class="ot">FALSE</span>)</a>
-<a class="sourceLine" id="cb4-4" data-line-number="4"><span class="co">#&gt;  [1] "4820"  "48200" "48201" "48202" "48203" "48204" "48205" "48206"</span></a>
-<a class="sourceLine" id="cb4-5" data-line-number="5"><span class="co">#&gt;  [9] "48207" "48208" "48209" "4821"  "48210" "48211" "48212" "48213"</span></a>
-<a class="sourceLine" id="cb4-6" data-line-number="6"><span class="co">#&gt; [17] "48214" "48215" "48216" "48217" "48218" "48219" "4822"  "48220"</span></a>
-<a class="sourceLine" id="cb4-7" data-line-number="7"><span class="co">#&gt; [25] "48221" "48222" "48223" "48224" "48225" "48226" "48227" "48228"</span></a>
-<a class="sourceLine" id="cb4-8" data-line-number="8"><span class="co">#&gt; [33] "48229" "4823"  "48230" "48231" "48232" "48233" "48234" "48235"</span></a>
-<a class="sourceLine" id="cb4-9" data-line-number="9"><span class="co">#&gt; [41] "48236" "48237" "48238" "48239"</span></a>
-<a class="sourceLine" id="cb4-10" data-line-number="10"><span class="co"># see the first few differences (which are by definition not 'real' codes):</span></a>
-<a class="sourceLine" id="cb4-11" data-line-number="11"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/head">head</a></span>(</a>
-<a class="sourceLine" id="cb4-12" data-line-number="12">  <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/sets">setdiff</a></span>(icd<span class="op">:::</span><span class="kw"><a href="../reference/expand_range.html">expand_range</a></span>(<span class="st">"4820"</span>, <span class="st">"4823"</span>, <span class="dt">defined =</span> <span class="ot">FALSE</span>),</a>
-<a class="sourceLine" id="cb4-13" data-line-number="13">          icd<span class="op">:::</span><span class="kw"><a href="../reference/expand_range.html">expand_range</a></span>(<span class="st">"4820"</span>, <span class="st">"4823"</span>)))</a>
-<a class="sourceLine" id="cb4-14" data-line-number="14"><span class="co">#&gt; [1] "48200" "48201" "48202" "48203" "48204" "48205"</span></a></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" title="1">icd<span class="op">:::</span><span class="kw"><a href="../reference/expand_range.html">expand_range</a></span>(<span class="st">"4820"</span>, <span class="st">"4823"</span>) <span class="co"># default, equivalent to %i9s%</span></a>
+<a class="sourceLine" id="cb4-2" title="2"><span class="co">#&gt; [1] "4820"  "4821"  "4822"  "4823"  "48230" "48231" "48232" "48239"</span></a>
+<a class="sourceLine" id="cb4-3" title="3">icd<span class="op">:::</span><span class="kw"><a href="../reference/expand_range.html">expand_range</a></span>(<span class="st">"4820"</span>, <span class="st">"4823"</span>, <span class="dt">defined =</span> <span class="ot">FALSE</span>)</a>
+<a class="sourceLine" id="cb4-4" title="4"><span class="co">#&gt;  [1] "4820"  "48200" "48201" "48202" "48203" "48204" "48205" "48206"</span></a>
+<a class="sourceLine" id="cb4-5" title="5"><span class="co">#&gt;  [9] "48207" "48208" "48209" "4821"  "48210" "48211" "48212" "48213"</span></a>
+<a class="sourceLine" id="cb4-6" title="6"><span class="co">#&gt; [17] "48214" "48215" "48216" "48217" "48218" "48219" "4822"  "48220"</span></a>
+<a class="sourceLine" id="cb4-7" title="7"><span class="co">#&gt; [25] "48221" "48222" "48223" "48224" "48225" "48226" "48227" "48228"</span></a>
+<a class="sourceLine" id="cb4-8" title="8"><span class="co">#&gt; [33] "48229" "4823"  "48230" "48231" "48232" "48233" "48234" "48235"</span></a>
+<a class="sourceLine" id="cb4-9" title="9"><span class="co">#&gt; [41] "48236" "48237" "48238" "48239"</span></a>
+<a class="sourceLine" id="cb4-10" title="10"><span class="co"># see the first few differences (which are by definition not 'real' codes):</span></a>
+<a class="sourceLine" id="cb4-11" title="11"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/head">head</a></span>(</a>
+<a class="sourceLine" id="cb4-12" title="12">  <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/sets">setdiff</a></span>(icd<span class="op">:::</span><span class="kw"><a href="../reference/expand_range.html">expand_range</a></span>(<span class="st">"4820"</span>, <span class="st">"4823"</span>, <span class="dt">defined =</span> <span class="ot">FALSE</span>),</a>
+<a class="sourceLine" id="cb4-13" title="13">          icd<span class="op">:::</span><span class="kw"><a href="../reference/expand_range.html">expand_range</a></span>(<span class="st">"4820"</span>, <span class="st">"4823"</span>)))</a>
+<a class="sourceLine" id="cb4-14" title="14"><span class="co">#&gt; [1] "48200" "48201" "48202" "48203" "48204" "48205"</span></a></code></pre></div>
 </div>
 <div id="finding-codes-in-hierarchy" class="section level2">
 <h2 class="hasAnchor">
 <a href="#finding-codes-in-hierarchy" class="anchor"></a>Finding codes in hierarchy</h2>
 <p>It is easy to find the children of a higher-level ICD-9 code:</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1"><span class="kw"><a href="../reference/children.html">children</a></span>(<span class="st">"391"</span>)</a>
-<a class="sourceLine" id="cb5-2" data-line-number="2"><span class="co">#&gt; [1] "391"  "3910" "3911" "3912" "3918" "3919"</span></a>
-<a class="sourceLine" id="cb5-3" data-line-number="3"><span class="co"># mid-level code</span></a>
-<a class="sourceLine" id="cb5-4" data-line-number="4"><span class="kw"><a href="../reference/children.html">children</a></span>(<span class="st">"0032"</span>)</a>
-<a class="sourceLine" id="cb5-5" data-line-number="5"><span class="co">#&gt; [1] "0032"  "00320" "00321" "00322" "00323" "00324" "00329"</span></a>
-<a class="sourceLine" id="cb5-6" data-line-number="6"><span class="co"># leaf node has no children, so returns itself</span></a>
-<a class="sourceLine" id="cb5-7" data-line-number="7"><span class="kw"><a href="../reference/children.html">children</a></span>(<span class="st">"00320"</span>)</a>
-<a class="sourceLine" id="cb5-8" data-line-number="8"><span class="co">#&gt; [1] "00320"</span></a>
-<a class="sourceLine" id="cb5-9" data-line-number="9"></a>
-<a class="sourceLine" id="cb5-10" data-line-number="10"><span class="co"># pneumococcal pneumonia is a three-digit ICD-9 code with no descendants</span></a>
-<a class="sourceLine" id="cb5-11" data-line-number="11"><span class="kw"><a href="../reference/children.html">children</a></span>(<span class="st">"481"</span>)</a>
-<a class="sourceLine" id="cb5-12" data-line-number="12"><span class="co">#&gt; [1] "481"</span></a></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" title="1"><span class="kw"><a href="../reference/children.html">children</a></span>(<span class="st">"391"</span>)</a>
+<a class="sourceLine" id="cb5-2" title="2"><span class="co">#&gt; [1] "391"  "3910" "3911" "3912" "3918" "3919"</span></a>
+<a class="sourceLine" id="cb5-3" title="3"><span class="co"># mid-level code</span></a>
+<a class="sourceLine" id="cb5-4" title="4"><span class="kw"><a href="../reference/children.html">children</a></span>(<span class="st">"0032"</span>)</a>
+<a class="sourceLine" id="cb5-5" title="5"><span class="co">#&gt; [1] "0032"  "00320" "00321" "00322" "00323" "00324" "00329"</span></a>
+<a class="sourceLine" id="cb5-6" title="6"><span class="co"># leaf node has no children, so returns itself</span></a>
+<a class="sourceLine" id="cb5-7" title="7"><span class="kw"><a href="../reference/children.html">children</a></span>(<span class="st">"00320"</span>)</a>
+<a class="sourceLine" id="cb5-8" title="8"><span class="co">#&gt; [1] "00320"</span></a>
+<a class="sourceLine" id="cb5-9" title="9"></a>
+<a class="sourceLine" id="cb5-10" title="10"><span class="co"># pneumococcal pneumonia is a three-digit ICD-9 code with no descendants</span></a>
+<a class="sourceLine" id="cb5-11" title="11"><span class="kw"><a href="../reference/children.html">children</a></span>(<span class="st">"481"</span>)</a>
+<a class="sourceLine" id="cb5-12" title="12"><span class="co">#&gt; [1] "481"</span></a></code></pre></div>
 <p>By adding <code>defined = TRUE</code>, all syntactically valid ICD-9 codes are returned, even if not defined by CMS as diagnoses. This is relevant because of minor coding errors, or coding in a different year to the master list. A planned feature is to allow testing of an ICD-9 code against the valid codes for the year it was entered, but at present only the 2014 master list is used. This means that some older valid codes may no longer be on the list. However, there have been very few changes to ICD-9-CM in the last five years with ICD-10-CM in the wings.</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1"><span class="co"># first ten possible ICD-9 child codes from 391</span></a>
-<a class="sourceLine" id="cb6-2" data-line-number="2"><span class="kw"><a href="../reference/children.html">children</a></span>(<span class="st">"391"</span>, <span class="dt">defined =</span> <span class="ot">FALSE</span>)[<span class="dv">1</span><span class="op">:</span><span class="dv">10</span>]</a>
-<a class="sourceLine" id="cb6-3" data-line-number="3"><span class="co">#&gt;  [1] "391"   "3910"  "39100" "39101" "39102" "39103" "39104" "39105"</span></a>
-<a class="sourceLine" id="cb6-4" data-line-number="4"><span class="co">#&gt;  [9] "39106" "39107"</span></a></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" title="1"><span class="co"># first ten possible ICD-9 child codes from 391</span></a>
+<a class="sourceLine" id="cb6-2" title="2"><span class="kw"><a href="../reference/children.html">children</a></span>(<span class="st">"391"</span>, <span class="dt">defined =</span> <span class="ot">FALSE</span>)[<span class="dv">1</span><span class="op">:</span><span class="dv">10</span>]</a>
+<a class="sourceLine" id="cb6-3" title="3"><span class="co">#&gt;  [1] "391"   "3910"  "39100" "39101" "39102" "39103" "39104" "39105"</span></a>
+<a class="sourceLine" id="cb6-4" title="4"><span class="co">#&gt;  [9] "39106" "39107"</span></a></code></pre></div>
 <p><code>condense</code> is the reverse operation to <code>children</code>. You need to specify whether you want to consider all possible children or just defined codes.</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1">icd<span class="op">::</span><span class="kw"><a href="https://jackwasey.github.io/icd//reference/condense.html">condense</a></span>(<span class="kw"><a href="../reference/children.html">children</a></span>(<span class="st">"0032"</span>), <span class="dt">defined =</span> <span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb7-2" data-line-number="2"><span class="co">#&gt; [1] "0032"</span></a>
-<a class="sourceLine" id="cb7-3" data-line-number="3"></a>
-<a class="sourceLine" id="cb7-4" data-line-number="4">codes &lt;-<span class="st"> </span><span class="kw"><a href="../reference/children.html">children</a></span>(<span class="st">"0032"</span>, <span class="dt">defined =</span> <span class="ot">FALSE</span>)</a>
-<a class="sourceLine" id="cb7-5" data-line-number="5">codes</a>
-<a class="sourceLine" id="cb7-6" data-line-number="6"><span class="co">#&gt;  [1] "0032"  "00320" "00321" "00322" "00323" "00324" "00325" "00326"</span></a>
-<a class="sourceLine" id="cb7-7" data-line-number="7"><span class="co">#&gt;  [9] "00327" "00328" "00329"</span></a>
-<a class="sourceLine" id="cb7-8" data-line-number="8">icd<span class="op">::</span><span class="kw"><a href="https://jackwasey.github.io/icd//reference/condense.html">condense</a></span>(codes, <span class="dt">defined =</span> <span class="ot">FALSE</span>)</a>
-<a class="sourceLine" id="cb7-9" data-line-number="9"><span class="co">#&gt; [1] "0032"</span></a></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" title="1">icd<span class="op">::</span><span class="kw"><a href="https://jackwasey.github.io/icd//reference/condense.html">condense</a></span>(<span class="kw"><a href="../reference/children.html">children</a></span>(<span class="st">"0032"</span>), <span class="dt">defined =</span> <span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb7-2" title="2"><span class="co">#&gt; [1] "0032"</span></a>
+<a class="sourceLine" id="cb7-3" title="3"></a>
+<a class="sourceLine" id="cb7-4" title="4">codes &lt;-<span class="st"> </span><span class="kw"><a href="../reference/children.html">children</a></span>(<span class="st">"0032"</span>, <span class="dt">defined =</span> <span class="ot">FALSE</span>)</a>
+<a class="sourceLine" id="cb7-5" title="5">codes</a>
+<a class="sourceLine" id="cb7-6" title="6"><span class="co">#&gt;  [1] "0032"  "00320" "00321" "00322" "00323" "00324" "00325" "00326"</span></a>
+<a class="sourceLine" id="cb7-7" title="7"><span class="co">#&gt;  [9] "00327" "00328" "00329"</span></a>
+<a class="sourceLine" id="cb7-8" title="8">icd<span class="op">::</span><span class="kw"><a href="https://jackwasey.github.io/icd//reference/condense.html">condense</a></span>(codes, <span class="dt">defined =</span> <span class="ot">FALSE</span>)</a>
+<a class="sourceLine" id="cb7-9" title="9"><span class="co">#&gt; [1] "0032"</span></a></code></pre></div>
 </div>
 </div>
   </div>
@@ -239,7 +242,7 @@ along with icd. If not, see <http:#www.gnu.org/licenses/>.
 
 
       <footer><div class="copyright">
-  <p>Developed by Jack O. Wasey.</p>
+  <p>Developed by Jack O. Wasey, R Core Team.</p>
 </div>
 
 <div class="pkgdown">

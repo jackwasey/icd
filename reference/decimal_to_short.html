@@ -39,7 +39,8 @@
 <meta property="og:title" content="Convert Decimal format ICD codes to short format — decimal_to_short" />
 
 <meta property="og:description" content="This usually just entails removing the decimal point, but also does some
-limited validation and tidying up." />
+limited validation and tidying up. Missing leading zeroes will be added for
+correctness of the shortened codes." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -70,7 +71,7 @@ limited validation and tidying up." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Comorbidity calculations and tools for ICD-9 and ICD-10 codes</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">4.0.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">4.0.4</span>
       </span>
     </div>
 
@@ -99,6 +100,9 @@ limited validation and tidying up." />
       <a href="../articles/ICD-10.html">ICD-10 comorbidities</a>
     </li>
     <li>
+      <a href="../articles/PCCC.html">Pediatric Complex Chronic Conditions</a>
+    </li>
+    <li>
       <a href="../articles/charlson-scores.html">Charlson and Van Walraven scores</a>
     </li>
     <li>
@@ -114,7 +118,7 @@ limited validation and tidying up." />
       <a href="../articles/efficiency.pdf">icd: Efficient Computation of Comorbidities from ICD Codes Using Sparse Matrix Multiplication in R (PDF)</a>
     </li>
     <li>
-      <a href="../articles/introduction.html">Quick Introduction to icd</a>
+      <a href="../articles/introduction.html">An Introduction to icd</a>
     </li>
     <li>
       <a href="../articles/ranges.html">Ranges of ICD codes</a>
@@ -154,7 +158,8 @@ limited validation and tidying up." />
     <div class="ref-description">
     
     <p>This usually just entails removing the decimal point, but also does some
-limited validation and tidying up.</p>
+limited validation and tidying up. Missing leading zeroes will be added for
+correctness of the shortened codes.</p>
     
     </div>
 
@@ -219,7 +224,7 @@ short format</p></li>
 
       <footer>
       <div class="copyright">
-  <p>Developed by Jack O. Wasey.</p>
+  <p>Developed by Jack O. Wasey, R Core Team.</p>
 </div>
 
 <div class="pkgdown">

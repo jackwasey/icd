@@ -41,16 +41,16 @@
     Codes — icd-package" />
 
 <meta property="og:description" content="Calculate comorbidities, medical risk scores, and
-    work quickly and precisely with ICD-9 and ICD-10 codes. This package
-    enables a work flow from raw tables of ICD codes in hospital databases
-    to comorbidities. ICD-9 and ICD-10 comorbidity mappings from Quan
-    (Deyo and Elixhauser versions), Elixhauser and AHRQ included.  Common
-    ambiguities and code formats are handled. Comorbidity computation
-    includes Hierarchical Condition Codes, and a reimplementation of the
-    AHRQ Clinical Classifications Software. Risk scores include those of
-    Charlson and van Walraven.  US Clinical Modification, Word Health
-    Organization, Belgian and French ICD-10 codes are supported through
-    the 'icd.data' package, some of which are downloaded on demand." />
+    work very quickly and precisely with ICD-9 and ICD-10 codes. This
+    package enables a work flow from raw tables of ICD codes in hospital
+    databases to comorbidities. ICD-9 and ICD-10 comorbidity mappings from
+    Quan (Deyo and Elixhauser versions), Elixhauser and AHRQ included.
+    Common ambiguities and code formats are handled. Comorbidity
+    computation includes Hierarchical Condition Codes, and an
+    implementation of AHRQ Clinical Classifications. Risk
+    scores include those of Charlson and van Walraven.  US Clinical
+    Modification, Word Health Organization, Belgian and French ICD-10
+    codes are supported, most of which are downloaded on demand." />
 <meta name="twitter:card" content="summary" />
 
 
@@ -81,7 +81,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Comorbidity calculations and tools for ICD-9 and ICD-10 codes</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">4.0.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">4.0.4</span>
       </span>
     </div>
 
@@ -110,6 +110,9 @@
       <a href="../articles/ICD-10.html">ICD-10 comorbidities</a>
     </li>
     <li>
+      <a href="../articles/PCCC.html">Pediatric Complex Chronic Conditions</a>
+    </li>
+    <li>
       <a href="../articles/charlson-scores.html">Charlson and Van Walraven scores</a>
     </li>
     <li>
@@ -125,7 +128,7 @@
       <a href="../articles/efficiency.pdf">icd: Efficient Computation of Comorbidities from ICD Codes Using Sparse Matrix Multiplication in R (PDF)</a>
     </li>
     <li>
-      <a href="../articles/introduction.html">Quick Introduction to icd</a>
+      <a href="../articles/introduction.html">An Introduction to icd</a>
     </li>
     <li>
       <a href="../articles/ranges.html">Ranges of ICD codes</a>
@@ -166,16 +169,16 @@
     <div class="ref-description">
     
     <p>Calculate comorbidities, medical risk scores, and
-    work quickly and precisely with ICD-9 and ICD-10 codes. This package
-    enables a work flow from raw tables of ICD codes in hospital databases
-    to comorbidities. ICD-9 and ICD-10 comorbidity mappings from Quan
-    (Deyo and Elixhauser versions), Elixhauser and AHRQ included.  Common
-    ambiguities and code formats are handled. Comorbidity computation
-    includes Hierarchical Condition Codes, and a reimplementation of the
-    AHRQ Clinical Classifications Software. Risk scores include those of
-    Charlson and van Walraven.  US Clinical Modification, Word Health
-    Organization, Belgian and French ICD-10 codes are supported through
-    the 'icd.data' package, some of which are downloaded on demand.</p>
+    work very quickly and precisely with ICD-9 and ICD-10 codes. This
+    package enables a work flow from raw tables of ICD codes in hospital
+    databases to comorbidities. ICD-9 and ICD-10 comorbidity mappings from
+    Quan (Deyo and Elixhauser versions), Elixhauser and AHRQ included.
+    Common ambiguities and code formats are handled. Comorbidity
+    computation includes Hierarchical Condition Codes, and an
+    implementation of AHRQ Clinical Classifications. Risk
+    scores include those of Charlson and van Walraven.  US Clinical
+    Modification, Word Health Organization, Belgian and French ICD-10
+    codes are supported, most of which are downloaded on demand.</p>
     
     </div>
 
@@ -185,8 +188,9 @@
     <dl class='dl-horizontal'>
 <dt>Comorbidities</dt><dd><p><code><a href='comorbid.html'>comorbid</a></code> determines
   comorbidities for a set of patients with one or more ICD codes each. All
-  the comorbidity functions attempt to guess which are your identifier and
-  ICD code fields, and these can also be specified exactly.
+  the comorbidity functions guess which columns are the identifiers and which
+  are ICD code fields. You may also specify these. Most 'long' or 'wide' data
+  can simply be passed directly, e.g.: <code><a href='comorbid.html'>comorbid(patient_data_frame)</a></code>.
     <ul>
 <li><p>The AHRQ comorbidity mappings from ICD-9 and ICD-10 are provided as
   <code><a href='icd9_map_ahrq.html'>icd9_map_ahrq</a></code> and <code><a href='icd9_map_ahrq.html'>icd10_map_ahrq</a></code>. The easiest
@@ -207,10 +211,10 @@
   <code><a href='icd9_map_elix.html'>icd9_map_elix</a></code> and <code><a href='icd9_map_elix.html'>icd10_map_elix</a></code>, and
   Elixhauser comorbidities can be calculated directly from patient data using
   <code><a href='comorbid.html'>comorbid_elix</a></code>.</p></li>
-<li><p>AHRQ publishes Hierarchical Condition Codes (HCC) which are
-  essentially comorbidity maps with very many comorbidities, complicated by a
-  single- or multi-level system. These categories can be computed using
-  <code><a href='comorbid_hcc.html'>comorbid_hcc</a></code>.</p></li>
+<li><p>The US Center for Medicare and Medicare services (CMS) publishes
+  Hierarchical Condition Codes (HCC) which are essentially comorbidity maps
+  with very many comorbidities, complicated by a single- or multi-level
+  system. These categories can be computed using <code><a href='comorbid_hcc.html'>comorbid_hcc</a></code>.</p></li>
 <li><p>AHRQ also publishes Clinical Classification Software (CCS) which
   provides another set of disease groups, and this SAS code is implemented in
   'icd' by <code><a href='comorbid.html'>comorbid_ccs</a></code></p></li>
@@ -222,37 +226,52 @@
   calculates Van Walraven scores (based on the Elixhauser comorbidities,
   instead of Charlson), and <code><a href='van_walraven.html'>van_walraven_from_comorbid</a></code> if you
   already calculated Elixhauser comorbidities</p></dd>
-    <dt>Validation</dt><dd><p><code><a href='is_valid.html'>is_valid</a></code> checks whether ICD-9 codes are syntactically valid
-  (although not necessarily genuine ICD-9 diagnoses). In contrast,
-  <code><a href='is_defined.html'>is_defined</a></code> checks whether ICD-9 codes correspond to diagnoses
-  in the current ICD-9-CM definition from CMS.</p></dd>
+    <dt>Validation</dt><dd><p><code><a href='is_valid.html'>is_valid</a></code> checks whether ICD codes are syntactically valid
+  (although not necessarily genuine ICD diagnoses). In contrast,
+  <code><a href='is_defined.html'>is_defined</a></code> checks whether ICD-9 codes correspond to defined
+  diagnoses or diagnostic groups in the hierarchy of ICD codes.
+  <code><a href='is_leaf.html'>is_leaf</a></code> (and for the US, <code><a href='is_billable.html'>is_billable</a></code>) determine
+  whether given codes are leaves in the hierarchy, or not. <span class="pkg">icd</span> may need
+  to download data due to package size or copyright restrictions on
+  redistributing data, and needs a cache directory and your permission to do
+  this. Use <code><a href='set_icd_data_dir.html'>set_icd_data_dir</a></code> to do this, e.g.,
+  <code><a href='set_icd_data_dir.html'>set_icd_data_dir()</a></code> for a default location in a suitable place for
+  your OS, e.g. <code>~/.local/icd/icd-ver-num</code> on Linux. Use
+  <code><a href='download_all_icd_data.html'>download_all_icd_data</a></code> to download everything at once, which
+  will take a few minutes on a broadband connection.
+    Validation depends on the class of code, and is different if the code is
+  from France, Belgium, the USA, or the World Health Organization (WHO). Use
+  the functions <code><a href='set_icd_class.html'>as.icd10who</a></code>, <code><a href='set_icd_class.html'>as.icd10fr</a></code>,
+  <code><a href='set_icd_class.html'>as.icd10be</a></code>, and <code><a href='set_icd_class.html'>as.icd10cm</a></code> to set the class of
+  a set of ICD codes. This doesn't affect comorbidity calculations, but will
+  change the result of the above validation functions, and</p></dd>
     <dt>Conversion</dt><dd><p>There are many functions to convert ICD-9 codes or their components between
   different formats and structures. The most commonly used are:
   <code><a href='decimal_to_short.html'>decimal_to_short</a></code>, <code><a href='short_to_decimal.html'>short_to_decimal</a></code> to convert,
   e.g., 002.3 to 0023 and back again. See <a href='convert.html'>convert</a> for other options.
-  Conversion between ICD-9, ICD-10, and ICD-11 codes is not yet supported.</p></dd>
+  Conversion between ICD-9, ICD-10, and ICD-11 codes is not yet supported,
+  but is the subject of an upcoming US National Institutes of Health (NIH)
+  hackathon.</p></dd>
     <dt>Manipulation</dt><dd><p>You can find children of a higher-level ICD-9 code with
   <code><a href='children.html'>children</a></code> and find a common parent to a set of children (or
   arbitrary list of ICD-9 codes) with <code><a href='condense.html'>condense</a></code>.
   <code><a href='https://www.rdocumentation.org/packages/base/topics/sort'>sort</a></code> (<code><a href='sort_icd.html'>sort.icd9</a></code>, <code><a href='sort_icd.html'>sort.icd10cm</a></code>,
   etc.) sorts in hierarchical, then numerical order, so '100.0' comes before
   '100.00', for example.
-    <code><a href='wide_to_long.html'>wide_to_long</a></code> and <code><a href='long_to_wide.html'>long_to_wide</a></code> convert the two
-  most common data structures containing patient disease data. This is more
-  sophisticated and tailored to the problem than base reshaping or packages
-  like <a href='https://CRAN.R-project.org/package=dplyr'><span class="pkg">dplyr</span></a>, although these could no doubt be used.</p></dd>
-    <dt>Explanation and decoding</dt><dd><p>Use <code><a href='explain_code.html'>explain_code</a></code> to convert a list of codes into
-  human-readable descriptions. This (and a number of other functions in this
-  package) relies on the <code>icd.data</code> package, which is not installed by
-  default. This function can optionally reduce the codes to a their top-level
-  groups if all the child members of a group are present.
-  <code><a href='diff_comorbid.html'>diff_comorbid</a></code> allows summary of the differences between
-  comorbidity mappings, e.g. to find what has changed from year-to-year or
-  between revisions by different authors.
-  <code><a href='https://www.rdocumentation.org/packages/icd.data/topics/icd9cm_hierarchy'>icd9cm_hierarchy</a></code> is a <code>data.frame</code> containing
-  the full ICD-9 classification for each diagnosis.
-  <code><a href='https://www.rdocumentation.org/packages/icd.data/topics/icd9_chapters'>icd9_chapters</a></code> contains definitions of chapters,
-  sub-chapters and three-digit groups.</p></dd> </dl>
+    The comorbidity functions in <span class="pkg">icd</span> accept 'wide' or 'long' format data,
+  but you may wish to use <code><a href='wide_to_long.html'>wide_to_long</a></code> and
+  <code><a href='long_to_wide.html'>long_to_wide</a></code>, which convert between these two most common
+  data structures containing patient disease data. This is more sophisticated
+  and tailored to the problem than base reshaping or packages like
+  <a href='https://CRAN.R-project.org/package=dplyr'><span class="pkg">dplyr</span></a>, although these could no doubt be used.</p></dd> These functions
+  use base  functions to avoid dependencies, so are not very fast for very
+  big datasets.
+    <dt>Explanation and decoding</dt><dd><p>Use <code><a href='explain_code.html'>explain_code</a></code> to convert a set of ICD codes into
+  human-readable descriptions. See above for discussion on WHO, French,
+  Belgian and US ICD code classes. This function can can also reduce the
+  codes to their top-level groups if all the child members of a group are
+  present. <code><a href='diff_comorbid.html'>diff_comorbid</a></code> allows summary of the differences
+  between comorbidity mappings, e.g. between revisions by different authors.</p></dd> </dl>
     
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
@@ -279,7 +298,7 @@
 
       <footer>
       <div class="copyright">
-  <p>Developed by Jack O. Wasey.</p>
+  <p>Developed by Jack O. Wasey, R Core Team.</p>
 </div>
 
 <div class="pkgdown">

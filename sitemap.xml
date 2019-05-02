@@ -4,9 +4,6 @@
     <loc>https://jackwasey.github.io/icd//index.html</loc>
   </url>
   <url>
-    <loc>https://jackwasey.github.io/icd//reference/all_identical.html</loc>
-  </url>
-  <url>
     <loc>https://jackwasey.github.io/icd//reference/apply_hier.html</loc>
   </url>
   <url>
@@ -16,16 +13,10 @@
     <loc>https://jackwasey.github.io/icd//reference/as.decimal_diag.html</loc>
   </url>
   <url>
-    <loc>https://jackwasey.github.io/icd//reference/as_char_no_warn.html</loc>
-  </url>
-  <url>
     <loc>https://jackwasey.github.io/icd//reference/attr_decimal_diag.html</loc>
   </url>
   <url>
     <loc>https://jackwasey.github.io/icd//reference/attr_short_diag.html</loc>
-  </url>
-  <url>
-    <loc>https://jackwasey.github.io/icd//reference/categorize_simple.html</loc>
   </url>
   <url>
     <loc>https://jackwasey.github.io/icd//reference/chapters_to_map.html</loc>
@@ -46,16 +37,10 @@
     <loc>https://jackwasey.github.io/icd//reference/comorbid.html</loc>
   </url>
   <url>
-    <loc>https://jackwasey.github.io/icd//reference/comorbidMatMulWide.html</loc>
-  </url>
-  <url>
     <loc>https://jackwasey.github.io/icd//reference/comorbid_df_to_mat.html</loc>
   </url>
   <url>
     <loc>https://jackwasey.github.io/icd//reference/comorbid_hcc.html</loc>
-  </url>
-  <url>
-    <loc>https://jackwasey.github.io/icd//reference/comorbid_hcc_worker.html</loc>
   </url>
   <url>
     <loc>https://jackwasey.github.io/icd//reference/comorbid_mat_to_df.html</loc>
@@ -88,7 +73,7 @@
     <loc>https://jackwasey.github.io/icd//reference/diff_comorbid.html</loc>
   </url>
   <url>
-    <loc>https://jackwasey.github.io/icd//reference/expand_minor.html</loc>
+    <loc>https://jackwasey.github.io/icd//reference/download_all_icd_data.html</loc>
   </url>
   <url>
     <loc>https://jackwasey.github.io/icd//reference/expand_range.html</loc>
@@ -109,49 +94,85 @@
     <loc>https://jackwasey.github.io/icd//reference/explain_table_worker.html</loc>
   </url>
   <url>
-    <loc>https://jackwasey.github.io/icd//reference/factor_is_valid.html</loc>
-  </url>
-  <url>
-    <loc>https://jackwasey.github.io/icd//reference/factor_nosort.html</loc>
-  </url>
-  <url>
-    <loc>https://jackwasey.github.io/icd//reference/fastIntToStringRcpp.html</loc>
-  </url>
-  <url>
     <loc>https://jackwasey.github.io/icd//reference/filter_poa.html</loc>
   </url>
   <url>
     <loc>https://jackwasey.github.io/icd//reference/filter_valid.html</loc>
   </url>
   <url>
-    <loc>https://jackwasey.github.io/icd//reference/generate_maps_pccc.html</loc>
-  </url>
-  <url>
     <loc>https://jackwasey.github.io/icd//reference/generate_neds_pts.html</loc>
-  </url>
-  <url>
-    <loc>https://jackwasey.github.io/icd//reference/generate_random_short_icd10cm_bill.html</loc>
-  </url>
-  <url>
-    <loc>https://jackwasey.github.io/icd//reference/generate_random_short_icd9.html</loc>
-  </url>
-  <url>
-    <loc>https://jackwasey.github.io/icd//reference/generate_spelling.html</loc>
-  </url>
-  <url>
-    <loc>https://jackwasey.github.io/icd//reference/generate_sysdata.html</loc>
   </url>
   <url>
     <loc>https://jackwasey.github.io/icd//reference/get_billable.html</loc>
   </url>
   <url>
+    <loc>https://jackwasey.github.io/icd//reference/get_cim10fr2019.html</loc>
+  </url>
+  <url>
     <loc>https://jackwasey.github.io/icd//reference/get_defined.html</loc>
   </url>
   <url>
-    <loc>https://jackwasey.github.io/icd//reference/get_icd_dx_name.html</loc>
+    <loc>https://jackwasey.github.io/icd//reference/get_icd10be2014.html</loc>
   </url>
   <url>
-    <loc>https://jackwasey.github.io/icd//reference/get_icd_pc_name.html</loc>
+    <loc>https://jackwasey.github.io/icd//reference/get_icd10be2014_pc.html</loc>
+  </url>
+  <url>
+    <loc>https://jackwasey.github.io/icd//reference/get_icd10be2017.html</loc>
+  </url>
+  <url>
+    <loc>https://jackwasey.github.io/icd//reference/get_icd10be2017_pc.html</loc>
+  </url>
+  <url>
+    <loc>https://jackwasey.github.io/icd//reference/get_icd10cm2014.html</loc>
+  </url>
+  <url>
+    <loc>https://jackwasey.github.io/icd//reference/get_icd10cm2014_pc.html</loc>
+  </url>
+  <url>
+    <loc>https://jackwasey.github.io/icd//reference/get_icd10cm2015.html</loc>
+  </url>
+  <url>
+    <loc>https://jackwasey.github.io/icd//reference/get_icd10cm2015_pc.html</loc>
+  </url>
+  <url>
+    <loc>https://jackwasey.github.io/icd//reference/get_icd10cm2016_pc.html</loc>
+  </url>
+  <url>
+    <loc>https://jackwasey.github.io/icd//reference/get_icd10cm2017.html</loc>
+  </url>
+  <url>
+    <loc>https://jackwasey.github.io/icd//reference/get_icd10cm2017_pc.html</loc>
+  </url>
+  <url>
+    <loc>https://jackwasey.github.io/icd//reference/get_icd10cm2018.html</loc>
+  </url>
+  <url>
+    <loc>https://jackwasey.github.io/icd//reference/get_icd10cm2018_pc.html</loc>
+  </url>
+  <url>
+    <loc>https://jackwasey.github.io/icd//reference/get_icd10cm2019_pc.html</loc>
+  </url>
+  <url>
+    <loc>https://jackwasey.github.io/icd//reference/get_icd10cm_available.html</loc>
+  </url>
+  <url>
+    <loc>https://jackwasey.github.io/icd//reference/get_icd10cm_latest.html</loc>
+  </url>
+  <url>
+    <loc>https://jackwasey.github.io/icd//reference/get_icd10cm_version.html</loc>
+  </url>
+  <url>
+    <loc>https://jackwasey.github.io/icd//reference/get_icd10fr2019.html</loc>
+  </url>
+  <url>
+    <loc>https://jackwasey.github.io/icd//reference/get_icd10who2008fr.html</loc>
+  </url>
+  <url>
+    <loc>https://jackwasey.github.io/icd//reference/get_icd10who2016.html</loc>
+  </url>
+  <url>
+    <loc>https://jackwasey.github.io/icd//reference/get_icd9cm2014_leaf.html</loc>
   </url>
   <url>
     <loc>https://jackwasey.github.io/icd//reference/get_invalid.html</loc>
@@ -163,79 +184,34 @@
     <loc>https://jackwasey.github.io/icd//reference/get_valid.html</loc>
   </url>
   <url>
-    <loc>https://jackwasey.github.io/icd//reference/get_visit_name.html</loc>
-  </url>
-  <url>
-    <loc>https://jackwasey.github.io/icd//reference/guess_icd_col_by_name.html</loc>
-  </url>
-  <url>
-    <loc>https://jackwasey.github.io/icd//reference/guess_pair_version.html</loc>
-  </url>
-  <url>
     <loc>https://jackwasey.github.io/icd//reference/guess_short.html</loc>
   </url>
   <url>
     <loc>https://jackwasey.github.io/icd//reference/guess_version.html</loc>
   </url>
   <url>
-    <loc>https://jackwasey.github.io/icd//reference/guess_version_update.html</loc>
+    <loc>https://jackwasey.github.io/icd//reference/icd-package.html</loc>
   </url>
   <url>
-    <loc>https://jackwasey.github.io/icd//reference/icd-package.html</loc>
+    <loc>https://jackwasey.github.io/icd//reference/icd10_chapters.html</loc>
   </url>
   <url>
     <loc>https://jackwasey.github.io/icd//reference/icd10_comorbid_reduce.html</loc>
   </url>
   <url>
-    <loc>https://jackwasey.github.io/icd//reference/icd10_fetch_ahrq_ccs.html</loc>
-  </url>
-  <url>
-    <loc>https://jackwasey.github.io/icd//reference/icd10_generate_map_quan_deyo.html</loc>
-  </url>
-  <url>
-    <loc>https://jackwasey.github.io/icd//reference/icd10_generate_map_quan_elix.html</loc>
-  </url>
-  <url>
     <loc>https://jackwasey.github.io/icd//reference/icd10_map_ahrq_pcs.html</loc>
   </url>
   <url>
-    <loc>https://jackwasey.github.io/icd//reference/icd10_parse_ahrq_ccs.html</loc>
+    <loc>https://jackwasey.github.io/icd//reference/icd10_sub_chapters.html</loc>
   </url>
   <url>
-    <loc>https://jackwasey.github.io/icd//reference/icd10_parse_cc.html</loc>
-  </url>
-  <url>
-    <loc>https://jackwasey.github.io/icd//reference/icd10cm_order_rcpp.html</loc>
-  </url>
-  <url>
-    <loc>https://jackwasey.github.io/icd//reference/icd9AddLeadingZeroesMajorSingle.html</loc>
+    <loc>https://jackwasey.github.io/icd//reference/icd10cm2019.html</loc>
   </url>
   <url>
     <loc>https://jackwasey.github.io/icd//reference/icd9MajMinToCode.html</loc>
   </url>
   <url>
-    <loc>https://jackwasey.github.io/icd//reference/icd9_add_leading_zeroes_rcpp.html</loc>
-  </url>
-  <url>
-    <loc>https://jackwasey.github.io/icd//reference/icd9_drop_leading_zeroes.html</loc>
-  </url>
-  <url>
-    <loc>https://jackwasey.github.io/icd//reference/icd9_extract_alpha_numeric.html</loc>
-  </url>
-  <url>
-    <loc>https://jackwasey.github.io/icd//reference/icd9_fetch_ahrq_ccs.html</loc>
-  </url>
-  <url>
-    <loc>https://jackwasey.github.io/icd//reference/icd9_fetch_ahrq_sas.html</loc>
-  </url>
-  <url>
-    <loc>https://jackwasey.github.io/icd//reference/icd9_generate_map_elix.html</loc>
-  </url>
-  <url>
-    <loc>https://jackwasey.github.io/icd//reference/icd9_generate_map_quan_elix.html</loc>
-  </url>
-  <url>
-    <loc>https://jackwasey.github.io/icd//reference/icd9_is_n_rcpp.html</loc>
+    <loc>https://jackwasey.github.io/icd//reference/icd9_chapters.html</loc>
   </url>
   <url>
     <loc>https://jackwasey.github.io/icd//reference/icd9_map_ahrq.html</loc>
@@ -259,22 +235,16 @@
     <loc>https://jackwasey.github.io/icd//reference/icd9_map_single_ccs.html</loc>
   </url>
   <url>
-    <loc>https://jackwasey.github.io/icd//reference/icd9_parse_ahrq_ccs.html</loc>
+    <loc>https://jackwasey.github.io/icd//reference/icd9_sub_chapters.html</loc>
   </url>
   <url>
-    <loc>https://jackwasey.github.io/icd//reference/icd9_parse_ahrq_sas.html</loc>
+    <loc>https://jackwasey.github.io/icd//reference/icd9cm2014_leaf.html</loc>
   </url>
   <url>
-    <loc>https://jackwasey.github.io/icd//reference/icd9_parse_cc.html</loc>
+    <loc>https://jackwasey.github.io/icd//reference/icd9cm_billable.html</loc>
   </url>
   <url>
-    <loc>https://jackwasey.github.io/icd//reference/icd9_parse_quan_deyo_sas.html</loc>
-  </url>
-  <url>
-    <loc>https://jackwasey.github.io/icd//reference/icd_attr_clean.html</loc>
-  </url>
-  <url>
-    <loc>https://jackwasey.github.io/icd//reference/icd_parse_cc_hierarchy.html</loc>
+    <loc>https://jackwasey.github.io/icd//reference/icd9cm_hierarchy.html</loc>
   </url>
   <url>
     <loc>https://jackwasey.github.io/icd//reference/is.icd9.html</loc>
@@ -298,13 +268,7 @@
     <loc>https://jackwasey.github.io/icd//reference/is_valid_major.html</loc>
   </url>
   <url>
-    <loc>https://jackwasey.github.io/icd//reference/logical_to_binary.html</loc>
-  </url>
-  <url>
     <loc>https://jackwasey.github.io/icd//reference/long_to_wide.html</loc>
-  </url>
-  <url>
-    <loc>https://jackwasey.github.io/icd//reference/match_rcpp.html</loc>
   </url>
   <url>
     <loc>https://jackwasey.github.io/icd//reference/names_elix.html</loc>
@@ -322,37 +286,19 @@
     <loc>https://jackwasey.github.io/icd//reference/print.icd9.html</loc>
   </url>
   <url>
-    <loc>https://jackwasey.github.io/icd//reference/random_string.html</loc>
-  </url>
-  <url>
-    <loc>https://jackwasey.github.io/icd//reference/refactor.html</loc>
-  </url>
-  <url>
-    <loc>https://jackwasey.github.io/icd//reference/refactor_worker.html</loc>
-  </url>
-  <url>
-    <loc>https://jackwasey.github.io/icd//reference/sas_extract_let_strings.html</loc>
-  </url>
-  <url>
-    <loc>https://jackwasey.github.io/icd//reference/sas_format_extract.html</loc>
-  </url>
-  <url>
-    <loc>https://jackwasey.github.io/icd//reference/sas_parse_assignments.html</loc>
+    <loc>https://jackwasey.github.io/icd//reference/set_icd10cm_active_year.html</loc>
   </url>
   <url>
     <loc>https://jackwasey.github.io/icd//reference/set_icd_class.html</loc>
   </url>
   <url>
-    <loc>https://jackwasey.github.io/icd//reference/set_re_globals.html</loc>
+    <loc>https://jackwasey.github.io/icd//reference/set_icd_data_dir.html</loc>
   </url>
   <url>
     <loc>https://jackwasey.github.io/icd//reference/short_to_decimal.html</loc>
   </url>
   <url>
     <loc>https://jackwasey.github.io/icd//reference/shortcode_icd9.html</loc>
-  </url>
-  <url>
-    <loc>https://jackwasey.github.io/icd//reference/simplify_map_lex.html</loc>
   </url>
   <url>
     <loc>https://jackwasey.github.io/icd//reference/sort_icd.html</loc>
@@ -364,13 +310,13 @@
     <loc>https://jackwasey.github.io/icd//reference/subset.html</loc>
   </url>
   <url>
-    <loc>https://jackwasey.github.io/icd//reference/test_env.html</loc>
-  </url>
-  <url>
-    <loc>https://jackwasey.github.io/icd//reference/unzip_single.html</loc>
+    <loc>https://jackwasey.github.io/icd//reference/uranium_pathology.html</loc>
   </url>
   <url>
     <loc>https://jackwasey.github.io/icd//reference/van_walraven.html</loc>
+  </url>
+  <url>
+    <loc>https://jackwasey.github.io/icd//reference/vermont_dx.html</loc>
   </url>
   <url>
     <loc>https://jackwasey.github.io/icd//reference/wide_to_long.html</loc>
@@ -379,10 +325,16 @@
     <loc>https://jackwasey.github.io/icd//reference/wide_vs_long.html</loc>
   </url>
   <url>
+    <loc>https://jackwasey.github.io/icd//reference/with_icd10cm_version.html</loc>
+  </url>
+  <url>
     <loc>https://jackwasey.github.io/icd//articles/CMS-HCC.html</loc>
   </url>
   <url>
     <loc>https://jackwasey.github.io/icd//articles/ICD-10.html</loc>
+  </url>
+  <url>
+    <loc>https://jackwasey.github.io/icd//articles/PCCC.html</loc>
   </url>
   <url>
     <loc>https://jackwasey.github.io/icd//articles/charlson-scores.html</loc>

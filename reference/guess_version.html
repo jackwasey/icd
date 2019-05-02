@@ -72,7 +72,7 @@ just whether they are valid." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Comorbidity calculations and tools for ICD-9 and ICD-10 codes</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">4.0.1</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">4.0.4</span>
       </span>
     </div>
 
@@ -101,6 +101,9 @@ just whether they are valid." />
       <a href="../articles/ICD-10.html">ICD-10 comorbidities</a>
     </li>
     <li>
+      <a href="../articles/PCCC.html">Pediatric Complex Chronic Conditions</a>
+    </li>
+    <li>
       <a href="../articles/charlson-scores.html">Charlson and Van Walraven scores</a>
     </li>
     <li>
@@ -116,7 +119,7 @@ just whether they are valid." />
       <a href="../articles/efficiency.pdf">icd: Efficient Computation of Comorbidities from ICD Codes Using Sparse Matrix Multiplication in R (PDF)</a>
     </li>
     <li>
-      <a href="../articles/introduction.html">Quick Introduction to icd</a>
+      <a href="../articles/introduction.html">An Introduction to icd</a>
     </li>
     <li>
       <a href="../articles/ranges.html">Ranges of ICD codes</a>
@@ -162,17 +165,7 @@ just whether they are valid.</p>
     
     </div>
 
-    <pre class="usage"><span class='fu'>guess_version</span>(<span class='no'>x</span>, <span class='no'>short_code</span>, <span class='no'>...</span>)
-
-<span class='co'># S3 method for factor</span>
-<span class='fu'>guess_version</span>(<span class='no'>x</span>, <span class='kw'>short_code</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>...</span>)
-
-<span class='co'># S3 method for character</span>
-<span class='fu'>guess_version</span>(<span class='no'>x</span>, <span class='kw'>short_code</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>...</span>)
-
-<span class='co'># S3 method for data.frame</span>
-<span class='fu'>guess_version</span>(<span class='no'>x</span>, <span class='kw'>short_code</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>icd_name</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='no'>...</span>)</pre>
+    <pre class="usage"><span class='fu'>guess_version</span>(<span class='no'>x</span>, <span class='no'>short_code</span>, <span class='no'>...</span>)</pre>
     
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
@@ -188,15 +181,6 @@ code provided is in short (<code>TRUE</code>) or decimal (<code>FALSE</code>) fo
 Where reasonable, this is guessed from the input data.</p></td>
     </tr>
     <tr>
-      <th>icd_name</th>
-      <td><p>The name of the column in the <code>data.frame</code> which
-contains the ICD codes. This is a character vector of length one. If it is
-<code>NULL</code>, <code>icd9</code> will attempt to guess the column name, looking for
-progressively less likely possibilities until it matches a single column.
-Failing this, it will take the first column in the data frame. Specifying
-the column using this argument avoids the guesswork.</p></td>
-    </tr>
-    <tr>
       <th>n</th>
       <td><p>number of elements or rows to sample</p></td>
     </tr>
@@ -204,18 +188,9 @@ the column using this argument avoids the guesswork.</p></td>
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>Currently, ambiguous codes are guessed true or false, with no indication of
-uncertainty. Possible solutions are adding an attribute, warning, or
-optionally throwing an error.</p>
-    
-    <h2 class="hasAnchor" id="methods-by-class-"><a class="anchor" href="#methods-by-class-"></a>Methods (by class)</h2>
-
-    <ul>
-<li><p><code>factor</code>: Guess version of ICD codes in a factor</p></li>
-<li><p><code>character</code>: Guess version of ICD codes in character vector</p></li>
-<li><p><code>data.frame</code>: Guess version of ICD codes in a field in a
-<code>data.frame</code></p></li>
-</ul>
+    <p>Currently, ambiguous codes are guessed as being ICD-9 or ICD-10, with no
+indication of uncertainty. Possible solutions are adding an attribute,
+warning, or optionally throwing an error.</p>
     
 
   </div>
@@ -225,8 +200,6 @@ optionally throwing an error.</p>
       <li><a href="#arguments">Arguments</a></li>
       
       <li><a href="#details">Details</a></li>
-
-      <li><a href="#methods-by-class-">Methods (by class)</a></li>
           </ul>
 
   </div>
@@ -234,7 +207,7 @@ optionally throwing an error.</p>
 
       <footer>
       <div class="copyright">
-  <p>Developed by Jack O. Wasey.</p>
+  <p>Developed by Jack O. Wasey, R Core Team.</p>
 </div>
 
 <div class="pkgdown">
