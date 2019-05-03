@@ -62,7 +62,7 @@ before_install:
   - echo '^vignettes\/.*-vignette\.Rnw$' >> .Rbuildignore
   # Homebrew GCC currently version 8.3 from
   # https://github.com/Homebrew/homebrew-core/blob/master/Formula/gcc.rb
-  - if [[ "$(uname -s)" = 'Darwin' && x"$ICD_USE_XCODE" != 'xtrue' ]]; then
+  - if [[ "$(uname -s)" = 'Darwin' && x"$ICD_USE_XCODE_CLANG" != 'xtrue' ]]; then
       command -v g++-8 >/dev/null 2>&1 || brew install gcc && echo 'CC=gcc-8' >> ~/.R/Makevars && echo 'CXX=g++-8' >> ~/.R/Makevars && echo 'CXX11=g++-8' >> ~/.R/Makevars && Rscript -e 'install.packages("Rcpp", type = "source")';
     fi
   - cat ~/.R/Makevars
@@ -91,6 +91,7 @@ env:
     - _R_CHECK_ALWAYS_LOG_VIGNETTE_OUTPUT_=TRUE
     - _R_CHECK_CODE_ASSIGN_TO_GLOBALENV_=TRUE
     - _R_CHECK_CODETOOLS_PROFILE_="suppressLocalUnused=FALSE"
+    - _R_CHECK_COMPILATION_FLAGS_=FALSE
     - _R_CHECK_EXIT_ON_FIRST_ERROR_=FALSE
     - _R_CHECK_NATIVE_ROUTINE_REGISTRATION_=TRUE
     - _R_CHECK_NO_STOP_ON_TEST_ERROR_=TRUE
@@ -165,7 +166,7 @@ matrix:
     # https://docs.travis-ci.com/user/reference/osx#xcode-version
     # compiler: clang # redundant
     fortran: true
-    env: ICD_USE_XCODE=true
+    env: ICD_USE_XCODE_CLANG=true
   - r: release
     os: osx
     # compiler: clang # redundant
@@ -174,7 +175,7 @@ matrix:
     r_build_args: --no-build-vignettes --no-manual --resave-data=no
     r_check_args: --no-build-vignettes --no-vignettes --ignore-vignettes --no-codoc --no-manual
     env:
-    - ICD_USE_XCODE=true
+    - ICD_USE_XCODE_CLANG=true
     - ICD_MINI_BENCH=true
   allow_failures:
   # allow any osx to fail for now: error prone tool chain
