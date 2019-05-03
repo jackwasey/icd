@@ -66,7 +66,7 @@ before_install:
       fi
   # Homebrew GCC currently version 8.3 from
   # https://github.com/Homebrew/homebrew-core/blob/master/Formula/gcc.rb
-  - if [[ "$(uname -s)" = 'Darwin' ]]; then
+  - if [[ "$(uname -s)" = 'Darwin' && x"$ICD_USEXCODE" != 'xtrue' ]]; then
       command -v g++-8 >/dev/null 2>&1 || brew install gcc && echo 'CC=gcc-8' >> ~/.R/Makevars && echo 'CXX=g++-8' >> ~/.R/Makevars && echo 'CXX11=g++-8' >> ~/.R/Makevars && Rscript -e 'install.packages("Rcpp", type = "source")';
     fi
   - cat ~/.R/Makevars
@@ -126,6 +126,7 @@ matrix:
     dist: xenial
     env:
       - ICD_MINI_BENCH=true
+  # https://docs.travis-ci.com/user/languages/c/#gcc-on-macos
   - r: release
     os: osx
     # this xcode so stuff like _stdio.h are available to GCC.
@@ -144,6 +145,7 @@ matrix:
     # https://docs.travis-ci.com/user/reference/osx#xcode-version
     fortran: false
     compiler: clang
+    env: ICD_USE_XCODE=true
   - r: oldrel
     os: linux
     dist: trusty
@@ -159,6 +161,7 @@ matrix:
     r_check_args: --no-build-vignettes --no-vignettes --ignore-vignettes --no-codoc --no-manual
     env:
     - ICD_MINI_BENCH=true
+    - ICD_USE_XCODE=true
   - r: release
     os: linux
     latex: false
