@@ -1,3 +1,5 @@
+# TODO: only download (and cache) WHO data as needed, rather than forcing user to wait minutes to download everything on first use.
+
 #' Functions to get the WHO ICD-10 English 2016 and French 2008 data
 #' @param resource Fragment of URL with specific ICD-10 resource requested
 #' @param year Four-digit year as integer or character
@@ -185,12 +187,13 @@
       hier_code[new_hier] <- child_code
       hier_desc[new_hier] <- child_desc
       sub_sub_chapter <- NA
+      re_chap_or_sub_chap <- "(^[XVI]+$)|(^.+-.+$)"
       hier_three_digit_idx <- which(nchar(hier_code) == 3 &
-        !grepl("[XVI-]", hier_code))
+        !grepl(re_chap_or_sub_chap, hier_code))
       if (length(hier_code) >= 3 && nchar(hier_code[3]) > 3) {
         sub_sub_chapter <- hier_desc[3]
       }
-      this_child_up_hier <- grepl("[XVI-]", child_code)
+      this_child_up_hier <- grepl(re_chap_or_sub_chap, child_code)
       three_digit <- hier_code[hier_three_digit_idx]
       major <- hier_desc[hier_three_digit_idx]
       if (!this_child_up_hier && !is.na(three_digit)) {

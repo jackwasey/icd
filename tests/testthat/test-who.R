@@ -31,3 +31,13 @@ test_that("HIV is problematic for some reason", {
   b21 <- .dl_icd10who_children("B21")
   expect_match(b21$ID, "^B21\\.[0-9]$")
 })
+
+test_that("Some Ixx codes are missed", {
+  test_that("we do download the relevant blocks", {
+    skip_on_cran()
+    skip_if_offline()
+    expect_true(nrow(.dl_icd10who_children("I10-I15")) > 1)
+    expect_true(nrow(.dl_icd10who_walk("I10-I15")) > 1)
+  })
+  expect_true(length(explain_code(as.icd10who("I10"))) == 1)
+})
