@@ -142,26 +142,28 @@ matrix:
     os: osx
     # as of May 2019, default osx image is 9.4.1
     # https://docs.travis-ci.com/user/reference/osx#xcode-version
+    fortran: false
     compiler: clang
   - r: oldrel
     os: linux
     dist: trusty
     latex: false
-    r_build_args: --no-manual --resave-data=no
-    r_check_args: --no-manual
+    r_build_args: --no-build-vignettes --no-manual --resave-data=no
+    r_check_args: --no-build-vignettes --no-vignettes --ignore-vignettes --no-codoc --no-manual
   - r: release
     os: osx
     compiler: clang
+    fortran: false
     latex: false
-    r_build_args: --no-manual --resave-data=no
-    r_check_args: --no-manual
+    r_build_args: --no-build-vignettes --no-manual --resave-data=no
+    r_check_args: --no-build-vignettes --no-vignettes --ignore-vignettes --no-codoc --no-manual
     env:
     - ICD_MINI_BENCH=true
   - r: release
     os: linux
     latex: false
-    r_build_args: --no-manual --resave-data=no
-    r_check_args: --no-manual
+    r_build_args: --no-build-vignettes --no-manual --resave-data=no
+    r_check_args: --no-build-vignettes --no-vignettes --ignore-vignettes --no-codoc --no-manual
     env:
     - ICD_COVERAGE=true
     - ICD_MINI_BENCH=false
@@ -173,8 +175,8 @@ matrix:
   - r: release
     os: linux
     latex: false
-    r_build_args: --no-manual --resave-data=no
-    r_check_args: --no-manual
+    r_build_args: --no-build-vignettes --no-manual --resave-data=no
+    r_check_args: --no-build-vignettes --no-vignettes --ignore-vignettes --no-codoc --no-manual
     env:
     - ICD_COVERAGE=true
     - ICD_MINI_BENCH=false
