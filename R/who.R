@@ -1,3 +1,5 @@
+# TODO: only download (and cache) WHO data as needed, rather than forcing user to wait minutes to download everything on first use.
+
 #' Functions to get the WHO ICD-10 English 2016 and French 2008 data
 #' @param resource Fragment of URL with specific ICD-10 resource requested
 #' @param year Four-digit year as integer or character
@@ -18,18 +20,24 @@
   mem_file_name <- paste(
     "WHO", year, lang,
     gsub("JsonGetChildrenConcepts\\?ConceptId=|&useHtml=false", "", resource),
-    "json", sep = ".")
+    "json",
+    sep = "."
+  )
   mem_dir <- file.path(get_icd_data_dir(), "memoise")
   dir.create(mem_dir, showWarnings = FALSE)
   mem_path <- file.path(mem_dir, mem_file_name)
   if (file.exists(mem_path)) {
-    .trc(paste("Have memoised data for ", year, lang, resource,
-               "from", mem_path))
+    .trc(paste(
+      "Have memoised data for ", year, lang, resource,
+      "from", mem_path
+    ))
     readRDS(mem_path)
   } else {
     res <- .dl_icd10who_json(year, lang, resource)
-    .trc(paste("Saving memoised data for ", year, lang, resource,
-               "in", mem_path))
+    .trc(paste(
+      "Saving memoised data for ", year, lang, resource,
+      "in", mem_path
+    ))
     saveRDS(res, mem_path, version = 2)
     res
   }
@@ -187,12 +195,13 @@
       hier_code[new_hier] <- child_code
       hier_desc[new_hier] <- child_desc
       sub_sub_chapter <- NA
+      re_chap_or_sub_chap <- "(^[XVI]+$)|(^.+-.+$)"
       hier_three_digit_idx <- which(nchar(hier_code) == 3 &
-                                      !grepl("[XVI-]", hier_code))
+        !grepl(re_chap_or_sub_chap, hier_code))
       if (length(hier_code) >= 3 && nchar(hier_code[3]) > 3) {
         sub_sub_chapter <- hier_desc[3]
       }
-      this_child_up_hier <- grepl("[XVI-]", child_code)
+      this_child_up_hier <- grepl(re_chap_or_sub_chap, child_code)
       three_digit <- hier_code[hier_three_digit_idx]
       major <- hier_desc[hier_three_digit_idx]
       if (!this_child_up_hier && !is.na(three_digit)) {
@@ -241,7 +250,7 @@
   # just return the rows (we are recursing so can't save anything in this
   # function). Parser can do this.
   if (!all(vapply(all_new_rows, is.data.frame, logical(1))) ||
-      !all(vapply(all_new_rows, ncol, integer(1)) == ncol(all_new_rows[[1]]))
+    !all(vapply(all_new_rows, ncol, integer(1)) == ncol(all_new_rows[[1]]))
   ) {
     browser()
   }
