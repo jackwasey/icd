@@ -51,7 +51,7 @@
 ^src\/icd.*\.dll$
 ^src\/icd.*\.so$
 ^tools$
-^vignettes\/efficiency.(Rmd|tex)$
-^vignettes\/country-lang-vers.(Rmd|tex)$
+^vignettes\/efficiency\.(Rmd|tex)$
+^vignettes\/country-lang-vers\.(Rmd|tex)$
 ^vignettes\/jss\..*$
 

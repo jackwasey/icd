@@ -29,10 +29,10 @@ addons:
   apt:
     packages:
       - valgrind
-      - r-cran-tinytex
+      #- r-cran-tinytex
 
-r_packages:
-  - tinytex
+#r_packages:
+#  - tinytex
 
 cran: https://cloud.r-project.org
 # by default, DON'T do --as-cran, as it stops us using environment variables
@@ -42,11 +42,12 @@ warnings_are_errors: true
 
 # try to speed up compilation time
 before_install:
-  # Set library directory so R CMD check finds packages installed by travis and by R itself (e.g. Rcpp rebuilt for MacOS builds)
+  # May need to set the R library directory so R CMD check finds packages
+  # installed by travis (automatically, and in my scripts) and by R itself
   # https://stackoverflow.com/questions/31879011/r-cant-find-packages-installed-by-travis
-  # cannot sudo in docker! - sudo mkdir -p /usr/lib/R/library
-  # - echo 'R_LIBS=/usr/lib/R/library:/usr/lib/R/site-library/' > ~/.Renviron
-  # - sudo chmod 2777 /usr/lib/R/library
+  # - mkdir -p "$HOME/R.icd.lib"
+  # - echo R_LIBS=$HOME/R.icd.lib:/usr/lib/R/site-library/" > ~/.Renviron
+  # - sudo chmod 2777 "$HOME/R.icd.lib"
   #
   # Work-around r-lib/remotes bug which prevents travis building.
   # https://github.com/r-lib/devtools/issues/2020#issuecomment-481219296
@@ -55,20 +56,27 @@ before_install:
   - mkdir ~/.R ;
   - echo 'CXXFLAGS=-Wno-unused-parameter -Wno-unused-variable -Wno-ignored-attributes -Wno-cast-function-type -Wno-unknown-warning-option' >> ~/.R/Makevars ;
   - echo 'CXX11FLAGS=-Wno-unused-parameter -Wno-unused-variable -Wno-ignored-attributes -Wno-cast-function-type -Wno-unknown-warning-option' >> ~/.R/Makevars ;
+  # ignore the stubs for the pre-built vignettes, as the latex environments on
+  # travis are heterogeneous!
+  - echo '^vignettes\/.*-vignette\.Rnw$' >> .Rbuildignore
   - if [[ "$TRAVIS_R_VERSION_STRING" = 'devel' ]]; then
       echo 'CFLAGS=-O0' >> ~/.R/Makevars ;
       echo 'CXXFLAGS=-O0' >> ~/.R/Makevars ;
       echo 'CXX11FLAGS=-O0' >> ~/.R/Makevars ;
       fi
+  # Homebrew GCC currently version 8.3 from
+  # https://github.com/Homebrew/homebrew-core/blob/master/Formula/gcc.rb
   - if [[ "$(uname -s)" = 'Darwin' ]]; then
-      command -v g++-8 >/dev/null 2>&1 || brew install gcc && echo 'CC=gcc-8' >> ~/.R/Makevars && echo 'CXX=g++-8' >> ~/.R/Makevars && echo 'CXX11=g++-8' >> ~/.R/Makevars && Rscript -e 'install.packages(\"Rcpp\", type = \"source\")';
+      command -v g++-8 >/dev/null 2>&1 || brew install gcc && echo 'CC=gcc-8' >> ~/.R/Makevars && echo 'CXX=g++-8' >> ~/.R/Makevars && echo 'CXX11=g++-8' >> ~/.R/Makevars && Rscript -e 'install.packages("Rcpp", type = "source")';
     fi
   - cat ~/.R/Makevars
+  - cat .Rbuildignore
   - Rscript -e '.libPaths()'
-  # for the pre-built static vignette stubs to include the actual vignettes, try:
-  # - Rscript -e 'if (require("tinytex")) {tinytex::install_tinytex(); tinytex::tlmgr_install("pdfpages", "ae")}'
-  # tlmgr --user-mode doesn't seem to be necessary
-  - Rscript -e 'if (!require("tinytex")) {quit(status=1)} else {tinytex::install_tinytex(); tinytex::tlmgr_install("pdfpages", "ae")}' || hash tlmgr 2>/dev/null && { tlmgr install pdfpages ae; }
+  - pwd
+  - ls -R
+  # for the pre-built static vignette stubs to include the actual vignettes.
+  # Make sure travis latex option is not false for relevant builds.
+  # - Rscript -e 'if (!require("tinytex")) {quit(status=1)} else {tinytex::install_tinytex(); tinytex::tlmgr_install("pdfpages", "ae")}' || hash tlmgr 2>/dev/null && { tlmgr --usermode install pdfpages ae; }
 
 env:
   global:
@@ -81,7 +89,8 @@ env:
     - _R_CHECK_NO_STOP_ON_TEST_ERROR_=FALSE
     # some of the following are ignored if --as-cran is set
     - _R_CHECK_COMPILATION_FLAGS_=FALSE
-# the following are to simulate cran, and help debugging, esp if we didn't use --as-cran
+    # the following are to simulate cran, and
+    # help debugging if we didn't use --as-cran
     - _R_CHECK_ALL_NON_ISO_C_=TRUE
     - _R_CHECK_ALWAYS_LOG_VIGNETTE_OUTPUT_=TRUE
     - _R_CHECK_CODE_ASSIGN_TO_GLOBALENV_=TRUE
@@ -100,7 +109,8 @@ env:
     - ICD_DATA_VERBOSE=true
     - ICD_DATA_OFFLINE=true
     - ICD_DATA_INTERACT=false
-    # 4 is the official travis suggestion, but the docker images only have access to two cores/threads.
+    # 4 is the official travis suggestion, but the docker images only seem to
+    # have access to two cores/threads.
     - OMP_NUM_THREADS=2
 
 matrix:
@@ -121,21 +131,17 @@ matrix:
     # this xcode so stuff like _stdio.h are available to GCC.
     osx_image: xcode10.1
     fortran: false
-    # just to avoid matrix doing this twice, state gcc here
     compiler: gcc
-    # ?have to reinstall Rcpp with compiler and libc++ -> libstdc++ change
     env:
       - ICD_MINI_BENCH=true
-  # r-devel currently failing to download for macos, so release for now.
-  # also see https://docs.travis-ci.com/user/reference/osx
   - r: release
     os: osx
     osx_image: xcode10.2
     compiler: gcc
   - r: release
     os: osx
-    # as of April 2019, default osx image is 9.4
-    # just to avoid matrix doing this twice with same xcode binary...
+    # as of May 2019, default osx image is 9.4.1
+    # https://docs.travis-ci.com/user/reference/osx#xcode-version
     compiler: clang
   - r: oldrel
     os: linux
