@@ -29,7 +29,8 @@ install_jss3447_deps <- function() {
   )) {
     if (!require(p,
       character.only = TRUE,
-      quietly = TRUE, warn.conflicts = FALSE
+      quietly = TRUE,
+      warn.conflicts = FALSE
     )) {
       install.packages(p, character.only = TRUE, repos = repos)
     }
@@ -38,7 +39,9 @@ install_jss3447_deps <- function() {
       quietly = TRUE, warn.conflicts = FALSE
     )
   }
+  message("Installing medicalrisk from tar.gz")
   install.packages("medicalrisk_1.2.tar.gz", repos = NULL)
+  message("Installing comorbidity from tar.gz")
   install.packages("comorbidity_0.1.1.tar.gz", repos = NULL)
   # This relies on icd not already being loaded, or it will pass with any version
   if (!requireNamespace("icd",
@@ -52,10 +55,11 @@ install_jss3447_deps <- function() {
     install.packages("icd", repos = repos)
   }
   library("icd", quietly = TRUE)
+  # create the .deps file so Makefile knows we are done
   if (!file.exists(".deps")) {
     file.create(".deps", showWarnings = FALSE)
   }
-  return(invisible())
+  invisible()
 }
 
 install_jss3447_deps()
