@@ -128,6 +128,22 @@ matrix:
       - ICD_MINI_BENCH=true
   # https://docs.travis-ci.com/user/languages/c/#gcc-on-macos
   - r: release
+    os: linux
+    latex: false
+    r_build_args: --no-build-vignettes --no-manual --resave-data=no
+    r_check_args: --no-build-vignettes --no-vignettes --ignore-vignettes --no-codoc --no-manual
+    env:
+    - ICD_COVERAGE=true
+    - ICD_MINI_BENCH=false
+    - ICD_TEST_SLOW=true
+  - r: oldrel
+    os: linux
+    dist: trusty
+    latex: false
+    r_build_args: --no-build-vignettes --no-manual --resave-data=no
+    r_check_args: --no-build-vignettes --no-vignettes --ignore-vignettes --no-codoc --no-manual
+  # MacOS:
+  - r: release
     os: osx
     # this xcode so stuff like _stdio.h are available to GCC.
     osx_image: xcode10.1
@@ -143,34 +159,19 @@ matrix:
     os: osx
     # as of May 2019, default osx image is 9.4.1
     # https://docs.travis-ci.com/user/reference/osx#xcode-version
-    fortran: false
-    compiler: clang
+#    fortran: false
+#    compiler: clang
     env: ICD_USE_XCODE=true
-  - r: oldrel
-    os: linux
-    dist: trusty
-    latex: false
-    r_build_args: --no-build-vignettes --no-manual --resave-data=no
-    r_check_args: --no-build-vignettes --no-vignettes --ignore-vignettes --no-codoc --no-manual
   - r: release
     os: osx
-    compiler: clang
-    fortran: false
+#    compiler: clang
+#    fortran: false
     latex: false
     r_build_args: --no-build-vignettes --no-manual --resave-data=no
     r_check_args: --no-build-vignettes --no-vignettes --ignore-vignettes --no-codoc --no-manual
     env:
     - ICD_MINI_BENCH=true
     - ICD_USE_XCODE=true
-  - r: release
-    os: linux
-    latex: false
-    r_build_args: --no-build-vignettes --no-manual --resave-data=no
-    r_check_args: --no-build-vignettes --no-vignettes --ignore-vignettes --no-codoc --no-manual
-    env:
-    - ICD_COVERAGE=true
-    - ICD_MINI_BENCH=false
-    - ICD_TEST_SLOW=true
   allow_failures:
   # allow any osx to fail for now: error prone tool chain
   - os: osx

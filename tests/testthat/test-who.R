@@ -34,7 +34,7 @@ test_that("HIV is problematic for some reason", {
 
 test_that("Some Ixx codes are missed", {
   test_that("we do download the relevant blocks", {
-    skip_on_cran()
+    skip_multi()
     skip_if_offline()
     expect_true(nrow(.dl_icd10who_children("I10-I15")) > 1)
     expect_true(nrow(.dl_icd10who_walk("I10-I15")) > 1)
