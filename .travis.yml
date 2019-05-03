@@ -4,11 +4,7 @@ language: r
 # https://docs.travis-ci.com/user/ci-environment/
 
 # for RcppEigen to compile, (but disable if brew gcc on mac to avoid conflict)
-fortran: true
-
-compiler:
-  - gcc
-  - clang
+# fortran: true # set explicitly in each stanza
 
 # may need this for clang:
 # export LD_LIBRARY_PATH=/usr/local/clang/lib:$LD_LIBRARY_PATH
@@ -53,20 +49,20 @@ before_install:
   # https://github.com/r-lib/devtools/issues/2020#issuecomment-481219296
   - Rscript -e 'source("https://install-github.me/r-lib/remotes")'
   # ready for Makevars
-  - mkdir ~/.R ;
+  - mkdir -p ~/.R ;
   - echo 'CXXFLAGS=-Wno-unused-parameter -Wno-unused-variable -Wno-ignored-attributes -Wno-cast-function-type -Wno-unknown-warning-option' >> ~/.R/Makevars ;
   - echo 'CXX11FLAGS=-Wno-unused-parameter -Wno-unused-variable -Wno-ignored-attributes -Wno-cast-function-type -Wno-unknown-warning-option' >> ~/.R/Makevars ;
-  # ignore the stubs for the pre-built vignettes, as the latex environments on
-  # travis are heterogeneous!
-  - echo '^vignettes\/.*-vignette\.Rnw$' >> .Rbuildignore
   - if [[ "$TRAVIS_R_VERSION_STRING" = 'devel' ]]; then
       echo 'CFLAGS=-O0' >> ~/.R/Makevars ;
       echo 'CXXFLAGS=-O0' >> ~/.R/Makevars ;
       echo 'CXX11FLAGS=-O0' >> ~/.R/Makevars ;
       fi
+  # ignore the stubs for the pre-built vignettes, as the latex environments on
+  # travis are heterogeneous!
+  - echo '^vignettes\/.*-vignette\.Rnw$' >> .Rbuildignore
   # Homebrew GCC currently version 8.3 from
   # https://github.com/Homebrew/homebrew-core/blob/master/Formula/gcc.rb
-  - if [[ "$(uname -s)" = 'Darwin' && x"$ICD_USEXCODE" != 'xtrue' ]]; then
+  - if [[ "$(uname -s)" = 'Darwin' && x"$ICD_USE_XCODE" != 'xtrue' ]]; then
       command -v g++-8 >/dev/null 2>&1 || brew install gcc && echo 'CC=gcc-8' >> ~/.R/Makevars && echo 'CXX=g++-8' >> ~/.R/Makevars && echo 'CXX11=g++-8' >> ~/.R/Makevars && Rscript -e 'install.packages("Rcpp", type = "source")';
     fi
   - cat ~/.R/Makevars
@@ -114,21 +110,28 @@ env:
     - OMP_NUM_THREADS=2
 
 matrix:
-  fast_finish: false
+  fast_finish: true
   include:
   - r: devel
     os: linux
     dist: xenial
+    compiler:
+      - gcc
+      - clang
     env:
       - ICD_MINI_BENCH=true
   - r: release
     os: linux
+    compiler:
+      - gcc
+      - clang
     dist: xenial
     env:
       - ICD_MINI_BENCH=true
   # https://docs.travis-ci.com/user/languages/c/#gcc-on-macos
   - r: release
     os: linux
+    compiler: gcc
     latex: false
     r_build_args: --no-build-vignettes --no-manual --resave-data=no
     r_check_args: --no-build-vignettes --no-vignettes --ignore-vignettes --no-codoc --no-manual
@@ -145,33 +148,34 @@ matrix:
   # MacOS:
   - r: release
     os: osx
-    # this xcode so stuff like _stdio.h are available to GCC.
+    # xcode image is needed so things like _stdio.h are available to GCC.
     osx_image: xcode10.1
+#    compiler: gcc # redundant: done by logic in before_intall
     fortran: false
-    compiler: gcc
     env:
       - ICD_MINI_BENCH=true
-  - r: release
+  - r: devel
     os: osx
     osx_image: xcode10.2
-    compiler: gcc
-  - r: release
+#    compiler: gcc # redundant: done by logic in before_intall
+    fortran: false
+  - r: devel
     os: osx
     # as of May 2019, default osx image is 9.4.1
     # https://docs.travis-ci.com/user/reference/osx#xcode-version
-#    fortran: false
-#    compiler: clang
+    # compiler: clang # redundant
+    fortran: true
     env: ICD_USE_XCODE=true
   - r: release
     os: osx
-#    compiler: clang
-#    fortran: false
+    # compiler: clang # redundant
+    fortran: true
     latex: false
     r_build_args: --no-build-vignettes --no-manual --resave-data=no
     r_check_args: --no-build-vignettes --no-vignettes --ignore-vignettes --no-codoc --no-manual
     env:
-    - ICD_MINI_BENCH=true
     - ICD_USE_XCODE=true
+    - ICD_MINI_BENCH=true
   allow_failures:
   # allow any osx to fail for now: error prone tool chain
   - os: osx
