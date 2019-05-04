@@ -41,10 +41,12 @@ test_that("ICD-10 chapters and sub-chapters are distinct", {
   # and for good measure, make sure that sub-chapters and chapters are not
   # confused. This was really just a problem with RTF parsing for ICD-9, but
   # there are possible similiar problems with some of the XML hierarchy.
-  for (chap in names(icd10_chapters))
+  for (chap in names(icd10_chapters)) {
     expect_icd10_only_chap(chap)
-  for (subchap in names(icd10_sub_chapters))
+  }
+  for (subchap in names(icd10_sub_chapters)) {
     expect_icd10_only_sub_chap(subchap)
+  }
 })
 
 test_that("Y09 got picked up in sub-chapter parsing", {

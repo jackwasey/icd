@@ -36,7 +36,7 @@ check it exists and is writable.
 \dontrun{
 set_icd_data_dir()
 # or choose another directory:
-#set_icd_data_dir("/var/cache/icd.data")
+# set_icd_data_dir("/var/cache/icd.data")
 # then you may use:
 # download_all_icd_data()
 # or let 'icd' download data when needed.

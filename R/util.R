@@ -183,10 +183,14 @@ get_icd_dx_name <- function(x,
     warning("'POA' Present-on-arrival fields in 'icd_name'.")
   }
   icd_name <- guess_icd_col_by_class(x, pattern = icd_dx_not_generic)
-  if (!is.null(icd_name)) return(icd_name)
+  if (!is.null(icd_name)) {
+    return(icd_name)
+  }
   icd_pc_name <- guess_icd_col_by_class(x, pattern = icd_pc_not_generic)
   icd_generic <- guess_icd_col_by_class(x, pattern = c("icd9", "icd10"))
-  if (is.null(icd_pc_name) && !is.null(icd_name)) return(icd_generic)
+  if (is.null(icd_pc_name) && !is.null(icd_name)) {
+    return(icd_generic)
+  }
   icd_name <- guess_icd_col_by_name(x,
     valid_codes = valid_codes,
     defined_codes = defined_codes
@@ -247,7 +251,9 @@ get_icd_pc_name <- function(x, icd_name = NULL) {
     warning("'POA' Present-on-arrival field name in 'icd_name'.")
   }
   icd_name <- guess_icd_col_by_class(x, pattern = icd_pc_not_generic)
-  if (!is.null(icd_name)) return(icd_name)
+  if (!is.null(icd_name)) {
+    return(icd_name)
+  }
   guess_icd_pc_col_by_name(x)
 }
 
@@ -293,7 +299,9 @@ guess_icd_col_by_name <- function(x,
   stopifnot(is.character(guesses))
   # if one column exactly has a class like icd9, then we're done.
   icd_name_by_class <- guess_icd_col_by_class(x, pattern = class_pattern)
-  if (!is.null(icd_name_by_class)) return(icd_name_by_class)
+  if (!is.null(icd_name_by_class)) {
+    return(icd_name_by_class)
+  }
   guessed <- lapply(guesses,
     grep,
     x = names(x),
@@ -339,7 +347,9 @@ guess_icd_pc_col_by_name <- function(x,
 guess_icd_col_by_class <- function(x, pattern) {
   cls <- lapply(x, class)
   clg <- vapply(cls, function(z) any(z %in% pattern), logical(1))
-  if (any(clg)) return(names(x)[clg])
+  if (any(clg)) {
+    return(names(x)[clg])
+  }
   NULL
 }
 
@@ -394,7 +404,9 @@ get_raw_data_dir <- function() {
 
 .m <- function(threshold, ..., print = FALSE) {
   v <- as.integer(.verbose())
-  if (v < threshold) return()
+  if (v < threshold) {
+    return()
+  }
   if (print) {
     dots <- list(...)
     print(

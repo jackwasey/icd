@@ -68,7 +68,9 @@
   # Currently all the codes are identical to ICD-10-CM US version.
   sheet_2017 <- "FY2017"
   fnp <- .dl_icd10be2017(...)
-  if (is.null(fnp)) return()
+  if (is.null(fnp)) {
+    return()
+  }
   raw_dat <- readxl::read_xlsx(fnp$file_path,
     sheet = sheet_2017,
     col_names = TRUE,
@@ -138,7 +140,9 @@
 .parse_icd10be2014 <- function(dx = TRUE, ...) {
   # MS Excel sheet with French English and Dutch translations of ICD-10-CM.
   fnp <- .dl_icd10be2014(...)
-  if (is.null(fnp)) return()
+  if (is.null(fnp)) {
+    return()
+  }
   raw_dat <- readxl::read_xlsx(fnp$file_path,
     sheet = "FY2014_ICD10BE",
     col_names = TRUE,

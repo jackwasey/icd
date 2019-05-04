@@ -255,7 +255,7 @@ icd10_map_ahrq$CHF[1:5]
 ```
 
 ### Elixhauser comorbidities
-Elixhauser originally devleoped this set of comorbidities to predict long term mortality based on hospital ICD-9-CM coding records [@elixhauser_comorbidity_1998]. The AHRQ comorbidities are an updated version of this, however the original Elixhauser have been used in many publications.
+Elixhauser originally developed this set of comorbidities to predict long term mortality based on hospital ICD-9-CM coding records [@elixhauser_comorbidity_1998]. The AHRQ comorbidities are an updated version of this, however the original Elixhauser have been used in many publications.
 ```{r elix}
 # the names of the comorbidities in each map are available as named lists:
 names_elix[1:5]
@@ -311,7 +311,7 @@ as.icd9(cardiac) %>% explain_code(warn = FALSE) %>% head(10)
 ```
 
 ### Find comorbidities for a large number of patients
-I understand that comorbiditity assignment using SAS is a lengthy business. Let's generate 100,000 patients with a random selection of comorbidities:
+I understand that comorbidity assignment using SAS is a lengthy business. Let's generate 100,000 patients with a random selection of comorbidities:
 ```{r speed, eval = FALSE}
 # codes selected from AHRQ mapping
 many_patients <- icd:::generate_random_pts(1e7)
@@ -323,7 +323,7 @@ This takes about five seconds on a 2016 8-core workstation. More detailed benchm
 
 ### Use an arbitrary ICD-9 mapping
 
-The user can provide any ICD-9, ICD-10 or other code mapping to comorbidities they wish. Submissions of other peer-reviewed published mappings could be included in this package, if their license permits. Create an issue in [github](https://github.com/jackwasey/icd/issues) or email me at jack@jackwasey.com) Included in this package is a small data set called `icd9_chapters`, which lists the ICD-9-CM (and indeed ICD-9) Chapters. These can easily be expanded out and used as a mapping, so instead of a comorbidity, we see which patients have codes in each chapter of the ICD-9 defintion.
+The user can provide any ICD-9, ICD-10 or other code mapping to comorbidities they wish. Submissions of other peer-reviewed published mappings could be included in this package, if their license permits. Create an issue in [github](https://github.com/jackwasey/icd/issues) or email me at jack@jackwasey.com) Included in this package is a small data set called `icd9_chapters`, which lists the ICD-9-CM (and indeed ICD-9) Chapters. These can easily be expanded out and used as a mapping, so instead of a comorbidity, we see which patients have codes in each chapter of the ICD-9 definition.
 
 See the [custom comorbidity map vignette](custom-maps.html).
 ```{r arbitrary Mapping}

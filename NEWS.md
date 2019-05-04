@@ -13,7 +13,7 @@
  * default not to do (minimal) code cleaning before calculating comorbidities. To re-enable, use `preclean = TRUE`. Decimal-format codes are still converted to the short form used in the maps. For huge data with decimal format codes, converting the maps to decimal will be more efficient than converting the ICD data to decimal format.
  * drop `unique_ids` argument to `comorbid` and `categorize` since it no longer provides any optimization opportunity.
  * Let `icd` work better when not lodaded with `library`, so `icd::comorbid_ahrq` etc. should work with just `requireNamespace` or using `icd::function()`
- * Prefer 'leaf' over 'billable' to indicate a leaf node. Most coding systems are _not_ all about money, and 'icd' should reflect this. 'billable' as an argument to functions such as `is_defined()` and `get_defined()`. Functions named like `is_billable()` are left in place for ICD-9-CM and ICD-10-CM, but in general, `is_leaf()` and that family of functions is prefered.
+ * Prefer 'leaf' over 'billable' to indicate a leaf node. Most coding systems are _not_ all about money, and 'icd' should reflect this. 'billable' as an argument to functions such as `is_defined()` and `get_defined()`. Functions named like `is_billable()` are left in place for ICD-9-CM and ICD-10-CM, but in general, `is_leaf()` and that family of functions is preferred.
  * Drop dependency on magrittr, although it may still be used nicely with icd functions
  * Increased test coverage with resulting fixes in corner cases
  * Accept integer identifiers in patient data
@@ -59,9 +59,9 @@
  * Added AHRQ clinical condition software (CCS) classification for ICD-9 and ICD-10, thanks to Vitaly Druker, fixes #127
  * added 'charlson' synonyms for 'Quan/Deyo', e.g. Charlson comorbidities can now be found using `comorbid_charlson(patient_data)`
  * Added AHRQ clinical condition software (CCS) classification for ICD-9 and ICD-10, thanks to Vitaly Druker, fixes #127
- * function names have lost the 'icd_' prefix, old names kept for compatability, but easier now to write `comorbid(patient_data)`, and `icd::comorbid` may also be used, and which many consider good practice. `explain_icd` synonym avoids name conflict with the popular `dplyr` package, but `icd::explain` also a nice option.
+ * function names have lost the 'icd_' prefix, old names kept for compatibility, but easier now to write `comorbid(patient_data)`, and `icd::comorbid` may also be used, and which many consider good practice. `explain_icd` synonym avoids name conflict with the popular `dplyr` package, but `icd::explain` also a nice option.
  * Assume C++11, which is now four years old, enabling code simplification
- * rename all functions to remove the icd_, people can use the concise icd:: if library(icd) was not callled
+ * rename all functions to remove the icd_, people can use the concise icd:: if library(icd) was not called
  * deprecated rarely or unused code, including %i9in%
  
 # Version 2.4.1

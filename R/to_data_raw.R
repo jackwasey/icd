@@ -50,7 +50,9 @@
       "Unable to find downloaded file at: ",
       file_path, ". Attempting download..."
     )
-    if (!.confirm_download(msg = dl_msg)) return()
+    if (!.confirm_download(msg = dl_msg)) {
+      return()
+    }
     ok <- .unzip_single(
       url = url,
       file_name = file_name,
@@ -90,8 +92,12 @@
       file.exists(save_path)) {
       return(f_info)
     }
-    if (.offline()) return()
-    if (!.confirm_download()) return()
+    if (.offline()) {
+      return()
+    }
+    if (!.confirm_download()) {
+      return()
+    }
     if (!is.null(dl_msg)) message(dl_msg)
     curl_res <- try(
       utils::download.file(

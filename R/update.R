@@ -58,7 +58,7 @@
   icd9cm_hierarchy <- get_icd9cm2014()
   names(icd9cm_hierarchy)[names(icd9cm_hierarchy) == "leaf"] <- "billable"
   .save_in_data_dir(icd9cm_hierarchy)
-  #.generate_vigette_index()
+  # .generate_vigette_index()
 }
 
 #' Generate \code{sysdata.rda}

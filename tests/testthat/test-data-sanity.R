@@ -31,7 +31,7 @@ test_that("row numbers and factors are sequential for data frames", {
         print(paste(info, "checking code and three_digit"))
       }
       if (col_name %in% c("code", "three_digit") &&
-          !grepl(".*_pc", data_name)) {
+        !grepl(".*_pc", data_name)) {
         expect_true(inherits(col_dat, c("icd9", "icd10")), info = info)
         j <- d[[col_name]]
         expect_valid(j, whitespace_ok = FALSE, info = info)

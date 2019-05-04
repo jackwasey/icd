@@ -136,8 +136,12 @@
   stopifnot(is.character(url))
   stopifnot(is.character(file_name))
   stopifnot(is.character(save_path))
-  if (file.exists(save_path)) return(TRUE)
-  if (!.confirm_download()) return(FALSE)
+  if (file.exists(save_path)) {
+    return(TRUE)
+  }
+  if (!.confirm_download()) {
+    return(FALSE)
+  }
   zipfile <- tempfile(fileext = ".zip")
   on.exit(unlink(zipfile), add = TRUE)
   extra <- ifelse(insecure, "--insecure --silent", NULL)

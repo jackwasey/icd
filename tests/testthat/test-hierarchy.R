@@ -17,11 +17,12 @@ test_that("icd9cm_hierarchy as saved in data can be recreated as expected", {
     "chapter"
   )
   cmh <- .parse_icd9cm_rtf_year("2014", save_pkg_majors = FALSE)
-  for (h in cmh_headings)
+  for (h in cmh_headings) {
     expect_equal(cmh[[h]],
       icd9cm_hierarchy[[h]],
       info = paste("working on :", h)
     )
+  }
 })
 
 test_that("no NA or zero-length values", {

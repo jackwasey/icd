@@ -224,7 +224,9 @@ condense_explain_table <- function(x) {
 condense_explain_table_worker <- function(x) {
   # we can only condense when we have three_digit major
   x <- x[!is.na(x[["three_digit"]]), ]
-  if (nrow(x) == 0) return(data.frame())
+  if (nrow(x) == 0) {
+    return(data.frame())
+  }
   condensed <- aggregate(x["code"],
     by = list(x[["three_digit"]]),
     paste, sep = ", ", collapse = ", "

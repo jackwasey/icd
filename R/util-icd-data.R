@@ -109,8 +109,12 @@ get_icd_data <- function(data_name, alt = NULL) {
     data_name <- deparse(substitute(data_name))
   }
   ns <- asNamespace("icd")
-  if (exists(data_name, ns)) return(get(data_name, ns))
-  if (.exists_in_cache(data_name)) return(.get_from_cache(data_name))
+  if (exists(data_name, ns)) {
+    return(get(data_name, ns))
+  }
+  if (.exists_in_cache(data_name)) {
+    return(.get_from_cache(data_name))
+  }
   alt
 }
 

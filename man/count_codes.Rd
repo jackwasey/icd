@@ -64,6 +64,8 @@ count_codes_wide(wide)
 # or:
 \dontrun{
 library(magrittr, warn.conflicts = FALSE)
-wide \%>\% wide_to_long() \%>\% count_codes()
+wide \%>\%
+  wide_to_long() \%>\%
+  count_codes()
 }
 }

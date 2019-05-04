@@ -127,7 +127,9 @@ order.icd9 <- function(x, na.last = TRUE) {
   n_na <- sum(na)
   if (is.na(na.last) && n_na != 0) {
     x <- x[!na]
-    if (length(x) == 0) return(integer())
+    if (length(x) == 0) {
+      return(integer())
+    }
   }
   if (!is.factor(x)) {
     res <- icd9_order_rcpp(x)

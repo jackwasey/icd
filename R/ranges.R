@@ -312,7 +312,9 @@ icd9_expand_range_worker <- function(start,
       return()
     }
     kids <- get_missing_kids(x, defined)
-    if (length(kids) == 0L) return()
+    if (length(kids) == 0L) {
+      return()
+    }
     suppressWarnings(rm(list = x, envir = out_env))
   }
   if (ex_ambig_end) {

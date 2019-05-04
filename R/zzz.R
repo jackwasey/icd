@@ -58,32 +58,30 @@
 
 release_questions <- function() {
   c(
-    # vignette
-    "manual rebuild efficiency & country-lang-vers vignettes, check in tarball",
     # commands:
-    ".clean(destroy = TRUE), then update_everything() on all platforms",
+    "clena data then download and update everything on all platforms",
     "aspell_package_Rd_files('.')",
     # documentation:
-    "Check all TODO comments, make into github issues",
+    "manual rebuild efficiency & country-lang-vers vignettes, check in tarball",
     "Do all examples look ok (not just run without errors)?",
-    "Have all the fixed github issues been closed",
-    "pkgdown::build_site() reports no errors",
     # code quality:
+    ".test_slow(TRUE); test_all()",
     "icd::download_all_icd_data() and other major functions pre-library call",
     "codetools::checkUsagePackage('icd', all = TRUE, suppressLocal = TRUE)",
     "devtools::missing_s3()", # http://r-pkgs.had.co.nz/namespace.html
     "Use clang scan-build, with latest version of clang",
     # testing and compilation and different platforms:
-    "Are there no skipped tests which should be run?",
-    "rhub::check_with_sanitizers()",
-    "rhub::check_for_cran()",
-    "Windows? Appveyor, win_builder, r-hub all okay?",
-    "MacOS? Travis and local okay?",
-    "Linux? Travis, r-hub okay?",
-    "Check with verbose, offline, interact all undefined in vanilla R",
+    "Are there any skipped tests which should be run?",
+    "MacOS, Windows, Linux, r-hub, win-builder, travis, appveyor",
+    "Download and set data dir in vanilla bash and R, without library(icd)",
     "styler::style_pkg()",
     # final manual check:
-    "Have all unnecessary files been ignored in built source package?"
+    "Have all unnecessary files been ignored in built source package?",
+    # post-release
+    "Have all the fixed github issues been closed",
+    "update version number to devel",
+    "make new git branch for devel",
+    "pkgdown::build_site() reports no errors"
   )
 }
 

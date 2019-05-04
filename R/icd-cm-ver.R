@@ -164,7 +164,9 @@ with_icd10cm_version <- function(ver, code) {
   ver <- as.character(ver)
   stopifnot(grepl("^[[:digit:]]{4}$", ver))
   var_name <- .get_icd10cm_name(ver, dx = dx)
-  if (.exists_in_cache(var_name)) return(.get_from_cache(var_name))
+  if (.exists_in_cache(var_name)) {
+    return(.get_from_cache(var_name))
+  }
   if (dx) {
     dat <- .parse_icd10cm_year(year = ver)
   } else {

@@ -214,11 +214,11 @@ classes_ordered <- function(x) {
 #' x
 #' attributes(x) <- list(icd_short_diag = NULL)
 #' x
-#' 
+#'
 #' y <- as.decimal_diag(as.icd10("A10.09"))
 #' y
 #' is.short_diag(y)
-#' 
+#'
 #' j <- as.short_diag(as.icd10(c("A11", "B2222")))
 #' j[2] <- "C33"
 #' stopifnot(is.short_diag(j))
@@ -236,7 +236,9 @@ icd9 <- function(x) {
   # rev, head, and tail should all work)." But see examples, as this may not be
   # needed.
   cl <- class(x)
-  if ("icd9" %in% cl) return(x)
+  if ("icd9" %in% cl) {
+    return(x)
+  }
   class(x) <- c("icd9", cl)
   x
 }
@@ -246,7 +248,9 @@ icd9 <- function(x) {
 #' @export
 as.icd9 <- function(x) {
   stopifnot(is.atomic(x))
-  if (is.icd9(x)) return(x)
+  if (is.icd9(x)) {
+    return(x)
+  }
   after <- match("icd9cm", class(x), nomatch = 0L)
   class(x) <- append(class(x), "icd9", after = after)
   # set the class then allow dispatch to confirm okay
@@ -258,7 +262,9 @@ as.icd9 <- function(x) {
 #' @keywords internal
 icd9cm <- function(x) {
   cl <- class(x)
-  if ("icd9cm" %in% cl) return(x)
+  if ("icd9cm" %in% cl) {
+    return(x)
+  }
   class(x) <- c("icd9cm", cl)
   x
 }
@@ -267,7 +273,9 @@ icd9cm <- function(x) {
 #' @export
 as.icd9cm <- function(x) {
   stopifnot(is.atomic(x))
-  if (inherits(x, "icd9") && inherits(x, "icd9cm")) return(x)
+  if (inherits(x, "icd9") && inherits(x, "icd9cm")) {
+    return(x)
+  }
   icd9_pos <- match("icd9", class(x))
   if (!is.na(icd9_pos)) {
     class(x) <- append(class(x), "icd9cm", after = icd9_pos - 1)
@@ -283,7 +291,9 @@ as.icd9cm <- function(x) {
 #' @keywords internal
 icd9cm_pc <- function(x) {
   cl <- class(x)
-  if ("icd9cm_pc" %in% cl) return(x)
+  if ("icd9cm_pc" %in% cl) {
+    return(x)
+  }
   class(x) <- c("icd9cm_pc", cl)
   x
 }
@@ -310,7 +320,9 @@ as.icd9cm_pc <- function(x) {
 #' @keywords internal
 icd10 <- function(x) {
   cl <- class(x)
-  if ("icd10" %in% cl) return(x)
+  if ("icd10" %in% cl) {
+    return(x)
+  }
   class(x) <- c("icd10", cl)
   x
 }
@@ -320,7 +332,9 @@ icd10 <- function(x) {
 #' @export
 as.icd10 <- function(x) {
   stopifnot(is.atomic(x))
-  if (inherits(x, "icd10")) return(x)
+  if (inherits(x, "icd10")) {
+    return(x)
+  }
   icd10cm_pos <- match("icd10cm", class(x), nomatch = 0L)
   class(x) <- append(class(x), "icd10", after = icd10cm_pos)
   icd_conflicts(x, do_stop = TRUE)
@@ -331,7 +345,9 @@ as.icd10 <- function(x) {
 #' @keywords internal
 icd10cm <- function(x) {
   cl <- class(x)
-  if ("icd10cm" %in% cl) return(x)
+  if ("icd10cm" %in% cl) {
+    return(x)
+  }
   if ("icd10" %in% cl) {
     class(x) <- c("icd10cm", cl)
   } else {
@@ -346,7 +362,9 @@ as.icd10cm <- function(x, short_code = NULL) {
   # TODO: as.icd10cm(as.icd10be("A00)) works, but gives both classes, which the
   # print method fails on.
   stopifnot(is.atomic(x))
-  if (inherits(x, "icd10cm")) return(x)
+  if (inherits(x, "icd10cm")) {
+    return(x)
+  }
   icd10_pos <- match("icd10", class(x))
   if (!is.na(icd10_pos)) {
     class(x) <- append(class(x), "icd10cm", after = icd10_pos - 1)
@@ -364,7 +382,9 @@ as.icd10cm <- function(x, short_code = NULL) {
 #' @keywords internal
 icd10cm_pc <- function(x) {
   cl <- class(x)
-  if ("icd10cm_pc" %in% cl) return(x)
+  if ("icd10cm_pc" %in% cl) {
+    return(x)
+  }
   class(x) <- c("icd10cm_pc", cl)
   x
 }
@@ -391,7 +411,9 @@ as.icd10cm_pc <- function(x) {
 #' @keywords internal
 icd10who <- function(x) {
   cl <- class(x)
-  if ("icd10who" %in% cl) return(x)
+  if ("icd10who" %in% cl) {
+    return(x)
+  }
   class(x) <- c("icd10who", cl)
   x
 }
@@ -400,7 +422,9 @@ icd10who <- function(x) {
 #' @export
 as.icd10who <- function(x, short_code = NULL) {
   stopifnot(is.atomic(x))
-  if (inherits(x, "icd10who")) return(x)
+  if (inherits(x, "icd10who")) {
+    return(x)
+  }
   icd10_pos <- match("icd10", class(x))
   if (!is.na(icd10_pos)) {
     class(x) <- append(class(x), "icd10who", after = icd10_pos - 1)
@@ -418,7 +442,9 @@ as.icd10who <- function(x, short_code = NULL) {
 #' @keywords internal
 icd10who <- function(x) {
   cl <- class(x)
-  if ("icd10who" %in% cl) return(x)
+  if ("icd10who" %in% cl) {
+    return(x)
+  }
   if ("icd10" %in% cl) {
     class(x) <- c("icd10who", cl)
   } else {
@@ -431,7 +457,9 @@ icd10who <- function(x) {
 #' @export
 as.icd10fr <- function(x, short_code = NULL) {
   stopifnot(is.atomic(x))
-  if (inherits(x, "icd10fr")) return(x)
+  if (inherits(x, "icd10fr")) {
+    return(x)
+  }
   icd10_pos <- match("icd10", class(x))
   if (!is.na(icd10_pos)) {
     class(x) <- append(class(x), "icd10fr", after = icd10_pos - 1)
@@ -449,7 +477,9 @@ as.icd10fr <- function(x, short_code = NULL) {
 #' @keywords internal
 icd10fr <- function(x) {
   cl <- class(x)
-  if ("icd10fr" %in% cl) return(x)
+  if ("icd10fr" %in% cl) {
+    return(x)
+  }
   if ("icd10" %in% cl) {
     class(x) <- c("icd10fr", cl)
   } else {
@@ -462,7 +492,9 @@ icd10fr <- function(x) {
 #' @export
 as.icd10be <- function(x, short_code = NULL) {
   stopifnot(is.atomic(x))
-  if (inherits(x, "icd10be")) return(x)
+  if (inherits(x, "icd10be")) {
+    return(x)
+  }
   icd10_pos <- match("icd10", class(x))
   if (!is.na(icd10_pos)) {
     class(x) <- append(class(x), "icd10be", after = icd10_pos - 1)
@@ -480,7 +512,9 @@ as.icd10be <- function(x, short_code = NULL) {
 #' @keywords internal
 icd10be <- function(x) {
   cl <- class(x)
-  if ("icd10be" %in% cl) return(x)
+  if ("icd10be" %in% cl) {
+    return(x)
+  }
   if ("icd10" %in% cl) {
     class(x) <- c("icd10be", cl)
   } else {
@@ -587,7 +621,9 @@ icd_wide_data <- function(x, ..., warn = TRUE)
 comorbidity_map <- function(x) {
   assert_list(x, min.len = 1, names = "unique")
   cl <- class(x)
-  if ("comorbidity_map" %in% cl) return(x)
+  if ("comorbidity_map" %in% cl) {
+    return(x)
+  }
   class(x) <- c("comorbidity_map", cl)
   x
 }
@@ -696,7 +732,9 @@ c.icd10 <- function(..., warn = FALSE) {
   # present. One NULL or one conflict will mean the attribute is not set
   attribs <- lapply(dots, attr, which = "icd_short_diag")
   nulls <- vapply(attribs, is.null, logical(1))
-  if (all(nulls)) return(out)
+  if (all(nulls)) {
+    return(out)
+  }
   short_attribs <- unlist(attribs[!nulls])
   if (all(short_attribs)) {
     attr(out, "icd_short_diag") <- TRUE
@@ -727,7 +765,7 @@ c.icd10 <- function(..., warn = FALSE) {
 #' # preserving the ICD class
 #' stopifnot(!inherits(x[[1]], "list"))
 #' stopifnot(!inherits(x[[1]][2], "list"))
-#' 
+#'
 #' y <- as.icd10(c("A01", "B0234"))
 #' y[2]
 #' y[[2]]

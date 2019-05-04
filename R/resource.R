@@ -83,7 +83,9 @@
   }
   fp <- .rds_path(var_name)
   .msg("Checking if we have file path for exists")
-  if (is.null(fp)) return(FALSE)
+  if (is.null(fp)) {
+    return(FALSE)
+  }
   .msg("Trying file at: ", fp)
   return(file.exists(fp))
   .msg(var_name, " not seen in cache env or dir.")
@@ -110,7 +112,9 @@
   }
   fp <- .rds_path(var_name)
   .msg("Checking if we have file path for get")
-  if (is.null(fp)) return()
+  if (is.null(fp)) {
+    return()
+  }
   .msg("Getting file at: ", fp)
   val <- readRDS(fp)
   .assign(var_name, val)
@@ -118,7 +122,9 @@
 }
 
 .all_cached <- function() {
-  if (is.null(.get_opt("resource"))) return(FALSE)
+  if (is.null(.get_opt("resource"))) {
+    return(FALSE)
+  }
   vec <- vapply(.data_names_cache, .exists_in_cache, logical(1))
   res <- all(vec)
   if (!res) {
@@ -219,7 +225,9 @@
     .msg("Getting form cache now we have parsed.")
     # Parse function should have saved the data in env and file caches
     dat <- .get_from_cache(var_name, must_work = FALSE)
-    if (!is.null(dat)) return(dat)
+    if (!is.null(dat)) {
+      return(dat)
+    }
     if (must_work) {
       stop(
         "Cannot fetch (download/parse/get from cache) that data using ",
@@ -586,10 +594,16 @@ get_icd_data_dir <- function(must_work = TRUE) {
     if (exists(var_name, ns)) message("from package namespace itself")
     if (fetch) message("will try to fetch") else message("not going to fetch")
   }
-  if (.exists_in_lazy(var_name)) return(.get_lazy(var_name))
-  if (.exists_in_cache(var_name)) return(.get_from_cache(var_name))
+  if (.exists_in_lazy(var_name)) {
+    return(.get_lazy(var_name))
+  }
+  if (.exists_in_cache(var_name)) {
+    return(.get_from_cache(var_name))
+  }
   ns <- asNamespace("icd")
-  if (exists(var_name, ns)) return(get(var_name, ns))
+  if (exists(var_name, ns)) {
+    return(get(var_name, ns))
+  }
   if (fetch && exists(.get_fetcher_name(var_name), ns, mode = "function")) {
     return(.get_fetcher_fun(var_name)())
   }

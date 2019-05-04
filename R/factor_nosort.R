@@ -24,7 +24,7 @@
 #' identical(icd:::factor_nosort(x), x)
 #' # unless the levels change:
 #' icd:::factor_nosort(x, levels = c("a", "z"))
-#' 
+#'
 #' # existing factor levels aren't re-ordered without also moving elements
 #' f <- factor(c("a", "b", "b", "c"))
 #' g <- icd:::factor_nosort(f, levels = c("a", "c", "b"))
@@ -36,7 +36,11 @@
 #' @noRd
 factor_nosort <- function(x, levels) {
   if (missing(levels)) {
-    if (is.factor(x)) return(x) else levels <- unique.default(x)
+    if (is.factor(x)) {
+      return(x)
+    } else {
+      levels <- unique.default(x)
+    }
   }
   suppressWarnings(f <- match(x, levels))
   levels(f) <- as.character(levels)

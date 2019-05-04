@@ -80,7 +80,9 @@ charlson.data.frame <- function(x,
     hierarchy = FALSE,
     scoring_system = scoring_system
   )
-  if (!return_df) return(res)
+  if (!return_df) {
+    return(res)
+  }
   out <- cbind(names(res),
     data.frame("Charlson" = unname(res)),
     stringsAsFactors = stringsAsFactors
@@ -168,10 +170,10 @@ charlson_from_comorbid <- function(x,
 #' )
 #' count_codes(mydf, return_df = TRUE)
 #' count_codes(mydf)
-#' 
+#'
 #' cmb <- icd9_comorbid_quan_deyo(mydf, short_code = FALSE, return_df = TRUE)
 #' count_comorbid(cmb)
-#' 
+#'
 #' wide <- data.frame(
 #'   visit_name = c("r", "s", "t"),
 #'   icd9_1 = c("0011", "441", "456"),
@@ -182,7 +184,9 @@ charlson_from_comorbid <- function(x,
 #' # or:
 #' \dontrun{
 #' library(magrittr, warn.conflicts = FALSE)
-#' wide %>% wide_to_long() %>% count_codes()
+#' wide %>%
+#'   wide_to_long() %>%
+#'   count_codes()
 #' }
 #' @export
 count_codes <- function(x,
@@ -272,7 +276,9 @@ count_codes_wide <- function(x,
   }
   rdf <- cbind(x[visit_name], "count" = res)
   rdfagg <- aggregate(rdf["count"], by = rdf[visit_name], FUN = sum)
-  if (return_df) return(rdfagg)
+  if (return_df) {
+    return(rdfagg)
+  }
   vec <- rdfagg[["count"]]
   names(vec) <- rdfagg[[visit_name]]
   vec
@@ -307,7 +313,7 @@ count_codes_wide <- function(x,
 #' cmb <- icd9_comorbid_quan_elix(mydf, short_code = FALSE, hierarchy = TRUE)
 #' vwr <- van_walraven_from_comorbid(cmb)
 #' stopifnot(identical(van_walraven(mydf), vwr))
-#' 
+#'
 #' # alternatively return as data frame in 'tidy' format
 #' van_walraven(mydf, return_df = TRUE)
 #' @author wmurphyrd
@@ -347,7 +353,9 @@ van_walraven.data.frame <- function(x,
     visit_name = visit_name,
     hierarchy = FALSE
   )
-  if (!return_df) return(res)
+  if (!return_df) {
+    return(res)
+  }
   out <- cbind(names(res),
     data.frame("vanWalraven" = unname(res)),
     stringsAsFactors = stringsAsFactors

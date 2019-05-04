@@ -24,7 +24,7 @@
 #' # show differences for
 #' # give full report on all comorbidities for these mappings
 #' diff_result <- diff_comorbid(icd9_map_elix, icd9_map_ahrq, show = FALSE)
-#' 
+#'
 #' # the following outputs a summary to the console:
 #' diff_comorbid(icd9_map_elix, icd9_map_ahrq)
 #' }

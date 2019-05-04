@@ -102,8 +102,9 @@ skip_icd10cm_xml_avail <- function() {
 }
 
 skip_flat_icd9_avail_all <- function() {
-  for (v in .icd9cm_sources$version)
+  for (v in .icd9cm_sources$version) {
     skip_flat_icd9_avail(ver = v)
+  }
 }
 
 #' expect named sub-chapter has a given range, case insensitive

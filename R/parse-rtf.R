@@ -183,8 +183,9 @@
   )
   # in reverse order, put each non-par line on end of previous, then filter out
   # all non-par lines
-  for (i in rev(non_par_lines))
+  for (i in rev(non_par_lines)) {
     filtered[i - 1] <- paste(filtered[i - 1], filtered[i], sep = "")
+  }
   filtered <- grep("^\\\\par", filtered, value = TRUE)
   filtered <- .rtf_fix_unicode(filtered)
   # extremely long terminal line in primary source is junk

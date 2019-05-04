@@ -30,8 +30,6 @@ along with icd. If not, see <http:#www.gnu.org/licenses/>.
 [![Project Status: Active – The project has reached a stable, usable
 state and is being actively
 developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
-[![GitHub](https://img.shields.io/badge/devel%20version-3.4-blue.svg?style=flat
-"GitHub")](https://github.com/jackwasey/icd)
 [![Travis](https://travis-ci.org/jackwasey/icd.svg?branch=master
 "Travis Build Status")](https://travis-ci.org/jackwasey/icd)
 [![Appveyor](https://ci.appveyor.com/api/projects/status/9ncfgxht3n5i8t60/branch/master?svg=true
@@ -51,17 +49,16 @@ month](https://cranlogs.r-pkg.org/badges/icd
 
 ## Introduction
 
-Calculate comorbidities, medical risk scores, and work quickly and
+Calculate comorbidities, medical risk scores, and work very quickly and
 precisely with ICD-9 and ICD-10 codes. This package enables a work flow
 from raw tables of ICD codes in hospital databases to comorbidities.
 ICD-9 and ICD-10 comorbidity mappings from Quan (Deyo and Elixhauser
 versions), Elixhauser and AHRQ included. Common ambiguities and code
 formats are handled. Comorbidity computation includes Hierarchical
-Condition Codes, and a reimplementation of the AHRQ Clinical
-Classifications Software. Risk scores include those of Charlson and van
-Walraven. US Clinical Modification, Word Health Organization, Belgian
-and French ICD-10 codes are supported through the ‘icd.data’ package,
-some of which are downloaded on demand.
+Condition Codes, and an implementation of AHRQ Clinical Classifications.
+Risk scores include those of Charlson and van Walraven. US Clinical
+Modification, Word Health Organization, Belgian and French ICD-10 codes
+are supported, most of which are downloaded on demand.
 
 `icd` is used by many researchers around the world who work in public
 health, epidemiology, clinical research, nutrition, journalism, health
@@ -79,26 +76,25 @@ finalist](http://www.pulitzer.org/finalists/staff-propublica) work on
       - several standard mappings of ICD codes to comorbidities are
         included (Quan, Deyo, Elixhauser, AHRQ, PCCC)
       - *very fast* assignment of ICD codes to comorbidities (using
-        novel matrix multiplication algorithm and C++ internally)
-  - use your existing data format, minimizing requirements for
-    pre-processing
-  - summarize groups of ICD codes in natural language
+        novel matrix multiplication algorithm and C++ internally – see
+        ‘efficiency’ vignette for details)
+  - use your existing wide or long data format, icd can guess which
+    columns are ICD-9 or ICD-10 codes.
+  - explain and summarize groups of ICD codes in natural language, using
+    ICD editions from the WHO, USA, France and Belgium. Many different
+    annual editions of these data are available, all via the ‘icd.data’
+    companion package.
   - Charlson and Van Walraven score calculations
   - Hierarchical Condition Codes (HCC) from CMS
-  - Clinical Classifcations Software (CCS) comorbidities from AHRQ
+  - Clinical Classifications Software (CCS) comorbidities from AHRQ
   - Pediatric Complex Chronic Condition comorbidities
   - AHRQ ICD-10 procedure code classification
-  - annual revisions of ICD-9-CM and ICD-10-CM
   - correct conversion between different representations of ICD codes,
     with and without a decimal points, leading and trailing characters
     (this is not trivial for ICD-9-CM). ICD-9 to ICD-10 cross-walk is
     not yet implemented
   - comprehensive test suite to increase confidence in accurate
     processing of ICD codes
-  - all internal ICD and comorbidity data is extracted directly from
-    public data or code, allowing end-to-end reproducibility
-  - used, tested and benchmarked against other comorbidity calculators
-    on hardware from laptops to big servers
 
 ## Examples
 
@@ -108,8 +104,6 @@ function for more. Here’s a taste:
 ``` r
 # install.packages("icd")
 library(icd)
-browseVignettes("icd")
-help(package = "icd")
 
 # Typical diagnostic code data, with many-to-many relationship
 patient_data
@@ -145,7 +139,14 @@ plot_comorbid(uranium_pathology)
 
 ![](man/figures/README-example-1.png)<!-- -->
 
-## Make “Table 1” summary data
+## Comorbodities example: make “Table 1” summary data
+
+A common requirement for medical research involving patients is
+determining new or existing comorbidities. This is often reported in
+*Table 1* of research papers to demonstrate the similarity or
+differences of groups of patients. This package is focussed on fast and
+accurate generation of this comorbidity information from raw lists of
+ICD-9 and ICD-10 codes.
 
 Here we are using the US National Hospital Discharge Survey 2010 data
 from the [nhds](https://github.com/jackwasey/nhds) package. For the sake
@@ -200,7 +201,8 @@ knitr::kable(t(tab_dat), col.names = c("Emergency", "Not emergency"))
 ## How to get help
 
 Look at the help files for details and examples of almost every function
-in this package. There are several vignettes showing the main features:
+in this package. There are several vignettes showing the main features
+(See list with `vignette(package = "icd")`):
 
   - Introduction `vignette("introduction", package = "icd")`
   - Charlson scores `vignette("charlson-scores", package = "icd")`
@@ -227,34 +229,19 @@ suite which exercises all the key functions.
 ?comorbid_hcc
 ?explain_code
 ?is_valid
-
-help(package = "icd")
-browseVignettes("icd")
-vignette("introduction", package = "icd")
 ```
 
-## Relevance
+## ICD-9 codes
 
 ICD-9 codes are still in heavy use around the world, particularly in the
 USA where the ICD-9-CM (Clinical Modification) was in widespread use
 until the end of 2015. ICD-10 has been used worldwide for reporting
 cause of death for more than a decade, and ICD-11 is due to be released
-in 2018. ICD-10-CM is now the primary coding scheme for US hospital
+in 2019. ICD-10-CM is now the primary coding scheme for US hospital
 admission and discharge diagnoses used for regulatory purposes and
 billing. A vast amount of electronic patient data is recorded with ICD-9
 codes of some kind: this package enables their use in R alongside
 ICD-10.
-
-## Comorbidities
-
-A common requirement for medical research involving patients is
-determining new or existing comorbidities. This is often reported in
-*Table 1* of research papers to demonstrate the similarity or
-differences of groups of patients. This package is focussed on fast and
-accurate generation of this comorbidity information from raw lists of
-ICD-9 codes.
-
-## ICD-9 codes
 
 ICD-9 codes are not numbers, and great care is needed when matching
 individual codes and ranges of codes. It is easy to make mistakes, hence
@@ -266,7 +253,7 @@ meaningful, so numeric ICD-9 codes cannot be used in most cases. In
 addition, most clinical databases contain invalid codes, and even
 decimal and non-decimal format codes in different places. This package
 primarily deals with ICD-9-CM (Clinical Modification) codes, but should
-be applicable or easily extendible to the original WHO ICD-9 system.
+be applicable or easily extendable to the original WHO ICD-9 system.
 
 ## ICD-10 codes
 
@@ -276,17 +263,7 @@ there are a multitude of qualifiers, e.g. specifying recurrence,
 laterality, which vastly increase the number of possible codes. This
 package recognizes validity of codes by syntax alone, or whether the
 codes appear in a canonical list. The current ICD-10-CM master list is
-the 2016 set. There is no capability of converting between ICD-9 and
-ICD-10, but comorbidities can be generated from older ICD-9 codes and
-newer ICD-10 codes in parallel, and the comorbidities can then be
-compared.
-
-## Development version
-
-The latest version is available in [github
-icd](https://github.com/jackwasey/icd), and can be installed with:
-
-``` r
-    #install.packages("remotes")
-    remotes::install_github("jackwasey/icd")
-```
+the 2016 set. There is not yet the capability of converting between
+ICD-9 and ICD-10, but comorbidities can be generated from older ICD-9
+codes and newer ICD-10 codes in parallel, and the comorbidities can then
+be compared.

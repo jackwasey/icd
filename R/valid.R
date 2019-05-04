@@ -220,8 +220,9 @@ set_re_globals <- function(env = parent.frame()) {
   re_icd10fr_decimal <- wrap_decimal_re(re_icd10fr_major_bare, re_icd10fr_minor)
   re_icd10fr_any <- wrap_any_re(re_icd10fr_major_bare, re_icd10fr_minor)
   cur_env <- environment()
-  for (re in ls(envir = cur_env, pattern = "re_.+"))
+  for (re in ls(envir = cur_env, pattern = "re_.+")) {
     assign(re, get(re, envir = cur_env), envir = env)
+  }
   list(
     re_icd10_any,
     re_icd10cm_any,
@@ -336,7 +337,9 @@ icd_valid_worker <- function(x,
                              regex,
                              regex_no_ws = regex) {
   assert_flag(whitespace_ok)
-  if (length(x) == 0) return(logical())
+  if (length(x) == 0) {
+    return(logical())
+  }
   assert_fac_or_char(x)
   if (whitespace_ok) {
     na_to_false(

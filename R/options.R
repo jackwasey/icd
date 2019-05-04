@@ -90,7 +90,9 @@ NULL
 .verbose <- function(x) {
   if (missing(x)) {
     v <- .get_opt("verbose")
-    if (is.numeric(v)) return(as.integer(v))
+    if (is.numeric(v)) {
+      return(as.integer(v))
+    }
     return(isTRUE(v))
   }
   if ((is.logical(x) || is.numeric(x)) &&
@@ -251,7 +253,7 @@ with_absent_action <- function(absent_action = c(
 #' \dontrun{
 #' set_icd_data_dir()
 #' # or choose another directory:
-#' #set_icd_data_dir("/var/cache/icd.data")
+#' # set_icd_data_dir("/var/cache/icd.data")
 #' # then you may use:
 #' # download_all_icd_data()
 #' # or let 'icd' download data when needed.

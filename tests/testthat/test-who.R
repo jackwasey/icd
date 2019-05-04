@@ -42,13 +42,16 @@ test_that("Some codes beginning with Roman numerals were missed", {
   skip_missing_icd10who()
   expect_equal_no_icd(
     explain_code(as.icd10who(c("V13", "X13", "I10"))),
-    c("Essential (primary) hypertension",
+    c(
+      "Essential (primary) hypertension",
       "Pedal cyclist injured in collision with car, pick-up truck or van",
-      "Contact with steam and hot vapours")
+      "Contact with steam and hot vapours"
+    )
   )
   expect_equal_no_icd(
     explain_code(as.icd10who(c("V13", "X13", "I10")), lang = "fr"),
-    c("Hypertension essentielle (primitive)",
+    c(
+      "Hypertension essentielle (primitive)",
       "Cycliste bless\u00e9 dans une collision avec une automobile ou une camionnette",
       "Contact avec de la vapeur d'eau et des vapeurs br\u00fblantes"
     )

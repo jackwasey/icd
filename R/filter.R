@@ -130,7 +130,9 @@ icd10_filter_invalid <- function(x, icd_name = get_icd_name(x),
 #'   poa = c("Y", "N", NA, "Y"),
 #'   stringsAsFactors = FALSE
 #' )
-#' myData %>% filter_poa_not_no() %>% comorbid_ahrq()
+#' myData %>%
+#'   filter_poa_not_no() %>%
+#'   comorbid_ahrq()
 #' # can fill out named fields also:
 #' myData %>%
 #'   filter_poa_yes(poa_name = "poa") %>%

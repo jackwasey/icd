@@ -61,7 +61,9 @@ categorize_simple <- function(x,
       ncol = length(map),
       dimnames = list(character(0), names(map))
     )
-    if (!return_df) return(empty_mat_out)
+    if (!return_df) {
+      return(empty_mat_out)
+    }
     if (id_was_factor) {
       row_names <- factor_nosort(character(0), levels = iv_levels)
     } else if (preserve_id_type) {
@@ -94,7 +96,9 @@ categorize_simple <- function(x,
     mat <- mat[order(mat_new_row_order), , drop = FALSE] # nolint
   }
   if (return_binary) mat <- logical_to_binary(mat)
-  if (!return_df) return(mat)
+  if (!return_df) {
+    return(mat)
+  }
   # TODO: next step better left to the pure C++ functions?
   if (id_was_factor) {
     row_names <- factor_nosort_rcpp(x = rownames(mat), levels = iv_levels)

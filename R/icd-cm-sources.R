@@ -173,8 +173,9 @@
   oldwarn <- options("warn" = 1)
   on.exit(options(oldwarn))
   urls <- c(.icd9cm_sources$url, .icd9cm_sources$rtf_url)
-  for (url in urls)
+  for (url in urls) {
     .url_warn_or_stop(url, warn)
+  }
   message("now regenerate sysdata with\ngenerate_sysdata()")
 }
 
@@ -184,7 +185,8 @@
   lapply(.icd10cm_sources, function(year) {
     zips <- grep("zip$", names(year))
     urls <- paste0(year$base_url, unlist(unname(year))[zips])
-    for (url in urls)
+    for (url in urls) {
       .url_warn_or_stop(url, warn)
+    }
   })
 }

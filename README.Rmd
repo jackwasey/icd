@@ -79,7 +79,7 @@ cat(packageDescription("icd")$Description)
  * explain and summarize groups of ICD codes in natural language, using ICD editions from the WHO, USA, France and Belgium. Many different annual editions of these data are available, all via the 'icd.data' companion package.
  * Charlson and Van Walraven score calculations
  * Hierarchical Condition Codes (HCC) from CMS
- * Clinical Classifcations Software (CCS) comorbidities from AHRQ
+ * Clinical Classifications Software (CCS) comorbidities from AHRQ
  * Pediatric Complex Chronic Condition comorbidities
  * AHRQ ICD-10 procedure code classification
  * correct conversion between different representations of ICD codes, with and without a decimal points, leading and trailing characters (this is not trivial for ICD-9-CM). ICD-9 to ICD-10 cross-walk is not yet implemented
@@ -160,7 +160,7 @@ Many users have emailed me directly for help, and I'll do what I can, but it is 
 
 ICD-9 codes are still in heavy use around the world, particularly in the USA where the ICD-9-CM (Clinical Modification) was in widespread use until the end of 2015. ICD-10 has been used worldwide for reporting cause of death for more than a decade, and ICD-11 is due to be released in 2019. ICD-10-CM is now the primary coding scheme for US hospital admission and discharge diagnoses used for regulatory purposes and billing. A vast amount of electronic patient data is recorded with ICD-9 codes of some kind: this package enables their use in R alongside ICD-10.
 
-ICD-9 codes are not numbers, and great care is needed when matching individual codes and ranges of codes. It is easy to make mistakes, hence the need for this package. ICD-9 codes can be presented in *short* 5 character format, or *decimal* format, with a decimal place separating the code into two groups. There are also codes beginning with V and E which have different validation rules. Zeroes after a decimal place are meaningful, so numeric ICD-9 codes cannot be used in most cases. In addition, most clinical databases contain invalid codes, and even decimal and non-decimal format codes in different places. This package primarily deals with ICD-9-CM (Clinical Modification) codes, but should be applicable or easily extendible to the original WHO ICD-9 system.
+ICD-9 codes are not numbers, and great care is needed when matching individual codes and ranges of codes. It is easy to make mistakes, hence the need for this package. ICD-9 codes can be presented in *short* 5 character format, or *decimal* format, with a decimal place separating the code into two groups. There are also codes beginning with V and E which have different validation rules. Zeroes after a decimal place are meaningful, so numeric ICD-9 codes cannot be used in most cases. In addition, most clinical databases contain invalid codes, and even decimal and non-decimal format codes in different places. This package primarily deals with ICD-9-CM (Clinical Modification) codes, but should be applicable or easily extendable to the original WHO ICD-9 system.
 
 ## ICD-10 codes
 

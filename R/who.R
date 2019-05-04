@@ -280,7 +280,9 @@
 }
 
 .parse_icd10who2016 <- function(...) {
-  if (!.confirm_download()) return()
+  if (!.confirm_download()) {
+    return()
+  }
   .dl_icd10who_finalize(
     .dl_icd10who_walk(year = 2016, lang = "en", ...),
     2016, "en"
@@ -288,7 +290,9 @@
 }
 
 .parse_icd10who2008fr <- function(...) {
-  if (!.confirm_download()) return()
+  if (!.confirm_download()) {
+    return()
+  }
   .dl_icd10who_finalize(
     .dl_icd10who_walk(year = 2008, lang = "fr", ...),
     2008,
