@@ -146,11 +146,11 @@ NULL
 
 .test_slow <- function(x) {
   if (missing(x)) {
-    return(.get_opt("test_slow", default = FALSE))
+    return(.get_opt("icd.test_slow", default = FALSE))
   }
   stopifnot(is.logical(x) && length(x) == 1)
   Sys.setenv("ICD_TEST_SLOW" = x)
-  options("icd.data.test_slow" = x)
+  options("icd.test_slow" = x)
   invisible(x)
 }
 

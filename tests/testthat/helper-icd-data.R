@@ -1,3 +1,5 @@
+# !diagnostics suppress=year
+# (apparently non-functional attempt to suppress incorrect rstudio diagnostic)
 rtf_year_ok <- function(year, ...) {
   !is.null(
     with_absent_action(
@@ -203,9 +205,15 @@ chap_present <- function(x, ver_chaps, ...) {
 }
 
 expect_chap_missing <- function(x, ver_chaps, info = NULL, label = NULL, ...)
-  eval(bquote(expect_true(.(chap_missing(x, ver_chaps)),
-    info = info, label = label, ...
-  )))
+  eval(
+    bquote(
+      expect_true(
+        object = .(chap_missing(x, ver_chaps)),
+        info = info,
+        label = label
+      )
+    )
+  )
 
 expect_icd9_sub_chap_missing <- function(x, ...)
   eval(bquote(expect_chap_missing(.(x), ver_chaps = icd9_sub_chapters, ...)))
@@ -222,7 +230,7 @@ expect_icd10_chap_missing <- function(x, ...)
 # expect that a chapter with given title exists, case-insensitive
 expect_chap_present <- function(x, ver_chaps, info = NULL, label = NULL, ...) {
   eval(bquote(expect_true(.(chap_present(x, ver_chaps = ver_chaps)),
-    info = info, label = label, ...
+    info = info, label = label
   )))
 }
 

@@ -136,7 +136,7 @@ expand_range.icd10cm <- function(start,
 #' expand_range_major("100", "102")
 #' @template dotdotdot
 #' @export
-expand_range_major <- function(start, end, defined) {
+expand_range_major <- function(start, end, defined = TRUE) {
   UseMethod("expand_range_major")
 }
 

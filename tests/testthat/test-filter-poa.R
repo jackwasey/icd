@@ -11,23 +11,23 @@ test_that("filter POA - no poa field", {
 test_that("filter POA - generic func - invalid poa type", {
   expect_error(filter_poa(
     x = simple_poa_pts,
-    poaField = "poa", poa = "not an option"
+    poa_name = "poa", poa = "not an option"
   ))
   expect_error(filter_poa(
     x = simple_poa_pts,
-    poaField = "poa", poa = ""
+    poa_name = "poa", poa = ""
   ))
   expect_error(filter_poa(
     x = simple_poa_pts,
-    poaField = "poa", poa = NA
+    poa_name = "poa", poa = NA
   ))
 })
 
 test_that("filter POA - wrong name poa field", {
   pd <- simple_poa_pts
   names(pd) <- c("visit_id", "icd9", "achilleus")
-  expect_error(filter_poa_yes(pd, poaField = "poa"))
-  expect_error(filter_poa_yes(pd, poaField = "odysseus"))
+  expect_error(filter_poa_yes(pd, poa_name = "poa"))
+  expect_error(filter_poa_yes(pd, poa_name = "odysseus"))
   expect_error(filter_poa_yes(pd))
 })
 

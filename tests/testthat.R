@@ -11,15 +11,12 @@ if (!icd:::.env_var_is_true("NOT_CRAN")) {
   old_offline <- options("icd.data.offline" = FALSE)
   on.exit(options(old_offline), add = TRUE)
 }
-if (icd:::.env_var_is_true("ICD_DATA_TEST_SLOW")) {
-  old_test_slow <- options("icd.data.test_slow" = TRUE)
+if (icd:::.env_var_is_true("ICD_TEST_SLOW")) {
+  old_test_slow <- options("icd.test_slow" = TRUE)
   on.exit(options(old_test_slow), add = TRUE)
 }
 old_interact <- options("icd.data.interact" = FALSE)
 on.exit(options(old_interact), add = TRUE)
-writeLines(paste(as.character(icd:::.show_options()), collapse = ", "),
-  con = "~/icddebug.txt"
-)
 icd:::.show_options()
 testthat::test_check("icd")
 icd:::.show_options()

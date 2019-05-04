@@ -103,13 +103,14 @@ comorbid_quan_elix(vermont_dx)[1:5, 1:8]
 Things work beautifully using [magrittr](https://cran.r-project.org/package=magrittr) `%>%` to chain functions together. `magrittr` is useful for chains of commands, such as the following:
 ```{r getcomorbidities2}
 # find Elixhauser comorbidities which were present-on-arrival
-patients_icd9 %>% filter_poa %>% comorbid_elix
+patients_icd9 %>% 
+  filter_poa %>% 
+  comorbid_elix
 
-# same as above, then summarize five columns:
+# same as above, then summarize:
 patients_icd9 %>%
   filter_poa %>%
   comorbid_elix %>%
-  extract(, 5:10) %>%
   colSums
 
 # Take Vermont discharge data (wide to long conversion no longer needed)

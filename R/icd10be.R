@@ -110,6 +110,7 @@
   )
   names(icd10be2017) <- names
   names(icd10be2017_pc) <- names
+  icd10be2017_pc$not_poa <- NULL
   icd10be2017$not_poa <- !is.na(icd10be2017$not_poa) && icd10be2017 == "Y"
   icd10be2017 <- icd10be2017[order.icd10be(icd10be2017$code), ]
   icd10be2017_pc <- icd10be2017_pc[order(icd10be2017_pc$code), ]
@@ -160,7 +161,7 @@
     # N=Newborn and Neonates 0y;
     # P=Pediatric 0-17y)
     "ICDFLAGE",
-    # effectively NOPOA is flag for leaf node
+    # blank for procedure codes, Y or empty for diagnostic codes
     "ICDNOPOA",
     "ICDTXTFR",
     "ICDTXTNL",
@@ -188,7 +189,8 @@
   )
   names(icd10be2014) <- names
   names(icd10be2014_pc) <- names
-  icd10be2014$not_poa <- !is.na(icd10be2014$not_poa) && icd10be2014 == "Y"
+  icd10be2014_pc$not_poa <- NULL
+  icd10be2014$not_poa <- !is.na(icd10be2014$not_poa) & icd10be2014$not_poa == "Y"
   icd10be2014 <- icd10be2014[order.icd10be(icd10be2014$code), ]
   icd10be2014_pc <- icd10be2014_pc[order(icd10be2014_pc$code), ]
   class(icd10be2014$code) <- c("icd10be", "icd10", "character")

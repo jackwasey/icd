@@ -541,9 +541,6 @@ get_icd_data_dir <- function(must_work = TRUE) {
 # for development, list envrionment of a function
 .ls_fun <- function(f) ls(environment(f))
 
-# for development, list envrionment of a function
-.ls.str_fun <- function(f) utils::ls.str(environment(f))
-
 #' List the actual data in this package, not bindings
 #' @examples
 #' icd:::.ls_icd_data()
