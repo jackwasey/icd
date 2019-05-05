@@ -1,19 +1,19 @@
 #' Calculate Charlson Comorbidity Index (Charlson Score)
 #'
-#' Charlson score is calculated in the basis of the Quan revision of Deyo's
-#' ICD-9 mapping. (Peptic ulcer disease no longer warrants a point.) Quan
-#' published an updated set of scores, but it seems most people use the original
-#' scores for easier comparison between studies, even though Quan's were more
-#' predictive.
+#' @description Charlson score is calculated in the basis of the Quan revision
+#'   of Deyo's ICD-9 mapping. (Peptic ulcer disease no longer warrants a point.)
+#'   Quan published an updated set of scores, but it seems most people use the
+#'   original scores for easier comparison between studies, even though Quan's
+#'   were more predictive.
 #' @details When used, hierarchy is applied per Quan, \dQuote{The following
 #'   comorbid conditions were mutually exclusive: diabetes with chronic
 #'   complications and diabetes without chronic complications; mild liver
 #'   disease and moderate or severe liver disease; and any malignancy and
-#'   metastatic solid tumor.} The Quan scoring weights come from the 2011 paper
-#'   (dx.doi.org/10.1093/aje/kwq433). The comorbidity weights were recalculated
-#'   using updated discharge data, and some changes, such as Myocardial
-#'   Infarction decreasing from 1 to 0, may reflect improved outcomes due to
-#'   advances in treatment since the original weights were determined in 1984.
+#'   metastatic solid tumor.} The Quan scoring weights come from the 2011 paper.
+#'   The comorbidity weights were recalculated using updated discharge data, and
+#'   some changes, such as Myocardial Infarction decreasing from 1 to 0, may
+#'   reflect improved outcomes due to advances in treatment since the original
+#'   weights were determined in 1984.
 #' @param x data frame containing a column of visit or patient identifiers, and
 #'   a column of ICD-9 codes. It may have other columns which will be ignored.
 #'   By default, the first column is the patient identifier and is not counted.
