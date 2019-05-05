@@ -173,7 +173,7 @@ along with icd. If not, see <http:#www.gnu.org/licenses/>.
 <li>explain and summarize groups of ICD codes in natural language, using ICD editions from the WHO, USA, France and Belgium. Many different annual editions of these data are available, all via the ‘icd.data’ companion package.</li>
 <li>Charlson and Van Walraven score calculations</li>
 <li>Hierarchical Condition Codes (HCC) from CMS</li>
-<li>Clinical Classifcations Software (CCS) comorbidities from AHRQ</li>
+<li>Clinical Classifications Software (CCS) comorbidities from AHRQ</li>
 <li>Pediatric Complex Chronic Condition comorbidities</li>
 <li>AHRQ ICD-10 procedure code classification</li>
 <li>correct conversion between different representations of ICD codes, with and without a decimal points, leading and trailing characters (this is not trivial for ICD-9-CM). ICD-9 to ICD-10 cross-walk is not yet implemented</li>
@@ -370,7 +370,7 @@ along with icd. If not, see <http:#www.gnu.org/licenses/>.
 <h2 class="hasAnchor">
 <a href="#icd-9-codes" class="anchor"></a>ICD-9 codes</h2>
 <p>ICD-9 codes are still in heavy use around the world, particularly in the USA where the ICD-9-CM (Clinical Modification) was in widespread use until the end of 2015. ICD-10 has been used worldwide for reporting cause of death for more than a decade, and ICD-11 is due to be released in 2019. ICD-10-CM is now the primary coding scheme for US hospital admission and discharge diagnoses used for regulatory purposes and billing. A vast amount of electronic patient data is recorded with ICD-9 codes of some kind: this package enables their use in R alongside ICD-10.</p>
-<p>ICD-9 codes are not numbers, and great care is needed when matching individual codes and ranges of codes. It is easy to make mistakes, hence the need for this package. ICD-9 codes can be presented in <em>short</em> 5 character format, or <em>decimal</em> format, with a decimal place separating the code into two groups. There are also codes beginning with V and E which have different validation rules. Zeroes after a decimal place are meaningful, so numeric ICD-9 codes cannot be used in most cases. In addition, most clinical databases contain invalid codes, and even decimal and non-decimal format codes in different places. This package primarily deals with ICD-9-CM (Clinical Modification) codes, but should be applicable or easily extendible to the original WHO ICD-9 system.</p>
+<p>ICD-9 codes are not numbers, and great care is needed when matching individual codes and ranges of codes. It is easy to make mistakes, hence the need for this package. ICD-9 codes can be presented in <em>short</em> 5 character format, or <em>decimal</em> format, with a decimal place separating the code into two groups. There are also codes beginning with V and E which have different validation rules. Zeroes after a decimal place are meaningful, so numeric ICD-9 codes cannot be used in most cases. In addition, most clinical databases contain invalid codes, and even decimal and non-decimal format codes in different places. This package primarily deals with ICD-9-CM (Clinical Modification) codes, but should be applicable or easily extendable to the original WHO ICD-9 system.</p>
 </div>
 <div id="icd-10-codes" class="section level2">
 <h2 class="hasAnchor">

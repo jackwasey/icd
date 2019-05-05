@@ -231,7 +231,9 @@ first column is used.</p>
 #&gt; 1 2 2 </div><div class='input'># or:
 </div><span class='co'># NOT RUN {</span>
 <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>library</a></span>(<span class='no'>magrittr</span>, <span class='kw'>warn.conflicts</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>)
-<span class='no'>wide</span> <span class='kw'>%&gt;%</span> <span class='fu'><a href='wide_to_long.html'>wide_to_long</a></span>() <span class='kw'>%&gt;%</span> <span class='fu'>count_codes</span>()
+<span class='no'>wide</span> <span class='kw'>%&gt;%</span>
+  <span class='fu'><a href='wide_to_long.html'>wide_to_long</a></span>() <span class='kw'>%&gt;%</span>
+  <span class='fu'>count_codes</span>()
 <span class='co'># }</span></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">

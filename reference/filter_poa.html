@@ -231,7 +231,9 @@ out-of-hospital characteristics.</p></li>
   <span class='kw'>poa</span> <span class='kw'>=</span> <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"Y"</span>, <span class='st'>"N"</span>, <span class='fl'>NA</span>, <span class='st'>"Y"</span>),
   <span class='kw'>stringsAsFactors</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>
 )
-<span class='no'>myData</span> <span class='kw'>%&gt;%</span> <span class='fu'>filter_poa_not_no</span>() <span class='kw'>%&gt;%</span> <span class='fu'><a href='comorbid.html'>comorbid_ahrq</a></span>()
+<span class='no'>myData</span> <span class='kw'>%&gt;%</span>
+  <span class='fu'>filter_poa_not_no</span>() <span class='kw'>%&gt;%</span>
+  <span class='fu'><a href='comorbid.html'>comorbid_ahrq</a></span>()
 <span class='co'># can fill out named fields also:</span>
 <span class='no'>myData</span> <span class='kw'>%&gt;%</span>
   <span class='fu'>filter_poa_yes</span>(<span class='kw'>poa_name</span> <span class='kw'>=</span> <span class='st'>"poa"</span>) <span class='kw'>%&gt;%</span>

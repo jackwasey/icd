@@ -169,7 +169,7 @@
 <li>drop <code>unique_ids</code> argument to <code>comorbid</code> and <code>categorize</code> since it no longer provides any optimization opportunity.</li>
 <li>Let <code>icd</code> work better when not lodaded with <code>library</code>, so <code><a href="../reference/comorbid.html">icd::comorbid_ahrq</a></code> etc. should work with just <code>requireNamespace</code> or using <code>icd::function()</code>
 </li>
-<li>Prefer ‘leaf’ over ‘billable’ to indicate a leaf node. Most coding systems are <em>not</em> all about money, and ‘icd’ should reflect this. ‘billable’ as an argument to functions such as <code><a href="../reference/is_defined.html">is_defined()</a></code> and <code><a href="../reference/get_defined.html">get_defined()</a></code>. Functions named like <code><a href="../reference/is_billable.html">is_billable()</a></code> are left in place for ICD-9-CM and ICD-10-CM, but in general, <code><a href="../reference/is_leaf.html">is_leaf()</a></code> and that family of functions is prefered.</li>
+<li>Prefer ‘leaf’ over ‘billable’ to indicate a leaf node. Most coding systems are <em>not</em> all about money, and ‘icd’ should reflect this. ‘billable’ as an argument to functions such as <code><a href="../reference/is_defined.html">is_defined()</a></code> and <code><a href="../reference/get_defined.html">get_defined()</a></code>. Functions named like <code><a href="../reference/is_billable.html">is_billable()</a></code> are left in place for ICD-9-CM and ICD-10-CM, but in general, <code><a href="../reference/is_leaf.html">is_leaf()</a></code> and that family of functions is preferred.</li>
 <li>Drop dependency on magrittr, although it may still be used nicely with icd functions</li>
 <li>Increased test coverage with resulting fixes in corner cases</li>
 <li>Accept integer identifiers in patient data</li>
@@ -250,9 +250,9 @@
 <li>added ‘charlson’ synonyms for ‘Quan/Deyo’, e.g. Charlson comorbidities can now be found using <code><a href="../reference/comorbid.html">comorbid_charlson(patient_data)</a></code>
 </li>
 <li>Added AHRQ clinical condition software (CCS) classification for ICD-9 and ICD-10, thanks to Vitaly Druker, fixes #127</li>
-<li>function names have lost the ‘icd_’ prefix, old names kept for compatability, but easier now to write <code><a href="../reference/comorbid.html">comorbid(patient_data)</a></code>, and <code><a href="../reference/comorbid.html">icd::comorbid</a></code> may also be used, and which many consider good practice. <code>explain_icd</code> synonym avoids name conflict with the popular <code>dplyr</code> package, but <code>icd::explain</code> also a nice option.</li>
+<li>function names have lost the ‘icd_’ prefix, old names kept for compatibility, but easier now to write <code><a href="../reference/comorbid.html">comorbid(patient_data)</a></code>, and <code><a href="../reference/comorbid.html">icd::comorbid</a></code> may also be used, and which many consider good practice. <code>explain_icd</code> synonym avoids name conflict with the popular <code>dplyr</code> package, but <code>icd::explain</code> also a nice option.</li>
 <li>Assume C++11, which is now four years old, enabling code simplification</li>
-<li>rename all functions to remove the icd_, people can use the concise icd:: if library(icd) was not callled</li>
+<li>rename all functions to remove the icd_, people can use the concise icd:: if library(icd) was not called</li>
 <li>deprecated rarely or unused code, including %i9in%</li>
 </ul>
 </div>
