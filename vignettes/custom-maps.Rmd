@@ -7,6 +7,7 @@ vignette: >
   %\VignetteIndexEntry{Quick custom comorbidity maps are helpful}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
+  %\VignetteKeyword{comorbidity, comorbidities, biomedical informatics, administrative data, ICD-9, ICD-10, ICD-9-CM, ICD-10-CM, mapping, algorithm}
 ---
 
 ```{r setup, include = FALSE}
@@ -18,12 +19,12 @@ knitr::opts_chunk$set(
 
 
 Many problems with clinical data are best solved using the standard and widely validated comorbidities, mapped to subsets of ICD-9 or ICD-10 codes, as published by authors including Elixhauser, Quan, Deyo and the AHRQ. It is also common to have a pre-defined specific set of ICD codes. Examples of this include:
- 
+
  - Studying sub-types of a common comorbidity, such as obesity: although obesity is in the AHRQ and Elixhauser mappings, there is no granularity.
  - Studying a particular disease: most diseases are not in the standard comorbidity maps. To distinguish patients having or not having a particular set of diseases is usually not possible using the standard comorbidity maps. E.g. Which patients have eczema? Which emergency room patients presented with a sexual health problem?
- 
+
  `icd` has a simple mechanism to use custom category-ICD maps. A comorbidity map is a list of character vectors. Each list must be named to reflect the ICD codes it contains; the character vector contains the ICD codes themselves.
- 
+
  Let's take a look at the first few items in the Charlson map from Quan and Deyo:
 ```{r charlsonexample}
 print(icd::icd10_map_quan_deyo, n_comorbidities = 3, n_codes = 8)
@@ -93,16 +94,16 @@ icd::comorbid(one_pt, map = my_map)
 ```{r matriximage, fig.width=6, echo = FALSE}
 {
   image(t(six_pts_cmb),
-        col = c("light blue", "blue"), 
+        col = c("light blue", "blue"),
         xlab = "Custom disease ranges",
         axes = FALSE
   )
-  axis(1, 
+  axis(1,
        at = seq(0, 1, length.out = length(my_map)),
        labels = names(my_map),
        lwd = 0
   )
-  axis(2, 
+  axis(2,
        at = seq(0, 1, length.out = nrow(dif_pt)),
        labels = dif_pt$id,
        lwd = 0,

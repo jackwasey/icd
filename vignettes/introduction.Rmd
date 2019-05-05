@@ -12,6 +12,7 @@ vignette: >
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteDepends{magrittr, utils}
   %\VignetteEncoding{UTF-8}
+  %\VignetteKeyword{comorbidity, comorbidities, biomedical informatics, administrative data, matrix algebra, ICD-9, ICD-10, ICD-9-CM, ICD-10-CM, mapping, algorithm}
 ---
 <!--
 Copyright (C) 2014 - 2019  Jack O. Wasey
@@ -44,8 +45,8 @@ suppressWarnings({
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
-  out.width = "100%", 
-  fig.width = 14, 
+  out.width = "100%",
+  fig.width = 14,
   fig.height = 10.5
 )
 
@@ -63,10 +64,10 @@ patients_icd9 <- data.frame(
 library(icd)
 head(uranium_pathology, 10)
 head(comorbid_charlson(uranium_pathology))
-comorbid_charlson(uranium_pathology, 
+comorbid_charlson(uranium_pathology,
                   return_df = TRUE,
                   return_binary = TRUE)[1:5, 1:5]
-hist(charlson(uranium_pathology), 
+hist(charlson(uranium_pathology),
      main = "Uranium data",
      xlab = "Charlson Score")
 ```
@@ -103,8 +104,8 @@ comorbid_quan_elix(vermont_dx)[1:5, 1:8]
 Things work beautifully using [magrittr](https://cran.r-project.org/package=magrittr) `%>%` to chain functions together. `magrittr` is useful for chains of commands, such as the following:
 ```{r getcomorbidities2}
 # find Elixhauser comorbidities which were present-on-arrival
-patients_icd9 %>% 
-  filter_poa %>% 
+patients_icd9 %>%
+  filter_poa %>%
   comorbid_elix
 
 # same as above, then summarize:
@@ -115,7 +116,7 @@ patients_icd9 %>%
 
 # Take Vermont discharge data (wide to long conversion no longer needed)
 # find comorbidities, convert TRUE to 1 and show first few
-vermont_cmb <- vermont_dx %>% 
+vermont_cmb <- vermont_dx %>%
   icd9_comorbid_quan_elix %>%
   apply(2, as.integer) # convert logical to integer
 
@@ -318,7 +319,7 @@ I understand that comorbidity assignment using SAS is a lengthy business. Let's 
 many_patients <- icd:::generate_random_pts(1e7)
 system.time(
   comorbid_ahrq(many_patients)
-  )[["elapsed"]] 
+  )[["elapsed"]]
 ```
 This takes about five seconds on a 2016 8-core workstation. More detailed benchmarks can be seen comparing icd to other packages in the vignette article in this package.
 
@@ -330,7 +331,7 @@ See the [custom comorbidity map vignette](custom-maps.html).
 ```{r arbitrary Mapping}
 names(icd9_chapters)[c(1:5, 14)]
 my_map <- icd:::chapters_to_map(icd9_chapters[c(2, 5, 14)])
-icd9_comorbid(patients_icd9, my_map) # no positive 
+icd9_comorbid(patients_icd9, my_map) # no positive
 ```
 
 ### Reduce comorbidity mapping from possible values to defined diagnostic codes
@@ -350,7 +351,7 @@ The ICD-9-CM scheme is structured as follows:
  - Major part (three-digit codes)
  - sub-division (first decimal place)
  - sub-sub-division (second decimal place)
- 
+
  For most combinations of zero to nine, nothing is defined. Sometimes, nodes at one level in the hierarchy are descriptive only of their children (branch nodes), whereas some are themselves billable.
 
 ## Conclusion

@@ -9,14 +9,15 @@ vignette: >
   %\VignetteIndexEntry{Pediatric Complex Chronic Conditions}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
+  %\VignetteKeyword{PCCC, pediatric complex chronic conditions, comorbidity, comorbidities, biomedical informatics, administrative data, ICD-9, ICD-10, ICD-9-CM, ICD-10-CM, mapping, algorithm}
 bibliography: icdpkg.bib
 ---
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
-  out.width = "100%", 
-  fig.width = 14, 
+  out.width = "100%",
+  fig.width = 14,
   fig.height = 10.5
   # global.par = TRUE
 )

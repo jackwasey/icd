@@ -10,6 +10,7 @@ vignette: >
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteDepends{magrittr}
   %\VignetteEncoding{UTF-8}
+  %\VignetteKeyword{risk score, Charlson score, van Walraven score, comorbidity, comorbidities, biomedical informatics, administrative data, ICD-9, ICD-10}
 ---
 <!--
 Copyright (C) 2014 - 2019  Jack O. Wasey
