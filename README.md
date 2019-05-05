@@ -45,7 +45,7 @@ month](https://cranlogs.r-pkg.org/badges/icd
 <!-- badges: end -->
 <!-- [![CRAN RStudio mirror downloads last week](https://cranlogs.r-pkg.org/badges/last-week/icd "RStudio Mirror Downloads Last Week")](https://cran.r-project.org/package=icd) -->
 
-# Comorbidities from ICD-9 and ICD-10 codes, manipulation and validation
+# Fast comorbidities from ICD-9 and ICD-10 codes, decoding, manipulation and validation
 
 ## Introduction
 
