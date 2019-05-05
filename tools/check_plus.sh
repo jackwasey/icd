@@ -54,8 +54,9 @@ MAKEFLAGS=-j$(getconf _NPROCESSORS_ONLN) \
   _R_CHECK_VIGNETTES_NLINES_=0 \
   _R_CHECK_LENGTH_1_CONDITION_="verbose,abort" \
   _R_CHECK_LENGTH_1_LOGIC2_="verbose,abort" \
-  R_CHECK_CONSTANTS=5 \
+  ICD_TEST_SLOW=true \
   R CMD check "$(ls -t $tmpd/icd*.tar.gz | head -1)"
 popd
 
+  #R_CHECK_CONSTANTS=5 \
 # N.b. R_CHECK_CONSTANTS and R_JIT_STRATEGY work together, but can make examples and tests run very slowly.

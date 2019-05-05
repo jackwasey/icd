@@ -2,10 +2,10 @@ I am submitting icd 4.0.4, which does not depend on icd.data in any way. Thank y
 
 # Test environments
 
-  * Ubuntu 18.10 R 3.5.3, clang 7.0, gcc 8.2, 
+  * Ubuntu 18.10 R 3.6.0, clang 8.0, gcc 8.3, 
   * Travis CI: MacOS, Ubuntu 16.04, 18.04 (Travis) R-devel, R-release, gcc, clang
   * Windows Server 2012 R2 x64 (Appveyor), R devel 32 and 64 bit
-  * MacOS Mojave, R 3.5.3 brew clang 7.0, GCC-8.3, GCC-9.0.1-HEAD
+  * MacOS Mojave, R 3.6.0 brew clang 8.0, GCC-9.0.1-HEAD
   * R-hub (sanitizer, valgrind)
 
 # R CMD check results
