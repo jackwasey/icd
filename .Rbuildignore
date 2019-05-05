@@ -36,6 +36,7 @@
 ^icd_.*tar\.gz
 ^inst\/doc\/benchresults\\.ods$
 ^.*efficiency.*_files$
+^.*country-lang-vers.*_files$
 ^lib-bench$
 ^man-roxygen$
 ^revdep$
