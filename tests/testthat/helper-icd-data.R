@@ -153,8 +153,8 @@ eee <- function(x, desc, ...) {
 
 eee10 <- function(x, desc, ...) {
   x <- sub("\\.", "", x)
-  res <- icd10cm2016[
-    icd10cm2016 %in% x,
+  res <- icd10cm2019[
+    icd10cm2019 %in% x,
     "long_desc"
   ]
   if (nrow(res) == 0 && is.null(x)) {

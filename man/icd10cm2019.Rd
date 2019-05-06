@@ -3,7 +3,6 @@
 \docType{data}
 \name{icd10cm2019}
 \alias{icd10cm2019}
-\alias{icd10cm2016}
 \title{United States and Belgium ICD-10-CM}
 \source{
 \url{http://www.cdc.gov/nchs/icd/icd10cm.htm}

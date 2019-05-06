@@ -26,7 +26,7 @@ n <- 10000
 set.seed(1441)
 # load the dice with more PCCC diagnostic codes
 h <- c(
-  icd10cm2016$code,
+  icd10cm2019$code,
   rep(unlist(unname(icd10_map_pccc_dx)), 10)
 )
 dat <- data.frame(
@@ -35,8 +35,8 @@ dat <- data.frame(
   icd_dx2 = sample(h, n, replace = TRUE)
 )
 # for builds without the ability to download or use cached data, ignore pcs
-if (icd:::.exists_in_cache("icd10cm2016_pc")) {
-  i <- get_icd10cm2016_pc()$code
+if (icd:::.exists_in_cache("icd10cm2019_pc")) {
+  i <- get_icd10cm2019_pc()$code
   dat <- cbind(dat,
                icd_pcs1 = sample(i, n, replace = TRUE),
                icd_pcs2 = sample(i, n, replace = TRUE)
@@ -60,7 +60,7 @@ head(dat)
 The data is in 'wide' format. `icd` no longer needs the data to be in 'long' format. The PCCC comorbidity classes can be computed directly from the source data and summarized in a plot. Here we calculate the PCCC from ICD diagnostic codes and ICD procedure codes separately, and logically combine them to get the result.
 ```{r calcpre, eval = TRUE, echo = FALSE}
 pccc_dx <- comorbid_pccc_dx(dat)
-if (icd:::.exists_in_cache("icd10cm2016_pc")) {
+if (icd:::.exists_in_cache("icd10cm2019_pc")) {
   pccc_pcs <- icd10_comorbid_pccc_pcs(dat,
                                       icd_name = c("icd_pcs1", "icd_pcs2")
   )

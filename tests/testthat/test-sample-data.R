@@ -5,7 +5,7 @@ test_that("ICD-10 codes in uranium data are okay", {
   expect_equal(
     setdiff(
       levels(icd::decimal_to_short(uranium_pathology$icd10)),
-      icd10cm2016$code
+      icd10cm2019$code
     ),
     character(0)
   )

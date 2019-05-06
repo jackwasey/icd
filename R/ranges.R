@@ -188,7 +188,7 @@ expand_range_major.icd10cm <- function(start, end, defined = TRUE) {
   # we expand the start to end range of chapter and sub-chapter definitions.
   se <- toupper(trimws(as_char_no_warn(c(start, end))))
   unique_mjrs <- if (defined) {
-    unique(icd10cm2016$three_digit)
+    unique(icd10cm2019$three_digit)
   } else {
     .icd10cm_get_majors_possible("A00", "Z99")
   }

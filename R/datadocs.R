@@ -121,7 +121,6 @@ NULL
 #' \emph{leaf} flag indicating whether a code is a \emph{billable} leaf node, or
 #' a code higher in the hierarchy which nevertheless will have a description.
 #' @section Editions: There are annual revisions to this data in the US.
-#' @aliases icd10cm2016
 #' @seealso \code{\link{get_icd10cm2014}} \code{\link{get_icd10cm2015}}
 #'   \code{\link{get_icd10cm2017}} \code{\link{get_icd10cm2018}}
 #' @source \url{http://www.cdc.gov/nchs/icd/icd10cm.htm}

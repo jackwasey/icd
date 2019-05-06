@@ -144,7 +144,7 @@ generate_neds_pts <- function(n = 1000L,
                               icd10 = TRUE,
                               verbose = FALSE) {
   codes <- if (icd10) {
-    i <- icd10cm2016
+    i <- icd10cm2019
     unclass(as_char_no_warn(i$code))
   } else {
     unclass(as_char_no_warn(icd9cm_hierarchy$code))
