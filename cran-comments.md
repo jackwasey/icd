@@ -1,4 +1,4 @@
-I am submitting icd 4.0.5, which does not depend on icd.data in any way. Thank you for comments on previous submission, all of which have been addressed in this submission. icd.data will be updated to indicate it is deprecated. This is a small update from 4.0.4 which seem to fail the pre-check, but the expected pandocs in the pre-check were from version 3.3. This version does not depend on pandoc 2.2 to build the vignettes anymore.
+This version is less than 5MB.
 
 # Test environments
 
