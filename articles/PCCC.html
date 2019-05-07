@@ -32,7 +32,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Comorbidity calculations and tools for ICD-9 and ICD-10 codes</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">4.0.4</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">4.1.9000</span>
       </span>
     </div>
 
@@ -70,13 +70,13 @@
       <a href="../articles/compare-maps.html">Comparing Comorbidity Mappings</a>
     </li>
     <li>
-      <a href="../articles/country-lang-vers.html">Working with World Health Organization ICD codes and national editions, and different languages</a>
+      <a href="../articles/country-lang-vers-prebuilt.html">Working with World Health Organization ICD codes and national editions, and different languages</a>
     </li>
     <li>
       <a href="../articles/custom-maps.html">Quick custom comorbidity maps are helpful</a>
     </li>
     <li>
-      <a href="../articles/efficiency.pdf">icd: Efficient Computation of Comorbidities from ICD Codes Using Sparse Matrix Multiplication in R (PDF)</a>
+      <a href="../articles/efficiency-prebuilt.pdf">icd: Efficient Computation of Comorbidities from ICD Codes Using Sparse Matrix Multiplication in R (PDF)</a>
     </li>
     <li>
       <a href="../articles/introduction.html">An Introduction to icd</a>
@@ -111,7 +111,7 @@
       <h1>Pediatric Complex Chronic Conditions</h1>
                         <h4 class="author">Jack O. Wasey</h4>
             
-            <h4 class="date">2019-05-05</h4>
+            <h4 class="date">2019-05-07</h4>
       
       
       <div class="hidden name"><code>PCCC.Rmd</code></div>
@@ -134,12 +134,12 @@
 <p>The PCCC comorbidities may be derived from both diagnostic and procedure codes. The following simulated data has both:</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/head">head</a></span>(dat)</a>
 <a class="sourceLine" id="cb1-2" title="2"><span class="co">#&gt;      id icd_dx1 icd_dx2 icd_pcs1 icd_pcs2</span></a>
-<a class="sourceLine" id="cb1-3" title="3"><span class="co">#&gt; 1 10001   C8490 S63656S  061409Y  0KX44Z2</span></a>
-<a class="sourceLine" id="cb1-4" title="4"><span class="co">#&gt; 2 10002 S28222S S66109A  0RGF0ZZ  2W5BXYZ</span></a>
-<a class="sourceLine" id="cb1-5" title="5"><span class="co">#&gt; 3 10003     I71 V80910A  0CUT7JZ  3E0G3SF</span></a>
-<a class="sourceLine" id="cb1-6" title="6"><span class="co">#&gt; 4 10004   T4993  S80212  03HQ43Z  BQ3KZZZ</span></a>
-<a class="sourceLine" id="cb1-7" title="7"><span class="co">#&gt; 5 10005   M4004  T65894  0YWBX7Z  0D590ZZ</span></a>
-<a class="sourceLine" id="cb1-8" title="8"><span class="co">#&gt; 6 10006 S62254G T596X1A  0XHG33Z  D7045ZZ</span></a></code></pre></div>
+<a class="sourceLine" id="cb1-3" title="3"><span class="co">#&gt; 1 10001   C8411   K0849  089PX0Z  035Y4ZZ</span></a>
+<a class="sourceLine" id="cb1-4" title="4"><span class="co">#&gt; 2 10002 S20451A S52699M  03L00ZZ  0JRD0JZ</span></a>
+<a class="sourceLine" id="cb1-5" title="5"><span class="co">#&gt; 3 10003    I600    Z990  0QCG3ZZ  06VC0CZ</span></a>
+<a class="sourceLine" id="cb1-6" title="6"><span class="co">#&gt; 4 10004  T424X6 S42016K  05963ZX  0WH231Z</span></a>
+<a class="sourceLine" id="cb1-7" title="7"><span class="co">#&gt; 5 10005   M2117  T477X3  0WPQ43Z  30260S1</span></a>
+<a class="sourceLine" id="cb1-8" title="8"><span class="co">#&gt; 6 10006  S60559     H69  10903ZC      0BD</span></a></code></pre></div>
 <p>The data is in ‘wide’ format. <code>icd</code> no longer needs the data to be in ‘long’ format. The PCCC comorbidity classes can be computed directly from the source data and summarized in a plot. Here we calculate the PCCC from ICD diagnostic codes and ICD procedure codes separately, and logically combine them to get the result.</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" title="1">pccc_dx &lt;-<span class="st"> </span><span class="kw"><a href="../reference/comorbid_pccc_dx.html">comorbid_pccc_dx</a></span>(dat)</a>
 <a class="sourceLine" id="cb2-2" title="2">pccc_pcs &lt;-<span class="st"> </span><span class="kw"><a href="../reference/comorbid_pccc_dx.html">icd10_comorbid_pccc_pcs</a></span>(dat,</a>
@@ -164,11 +164,11 @@
 <p>Let’s look at the summary results:</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" title="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/colSums">colSums</a></span>(res)</a>
 <a class="sourceLine" id="cb4-2" title="2"><span class="co">#&gt;      Neuromusc            CVD    Respiratory          Renal             GI </span></a>
-<a class="sourceLine" id="cb4-3" title="3"><span class="co">#&gt;            277            360            112            175            254 </span></a>
+<a class="sourceLine" id="cb4-3" title="3"><span class="co">#&gt;            270            344            108            163            269 </span></a>
 <a class="sourceLine" id="cb4-4" title="4"><span class="co">#&gt;     HematoImmu      Metabolic CongeniGenetic     Malignancy       Neonatal </span></a>
-<a class="sourceLine" id="cb4-5" title="5"><span class="co">#&gt;            212            212            147            188            110 </span></a>
+<a class="sourceLine" id="cb4-5" title="5"><span class="co">#&gt;            205            213            139            183            101 </span></a>
 <a class="sourceLine" id="cb4-6" title="6"><span class="co">#&gt;        TechDep     Transplant </span></a>
-<a class="sourceLine" id="cb4-7" title="7"><span class="co">#&gt;            728            182</span></a></code></pre></div>
+<a class="sourceLine" id="cb4-7" title="7"><span class="co">#&gt;            720            193</span></a></code></pre></div>
 <p><img src="PCCC_files/figure-html/pcccbarplot-1.png" width="100%"></p>
 </div>
 </div>

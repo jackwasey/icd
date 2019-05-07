@@ -32,7 +32,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Comorbidity calculations and tools for ICD-9 and ICD-10 codes</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">4.0.4</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">4.1.9000</span>
       </span>
     </div>
 
@@ -70,13 +70,13 @@
       <a href="../articles/compare-maps.html">Comparing Comorbidity Mappings</a>
     </li>
     <li>
-      <a href="../articles/country-lang-vers.html">Working with World Health Organization ICD codes and national editions, and different languages</a>
+      <a href="../articles/country-lang-vers-prebuilt.html">Working with World Health Organization ICD codes and national editions, and different languages</a>
     </li>
     <li>
       <a href="../articles/custom-maps.html">Quick custom comorbidity maps are helpful</a>
     </li>
     <li>
-      <a href="../articles/efficiency.pdf">icd: Efficient Computation of Comorbidities from ICD Codes Using Sparse Matrix Multiplication in R (PDF)</a>
+      <a href="../articles/efficiency-prebuilt.pdf">icd: Efficient Computation of Comorbidities from ICD Codes Using Sparse Matrix Multiplication in R (PDF)</a>
     </li>
     <li>
       <a href="../articles/introduction.html">An Introduction to icd</a>
@@ -162,7 +162,7 @@ along with icd. If not, see <http:#www.gnu.org/licenses/>.
 <pre><code>## character(0)</code></pre>
 <p>We see that the comorbidity names are almost exactly the same except for Arrhythmia, which exists in the AHRQ mapping but not the Elixhauser mapping.</p>
 <p>Now we run the function <code>diff_comorbid</code> and input the ICD-9 mappings from Elixhauser and AHRQ that are included in the package. The <code>all_names</code> option can be used if one wants to compare only a selection of comorbidities, in which case one can give a list of comorbidity names. By default, the function will compare all comorbiditi.introduces in both mapping schemes. Similarly, <code>x_names</code> and <code>y_names</code> can be used to specify the comorbidities to compare in the first and second mapping schemes, respectively. Setting the option <code>show</code> to <code>TRUE</code> tells the function to print out the comparison summary, and setting the option <code>explain</code> to <code>TRUE</code> tells the function to attempt to combine many low-level ICD codes to form just their parent codes for the output, which can be much more concise.</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" title="1">comp &lt;-<span class="st"> </span><span class="kw"><a href="../reference/diff_comorbid.html">diff_comorbid</a></span>(icd9_map_ahrq, icd9_map_elix, </a>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" title="1">comp &lt;-<span class="st"> </span><span class="kw"><a href="../reference/diff_comorbid.html">diff_comorbid</a></span>(icd9_map_ahrq, icd9_map_elix,</a>
 <a class="sourceLine" id="cb8-2" title="2">                      <span class="dt">show =</span> <span class="ot">TRUE</span>, <span class="dt">explain =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
 <pre><code>## Comorbidity CHF: 
 ## icd9_map_ahrq has 4 codes not in icd9_map_elix. First few are: 'Mal hypert hrt dis w hf' 'Mal hyp ht/kd I-IV w hf' 'Mal hyp ht/kd stg V w hf' 'Heart failure' 

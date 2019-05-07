@@ -32,7 +32,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">Comorbidity calculations and tools for ICD-9 and ICD-10 codes</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">4.0.4</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">4.1.9000</span>
       </span>
     </div>
 
@@ -70,13 +70,13 @@
       <a href="../articles/compare-maps.html">Comparing Comorbidity Mappings</a>
     </li>
     <li>
-      <a href="../articles/country-lang-vers.html">Working with World Health Organization ICD codes and national editions, and different languages</a>
+      <a href="../articles/country-lang-vers-prebuilt.html">Working with World Health Organization ICD codes and national editions, and different languages</a>
     </li>
     <li>
       <a href="../articles/custom-maps.html">Quick custom comorbidity maps are helpful</a>
     </li>
     <li>
-      <a href="../articles/efficiency.pdf">icd: Efficient Computation of Comorbidities from ICD Codes Using Sparse Matrix Multiplication in R (PDF)</a>
+      <a href="../articles/efficiency-prebuilt.pdf">icd: Efficient Computation of Comorbidities from ICD Codes Using Sparse Matrix Multiplication in R (PDF)</a>
     </li>
     <li>
       <a href="../articles/introduction.html">An Introduction to icd</a>
@@ -112,7 +112,7 @@
                         <h4 class="author">Andrew Cooper (original)</h4>
                         <h4 class="author">Jack Wasey (minor updates)</h4>
             
-            <h4 class="date">2019-05-05</h4>
+            <h4 class="date">2019-05-07</h4>
       
       
       <div class="hidden name"><code>CMS-HCC.Rmd</code></div>
@@ -137,7 +137,7 @@
 <p>The method returns a table with each ICD-9 code and its corresponding CC. The third column labeled “year” specifies the year that a ICD-9 code was assigned to a corresponding CC. This is needed because HCC has been changed and updated over the years, so the CC assigned to a code in one year might be different from the CC assigned to that same code in another year.</p>
 <p>ICD also provides a method for mapping specific ICD codes to HCCs. The method <code>comorbid_hcc</code> takes as input a list of ICD-9 or ICD-10 codes and outputs a mapping of those codes to their corresponding CCs. For this example, we have an arbitrary table of five ICD-9 codes along with their corresponding patient identifiers and dates of visit.</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" title="1">pts &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/data.frame">data.frame</a></span>(<span class="dt">patient_id =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"1"</span>, <span class="st">"2"</span>, <span class="st">"3"</span>, <span class="st">"4"</span>, <span class="st">"4"</span>),</a>
-<a class="sourceLine" id="cb3-2" title="2">                  <span class="dt">icd_code =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"20084"</span>, <span class="st">"1742"</span>, <span class="st">"30410"</span>, <span class="st">"41514"</span>, <span class="st">"95893"</span>), </a>
+<a class="sourceLine" id="cb3-2" title="2">                  <span class="dt">icd_code =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"20084"</span>, <span class="st">"1742"</span>, <span class="st">"30410"</span>, <span class="st">"41514"</span>, <span class="st">"95893"</span>),</a>
 <a class="sourceLine" id="cb3-3" title="3">                  <span class="dt">date =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/as.Date">as.Date</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"2011-01-01"</span>, <span class="st">"2011-01-02"</span>, <span class="st">"2011-01-03"</span>, <span class="st">"2011-01-04"</span>, <span class="st">"2011-01-04"</span>)))</a>
 <a class="sourceLine" id="cb3-4" title="4"></a>
 <a class="sourceLine" id="cb3-5" title="5">pts</a></code></pre></div>

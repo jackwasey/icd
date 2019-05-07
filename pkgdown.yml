@@ -7,9 +7,9 @@ articles:
   PCCC: PCCC.html
   charlson-scores: charlson-scores.html
   compare-maps: compare-maps.html
-  country-lang-vers: country-lang-vers.html
+  country-lang-vers-prebuilt: country-lang-vers-prebuilt.html
   custom-maps: custom-maps.html
-  efficiency: efficiency.html
+  efficiency-prebuilt: efficiency-prebuilt.html
   introduction: introduction.html
   ranges: ranges.html
 urls:
