@@ -7,7 +7,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>An Introduction to icd • Comorbidity calculations and tools for ICD-9 and ICD-10 codes</title>
 <!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script><!-- Bootstrap --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha256-916EbMg70RQy9LHiGkXzG8hSg9EdNy97GazNG/aiY1w=" crossorigin="anonymous">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script><!-- sticky kit --><script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
 <script src="../pkgdown.js"></script><!-- docsearch --><script src="../docsearch.js"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/docsearch.js/2.6.1/docsearch.min.css" integrity="sha256-QOSRU/ra9ActyXkIBbiIB144aDBdtvXBcNc3OTNuX/Q=" crossorigin="anonymous">
 <link href="../docsearch.css" rel="stylesheet">
@@ -40,7 +41,7 @@
       <ul class="nav navbar-nav">
 <li>
   <a href="../index.html">
-    <span class="fa fa-home fa-lg"></span>
+    <span class="fas fa fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -91,7 +92,7 @@
 </li>
       </ul>
 <ul class="nav navbar-nav navbar-right"></ul>
-<form class="navbar-form navbar-right" role="search">
+<form class="navbar-form navbar-right hidden-xs hidden-sm" role="search">
         <div class="form-group">
           <input type="search" class="form-control" name="search-input" id="search-input" placeholder="Search..." aria-label="Search for..." autocomplete="off">
 </div>
@@ -111,7 +112,7 @@
       <h1>An Introduction to icd</h1>
                         <h4 class="author">Jack O. Wasey</h4>
             
-            <h4 class="date">2019-05-07</h4>
+            <h4 class="date">2019-05-08</h4>
       
       
       <div class="hidden name"><code>introduction.Rmd</code></div>
@@ -141,8 +142,8 @@ along with icd. If not, see <http:#www.gnu.org/licenses/>.
 <div id="quick-start" class="section level2">
 <h2 class="hasAnchor">
 <a href="#quick-start" class="anchor"></a>Quick Start</h2>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(icd)</a>
-<a class="sourceLine" id="cb1-2" title="2"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/head">head</a></span>(uranium_pathology, <span class="dv">10</span>)</a>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(icd)</a>
+<a class="sourceLine" id="cb1-2" title="2"><span class="kw"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(uranium_pathology, <span class="dv">10</span>)</a>
 <a class="sourceLine" id="cb1-3" title="3"><span class="co">#&gt;    case icd10</span></a>
 <a class="sourceLine" id="cb1-4" title="4"><span class="co">#&gt; 1     1 F17.9</span></a>
 <a class="sourceLine" id="cb1-5" title="5"><span class="co">#&gt; 2     1 I21.9</span></a>
@@ -154,7 +155,7 @@ along with icd. If not, see <http:#www.gnu.org/licenses/>.
 <a class="sourceLine" id="cb1-11" title="11"><span class="co">#&gt; 8     2   I64</span></a>
 <a class="sourceLine" id="cb1-12" title="12"><span class="co">#&gt; 9     2 J43.9</span></a>
 <a class="sourceLine" id="cb1-13" title="13"><span class="co">#&gt; 10    2 J84.1</span></a>
-<a class="sourceLine" id="cb1-14" title="14"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/head">head</a></span>(<span class="kw"><a href="../reference/comorbid.html">comorbid_charlson</a></span>(uranium_pathology))</a>
+<a class="sourceLine" id="cb1-14" title="14"><span class="kw"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(<span class="kw"><a href="../reference/comorbid.html">comorbid_charlson</a></span>(uranium_pathology))</a>
 <a class="sourceLine" id="cb1-15" title="15"><span class="co">#&gt;      MI   CHF   PVD Stroke Dementia Pulmonary Rheumatic   PUD LiverMild</span></a>
 <a class="sourceLine" id="cb1-16" title="16"><span class="co">#&gt; 1  TRUE FALSE FALSE  FALSE    FALSE     FALSE     FALSE FALSE     FALSE</span></a>
 <a class="sourceLine" id="cb1-17" title="17"><span class="co">#&gt; 2 FALSE FALSE FALSE   TRUE    FALSE      TRUE     FALSE FALSE     FALSE</span></a>
@@ -178,7 +179,7 @@ along with icd. If not, see <http:#www.gnu.org/licenses/>.
 <a class="sourceLine" id="cb1-35" title="35"><span class="co">#&gt; 3    3  1   0   0      0</span></a>
 <a class="sourceLine" id="cb1-36" title="36"><span class="co">#&gt; 4    4  0   0   0      0</span></a>
 <a class="sourceLine" id="cb1-37" title="37"><span class="co">#&gt; 5    5  0   0   0      0</span></a>
-<a class="sourceLine" id="cb1-38" title="38"><span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/hist">hist</a></span>(<span class="kw"><a href="../reference/charlson.html">charlson</a></span>(uranium_pathology),</a>
+<a class="sourceLine" id="cb1-38" title="38"><span class="kw"><a href="https://rdrr.io/r/graphics/hist.html">hist</a></span>(<span class="kw"><a href="../reference/charlson.html">charlson</a></span>(uranium_pathology),</a>
 <a class="sourceLine" id="cb1-39" title="39">     <span class="dt">main =</span> <span class="st">"Uranium data"</span>,</a>
 <a class="sourceLine" id="cb1-40" title="40">     <span class="dt">xlab =</span> <span class="st">"Charlson Score"</span>)</a></code></pre></div>
 <p><img src="introduction_files/figure-html/quickstart-1.png" width="100%"></p>
@@ -210,7 +211,7 @@ along with icd. If not, see <http:#www.gnu.org/licenses/>.
 <a class="sourceLine" id="cb2-19" title="19"><span class="co">#&gt; 5    2 I25.1</span></a>
 <a class="sourceLine" id="cb2-20" title="20"></a>
 <a class="sourceLine" id="cb2-21" title="21"><span class="co"># wide format, real ICD-9 discharge diagnoses</span></a>
-<a class="sourceLine" id="cb2-22" title="22">vermont_dx[<span class="dv">1</span><span class="op">:</span><span class="dv">5</span>, <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="dv">1</span>, <span class="dv">6</span><span class="op">:</span><span class="dv">15</span>)]</a>
+<a class="sourceLine" id="cb2-22" title="22">vermont_dx[<span class="dv">1</span><span class="op">:</span><span class="dv">5</span>, <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="dv">1</span>, <span class="dv">6</span><span class="op">:</span><span class="dv">15</span>)]</a>
 <a class="sourceLine" id="cb2-23" title="23"><span class="co">#&gt;   visit_id   DX1   DX2   DX3   DX4   DX5   DX6   DX7   DX8   DX9  DX10</span></a>
 <a class="sourceLine" id="cb2-24" title="24"><span class="co">#&gt; 1        7 27801 03842 51881 41519 99591 42842  5849  5609  6826  5853</span></a>
 <a class="sourceLine" id="cb2-25" title="25"><span class="co">#&gt; 2       10 71526 25000 42830  4280  4019  4241   311 49390  2724 73300</span></a>
@@ -272,9 +273,9 @@ along with icd. If not, see <http:#www.gnu.org/licenses/>.
 <a class="sourceLine" id="cb4-37" title="37"><span class="co"># find comorbidities, convert TRUE to 1 and show first few</span></a>
 <a class="sourceLine" id="cb4-38" title="38">vermont_cmb &lt;-<span class="st"> </span>vermont_dx <span class="op">%&gt;%</span></a>
 <a class="sourceLine" id="cb4-39" title="39"><span class="st">  </span>icd9_comorbid_quan_elix <span class="op">%&gt;%</span></a>
-<a class="sourceLine" id="cb4-40" title="40"><span class="st">  </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/apply">apply</a></span>(<span class="dv">2</span>, as.integer) <span class="co"># convert logical to integer</span></a>
+<a class="sourceLine" id="cb4-40" title="40"><span class="st">  </span><span class="kw"><a href="https://rdrr.io/r/base/apply.html">apply</a></span>(<span class="dv">2</span>, as.integer) <span class="co"># convert logical to integer</span></a>
 <a class="sourceLine" id="cb4-41" title="41"></a>
-<a class="sourceLine" id="cb4-42" title="42"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/head">head</a></span>(vermont_cmb)</a>
+<a class="sourceLine" id="cb4-42" title="42"><span class="kw"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(vermont_cmb)</a>
 <a class="sourceLine" id="cb4-43" title="43"><span class="co">#&gt;      CHF Arrhythmia Valvular PHTN PVD HTN Paralysis NeuroOther Pulmonary</span></a>
 <a class="sourceLine" id="cb4-44" title="44"><span class="co">#&gt; [1,]   1          1        0    1   0   0         0          0         0</span></a>
 <a class="sourceLine" id="cb4-45" title="45"><span class="co">#&gt; [2,]   1          0        1    0   0   1         0          0         1</span></a>
@@ -303,7 +304,7 @@ along with icd. If not, see <http:#www.gnu.org/licenses/>.
 <a class="sourceLine" id="cb4-68" title="68"><span class="co">#&gt; [4,]     0         0          0</span></a>
 <a class="sourceLine" id="cb4-69" title="69"><span class="co">#&gt; [5,]     0         0          0</span></a>
 <a class="sourceLine" id="cb4-70" title="70"><span class="co">#&gt; [6,]     0         0          0</span></a>
-<a class="sourceLine" id="cb4-71" title="71"><span class="kw"><a href="https://www.rdocumentation.org/packages/graphics/topics/barplot">barplot</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/colSums">colSums</a></span>(vermont_cmb[, <span class="dv">1</span><span class="op">:</span><span class="dv">5</span>]),</a>
+<a class="sourceLine" id="cb4-71" title="71"><span class="kw"><a href="https://rdrr.io/r/graphics/barplot.html">barplot</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/colSums.html">colSums</a></span>(vermont_cmb[, <span class="dv">1</span><span class="op">:</span><span class="dv">5</span>]),</a>
 <a class="sourceLine" id="cb4-72" title="72">        <span class="dt">main =</span> <span class="st">"Incidence of five Elixhauser comorbidities in Vermont data"</span>)</a></code></pre></div>
 <p><img src="introduction_files/figure-html/getcomorbidities2-1.png" width="100%"></p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" title="1"><span class="co"># Use built-in summary plot, this time for AHRQ comorbidities</span></a>
@@ -311,7 +312,7 @@ along with icd. If not, see <http:#www.gnu.org/licenses/>.
 <a class="sourceLine" id="cb5-3" title="3">        <span class="dt">main =</span> <span class="st">"Incidence of all AHRQ Comorbidities in Vermont data"</span>)</a></code></pre></div>
 <p><img src="introduction_files/figure-html/getcomorbidities2-2.png" width="100%"></p>
 <p>The above can also be written in classic R with many parentheses:</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" title="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/head">head</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/apply">apply</a></span>(<span class="kw"><a href="../reference/comorbid.html">icd9_comorbid_quan_deyo</a></span>(vermont_dx), <span class="dv">2</span>, as.integer))</a></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" title="1"><span class="kw"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/apply.html">apply</a></span>(<span class="kw"><a href="../reference/comorbid.html">icd9_comorbid_quan_deyo</a></span>(vermont_dx), <span class="dv">2</span>, as.integer))</a></code></pre></div>
 </div>
 <div id="specifying-data-types" class="section level2">
 <h2 class="hasAnchor">
@@ -321,11 +322,11 @@ along with icd. If not, see <http:#www.gnu.org/licenses/>.
 <a class="sourceLine" id="cb7-2" title="2"><span class="co">#&gt; [1] TRUE</span></a>
 <a class="sourceLine" id="cb7-3" title="3"><span class="kw"><a href="../reference/is_valid.html">is_valid</a></span>(<span class="st">"A1001"</span>) <span class="co"># valid ICD-10 code</span></a>
 <a class="sourceLine" id="cb7-4" title="4"><span class="co">#&gt; [1] TRUE</span></a>
-<a class="sourceLine" id="cb7-5" title="5"><span class="kw"><a href="../reference/is_valid.html">is_valid</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"100"</span>, <span class="st">"A1001"</span>)) <span class="co"># they can't both be valid</span></a>
+<a class="sourceLine" id="cb7-5" title="5"><span class="kw"><a href="../reference/is_valid.html">is_valid</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"100"</span>, <span class="st">"A1001"</span>)) <span class="co"># they can't both be valid</span></a>
 <a class="sourceLine" id="cb7-6" title="6"><span class="co">#&gt; [1]  TRUE FALSE</span></a></code></pre></div>
 <p>You can let <code>icd</code> guess types, or specify the type of your data explicitly:</p>
 <div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" title="1"><span class="co"># decimal format ICD-10 codes</span></a>
-<a class="sourceLine" id="cb8-2" title="2">codes &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"A10.01"</span>, <span class="st">"L40.50"</span>, <span class="st">"Z77.098"</span>)</a>
+<a class="sourceLine" id="cb8-2" title="2">codes &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"A10.01"</span>, <span class="st">"L40.50"</span>, <span class="st">"Z77.098"</span>)</a>
 <a class="sourceLine" id="cb8-3" title="3"><span class="co"># set class to be icd10cm (and implicitly icd10)</span></a>
 <a class="sourceLine" id="cb8-4" title="4"><span class="kw"><a href="../reference/set_icd_class.html">as.icd10cm</a></span>(codes)</a>
 <a class="sourceLine" id="cb8-5" title="5"><span class="co">#&gt; [1] "A10.01"  "L40.50"  "Z77.098"</span></a>
@@ -338,13 +339,13 @@ along with icd. If not, see <http:#www.gnu.org/licenses/>.
 <h2 class="hasAnchor">
 <a href="#converting-icd-codes-between-types" class="anchor"></a>Converting ICD codes between types</h2>
 <p>ICD codes are usually presented in <em>decimal</em> format (beware, for this is not a number), e.g., the ICD-9 code <code>003.21</code>, or ICD-10 code <code>T81.10XD</code>, whereas most electronic records seem to use the <em>short</em> form without a decimal place. These are not interchangeable simply by removing the decimal place, and great care is taken to do this correctly. Most ICD-9 codes do not have a letter prefix, so there is possible ambiguity here. icd was designed to deal with the common problem of incorrectly formatted ICD codes. The assumption is made that short codes of three or fewer characters are describing only the ‘major’ part: there is no other reasonable interpretation. For example, <code>020</code> must be taken to mean <code>20</code>, not <code>2.0</code> or even <code>0.20</code>. In most cases, when <em>icd</em> works on ICD-9 codes, it will convert any codes of fewer than three characters into zero-padded three-digit codes.</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" title="1"><span class="kw"><a href="../reference/decimal_to_short.html">decimal_to_short</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"1"</span>, <span class="st">"10.20"</span>, <span class="st">"100"</span>, <span class="st">"123.45"</span>))</a>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" title="1"><span class="kw"><a href="../reference/decimal_to_short.html">decimal_to_short</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"1"</span>, <span class="st">"10.20"</span>, <span class="st">"100"</span>, <span class="st">"123.45"</span>))</a>
 <a class="sourceLine" id="cb9-2" title="2"><span class="co">#&gt; [1] "001"   "01020" "100"   "12345"</span></a>
-<a class="sourceLine" id="cb9-3" title="3"><span class="kw"><a href="../reference/short_to_decimal.html">short_to_decimal</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"1"</span>, <span class="st">"22"</span>, <span class="st">"2244"</span>, <span class="st">"1005"</span>))</a>
+<a class="sourceLine" id="cb9-3" title="3"><span class="kw"><a href="../reference/short_to_decimal.html">short_to_decimal</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"1"</span>, <span class="st">"22"</span>, <span class="st">"2244"</span>, <span class="st">"1005"</span>))</a>
 <a class="sourceLine" id="cb9-4" title="4"><span class="co">#&gt; [1] "001"   "022"   "224.4" "100.5"</span></a>
 <a class="sourceLine" id="cb9-5" title="5"></a>
 <a class="sourceLine" id="cb9-6" title="6"><span class="co"># similar operations with magrittr, also showing invalid codes</span></a>
-<a class="sourceLine" id="cb9-7" title="7">codes &lt;-<span class="st"> </span><span class="kw"><a href="../reference/set_icd_class.html">as.icd9</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"87.65"</span>, <span class="st">"9999"</span>, <span class="st">"Aesop"</span>, <span class="dv">-100</span>, <span class="st">""</span>, <span class="ot">NA</span>))</a>
+<a class="sourceLine" id="cb9-7" title="7">codes &lt;-<span class="st"> </span><span class="kw"><a href="../reference/set_icd_class.html">as.icd9</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"87.65"</span>, <span class="st">"9999"</span>, <span class="st">"Aesop"</span>, <span class="dv">-100</span>, <span class="st">""</span>, <span class="ot">NA</span>))</a>
 <a class="sourceLine" id="cb9-8" title="8"><span class="kw"><a href="../reference/decimal_to_short.html">decimal_to_short</a></span>(codes)</a>
 <a class="sourceLine" id="cb9-9" title="9"><span class="co">#&gt; [1] "08765" ""      ""      ""      ""      NA</span></a>
 <a class="sourceLine" id="cb9-10" title="10"></a>
@@ -360,11 +361,11 @@ along with icd. If not, see <http:#www.gnu.org/licenses/>.
 <a class="sourceLine" id="cb10-3" title="3"><span class="co">#&gt; [1] TRUE</span></a>
 <a class="sourceLine" id="cb10-4" title="4"></a>
 <a class="sourceLine" id="cb10-5" title="5"><span class="co"># state we are using short or decimal codes:</span></a>
-<a class="sourceLine" id="cb10-6" title="6"><span class="kw"><a href="../reference/is_valid.html">is_valid</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"099.17"</span>, <span class="st">"-1"</span>), <span class="dt">short_code =</span> <span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb10-6" title="6"><span class="kw"><a href="../reference/is_valid.html">is_valid</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"099.17"</span>, <span class="st">"-1"</span>), <span class="dt">short_code =</span> <span class="ot">TRUE</span>)</a>
 <a class="sourceLine" id="cb10-7" title="7"><span class="co">#&gt; [1] FALSE FALSE</span></a>
-<a class="sourceLine" id="cb10-8" title="8"><span class="kw"><a href="../reference/is_valid.html">is_valid</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"099.17"</span>, <span class="st">"-1.1"</span>), <span class="dt">short_code =</span> <span class="ot">FALSE</span>)</a>
+<a class="sourceLine" id="cb10-8" title="8"><span class="kw"><a href="../reference/is_valid.html">is_valid</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"099.17"</span>, <span class="st">"-1.1"</span>), <span class="dt">short_code =</span> <span class="ot">FALSE</span>)</a>
 <a class="sourceLine" id="cb10-9" title="9"><span class="co">#&gt; [1]  TRUE FALSE</span></a>
-<a class="sourceLine" id="cb10-10" title="10"><span class="kw"><a href="../reference/is_valid.html">is_valid</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"1"</span>, <span class="st">"001"</span>, <span class="st">"100"</span>, <span class="st">"123456"</span>, <span class="st">"003.21"</span>), <span class="dt">short_code =</span> <span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb10-10" title="10"><span class="kw"><a href="../reference/is_valid.html">is_valid</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"1"</span>, <span class="st">"001"</span>, <span class="st">"100"</span>, <span class="st">"123456"</span>, <span class="st">"003.21"</span>), <span class="dt">short_code =</span> <span class="ot">TRUE</span>)</a>
 <a class="sourceLine" id="cb10-11" title="11"><span class="co">#&gt; [1]  TRUE  TRUE  TRUE FALSE FALSE</span></a></code></pre></div>
 </div>
 <div id="decoding-icd-9-codes-to-descriptions" class="section level2">
@@ -378,7 +379,7 @@ along with icd. If not, see <http:#www.gnu.org/licenses/>.
 <div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" title="1"><span class="co"># we can be explicit about short vs decimal</span></a>
 <a class="sourceLine" id="cb12-2" title="2"><span class="kw"><a href="../reference/explain_code.html">explain_code</a></span>(<span class="st">"434.00"</span>, <span class="dt">short_code =</span> <span class="ot">FALSE</span>)</a>
 <a class="sourceLine" id="cb12-3" title="3"><span class="co">#&gt; [1] "Cerebral thrombosis without mention of cerebral infarction"</span></a>
-<a class="sourceLine" id="cb12-4" title="4"><span class="kw"><a href="../reference/explain_code.html">explain_code</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"43410"</span>, <span class="st">"43491"</span>), <span class="dt">short_code =</span> <span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb12-4" title="4"><span class="kw"><a href="../reference/explain_code.html">explain_code</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"43410"</span>, <span class="st">"43491"</span>), <span class="dt">short_code =</span> <span class="ot">TRUE</span>)</a>
 <a class="sourceLine" id="cb12-5" title="5"><span class="co">#&gt; [1] "Cerebral embolism without mention of cerebral infarction"       </span></a>
 <a class="sourceLine" id="cb12-6" title="6"><span class="co">#&gt; [2] "Cerebral artery occlusion, unspecified with cerebral infarction"</span></a>
 <a class="sourceLine" id="cb12-7" title="7"><span class="co">#explain top level code with children</span></a>
@@ -396,8 +397,8 @@ along with icd. If not, see <http:#www.gnu.org/licenses/>.
 <a class="sourceLine" id="cb12-19" title="19"><span class="co">#&gt; [5] "Other acute rheumatic heart disease"       </span></a>
 <a class="sourceLine" id="cb12-20" title="20"><span class="co">#&gt; [6] "Acute rheumatic heart disease, unspecified"</span></a></code></pre></div>
 <p>Arbitrary named list(s) of codes:</p>
-<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" title="1"><span class="kw"><a href="../reference/explain_code.html">explain_code</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/list">list</a></span>(<span class="dt">somecodes =</span> <span class="kw"><a href="../reference/set_icd_class.html">as.icd9</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"001"</span>, <span class="st">"391"</span>)),</a>
-<a class="sourceLine" id="cb13-2" title="2">                 <span class="dt">morecodes =</span> <span class="kw"><a href="../reference/set_icd_class.html">as.icd9cm</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"001.1"</span>, <span class="st">"001.9"</span>))))</a>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" title="1"><span class="kw"><a href="../reference/explain_code.html">explain_code</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="dt">somecodes =</span> <span class="kw"><a href="../reference/set_icd_class.html">as.icd9</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"001"</span>, <span class="st">"391"</span>)),</a>
+<a class="sourceLine" id="cb13-2" title="2">                 <span class="dt">morecodes =</span> <span class="kw"><a href="../reference/set_icd_class.html">as.icd9cm</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"001.1"</span>, <span class="st">"001.9"</span>))))</a>
 <a class="sourceLine" id="cb13-3" title="3"><span class="co">#&gt; $somecodes</span></a>
 <a class="sourceLine" id="cb13-4" title="4"><span class="co">#&gt; [1] "Cholera"                               </span></a>
 <a class="sourceLine" id="cb13-5" title="5"><span class="co">#&gt; [2] "Rheumatic fever with heart involvement"</span></a>
@@ -406,7 +407,7 @@ along with icd. If not, see <http:#www.gnu.org/licenses/>.
 <a class="sourceLine" id="cb13-8" title="8"><span class="co">#&gt; [1] "Cholera due to vibrio cholerae el tor"</span></a>
 <a class="sourceLine" id="cb13-9" title="9"><span class="co">#&gt; [2] "Cholera, unspecified"</span></a></code></pre></div>
 <p><code>001</code> (Cholera) isn’t itself a diagnostic code, i.e. leaf node in the hierarchy, but <code>390</code> (Rheumatic fever without heart involvement) is. Both are explained correctly:</p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" title="1"><span class="kw"><a href="../reference/explain_code.html">explain_code</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/list">list</a></span>(<span class="dt">cholera =</span> <span class="st">"001"</span>, <span class="dt">rheumatic_heart =</span> <span class="st">"390"</span>))</a>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" title="1"><span class="kw"><a href="../reference/explain_code.html">explain_code</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="dt">cholera =</span> <span class="st">"001"</span>, <span class="dt">rheumatic_heart =</span> <span class="st">"390"</span>))</a>
 <a class="sourceLine" id="cb14-2" title="2"><span class="co">#&gt; $cholera</span></a>
 <a class="sourceLine" id="cb14-3" title="3"><span class="co">#&gt; [1] "Cholera"</span></a>
 <a class="sourceLine" id="cb14-4" title="4"><span class="co">#&gt; </span></a>
@@ -415,9 +416,9 @@ along with icd. If not, see <http:#www.gnu.org/licenses/>.
 <p>Now try to explain on a non-existent (but ‘valid’) ICD-9 code:</p>
 <div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" title="1">s &lt;-<span class="st"> </span><span class="kw"><a href="../reference/explain_code.html">explain_code</a></span>(<span class="st">"001.5"</span>) <span class="co"># gives warning</span></a></code></pre></div>
 <p>As we have just seen, <code>explain_code</code> can convert lists of ICD-9 or ICD-10 codes to a human-readable format. Let’s apply the <code>explain_code</code> to a list of comorbidity ICD-9 codes in one of the commonly-used mappings. This makes comprehending a complicated list much easier. Taking the list for dementia:</p>
-<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb16-1" title="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/length">length</a></span>(icd9_map_quan_deyo[[<span class="st">"Dementia"</span>]]) <span class="co"># 133 possible ICD-9 codes</span></a>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb16-1" title="1"><span class="kw"><a href="https://rdrr.io/r/base/length.html">length</a></span>(icd9_map_quan_deyo[[<span class="st">"Dementia"</span>]]) <span class="co"># 133 possible ICD-9 codes</span></a>
 <a class="sourceLine" id="cb16-2" title="2"><span class="co">#&gt; [1] 133</span></a>
-<a class="sourceLine" id="cb16-3" title="3"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/length">length</a></span>(icd10_map_quan_deyo[[<span class="st">"Dementia"</span>]]) <span class="co"># the ICD-10 map is different</span></a>
+<a class="sourceLine" id="cb16-3" title="3"><span class="kw"><a href="https://rdrr.io/r/base/length.html">length</a></span>(icd10_map_quan_deyo[[<span class="st">"Dementia"</span>]]) <span class="co"># the ICD-10 map is different</span></a>
 <a class="sourceLine" id="cb16-4" title="4"><span class="co">#&gt; [1] 20</span></a>
 <a class="sourceLine" id="cb16-5" title="5"><span class="co"># explain_code summarizes these to just two groups:</span></a>
 <a class="sourceLine" id="cb16-6" title="6">icd9_map_quan_deyo[[<span class="st">"Dementia"</span>]] <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="../reference/explain_code.html">explain_code</a></span>(<span class="dt">warn =</span> <span class="ot">FALSE</span>)</a>
@@ -430,7 +431,7 @@ along with icd. If not, see <http:#www.gnu.org/licenses/>.
 <a class="sourceLine" id="cb16-13" title="13"><span class="co">#&gt; [2] "Dementia in conditions classified elsewhere"</span></a>
 <a class="sourceLine" id="cb16-14" title="14"><span class="co">#&gt; [3] "Senile degeneration of brain"</span></a></code></pre></div>
 <p>Use a range with more than two hundred ICD-9 codes (most of them not real):</p>
-<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb17-1" title="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/length">length</a></span>(<span class="st">"390"</span> <span class="op">%i9da%</span><span class="st"> "392.1"</span>)</a>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb17-1" title="1"><span class="kw"><a href="https://rdrr.io/r/base/length.html">length</a></span>(<span class="st">"390"</span> <span class="op">%i9da%</span><span class="st"> "392.1"</span>)</a>
 <a class="sourceLine" id="cb17-2" title="2"><span class="co">#&gt; [1] 244</span></a>
 <a class="sourceLine" id="cb17-3" title="3"><span class="st">"390"</span> <span class="op">%i9da%</span><span class="st"> "392.1"</span> <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="../reference/explain_code.html">explain_code</a></span>(<span class="dt">warn =</span> <span class="ot">FALSE</span>)</a>
 <a class="sourceLine" id="cb17-4" title="4"><span class="co">#&gt; [1] "Rheumatic fever without mention of heart involvement"</span></a>
@@ -469,7 +470,7 @@ along with icd. If not, see <http:#www.gnu.org/licenses/>.
 <h3 class="hasAnchor">
 <a href="#ahrq-comorbidity-classification" class="anchor"></a>AHRQ comorbidity classification</h3>
 <p>The AHRQ keeps an updated version of the Elixhauser classification of ICD-9-CM codes into comorbidities, useful for research. They provide the data in the form of SAS code <span class="citation">(Healthcare Research and Quality 2018)</span>. The names of the comorbidities derived from ICD-9 and ICD-10 codes are the same. Maps contain the ICD code to comorbidity mappings; the functions that apply those mappings are called things like <code>icd10_comorbid_ahrq</code>.</p>
-<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb21-1" title="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/names">names</a></span>(icd9_map_ahrq)</a>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb21-1" title="1"><span class="kw"><a href="https://rdrr.io/r/base/names.html">names</a></span>(icd9_map_ahrq)</a>
 <a class="sourceLine" id="cb21-2" title="2"><span class="co">#&gt;  [1] "CHF"          "Valvular"     "PHTN"         "PVD"         </span></a>
 <a class="sourceLine" id="cb21-3" title="3"><span class="co">#&gt;  [5] "HTN"          "HTNcx"        "Paralysis"    "NeuroOther"  </span></a>
 <a class="sourceLine" id="cb21-4" title="4"><span class="co">#&gt;  [9] "Pulmonary"    "DM"           "DMcx"         "Hypothyroid" </span></a>
@@ -503,7 +504,7 @@ along with icd. If not, see <http:#www.gnu.org/licenses/>.
 <a class="sourceLine" id="cb22-14" title="14"><span class="co">#&gt; </span></a>
 <a class="sourceLine" id="cb22-15" title="15"><span class="co">#&gt; $`05`</span></a>
 <a class="sourceLine" id="cb22-16" title="16"><span class="co">#&gt; [1] "Peripheral vascular disorders"</span></a>
-<a class="sourceLine" id="cb22-17" title="17"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/unlist">unlist</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/unname">unname</a></span>(names_elix))</a>
+<a class="sourceLine" id="cb22-17" title="17"><span class="kw"><a href="https://rdrr.io/r/base/unlist.html">unlist</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/unname.html">unname</a></span>(names_elix))</a>
 <a class="sourceLine" id="cb22-18" title="18"><span class="co">#&gt;  [1] "Congestive heart failure"                       </span></a>
 <a class="sourceLine" id="cb22-19" title="19"><span class="co">#&gt;  [2] "Cardiac arrhythmias"                            </span></a>
 <a class="sourceLine" id="cb22-20" title="20"><span class="co">#&gt;  [3] "Valvular disease"                               </span></a>
@@ -546,12 +547,12 @@ along with icd. If not, see <http:#www.gnu.org/licenses/>.
 <h3 class="hasAnchor">
 <a href="#quan" class="anchor"></a>Quan</h3>
 <p>In a classic paper, Quan <span class="citation">(Quan et al. 2011)</span> paper looked at indices using both ICD-10 and ICD-9-CM. Quan generated updated ICD-9-CM codes for all 30 of Elixhauser and all 17 of Charlson/Deyo’s comorbidities. Thus there are two ‘Quan’ comorbidity mappings.</p>
-<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb23-1" title="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/names">names</a></span>(icd10_map_quan_deyo)</a>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb23-1" title="1"><span class="kw"><a href="https://rdrr.io/r/base/names.html">names</a></span>(icd10_map_quan_deyo)</a>
 <a class="sourceLine" id="cb23-2" title="2"><span class="co">#&gt;  [1] "MI"          "CHF"         "PVD"         "Stroke"      "Dementia"   </span></a>
 <a class="sourceLine" id="cb23-3" title="3"><span class="co">#&gt;  [6] "Pulmonary"   "Rheumatic"   "PUD"         "LiverMild"   "DM"         </span></a>
 <a class="sourceLine" id="cb23-4" title="4"><span class="co">#&gt; [11] "DMcx"        "Paralysis"   "Renal"       "Cancer"      "LiverSevere"</span></a>
 <a class="sourceLine" id="cb23-5" title="5"><span class="co">#&gt; [16] "Mets"        "HIV"</span></a>
-<a class="sourceLine" id="cb23-6" title="6"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/names">names</a></span>(icd10_map_quan_elix)</a>
+<a class="sourceLine" id="cb23-6" title="6"><span class="kw"><a href="https://rdrr.io/r/base/names.html">names</a></span>(icd10_map_quan_elix)</a>
 <a class="sourceLine" id="cb23-7" title="7"><span class="co">#&gt;  [1] "CHF"          "Arrhythmia"   "Valvular"     "PHTN"        </span></a>
 <a class="sourceLine" id="cb23-8" title="8"><span class="co">#&gt;  [5] "PVD"          "HTN"          "HTNcx"        "Paralysis"   </span></a>
 <a class="sourceLine" id="cb23-9" title="9"><span class="co">#&gt;  [9] "NeuroOther"   "Pulmonary"    "DM"           "DMcx"        </span></a>
@@ -580,7 +581,7 @@ along with icd. If not, see <http:#www.gnu.org/licenses/>.
 <a href="#compare-two-comorbidity-definitions" class="anchor"></a>Compare two comorbidity definitions</h3>
 <p>We will find the differences between some categories of the original Elixhauser and the updated version by Quan. Just taking the select few comorbidity groups for brevity:</p>
 <div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb25-1" title="1">difference &lt;-<span class="st"> </span><span class="kw"><a href="../reference/diff_comorbid.html">diff_comorbid</a></span>(icd9_map_elix, icd9_map_quan_elix,</a>
-<a class="sourceLine" id="cb25-2" title="2">                            <span class="dt">all_names =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"CHF"</span>, <span class="st">"PHTN"</span>, <span class="st">"HTN"</span>, <span class="st">"Valvular"</span>))</a>
+<a class="sourceLine" id="cb25-2" title="2">                            <span class="dt">all_names =</span> <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"CHF"</span>, <span class="st">"PHTN"</span>, <span class="st">"HTN"</span>, <span class="st">"Valvular"</span>))</a>
 <a class="sourceLine" id="cb25-3" title="3"><span class="co">#&gt; Comorbidity CHF: </span></a>
 <a class="sourceLine" id="cb25-4" title="4"><span class="co">#&gt; icd9_map_quan_elix has 70 codes not in icd9_map_elix. First few are: 'Mal hypert hrt dis w hf' 'Mal hyp ht/kd I-IV w hf' 'Mal hyp ht/kd stg V w hf' 'Prim cardiomyopathy NEC' 'Alcoholic cardiomyopathy' </span></a>
 <a class="sourceLine" id="cb25-5" title="5"><span class="co">#&gt; Comorbidity PHTN: </span></a>
@@ -590,7 +591,7 @@ along with icd. If not, see <http:#www.gnu.org/licenses/>.
 <a class="sourceLine" id="cb25-9" title="9"><span class="co">#&gt; Comorbidity Valvular: </span></a>
 <a class="sourceLine" id="cb25-10" title="10"><span class="co">#&gt; icd9_map_quan_elix has 106 codes not in icd9_map_elix. First few are: 'Syphilitic endocarditis' 'Diseases of mitral valve' 'Diseases of other endocardial structures' 'Other diseases of endocardium'</span></a>
 <a class="sourceLine" id="cb25-11" title="11"><span class="co"># reuslts also returned as data</span></a>
-<a class="sourceLine" id="cb25-12" title="12"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/str">str</a></span>(difference)</a>
+<a class="sourceLine" id="cb25-12" title="12"><span class="kw"><a href="https://rdrr.io/r/utils/str.html">str</a></span>(difference)</a>
 <a class="sourceLine" id="cb25-13" title="13"><span class="co">#&gt; List of 4</span></a>
 <a class="sourceLine" id="cb25-14" title="14"><span class="co">#&gt;  $ CHF     :List of 3</span></a>
 <a class="sourceLine" id="cb25-15" title="15"><span class="co">#&gt;   ..$ both  : chr [1:117] "39891" "40211" "40291" "40411" ...</span></a>
@@ -620,12 +621,12 @@ along with icd. If not, see <http:#www.gnu.org/licenses/>.
 <h3 class="hasAnchor">
 <a href="#find-cardiac-icd-9-codes" class="anchor"></a>Find cardiac ICD-9 codes</h3>
 <div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb27-1" title="1">icd9cm_hierarchy[</a>
-<a class="sourceLine" id="cb27-2" title="2">  <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/grep">grepl</a></span>(<span class="dt">pattern =</span> <span class="st">"(heart)|(cardiac)"</span>,</a>
-<a class="sourceLine" id="cb27-3" title="3">        <span class="dt">x =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(icd9cm_hierarchy<span class="op">$</span>long_desc, icd9cm_hierarchy<span class="op">$</span>short_desc),</a>
+<a class="sourceLine" id="cb27-2" title="2">  <span class="kw"><a href="https://rdrr.io/r/base/grep.html">grepl</a></span>(<span class="dt">pattern =</span> <span class="st">"(heart)|(cardiac)"</span>,</a>
+<a class="sourceLine" id="cb27-3" title="3">        <span class="dt">x =</span> <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(icd9cm_hierarchy<span class="op">$</span>long_desc, icd9cm_hierarchy<span class="op">$</span>short_desc),</a>
 <a class="sourceLine" id="cb27-4" title="4">        <span class="dt">ignore.case =</span> <span class="ot">TRUE</span>),</a>
 <a class="sourceLine" id="cb27-5" title="5">  <span class="st">"code"</span>] <span class="op">%&gt;%</span><span class="st"> </span>unique -&gt;<span class="st"> </span>cardiac</a></code></pre></div>
 <p>then explain the list, just showing the first ten:</p>
-<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb28-1" title="1"><span class="kw"><a href="../reference/set_icd_class.html">as.icd9</a></span>(cardiac) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="../reference/explain_code.html">explain_code</a></span>(<span class="dt">warn =</span> <span class="ot">FALSE</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/head">head</a></span>(<span class="dv">10</span>)</a>
+<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb28-1" title="1"><span class="kw"><a href="../reference/set_icd_class.html">as.icd9</a></span>(cardiac) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="../reference/explain_code.html">explain_code</a></span>(<span class="dt">warn =</span> <span class="ot">FALSE</span>) <span class="op">%&gt;%</span><span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(<span class="dv">10</span>)</a>
 <a class="sourceLine" id="cb28-2" title="2"><span class="co">#&gt;  [1] "Chagas' disease with heart involvement"              </span></a>
 <a class="sourceLine" id="cb28-3" title="3"><span class="co">#&gt;  [2] "Other gonococcal heart disease"                      </span></a>
 <a class="sourceLine" id="cb28-4" title="4"><span class="co">#&gt;  [3] "Malignant neoplasm of thymus, heart, and mediastinum"</span></a>
@@ -643,7 +644,7 @@ along with icd. If not, see <http:#www.gnu.org/licenses/>.
 <p>I understand that comorbidity assignment using SAS is a lengthy business. Let’s generate 100,000 patients with a random selection of comorbidities:</p>
 <div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb29-1" title="1"><span class="co"># codes selected from AHRQ mapping</span></a>
 <a class="sourceLine" id="cb29-2" title="2">many_patients &lt;-<span class="st"> </span>icd<span class="op">:::</span><span class="kw">generate_random_pts</span>(<span class="fl">1e7</span>)</a>
-<a class="sourceLine" id="cb29-3" title="3"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/system.time">system.time</a></span>(</a>
+<a class="sourceLine" id="cb29-3" title="3"><span class="kw"><a href="https://rdrr.io/r/base/system.time.html">system.time</a></span>(</a>
 <a class="sourceLine" id="cb29-4" title="4">  <span class="kw"><a href="../reference/comorbid.html">comorbid_ahrq</a></span>(many_patients)</a>
 <a class="sourceLine" id="cb29-5" title="5">  )[[<span class="st">"elapsed"</span>]]</a></code></pre></div>
 <p>This takes about five seconds on a 2016 8-core workstation. More detailed benchmarks can be seen comparing icd to other packages in the vignette article in this package.</p>
@@ -653,14 +654,14 @@ along with icd. If not, see <http:#www.gnu.org/licenses/>.
 <a href="#use-an-arbitrary-icd-9-mapping" class="anchor"></a>Use an arbitrary ICD-9 mapping</h3>
 <p>The user can provide any ICD-9, ICD-10 or other code mapping to comorbidities they wish. Submissions of other peer-reviewed published mappings could be included in this package, if their license permits. Create an issue in <a href="https://github.com/jackwasey/icd/issues">github</a> or email me at <a href="mailto:jack@jackwasey.com">jack@jackwasey.com</a>) Included in this package is a small data set called <code>icd9_chapters</code>, which lists the ICD-9-CM (and indeed ICD-9) Chapters. These can easily be expanded out and used as a mapping, so instead of a comorbidity, we see which patients have codes in each chapter of the ICD-9 definition.</p>
 <p>See the <a href="custom-maps.html">custom comorbidity map vignette</a>.</p>
-<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb30-1" title="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/names">names</a></span>(icd9_chapters)[<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="dv">1</span><span class="op">:</span><span class="dv">5</span>, <span class="dv">14</span>)]</a>
+<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb30-1" title="1"><span class="kw"><a href="https://rdrr.io/r/base/names.html">names</a></span>(icd9_chapters)[<span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="dv">1</span><span class="op">:</span><span class="dv">5</span>, <span class="dv">14</span>)]</a>
 <a class="sourceLine" id="cb30-2" title="2"><span class="co">#&gt; [1] "Infectious And Parasitic Diseases"                                    </span></a>
 <a class="sourceLine" id="cb30-3" title="3"><span class="co">#&gt; [2] "Neoplasms"                                                            </span></a>
 <a class="sourceLine" id="cb30-4" title="4"><span class="co">#&gt; [3] "Endocrine, Nutritional And Metabolic Diseases, And Immunity Disorders"</span></a>
 <a class="sourceLine" id="cb30-5" title="5"><span class="co">#&gt; [4] "Diseases Of The Blood And Blood-Forming Organs"                       </span></a>
 <a class="sourceLine" id="cb30-6" title="6"><span class="co">#&gt; [5] "Mental Disorders"                                                     </span></a>
 <a class="sourceLine" id="cb30-7" title="7"><span class="co">#&gt; [6] "Congenital Anomalies"</span></a>
-<a class="sourceLine" id="cb30-8" title="8">my_map &lt;-<span class="st"> </span>icd<span class="op">:::</span><span class="kw"><a href="../reference/chapters_to_map.html">chapters_to_map</a></span>(icd9_chapters[<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="dv">2</span>, <span class="dv">5</span>, <span class="dv">14</span>)])</a>
+<a class="sourceLine" id="cb30-8" title="8">my_map &lt;-<span class="st"> </span>icd<span class="op">:::</span><span class="kw"><a href="../reference/chapters_to_map.html">chapters_to_map</a></span>(icd9_chapters[<span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="dv">2</span>, <span class="dv">5</span>, <span class="dv">14</span>)])</a>
 <a class="sourceLine" id="cb30-9" title="9"><span class="kw"><a href="../reference/comorbid.html">icd9_comorbid</a></span>(patients_icd9, my_map) <span class="co"># no positive</span></a>
 <a class="sourceLine" id="cb30-10" title="10"><span class="co">#&gt;      Neoplasms Mental Disorders Congenital Anomalies</span></a>
 <a class="sourceLine" id="cb30-11" title="11"><span class="co">#&gt; 1000      TRUE            FALSE                FALSE</span></a>
@@ -671,8 +672,8 @@ along with icd. If not, see <http:#www.gnu.org/licenses/>.
 <h3 class="hasAnchor">
 <a href="#reduce-comorbidity-mapping-from-possible-values-to-defined-diagnostic-codes" class="anchor"></a>Reduce comorbidity mapping from possible values to defined diagnostic codes</h3>
 <p>Suppose we want to exact match only real ICD-9 codes when looking up comorbdities for some patients. E.g. if the coder accidentally omitted a trailing zero, e.g. code <code>003.20</code> (<em>Localized salmonella infection, unspecified</em>) might have been written as <code>003.2</code> which has a heading (<em>Localized salmonella infections</em>) but is not itself billable. Use of ICD-9 codes for comorbidities generally assumes the codes are either right or wrong. How do we match only real codes, for a strict interpretation of comorbidities? It’s one line or R code:</p>
-<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb31-1" title="1">ahrq_strict &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/lapply">lapply</a></span>(icd9_map_ahrq, get_defined)</a>
-<a class="sourceLine" id="cb31-2" title="2"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/str">str</a></span>(icd9_map_ahrq[<span class="dv">1</span><span class="op">:</span><span class="dv">5</span>]) <span class="co"># first five of the original:</span></a>
+<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb31-1" title="1">ahrq_strict &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/lapply.html">lapply</a></span>(icd9_map_ahrq, get_defined)</a>
+<a class="sourceLine" id="cb31-2" title="2"><span class="kw"><a href="https://rdrr.io/r/utils/str.html">str</a></span>(icd9_map_ahrq[<span class="dv">1</span><span class="op">:</span><span class="dv">5</span>]) <span class="co"># first five of the original:</span></a>
 <a class="sourceLine" id="cb31-3" title="3"><span class="co">#&gt; List of 5</span></a>
 <a class="sourceLine" id="cb31-4" title="4"><span class="co">#&gt;  $ CHF     : 'icd9' chr [1:121] "39891" "40201" "40211" "40291" ...</span></a>
 <a class="sourceLine" id="cb31-5" title="5"><span class="co">#&gt;   ..- attr(*, "icd_short_diag")= logi TRUE</span></a>
@@ -684,7 +685,7 @@ along with icd. If not, see <http:#www.gnu.org/licenses/>.
 <a class="sourceLine" id="cb31-11" title="11"><span class="co">#&gt;   ..- attr(*, "icd_short_diag")= logi TRUE</span></a>
 <a class="sourceLine" id="cb31-12" title="12"><span class="co">#&gt;  $ HTN     : 'icd9' chr [1:33] "4011" "40110" "40111" "40112" ...</span></a>
 <a class="sourceLine" id="cb31-13" title="13"><span class="co">#&gt;   ..- attr(*, "icd_short_diag")= logi TRUE</span></a>
-<a class="sourceLine" id="cb31-14" title="14"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/str">str</a></span>(ahrq_strict[<span class="dv">1</span><span class="op">:</span><span class="dv">5</span>]) <span class="co"># and first five of the result:</span></a>
+<a class="sourceLine" id="cb31-14" title="14"><span class="kw"><a href="https://rdrr.io/r/utils/str.html">str</a></span>(ahrq_strict[<span class="dv">1</span><span class="op">:</span><span class="dv">5</span>]) <span class="co"># and first five of the result:</span></a>
 <a class="sourceLine" id="cb31-15" title="15"><span class="co">#&gt; List of 5</span></a>
 <a class="sourceLine" id="cb31-16" title="16"><span class="co">#&gt;  $ CHF     : 'icd9' chr [1:29] "39891" "40201" "40211" "40291" ...</span></a>
 <a class="sourceLine" id="cb31-17" title="17"><span class="co">#&gt;   ..- attr(*, "icd_short_diag")= logi TRUE</span></a>
@@ -755,7 +756,7 @@ along with icd. If not, see <http:#www.gnu.org/licenses/>.
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.3.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.3.0.9000.</p>
 </div>
       </footer>
 </div>

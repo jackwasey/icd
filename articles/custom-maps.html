@@ -7,7 +7,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Quick custom comorbidity maps are helpful • Comorbidity calculations and tools for ICD-9 and ICD-10 codes</title>
 <!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script><!-- Bootstrap --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha256-916EbMg70RQy9LHiGkXzG8hSg9EdNy97GazNG/aiY1w=" crossorigin="anonymous">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script><!-- sticky kit --><script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
 <script src="../pkgdown.js"></script><!-- docsearch --><script src="../docsearch.js"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/docsearch.js/2.6.1/docsearch.min.css" integrity="sha256-QOSRU/ra9ActyXkIBbiIB144aDBdtvXBcNc3OTNuX/Q=" crossorigin="anonymous">
 <link href="../docsearch.css" rel="stylesheet">
@@ -40,7 +41,7 @@
       <ul class="nav navbar-nav">
 <li>
   <a href="../index.html">
-    <span class="fa fa-home fa-lg"></span>
+    <span class="fas fa fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -91,7 +92,7 @@
 </li>
       </ul>
 <ul class="nav navbar-nav navbar-right"></ul>
-<form class="navbar-form navbar-right" role="search">
+<form class="navbar-form navbar-right hidden-xs hidden-sm" role="search">
         <div class="form-group">
           <input type="search" class="form-control" name="search-input" id="search-input" placeholder="Search..." aria-label="Search for..." autocomplete="off">
 </div>
@@ -111,7 +112,7 @@
       <h1>Quick custom comorbidity maps are helpful</h1>
                         <h4 class="author">Jack O. Wasey</h4>
             
-            <h4 class="date">2019-05-07</h4>
+            <h4 class="date">2019-05-08</h4>
       
       
       <div class="hidden name"><code>custom-maps.Rmd</code></div>
@@ -127,7 +128,7 @@
 </ul>
 <p><code>icd</code> has a simple mechanism to use custom category-ICD maps. A comorbidity map is a list of character vectors. Each list must be named to reflect the ICD codes it contains; the character vector contains the ICD codes themselves.</p>
 <p>Let’s take a look at the first few items in the Charlson map from Quan and Deyo:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/print">print</a></span>(icd<span class="op">::</span>icd10_map_quan_deyo, <span class="dt">n_comorbidities =</span> <span class="dv">3</span>, <span class="dt">n_codes =</span> <span class="dv">8</span>)</a>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1"><span class="kw"><a href="https://rdrr.io/r/base/print.html">print</a></span>(icd<span class="op">::</span>icd10_map_quan_deyo, <span class="dt">n_comorbidities =</span> <span class="dv">3</span>, <span class="dt">n_codes =</span> <span class="dv">8</span>)</a>
 <a class="sourceLine" id="cb1-2" title="2"><span class="co">#&gt; Showing first 3 comorbidities, and first 8 of each.</span></a>
 <a class="sourceLine" id="cb1-3" title="3"><span class="co">#&gt; $MI</span></a>
 <a class="sourceLine" id="cb1-4" title="4"><span class="co">#&gt; [1] "I21"   "I210"  "I2101" "I2102" "I2109" "I211"  "I2111" "I2119"</span></a>
@@ -143,16 +144,16 @@
 <h2 class="hasAnchor">
 <a href="#obesity-example" class="anchor"></a>Obesity example</h2>
 <p>Now we can make our own comorbidity map, and apply it to <a href="https://stackoverflow.com/questions/53954537/creating-categorical-variable-in-r/53954950#53954950">a question on ‘Stackoverflow’</a>.</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" title="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(icd)</a>
-<a class="sourceLine" id="cb2-2" title="2">obesity_map &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/list">list</a></span>(</a>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" title="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(icd)</a>
+<a class="sourceLine" id="cb2-2" title="2">obesity_map &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/list.html">list</a></span>(</a>
 <a class="sourceLine" id="cb2-3" title="3">  <span class="st">"1"</span> =<span class="st"> "E663"</span>,</a>
-<a class="sourceLine" id="cb2-4" title="4">  <span class="st">"2"</span> =<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"E669"</span>, <span class="st">"E668"</span>, <span class="st">"E6609"</span>),</a>
+<a class="sourceLine" id="cb2-4" title="4">  <span class="st">"2"</span> =<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"E669"</span>, <span class="st">"E668"</span>, <span class="st">"E6609"</span>),</a>
 <a class="sourceLine" id="cb2-5" title="5">  <span class="st">"3"</span> =<span class="st"> "E661"</span>,</a>
 <a class="sourceLine" id="cb2-6" title="6">  <span class="st">"4"</span> =<span class="st"> "E662"</span>)</a>
 <a class="sourceLine" id="cb2-7" title="7"></a>
-<a class="sourceLine" id="cb2-8" title="8">obesity &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/data.frame">data.frame</a></span>(</a>
-<a class="sourceLine" id="cb2-9" title="9">  <span class="dt">ICD.10.Code =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"E6601"</span>, <span class="st">"E663"</span>, <span class="st">"E663"</span>, <span class="st">"E6609"</span>),</a>
-<a class="sourceLine" id="cb2-10" title="10">  <span class="dt">Encounter.ID =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"408773"</span>, <span class="st">"542207"</span>, <span class="st">"358741"</span>, <span class="st">"342534"</span>)</a>
+<a class="sourceLine" id="cb2-8" title="8">obesity &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span>(</a>
+<a class="sourceLine" id="cb2-9" title="9">  <span class="dt">ICD.10.Code =</span> <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"E6601"</span>, <span class="st">"E663"</span>, <span class="st">"E663"</span>, <span class="st">"E6609"</span>),</a>
+<a class="sourceLine" id="cb2-10" title="10">  <span class="dt">Encounter.ID =</span> <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"408773"</span>, <span class="st">"542207"</span>, <span class="st">"358741"</span>, <span class="st">"342534"</span>)</a>
 <a class="sourceLine" id="cb2-11" title="11">)</a>
 <a class="sourceLine" id="cb2-12" title="12"></a>
 <a class="sourceLine" id="cb2-13" title="13">custom_map_result &lt;-<span class="st"> </span>icd<span class="op">::</span><span class="kw"><a href="https://jackwasey.github.io/icd//reference/comorbid.html">icd10_comorbid</a></span>(</a>
@@ -167,8 +168,8 @@
 <a class="sourceLine" id="cb2-22" title="22"><span class="co">#&gt; 342534 FALSE  TRUE FALSE FALSE</span></a>
 <a class="sourceLine" id="cb2-23" title="23"></a>
 <a class="sourceLine" id="cb2-24" title="24"><span class="co"># finally, format as requested by the user</span></a>
-<a class="sourceLine" id="cb2-25" title="25"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/apply">apply</a></span>(custom_map_result, <span class="dv">1</span>, <span class="cf">function</span>(x) {</a>
-<a class="sourceLine" id="cb2-26" title="26">  <span class="cf">if</span> (<span class="op">!</span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/any">any</a></span>(x)) <span class="dv">4</span> <span class="cf">else</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/which">which</a></span>(x)[<span class="dv">1</span>]</a>
+<a class="sourceLine" id="cb2-25" title="25"><span class="kw"><a href="https://rdrr.io/r/base/apply.html">apply</a></span>(custom_map_result, <span class="dv">1</span>, <span class="cf">function</span>(x) {</a>
+<a class="sourceLine" id="cb2-26" title="26">  <span class="cf">if</span> (<span class="op">!</span><span class="kw"><a href="https://rdrr.io/r/base/any.html">any</a></span>(x)) <span class="dv">4</span> <span class="cf">else</span> <span class="kw"><a href="https://rdrr.io/r/base/which.html">which</a></span>(x)[<span class="dv">1</span>]</a>
 <a class="sourceLine" id="cb2-27" title="27">  })</a>
 <a class="sourceLine" id="cb2-28" title="28"><span class="co">#&gt; 408773 542207 358741 342534 </span></a>
 <a class="sourceLine" id="cb2-29" title="29"><span class="co">#&gt;      4      1      1      2</span></a>
@@ -196,13 +197,13 @@
 <a href="#maps-with-ranges-of-codes" class="anchor"></a>Maps with ranges of codes</h2>
 <p>Sometimes there are a large number of ICD codes, and they can be defined more succinctly with ranges, then by specifying every single code. In addition, as new codes are added to ICD-10-CM, (especially ICD-10-CM – it moves much faster than ICD-10 from the WHO) having specific hard-coded ICD-10 codes will miss closely related codes in the future. Using the ranges functions from <code>icd</code> helps with both these problems.</p>
 <p>Again, using a <a href="https://stackoverflow.com/questions/54245282/how-to-compare-icd-10-character-string-or-search-whether-a-diagnosis-fall-into-t/54277842#54277842">Stackoverflow question</a>:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" title="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(icd)</a>
-<a class="sourceLine" id="cb3-2" title="2">diagnoses &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"C349"</span>, <span class="st">"A219"</span>, <span class="st">"B003"</span>, <span class="st">"C509"</span>, <span class="st">"B700"</span>, <span class="st">"A090"</span>)</a>
-<a class="sourceLine" id="cb3-3" title="3">one_pt &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/data.frame">data.frame</a></span>(<span class="dt">id =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/rep">rep</a></span>(<span class="st">"patient1"</span>, <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/length">length</a></span>(diagnoses)),</a>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" title="1"><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span>(icd)</a>
+<a class="sourceLine" id="cb3-2" title="2">diagnoses &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"C349"</span>, <span class="st">"A219"</span>, <span class="st">"B003"</span>, <span class="st">"C509"</span>, <span class="st">"B700"</span>, <span class="st">"A090"</span>)</a>
+<a class="sourceLine" id="cb3-3" title="3">one_pt &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span>(<span class="dt">id =</span> <span class="kw"><a href="https://rdrr.io/r/base/rep.html">rep</a></span>(<span class="st">"patient1"</span>, <span class="kw"><a href="https://rdrr.io/r/base/length.html">length</a></span>(diagnoses)),</a>
 <a class="sourceLine" id="cb3-4" title="4">                     diagnoses)</a>
-<a class="sourceLine" id="cb3-5" title="5">dif_pt &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/data.frame">data.frame</a></span>(<span class="dt">id =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/paste">paste0</a></span>(<span class="st">"patient"</span>, <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/seq">seq_along</a></span>(diagnoses)),</a>
+<a class="sourceLine" id="cb3-5" title="5">dif_pt &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span>(<span class="dt">id =</span> <span class="kw"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span>(<span class="st">"patient"</span>, <span class="kw"><a href="https://rdrr.io/r/base/seq.html">seq_along</a></span>(diagnoses)),</a>
 <a class="sourceLine" id="cb3-6" title="6">                     diagnoses)</a>
-<a class="sourceLine" id="cb3-7" title="7">my_map &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/list">list</a></span>(<span class="dt">c01to17 =</span> <span class="kw"><a href="../reference/expand_range.html">expand_range</a></span>(<span class="st">"C01"</span>, <span class="st">"C17"</span>),</a>
+<a class="sourceLine" id="cb3-7" title="7">my_map &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="dt">c01to17 =</span> <span class="kw"><a href="../reference/expand_range.html">expand_range</a></span>(<span class="st">"C01"</span>, <span class="st">"C17"</span>),</a>
 <a class="sourceLine" id="cb3-8" title="8">               <span class="dt">a74to75 =</span> <span class="kw"><a href="../reference/expand_range.html">expand_range</a></span>(<span class="st">"A748"</span>, <span class="st">"A759"</span>),</a>
 <a class="sourceLine" id="cb3-9" title="9">               <span class="dt">b00to33 =</span> <span class="kw"><a href="../reference/expand_range.html">expand_range</a></span>(<span class="st">"B001"</span>, <span class="st">"B331"</span>),</a>
 <a class="sourceLine" id="cb3-10" title="10">               <span class="dt">b69to72 =</span> <span class="kw"><a href="../reference/expand_range.html">expand_range</a></span>(<span class="st">"B69"</span>, <span class="st">"B72"</span>),</a>
@@ -210,7 +211,7 @@
 <a class="sourceLine" id="cb3-12" title="12"><span class="co"># optionally use as.comorbidity_map which ensures it is valid, and let's it</span></a>
 <a class="sourceLine" id="cb3-13" title="13"><span class="co"># print more pleasantly</span></a>
 <a class="sourceLine" id="cb3-14" title="14">my_map &lt;-<span class="st"> </span><span class="kw"><a href="../reference/as.comorbidity_map.html">as.comorbidity_map</a></span>(my_map)</a>
-<a class="sourceLine" id="cb3-15" title="15"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/print">print</a></span>(my_map)</a>
+<a class="sourceLine" id="cb3-15" title="15"><span class="kw"><a href="https://rdrr.io/r/base/print.html">print</a></span>(my_map)</a>
 <a class="sourceLine" id="cb3-16" title="16"><span class="co">#&gt; Showing first 7 comorbidities, and first 7 of each.</span></a>
 <a class="sourceLine" id="cb3-17" title="17"><span class="co">#&gt; $c01to17</span></a>
 <a class="sourceLine" id="cb3-18" title="18"><span class="co">#&gt; [1] "C01"  "C02"  "C020" "C021" "C022" "C023" "C024"</span></a>
@@ -260,7 +261,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.3.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.3.0.9000.</p>
 </div>
       </footer>
 </div>

@@ -16,7 +16,8 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
 
 <!-- Font Awesome icons -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous" />
 
 <!-- clipboard.js -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script>
@@ -80,7 +81,7 @@
       <ul class="nav navbar-nav">
         <li>
   <a href="../index.html">
-    <span class="fa fa-home fa-lg"></span>
+    <span class="fas fa fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -135,7 +136,7 @@
         
       </ul>
       
-      <form class="navbar-form navbar-right" role="search">
+      <form class="navbar-form navbar-right hidden-xs hidden-sm" role="search">
         <div class="form-group">
           <input type="search" class="form-control" name="search-input" id="search-input" placeholder="Search..." aria-label="Search for..." autocomplete="off">
         </div>
@@ -168,16 +169,16 @@
     <pre class="usage"><span class='fu'>sort_icd</span>(<span class='no'>x</span>, <span class='kw'>decreasing</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>short_code</span> <span class='kw'>=</span> <span class='fu'><a href='guess_short.html'>guess_short</a></span>(<span class='no'>x</span>), <span class='no'>...</span>)
 
 <span class='co'># S3 method for icd10</span>
-<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/sort'>sort</a></span>(<span class='no'>x</span>, <span class='kw'>decreasing</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='no'>...</span>)
+<span class='fu'><a href='https://rdrr.io/r/base/sort.html'>sort</a></span>(<span class='no'>x</span>, <span class='kw'>decreasing</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='no'>...</span>)
 
 <span class='co'># S3 method for icd10cm</span>
-<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/sort'>sort</a></span>(<span class='no'>x</span>, <span class='kw'>decreasing</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='no'>...</span>)
+<span class='fu'><a href='https://rdrr.io/r/base/sort.html'>sort</a></span>(<span class='no'>x</span>, <span class='kw'>decreasing</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='no'>...</span>)
 
 <span class='co'># S3 method for icd10be</span>
-<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/sort'>sort</a></span>(<span class='no'>x</span>, <span class='kw'>decreasing</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='no'>...</span>)
+<span class='fu'><a href='https://rdrr.io/r/base/sort.html'>sort</a></span>(<span class='no'>x</span>, <span class='kw'>decreasing</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='no'>...</span>)
 
 <span class='co'># S3 method for icd9</span>
-<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/sort'>sort</a></span>(<span class='no'>x</span>, <span class='kw'>decreasing</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>short_code</span> <span class='kw'>=</span> <span class='fu'><a href='guess_short.html'>guess_short</a></span>(<span class='no'>x</span>),
+<span class='fu'><a href='https://rdrr.io/r/base/sort.html'>sort</a></span>(<span class='no'>x</span>, <span class='kw'>decreasing</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>short_code</span> <span class='kw'>=</span> <span class='fu'><a href='guess_short.html'>guess_short</a></span>(<span class='no'>x</span>),
   <span class='no'>...</span>)
 
 <span class='fu'>order.icd9</span>(<span class='no'>x</span>, <span class='kw'>na.last</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
@@ -195,7 +196,7 @@
     </tr>
     <tr>
       <th>decreasing</th>
-      <td><p>Logical See <code><a href='https://www.rdocumentation.org/packages/base/topics/sort'>sort</a></code>.</p></td>
+      <td><p>Logical See <code><a href='https://rdrr.io/r/base/sort.html'>sort</a></code>.</p></td>
     </tr>
     <tr>
       <th>short_code</th>
@@ -222,8 +223,8 @@ Where reasonable, this is guessed from the input data.</p></td>
     
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
-    <p>Note that <code><a href='https://www.rdocumentation.org/packages/base/topics/sort'>sort</a></code> is an S3 generic, whereas
-  <code><a href='https://www.rdocumentation.org/packages/base/topics/order'>order</a></code> is not. Thus we export <code>order.icd10cm</code>, but
+    <p>Note that <code><a href='https://rdrr.io/r/base/sort.html'>sort</a></code> is an S3 generic, whereas
+  <code><a href='https://rdrr.io/r/base/order.html'>order</a></code> is not. Thus we export <code>order.icd10cm</code>, but
   not <code>sort.icd10cm</code>, etc..</p>
     
     <h2 class="hasAnchor" id="icd-"><a class="anchor" href="#icd-"></a>ICD-9</h2>
@@ -243,17 +244,17 @@ Where reasonable, this is guessed from the input data.</p></td>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='co'># order ICD-10-CM is not lexicographic:</span>
-<span class='no'>codes</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='set_icd_class.html'>as.icd10cm</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"C7A"</span>, <span class='st'>"C79"</span>, <span class='st'>"C80"</span>, <span class='st'>"C81"</span>, <span class='st'>"C7B"</span>))
+<span class='no'>codes</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='set_icd_class.html'>as.icd10cm</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"C7A"</span>, <span class='st'>"C79"</span>, <span class='st'>"C80"</span>, <span class='st'>"C81"</span>, <span class='st'>"C7B"</span>))
 <span class='co'># as the class is set, use S3 dispatch to get the right answer</span>
-<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/sort'>sort</a></span>(<span class='no'>codes</span>)</div><div class='output co'>#&gt; [1] "C7A" "C79" "C80" "C81" "C7B"</div><div class='input'><span class='co'># or call directly, but recall S3 dispatch will only work once 'icd' is</span>
+<span class='fu'><a href='https://rdrr.io/r/base/sort.html'>sort</a></span>(<span class='no'>codes</span>)</div><div class='output co'>#&gt; [1] "C7A" "C79" "C80" "C81" "C7B"</div><div class='input'><span class='co'># or call directly, but recall S3 dispatch will only work once 'icd' is</span>
 <span class='co'># attached using:</span>
-<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/library'>library</a></span>(<span class='no'>icd</span>)
-<span class='kw pkg'>icd</span><span class='kw ns'>:::</span><span class='fu'><a href='https://jackwasey.github.io/icd//reference/sort_icd.html'>sort.icd10cm</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"C7A"</span>, <span class='st'>"C79"</span>, <span class='st'>"C80"</span>, <span class='st'>"C81"</span>, <span class='st'>"C7B"</span>))</div><div class='output co'>#&gt; [1] "C7A" "C79" "C80" "C81" "C7B"</div><div class='input'><span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/stopifnot'>stopifnot</a></span>(!<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/identical'>identical</a></span>(
-  <span class='fu'>order.icd10cm</span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/character'>as.character</a></span>(<span class='no'>codes</span>)),
-  <span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/order'>order</a></span>(<span class='no'>codes</span>)
+<span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>icd</span>)
+<span class='kw pkg'>icd</span><span class='kw ns'>:::</span><span class='fu'><a href='https://jackwasey.github.io/icd//reference/sort_icd.html'>sort.icd10cm</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"C7A"</span>, <span class='st'>"C79"</span>, <span class='st'>"C80"</span>, <span class='st'>"C81"</span>, <span class='st'>"C7B"</span>))</div><div class='output co'>#&gt; [1] "C7A" "C79" "C80" "C81" "C7B"</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/stopifnot.html'>stopifnot</a></span>(!<span class='fu'><a href='https://rdrr.io/r/base/identical.html'>identical</a></span>(
+  <span class='fu'>order.icd10cm</span>(<span class='fu'><a href='https://rdrr.io/r/base/character.html'>as.character</a></span>(<span class='no'>codes</span>)),
+  <span class='fu'><a href='https://rdrr.io/r/base/order.html'>order</a></span>(<span class='no'>codes</span>)
 ))
-<span class='kw pkg'>icd</span><span class='kw ns'>::</span><span class='fu'><a href='https://jackwasey.github.io/icd//reference/sort_icd.html'>order.icd9</a></span>(<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/c'>c</a></span>(<span class='st'>"V20"</span>, <span class='fl'>NA</span>, <span class='st'>"100"</span>, <span class='fl'>NA</span>, <span class='st'>"E998"</span>, <span class='st'>"101"</span>))</div><div class='output co'>#&gt; [1] 3 6 1 5 2 4</div><div class='input'><span class='no'>codes</span>[<span class='fu'>order.icd10cm</span>(<span class='no'>codes</span>)]</div><div class='output co'>#&gt; [1] "C7A" "C79" "C80" "C81" "C7B"</div><div class='input'><span class='co'># Note that base::order does NOT do S3 dispatch, so the following does not work:</span>
-<span class='no'>codes</span>[<span class='fu'><a href='https://www.rdocumentation.org/packages/base/topics/order'>order</a></span>(<span class='no'>codes</span>)]</div><div class='output co'>#&gt; [1] "C7A" "C7B" "C79" "C80" "C81"</div></pre>
+<span class='kw pkg'>icd</span><span class='kw ns'>::</span><span class='fu'><a href='https://jackwasey.github.io/icd//reference/sort_icd.html'>order.icd9</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"V20"</span>, <span class='fl'>NA</span>, <span class='st'>"100"</span>, <span class='fl'>NA</span>, <span class='st'>"E998"</span>, <span class='st'>"101"</span>))</div><div class='output co'>#&gt; [1] 3 6 1 5 2 4</div><div class='input'><span class='no'>codes</span>[<span class='fu'>order.icd10cm</span>(<span class='no'>codes</span>)]</div><div class='output co'>#&gt; [1] "C7A" "C79" "C80" "C81" "C7B"</div><div class='input'><span class='co'># Note that base::order does NOT do S3 dispatch, so the following does not work:</span>
+<span class='no'>codes</span>[<span class='fu'><a href='https://rdrr.io/r/base/order.html'>order</a></span>(<span class='no'>codes</span>)]</div><div class='output co'>#&gt; [1] "C7A" "C7B" "C79" "C80" "C81"</div></pre>
   </div>
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
     <h2>Contents</h2>
@@ -280,7 +281,7 @@ Where reasonable, this is guessed from the input data.</p></td>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.3.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.3.0.9000.</p>
 </div>
       </footer>
    </div>

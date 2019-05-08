@@ -7,7 +7,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Working with World Health Organization ICD codes and national editions, and different languages • Comorbidity calculations and tools for ICD-9 and ICD-10 codes</title>
 <!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script><!-- Bootstrap --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha256-916EbMg70RQy9LHiGkXzG8hSg9EdNy97GazNG/aiY1w=" crossorigin="anonymous">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script><!-- sticky kit --><script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
 <script src="../pkgdown.js"></script><!-- docsearch --><script src="../docsearch.js"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/docsearch.js/2.6.1/docsearch.min.css" integrity="sha256-QOSRU/ra9ActyXkIBbiIB144aDBdtvXBcNc3OTNuX/Q=" crossorigin="anonymous">
 <link href="../docsearch.css" rel="stylesheet">
@@ -40,7 +41,7 @@
       <ul class="nav navbar-nav">
 <li>
   <a href="../index.html">
-    <span class="fa fa-home fa-lg"></span>
+    <span class="fas fa fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -91,7 +92,7 @@
 </li>
       </ul>
 <ul class="nav navbar-nav navbar-right"></ul>
-<form class="navbar-form navbar-right" role="search">
+<form class="navbar-form navbar-right hidden-xs hidden-sm" role="search">
         <div class="form-group">
           <input type="search" class="form-control" name="search-input" id="search-input" placeholder="Search..." aria-label="Search for..." autocomplete="off">
 </div>
@@ -175,7 +176,7 @@
 <a class="sourceLine" id="cb2-36" title="36"><span class="co">#&gt; 3                          Choléra         A00</span></a>
 <a class="sourceLine" id="cb2-37" title="37"><span class="co">#&gt; 4                          Choléra         A00</span></a>
 <a class="sourceLine" id="cb2-38" title="38"><span class="co">#&gt; 5 Fièvres typhoïde et paratyphoïde         A01</span></a>
-<a class="sourceLine" id="cb2-39" title="39"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/summary">summary</a></span>(<span class="kw"><a href="../reference/get_icd10who2016.html">get_icd10who2016</a></span>())</a>
+<a class="sourceLine" id="cb2-39" title="39"><span class="kw"><a href="https://rdrr.io/r/base/summary.html">summary</a></span>(<span class="kw"><a href="../reference/get_icd10who2016.html">get_icd10who2016</a></span>())</a>
 <a class="sourceLine" id="cb2-40" title="40"><span class="co">#&gt;      code              leaf             desc            three_digit   </span></a>
 <a class="sourceLine" id="cb2-41" title="41"><span class="co">#&gt;  Length:12187       Mode :logical   Length:12187       A04    :   11  </span></a>
 <a class="sourceLine" id="cb2-42" title="42"><span class="co">#&gt;  Class1:icd10who    FALSE:1580      Class :character   A06    :   11  </span></a>
@@ -283,7 +284,7 @@
 <a class="sourceLine" id="cb5-5" title="5">  devnull &lt;-<span class="st"> </span><span class="kw"><a href="../reference/get_icd10cm_version.html">get_icd10cm_active</a></span>()</a>
 <a class="sourceLine" id="cb5-6" title="6">  <span class="co">#set the active version, and check it is the one we expected</span></a>
 <a class="sourceLine" id="cb5-7" title="7">  <span class="kw"><a href="../reference/set_icd10cm_active_year.html">set_icd10cm_active_year</a></span>(<span class="st">"2015"</span>)</a>
-<a class="sourceLine" id="cb5-8" title="8">  <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/identical">identical</a></span>(<span class="kw"><a href="../reference/get_icd10cm_version.html">get_icd10cm_active</a></span>(), <span class="kw"><a href="../reference/get_icd10cm2015.html">get_icd10cm2015</a></span>())</a>
+<a class="sourceLine" id="cb5-8" title="8">  <span class="kw"><a href="https://rdrr.io/r/base/identical.html">identical</a></span>(<span class="kw"><a href="../reference/get_icd10cm_version.html">get_icd10cm_active</a></span>(), <span class="kw"><a href="../reference/get_icd10cm2015.html">get_icd10cm2015</a></span>())</a>
 <a class="sourceLine" id="cb5-9" title="9"><span class="co">#&gt; [1] TRUE</span></a></code></pre></div>
 <p>The function <code>with_icd10cm_version</code> allows temporarily using a particular data set for a computation, analogous to the functions in the <code>withr</code> package:</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" title="1">  <span class="co"># The code "C4311" goes from being a leaf in 2018, to a parent in 2019</span></a>
@@ -299,8 +300,8 @@
 <a class="sourceLine" id="cb6-11" title="11">  <span class="co"># code of "C4311"s</span></a>
 <a class="sourceLine" id="cb6-12" title="12">  <span class="kw"><a href="../reference/with_icd10cm_version.html">with_icd10cm_version</a></span>(<span class="dt">ver =</span> <span class="st">"2018"</span>, </a>
 <a class="sourceLine" id="cb6-13" title="13">                                 {</a>
-<a class="sourceLine" id="cb6-14" title="14">                                   <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/print">print</a></span>(<span class="kw"><a href="../reference/is_defined.html">is_defined</a></span>(<span class="kw"><a href="../reference/set_icd_class.html">as.icd10cm</a></span>(<span class="st">"C4311"</span>)))</a>
-<a class="sourceLine" id="cb6-15" title="15">                                   <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/print">print</a></span>(<span class="kw"><a href="../reference/is_leaf.html">is_leaf</a></span>(<span class="kw"><a href="../reference/set_icd_class.html">as.icd10cm</a></span>(<span class="st">"C4311"</span>)))</a>
+<a class="sourceLine" id="cb6-14" title="14">                                   <span class="kw"><a href="https://rdrr.io/r/base/print.html">print</a></span>(<span class="kw"><a href="../reference/is_defined.html">is_defined</a></span>(<span class="kw"><a href="../reference/set_icd_class.html">as.icd10cm</a></span>(<span class="st">"C4311"</span>)))</a>
+<a class="sourceLine" id="cb6-15" title="15">                                   <span class="kw"><a href="https://rdrr.io/r/base/print.html">print</a></span>(<span class="kw"><a href="../reference/is_leaf.html">is_leaf</a></span>(<span class="kw"><a href="../reference/set_icd_class.html">as.icd10cm</a></span>(<span class="st">"C4311"</span>)))</a>
 <a class="sourceLine" id="cb6-16" title="16">                                 }</a>
 <a class="sourceLine" id="cb6-17" title="17">  )</a>
 <a class="sourceLine" id="cb6-18" title="18"><span class="co">#&gt; [1] TRUE</span></a>
@@ -332,7 +333,7 @@
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.3.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.3.0.9000.</p>
 </div>
       </footer>
 </div>

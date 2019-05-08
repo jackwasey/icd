@@ -7,7 +7,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ICD-10 comorbidities • Comorbidity calculations and tools for ICD-9 and ICD-10 codes</title>
 <!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script><!-- Bootstrap --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha256-916EbMg70RQy9LHiGkXzG8hSg9EdNy97GazNG/aiY1w=" crossorigin="anonymous">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script><!-- sticky kit --><script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
 <script src="../pkgdown.js"></script><!-- docsearch --><script src="../docsearch.js"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/docsearch.js/2.6.1/docsearch.min.css" integrity="sha256-QOSRU/ra9ActyXkIBbiIB144aDBdtvXBcNc3OTNuX/Q=" crossorigin="anonymous">
 <link href="../docsearch.css" rel="stylesheet">
@@ -40,7 +41,7 @@
       <ul class="nav navbar-nav">
 <li>
   <a href="../index.html">
-    <span class="fa fa-home fa-lg"></span>
+    <span class="fas fa fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -91,7 +92,7 @@
 </li>
       </ul>
 <ul class="nav navbar-nav navbar-right"></ul>
-<form class="navbar-form navbar-right" role="search">
+<form class="navbar-form navbar-right hidden-xs hidden-sm" role="search">
         <div class="form-group">
           <input type="search" class="form-control" name="search-input" id="search-input" placeholder="Search..." aria-label="Search for..." autocomplete="off">
 </div>
@@ -111,7 +112,7 @@
       <h1>ICD-10 comorbidities</h1>
                         <h4 class="author">Jack O. Wasey</h4>
             
-            <h4 class="date">2019-05-07</h4>
+            <h4 class="date">2019-05-08</h4>
       
       
       <div class="hidden name"><code>ICD-10.Rmd</code></div>
@@ -159,7 +160,7 @@ along with icd. If not, see <http:#www.gnu.org/licenses/>.
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" title="1"><span class="kw"><a href="../reference/explain_code.html">explain_code</a></span>(<span class="st">"R55"</span>)</a>
 <a class="sourceLine" id="cb2-2" title="2"><span class="co">#&gt; [1] "Syncope and collapse"</span></a></code></pre></div>
 <p><code>icd</code> can work with ‘long’ or ‘wide’ format data without modification. If the source database is not normalized, i.e., has multiple diagnostic code columns, <code>icd</code> can detect and efficiently work on all the columns at once.</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" title="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/head">head</a></span>(uranium_pathology)</a>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" title="1"><span class="kw"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(uranium_pathology)</a>
 <a class="sourceLine" id="cb3-2" title="2"><span class="co">#&gt;   case icd10</span></a>
 <a class="sourceLine" id="cb3-3" title="3"><span class="co">#&gt; 1    1 F17.9</span></a>
 <a class="sourceLine" id="cb3-4" title="4"><span class="co">#&gt; 2    1 I21.9</span></a>
@@ -170,7 +171,7 @@ along with icd. If not, see <http:#www.gnu.org/licenses/>.
 <p>Now map these diagnoses to disease groups as defined by Quan et al:</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" title="1">quan_comorbidities &lt;-<span class="st"> </span><span class="kw"><a href="../reference/comorbid.html">comorbid</a></span>(uranium_pathology, icd10_map_quan_elix)</a>
 <a class="sourceLine" id="cb4-2" title="2"><span class="co"># see the first few rows and columns:</span></a>
-<a class="sourceLine" id="cb4-3" title="3">quan_comorbidities[<span class="dv">1</span><span class="op">:</span><span class="dv">6</span>, <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="dv">1</span>, <span class="dv">3</span><span class="op">:</span><span class="dv">10</span>)]</a>
+<a class="sourceLine" id="cb4-3" title="3">quan_comorbidities[<span class="dv">1</span><span class="op">:</span><span class="dv">6</span>, <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="dv">1</span>, <span class="dv">3</span><span class="op">:</span><span class="dv">10</span>)]</a>
 <a class="sourceLine" id="cb4-4" title="4"><span class="co">#&gt;     CHF Valvular  PHTN   PVD   HTN HTNcx Paralysis NeuroOther Pulmonary</span></a>
 <a class="sourceLine" id="cb4-5" title="5"><span class="co">#&gt; 1 FALSE    FALSE FALSE FALSE FALSE FALSE     FALSE      FALSE     FALSE</span></a>
 <a class="sourceLine" id="cb4-6" title="6"><span class="co">#&gt; 2 FALSE     TRUE FALSE FALSE FALSE FALSE     FALSE      FALSE      TRUE</span></a>
@@ -196,34 +197,34 @@ along with icd. If not, see <http:#www.gnu.org/licenses/>.
 <p><code>icd</code> is carefully optimized to give accurate results as quickly as possible, and <a href="efficiency.html">shines</a> with huge data sets. For users working with millions of rows of data and higher orders of magnitude, some options can improve throughput.</p>
 <p>In this example, we also return ‘binary’ numeric flags instead of a matrix of logical values. For very large data sets, matrices are faster both for <code>icd</code> and subsequent manipulation and analysis. Here we also show that we can request the ‘id’ field is return in the order the data was presented. Note that setting <code>restore_id_order</code> to <code>FALSE</code> does not sort: it simply returns the data as soon as it was calculated, and since parallel threads complete at different times, it is quicker, although not deterministic. Again, this is really for huge data sets, where the additional sorting and re-ordering may be very time consuming. Most users will not need to worry about this.</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" title="1"><span class="co"># shuffle the rows:</span></a>
-<a class="sourceLine" id="cb6-2" title="2">u &lt;-<span class="st"> </span>uranium_pathology[<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/sample">sample</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/seq">seq_len</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/nrow">nrow</a></span>(uranium_pathology))), ]</a>
-<a class="sourceLine" id="cb6-3" title="3"><span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/head">head</a></span>(u)</a>
+<a class="sourceLine" id="cb6-2" title="2">u &lt;-<span class="st"> </span>uranium_pathology[<span class="kw"><a href="https://rdrr.io/r/base/sample.html">sample</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/seq.html">seq_len</a></span>(<span class="kw"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span>(uranium_pathology))), ]</a>
+<a class="sourceLine" id="cb6-3" title="3"><span class="kw"><a href="https://rdrr.io/r/utils/head.html">head</a></span>(u)</a>
 <a class="sourceLine" id="cb6-4" title="4"><span class="co">#&gt;      case icd10</span></a>
-<a class="sourceLine" id="cb6-5" title="5"><span class="co">#&gt; 781   184 I21.9</span></a>
-<a class="sourceLine" id="cb6-6" title="6"><span class="co">#&gt; 273    47 D13.1</span></a>
-<a class="sourceLine" id="cb6-7" title="7"><span class="co">#&gt; 1378  306 R16.1</span></a>
-<a class="sourceLine" id="cb6-8" title="8"><span class="co">#&gt; 1581  430 I67.2</span></a>
-<a class="sourceLine" id="cb6-9" title="9"><span class="co">#&gt; 1056  223 J44.9</span></a>
-<a class="sourceLine" id="cb6-10" title="10"><span class="co">#&gt; 1964  775 I21.9</span></a>
+<a class="sourceLine" id="cb6-5" title="5"><span class="co">#&gt; 1078  227 I46.9</span></a>
+<a class="sourceLine" id="cb6-6" title="6"><span class="co">#&gt; 122    25 J18.9</span></a>
+<a class="sourceLine" id="cb6-7" title="7"><span class="co">#&gt; 213    38   C61</span></a>
+<a class="sourceLine" id="cb6-8" title="8"><span class="co">#&gt; 28      6 I25.1</span></a>
+<a class="sourceLine" id="cb6-9" title="9"><span class="co">#&gt; 1516  397 I25.0</span></a>
+<a class="sourceLine" id="cb6-10" title="10"><span class="co">#&gt; 1566  425 J43.2</span></a>
 <a class="sourceLine" id="cb6-11" title="11">quan_comorbidities &lt;-<span class="st"> </span><span class="kw"><a href="../reference/comorbid.html">comorbid</a></span>(u,</a>
 <a class="sourceLine" id="cb6-12" title="12">                               icd10_map_quan_elix,</a>
 <a class="sourceLine" id="cb6-13" title="13">                               <span class="dt">return_df =</span> <span class="ot">TRUE</span>,</a>
 <a class="sourceLine" id="cb6-14" title="14">                               <span class="dt">return_binary =</span> <span class="ot">TRUE</span>,</a>
 <a class="sourceLine" id="cb6-15" title="15">                               <span class="dt">restore_id_order =</span> <span class="ot">FALSE</span>)</a>
 <a class="sourceLine" id="cb6-16" title="16"><span class="co"># see the first few rows and columns:</span></a>
-<a class="sourceLine" id="cb6-17" title="17">quan_comorbidities[<span class="dv">1</span><span class="op">:</span><span class="dv">6</span>, <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="dv">1</span>, <span class="dv">3</span><span class="op">:</span><span class="dv">9</span>)]</a>
+<a class="sourceLine" id="cb6-17" title="17">quan_comorbidities[<span class="dv">1</span><span class="op">:</span><span class="dv">6</span>, <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="dv">1</span>, <span class="dv">3</span><span class="op">:</span><span class="dv">9</span>)]</a>
 <a class="sourceLine" id="cb6-18" title="18"><span class="co">#&gt;   case Arrhythmia Valvular PHTN PVD HTN HTNcx Paralysis</span></a>
-<a class="sourceLine" id="cb6-19" title="19"><span class="co">#&gt; 1   79          0        0    0   0   0     0         0</span></a>
-<a class="sourceLine" id="cb6-20" title="20"><span class="co">#&gt; 2   45          0        0    0   0   0     0         0</span></a>
-<a class="sourceLine" id="cb6-21" title="21"><span class="co">#&gt; 3  229          0        0    0   1   0     0         0</span></a>
-<a class="sourceLine" id="cb6-22" title="22"><span class="co">#&gt; 4   58          0        0    0   0   0     0         0</span></a>
-<a class="sourceLine" id="cb6-23" title="23"><span class="co">#&gt; 5 1016          0        0    0   0   0     1         0</span></a>
-<a class="sourceLine" id="cb6-24" title="24"><span class="co">#&gt; 6  256          0        0    0   0   0     0         0</span></a></code></pre></div>
+<a class="sourceLine" id="cb6-19" title="19"><span class="co">#&gt; 1  631          0        0    1   0   0     0         0</span></a>
+<a class="sourceLine" id="cb6-20" title="20"><span class="co">#&gt; 2  208          0        0    1   0   0     1         0</span></a>
+<a class="sourceLine" id="cb6-21" title="21"><span class="co">#&gt; 3  400          0        0    0   0   0     1         0</span></a>
+<a class="sourceLine" id="cb6-22" title="22"><span class="co">#&gt; 4   24          0        0    0   1   0     0         0</span></a>
+<a class="sourceLine" id="cb6-23" title="23"><span class="co">#&gt; 5  186          0        0    0   0   0     0         0</span></a>
+<a class="sourceLine" id="cb6-24" title="24"><span class="co">#&gt; 6   95          0        0    0   0   0     0         0</span></a></code></pre></div>
 <p>The ICD-10-CM mappings are recorded a bit differently from the ICD-9-CM mappings in this package. The ICD-9 mappings included all possible permutations of child codes. Since ICD-10 codes contain letters, and are seven characters long, this became impractical. Therefore, the current mappings include only codes for the most recent update of ICD-10-CM. The code which assigns comorbidities for ICD-10 therefore doesn’t rely on all the possible codes being listed in the mappings, so it will (more slowly) search for each possible parent of the given code, up to the three digit ‘major’ (e.g. if Cholera was in the comorbidity mapping, then <code>A0034212647</code> would eventually match <code>A00</code>)</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" title="1"><span class="co"># create trivial comorbidity map:</span></a>
-<a class="sourceLine" id="cb7-2" title="2">cholera_typhoid_map &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/list">list</a></span>(<span class="dt">cholera =</span> <span class="st">"A00"</span>, <span class="dt">typhoid =</span> <span class="st">"A01"</span>)</a>
-<a class="sourceLine" id="cb7-3" title="3">patients &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/data.frame">data.frame</a></span>(<span class="dt">patient =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"0001"</span>, <span class="st">"0001"</span>, <span class="st">"0002"</span>),</a>
-<a class="sourceLine" id="cb7-4" title="4">                       <span class="dt">code =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/c">c</a></span>(<span class="st">"A001234567"</span>, <span class="st">"A01"</span>, <span class="st">"A019"</span>))</a>
+<a class="sourceLine" id="cb7-2" title="2">cholera_typhoid_map &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="dt">cholera =</span> <span class="st">"A00"</span>, <span class="dt">typhoid =</span> <span class="st">"A01"</span>)</a>
+<a class="sourceLine" id="cb7-3" title="3">patients &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span>(<span class="dt">patient =</span> <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"0001"</span>, <span class="st">"0001"</span>, <span class="st">"0002"</span>),</a>
+<a class="sourceLine" id="cb7-4" title="4">                       <span class="dt">code =</span> <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="st">"A001234567"</span>, <span class="st">"A01"</span>, <span class="st">"A019"</span>))</a>
 <a class="sourceLine" id="cb7-5" title="5"><span class="kw"><a href="../reference/comorbid.html">comorbid</a></span>(patients , <span class="dt">map =</span> cholera_typhoid_map)</a>
 <a class="sourceLine" id="cb7-6" title="6"><span class="co">#&gt;      cholera typhoid</span></a>
 <a class="sourceLine" id="cb7-7" title="7"><span class="co">#&gt; 0001    TRUE    TRUE</span></a>
@@ -240,18 +241,18 @@ along with icd. If not, see <http:#www.gnu.org/licenses/>.
 <a href="#procedure-codes" class="anchor"></a>Procedure codes</h1>
 <p>The AHRQ publishes an annually updated categorization of ICD-10-CM procedure codes into four classes, representing diagnostic and therapeutic procedures, each being either minor or major.</p>
 <pre><code>#&gt;   Minor Diagnostic Minor Therapeutic Major Diagnostic Major Therapeutic
-#&gt; S                0                 1                0                 0
-#&gt; B                0                 1                0                 0
+#&gt; S                0                 0                0                 1
+#&gt; B                0                 0                0                 1
 #&gt; Z                0                 0                0                 1
 #&gt; L                0                 0                0                 1
 #&gt; Q                0                 0                0                 1
 #&gt; H                0                 1                0                 0
-#&gt; T                0                 1                0                 0
-#&gt; G                0                 0                1                 0
-#&gt; A                0                 0                0                 1
-#&gt; V                0                 1                0                 0
+#&gt; T                0                 0                0                 1
+#&gt; G                0                 0                0                 1
+#&gt; A                0                 1                0                 0
+#&gt; V                0                 0                1                 0
 #&gt;  Minor Diagnostic Minor Therapeutic  Major Diagnostic Major Therapeutic 
-#&gt;                 0                 5                 1                 4</code></pre>
+#&gt;                 0                 2                 1                 7</code></pre>
 <p>For more information on working with ICD-10 codes, see the introduction vignette, and function examples. E.g.</p>
 <pre><code><a href="../reference/comorbid.html">?comorbid
 ?explain_code</a></code></pre>
@@ -287,7 +288,7 @@ along with icd. If not, see <http:#www.gnu.org/licenses/>.
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.3.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.3.0.9000.</p>
 </div>
       </footer>
 </div>

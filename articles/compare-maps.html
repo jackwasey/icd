@@ -7,7 +7,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Comparing Comorbidity Mappings • Comorbidity calculations and tools for ICD-9 and ICD-10 codes</title>
 <!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script><!-- Bootstrap --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha256-916EbMg70RQy9LHiGkXzG8hSg9EdNy97GazNG/aiY1w=" crossorigin="anonymous">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script><!-- sticky kit --><script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
 <script src="../pkgdown.js"></script><!-- docsearch --><script src="../docsearch.js"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/docsearch.js/2.6.1/docsearch.min.css" integrity="sha256-QOSRU/ra9ActyXkIBbiIB144aDBdtvXBcNc3OTNuX/Q=" crossorigin="anonymous">
 <link href="../docsearch.css" rel="stylesheet">
@@ -40,7 +41,7 @@
       <ul class="nav navbar-nav">
 <li>
   <a href="../index.html">
-    <span class="fa fa-home fa-lg"></span>
+    <span class="fas fa fas fa-home fa-lg"></span>
      
   </a>
 </li>
@@ -91,7 +92,7 @@
 </li>
       </ul>
 <ul class="nav navbar-nav navbar-right"></ul>
-<form class="navbar-form navbar-right" role="search">
+<form class="navbar-form navbar-right hidden-xs hidden-sm" role="search">
         <div class="form-group">
           <input type="search" class="form-control" name="search-input" id="search-input" placeholder="Search..." aria-label="Search for..." autocomplete="off">
 </div>
@@ -142,10 +143,10 @@ along with icd. If not, see <http:#www.gnu.org/licenses/>.
 <p>When deciding which comorbidity mapping to use in research, it might be useful to compare mapping schemes. For instance, it would be useful to know which comorbidities a pair of mapping schemes share, and which comorbidities only exist in only one mapping scheme. For comorbidites that exist in both mapping schemes, how many ICD codes assigned to those comorbidities overlap? In other words, how similar are the mapping schemes structurally?</p>
 <p>To answer these questions, we can use the function <code>diff_comorbid</code> in the “ICD” package. This function takes in two mapping schemes and outputs a comorbidity-by-comorbidity comparison of the two assignments. The function identifies comorbidities that are shared by both mapping schemes. It then takes each shared comorbidity and returns a list of codes that both mapping schemes assign to that comorbidity. The function returns a list of character lists, and condenses it into a summary of comparisons.</p>
 <p>The following example demonstrates the comparison of two different mapping schemes. Say we were interested in comparing the mapping schemes of Elixhauser (1998) and Agency for Healthcare Research and Quality (AHRQ) in classifying ICD-9 codes. We can first use basic set operations to compare the comorbidity names.</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1">Elix_comor &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/names">names</a></span>(icd9_map_ahrq)</a>
-<a class="sourceLine" id="cb1-2" title="2">AHRQ_comor &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/names">names</a></span>(icd9_map_elix)</a></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1">Elix_comor &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/names.html">names</a></span>(icd9_map_ahrq)</a>
+<a class="sourceLine" id="cb1-2" title="2">AHRQ_comor &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/names.html">names</a></span>(icd9_map_elix)</a></code></pre></div>
 <p>These comorbidities are shared:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" title="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/sets">intersect</a></span>(AHRQ_comor, Elix_comor)</a></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" title="1"><span class="kw"><a href="https://rdrr.io/r/base/sets.html">intersect</a></span>(AHRQ_comor, Elix_comor)</a></code></pre></div>
 <pre><code>##  [1] "CHF"          "Valvular"     "PHTN"         "PVD"         
 ##  [5] "HTN"          "HTNcx"        "Paralysis"    "NeuroOther"  
 ##  [9] "Pulmonary"    "DM"           "DMcx"         "Hypothyroid" 
@@ -155,10 +156,10 @@ along with icd. If not, see <http:#www.gnu.org/licenses/>.
 ## [25] "BloodLoss"    "Anemia"       "Alcohol"      "Drugs"       
 ## [29] "Psychoses"    "Depression"</code></pre>
 <p>These comorbidities are in AHRQ but not in the Elixhauser sets:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" title="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/sets">setdiff</a></span>(AHRQ_comor, Elix_comor)</a></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" title="1"><span class="kw"><a href="https://rdrr.io/r/base/sets.html">setdiff</a></span>(AHRQ_comor, Elix_comor)</a></code></pre></div>
 <pre><code>## [1] "Arrhythmia"</code></pre>
 <p>Finally, these comorbidities are in Elixhauser but not in the AHRQ sets:</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" title="1"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/sets">setdiff</a></span>(Elix_comor, AHRQ_comor)</a></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" title="1"><span class="kw"><a href="https://rdrr.io/r/base/sets.html">setdiff</a></span>(Elix_comor, AHRQ_comor)</a></code></pre></div>
 <pre><code>## character(0)</code></pre>
 <p>We see that the comorbidity names are almost exactly the same except for Arrhythmia, which exists in the AHRQ mapping but not the Elixhauser mapping.</p>
 <p>Now we run the function <code>diff_comorbid</code> and input the ICD-9 mappings from Elixhauser and AHRQ that are included in the package. The <code>all_names</code> option can be used if one wants to compare only a selection of comorbidities, in which case one can give a list of comorbidity names. By default, the function will compare all comorbiditi.introduces in both mapping schemes. Similarly, <code>x_names</code> and <code>y_names</code> can be used to specify the comorbidities to compare in the first and second mapping schemes, respectively. Setting the option <code>show</code> to <code>TRUE</code> tells the function to print out the comparison summary, and setting the option <code>explain</code> to <code>TRUE</code> tells the function to attempt to combine many low-level ICD codes to form just their parent codes for the output, which can be much more concise.</p>
@@ -268,7 +269,7 @@ along with icd. If not, see <http:#www.gnu.org/licenses/>.
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.3.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.3.0.9000.</p>
 </div>
       </footer>
 </div>
