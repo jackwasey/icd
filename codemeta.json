@@ -10,7 +10,7 @@
   "codeRepository": "https://jackwasey.github.io/icd/",
   "issueTracker": "https://github.com/jackwasey/icd/issues",
   "license": "https://spdx.org/licenses/GPL-3.0",
-  "version": "4.1.9000",
+  "version": "4.0.6.9000",
   "programmingLanguage": {
     "@type": "ComputerLanguage",
     "name": "R",
@@ -275,8 +275,8 @@
       "sameAs": "https://CRAN.R-project.org/package=Rcpp"
     }
   ],
-  "releaseNotes": "https://github.com/anobel/icd/blob/master/NEWS.md",
-  "readme": "https://github.com/anobel/icd/blob/master/README.md",
+  "releaseNotes": "https://github.com/jackwasey/icd/blob/master/NEWS.md",
+  "readme": "https://github.com/jackwasey/icd/blob/master/README.md",
   "contIntegration": [
     "https://travis-ci.org/jackwasey/icd",
     "https://ci.appveyor.com/project/jackwasey/icd/branch/master",
@@ -287,5 +287,5 @@
     "https://www.repostatus.org/#active"
   ],
   "relatedLink": "https://CRAN.R-project.org/package=icd",
-  "fileSize": "4483.864KB"
+  "fileSize": "4508.571KB"
 }
