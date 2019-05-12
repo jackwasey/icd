@@ -67,14 +67,16 @@ explain_table.default <- function(x,
 #' @describeIn explain_table from vector of ICD-9 codes.
 #' @export
 #' @keywords internal
-explain_table.icd9 <- function(...)
+explain_table.icd9 <- function(...) {
   explain_table.icd9cm(...)
+}
 
 #' @describeIn explain_table from vector of ICD-10 codes.
 #' @export
 #' @keywords internal
-explain_table.icd10 <- function(...)
+explain_table.icd10 <- function(...) {
   explain_table.icd10cm(...)
+}
 
 #' set \code{short_to_decimal} attribute
 #'
@@ -92,10 +94,15 @@ shortcode_icd10 <- function(x, short_code = guess_short(x))
 #' generate table of ICD code explanations
 #'
 #' common code for generating full table of explanations of ICD codes
-#' @author Ed Lee
+#' @author Ed Lee created, Jack Wasey updated
 #' @keywords internal
-explain_table_worker <- function(x, hierarchy, short_code, condense,
-                                 brief, warn, ...) {
+explain_table_worker <- function(x,
+                                 hierarchy,
+                                 short_code,
+                                 condense,
+                                 brief,
+                                 warn,
+                                 ...) {
   stopifnot(is.character(x) || is.factor(x))
   stopifnot(is.data.frame(hierarchy))
   stopifnot(is.logical(short_code))
@@ -106,21 +113,24 @@ explain_table_worker <- function(x, hierarchy, short_code, condense,
   xs <- if (!short_code) decimal_to_short.icd9(x) else x
   exptable <- merge(data.frame(code = xs, stringsAsFactors = FALSE),
     hierarchy,
-    all.x = TRUE
+    all.x = TRUE,
+    sort = FALSE
   )
-  # merge has reordered...
+  # merge has often reordered (whether sort -- on by cols -- is done or not)
+  exptable <- exptable[match(xs, exptable[["code"]]), ]
   exptable[["is_major"]] <-
     as_char_no_warn(exptable[["three_digit"]]) == exptable[["code"]]
   exptable[["valid_icd9"]] <- is_valid.icd9(xs, short_code = TRUE)
   exptable[["valid_icd10"]] <- is_valid.icd10(xs, short_code = TRUE)
+  rownames(exptable) <- NULL
   if (condense) {
     condense_explain_table(exptable)
   } else {
-    exptable[match(xs, exptable[["code"]]), ]
+    exptable
   }
 }
 
-#' @describeIn explain_table explain character vector of ICD1-10-CM codes
+#' @describeIn explain_table explain character vector of ICD-9-CM codes
 #' @author Ed Lee
 #' @export
 #' @keywords internal
@@ -213,6 +223,7 @@ condense_explain_table <- function(x) {
   out[is.na(out$condensed_codes), "condensed_codes"] <-
     out[is.na(out$condensed_codes), "code"]
   out[is.na(out$condensed_num), "condensed_num"] <- 1L
+  rownames(out) <- NULL
   out
 }
 

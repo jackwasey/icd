@@ -2,12 +2,27 @@ context("explain in table format")
 
 test_that("with and without condense returns correct structure", {
   codes <- c("362.5", "413.9", "414.01", "584.9", "357.2", "588.81", "414")
-  expect_equal(dim(explain_table(codes, condense = FALSE)), c(7, 11))
-  expect_equal(dim(explain_table(codes, condense = TRUE)), c(6, 13))
+  expect_equal(dim(en <- explain_table(codes, condense = FALSE)), c(7, 11))
+  expect_equal(dim(ec <- explain_table(codes, condense = TRUE)), c(6, 13))
   expect_equal(
-    names(explain_table(codes, condense = TRUE))[c(12, 13)],
+    names(ec)[c(12, 13)],
     c("condensed_codes", "condensed_num")
   )
+  expect_true(all(is_valid(en$code) == en$valid_icd9))
+})
+
+test_that("valid ICD-9 codes are valid and row numbers ok", {
+  v <- c(vermont_dx$DX1, vermont_dx$DX2)
+  vt <- explain_table(v)
+  expect_true(all(is_valid(vt$code) == vt$valid_icd9))
+  expect_equal(rownames(vt), as.character(seq_along(vt$code)))
+})
+
+test_that("valid ICD-10 codes are valid and row numbers ok", {
+  v <- unlist(unname(icd10_map_pccc_dx))
+  vt <- explain_table(v)
+  expect_true(all(is_valid(vt$code) == vt$valid_icd10))
+  expect_equal(rownames(vt), as.character(seq_along(vt$code)))
 })
 
 test_that("reproduces explain_code.list, mixed major and minor", {
