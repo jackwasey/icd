@@ -20,10 +20,10 @@ Calculate comorbidities, medical risk scores, and
     Quan (Deyo and Elixhauser versions), Elixhauser and AHRQ included.
     Common ambiguities and code formats are handled. Comorbidity
     computation includes Hierarchical Condition Codes, and an
-    implementation of AHRQ Clinical Classifications. Risk
-    scores include those of Charlson and van Walraven.  US Clinical
-    Modification, Word Health Organization, Belgian and French ICD-10
-    codes are supported, most of which are downloaded on demand.
+    implementation of AHRQ Clinical Classifications. Risk scores include
+    those of Charlson and van Walraven.  US Clinical Modification, Word
+    Health Organization, Belgian and French ICD-10 codes are supported,
+    most of which are downloaded on demand.
 }
 \details{
 \describe{ \item{Comorbidities}{ \code{\link{comorbid}} determines

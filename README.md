@@ -42,7 +42,6 @@ Practices](https://bestpractices.coreinfrastructure.org/projects/2092/badge)](ht
 [![CRAN RStudio mirror downloads last calendar
 month](https://cranlogs.r-pkg.org/badges/icd
 "RStudio Mirror Downloads")](https://cran.r-project.org/package=icd)
-[![](https://cranlogs.r-pkg.org/badges/icd)](https://cran.r-project.org/package=icd)
 <!-- badges: end -->
 <!-- [![CRAN RStudio mirror downloads last week](https://cranlogs.r-pkg.org/badges/last-week/icd "RStudio Mirror Downloads Last Week")](https://cran.r-project.org/package=icd) -->
 
@@ -83,8 +82,9 @@ finalist](http://www.pulitzer.org/finalists/staff-propublica) work on
     columns are ICD-9 or ICD-10 codes.
   - explain and summarize groups of ICD codes in natural language, using
     ICD editions from the WHO, USA, France and Belgium. Many different
-    annual editions of these data are available, all via the ‘icd.data’
-    companion package.
+    annual editions of these data are available, and these may be
+    downloaded automatically when used, or in bulk with
+    `download_all_icd_data()`.
   - Charlson and Van Walraven score calculations
   - Hierarchical Condition Codes (HCC) from CMS
   - Clinical Classifications Software (CCS) comorbidities from AHRQ
