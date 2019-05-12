@@ -45,10 +45,13 @@ icd9_fetch_ahrq_sas <- function() {
 }
 
 icd10_fetch_ahrq_sas <- function(ver = "2016") {
+  if (!ver %in% c("2016","2017","2018")) {
+    stop(ver," not currently available")
+  }
   .download_to_data_raw(
-    url = paste0(.ahrq_url_base, "comorbidityicd10/comformat_icd10cm_2016.txt"),
-    file_name = .get_versioned_raw_file_name("ahrq-comformat_icd10cm_2016.txt",
-      ver = "2016"
+    url = paste0(.ahrq_url_base, "comorbidityicd10/comformat_icd10cm_",ver,".txt"),
+    file_name = .get_versioned_raw_file_name(paste0("ahrq-comformat_icd10cm_",ver,".txt"),
+      ver = ver
     )
   )
 }
