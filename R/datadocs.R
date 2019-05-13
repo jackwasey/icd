@@ -163,6 +163,14 @@ NULL
 #' @export
 NULL
 
+#' @name get_icd10cm2016
+#' @title ICD-10-CM 2016
+#' @seealso \code{\link{icd10cm2019}}
+#' @docType data
+#' @keywords datasets
+#' @export
+NULL
+
 #' @name get_icd10cm2017
 #' @title ICD-10-CM 2017
 #' @seealso \code{\link{icd10cm2019}}

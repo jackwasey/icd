@@ -13,17 +13,17 @@ desc: >
     those of Charlson and van Walraven.  US Clinical Modification, Word
     Health Organization, Belgian and French ICD-10 codes are supported,
     most of which are downloaded on demand.
-#template:
-#  params:
-#    docsearch:
-#      api_key: 797795ae271734faa8bc9b1f4aaae82b
-#      index_name: icd
+template:
+  params:
+    docsearch:
+      api_key: 797795ae271734faa8bc9b1f4aaae82b
+      index_name: icd
 
 articles:
 - title: Journal of Statistical Software
   desc: This manuscript was submitted to JSS
   contents:
-  - '`efficiency`'
+  - '`efficiency-prebuilt`'
 
 - title: All vignettes
   desc: ~
@@ -34,7 +34,9 @@ articles:
   - '`ICD-10`'
   - '`PCCC`'
   - '`ranges`'
+  - '`custom-maps`'
   - '`compare-maps`'
+  - '`country-lang-vers-prebuilt`'
 
 reference:
 
@@ -68,8 +70,8 @@ reference:
   - '`icd9_map_single_ccs`'
   - '`icd10_map_ahrq_pcs`'
 
-- title: Transforming ICD data
-  desc: ~
+- title: Transforming data
+  desc: Reshaping of typical healthcare data frames containing one or more ICD code columns. Convert comorbidity results between matrices and 'tidy' data frmes.
   contents:
   - '`comorbid_df_to_mat`'
   - '`comorbid_mat_to_df`'
@@ -78,16 +80,23 @@ reference:
   - '`convert`'
 
 - title: Metadata
-  desc: Optionally describe the type and structure of your data.
+  desc: Optionally describe and check the type and structure of your data. This enables functions like '`is_valid`' and '`explain_code`' to look up codes in the appropriate version of ICD-9 or ICD-10.
   contents:
   - '`as.icd_long_data`'
   - '`as.decimal_diag`'
   - '`is.icd9`'
+  - '`is.icd9cm`'
+  - '`is.icd10`'
+  - '`is.icd10who`'
+  - '`is.icd10cm`'
+  - '`is.icd10fr`'
+  - '`is.icd10be`'
 
 - title: Manipulation
   desc: Working with codes and the ICD hierarchies
   contents:
   - '`children`'
+  - '`condense`'
   - '`combine`'
   - '`diff_comorbid`'
   - '`filter_poa`'
@@ -99,3 +108,61 @@ reference:
   - '`subset`'
 #  - '`unzip_single`'
   - '`icd10_map_ahrq`'
+
+- title: International and historic ICD editions
+  contents:
+  - '`set_icd_data_dir`'
+  - '`download_all_icd_data`'
+  - '`get_icd10cm_active_year`'
+  - '`get_icd10cm_active`'
+  - '`get_icd10cm_available`'
+  - '`get_icd10cm_latest`'
+  - '`get_icd10cm_version`'
+
+- title: Get ICD data
+  desc: This is needed for explaining codes, and checking validity. The package includes data for the most recent ICD-9-CM and ICD-10-CM. Some editions, like WHO, cannot be distributed in the package due to copyright. Others are also available for download on demand, or in bulk using `download_all_icd_data()`.
+  contents:
+  - '`get_icd10be2014`'
+  - '`get_icd10be2014_pc`'
+  - '`get_icd10be2017`'
+  - '`get_icd10be2017_pc`'
+  - '`get_icd10cm2014`'
+  - '`get_icd10cm2014_pc`'
+  - '`get_icd10cm2015`'
+  - '`get_icd10cm2015_pc`'
+  - '`get_icd10cm2016`'
+  - '`get_icd10cm2016_pc`'
+  - '`get_icd10cm2017`'
+  - '`get_icd10cm2017_pc`'
+  - '`get_icd10cm2018`'
+  - '`get_icd10cm2018_pc`'
+  - '`get_icd10cm2019`'
+  - '`get_icd10cm2019_pc`'
+  - '`get_icd10fr2019`'
+  - '`get_icd10who2008fr`'
+  - '`get_icd10who2016`'
+  - '`get_icd9cm2005`'
+  - '`get_icd9cm2005_leaf`'
+  - '`get_icd9cm2006`'
+  - '`get_icd9cm2006_leaf`'
+  - '`get_icd9cm2007`'
+  - '`get_icd9cm2007_leaf`'
+  - '`get_icd9cm2008`'
+  - '`get_icd9cm2008_leaf`'
+  - '`get_icd9cm2009`'
+  - '`get_icd9cm2009_leaf`'
+  - '`get_icd9cm2010`'
+  - '`get_icd9cm2010_leaf`'
+  - '`get_icd9cm2011`'
+  - '`get_icd9cm2011_leaf`'
+  - '`get_icd9cm2012`'
+  - '`get_icd9cm2012_leaf`'
+  - '`get_icd9cm2013`'
+  - '`get_icd9cm2013_leaf`'
+  - '`get_icd9cm2014`'
+  - '`get_icd9cm2014_leaf`'
+
+- title: Sample data
+  contents:
+  - '`vermont_dx`'
+  - '`uranium_pathology`'

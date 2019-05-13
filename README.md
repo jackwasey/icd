@@ -62,11 +62,12 @@ are supported, most of which are downloaded on demand.
 
 `icd` is used by many researchers around the world who work in public
 health, epidemiology, clinical research, nutrition, journalism, health
-administration and more. I’m grateful for contact from people in these
-fields for their feedback and code contributions, and I’m pleased to say
-that `icd` has been used in works like the [Pulitzer
-finalist](http://www.pulitzer.org/finalists/staff-propublica) work on
-[maternal death](http://www.pulitzer.org/finalists/staff-propublica) by
+administration, insurance, and more. I’m grateful for contact from
+people in these fields for their feedback and code contributions, and
+I’m pleased to say that `icd` has been used in works like the
+[Pulitzer finalist](http://www.pulitzer.org/finalists/staff-propublica)
+work on [maternal
+death](http://www.pulitzer.org/finalists/staff-propublica) by
 [ProPublica](https://www.propublica.org).
 
 ## Features
@@ -263,8 +264,7 @@ then two alphanumeric characters. However, especially for ICD-10-CM,
 there are a multitude of qualifiers, e.g. specifying recurrence,
 laterality, which vastly increase the number of possible codes. This
 package recognizes validity of codes by syntax alone, or whether the
-codes appear in a canonical list. The current ICD-10-CM master list is
-the 2016 set. There is not yet the capability of converting between
-ICD-9 and ICD-10, but comorbidities can be generated from older ICD-9
-codes and newer ICD-10 codes in parallel, and the comorbidities can then
-be compared.
+codes appear in a canonical list. There is not yet the capability of
+converting between ICD-9 and ICD-10, but comorbidities can be generated
+from older ICD-9 codes and newer ICD-10 codes in parallel, and the
+comorbidities can then be compared.

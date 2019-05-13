@@ -63,7 +63,7 @@ get_icd10cm_version <- function(ver) {
       )
     }
   }
-  # for 2016 and 2019 (currently), we look in lazy data.
+  # for included data, we look in lazy data.
   .msg("Resorting to normal package data")
   # try double checking it exists for bizarre R CMD check problem
   lazyenv <- asNamespace("icd")$.__NAMESPACE__.$lazydata

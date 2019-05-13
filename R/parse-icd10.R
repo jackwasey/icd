@@ -123,7 +123,7 @@
     var_name = .get_icd10cm_name(year = year, dx = dx),
     x = dat
   )
-  if (save_pkg_data && year %in% c("2016", "2019")) {
+  if (save_pkg_data && year == "2019") {
     if (.verbose()) {
       message("Saving in package data: ", .get_icd10cm_name(year, dx))
     }

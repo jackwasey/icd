@@ -79,7 +79,7 @@ guessing ICD version
 
 \item \code{icd10}: from vector of ICD-10 codes.
 
-\item \code{icd9cm}: explain character vector of ICD1-10-CM codes
+\item \code{icd9cm}: explain character vector of ICD-9-CM codes
 
 \item \code{icd10cm}: explain character vector of ICD1-10-CM codes
 

@@ -3,7 +3,6 @@
 
 .data_names_pkg <- c(
   "icd9cm2014_leaf",
-  "icd10cm2016", # included (but will migrate to 2019 once all is on CRAN)
   "icd10cm2019" # included in package data, being the latest version
 )
 
@@ -27,6 +26,7 @@
   # ICD-10-CM DX
   "icd10cm2014",
   "icd10cm2015",
+  "icd10cm2016",
   "icd10cm2017",
   "icd10cm2018"
 )
