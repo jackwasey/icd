@@ -1,0 +1,41 @@
+#!/bin/bash
+
+Rscript -e '
+  devnull <- desc::desc_reformat_fields();
+  devnull <- desc::desc_reorder_fields();
+'
+
+MSG="use 'git commit --no-verify' to override this check"
+
+DESCRIPTION=($(git diff --cached --name-only | grep 'DESCRIPTION'))
+if [[ ${#DESCRIPTION[@]} == 0 ]]; then
+  exit 0
+fi
+
+if [[ DESCRIPTION -nt codemeta.json ]]; then
+	# echo -e "codemeta.json is out of date; re-running codemetar::write_codemeta()\n$MSG"
+  # exit 1
+	Rscript -e 'codemetar::write_codemeta()'
+	git add codemeta.json
+	# git commit --amend -m"$(git log --format=%B -n1)" -m"Updated codemeta.json automatically."
+fi
+
+README=($(git diff --cached --name-only | grep 'README.Rmd'))
+if [[ ${#README[@]} == 0 ]]; then
+  exit 0
+fi
+
+if [[ README.Rmd -nt README.md ]]; then
+	# echo -e "README.md is out of date; please re-run rmarkdown::render(\"README.Rmd\")\n$MSG"
+  # exit 1
+  Rscript -e 'rmarkdown::render("README.Rmd")'
+  git add README.md man/figures/README*.png
+  # git commit --amend -m"$(git log --format=%B -n1)" -m"Updated README.md automatically."
+fi
+
+if [[ $(git diff --name-only | wc -l) != "0" ]]; then
+  echo "pre-commit updated files:"
+  git diff --name-only
+  echo "review and commit these changes"
+  exit 1
+fi
