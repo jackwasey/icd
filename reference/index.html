@@ -30,6 +30,12 @@
 <script src="../pkgdown.js"></script>
 
 
+<!-- docsearch -->
+<script src="../docsearch.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/docsearch.js/2.6.1/docsearch.min.css" integrity="sha256-QOSRU/ra9ActyXkIBbiIB144aDBdtvXBcNc3OTNuX/Q=" crossorigin="anonymous" />
+<link href="../docsearch.css" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/jquery.mark.min.js" integrity="sha256-4HLtjeVgH0eIB3aZ9mLYF6E8oU5chNdjU6p6rrXpl9U=" crossorigin="anonymous"></script>
+
 
 <meta property="og:title" content="Function reference" />
 
@@ -123,6 +129,12 @@
       <ul class="nav navbar-nav navbar-right">
         
       </ul>
+      
+      <form class="navbar-form navbar-right hidden-xs hidden-sm" role="search">
+        <div class="form-group">
+          <input type="search" class="form-control" name="search-input" id="search-input" placeholder="Search..." aria-label="Search for..." autocomplete="off">
+        </div>
+      </form>
       
     </div><!--/.nav-collapse -->
   </div><!--/.container -->
@@ -281,8 +293,8 @@
     </tbody><tbody>
       <tr>
         <th colspan="2">
-          <h2 id="section-transforming-icd-data" class="hasAnchor"><a href="#section-transforming-icd-data" class="anchor"></a>Transforming ICD data</h2>
-          <p class="section-desc"></p>
+          <h2 id="section-transforming-data" class="hasAnchor"><a href="#section-transforming-data" class="anchor"></a>Transforming data</h2>
+          <p class="section-desc"><p>Reshaping of typical healthcare data frames containing one or more ICD code columns. Convert comorbidity results between matrices and ‘tidy’ data frmes.</p></p>
         </th>
       </tr>
       <tr>
@@ -320,7 +332,7 @@
       <tr>
         <th colspan="2">
           <h2 id="section-metadata" class="hasAnchor"><a href="#section-metadata" class="anchor"></a>Metadata</h2>
-          <p class="section-desc"><p>Optionally describe the type and structure of your data.</p></p>
+          <p class="section-desc"><p>Optionally describe and check the type and structure of your data. This enables functions like ‘<code>is_valid</code>’ and ‘<code>explain_code</code>’ to look up codes in the appropriate version of ICD-9 or ICD-10.</p></p>
         </th>
       </tr>
       <tr>
@@ -356,6 +368,12 @@
           <p><code><a href="children.html">children()</a></code> </p>
         </td>
         <td><p>Get children of ICD codes</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="condense.html">condense()</a></code> <code><a href="condense.html">icd9_condense_decimal()</a></code> </p>
+        </td>
+        <td><p>Condense ICD-9 code by replacing complete families with parent codes</p></td>
       </tr><tr>
         
         <td>
@@ -399,6 +417,205 @@
         </td>
         <td><p>AHRQ comorbidities</p></td>
       </tr>
+    </tbody><tbody>
+      <tr>
+        <th colspan="2">
+          <h2 id="section-international-and-historic-icd-editions" class="hasAnchor"><a href="#section-international-and-historic-icd-editions" class="anchor"></a>International and historic ICD editions</h2>
+          <p class="section-desc"></p>
+        </th>
+      </tr>
+      <tr>
+        
+        <td>
+          <p><code><a href="set_icd_data_dir.html">set_icd_data_dir()</a></code> <code><a href="set_icd_data_dir.html">get_icd_data_dir()</a></code> </p>
+        </td>
+        <td><p>Set up the data download cache, give permission to download data</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="download_all_icd_data.html">download_all_icd_data()</a></code> </p>
+        </td>
+        <td><p>Download all the additional data at once</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="set_icd10cm_active_year.html">set_icd10cm_active_year()</a></code> <code><a href="set_icd10cm_active_year.html">get_icd10cm_active_year()</a></code> </p>
+        </td>
+        <td><p>Get or set the annual version of ICD-10-CM to use</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="get_icd10cm_version.html">get_icd10cm_version()</a></code> <code><a href="get_icd10cm_version.html">get_icd10cm_active()</a></code> </p>
+        </td>
+        <td><p>Get the data for a given version (four-digit year) of ICD-10-CM</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="get_icd10cm_available.html">get_icd10cm_available()</a></code> </p>
+        </td>
+        <td><p>Get the ICD-10-CM versions available in this package</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="get_icd10cm_latest.html">get_icd10cm_latest()</a></code> <code><a href="get_icd10cm_latest.html">get_icd10cm_latest()</a></code> </p>
+        </td>
+        <td><p>The latest available version of ICD-10-CM in this package</p></td>
+      </tr>
+    </tbody><tbody>
+      <tr>
+        <th colspan="2">
+          <h2 id="section-get-icd-data" class="hasAnchor"><a href="#section-get-icd-data" class="anchor"></a>Get ICD data</h2>
+          <p class="section-desc"><p>This is needed for explaining codes, and checking validity. The package includes data for the most recent ICD-9-CM and ICD-10-CM. Some editions, like WHO, cannot be distributed in the package due to copyright. Others are also available for download on demand, or in bulk using <code><a href="../reference/download_all_icd_data.html">download_all_icd_data()</a></code>.</p></p>
+        </th>
+      </tr>
+      <tr>
+        
+        <td>
+          <p><code><a href="get_icd10be2014.html">get_icd10be2014</a></code> </p>
+        </td>
+        <td><p>Belgian ICD-10-BE</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="get_icd10be2014_pc.html">get_icd10be2014_pc</a></code> </p>
+        </td>
+        <td><p>ICD-10-BE 2014 procedure codes</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="get_icd10be2017.html">get_icd10be2017</a></code> </p>
+        </td>
+        <td><p>ICD-10-BE 2017</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="get_icd10be2017_pc.html">get_icd10be2017_pc</a></code> </p>
+        </td>
+        <td><p>ICD-10-BE 2017 procedure codes</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="get_icd10cm2014.html">get_icd10cm2014</a></code> </p>
+        </td>
+        <td><p>ICD-10-CM 2014</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="get_icd10cm2014_pc.html">get_icd10cm2014_pc</a></code> </p>
+        </td>
+        <td><p>ICD-10-CM Procedure codes for 2014</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="get_icd10cm2015.html">get_icd10cm2015</a></code> </p>
+        </td>
+        <td><p>ICD-10-CM 2015</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="get_icd10cm2015_pc.html">get_icd10cm2015_pc</a></code> </p>
+        </td>
+        <td><p>ICD-10-CM Procedure codes for 2015</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="get_icd10cm2016.html">get_icd10cm2016</a></code> </p>
+        </td>
+        <td><p>ICD-10-CM 2016</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="get_icd10cm2016_pc.html">get_icd10cm2016_pc</a></code> </p>
+        </td>
+        <td><p>ICD-10-CM Procedure codes for 2016</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="get_icd10cm2017.html">get_icd10cm2017</a></code> </p>
+        </td>
+        <td><p>ICD-10-CM 2017</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="get_icd10cm2017_pc.html">get_icd10cm2017_pc</a></code> </p>
+        </td>
+        <td><p>ICD-10-CM Procedure codes for 2017</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="get_icd10cm2018.html">get_icd10cm2018</a></code> </p>
+        </td>
+        <td><p>ICD-10-CM 2018</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="get_icd10cm2018_pc.html">get_icd10cm2018_pc</a></code> </p>
+        </td>
+        <td><p>ICD-10-CM Procedure codes for 2018</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="get_icd10cm2019.html">get_icd10cm2019</a></code> </p>
+        </td>
+        <td><p>ICD-10-CM 2019</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="get_icd10cm2019_pc.html">get_icd10cm2019_pc</a></code> </p>
+        </td>
+        <td><p>ICD-10-CM Procedure Codes</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="get_icd10fr2019.html">get_icd10fr2019</a></code> </p>
+        </td>
+        <td><p>French ICD-10-FR modification of WHO ICD-10 used in France</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="get_icd10who2008fr.html">get_icd10who2008fr</a></code> </p>
+        </td>
+        <td><p>2008 WHO ICD-10 data in French</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="get_icd10who2016.html">get_icd10who2016</a></code> </p>
+        </td>
+        <td><p>2016 WHO ICD-10 data</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="icd9cm_hierarchy.html">icd9cm_hierarchy</a></code> </p>
+        </td>
+        <td><p>ICD-9-CM diagnosis codes including leaf nodes and branch names up to the
+three-digit codes.</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="get_icd9cm2014_leaf.html">get_icd9cm2014_leaf</a></code> </p>
+        </td>
+        <td><p>ICD-9-CM, just billable/leaf codes</p></td>
+      </tr>
+    </tbody><tbody>
+      <tr>
+        <th colspan="2">
+          <h2 id="section-sample-data" class="hasAnchor"><a href="#section-sample-data" class="anchor"></a>Sample data</h2>
+          <p class="section-desc"></p>
+        </th>
+      </tr>
+      <tr>
+        
+        <td>
+          <p><code><a href="vermont_dx.html">vermont_dx</a></code> </p>
+        </td>
+        <td><p>Hospital discharge data from Vermont</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="uranium_pathology.html">uranium_pathology</a></code> </p>
+        </td>
+        <td><p>United States Transuranium &amp; Uranium Registries</p></td>
+      </tr>
     </tbody>
     </table>
   </div>
@@ -409,9 +626,12 @@
       <li><a href="#section-package-overview">Package overview</a></li>
       <li><a href="#section-comorbidity-and-risk-score-calculations">Comorbidity and risk score calculations</a></li>
       <li><a href="#section-comorbidity-to-icd-code-maps">Comorbidity to ICD code maps</a></li>
-      <li><a href="#section-transforming-icd-data">Transforming ICD data</a></li>
+      <li><a href="#section-transforming-data">Transforming data</a></li>
       <li><a href="#section-metadata">Metadata</a></li>
       <li><a href="#section-manipulation">Manipulation</a></li>
+      <li><a href="#section-international-and-historic-icd-editions">International and historic ICD editions</a></li>
+      <li><a href="#section-get-icd-data">Get ICD data</a></li>
+      <li><a href="#section-sample-data">Sample data</a></li>
     </ul>
   </div>
 </div>
@@ -428,6 +648,23 @@
    </div>
 
   
+<script src="https://cdnjs.cloudflare.com/ajax/libs/docsearch.js/2.6.1/docsearch.min.js" integrity="sha256-GKvGqXDznoRYHCwKXGnuchvKSwmx9SRMrZOTh2g4Sb0=" crossorigin="anonymous"></script>
+<script>
+  docsearch({
+    
+    
+    apiKey: '797795ae271734faa8bc9b1f4aaae82b',
+    indexName: 'icd',
+    inputSelector: 'input#search-input.form-control',
+    transformData: function(hits) {
+      return hits.map(function (hit) {
+        hit.url = updateHitURL(hit);
+        return hit;
+      });
+    }
+  });
+</script>
+
 
   </body>
 </html>

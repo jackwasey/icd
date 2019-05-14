@@ -30,10 +30,16 @@
 <script src="../pkgdown.js"></script>
 
 
+<!-- docsearch -->
+<script src="../docsearch.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/docsearch.js/2.6.1/docsearch.min.css" integrity="sha256-QOSRU/ra9ActyXkIBbiIB144aDBdtvXBcNc3OTNuX/Q=" crossorigin="anonymous" />
+<link href="../docsearch.css" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/jquery.mark.min.js" integrity="sha256-4HLtjeVgH0eIB3aZ9mLYF6E8oU5chNdjU6p6rrXpl9U=" crossorigin="anonymous"></script>
+
 
 <meta property="og:title" content="Evaluate code with a particular version of ICD-10-CM — with_icd10cm_version" />
 
-<meta property="og:description" content="Temporarily sets and restores the option icd.data.icd10cm_active_year,
+<meta property="og:description" content="Temporarily sets and restores the option icd.icd10cm_active_year,
 analogous to functions in withr." />
 <meta name="twitter:card" content="summary" />
 
@@ -128,6 +134,12 @@ analogous to functions in withr." />
         
       </ul>
       
+      <form class="navbar-form navbar-right hidden-xs hidden-sm" role="search">
+        <div class="form-group">
+          <input type="search" class="form-control" name="search-input" id="search-input" placeholder="Search..." aria-label="Search for..." autocomplete="off">
+        </div>
+      </form>
+      
     </div><!--/.nav-collapse -->
   </div><!--/.container -->
 </div><!--/.navbar -->
@@ -145,7 +157,7 @@ analogous to functions in withr." />
 
     <div class="ref-description">
     
-    <p>Temporarily sets and restores the option <code>icd.data.icd10cm_active_year</code>,
+    <p>Temporarily sets and restores the option <code>icd.icd10cm_active_year</code>,
 analogous to functions in <a href='https://CRAN.R-project.org/package=withr'><span class="pkg">withr</span></a>.</p>
     
     </div>
@@ -179,16 +191,34 @@ without braces.</p></td>
 #&gt; 
 #&gt; $icd.data.who_url
 #&gt; [1] "https://icd.who.int/browse10"
-#&gt; </div><div class='input'><span class='fu'>with_icd10cm_version</span>(<span class='st'>"2014"</span>, <span class='kw pkg'>icd</span><span class='kw ns'>:::</span><span class='fu'>.show_options</span>())</div><div class='output co'>#&gt; $icd.data.icd10cm_active_year
-#&gt; [1] "2014"
 #&gt; 
-#&gt; $icd.data.offline
+#&gt; $icd.offline
+#&gt; [1] FALSE
+#&gt; 
+#&gt; $icd.resource
+#&gt; [1] "/home/jack/.local/share/icd"
+#&gt; 
+#&gt; $icd.who_url
+#&gt; [1] "https://icd.who.int/browse10"
+#&gt; </div><div class='input'><span class='fu'>with_icd10cm_version</span>(<span class='st'>"2014"</span>, <span class='kw pkg'>icd</span><span class='kw ns'>:::</span><span class='fu'>.show_options</span>())</div><div class='output co'>#&gt; $icd.data.offline
 #&gt; [1] FALSE
 #&gt; 
 #&gt; $icd.data.resource
 #&gt; [1] "/home/jack/.local/share/icd"
 #&gt; 
 #&gt; $icd.data.who_url
+#&gt; [1] "https://icd.who.int/browse10"
+#&gt; 
+#&gt; $icd.icd10cm_active_year
+#&gt; [1] "2014"
+#&gt; 
+#&gt; $icd.offline
+#&gt; [1] FALSE
+#&gt; 
+#&gt; $icd.resource
+#&gt; [1] "/home/jack/.local/share/icd"
+#&gt; 
+#&gt; $icd.who_url
 #&gt; [1] "https://icd.who.int/browse10"
 #&gt; </div></pre>
   </div>
@@ -215,6 +245,23 @@ without braces.</p></td>
    </div>
 
   
+<script src="https://cdnjs.cloudflare.com/ajax/libs/docsearch.js/2.6.1/docsearch.min.js" integrity="sha256-GKvGqXDznoRYHCwKXGnuchvKSwmx9SRMrZOTh2g4Sb0=" crossorigin="anonymous"></script>
+<script>
+  docsearch({
+    
+    
+    apiKey: '797795ae271734faa8bc9b1f4aaae82b',
+    indexName: 'icd',
+    inputSelector: 'input#search-input.form-control',
+    transformData: function(hits) {
+      return hits.map(function (hit) {
+        hit.url = updateHitURL(hit);
+        return hit;
+      });
+    }
+  });
+</script>
+
 
   </body>
 </html>

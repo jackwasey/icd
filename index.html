@@ -10,7 +10,9 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script><!-- sticky kit --><script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script><!-- pkgdown --><link href="pkgdown.css" rel="stylesheet">
-<script src="pkgdown.js"></script><meta property="og:title" content="Comorbidity calculations and tools for ICD-9 and ICD-10 codes">
+<script src="pkgdown.js"></script><!-- docsearch --><script src="docsearch.js"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/docsearch.js/2.6.1/docsearch.min.css" integrity="sha256-QOSRU/ra9ActyXkIBbiIB144aDBdtvXBcNc3OTNuX/Q=" crossorigin="anonymous">
+<link href="docsearch.css" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/jquery.mark.min.js" integrity="sha256-4HLtjeVgH0eIB3aZ9mLYF6E8oU5chNdjU6p6rrXpl9U=" crossorigin="anonymous"></script><meta property="og:title" content="Comorbidity calculations and tools for ICD-9 and ICD-10 codes">
 <meta property="og:description" content="Calculate comorbidities, medical risk scores, and
     work very quickly and precisely with ICD-9 and ICD-10 codes. This
     package enables a work flow from raw tables of ICD codes in hospital
@@ -100,7 +102,13 @@
 </li>
       </ul>
 <ul class="nav navbar-nav navbar-right"></ul>
+<form class="navbar-form navbar-right hidden-xs hidden-sm" role="search">
+        <div class="form-group">
+          <input type="search" class="form-control" name="search-input" id="search-input" placeholder="Search..." aria-label="Search for..." autocomplete="off">
 </div>
+      </form>
+      
+    </div>
 <!--/.nav-collapse -->
   </div>
 <!--/.container -->
@@ -147,7 +155,7 @@ along with icd. If not, see <http:#www.gnu.org/licenses/>.
 <h2 class="hasAnchor">
 <a href="#introduction" class="anchor"></a>Introduction</h2>
 <p>Calculate comorbidities, medical risk scores, and work very quickly and precisely with ICD-9 and ICD-10 codes. This package enables a work flow from raw tables of ICD codes in hospital databases to comorbidities. ICD-9 and ICD-10 comorbidity mappings from Quan (Deyo and Elixhauser versions), Elixhauser and AHRQ included. Common ambiguities and code formats are handled. Comorbidity computation includes Hierarchical Condition Codes, and an implementation of AHRQ Clinical Classifications. Risk scores include those of Charlson and van Walraven. US Clinical Modification, Word Health Organization, Belgian and French ICD-10 codes are supported, most of which are downloaded on demand.</p>
-<p><code>icd</code> is used by many researchers around the world who work in public health, epidemiology, clinical research, nutrition, journalism, health administration and more. I’m grateful for contact from people in these fields for their feedback and code contributions, and I’m pleased to say that <code>icd</code> has been used in works like the <a href="http://www.pulitzer.org/finalists/staff-propublica">Pulitzer finalist</a> work on <a href="http://www.pulitzer.org/finalists/staff-propublica">maternal death</a> by <a href="https://www.propublica.org">ProPublica</a>.</p>
+<p><code>icd</code> is used by many researchers around the world who work in public health, epidemiology, clinical research, nutrition, journalism, health administration, insurance, and more. I’m grateful for contact from people in these fields for their feedback and code contributions, and I’m pleased to say that <code>icd</code> has been used in works like the <a href="http://www.pulitzer.org/finalists/staff-propublica">Pulitzer finalist</a> work on <a href="http://www.pulitzer.org/finalists/staff-propublica">maternal death</a> by <a href="https://www.propublica.org">ProPublica</a>.</p>
 </div>
 <div id="features" class="section level2">
 <h2 class="hasAnchor">
@@ -161,7 +169,7 @@ along with icd. If not, see <http:#www.gnu.org/licenses/>.
 </ul>
 </li>
 <li>use your existing wide or long data format, icd can guess which columns are ICD-9 or ICD-10 codes.</li>
-<li>explain and summarize groups of ICD codes in natural language, using ICD editions from the WHO, USA, France and Belgium. Many different annual editions of these data are available, all via the ‘icd.data’ companion package.</li>
+<li>explain and summarize groups of ICD codes in natural language, using ICD editions from the WHO, USA, France and Belgium. Many different annual editions of these data are available, and these may be downloaded automatically when used, or in bulk with <code><a href="reference/download_all_icd_data.html">download_all_icd_data()</a></code>.</li>
 <li>Charlson and Van Walraven score calculations</li>
 <li>Hierarchical Condition Codes (HCC) from CMS</li>
 <li>Clinical Classifications Software (CCS) comorbidities from AHRQ</li>
@@ -366,7 +374,7 @@ along with icd. If not, see <http:#www.gnu.org/licenses/>.
 <div id="icd-10-codes" class="section level2">
 <h2 class="hasAnchor">
 <a href="#icd-10-codes" class="anchor"></a>ICD-10 codes</h2>
-<p>ICD-10 has a somewhat simpler format, with consistent use of a letter, then two alphanumeric characters. However, especially for ICD-10-CM, there are a multitude of qualifiers, e.g. specifying recurrence, laterality, which vastly increase the number of possible codes. This package recognizes validity of codes by syntax alone, or whether the codes appear in a canonical list. The current ICD-10-CM master list is the 2016 set. There is not yet the capability of converting between ICD-9 and ICD-10, but comorbidities can be generated from older ICD-9 codes and newer ICD-10 codes in parallel, and the comorbidities can then be compared.</p>
+<p>ICD-10 has a somewhat simpler format, with consistent use of a letter, then two alphanumeric characters. However, especially for ICD-10-CM, there are a multitude of qualifiers, e.g. specifying recurrence, laterality, which vastly increase the number of possible codes. This package recognizes validity of codes by syntax alone, or whether the codes appear in a canonical list. There is not yet the capability of converting between ICD-9 and ICD-10, but comorbidities can be generated from older ICD-9 codes and newer ICD-10 codes in parallel, and the comorbidities can then be compared.</p>
 </div>
 </div>
   </div>
@@ -409,7 +417,6 @@ along with icd. If not, see <http:#www.gnu.org/licenses/>.
 <li><a href="https://bestpractices.coreinfrastructure.org/projects/2092"><img src="https://bestpractices.coreinfrastructure.org/projects/2092/badge" alt="CII Best Practices"></a></li>
 <li><a href="https://cran.r-project.org/package=icd"><img src="https://tinyverse.netlify.com/badge/icd" alt="Dependencies"></a></li>
 <li><a href="https://cran.r-project.org/package=icd"><img src="https://cranlogs.r-pkg.org/badges/icd" title="RStudio Mirror Downloads" alt="CRAN RStudio mirror downloads last calendar month"></a></li>
-<li><a href="https://cran.r-project.org/package=icd"><img src="https://cranlogs.r-pkg.org/badges/icd"></a></li>
 </ul>
 </div>
 </div>
@@ -428,6 +435,20 @@ along with icd. If not, see <http:#www.gnu.org/licenses/>.
 </div>
 
   
-
-  </body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/docsearch.js/2.6.1/docsearch.min.js" integrity="sha256-GKvGqXDznoRYHCwKXGnuchvKSwmx9SRMrZOTh2g4Sb0=" crossorigin="anonymous"></script><script>
+  docsearch({
+    
+    
+    apiKey: '797795ae271734faa8bc9b1f4aaae82b',
+    indexName: 'icd',
+    inputSelector: 'input#search-input.form-control',
+    transformData: function(hits) {
+      return hits.map(function (hit) {
+        hit.url = updateHitURL(hit);
+        return hit;
+      });
+    }
+  });
+</script>
+</body>
 </html>
