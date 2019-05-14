@@ -19,7 +19,7 @@ will download data when needed.
 \dontrun{
 set_icd_data_dir()
 # or configure a directory to us:
-# options("icd.data.resource" = "/tmp/icd")
+# .set_opt("resource" = "/tmp/icd")
 # or
 # set_icd_data_dir("/tmp/icd")
 

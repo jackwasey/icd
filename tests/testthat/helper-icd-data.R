@@ -21,7 +21,7 @@ have_icd_data_resource <- function() {
     if (.verbose()) {
       message("have_icd_data_resource() is setting data opt to default")
     }
-    options("icd.data.resource" = .default_icd_data_dir())
+    .set_opt("resource" = .default_icd_data_dir())
     return(TRUE)
   }
   opt_ok
@@ -29,7 +29,7 @@ have_icd_data_resource <- function() {
 
 skip_no_icd_data_resource <- function() {
   if (!have_icd_data_resource()) {
-    skip("Skipping - no icd.data.resource option defined.")
+    skip("Skipping - no icd data resource option defined.")
   }
 }
 

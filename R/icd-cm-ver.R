@@ -13,7 +13,7 @@ set_icd10cm_active_year <- function(ver, check_exists = TRUE) {
     stopifnot(v %in% names(.icd10cm_sources))
     stopifnot(.exists_in_cache(v_name))
   }
-  options("icd.data.icd10cm_active_year" = v)
+  .set_opt("icd10cm_active_year" = v)
   invisible(old_v)
 }
 
@@ -21,11 +21,11 @@ set_icd10cm_active_year <- function(ver, check_exists = TRUE) {
 #' @export
 get_icd10cm_active_year <- function() {
   ver <- .get_opt("icd10cm_active_year", default = "2019")
-  .dbg("getting icd.data.icd10cm_active_year: ", ver)
+  .dbg("getting options: icd10cm_active_year: ", ver)
   ver <- as.character(ver)
   if (!grepl("^[[:digit:]]+$", ver)) {
     stop(
-      "Option \"icd.data.icd10cm_active_year\" is not valid.\n",
+      "Option \"icd.icd10cm_active_year\" is not valid.\n",
       "Reset it with set_icd10cm_active_year(\"2019\") ",
       "or other year version."
     )
@@ -136,7 +136,7 @@ get_icd10cm_latest <- function() {
 
 #' Evaluate code with a particular version of ICD-10-CM
 #'
-#' Temporarily sets and restores the option \code{icd.data.icd10cm_active_year},
+#' Temporarily sets and restores the option \code{icd.icd10cm_active_year},
 #' analogous to functions in \CRANpkg{withr}.
 #' @template ver
 #' @param code Code block to execute, may be in braces, or a single statement
@@ -147,7 +147,7 @@ get_icd10cm_latest <- function() {
 #' @export
 with_icd10cm_version <- function(ver, code) {
   stopifnot(is.character(ver), length(ver) == 1)
-  old <- options("icd.data.icd10cm_active_year" = ver)
+  old <- .set_opt("icd10cm_active_year" = ver)
   on.exit(options(old), add = TRUE)
   force(code)
 }

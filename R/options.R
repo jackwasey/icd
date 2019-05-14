@@ -7,11 +7,13 @@
   "interact"
 )
 
-.opt_full_name <- function(opt_name) paste0("icd.data.", opt_name)
+.opt_full_name <- function(opt_name) {
+  paste0("icd.", opt_name)
+}
 
 .show_options <- function() {
   o <- options()
-  o[grepl("^icd\\.data", names(o))]
+  o[grepl("^icd\\.", names(o))]
 }
 
 .print_options <- function() {
@@ -28,57 +30,37 @@
 
 #' Set initial options for the package
 #'
-#' \code{icd.data.offline} - default is \code{TRUE}, unless the system
+#' \code{icd.offline} - default is \code{TRUE}, unless the system
 #' environment vairable \code{ICD_DATA_OFFLINE} is \sQuote{false} or
 #' \sQuote{no}. This will only ever be turned on with explicit user
 #' authorization (or by directly setting it). Turning this on also results in
 #' data being saved in the data directory. See below.
 #'
-#' \code{icd.data.interact} - default is based on interactive mode of R, as
+#' \code{icd.interact} - default is based on interactive mode of R, as
 #' given by \code{base::interactive()}, but can be overridden, e.g. to simulate
 #' non-interactive testing in an interactive environment.
 #'
-#' \code{icd.data.resource} - default is ~/.icd.data but won't write unless user
+#' \code{icd.resource} - default is ~/.icd.data but won't write unless user
 #' gives permission, e.g., using \code{\link{set_icd_data_dir}}
 #'
-#' \code{icd.data.absent_action} - what to do if data is missing, \sQuote{stop},
+#' \code{icd.absent_action} - what to do if data is missing, \sQuote{stop},
 #' \sQuote{warning}, \sQuote{message"}, or \sQuote{silent}.
 #'
-#' \code{icd.data.icd10cm_active_year} - which ICD-10-CM version is currently
+#' \code{icd.icd10cm_active_year} - which ICD-10-CM version is currently
 #' active. Default is \sQuote{2019}.
 #'
-#' See also \code{.show_options} \code{.clear_options} \code{.set_dev_options}
+#' See also \code{.show_options} \code{.clear_options}
 #' @keywords internal
 #' @noRd
 NULL
 
 # the whole point of this is to have 'enum' like behavior, so I can't mistype an
 # option name string elsewhere.
-.set_opt <- function(..., overwrite = FALSE) {
+.set_opt <- function(...) {
   f <- list(...)
-  invisible(
-    sapply(
-      simplify = FALSE,
-      USE.NAMES = TRUE,
-      names(f),
-      function(o) {
-        if (!(o %in% .opt_names)) {
-          stop("Option ", sQuote(o), " is not a valid icd option.")
-        }
-        if (overwrite || is.null(.get_opt(o))) {
-          .dbg("Writing option ", sQuote(o))
-          if (overwrite && .verbose() > 1) {
-            message("overwriting the previous value: ", getOption(o))
-          }
-          args <- list(f[[o]])
-          names(args) <- .opt_full_name(o)
-          do.call(options, args = args)
-        } else {
-          options(o)
-        }
-      }
-    )
-  )
+  stopifnot(!any(grepl(names(f), pattern = "^icd\\.")))
+  names(f) <- paste0("icd.", names(f))
+  options(f)
 }
 
 # only get options we know about, to avoid typo giving a NULL
@@ -99,10 +81,10 @@ NULL
     length(x) == 1L &&
     !is.na(x)) {
     if (is.numeric(x)) x <- as.integer(x)
-    options("icd.data.verbose" = x)
+    .set_opt("verbose" = x)
   } else {
     ev <- .env_var_is_true("ICD_DATA_VERBOSE")
-    options("icd.data.verbose" = ev)
+    .set_opt("verbose" = ev)
     if (ev) message("Reset verbose option to ICD_DATA_VERBOSE")
   }
   gcinfo(x > 5)
@@ -119,13 +101,13 @@ NULL
     opt <- .get_opt("interact", default = NA)
     if (is.na(opt)) {
       .msg("interact option not set, so falling back on interactive()")
-      .set_opt("interact" = interactive(), overwrite = FALSE)
+      .set_opt("interact" = interactive())
     }
     stopifnot(is.logical(opt))
     return(opt)
   }
   if (is.logical(x) && length(x) == 1L && !is.na(x)) {
-    .set_opt("interact" = x, overwrite = TRUE)
+    .set_opt("interact" = x)
   } else {
     stop(".interact() requires a single logical value, or a missing value.")
   }
@@ -137,7 +119,7 @@ NULL
     return(isTRUE(.get_opt("offline")))
   }
   if (is.logical(x) && length(x) == 1L && !is.na(x)) {
-    .set_opt("offline" = x, overwrite = TRUE)
+    .set_opt("offline" = x)
   } else {
     stop("offline() requires a single logical value, or a missing value.")
   }
@@ -146,11 +128,11 @@ NULL
 
 .test_slow <- function(x) {
   if (missing(x)) {
-    return(.get_opt("icd.test_slow", default = FALSE))
+    return(.get_opt("test_slow", default = FALSE))
   }
   stopifnot(is.logical(x) && length(x) == 1)
   Sys.setenv("ICD_TEST_SLOW" = x)
-  options("icd.test_slow" = x)
+  .set_opt("test_slow" = x)
   invisible(x)
 }
 
@@ -165,9 +147,9 @@ NULL
   if (!missing(x)) {
     x <- match.arg(x)
     if (is.na(x) || x == "sysenv") {
-      options("icd.data.absent_action" = Sys.getenv("ICD_DATA_ABSENT_ACTION"))
+      .set_opt("absent_action" = Sys.getenv("ICD_DATA_ABSENT_ACTION"))
     } else {
-      options("icd.data.absent_action" = x)
+      .set_opt("absent_action" = x)
     }
     return(.get_opt("absent_action"))
   }
@@ -217,13 +199,13 @@ NULL
 }
 
 with_offline <- function(offline, code) {
-  old <- options("icd.data.offline" = offline)
+  old <- .set_opt("offline" = offline)
   on.exit(options(old))
   force(code)
 }
 
 with_interact <- function(interact, code) {
-  old <- options("icd.data.interact" = interact)
+  old <- .set_opt("interact" = interact)
   on.exit(options(old))
   force(code)
 }
@@ -236,7 +218,7 @@ with_absent_action <- function(absent_action = c(
                                ),
                                code) {
   absent_action <- match.arg(absent_action)
-  old <- options("icd.data.absent_action" = absent_action)
+  old <- .set_opt("absent_action" = absent_action)
   on.exit(options(old))
   force(code)
 }
@@ -264,7 +246,7 @@ with_absent_action <- function(absent_action = c(
 #' @seealso \code{\link{download_all_icd_data}}
 #' @export
 set_icd_data_dir <- function(path = NULL) {
-  .set_opt("offline" = FALSE, overwrite = TRUE)
+  .set_opt("offline" = FALSE)
   if (!is.null(path)) {
     .msg("Using the icd data cache set by argument from user: ", path)
   }
@@ -291,7 +273,7 @@ set_icd_data_dir <- function(path = NULL) {
     created <- dir.create(path, showWarnings = TRUE)
     if (!created) stop("Unable to create directory at: ", path)
   }
-  options("icd.data.resource" = path)
+  .set_opt("resource" = path)
   if (!.all_cached() && "download_all_icd_data" %nin% names(sys.calls())) {
     message(
       "Not all available data is currently downloaded. ",
@@ -317,7 +299,7 @@ set_icd_data_dir <- function(path = NULL) {
 #' \dontrun{
 #' set_icd_data_dir()
 #' # or configure a directory to us:
-#' # options("icd.data.resource" = "/tmp/icd")
+#' # .set_opt("resource" = "/tmp/icd")
 #' # or
 #' # set_icd_data_dir("/tmp/icd")
 #'
@@ -329,7 +311,7 @@ download_all_icd_data <- function() {
   set_icd_data_dir()
   message("Downloading, caching and parsing all ICD data")
   message("This will take a few minutes, and use about 340MB.")
-  options("icd.data.offline" = FALSE)
+  .set_opt("offline" = FALSE)
   for (d in .data_names) {
     message("Working on: ", d)
     .get_fetcher_fun(d)()

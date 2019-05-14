@@ -7,11 +7,11 @@
 .lookup_chars_in_icd10cm <- new.env(parent = emptyenv())
 
 .onLoad <- function(libname, pkgname) {
-  if (.icd_data_dir_okay()) {
-    .set_opt(offline = FALSE, overwrite = FALSE)
+  if (.icd_data_dir_okay() && is.null(.get_opt("offline"))) {
+    .set_opt(offline = FALSE)
   }
-  if (is.null(getOption("icd.data.who_url"))) {
-    options("icd.data.who_url" = "https://icd.who.int/browse10")
+  if (is.null(.get_opt("who_url"))) {
+    .set_opt(who_url = "https://icd.who.int/browse10")
   }
 }
 

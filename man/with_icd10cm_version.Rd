@@ -16,7 +16,7 @@ ICD-10-CM, use \code{"icd10cm2019"} for Dutch 2014 ICD-CM translations, use
 without braces.}
 }
 \description{
-Temporarily sets and restores the option \code{icd.data.icd10cm_active_year},
+Temporarily sets and restores the option \code{icd.icd10cm_active_year},
 analogous to functions in \CRANpkg{withr}.
 }
 \examples{

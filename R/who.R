@@ -45,7 +45,7 @@
 
 .dl_icd10who_json <- function(year, lang, resource) {
   json_url <- paste(
-    getOption("icd.data.who_url"),
+    getOption("icd.who_url"),
     year,
     lang,
     resource,
