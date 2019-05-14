@@ -26,7 +26,7 @@ test_that("row numbers and factors are sequential for data frames", {
       info <- paste0("get_", data_name, "()[[\"", col_name, "\"]]")
       if (col_name %nin% c("sub_sub_chapter", "age_group", "sex")) {
         if (data_name %in% c(.get_icd9cm_name(2005:2008, leaf = TRUE)) &&
-            col_name == "long_desc") {
+          col_name == "long_desc") {
           skip("No long descriptions for older ICD-9-CM data")
         }
         expect_true(!anyNA(col_dat), info = info)
