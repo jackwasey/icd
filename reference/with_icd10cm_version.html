@@ -180,7 +180,16 @@ without braces.</p></td>
     
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
-    <pre class="examples"><div class='input'><span class='kw pkg'>icd</span><span class='kw ns'>:::</span><span class='fu'>.show_options</span>()</div><div class='output co'>#&gt; $icd.offline
+    <pre class="examples"><div class='input'><span class='kw pkg'>icd</span><span class='kw ns'>:::</span><span class='fu'>.show_options</span>()</div><div class='output co'>#&gt; $icd.data.offline
+#&gt; [1] FALSE
+#&gt; 
+#&gt; $icd.data.resource
+#&gt; [1] "/home/jack/.local/share/icd"
+#&gt; 
+#&gt; $icd.data.who_url
+#&gt; [1] "https://icd.who.int/browse10"
+#&gt; 
+#&gt; $icd.offline
 #&gt; [1] FALSE
 #&gt; 
 #&gt; $icd.resource
@@ -188,7 +197,16 @@ without braces.</p></td>
 #&gt; 
 #&gt; $icd.who_url
 #&gt; [1] "https://icd.who.int/browse10"
-#&gt; </div><div class='input'><span class='fu'>with_icd10cm_version</span>(<span class='st'>"2014"</span>, <span class='kw pkg'>icd</span><span class='kw ns'>:::</span><span class='fu'>.show_options</span>())</div><div class='output co'>#&gt; $icd.icd10cm_active_year
+#&gt; </div><div class='input'><span class='fu'>with_icd10cm_version</span>(<span class='st'>"2014"</span>, <span class='kw pkg'>icd</span><span class='kw ns'>:::</span><span class='fu'>.show_options</span>())</div><div class='output co'>#&gt; $icd.data.offline
+#&gt; [1] FALSE
+#&gt; 
+#&gt; $icd.data.resource
+#&gt; [1] "/home/jack/.local/share/icd"
+#&gt; 
+#&gt; $icd.data.who_url
+#&gt; [1] "https://icd.who.int/browse10"
+#&gt; 
+#&gt; $icd.icd10cm_active_year
 #&gt; [1] "2014"
 #&gt; 
 #&gt; $icd.offline
