@@ -43,11 +43,11 @@
       paste(versions, collapse = ", ")
     )
   }
-  icd9cm_leaf_v32 <- .parse_icd9cm_leaf_year(
+  icd9cm2014_leaf <- .parse_icd9cm_leaf_year(
     year = "2014",
     ...
   )
-  invisible(icd9cm_leaf_v32)
+  invisible(icd9cm2014_leaf)
 }
 
 .dl_icd9cm_leaf_year <- function(year, ...) {

@@ -69,6 +69,7 @@ reference:
   - '`icd9_map_quan_elix`'
   - '`icd9_map_single_ccs`'
   - '`icd10_map_ahrq_pcs`'
+  - '`names_elix`'
 
 - title: Transforming data
   desc: Reshaping of typical healthcare data frames containing one or more ICD code columns. Convert comorbidity results between matrices and 'tidy' data frmes.
@@ -82,8 +83,10 @@ reference:
 - title: Metadata
   desc: Optionally describe and check the type and structure of your data. This enables functions like '`is_valid`' and '`explain_code`' to look up codes in the appropriate version of ICD-9 or ICD-10.
   contents:
+  - '`set_icd_class`'
   - '`as.icd_long_data`'
   - '`as.decimal_diag`'
+  - '`as.comorbidity_map`'
   - '`is.icd9`'
   - '`is.icd9cm`'
   - '`is.icd10`'
@@ -91,6 +94,13 @@ reference:
   - '`is.icd10cm`'
   - '`is.icd10fr`'
   - '`is.icd10be`'
+  - '`is.icd_long_data`'
+  - '`icd9_chapters`'
+  - '`icd9_sub_chapters`'
+  - '`icd10_chapters`'
+  - '`icd10_sub_chapters`'
+  - '`is_billable`'
+  - '`get_billable`'
 
 - title: Manipulation
   desc: Working with codes and the ICD hierarchies
@@ -119,9 +129,17 @@ reference:
   - '`get_icd10cm_latest`'
   - '`get_icd10cm_version`'
 
+- title: ICD data included in the package
+  contents:
+  - '`icd9cm2014_leaf`'
+  - '`icd10cm2019`'
+  - '`vermont_dx`'
+  - '`uranium_pathology`'
+
 - title: Get ICD data
   desc: This is needed for explaining codes, and checking validity. The package includes data for the most recent ICD-9-CM and ICD-10-CM. Some editions, like WHO, cannot be distributed in the package due to copyright. Others are also available for download on demand, or in bulk using `download_all_icd_data()`.
   contents:
+  - '`with_icd10cm_version`'
   - '`get_icd10be2014`'
   - '`get_icd10be2014_pc`'
   - '`get_icd10be2017`'
@@ -139,6 +157,7 @@ reference:
   - '`get_icd10cm2019`'
   - '`get_icd10cm2019_pc`'
   - '`get_icd10fr2019`'
+  - '`get_cim10fr2019`'
   - '`get_icd10who2008fr`'
   - '`get_icd10who2016`'
   - '`get_icd9cm2005`'
@@ -162,7 +181,9 @@ reference:
   - '`get_icd9cm2014`'
   - '`get_icd9cm2014_leaf`'
 
-- title: Sample data
+- title: Other
   contents:
-  - '`vermont_dx`'
-  - '`uranium_pathology`'
+  - '`sort_icd`'
+  - '`plot_comorbid`'
+  - '`poa_choices`'
+  - '`print.icd9`'
