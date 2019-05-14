@@ -63,7 +63,7 @@ before_install:
   # Homebrew GCC currently version 8.3 from
   # https://github.com/Homebrew/homebrew-core/blob/master/Formula/gcc.rb
   - if [[ "$(uname -s)" = 'Darwin' && x"$ICD_USE_XCODE_CLANG" != 'xtrue' ]]; then
-      command -v g++-8 >/dev/null 2>&1 || brew install gcc && echo 'CC=gcc-8' >> ~/.R/Makevars && echo 'CXX=g++-8' >> ~/.R/Makevars && echo 'CXX11=g++-8' >> ~/.R/Makevars && Rscript -e 'install.packages("Rcpp", type = "source")';
+      command -v g++-9 >/dev/null 2>&1 || brew install gcc && echo 'CC=gcc-9' >> ~/.R/Makevars && echo 'CXX=g++-9' >> ~/.R/Makevars && echo 'CXX11=g++-9' >> ~/.R/Makevars && Rscript -e 'install.packages("Rcpp", type = "source")';
     fi
   - cat ~/.R/Makevars
   - cat .Rbuildignore
