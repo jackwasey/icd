@@ -1,41 +1,6 @@
 context("build icd9 maps")
 
-skip_slow("Skipping slow re-building of ICD-9 comorbidity maps")
-
-test_that("AHRQ children same as saved", {
-  for (i in icd9_map_ahrq) {
-    expect_equal(
-      children.icd9(i, defined = FALSE, short_code = TRUE),
-      sort.icd9(i)
-    )
-  }
-})
-
-test_that("Elixhauser children same as saved", {
-  for (i in icd9_map_quan_elix) {
-    expect_equal(
-      children.icd9(i, defined = FALSE, short_code = TRUE),
-      sort.icd9(i)
-    )
-  }
-})
-
-test_that("Quan Charlson children same as saved", {
-  for (i in icd9_map_quan_deyo) {
-    expect_equal_no_class_order(
-      children.icd9(i, defined = FALSE, short_code = TRUE), sort.icd9(i)
-    )
-  }
-})
-
-test_that("Quan Elixhauser children same as saved", {
-  for (i in icd9_map_quan_elix) {
-    expect_equal_no_class_order(
-      children.icd9(i, defined = FALSE, short_code = TRUE), sort.icd9(i)
-    )
-  }
-})
-
+skip_slow("Skipping slow re-building of ICD-9 comorbidity maps (quan)")
 
 test_that("ahrq icd9 map recreated", {
   # skip this test if the file is not already in data-raw
@@ -83,14 +48,5 @@ test_that("Elixhauser icd9 map generated = saved", {
   expect_equivalent(
     get_invalid.comorbidity_map(icd9_map_elix, short_code = TRUE),
     list()
-  )
-})
-
-test_that("Elixhauser icd10 map generated = saved", {
-  expect_equivalent(
-    icd10_map_elix, icd10_generate_map_elix(save_pkg_data = FALSE)
-  )
-  expect_equivalent(
-    get_invalid.comorbidity_map(icd10_map_elix, short_code = TRUE), list()
   )
 })

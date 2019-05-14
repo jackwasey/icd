@@ -22,6 +22,9 @@ test_that("the icd-10 elix comorbidity map is reproduced", {
     icd10_map_elix,
     icd10_generate_map_elix(save_pkg_data = FALSE)
   )
+  expect_equivalent(
+    get_invalid.comorbidity_map(icd10_map_elix, short_code = TRUE), list()
+  )
 })
 
 test_that("icd-10 ahrq map is reproduced", {
