@@ -289,6 +289,12 @@
           <p><code><a href="icd10_map_ahrq_pcs.html">icd10_map_ahrq_pcs</a></code> </p>
         </td>
         <td><p>AHRQ ICD-10-PCS categories</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="names_elix.html">names_elix</a></code> </p>
+        </td>
+        <td><p>Comorbidity names</p></td>
       </tr>
     </tbody><tbody>
       <tr>
@@ -338,6 +344,12 @@
       <tr>
         
         <td>
+          <p><code><a href="set_icd_class.html">as.icd9()</a></code> <code><a href="set_icd_class.html">as.icd9cm()</a></code> <code><a href="set_icd_class.html">as.icd9cm_pc()</a></code> <code><a href="set_icd_class.html">as.icd10()</a></code> <code><a href="set_icd_class.html">as.icd10cm()</a></code> <code><a href="set_icd_class.html">as.icd10cm_pc()</a></code> <code><a href="set_icd_class.html">as.icd10who()</a></code> <code><a href="set_icd_class.html">as.icd10fr()</a></code> <code><a href="set_icd_class.html">as.icd10be()</a></code> </p>
+        </td>
+        <td><p>Construct ICD-9 and ICD-10 data types</p></td>
+      </tr><tr>
+        
+        <td>
           <p><code><a href="wide_vs_long.html">as.icd_long_data()</a></code> <code><a href="wide_vs_long.html">as.icd_wide_data()</a></code> <code><a href="wide_vs_long.html">icd_long_data()</a></code> <code><a href="wide_vs_long.html">icd_wide_data()</a></code> </p>
         </td>
         <td><p>Set the ICD data structure class of a <code>matrix</code> or <code>data.frame</code>.</p></td>
@@ -351,9 +363,57 @@
       </tr><tr>
         
         <td>
+          <p><code><a href="as.comorbidity_map.html">as.comorbidity_map()</a></code> </p>
+        </td>
+        <td><p>Set the class of a named list to show it is a comorbidity map.</p></td>
+      </tr><tr>
+        
+        <td>
           <p><code><a href="is.icd9.html">is.icd9()</a></code> <code><a href="is.icd9.html">is.icd9cm()</a></code> <code><a href="is.icd9.html">is.icd9cm_pc()</a></code> <code><a href="is.icd9.html">is.icd9who()</a></code> <code><a href="is.icd9.html">is.icd10()</a></code> <code><a href="is.icd9.html">is.icd10cm()</a></code> <code><a href="is.icd9.html">is.icd10cm_pc()</a></code> <code><a href="is.icd9.html">is.icd10who()</a></code> <code><a href="is.icd9.html">is.icd10fr()</a></code> <code><a href="is.icd9.html">is.icd10be()</a></code> <code><a href="is.icd9.html">is.comorbidity_map()</a></code> </p>
         </td>
         <td><p>Test presence of ICD classes</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="is.icd_long_data.html">is.icd_long_data()</a></code> <code><a href="is.icd_long_data.html">is.icd_wide_data()</a></code> </p>
+        </td>
+        <td><p>Test for class describing patient data</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="icd9_chapters.html">icd9_chapters</a></code> </p>
+        </td>
+        <td><p>ICD-9 chapters</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="icd9_sub_chapters.html">icd9_sub_chapters</a></code> </p>
+        </td>
+        <td><p>ICD-9 sub-chapters</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="icd10_chapters.html">icd10_chapters</a></code> </p>
+        </td>
+        <td><p>ICD-10 chapters</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="icd10_sub_chapters.html">icd10_sub_chapters</a></code> </p>
+        </td>
+        <td><p>ICD-10 sub-chapters</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="is_billable.html">is_billable()</a></code> </p>
+        </td>
+        <td><p>Check whether a code is billable according to ICD-9-CM or ICD-10-CM</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="get_billable.html">get_billable()</a></code> </p>
+        </td>
+        <td><p>Get the subset of codes that are billable according to ICD-9-CM or ICD-10-CM</p></td>
       </tr>
     </tbody><tbody>
       <tr>
@@ -464,11 +524,49 @@
     </tbody><tbody>
       <tr>
         <th colspan="2">
+          <h2 id="section-icd-data-included-in-the-package" class="hasAnchor"><a href="#section-icd-data-included-in-the-package" class="anchor"></a>ICD data included in the package</h2>
+          <p class="section-desc"></p>
+        </th>
+      </tr>
+      <tr>
+        
+        <td>
+          <p><code><a href="icd9cm2014_leaf.html">icd9cm2014_leaf</a></code> </p>
+        </td>
+        <td><p>The final ICD-9-CM list of leaf (&#8216;billable&#8217;) codes</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="icd10cm2019.html">icd10cm2019</a></code> </p>
+        </td>
+        <td><p>United States and Belgium ICD-10-CM</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="vermont_dx.html">vermont_dx</a></code> </p>
+        </td>
+        <td><p>Hospital discharge data from Vermont</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="uranium_pathology.html">uranium_pathology</a></code> </p>
+        </td>
+        <td><p>United States Transuranium &amp; Uranium Registries</p></td>
+      </tr>
+    </tbody><tbody>
+      <tr>
+        <th colspan="2">
           <h2 id="section-get-icd-data" class="hasAnchor"><a href="#section-get-icd-data" class="anchor"></a>Get ICD data</h2>
           <p class="section-desc"><p>This is needed for explaining codes, and checking validity. The package includes data for the most recent ICD-9-CM and ICD-10-CM. Some editions, like WHO, cannot be distributed in the package due to copyright. Others are also available for download on demand, or in bulk using <code><a href="../reference/download_all_icd_data.html">download_all_icd_data()</a></code>.</p></p>
         </th>
       </tr>
       <tr>
+        
+        <td>
+          <p><code><a href="with_icd10cm_version.html">with_icd10cm_version()</a></code> </p>
+        </td>
+        <td><p>Evaluate code with a particular version of ICD-10-CM</p></td>
+      </tr><tr>
         
         <td>
           <p><code><a href="get_icd10be2014.html">get_icd10be2014</a></code> </p>
@@ -573,6 +671,12 @@
       </tr><tr>
         
         <td>
+          <p><code><a href="get_cim10fr2019.html">get_cim10fr2019()</a></code> </p>
+        </td>
+        <td><p>Localised synonym for <code>get_icd10fr2019</code>, with French column names</p></td>
+      </tr><tr>
+        
+        <td>
           <p><code><a href="get_icd10who2008fr.html">get_icd10who2008fr</a></code> </p>
         </td>
         <td><p>2008 WHO ICD-10 data in French</p></td>
@@ -599,22 +703,34 @@ three-digit codes.</p></td>
     </tbody><tbody>
       <tr>
         <th colspan="2">
-          <h2 id="section-sample-data" class="hasAnchor"><a href="#section-sample-data" class="anchor"></a>Sample data</h2>
+          <h2 id="section-other" class="hasAnchor"><a href="#section-other" class="anchor"></a>Other</h2>
           <p class="section-desc"></p>
         </th>
       </tr>
       <tr>
         
         <td>
-          <p><code><a href="vermont_dx.html">vermont_dx</a></code> </p>
+          <p><code><a href="sort_icd.html">sort_icd()</a></code> <code><a href="sort_icd.html">sort(<i>&lt;icd10&gt;</i>)</a></code> <code><a href="sort_icd.html">sort(<i>&lt;icd10cm&gt;</i>)</a></code> <code><a href="sort_icd.html">sort(<i>&lt;icd10be&gt;</i>)</a></code> <code><a href="sort_icd.html">sort(<i>&lt;icd9&gt;</i>)</a></code> <code><a href="sort_icd.html">order.icd9()</a></code> <code><a href="sort_icd.html">order.icd10cm()</a></code> <code><a href="sort_icd.html">order.icd10be()</a></code> </p>
         </td>
-        <td><p>Hospital discharge data from Vermont</p></td>
+        <td><p>Sort or order ICD-9 or ICD-10 codes according to published sequence</p></td>
       </tr><tr>
         
         <td>
-          <p><code><a href="uranium_pathology.html">uranium_pathology</a></code> </p>
+          <p><code><a href="plot_comorbid.html">plot_comorbid()</a></code> <code><a href="plot_comorbid.html">plot_comorbid_results()</a></code> </p>
         </td>
-        <td><p>United States Transuranium &amp; Uranium Registries</p></td>
+        <td><p>Basic ordered bar plot showing counts of each comorbidity</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="poa_choices.html">poa_choices</a></code> </p>
+        </td>
+        <td><p>Present-on-admission flags</p></td>
+      </tr><tr>
+        
+        <td>
+          <p><code><a href="print.icd9.html">print(<i>&lt;icd9&gt;</i>)</a></code> <code><a href="print.icd9.html">print(<i>&lt;icd10&gt;</i>)</a></code> </p>
+        </td>
+        <td><p>Print ICD codes and comorbidity maps cleanly</p></td>
       </tr>
     </tbody>
     </table>
@@ -630,8 +746,9 @@ three-digit codes.</p></td>
       <li><a href="#section-metadata">Metadata</a></li>
       <li><a href="#section-manipulation">Manipulation</a></li>
       <li><a href="#section-international-and-historic-icd-editions">International and historic ICD editions</a></li>
+      <li><a href="#section-icd-data-included-in-the-package">ICD data included in the package</a></li>
       <li><a href="#section-get-icd-data">Get ICD data</a></li>
-      <li><a href="#section-sample-data">Sample data</a></li>
+      <li><a href="#section-other">Other</a></li>
     </ul>
   </div>
 </div>
