@@ -52,6 +52,7 @@
 ^src\/icd.*\.dll$
 ^src\/icd.*\.so$
 ^src\/test-cpp.*$
+^src\/test-runner.*$
 ^tools$
 ^vignettes\/efficiency-prebuilt\.(Rmd|tex)$
 ^vignettes\/country-lang-vers-prebuilt\.(Rmd|tex)$

@@ -1,5 +1,6 @@
 ---
 title: "Working with World Health Organization ICD codes and national editions, and different languages"
+author: Jack O. Wasey
 output: rmarkdown::pdf_document
 ---
 
