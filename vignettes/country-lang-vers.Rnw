@@ -4,5 +4,5 @@
 %\VignetteEncoding{UTF-8}
 %\VignetteKeyword{World Health Organization, World Health Organisation, WHO, OMS, Organisation Mondiale de la Santé, ICD-9, ICD-10, ICD-11, France, Belgium, Belgique}
 \begin{document}
-\includepdf[pages=-, fitpaper=true]{country-lang-vers-prebuilt.pdf}
+\includepdf[pages=-, fitpaper=true]{prebuilt/country-lang-vers-prebuilt.pdf}
 \end{document}

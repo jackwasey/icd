@@ -172,7 +172,7 @@ explain_table.icd10cm <- function(x,
   )
 }
 
-#' @describeIn explain_table explain character vector of ICD1-10-CM codes
+#' @describeIn explain_table explain character vector of ICD-10-WHO codes
 #' @export
 #' @keywords internal
 explain_table.icd10who <- function(x,

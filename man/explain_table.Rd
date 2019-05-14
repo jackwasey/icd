@@ -83,7 +83,7 @@ guessing ICD version
 
 \item \code{icd10cm}: explain character vector of ICD1-10-CM codes
 
-\item \code{icd10who}: explain character vector of ICD1-10-CM codes
+\item \code{icd10who}: explain character vector of ICD-10-WHO codes
 }}
 
 \author{

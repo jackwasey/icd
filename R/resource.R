@@ -626,12 +626,3 @@ get_icd_data_dir <- function(must_work = TRUE) {
   FUN.VALUE = logical(1)
   )
 }
-
-#' @title ICD-10-CM 2018
-#' @seealso \code{\link{icd10cm2019}}
-#' @docType data
-#' @keywords datasets
-#' @export
-get_icd10cm2019 <- function() {
-  icd10cm2019
-}

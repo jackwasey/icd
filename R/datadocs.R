@@ -187,6 +187,14 @@ NULL
 #' @export
 NULL
 
+#' @name get_icd10cm2019
+#' @title ICD-10-CM 2019
+#' @seealso \code{\link{icd10cm2019}}
+#' @docType data
+#' @keywords datasets
+#' @export
+NULL
+
 #' 2016 WHO ICD-10 data
 #'
 #' This data must be downloaded on a per-user basis. A prompt is given when the

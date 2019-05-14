@@ -73,7 +73,7 @@ pkgdown:
 # pandoc 2.something dependency which r-hub, CRAN etc do not have April 2019.
 # rmarkdown::render("vignettes/efficiency.Rmd", output_dir = "inst/doc")
 # # or, to juggle pkgbuild::build trashing inst/doc..., using .install_extras
-# rmarkdown::render("vignettes/efficiency-prebuilt.Rmd")
+# rmarkdown::render("vignettes/efficiency-prebuilt.Rmd", output_dir = "vignettes/prebuilt")
 ```
 
 ```{r setup, echo=FALSE, message=FALSE, warning=FALSE, cache=FALSE}
