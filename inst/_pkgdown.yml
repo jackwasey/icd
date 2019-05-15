@@ -1,6 +1,6 @@
 url: https://jackwasey.github.io/icd/
 
-title: Comorbidity calculations and tools for ICD codes
+title: "icd: Comorbidities and tools for ICD codes"
 desc: >
     Calculate comorbidities, medical risk scores, and
     work very quickly and precisely with ICD-9 and ICD-10 codes. This
