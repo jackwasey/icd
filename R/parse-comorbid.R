@@ -35,12 +35,13 @@ ahrq_order_all <- c(
 #' get the SAS code from AHRQ
 #'
 #' Get the SAS code from AHRQ and save in raw data directory, if not already
-#' there.
+#' there. Do keep things like this in data-raw, not cache dir.
 #' @keywords internal
 #' @noRd
 icd9_fetch_ahrq_sas <- function() {
   .download_to_data_raw(
-    url = paste0(.ahrq_url_base, "comorbidity/comformat2012-2013.txt")
+    url = paste0(.ahrq_url_base, "comorbidity/comformat2012-2013.txt"),
+    data_raw_path = .get_raw_data_path()
   )
 }
 

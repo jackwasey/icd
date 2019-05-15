@@ -29,7 +29,7 @@
 #' from 2012 RTF
 #'
 #' \code{save_pkg_majors} will save the majors it finds in the package data, the
-#' rest is cached as resource data.
+#' rest is cached.
 #' @param year from 1996 to 2012 (this is what CDC has published). Only 2012
 #'   implemented thus far
 #' @param save_pkg_majors logical
@@ -363,7 +363,7 @@
   # which are just listed twice in RTF. Also 199 (with punctuation difference),
   # 209 and 239.
   icd9_majors <- icd9_majors[!duplicated(icd9_majors)]
-  .save_in_resource_dir("icd9_majors", x = icd9_majors)
+  .save_in_cache("icd9_majors", x = icd9_majors)
   if (save_pkg_majors) .save_in_data_dir("icd9_majors")
   invisible(icd9_majors)
 }

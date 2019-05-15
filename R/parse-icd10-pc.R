@@ -33,6 +33,6 @@
   out$long_desc <- trimws(as.character(out$long_desc))
   out <- out[order(out$code), ]
   var_name <- paste0("icd10cm", year, "_pc")
-  .save_in_resource_dir(var_name = var_name, x = out)
+  .save_in_cache(var_name = var_name, x = out)
   invisible(out)
 }

@@ -1,10 +1,12 @@
+# for enum-like behavior
 .opt_names <- c(
-  "verbose",
-  "resource",
-  "icd10cm_active_year",
-  "offline",
-  "test_slow",
-  "interact"
+  verbose = "verbose",
+  cache = "cache",
+  icd10cm_active_year = "icd10cm_active_year",
+  offline = "offline",
+  test_slow = "test_slow",
+  interact = "interact",
+  who_url = "who_url"
 )
 
 .opt_full_name <- function(opt_name) {
@@ -30,6 +32,8 @@
 
 #' Set initial options for the package
 #'
+#' These are subject to change, and intended for package internals only.
+#'
 #' \code{icd.offline} - default is \code{TRUE}, unless the system
 #' environment vairable \code{ICD_DATA_OFFLINE} is \sQuote{false} or
 #' \sQuote{no}. This will only ever be turned on with explicit user
@@ -40,8 +44,9 @@
 #' given by \code{base::interactive()}, but can be overridden, e.g. to simulate
 #' non-interactive testing in an interactive environment.
 #'
-#' \code{icd.resource} - default is ~/.icd.data but won't write unless user
-#' gives permission, e.g., using \code{\link{set_icd_data_dir}}
+#' \code{icd.cache} - default is platform dependent, e.g.
+#' \code{~/.local/share/icd} on Linux, but won't write unless user gives
+#' permission, e.g., using \code{\link{set_icd_data_dir}}
 #'
 #' \code{icd.absent_action} - what to do if data is missing, \sQuote{stop},
 #' \sQuote{warning}, \sQuote{message"}, or \sQuote{silent}.
@@ -66,6 +71,7 @@ NULL
 # only get options we know about, to avoid typo giving a NULL
 .get_opt <- function(x, default = NULL) {
   o <- as.character(substitute(x))
+  stopifnot(x %in% .opt_names)
   getOption(.opt_full_name(o), default = default)
 }
 
@@ -236,11 +242,12 @@ with_absent_action <- function(absent_action = c(
 #' set_icd_data_dir()
 #' # or choose another directory:
 #' # set_icd_data_dir("/var/cache/icd.data")
+#' # If you choose a custom directory, you may wish to add this command to your .Rprofile .
 #' # then you may use:
 #' # download_all_icd_data()
 #' # or let 'icd' download data when needed.
 #' }
-#' @return The path to the resource directory, or \code{NULL} if it could not be
+#' @return The path to the cache directory, or \code{NULL} if it could not be
 #'   found.
 #' @return Invisibly returns the data path which was set, or NULL if not done.
 #' @seealso \code{\link{download_all_icd_data}}
@@ -251,12 +258,12 @@ set_icd_data_dir <- function(path = NULL) {
     .msg("Using the icd data cache set by argument from user: ", path)
   }
   if (is.null(path)) {
-    path <- .get_opt("resource", default = NULL)
-    .msg("Trying the icd data cache set by option(\"icd.data.resource\"): ", path) # nolint
+    path <- .get_opt("cache", default = NULL)
+    .msg("Trying the icd data cache set by option(\"icd.cache\"): ", path) # nolint
   }
   if (is.null(path)) {
-    path <- Sys.getenv("ICD_DATA_RESOURCE", unset = NA)
-    .msg("Trying the icd data cache set by the environment variable ICD_DATA_RESOURCE: ", path) # nolint
+    path <- Sys.getenv("ICD_DATA_CACHE", unset = NA)
+    .msg("Trying the icd data cache set by the environment variable ICD_DATA_CACHE: ", path) # nolint
     if (is.na(path)) path <- NULL
   }
   if (is.null(path)) {
@@ -273,7 +280,7 @@ set_icd_data_dir <- function(path = NULL) {
     created <- dir.create(path, showWarnings = TRUE)
     if (!created) stop("Unable to create directory at: ", path)
   }
-  .set_opt("resource" = path)
+  .set_opt("cache" = path)
   if (!.all_cached() && "download_all_icd_data" %nin% names(sys.calls())) {
     message(
       "Not all available data is currently downloaded. ",
@@ -297,10 +304,7 @@ set_icd_data_dir <- function(path = NULL) {
 #' @seealso \code{\link{set_icd_data_dir}}
 #' @examples
 #' \dontrun{
-#' set_icd_data_dir()
-#' # or configure a directory to us:
-#' # .set_opt("resource" = "/tmp/icd")
-#' # or
+#' # set_icd_data_dir()
 #' # set_icd_data_dir("/tmp/icd")
 #'
 #' # The following would download, and make all the known ICD data available

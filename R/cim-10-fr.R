@@ -69,7 +69,7 @@
     factor_sorted_levels(as.icd10fr(icd10fr2019$three_digit))
   stopifnot(all(is_valid.icd10fr(icd10fr2019$code)))
   stopifnot(all(is_valid.icd10fr(icd10fr2019$three_digit)))
-  .save_in_resource_dir(icd10fr2019)
+  .save_in_cache(icd10fr2019)
   invisible(icd10fr2019)
 }
 
@@ -86,7 +86,7 @@
     flat_hier = get_icd10who2008fr(),
     field = "chapter"
   )
-  .save_in_resource_dir(icd10_chapters_fr)
+  .save_in_cache(icd10_chapters_fr)
   invisible(icd10_chapters_fr)
 }
 

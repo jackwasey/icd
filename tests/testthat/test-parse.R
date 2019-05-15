@@ -149,7 +149,7 @@ skip_slow()
 # if we are in offline mode, and the data is not available, we can't proceed.
 # test whether the RTF is available offline. N.b. we skip in a 'context' so all
 # subsequent tests are skipped.
-skip_no_icd_data_resource()
+skip_no_icd_data_cache()
 if (rtf_year_ok(test_year)) {
   rtf_dat <- .icd9cm_sources[.icd9cm_sources$f_year == test_year, ]
   f_info_short <- .unzip_to_data_raw(

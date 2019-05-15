@@ -94,7 +94,7 @@
   invisible(x)
 }
 
-.save_in_resource_dir <- function(var_name,
+.save_in_cache <- function(var_name,
                                   x = NULL,
                                   envir = parent.frame()) {
   if (!is.character(var_name)) {

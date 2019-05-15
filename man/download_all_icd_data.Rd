@@ -17,10 +17,7 @@ will download data when needed.
 }
 \examples{
 \dontrun{
-set_icd_data_dir()
-# or configure a directory to us:
-# .set_opt("resource" = "/tmp/icd")
-# or
+# set_icd_data_dir()
 # set_icd_data_dir("/tmp/icd")
 
 # The following would download, and make all the known ICD data available

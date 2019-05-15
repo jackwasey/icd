@@ -2,6 +2,8 @@
 set -euo pipefail
 IFS=$'\n\t'
 
+#TODO: use rsync --delete
+
 set -x
 
 ICD_HOME=${ICD_HOME:-"$HOME/icd"}

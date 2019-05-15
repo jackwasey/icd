@@ -152,7 +152,7 @@ test_that("ICD-9-CM billable codes package data is recreated", {
 })
 
 test_that("explain icd9GetChapters simple input", {
-  skip_no_icd_data_resource()
+  skip_no_icd_data_cache()
   skip_on_no_rtf("2014")
   chaps1 <- .icd9_get_chapters(c("410", "411", "412"), short_code = TRUE)
   expect_equal(nrow(chaps1), 3)

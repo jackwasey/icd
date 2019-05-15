@@ -275,7 +275,7 @@
   rownames(dat) <- NULL
   var_name <- paste0("icd10who", year, ifelse(lang == "en", "", lang))
   dat$code <- as.icd10who(dat$code)
-  .save_in_resource_dir(var_name, x = dat)
+  .save_in_cache(var_name, x = dat)
   invisible(dat)
 }
 

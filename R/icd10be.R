@@ -118,8 +118,8 @@
   class(icd10be2017_pc$code) <- c("icd10be_pc", "character")
   row.names(icd10be2017) <- NULL
   row.names(icd10be2017_pc) <- NULL
-  .save_in_resource_dir(icd10be2017)
-  .save_in_resource_dir(icd10be2017_pc)
+  .save_in_cache(icd10be2017)
+  .save_in_cache(icd10be2017_pc)
   if (dx) {
     invisible(icd10be2017)
   } else {
@@ -197,8 +197,8 @@
   class(icd10be2014_pc$code) <- c("icd10be_pc", "character")
   row.names(icd10be2014) <- NULL
   row.names(icd10be2014_pc) <- NULL
-  .save_in_resource_dir(icd10be2014)
-  .save_in_resource_dir(icd10be2014_pc)
+  .save_in_cache(icd10be2014)
+  .save_in_cache(icd10be2014_pc)
   if (dx) {
     invisible(icd10be2014)
   } else {

@@ -118,8 +118,8 @@
   .msg("Correcting order of ", nrow(dat), " codes")
   dat <- dat[order.icd10cm(dat$code), ]
   row.names(dat) <- NULL
-  .msg("Saving in resource dir")
-  .save_in_resource_dir(
+  .msg("Saving in cache dir")
+  .save_in_cache(
     var_name = .get_icd10cm_name(year = year, dx = dx),
     x = dat
   )

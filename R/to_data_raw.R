@@ -64,12 +64,20 @@
   list(file_path = file_path, save_name = save_name)
 }
 
-.download_to_data_raw <-
+.download_to_data_raw <- function(...) {
+  .download(..., data_raw_path = .get_raw_data_path())
+}
+
+.download_to_data_cache <- function(...) {
+  .download(..., data_raw_path = get_icd_data_dir())
+}
+
+.download <-
   function(url,
-             file_name = NULL,
-             data_raw_path = get_icd_data_dir(),
-             dl_msg = NULL,
-             ...) {
+           data_raw_path,
+           file_name = NULL,
+           dl_msg = NULL,
+           ...) {
     if (is.null(file_name)) {
       file_name <- regmatches(url, regexpr("[^/]*$", url))
     }
@@ -77,7 +85,7 @@
     stopifnot(is.character(file_name), length(file_name) == 1)
     if (is.null(data_raw_path) || !dir.exists(data_raw_path)) {
       .absent_action_switch(
-        "icd data resource directory not defined or created."
+        "icd cache directory not defined or created."
       )
     }
     save_path <- file.path(

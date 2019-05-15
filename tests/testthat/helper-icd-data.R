@@ -15,21 +15,21 @@ rtf_year_ok <- function(year, ...) {
   )
 }
 
-have_icd_data_resource <- function() {
-  opt_ok <- !is.null(.get_opt("resource", default = NULL))
+have_cache <- function() {
+  opt_ok <- !is.null(.get_opt("cache", default = NULL))
   if (!opt_ok && dir.exists(.default_icd_data_dir())) {
     if (.verbose()) {
-      message("have_icd_data_resource() is setting data opt to default")
+      message("have_cache() is setting data opt to default")
     }
-    .set_opt("resource" = .default_icd_data_dir())
+    .set_opt("cache" = .default_icd_data_dir())
     return(TRUE)
   }
   opt_ok
 }
 
-skip_no_icd_data_resource <- function() {
-  if (!have_icd_data_resource()) {
-    skip("Skipping - no icd data resource option defined.")
+skip_no_icd_data_cache <- function() {
+  if (!have_cache()) {
+    skip("Skipping - no cache option defined.")
   }
 }
 
@@ -40,7 +40,7 @@ skip_if_offline <- function() {
 }
 
 skip_on_no_rtf <- function(test_year) {
-  if (!have_icd_data_resource() || !rtf_year_ok(test_year)) {
+  if (!have_cache() || !rtf_year_ok(test_year)) {
     testthat::skip(paste(
       test_year,
       "ICD-9-CM codes unavailable offline for testsing"
@@ -49,7 +49,7 @@ skip_on_no_rtf <- function(test_year) {
 }
 
 skip_flat_icd9_avail <- function(ver, year) {
-  skip_no_icd_data_resource()
+  skip_no_icd_data_cache()
   if (missing(ver)) {
     if (missing(year)) stop("specify ver or year")
     ver <- .icd9cm_sources[.icd9cm_sources$year == year, "version"]
@@ -84,7 +84,7 @@ skip_icd10cm_flat_avail <- function(year, dx = TRUE) {
 }
 
 skip_icd10cm_xml_avail <- function() {
-  skip_no_icd_data_resource()
+  skip_no_icd_data_cache()
   msg <- "skipping test because XML file ICD-10-CM source not available"
   if (is.null(
     with_absent_action(

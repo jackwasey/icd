@@ -17,7 +17,7 @@ be cached. It will be created if it doesn't exist.}
 with an error if a usable icd data directory cannot be found or set.}
 }
 \value{
-The path to the resource directory, or \code{NULL} if it could not be
+The path to the cache directory, or \code{NULL} if it could not be
   found.
 
 Invisibly returns the data path which was set, or NULL if not done.
@@ -37,6 +37,7 @@ check it exists and is writable.
 set_icd_data_dir()
 # or choose another directory:
 # set_icd_data_dir("/var/cache/icd.data")
+# If you choose a custom directory, you may wish to add this command to your .Rprofile .
 # then you may use:
 # download_all_icd_data()
 # or let 'icd' download data when needed.
