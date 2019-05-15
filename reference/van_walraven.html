@@ -247,7 +247,7 @@ and ICD-9 codes</p></li>
   <span class='kw'>icd9</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"412.93"</span>, <span class='st'>"441"</span>, <span class='st'>"042"</span>)
 )
 <span class='fu'>van_walraven</span>(<span class='no'>mydf</span>)</div><div class='output co'>#&gt; a b c 
-#&gt; 0 2 0 </div><div class='input'><span class='co'># or calculate comorbodities first:</span>
+#&gt; 0 2 0 </div><div class='input'><span class='co'># or calculate comorbidities first:</span>
 <span class='no'>cmb</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='comorbid.html'>icd9_comorbid_quan_elix</a></span>(<span class='no'>mydf</span>, <span class='kw'>short_code</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>hierarchy</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
 <span class='no'>vwr</span> <span class='kw'>&lt;-</span> <span class='fu'>van_walraven_from_comorbid</span>(<span class='no'>cmb</span>)
 <span class='fu'><a href='https://rdrr.io/r/base/stopifnot.html'>stopifnot</a></span>(<span class='fu'><a href='https://rdrr.io/r/base/identical.html'>identical</a></span>(<span class='fu'>van_walraven</span>(<span class='no'>mydf</span>), <span class='no'>vwr</span>))
