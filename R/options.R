@@ -1,5 +1,6 @@
 # for enum-like behavior
 .opt_names <- c(
+  absent_action = "absent_action",
   verbose = "verbose",
   cache = "cache",
   icd10cm_active_year = "icd10cm_active_year",
