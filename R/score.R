@@ -309,7 +309,7 @@ count_codes_wide <- function(x,
 #'   icd9 = c("412.93", "441", "042")
 #' )
 #' van_walraven(mydf)
-#' # or calculate comorbodities first:
+#' # or calculate comorbidities first:
 #' cmb <- icd9_comorbid_quan_elix(mydf, short_code = FALSE, hierarchy = TRUE)
 #' vwr <- van_walraven_from_comorbid(cmb)
 #' stopifnot(identical(van_walraven(mydf), vwr))

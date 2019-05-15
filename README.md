@@ -141,7 +141,7 @@ plot_comorbid(uranium_pathology)
 
 ![](man/figures/README-example-1.png)<!-- -->
 
-## Comorbodities example: make “Table 1” summary data
+## Comorbidities example: make “Table 1” summary data
 
 A common requirement for medical research involving patients is
 determining new or existing comorbidities. This is often reported in

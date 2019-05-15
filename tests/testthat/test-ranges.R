@@ -327,7 +327,7 @@ test_that("range doesn't include parent", {
   expect_true("390" %in% ("389.9" %i9d% "391.1"))
   # but not if we are looking at all possible codes. This is a subtle strange
   # distinction. It is primarily of importance when expanding codes describing
-  # ICD to comorbodity mappings. We might want to either include all possible
+  # ICD to comorbidity mappings. We might want to either include all possible
   # sub-codes, even if they are not (yet, or anymore) 'real'.
   expect_false("390" %in% ("389.9" %i9da% "390.1"))
   # and if range definitely covers the higher level code, re-affirm it is still
@@ -371,7 +371,7 @@ test_that("ranges can include ambiguous parents, optionally", {
   expect_true("390" %in% ("389.9" %i9d% "391.1"))
   # but not if we are looking at all possible codes. This is a subtle strange
   # distinction. It is primarily of importance when expanding codes describing
-  # ICD to comorbodity mappings. We might want to either include all possible
+  # ICD to comorbidity mappings. We might want to either include all possible
   # sub-codes, even if they are not (yet, or anymore) 'real'.
   expect_false("390" %in% ("389.9" %i9da% "390.1"))
   # and if range definitely covers the higher level code, re-affirm it is still

@@ -106,7 +106,7 @@ charlson(patient_data)
 plot_comorbid(uranium_pathology)
 ```
 
-## Comorbodities example: make "Table 1" summary data
+## Comorbidities example: make "Table 1" summary data
 
 A common requirement for medical research involving patients is determining new or existing comorbidities. This is often reported in *Table 1* of research papers to demonstrate the similarity or differences of groups of patients. This package is focussed on fast and accurate generation of this comorbidity information from raw lists of ICD-9 and ICD-10 codes.
 

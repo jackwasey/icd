@@ -114,8 +114,8 @@ The AHRQ publishes an annually updated categorization of ICD-10-CM procedure cod
 ```{r setuppcs, echo = FALSE}
 n <- 10
 nm <- "code"
-pcs_sample <- sample(unname(unlist(icd10_map_ahrq_pcs)), n)
 set.seed(1441)
+pcs_sample <- sample(unname(unlist(icd10_map_ahrq_pcs)), n)
 pts <- data.frame(id = sample(LETTERS, n),
                   pc = pcs_sample)
 res <- icd10_comorbid(pts,
