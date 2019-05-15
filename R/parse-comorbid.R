@@ -40,8 +40,7 @@ ahrq_order_all <- c(
 #' @noRd
 icd9_fetch_ahrq_sas <- function() {
   .download_to_data_raw(
-    url = paste0(.ahrq_url_base, "comorbidity/comformat2012-2013.txt"),
-    data_raw_path = .get_raw_data_path()
+    url = paste0(.ahrq_url_base, "comorbidity/comformat2012-2013.txt")
   )
 }
 

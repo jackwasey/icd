@@ -3,16 +3,10 @@ context("build icd9 maps")
 skip_slow("Skipping slow re-building of ICD-9 comorbidity maps (quan)")
 
 test_that("ahrq icd9 map recreated", {
-  # skip this test if the file is not already in data-raw
-  if (with_offline(
-    TRUE,
-    with_absent_action(
-      "silent",
-      is.null(icd9_fetch_ahrq_sas())
-    )
-  )) {
-    skip("comformat2012-2013.txt must be downloaded with icd9_fetch_ahrq_sas()")
-  }
+  skip_no_icd_data_raw(
+    fun = icd9_fetch_ahrq_sas,
+    msg = "comformat2012-2013 must be downloaded with icd9_fetch_ahrq_sas()"
+  )
   # same but from source data. Should be absolutely identical.
   expect_identical(
     result <- icd9_parse_ahrq_sas(save_pkg_data = FALSE), icd9_map_ahrq
@@ -23,9 +17,10 @@ test_that("ahrq icd9 map recreated", {
 })
 
 test_that("Quan Charlson icd9 map generated = saved", {
-  if (is.null(.dl_icd9_quan_deyo_sas())) {
-    skip("ICD9_E_Charlson.sas must be downloaded with .dl_icd9_quan_deyo_sas")
-  }
+  skip_no_icd_data_raw(
+    .dl_icd9_quan_deyo_sas,
+    "ICD9_E_Charlson.sas must be downloaded with .dl_icd9_quan_deyo_sas"
+  )
   expect_equivalent(
     icd9_map_quan_deyo, icd9_parse_quan_deyo_sas(save_pkg_data = FALSE)
   )

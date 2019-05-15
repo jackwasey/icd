@@ -16,6 +16,10 @@ ${ICD_HOME:-$HOME/rprojects/icd}/tools/build.sh
 # for all environment variable options see here:
 # https://cran.r-project.org/doc/manuals/r-release/R-ints.html#Tools
 # R_MAKEVARS_USER="$HOME/.R/Makevars.mac.quick" \
+
+# could be more specific with compilation flag check using, e.g. on ubuntu/debian:
+# _R_CHECK_COMPILATION_FLAGS_KNOWN_=-Wformat -Werror=format-security -Wdate-time
+
 MAKEFLAGS=-j$(getconf _NPROCESSORS_ONLN) \
   _R_CHECK_ALL_NON_ISO_C_=TRUE \
   _R_CHECK_ALWAYS_LOG_VIGNETTE_OUTPUT_=TRUE \

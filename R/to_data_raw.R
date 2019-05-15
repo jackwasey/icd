@@ -74,10 +74,10 @@
 
 .download <-
   function(url,
-           data_raw_path,
-           file_name = NULL,
-           dl_msg = NULL,
-           ...) {
+             data_raw_path,
+             file_name = NULL,
+             dl_msg = NULL,
+             ...) {
     if (is.null(file_name)) {
       file_name <- regmatches(url, regexpr("[^/]*$", url))
     }

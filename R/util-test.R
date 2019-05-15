@@ -229,12 +229,6 @@ expect_character <- function(x, ...) {
   testthat::expect_true(is.character(x))
 }
 
-with_offline <- function(offline, code) {
-  old <- options("icd.data.offline" = offline)
-  on.exit(options(old), add = TRUE)
-  force(code)
-}
-
 with_interact <- function(interact, code) {
   old <- options("icd.data.interact" = interact)
   on.exit(options(old), add = TRUE)
@@ -245,27 +239,4 @@ with_absent_action <- function(absent_action, code) {
   old <- options("icd.data.absent_action" = absent_action)
   on.exit(options(old), add = TRUE)
   force(code)
-}
-
-# workaround so icd.data 1.0 will not cause CRAN or user errors
-skip_missing_icd10who <- function() {
-  if (!.exists_anywhere("icd10who2016")) {
-    testthat::skip("No WHO ICD-10 2016 English data")
-  }
-  if (!.exists_anywhere("icd10who2008fr")) {
-    testthat::skip("No WHO ICD-10 2008 French data")
-  }
-}
-
-skip_missing_icd10fr <- function() {
-  if (!.exists_anywhere("icd10fr2019")) {
-    testthat::skip("No ICD-10-FR 2019 French data")
-  }
-}
-
-skip_slow <- function(msg = "Skipping slow test") {
-  testthat::skip_on_cran()
-  if (!.get_opt("test_slow", default = FALSE)) {
-    testthat::skip(msg)
-  }
 }

@@ -1,5 +1,21 @@
 # !diagnostics suppress=year
 # (apparently non-functional attempt to suppress incorrect rstudio diagnostic)
+
+
+skip_no_icd_data_raw <- function(
+                                 fun,
+                                 msg = paste0(fun, "() did not find existing raw data.")) {
+  if (with_offline(
+    TRUE,
+    with_absent_action(
+      "silent",
+      with_interact(FALSE, is.null(fun()))
+    )
+  )) {
+    skip(msg)
+  }
+}
+
 rtf_year_ok <- function(year, ...) {
   !is.null(
     with_absent_action(
@@ -85,22 +101,10 @@ skip_icd10cm_flat_avail <- function(year, dx = TRUE) {
 
 skip_icd10cm_xml_avail <- function() {
   skip_no_icd_data_cache()
-  msg <- "skipping test because XML file ICD-10-CM source not available"
-  if (is.null(
-    with_absent_action(
-      absent_action = "silent",
-      with_offline(
-        offline = TRUE,
-        with_interact(
-          interact = FALSE,
-          .dl_icd10cm_xml()
-        )
-      )
-    )
-  )) {
-    testthat::skip(msg)
-  }
-  invisible()
+  skip_no_icd_data_raw(
+    .dl_icd10cm_xml,
+    "skipping test because XML file ICD-10-CM source not available"
+  )
 }
 
 skip_flat_icd9_avail_all <- function() {
@@ -325,6 +329,7 @@ expect_equal_no_icd <- function(object, expected, ...) {
 #' removed in the future.
 #' @param ver Version of WHO ICD-10 to use, currently a four-digit year
 #' @param lang Language, currently either 'en' or 'fr'
+#' @noRd
 skip_missing_icd10who <- function(ver = "2016", lang = "en") {
   if (ver == "2016" && lang == "en") {
     if (!.exists_in_cache("icd10who2016")) {
@@ -342,5 +347,32 @@ skip_missing_icd10who <- function(ver = "2016", lang = "en") {
 skip_missing_dat <- function(var_name) {
   if (!.exists_in_cache(var_name, USE.NAMES = FALSE)) {
     skip(paste(var_name, "not available"))
+  }
+}
+
+skip_missing_icd10fr <- function() {
+  if (!.exists_anywhere("icd10fr2019")) {
+    testthat::skip("No ICD-10-FR 2019 French data")
+  }
+}
+
+skip_slow <- function(msg = "Skipping slow test") {
+  testthat::skip_on_cran()
+  if (!.get_opt("test_slow", default = FALSE)) {
+    testthat::skip(msg)
+  }
+}
+
+skip_no_icd_data_raw <- function(
+                                 fun,
+                                 msg = paste0(fun, "() did not find existing raw data.")) {
+  if (with_offline(
+    TRUE,
+    with_absent_action(
+      "silent",
+      is.null(fun())
+    )
+  )) {
+    skip(msg)
   }
 }

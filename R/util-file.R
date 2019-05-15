@@ -95,8 +95,8 @@
 }
 
 .save_in_cache <- function(var_name,
-                                  x = NULL,
-                                  envir = parent.frame()) {
+                           x = NULL,
+                           envir = parent.frame()) {
   if (!is.character(var_name)) {
     var_name <- as.character(substitute(var_name))
   }
