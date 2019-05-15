@@ -45,11 +45,14 @@ icd9_fetch_ahrq_sas <- function() {
   )
 }
 
-icd10_fetch_ahrq_sas <- function(ver = "2016") {
+icd10_fetch_ahrq_sas <- function(ver = "2018") {
+  if (!ver %in% c("2016","2017","2018")) {
+    stop(ver," not currently available")
+  }
   .download_to_data_raw(
-    url = paste0(.ahrq_url_base, "comorbidityicd10/comformat_icd10cm_2016.txt"),
-    file_name = .get_versioned_raw_file_name("ahrq-comformat_icd10cm_2016.txt",
-      ver = "2016"
+    url = paste0(.ahrq_url_base, "comorbidityicd10/comformat_icd10cm_",ver,".txt"),
+    file_name = .get_versioned_raw_file_name(paste0("ahrq-comformat_icd10cm_",ver,".txt"),
+      ver = ver
     )
   )
 }
@@ -139,10 +142,10 @@ icd9_parse_ahrq_sas <- function(save_pkg_data = FALSE) {
 
 # This is in some ways simpler than that ICD-9 equivalent because I make no
 # attempt to find all the child codes.
-icd10_parse_ahrq_sas <- function(save_pkg_data = FALSE,
+icd10_parse_ahrq_sas <- function(version = "2018", save_pkg_data = FALSE,
                                  offline = TRUE) {
   assert_flag(save_pkg_data)
-  ahrq_info <- icd10_fetch_ahrq_sas()
+  ahrq_info <- icd10_fetch_ahrq_sas(ver = version)
   ahrq_sas_lines <- readLines(ahrq_info$file_path, warn = FALSE)
   icd10_map_ahrq <- sas_format_extract_rcomfmt(ahrq_sas_lines)
   unun <- function(x) unname(unlist(x))
