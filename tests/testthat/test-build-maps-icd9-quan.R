@@ -4,8 +4,14 @@ skip_slow("Skipping slow re-building of ICD-9 comorbidity maps (quan)")
 
 test_that("ahrq icd9 map recreated", {
   # skip this test if the file is not already in data-raw
-  if (is.null(icd9_fetch_ahrq_sas())) {
-    skip("comformat2012-2013.txt must be downloaded with icd9_fetch_ahrq_sas")
+  if (with_offline(
+    TRUE,
+    with_absent_action(
+      "silent",
+      is.null(icd9_fetch_ahrq_sas())
+    )
+  )) {
+    skip("comformat2012-2013.txt must be downloaded with icd9_fetch_ahrq_sas()")
   }
   # same but from source data. Should be absolutely identical.
   expect_identical(
