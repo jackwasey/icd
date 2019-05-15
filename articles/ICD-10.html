@@ -6,7 +6,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ICD-10 comorbidities • Comorbidity calculations and tools for ICD-9 and ICD-10 codes</title>
-<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script><!-- Bootstrap --><link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.7/lux/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script><!-- Bootstrap --><link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.7/cosmos/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
@@ -215,12 +215,12 @@ along with icd. If not, see <http:#www.gnu.org/licenses/>.
 <a class="sourceLine" id="cb6-17" title="17"><span class="co"># see the first few rows and columns:</span></a>
 <a class="sourceLine" id="cb6-18" title="18">quan_comorbidities[<span class="dv">1</span><span class="op">:</span><span class="dv">6</span>, <span class="kw"><a href="https://rdrr.io/r/base/c.html">c</a></span>(<span class="dv">1</span>, <span class="dv">3</span><span class="op">:</span><span class="dv">9</span>)]</a>
 <a class="sourceLine" id="cb6-19" title="19"><span class="co">#&gt;   case Arrhythmia Valvular PHTN PVD HTN HTNcx Paralysis</span></a>
-<a class="sourceLine" id="cb6-20" title="20"><span class="co">#&gt; 1  233          1        1    0   1   0     0         0</span></a>
-<a class="sourceLine" id="cb6-21" title="21"><span class="co">#&gt; 2  363          0        0    0   1   0     1         0</span></a>
-<a class="sourceLine" id="cb6-22" title="22"><span class="co">#&gt; 3  205          0        0    0   0   0     0         0</span></a>
-<a class="sourceLine" id="cb6-23" title="23"><span class="co">#&gt; 4  445          0        0    1   0   0     0         0</span></a>
-<a class="sourceLine" id="cb6-24" title="24"><span class="co">#&gt; 5  719          0        0    0   1   0     1         0</span></a>
-<a class="sourceLine" id="cb6-25" title="25"><span class="co">#&gt; 6   52          0        0    0   0   1     1         0</span></a></code></pre></div>
+<a class="sourceLine" id="cb6-20" title="20"><span class="co">#&gt; 1   37          0        0    1   1   0     1         0</span></a>
+<a class="sourceLine" id="cb6-21" title="21"><span class="co">#&gt; 2  425          0        1    0   0   0     0         0</span></a>
+<a class="sourceLine" id="cb6-22" title="22"><span class="co">#&gt; 3   22          0        0    0   0   0     0         0</span></a>
+<a class="sourceLine" id="cb6-23" title="23"><span class="co">#&gt; 4  702          0        0    0   0   0     1         0</span></a>
+<a class="sourceLine" id="cb6-24" title="24"><span class="co">#&gt; 5  149          0        0    0   0   1     1         0</span></a>
+<a class="sourceLine" id="cb6-25" title="25"><span class="co">#&gt; 6   40          0        0    0   0   0     0         0</span></a></code></pre></div>
 <p>The ICD-10-CM mappings are recorded a bit differently from the ICD-9-CM mappings in this package. The ICD-9 mappings included all possible permutations of child codes. Since ICD-10 codes contain letters, and are seven characters long, this became impractical. Therefore, the current mappings include only codes for the most recent update of ICD-10-CM. The code which assigns comorbidities for ICD-10 therefore doesn’t rely on all the possible codes being listed in the mappings, so it will (more slowly) search for each possible parent of the given code, up to the three digit ‘major’ (e.g. if Cholera was in the comorbidity mapping, then <code>A0034212647</code> would eventually match <code>A00</code>)</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" title="1"><span class="co"># create trivial comorbidity map:</span></a>
 <a class="sourceLine" id="cb7-2" title="2">cholera_typhoid_map &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/list.html">list</a></span>(<span class="dt">cholera =</span> <span class="st">"A00"</span>, <span class="dt">typhoid =</span> <span class="st">"A01"</span>)</a>
