@@ -493,7 +493,7 @@ get_icd_data_dir <- function(must_work = TRUE) {
       )
     )
   }
-  options("icd.data.offline" = !ok)
+  .set_opt("offline" = !ok)
   if (!ok) .absent_action_switch("Unable to get permission to download data.")
   ok
 }

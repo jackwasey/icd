@@ -230,13 +230,13 @@ expect_character <- function(x, ...) {
 }
 
 with_interact <- function(interact, code) {
-  old <- options("icd.data.interact" = interact)
+  old <- .set_opt("interact" = interact)
   on.exit(options(old), add = TRUE)
   force(code)
 }
 
 with_absent_action <- function(absent_action, code) {
-  old <- options("icd.data.absent_action" = absent_action)
+  old <- .set_opt("absent_action" = absent_action)
   on.exit(options(old), add = TRUE)
   force(code)
 }
