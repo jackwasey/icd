@@ -1,0 +1,217 @@
+---
+title: "icd package"
+author: "ST Benjamin Chow"
+date: "03/05/2019"
+output: html_document
+---
+
+#Intro
+There are many illnesses and diseases known to man. How do the various stakeholders in the medical science industry classify the same illness? The illness will need to be coded in a standardized manner to aid in fair reimbursements and concise reporting of diseases. The International Classification of Diseases (ICD) provides this uniform coding system. The ICD [*"is the standard diagnostic tool for epidemiology, health management and clinical purposes."*](http://www.icd-code.org/about). *(There is a more detailed coding system known as the Systematized Nomenclature of Medicine — Clinical Terms (SNOMED-CT) but it will not be covered in this post.)*
+
+The ICD has currently 11 versions.  At this point of time, countries and researchers are using either ICD-9 or ICD-10, with those using ICD-9 gradually transiting to ICD-10. ICD-11 has yet to be adopted in clinical practice.  
+
+R has a package, [`icd`](https://jackwasey.github.io/icd/), which deals with both ICD-9 and ICD-10. The package also includes built in functions to conduct common calculations involving ICD such as Hierarchical Condition Codes and Charlson and Van Walraven score. We will use the `icd` package to help explain ICD-9 and ICD-10 and do some analysis on an external dataset. 
+
+The ICD is a hierarchical based classification. There is a total of 4 levels:  
+
+1. `chapter`
+2. `sub-chapter`
+3.  `major`. Each `major` has a `3_digital` identifier with a character length of three
+4. descriptor, `long_desc`. Each descriptor has an identifier `code` with a character length from three to five.
+
+```{r message=F, warning=F}
+library(tidyverse)
+library(icd)
+theme_set(theme_light())
+
+# Level 1-3 
+icd9cm_hierarchy  %>% select(chapter, sub_chapter, major, three_digit ) %>% head(10)
+```
+
+```{r}
+# Level 3-4 
+icd9cm_hierarchy  %>% select(major, three_digit, long_desc, code) %>% head(10)
+```
+
+We can see the subordinate `code`s of the `three_digit` identifier with the function, `children`. 
+```{r}
+children("001")
+```
+
+Beware that in some instances the first three characters of `code`s are not the same as the `three_digit` identifiers.
+```{r}
+icd9cm_hierarchy %>% mutate(first_3_char_of_code=substr(three_digit, 1,3), 
+       same=first_3_char_of_code==three_digit) %>% ggplot(aes(same)) + geom_bar()+ labs(x="", title= "Is the first three characters of `code` the same as \n the `three_digit` identifier?") 
+```
+
+Let's examine which `code`s are these. Looks like `code`s beginning with "E" resulted in the mismatch. 
+```{r}
+icd9cm_hierarchy %>% mutate(first_3_char_of_code=substr(three_digit, 1,3), 
+       same=first_3_char_of_code==three_digit) %>% filter(same=="FALSE") %>% select(code, first_3_char_of_code, three_digit) %>% sample_n(10)
+```
+
+
+# Difference between ICD-9 and ICD-10
+## Breath and depth 
+Now that we understand the structure of ICD. Let's understand the difference between ICD-9 and ICD-10. ICD-10 has more chapters and more permutations and combinations of subordinate members than ICD-9. Thus, ICD-10 is a longer dataset than ICD-9.
+```{r}
+cbind(ICD9=nrow(icd9cm_hierarchy), ICD10=nrow(icd10cm2019)) %>% as_tibble()
+```
+
+## Coding 
+Majority of ICD-9 uses numeric values for the first character for the  `three_digit` identifier (and therefore also for its `code`). 
+```{r}
+substr( icd9cm_hierarchy$three_digit, 1,1) %>%  unique()
+```
+Whereas ICD-10 uses all alphabets for the first character.
+```{r}
+substr( icd10cm2019$three_digit, 1,1) %>%  unique() #https://stackoverflow.com/questions/33199203/r-how-to-display-the-first-n-characters-from-a-string-of-words
+```
+I will be referring to ICD-9 for the rest of the post. 
+
+# `code` format
+`code` can be expressed in two ways:
+
+1. Short format which has been used in all the above examples. It has a character length from three to five. The first three characters of `code` are the same as the `3_digital`identifier on most occasions. The mismatch occurs when the `code` begins with the letter "E".
+
+2. Decimal format. A handful of healthcare databases and research datasets adopt this format. `code` in this format have three characters on the left side of the decimal point which are the same as the `three_digit` identifier. At the most two characters on the right side of the decimal point (e.g. "250.33"). However, due to formatting of electronic medical records or exporting the `code` to Excel, the `code` may be truncated. For instance, zeros before a non- zero numeric character will be dropped off (e.g. "004.11" -> "4.11" ). Zeros after a non-zero numeric character on the right side of the decimal point also will be dropped off (e.g. "250.50"-> "250.5"). 
+
+
+
+# Inspecting for data entry errors
+Data entry is susceptible to errors considering the `code` format and the magnitude of permutations and combinations of `code`. The `icd` package has two functions to identify data entry errors. 
+
+## Validation of code appearance 
+`is_valid` will help to determine if the `code` looks correct
+```{r}
+ is_valid("123.456") #max of 2 char of R side of decimal point
+```
+```{r}
+ is_valid("045l") #l is an invalid character 
+```
+```{r}
+ is_valid("099.17", short_code = T) #expecting `code` to be short format and not decimal format 
+
+```
+```{r}
+ is_valid("099.17", short_code = F) #plausible `code` in decimal format
+```
+## Legitimate definition behind `code`
+`code`s which appear valid may not be not have any underpinning meaning. `is_defined` helps to determine if the `code` can be defined. 
+```{r}
+ as.icd9cm("089") %>%  #as.icd9cm informs is_defined which ICD version you are referring to 
+  is_defined()
+```
+[The `code` 088 and 090 exists but 089 does not exist.](http://www.icd9data.com/2015/Volume1/001-139/default.htm)
+
+# Application  
+After completing a crash course on the concepts of ICD, let's see how the package can help us with our data wrangling. We will be using a [dataset on hospital admission of individuals with diabetes ](https://archive.ics.uci.edu/ml/datasets/diabetes+130-us+hospitals+for+years+1999-2008). 
+
+```{r message=F}
+diabetic<- read_csv("diabetic_data.csv") %>% select(primary=diag_1, secondary=diag_2)%>%  #only using primary and secondary diagnosis for this exercise 
+gather(primary, secondary, key = "diagnosis", value= "code") #longer tidy format
+
+```
+
+## Exploring and cleaning the data
+### What format are the `code`s in ? 
+The `code`s are formatted in the decimal form. 
+```{r}
+diabetic %>% select(diagnosis) %>% str_detect(".")
+```
+### Are there NA values?
+There are no NA values. 
+```{r}
+diabetic %>% map_dbl(~sum(is.na(.x)))
+```
+However, by physically viewing the dataset, there are observations recorded as "?". "?" suggests unknown or missing values. We'll coerce "?" values into NA
+
+```{r}
+diabetic<-diabetic  %>% mutate(code=ifelse(code=="?", NA, code))
+```
+
+## Providing the disease name
+The `code`s allow encoding of diseases to be more convenient but render it less comprehensible. We will extract the name of the diseases from `major`, the disease types from `sub-chapter` and the disease class from `chapter`.  
+
+### Converting into short format 
+The ICD dictionary `code` is in the short form while the `code` in the dataset is in the decimal form. I will need to convert the format of `code` in the dataset from the decimal form to the short type. 
+```{r}
+diabetic<-diabetic %>% mutate(code= decimal_to_short(code)) 
+```
+### Extracting the names
+
+```{r}
+# without  manual map of the chapter names
+
+chapter_range<-
+# extract range of `3_digit` identifier for each chapter
+icd9_chapters %>% map_df(~(.x)) %>% 
+# each chapter has it's own col, gather these col into a key superordinate col
+gather(key= chapter, value= `3_digit`) %>% 
+# add col to mark the `start`/`end` range of each chapter's `3_digital` identifier   
+mutate(range=rep(c("start", "end"), time=19)) %>% 
+# spread `range`  
+spread(range, `3_digit`) %>% 
+# rearrange `start` and `end` in order before uniting   
+select(chapter, start, end) %>% 
+# unite `start` and `end` to get range of `three_digit` identifier for each chapter
+unite(start, end, col= "chapter_range", sep="-")
+
+# merge chapter_range with ICD9 dictionary to extract `chapter_range`
+icd9cm_hierarchy<-left_join(icd9cm_hierarchy, chapter_range)
+
+# merge dataset with ICD dictionary to extract disease names, types, classes
+diabetic_names<-left_join(diabetic, icd9cm_hierarchy, 
+by=c("code"="code")) %>%   #making the arg explicit 
+select(diagnosis, disease_name=major, disease_type=sub_chapter, disease_class=chapter_range) 
+
+```
+
+```{r}
+?icd::chapters_to_map
+```
+
+
+## Summary of Diagnosis
+### Disease names 
+The most common disease name for primary diagnosis is diabetes. Not surprised given that the dataset is about individuals with diabetes. The most common class of disease is cardio- vascular (`390-459`) which relates to the heart and the blood circulatory system 
+```{r message=FALSE}
+#top 20 primary diagnosis
+diabetic_names %>% filter(diagnosis=="primary") %>% count( disease_name, disease_class,sort = T) %>% top_n(20) %>% 
+mutate(disease_name=fct_reorder(disease_name,n)) %>%  ggplot(aes(disease_name, n, fill=disease_class))+ geom_col() + coord_flip() +
+  theme(legend.position="bottom") +  guides(fill=guide_legend(title= "Disease Class", ncol  = 5)) + # legend based on aes fill, split into 4 col as legend broken off page. change legend title 
+labs(x="", y="", title = "Top 20 Disease Names for Primary Diagnosis", subtitle = "disease name refers to ICD major, disease class refers to ICD chapter ") + scale_fill_brewer(palette = "Set3") 
+```
+
+Similarly, the most common disease for secondary diagnosis is diabetes and the most common disease class is cardio-vascular. However, the number of disease class for secondary diagnosis is fewer than primary diagnosis. 
+```{r message=F}
+diabetic_names %>% filter(diagnosis=="secondary") %>% count( disease_name, disease_class,sort = T) %>% top_n(20) %>% 
+mutate(disease_name=fct_reorder(disease_name,n)) %>%  ggplot(aes(disease_name, n, fill=disease_class))+ geom_col() + coord_flip() +
+  theme(legend.position="bottom") +  guides(fill=guide_legend(title= "Disease Class", ncol  = 5)) 
+labs(x="", y="", title = "Top 20 Disease Names for Secondary Diagnosis ", subtitle = "disease name refers to ICD major, disease class refers to ICD chapter")+ scale_fill_brewer(palette = "Set3") 
+```
+### Disease types
+The disease type for diabetes is “Diseases of Other Endocrine Glands” and knowing that diabetes is the most common disease name for primary diagnosis, let’s see if  “Diseases of Other Endocrine Glands” will also be the most common disease type. 
+```{r message=F}
+diabetic_names %>% filter(diagnosis=="primary") %>% count( disease_type, disease_class,sort = T) %>% top_n(20) %>% 
+mutate(disease_type=fct_reorder(disease_type,n)) %>%  ggplot(aes(disease_type, n, fill=disease_class))+ geom_col() + coord_flip() +
+  theme(legend.position="bottom") +  guides(fill=guide_legend(title= "Disease Class", ncol  = 6)) + labs(x="", y="", title = "Top 20 Types of Diseases for Primary Diagnosis", subtitle = "disease type refers to ICD sub-chapter and disease class refers ICD chapter") + scale_fill_brewer(palette = "Set3") 
+```
+
+When we collapsed disease names for primary diagnosis to their superordinate,  disease types, the most common  disease type is “Ischemic Heart Diseases”. Though, “Diseases of Other Endocrine Glands” is the third most common disease type. 
+
+Let's see if this is the same for secondary diagnosis. 
+```{r message=F}
+diabetic_names %>% filter(diagnosis=="secondary") %>% count( disease_type, disease_class,sort = T) %>% top_n(20) %>% 
+mutate(disease_type=fct_reorder(disease_type,n)) %>%  ggplot(aes(disease_type, n, fill=disease_class))+ geom_col() + coord_flip() +
+  theme(legend.position="bottom") +  guides(fill=guide_legend(title= "Disease Class", nrow = 2)) + labs(x="", y="", title = "Top 20 Types of Diseases for Secondary Diagnosis", subtitle = "disease type refers to ICD sub-chapter and disease class refers ICD chapter") + scale_fill_brewer(palette = "Set3") 
+```
+
+"Diseases of Other Endocrine Glands" is still not the most common disease type though it moved up a spot. "Ischemic Heart Diseases" is now the 5th most common disease type. 
+Depending which level 
+
+
+# To sum up
+In this post, we learned about the International Classification of Diseases which is an invaluable reference for various stakeholders in healthcare to have a uniform code for illnesses. The `icd` package was introduced to aid in the processing of datasets with ICD codes. 
+
+
