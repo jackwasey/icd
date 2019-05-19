@@ -3,6 +3,9 @@
 *.rtf	 diff=astextplain
 *.RTF	 diff=astextplain
 
+*.png diff=png
+*.pdf diff=pdf
+
 ## git config diff.nodiff.command /usr/bin/true or /bin/true
 # *RcppExports* diff=nodiff
 # *.Rd diff=nodiff
