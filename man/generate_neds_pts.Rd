@@ -21,16 +21,19 @@ NEDS}
 Generate simulated 'NEDS' data for 'PCCC' and bigger wide data testing
 }
 \examples{
-summary(icd::comorbid_pccc_dx(icd:::generate_neds_pts()))
-neds <- icd:::generate_neds_pts(n = 100, ncol = 10L, icd10 = FALSE)
-stopifnot(dim(neds) == c(100L, 11L))
-summary(icd::comorbid_pccc_dx(neds))
+if (requireNamespace("icd.data", quietly = TRUE)) {
+  summary(icd::comorbid_pccc_dx(icd:::generate_neds_pts()))
+  neds <- icd:::generate_neds_pts(n = 100, ncol = 10L, icd10 = FALSE)
+  stopifnot(dim(neds) == c(100L, 11L))
+  summary(icd::comorbid_pccc_dx(neds))
+}
 \dontrun{
-# original size data for PCCC benchmarking:
-set.seed(1441)
-# Large NEDS simulation: neds <- icd:::generate_neds_pts(28584301L)
-neds <- icd:::generate_neds_pts(2858L)
-neds_comorbid <- icd::comorbid_pccc_dx(neds)
+if (requireNamespace("icd.data", quietly = TRUE)) {
+  # original size data for PCCC benchmarking:
+  set.seed(1441)
+  neds <- icd:::generate_neds_pts(28584301L)
+  neds_comorbid <- icd::comorbid_pccc_dx(neds)
+}
 }
 }
 \keyword{internal}

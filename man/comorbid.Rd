@@ -233,7 +233,7 @@ other tools, e.g. \code{apply(x, 2, as.integer)}}
 
 \item{categorize_fun}{Internal. Function used for the categorization problem.}
 
-\item{...}{Arguments passed through to \code{comorbid}, and ultimately \code{\link{categorize_simple}}, e.g. \code{restore_id_order}.}
+\item{...}{arguments passed on to other functions}
 
 \item{icd10_comorbid_fun}{Internal function Default will be fast and
 accurate. A function which calculates comorbidities for ICD-10 codes, in
