@@ -7,7 +7,7 @@
 \alias{expand_range_major.icd9}
 \title{Expand two major codes to a range}
 \usage{
-expand_range_major(start, end, defined = TRUE)
+expand_range_major(start, end, defined)
 
 \method{expand_range_major}{default}(start, end, defined = TRUE)
 
@@ -34,6 +34,8 @@ major codes
 }}
 
 \examples{
-expand_range_major("100", "102")
+if (requireNamespace("icd.data", quietly = TRUE)) {
+  expand_range_major("100", "102")
+}
 }
 \keyword{internal}
