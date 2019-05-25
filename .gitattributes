@@ -3,9 +3,12 @@
 *.rtf	 diff=astextplain
 *.RTF	 diff=astextplain
 
+# WIP:
 # need to run:
 # git config --local include.path ../.gitconfig
 # for local PNG/PDF friendly diffing to work
+*.png diff=png
+*.pdf diff=pdf
 
 ## git config diff.nodiff.command /usr/bin/true or /bin/true
 # *RcppExports* diff=nodiff

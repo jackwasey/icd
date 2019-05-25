@@ -1,0 +1,7 @@
+[diff "png"]
+    textconv = identify -quiet -format "%#"
+[diff "pdf"]
+    textconv = identify -quiet -format "%#"
+[diff "nodiff"]
+    command = /bin/true
+
