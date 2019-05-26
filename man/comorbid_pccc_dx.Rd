@@ -18,24 +18,24 @@ comorbid_pccc_pcs(x, visit_name = get_visit_name(x), icd_name,
 
 icd9_comorbid_pccc_dx(x, visit_name = NULL, icd_name = NULL,
   short_code = guess_short(x, icd_name = icd_name), return_df = FALSE,
-  return_binary = FALSE, ..., abbrev_names = TRUE)
+  return_binary = FALSE, ...)
 
 icd10_comorbid_pccc_dx(x, visit_name = NULL, icd_name = NULL,
   short_code = guess_short(x, icd_name = icd_name), return_df = FALSE,
-  return_binary = FALSE, ..., abbrev_names = TRUE)
+  return_binary = FALSE, ...)
 
 icd9_comorbid_pccc_pcs(x, visit_name = get_visit_name(x),
   icd_name = get_icd_pc_name(x), return_df = FALSE,
-  return_binary = FALSE, ..., abbrev_names = TRUE)
+  return_binary = FALSE, ...)
 
 icd10_comorbid_pccc_pcs(x, visit_name = get_visit_name(x), icd_name,
-  return_df = FALSE, return_binary = FALSE, ..., abbrev_names = TRUE)
+  return_df = FALSE, return_binary = FALSE, ...)
 }
 \arguments{
 \item{x}{\code{data.frame} containing a column of patient-visit identifiers
 and a column of ICD codes. The \code{data.frame} may be in \sQuote{long} or
-\sQuote{wide} format, like the example \code{\link{vermont_dx}}
-and \code{\link{uranium_pathology}} data.}
+\sQuote{wide} format, like the example \code{\link[icd.data]{vermont_dx}}
+and \code{\link[icd.data]{uranium_pathology}} data.}
 
 \item{visit_name}{The name of the column in the data frame which contains the
 patient or visit identifier. Typically this is the visit identifier, since
@@ -71,11 +71,7 @@ conversion can also be done by the internal functions
 \code{icd:::logical_to_binary} and \code{icd:::binary_to_logical}, or using
 other tools, e.g. \code{apply(x, 2, as.integer)}}
 
-\item{...}{Arguments passed through to \code{comorbid}}
-
-\item{abbrev_names}{single logical value that defaults to \code{TRUE}, in
-which case the shorter human-readable names stored in e.g.
-\code{ahrqComorbidNamesAbbrev} are applied to the data frame column names.}
+\item{...}{arguments passed on to other functions}
 }
 \description{
 Unlike with ICD-9 and ICD-10 diagnostic codes, 'icd' doesn't
@@ -103,7 +99,9 @@ procedure codes
 
 \examples{
 # not pediatric data, but let's look for this example
-head(icd9_comorbid_pccc_dx(vermont_dx))
+if (requireNamespace("icd.data", quietly = TRUE)) {
+  head(icd9_comorbid_pccc_dx(icd.data::vermont_dx))
+}
 # Six random codes from each PCCC procedure code map. 'icd' will use
 # an heuristic to guess whether ICD-9 or ICD-10:
 pts <- data.frame(
