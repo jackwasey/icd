@@ -1,4 +1,7 @@
-# Version 4.0.2
+# Version 4.0.7
+ * Work-around rappdirs problem affecting some Windows users with default cache data directory.
+
+# Version 4.0.6
  * Major update. Highlights include: wide/long data both handled efficiently without conversion; WHO, France, Belgium ICD-10 codes; more comprehensive ICD-10 comorbidity maps to span historic ICD-10 versions
  * The ICD-10 comorbidity maps have been expanded to include the union of all codes for each year in which ICD-10-CM and WHO ICD-10 are available. E.g., HIV in WHO scheme has more detail than the US version. (The ICD-9 code algorithm does not rely on exact ICD-10 codes in maps, so is unchanged). This will flag a few more comorbidities than before, especially when data doesn't correspond to the most recent map. CCS maps are only expanded over history ICD-10-CM since they are US-oriented. This is an important user-facing change which will improve capture of comorbidities in international and historic ICD-10 data. Again, ICD-9 computations are unaffected.
  * Thanks to @vitallish for update to CCS maps see #163, #168
