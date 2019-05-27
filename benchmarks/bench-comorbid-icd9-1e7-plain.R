@@ -1,4 +1,5 @@
-# generate a bunch of random patients and get comorbidities, intended for valgrind usage
+# generate a bunch of random patients and get comorbidities, intended for
+# stressing, e.g., with valgrind
 library(icd)
 library(microbenchmark)
 library(magrittr)
@@ -10,4 +11,3 @@ if (is.null(ten_million_random_pts)) {
   R.cache::saveCache(ten_million_random_pts, key = list("ten_million_random_pts"), suffix = "icd.Rcache")
 }
 comorbid_ahrq(ten_million_random_pts, preclean = FALSE)
-

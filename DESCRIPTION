@@ -1,7 +1,7 @@
 Package: icd
 Title: Comorbidity Calculations and Tools for ICD-9 and ICD-10
     Codes
-Version: 4.0
+Version: 4.0.2
 Authors@R: 
     c(person(given = "Jack O.",
              family = "Wasey",
@@ -28,24 +28,28 @@ Authors@R:
              role = "ctb",
              comment = "explain codes in table format"))
 Maintainer: Jack O. Wasey <jack@jackwasey.com>
-Description: Calculate comorbidities, Charlson and van Walraven
-    scores, perform extremely fast and accurate validation, conversion,
-    manipulation, filtering and comparison of ICD-9 and ICD-10 codes. This
-    package enables a work flow from raw lists of ICD codes in hospital
-    databases to comorbidities. ICD-9 and ICD-10 comorbidity mappings from
-    Quan (Deyo and Elixhauser versions), Elixhauser and AHRQ included.
-    Common ambiguities and code formats are handled.
+Description: Calculate comorbidities, medical risk scores, and
+    work very quickly and precisely with ICD-9 and ICD-10 codes. This package
+    enables a work flow from raw tables of ICD codes in hospital databases
+    to comorbidities. ICD-9 and ICD-10 comorbidity mappings from Quan
+    (Deyo and Elixhauser versions), Elixhauser and AHRQ included.  Common
+    ambiguities and code formats are handled. Comorbidity computation
+    includes Hierarchical Condition Codes, and a reimplementation of the
+    AHRQ Clinical Classifications Software. Risk scores include those of
+    Charlson and van Walraven.  US Clinical Modification, Word Health
+    Organization, Belgian and French ICD-10 codes are supported through
+    the 'icd.data' package, some of which are downloaded on demand.
 License: GPL-3
 URL: https://jackwasey.github.io/icd/
 BugReports: https://github.com/jackwasey/icd/issues
 Depends:
     R (>= 3.4)
 Imports:
-    icd.data,
     methods,
     Rcpp (>= 0.12.3)
 Suggests:
     graphics,
+    icd.data,
     knitr,
     magrittr,
     nhds,
@@ -59,11 +63,9 @@ Suggests:
     xml2
 LinkingTo:
     Rcpp (>= 0.12.3),
-    RcppEigen,
-    testthat (>= 0.11.1)
+    RcppEigen
 VignetteBuilder: 
     knitr
-ByteCompile: true
 SystemRequirements: pandoc >= 2.2 to build the JSS vignette
 Classification/ACM-2012: Social and professional topics~Medical
     records, Applied computing~Health care information systems, Applied

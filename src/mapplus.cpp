@@ -5,7 +5,6 @@
 #include "local.h"
 #include "refactor.h"
 #include "relevant.h"
-#include "valgrind_icd.h"
 #include <cstring>
 #include <string>
 

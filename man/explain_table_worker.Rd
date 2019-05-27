@@ -10,6 +10,6 @@ explain_table_worker(x, hierarchy, short_code, condense, brief, warn, ...)
 common code for generating full table of explanations of ICD codes
 }
 \author{
-Ed Lee
+Ed Lee created, Jack Wasey updated
 }
 \keyword{internal}

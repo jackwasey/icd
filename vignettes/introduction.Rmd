@@ -1,15 +1,18 @@
 ---
-title: 'Quick Introduction to icd'
+title: 'An Introduction to icd'
 author: "Jack O. Wasey"
 date: "`r Sys.Date()`"
 output:
-  html_document:
+  html_vignette:
     toc: yes
+bibliography:
+  - icdpkg.bib
 vignette: >
-  %\VignetteIndexEntry{Quick Introduction to icd}
+  %\VignetteIndexEntry{An Introduction to icd}
   %\VignetteEngine{knitr::rmarkdown}
-  %\VignetteDepends{icd.data, magrittr, utils}
+  %\VignetteDepends{magrittr, utils}
   %\VignetteEncoding{UTF-8}
+  %\VignetteKeyword{comorbidity, comorbidities, biomedical informatics, administrative data, matrix algebra, ICD-9, ICD-10, ICD-9-CM, ICD-10-CM, mapping, algorithm}
 ---
 <!--
 Copyright (C) 2014 - 2019  Jack O. Wasey
@@ -34,7 +37,6 @@ suppressWarnings({
   suppressPackageStartupMessages({
     loadNamespace("knitr") # for opts_chunk only
     library("icd")
-    library("icd.data")
     library("magrittr")
     library("utils")
     })
@@ -42,7 +44,10 @@ suppressWarnings({
 
 knitr::opts_chunk$set(
   collapse = TRUE,
-  comment = "#>"
+  comment = "#>",
+  out.width = "100%",
+  fig.width = 14,
+  fig.height = 10.5
 )
 
 patients_icd9 <- data.frame(
@@ -57,14 +62,13 @@ patients_icd9 <- data.frame(
 
 ```{r quickstart}
 library(icd)
-library(icd.data)
 head(uranium_pathology, 10)
 head(comorbid_charlson(uranium_pathology))
-comorbid_charlson(uranium_pathology, 
+comorbid_charlson(uranium_pathology,
                   return_df = TRUE,
                   return_binary = TRUE)[1:5, 1:5]
-hist(charlson(uranium_pathology), 
-     main = "Histogram of Charlson scores in Uranium data",
+hist(charlson(uranium_pathology),
+     main = "Uranium data",
      xlab = "Charlson Score")
 ```
 
@@ -100,18 +104,19 @@ comorbid_quan_elix(vermont_dx)[1:5, 1:8]
 Things work beautifully using [magrittr](https://cran.r-project.org/package=magrittr) `%>%` to chain functions together. `magrittr` is useful for chains of commands, such as the following:
 ```{r getcomorbidities2}
 # find Elixhauser comorbidities which were present-on-arrival
-patients_icd9 %>% filter_poa %>% comorbid_elix
+patients_icd9 %>%
+  filter_poa %>%
+  comorbid_elix
 
-# same as above, then summarize five columns:
+# same as above, then summarize:
 patients_icd9 %>%
   filter_poa %>%
   comorbid_elix %>%
-  extract(, 5:10) %>%
   colSums
 
 # Take Vermont discharge data (wide to long conversion no longer needed)
 # find comorbidities, convert TRUE to 1 and show first few
-vermont_cmb <- vermont_dx %>% 
+vermont_cmb <- vermont_dx %>%
   icd9_comorbid_quan_elix %>%
   apply(2, as.integer) # convert logical to integer
 
@@ -252,7 +257,7 @@ icd10_map_ahrq$CHF[1:5]
 ```
 
 ### Elixhauser comorbidities
-Elixhauser originally devleoped this set of comorbidities to predict long term mortality based on hospital ICD-9-CM coding records [@elixhauser_comorbidity_1998]. The AHRQ comorbidities are an updated version of this, however the original Elixhauser have been used in many publications.
+Elixhauser originally developed this set of comorbidities to predict long term mortality based on hospital ICD-9-CM coding records [@elixhauser_comorbidity_1998]. The AHRQ comorbidities are an updated version of this, however the original Elixhauser have been used in many publications.
 ```{r elix}
 # the names of the comorbidities in each map are available as named lists:
 names_elix[1:5]
@@ -308,25 +313,25 @@ as.icd9(cardiac) %>% explain_code(warn = FALSE) %>% head(10)
 ```
 
 ### Find comorbidities for a large number of patients
-I understand that comorbiditity assignment using SAS is a lengthy business. Let's generate 100,000 patients with a random selection of comorbidities:
+I understand that comorbidity assignment using SAS is a lengthy business. Let's generate 100,000 patients with a random selection of comorbidities:
 ```{r speed, eval = FALSE}
 # codes selected from AHRQ mapping
 many_patients <- icd:::generate_random_pts(1e7)
 system.time(
   comorbid_ahrq(many_patients)
-  )[["elapsed"]] 
+  )[["elapsed"]]
 ```
 This takes about five seconds on a 2016 8-core workstation. More detailed benchmarks can be seen comparing icd to other packages in the vignette article in this package.
 
 ### Use an arbitrary ICD-9 mapping
 
-The user can provide any ICD-9, ICD-10 or other code mapping to comorbidities they wish. Submissions of other peer-reviewed published mappings could be included in this package, if their license permits. Create an issue in [github](https://github.com/jackwasey/icd/issues) or email me at jack@jackwasey.com) Included in this package is a small data set called `icd9_chapters`, which lists the ICD-9-CM (and indeed ICD-9) Chapters. These can easily be expanded out and used as a mapping, so instead of a comorbidity, we see which patients have codes in each chapter of the ICD-9 defintion.
+The user can provide any ICD-9, ICD-10 or other code mapping to comorbidities they wish. Submissions of other peer-reviewed published mappings could be included in this package, if their license permits. Create an issue in [github](https://github.com/jackwasey/icd/issues) or email me at jack@jackwasey.com) Included in this package is a small data set called `icd9_chapters`, which lists the ICD-9-CM (and indeed ICD-9) Chapters. These can easily be expanded out and used as a mapping, so instead of a comorbidity, we see which patients have codes in each chapter of the ICD-9 definition.
 
 See the [custom comorbidity map vignette](custom-maps.html).
 ```{r arbitrary Mapping}
 names(icd9_chapters)[c(1:5, 14)]
 my_map <- icd:::chapters_to_map(icd9_chapters[c(2, 5, 14)])
-icd9_comorbid(patients_icd9, my_map) # no positive 
+icd9_comorbid(patients_icd9, my_map) # no positive
 ```
 
 ### Reduce comorbidity mapping from possible values to defined diagnostic codes
@@ -346,24 +351,8 @@ The ICD-9-CM scheme is structured as follows:
  - Major part (three-digit codes)
  - sub-division (first decimal place)
  - sub-sub-division (second decimal place)
- 
+
  For most combinations of zero to nine, nothing is defined. Sometimes, nodes at one level in the hierarchy are descriptive only of their children (branch nodes), whereas some are themselves billable.
-
-### Which ICD-9 codes have changed between versions of ICD-9
-```{r "compare ICD-9 versions"}
-new_since_27 <- setdiff(icd9cm_billable[["32"]][["code"]],
-                         icd9cm_billable[["27"]][["code"]]) %>% head
-lost_since_27 <- setdiff(icd9cm_billable[["27"]][["code"]],
-                         icd9cm_billable[["32"]][["code"]]) %>% tail
-# we know this is an ICD-9-CM code, so declare this using nice magrittr motif:
-lost_since_27 %<>% as.icd9cm
-lost_since_27 %<>% as.icd9cm
-
-# these are a few which were gained since v27
-data.frame(code = new_since_27, desc = new_since_27 %>% explain_code)
-# these are a few which were lost since v27
-data.frame(code = lost_since_27, desc = lost_since_27 %>% explain_code)
-```
 
 ## Conclusion
 

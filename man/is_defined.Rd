@@ -14,7 +14,7 @@ is_defined(x, short_code = guess_short(x), ...)
   billable = FALSE, leaf = billable, ...)
 
 \method{is_defined}{icd10cm}(x, short_code = guess_short(x),
-  billable = FALSE, leaf = billable, nomatch = 0L, ...)
+  billable = FALSE, leaf = billable, ...)
 
 \method{is_defined}{icd10}(x, short_code = guess_short(x),
   billable = FALSE, leaf = billable, ...)
@@ -37,9 +37,6 @@ as most adaptations of WHO ICD codes are not oriented around money.}
 whether they are billable, i.e. leaf nodes. This is really only designed
 for use with ICD-9-CM, ICD-10-CM etc, since the WHO versions are not
 designed for billing, but for public health and death reporting.}
-
-\item{nomatch}{integer value, passed to \code{match} default is 0. Setting
-this to \code{NA_integer_} would stop NA values being treated as undefined.}
 
 \item{leaf}{New synonym for 'billable', which will be deprecated.}
 }

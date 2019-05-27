@@ -12,7 +12,7 @@ get_leaf(...)
 \method{get_leaf}{default}(x, short_code = guess_short(x), ...)
 
 \method{get_leaf}{icd9cm}(x, short_code = guess_short(x),
-  invert = FALSE, icd9cm_edition = icd9cm_latest_edition(), ...)
+  invert = FALSE, ...)
 
 \method{get_leaf}{icd9}(...)
 }
@@ -27,9 +27,6 @@ Where reasonable, this is guessed from the input data.}
 
 \item{invert}{Single logical value. Returns the inverse of the result. E.g.
 if seeking valid ICD-9 codes, the invalid ones are returned.}
-
-\item{icd9cm_edition}{e.g. "32", not ICD-9 vs ICD-10
-currently just the year of release.}
 }
 \description{
 Get billable ICD codes, implicitly, this refers to an ICD

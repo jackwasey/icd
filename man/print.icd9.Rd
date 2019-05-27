@@ -24,21 +24,23 @@ Print ICD codes and comorbidity maps cleanly
 x <- structure(
   c("40201", "2258", "7208", "25001", "34400", "4011", "4011", NA),
   class = c("icd9cm", "icd9", "character"),
-  icd_short_diag = TRUE)
+  icd_short_diag = TRUE
+)
 \dontrun{
 print(x)
 print(x, verbose = TRUE)
 # as.factor drops any 'icd' classes
 print(as.factor(x), verbose = TRUE)
 }
-u <- icd.data::uranium_pathology[1:10, "icd10"]
 \dontrun{
+u <- uranium_pathology[1:10, "icd10"]
 print(u)
 print(u, verbose = TRUE)
 # as.character will unclass the 'icd' classes
 print(as.character(u), verbose = TRUE)
 a <- structure(c("R21", "Z21"),
-               class = c("icd10cm", "icd10", "character"))
+  class = c("icd10cm", "icd10", "character")
+)
 print(a, verbose = TRUE)
 }
 }

@@ -31,5 +31,3 @@
 #' stopifnot(identical(c(l, recursive = TRUE), c(unlist(l))))
 #'
 #' }
-
-

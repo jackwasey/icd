@@ -30,41 +30,44 @@ along with icd. If not, see <http:#www.gnu.org/licenses/>.
 [![Project Status: Active – The project has reached a stable, usable
 state and is being actively
 developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
-[![GitHub](https://img.shields.io/badge/devel%20version-3.4-blue.svg?style=flat
-"GitHub")](https://github.com/jackwasey/icd)
 [![Travis](https://travis-ci.org/jackwasey/icd.svg?branch=master
 "Travis Build Status")](https://travis-ci.org/jackwasey/icd)
 [![Appveyor](https://ci.appveyor.com/api/projects/status/9ncfgxht3n5i8t60/branch/master?svg=true
 "Appveyor Build Status")](https://ci.appveyor.com/project/jackwasey/icd/branch/master)
 [![codecov.io](https://codecov.io/github/jackwasey/icd/coverage.svg?branch=master
-"Core Code Coverage")](https://codecov.io/github/jackwasey/icd?branch=master)
+"Code Coverage")](https://codecov.io/github/jackwasey/icd?branch=master)
 [![CII Best
 Practices](https://bestpractices.coreinfrastructure.org/projects/2092/badge)](https://bestpractices.coreinfrastructure.org/projects/2092)
+[![Dependencies](https://tinyverse.netlify.com/badge/icd)](https://cran.r-project.org/package=icd)
 [![CRAN RStudio mirror downloads last calendar
 month](https://cranlogs.r-pkg.org/badges/icd
-"RStudio Mirror Downloads Last Calendar Month")](https://cran.r-project.org/package=icd)
+"RStudio Mirror Downloads")](https://cran.r-project.org/package=icd)
 <!-- badges: end -->
 <!-- [![CRAN RStudio mirror downloads last week](https://cranlogs.r-pkg.org/badges/last-week/icd "RStudio Mirror Downloads Last Week")](https://cran.r-project.org/package=icd) -->
 
-# Comorbidities from ICD-9 and ICD-10 codes, manipulation and validation
+# Fast comorbidities from ICD-9 and ICD-10 codes, decoding, manipulation and validation
 
 ## Introduction
 
-Calculate comorbidities, Charlson and van Walraven scores, perform fast
-and accurate validation, conversion, manipulation, filtering and
-comparison of ICD-9 and ICD-10 codes. This package enables a work flow
-from raw lists of ICD codes in hospital databases to comorbidities.
+Calculate comorbidities, medical risk scores, and work very quickly and
+precisely with ICD-9 and ICD-10 codes. This package enables a work flow
+from raw tables of ICD codes in hospital databases to comorbidities.
 ICD-9 and ICD-10 comorbidity mappings from Quan (Deyo and Elixhauser
 versions), Elixhauser and AHRQ included. Common ambiguities and code
-formats are handled.
+formats are handled. Comorbidity computation includes Hierarchical
+Condition Codes, and an implementation of AHRQ Clinical Classifications.
+Risk scores include those of Charlson and van Walraven. US Clinical
+Modification, Word Health Organization, Belgian and French ICD-10 codes
+are supported, most of which are downloaded on demand.
 
 `icd` is used by many researchers around the world who work in public
 health, epidemiology, clinical research, nutrition, journalism, health
-administration and more. I’m grateful for contact from people in these
-fields for their feedback and code contributions, and I’m pleased to say
-that `icd` has been used in works like the [Pulitzer
-finalist](http://www.pulitzer.org/finalists/staff-propublica) work on
-[maternal death](http://www.pulitzer.org/finalists/staff-propublica) by
+administration, insurance, and more. I’m grateful for contact from
+people in these fields for their feedback and code contributions, and
+I’m pleased to say that `icd` has been used in works like the
+[Pulitzer finalist](http://www.pulitzer.org/finalists/staff-propublica)
+work on [maternal
+death](http://www.pulitzer.org/finalists/staff-propublica) by
 [ProPublica](https://www.propublica.org).
 
 ## Features
@@ -74,26 +77,26 @@ finalist](http://www.pulitzer.org/finalists/staff-propublica) work on
       - several standard mappings of ICD codes to comorbidities are
         included (Quan, Deyo, Elixhauser, AHRQ, PCCC)
       - *very fast* assignment of ICD codes to comorbidities (using
-        novel matrix multiplication algorithm and C++ internally)
-  - use your existing data format, minimizing requirements for
-    pre-processing
-  - summarize groups of ICD codes in natural language
+        novel matrix multiplication algorithm and C++ internally – see
+        ‘efficiency’ vignette for details)
+  - use your existing wide or long data format, icd can guess which
+    columns are ICD-9 or ICD-10 codes.
+  - explain and summarize groups of ICD codes in natural language, using
+    ICD editions from the WHO, USA, France and Belgium. Many different
+    annual editions of these data are available, and these may be
+    downloaded automatically when used, or in bulk with
+    `download_all_icd_data()`.
   - Charlson and Van Walraven score calculations
   - Hierarchical Condition Codes (HCC) from CMS
-  - Clinical Classifcations Software (CCS) comorbidities from AHRQ
+  - Clinical Classifications Software (CCS) comorbidities from AHRQ
   - Pediatric Complex Chronic Condition comorbidities
   - AHRQ ICD-10 procedure code classification
-  - annual revisions of ICD-9-CM and ICD-10-CM
   - correct conversion between different representations of ICD codes,
     with and without a decimal points, leading and trailing characters
     (this is not trivial for ICD-9-CM). ICD-9 to ICD-10 cross-walk is
     not yet implemented
   - comprehensive test suite to increase confidence in accurate
     processing of ICD codes
-  - all internal ICD and comorbidity data is extracted directly from
-    public data or code, allowing end-to-end reproducibility
-  - used, tested and benchmarked against other comorbidity calculators
-    on hardware from laptops to big servers
 
 ## Examples
 
@@ -133,12 +136,19 @@ charlson(patient_data)
 #>    2    2    0
 
 # plot summary of Uranium Cancer Registry sample data using AHRQ comorbidities
-plot_comorbid(icd.data::uranium_pathology)
+plot_comorbid(uranium_pathology)
 ```
 
 ![](man/figures/README-example-1.png)<!-- -->
 
-## Make “Table 1” summary data
+## Comorbidities example: make “Table 1” summary data
+
+A common requirement for medical research involving patients is
+determining new or existing comorbidities. This is often reported in
+*Table 1* of research papers to demonstrate the similarity or
+differences of groups of patients. This package is focussed on fast and
+accurate generation of this comorbidity information from raw lists of
+ICD-9 and ICD-10 codes.
 
 Here we are using the US National Hospital Discharge Survey 2010 data
 from the [nhds](https://github.com/jackwasey/nhds) package. For the sake
@@ -172,28 +182,29 @@ knitr::kable(t(tab_dat), col.names = c("Emergency", "Not emergency"))
 
 |                                             | Emergency      | Not emergency |
 | ------------------------------------------- | :------------- | :------------ |
-| Myocardial Infarction                       | 2709 (3.70%)   | 1113 (1.42%)  |
-| Congestive Heart Failure                    | 12349 (16.85%) | 5644 (7.21%)  |
-| Periphral Vascular Disease                  | 3843 (5.25%)   | 3318 (4.24%)  |
-| Cerebrovascular Disease                     | 5788 (7.90%)   | 3177 (4.06%)  |
-| Dementia                                    | 2176 (2.97%)   | 729 (0.93%)   |
-| Chronic Pulmonary Disease                   | 12216 (16.67%) | 7058 (9.02%)  |
-| Connective Tissue Disease-Rheumatic Disease | 1529 (2.09%)   | 1143 (1.46%)  |
-| Peptic Ulcer Disease                        | 1143 (1.56%)   | 636 (0.81%)   |
-| Mild Liver Disease                          | 2171 (2.96%)   | 1149 (1.47%)  |
-| Diabetes without complications              | 14399 (19.65%) | 9133 (11.67%) |
+| Myocardial Infarction                       | 2707 (3.69%)   | 1077 (1.38%)  |
+| Congestive Heart Failure                    | 12339 (16.84%) | 5628 (7.19%)  |
+| Periphral Vascular Disease                  | 3798 (5.18%)   | 3042 (3.89%)  |
+| Cerebrovascular Disease                     | 5329 (7.27%)   | 2748 (3.51%)  |
+| Dementia                                    | 2175 (2.97%)   | 728 (0.93%)   |
+| Chronic Pulmonary Disease                   | 11989 (16.36%) | 6762 (8.64%)  |
+| Connective Tissue Disease-Rheumatic Disease | 1527 (2.08%)   | 1131 (1.44%)  |
+| Peptic Ulcer Disease                        | 1044 (1.42%)   | 473 (0.60%)   |
+| Mild Liver Disease                          | 2030 (2.77%)   | 1011 (1.29%)  |
+| Diabetes without complications              | 14399 (19.65%) | 9125 (11.66%) |
 | Diabetes with complications                 | 2719 (3.71%)   | 1449 (1.85%)  |
-| Paraplegia and Hemiplegia                   | 1446 (1.97%)   | 968 (1.24%)   |
-| Renal Disease                               | 9387 (12.81%)  | 4669 (5.96%)  |
-| Cancer                                      | 2780 (3.79%)   | 4008 (5.12%)  |
-| Moderate or Severe Liver Disease            | 1080 (1.47%)   | 521 (0.67%)   |
-| Metastatic Carcinoma                        | 2100 (2.87%)   | 1665 (2.13%)  |
-| HIV/AIDS                                    | 25 (0.03%)     | 63 (0.08%)    |
+| Paraplegia and Hemiplegia                   | 1386 (1.89%)   | 852 (1.09%)   |
+| Renal Disease                               | 9322 (12.72%)  | 4604 (5.88%)  |
+| Cancer                                      | 2724 (3.72%)   | 3496 (4.47%)  |
+| Moderate or Severe Liver Disease            | 893 (1.22%)    | 352 (0.45%)   |
+| Metastatic Carcinoma                        | 2100 (2.87%)   | 1663 (2.12%)  |
+| HIV/AIDS                                    | 0 (0.00%)      | 0 (0.00%)     |
 
 ## How to get help
 
 Look at the help files for details and examples of almost every function
-in this package. There are several vignettes showing the main features:
+in this package. There are several vignettes showing the main features
+(See list with `vignette(package = "icd")`):
 
   - Introduction `vignette("introduction", package = "icd")`
   - Charlson scores `vignette("charlson-scores", package = "icd")`
@@ -220,34 +231,19 @@ suite which exercises all the key functions.
 ?comorbid_hcc
 ?explain_code
 ?is_valid
-
-# first show the list
-vignette(package = "icd")
-vignette("introduction", package = "icd")
 ```
 
-## Relevance
+## ICD-9 codes
 
 ICD-9 codes are still in heavy use around the world, particularly in the
 USA where the ICD-9-CM (Clinical Modification) was in widespread use
 until the end of 2015. ICD-10 has been used worldwide for reporting
 cause of death for more than a decade, and ICD-11 is due to be released
-in 2018. ICD-10-CM is now the primary coding scheme for US hospital
+in 2019. ICD-10-CM is now the primary coding scheme for US hospital
 admission and discharge diagnoses used for regulatory purposes and
 billing. A vast amount of electronic patient data is recorded with ICD-9
 codes of some kind: this package enables their use in R alongside
 ICD-10.
-
-## Comorbidities
-
-A common requirement for medical research involving patients is
-determining new or existing comorbidities. This is often reported in
-*Table 1* of research papers to demonstrate the similarity or
-differences of groups of patients. This package is focussed on fast and
-accurate generation of this comorbidity information from raw lists of
-ICD-9 codes.
-
-## ICD-9 codes
 
 ICD-9 codes are not numbers, and great care is needed when matching
 individual codes and ranges of codes. It is easy to make mistakes, hence
@@ -259,7 +255,7 @@ meaningful, so numeric ICD-9 codes cannot be used in most cases. In
 addition, most clinical databases contain invalid codes, and even
 decimal and non-decimal format codes in different places. This package
 primarily deals with ICD-9-CM (Clinical Modification) codes, but should
-be applicable or easily extendible to the original WHO ICD-9 system.
+be applicable or easily extendable to the original WHO ICD-9 system.
 
 ## ICD-10 codes
 
@@ -268,18 +264,7 @@ then two alphanumeric characters. However, especially for ICD-10-CM,
 there are a multitude of qualifiers, e.g. specifying recurrence,
 laterality, which vastly increase the number of possible codes. This
 package recognizes validity of codes by syntax alone, or whether the
-codes appear in a canonical list. The current ICD-10-CM master list is
-the 2016 set. There is no capability of converting between ICD-9 and
-ICD-10, but comorbidities can be generated from older ICD-9 codes and
-newer ICD-10 codes in parallel, and the comorbidities can then be
-compared.
-
-## Development version
-
-The latest version is available in [github
-icd](https://github.com/jackwasey/icd), and can be installed with:
-
-``` r
-    #install.packages("remotes")
-    remotes::install_github("jackwasey/icd")
-```
+codes appear in a canonical list. There is not yet the capability of
+converting between ICD-9 and ICD-10, but comorbidities can be generated
+from older ICD-9 codes and newer ICD-10 codes in parallel, and the
+comorbidities can then be compared.

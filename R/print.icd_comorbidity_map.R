@@ -12,22 +12,33 @@
 #' \dontrun{
 #' print(icd9_map_ahrq)
 #' print(icd9_map_ahrq, n_comorbidities = 3, n_codes = 3)
-#' print.list(icd9_map_ahrq)
-#' print(list(icd9_map_ahrq))
+#' print(unclass(icd9_map_ahrq))
 #' }
 #' @keywords internal
 #' @export
-print.comorbidity_map <- function(x, ..., n_comorbidities = 7, n_codes = 7) {
+print.comorbidity_map <- function(x,
+                                  ...,
+                                  n_comorbidities = 7,
+                                  n_codes = 7) {
   stopifnot(is.list(x))
   assert_int(n_comorbidities)
   assert_int(n_codes)
   get_n_or_len <- function(x, n) {
     x[1:ifelse(length(x) < n, length(x), n)]
   }
-  message("Showing first ",
-          n_comorbidities, " comorbidities, and first ",
-          n_codes, " of each.")
-  print(get_n_or_len(lapply(x, get_n_or_len, n_codes), n_comorbidities), ...)
-  if (length(x) > n_comorbidities)
+  message(
+    "Showing first ",
+    n_comorbidities, " comorbidities, and first ",
+    n_codes, " of each."
+  )
+  print(
+    get_n_or_len(
+      lapply(x, get_n_or_len, n_codes),
+      n_comorbidities
+    ),
+    ...
+  )
+  if (length(x) > n_comorbidities) {
     writeLines("...")
+  }
 }

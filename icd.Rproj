@@ -1,8 +1,8 @@
 Version: 1.0
 
-RestoreWorkspace: Default
-SaveWorkspace: Default
-AlwaysSaveHistory: Default
+RestoreWorkspace: No
+SaveWorkspace: No
+AlwaysSaveHistory: Yes
 
 EnableCodeIndexing: Yes
 UseSpacesForTab: Yes
@@ -19,6 +19,7 @@ BuildType: Package
 PackageUseDevtools: Yes
 PackageInstallArgs: --with-keep.source --install-tests
 PackageBuildArgs: --compact-vignettes=gs+qpdf
-PackageBuildBinaryArgs: --install-tests
-PackageCheckArgs: --as-cran --ignore-vignettes --no-build-vignettes
+PackageBuildBinaryArgs: --preclean --example --install-tests --no-clean-on-error --with-keep.source --data-compress=none
 PackageRoxygenize: rd,namespace
+
+QuitChildProcessesOnExit: Yes

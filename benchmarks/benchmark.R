@@ -19,7 +19,7 @@
 
 slow_tests <- function(...) {
   r <- as.data.frame(res <- devtools::test(reporter = testthat::ListReporter))
-  r[order(r$real, decreasing = T), c(1,3,11)] %>%  head(10)
+  r[order(r$real, decreasing = T), c(1, 3, 11)] %>% head(10)
   invisible(res)
 }
 
@@ -27,7 +27,8 @@ my_check <- function(values) {
   sapply(values, function(x) message("dims: ", nrow(x), " by ", ncol(x)))
   sapply(values, function(x) message("digest: ", digest::digest(x)))
   sapply(values, function(x) {
-    print(head(x)); print(tail(x))
+    print(head(x))
+    print(tail(x))
   })
   all(sapply(values[-1], function(x) identical(values[[1]], x)))
 }
@@ -71,13 +72,16 @@ icd9_benchmark <- function() {
   utils::Rprof(NULL)
   utils::summaryRprof(filename = tmp, lines = "show")
 
-  mydf <- data.frame(visitId = c("a", "b", "c"),
-                     icd9 = c("441", "412.93", "004.0"),
-                     stringsAsFactors = TRUE)
+  mydf <- data.frame(
+    visitId = c("a", "b", "c"),
+    icd9 = c("441", "412.93", "004.0"),
+    stringsAsFactors = TRUE
+  )
   prof_charl <- profr::profr(charlson(mydf,
-                                      return.df = TRUE,
-                                      stringsAsFactors = TRUE,
-                                      short_code = FALSE))
+    return.df = TRUE,
+    stringsAsFactors = TRUE,
+    short_code = FALSE
+  ))
   ggplot2::ggplot(prof_charl, minlabel = 0.04)
 
   rng <- "300" %i9s% "450"
@@ -85,13 +89,17 @@ icd9_benchmark <- function() {
   ggplot2::ggplot(prof_child, minlabel = 0.001)
   ggplot2::ggsave("tmpggplot.jpg", width = 250, height = 5, dpi = 200, limitsize = FALSE)
 
-  microbenchmark::microbenchmark(times = 500, # initial about 2ms
-                                 icd9AddLeadingZeroesMajor(c(1 %i9mj% 999, paste("V", 1:9, sep = ""))))
+  microbenchmark::microbenchmark(
+    times = 500, # initial about 2ms
+    icd9AddLeadingZeroesMajor(c(1 %i9mj% 999, paste("V", 1:9, sep = "")))
+  )
 
-  microbenchmark::microbenchmark(times = 500, # initial about 2ms
-                                 icd9AddLeadingZeroesMajor(c(1 %i9mj% 999, paste("V", 1:9, sep = ""))))
+  microbenchmark::microbenchmark(
+    times = 500, # initial about 2ms
+    icd9AddLeadingZeroesMajor(c(1 %i9mj% 999, paste("V", 1:9, sep = "")))
+  )
 
-  #sprintf wins
+  # sprintf wins
   microbenchmark::microbenchmark(times = 500000, sprintf("%s%s", "410", "01"))
   microbenchmark::microbenchmark(times = 500000, paste("410", "01", sep = ""))
   rsicd9 <- generate_random_short_icd9()
@@ -100,15 +108,19 @@ icd9_benchmark <- function() {
 
   # initializing empty data frame
   microbenchmark::microbenchmark(data.frame(matrix(ncol = 2, nrow = 100000)))
-  microbenchmark::microbenchmark(data.frame(major = character(100000),
-                                            minor = character(100000)))
+  microbenchmark::microbenchmark(data.frame(
+    major = character(100000),
+    minor = character(100000)
+  ))
   # regex is a little faster than fixed
   icd9 <- rep(times = 500, c("1", "not", "V10.0", " E950", ""))
-  microbenchmark::microbenchmark(times = 3,
-                                 grepl(pattern = "E", icd9, fixed = TRUE) |
-                                   grepl(pattern = "e", icd9, fixed = TRUE) |
-                                   grepl(pattern = "V", icd9, fixed = TRUE) |
-                                   grepl(pattern = "v", icd9, fixed = TRUE))
+  microbenchmark::microbenchmark(
+    times = 3,
+    grepl(pattern = "E", icd9, fixed = TRUE) |
+      grepl(pattern = "e", icd9, fixed = TRUE) |
+      grepl(pattern = "V", icd9, fixed = TRUE) |
+      grepl(pattern = "v", icd9, fixed = TRUE)
+  )
 
   microbenchmark::microbenchmark(times = 3, grepl(pattern = "[EeVv]", rpts))
 }

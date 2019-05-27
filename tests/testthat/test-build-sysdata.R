@@ -1,16 +1,18 @@
 context("build sysdata")
-skip_slow("Skipping re-building of sysdata")
+skip_slow("Skipping slow re-building of sysdata")
 test_that("sysdata.rda is okay", {
-  lknames <- c("icd9_short_n",
-               "icd9_short_v",
-               "icd9_short_e",
-               "icd9_short_n_defined",
-               "icd9_short_v_defined",
-               "icd9_short_e_defined",
-               "icd9_short_n_leaf",
-               "icd9_short_v_leaf",
-               "icd9_short_e_leaf")
-  sysdat <- generate_sysdata(save_data = FALSE)
+  lknames <- c(
+    "icd9_short_n",
+    "icd9_short_v",
+    "icd9_short_e",
+    "icd9_short_n_defined",
+    "icd9_short_v_defined",
+    "icd9_short_e_defined",
+    "icd9_short_n_leaf",
+    "icd9_short_v_leaf",
+    "icd9_short_e_leaf"
+  )
+  sysdat <- .generate_sysdata(save_pkg_data = FALSE)
   expect_equal(names(sysdat), lknames)
 
   expect_lt(length(icd9_short_n_leaf$vec), length(icd9_short_n_defined$vec))

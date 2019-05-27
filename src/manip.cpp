@@ -7,6 +7,7 @@ using namespace Rcpp;
 
 //' Simpler add leading zeroes without converting to parts and back
 //' @keywords internal manip
+//' @noRd
 // [[Rcpp::export]]
 String icd9AddLeadingZeroesMajorSingle(String mjr) {
   if (mjr == NA_STRING) return (NA_STRING);
@@ -44,6 +45,8 @@ String icd9AddLeadingZeroesMajorSingle(String mjr) {
     case 4:
       if (icd9IsASingleE(m.c_str())) return (m);
       // # nocov start
+      // avoid fallthrough warning
+      stop("Major length invalid");
     default:
       stop("Major length invalid");
       // # nocov end
@@ -106,6 +109,7 @@ CV icd9AddLeadingZeroesMajor(CV mjr) {
 //' @template short_code
 //' @return character vector of ICD-9 codes with leading zeroes
 //' @keywords internal manip
+//' @noRd
 // [[Rcpp::export(icd9_add_leading_zeroes_rcpp)]]
 CV icd9AddLeadingZeroes(CV x, bool short_code) {
   if (short_code) {

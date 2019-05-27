@@ -1,305 +1,544 @@
-#' AHRQ comorbidities
+#' ICD-9 chapters
 #'
-#' These mappings of comorbidities to ICD-9 and ICD-10 codes are derived
-#' directly from SAS code provided by AHRQ then translated into this R data
-#' structure. This is a revision of the Elixhauser system, notably excluding
-#' cardiac arrythmia.
-#' @family comorbidity maps
-#' @family comorbidities
-#' @seealso \code{\link{comorbid_ahrq}} \code{\link{icd9_comorbid_ahrq}}
-#'   \code{\link{icd10_comorbid_ahrq}}
+#' \code{icd9_chapters}, \code{icd9_chapters_sub} and \code{icd9_majors} contain
+#' mappings from the higher level descriptions of ICD-9 codes to the ranges of
+#' ICD-9 codes they describe. Helpful in summarizing codes or grouping for
+#' human-readable output. These can easily be converted to a co-morbidity
+#' mapping, as shown in the vignette.
+#'
+#' \itemize{ \item 001-139 Infectious And Parasitic Diseases \item 140-239
+#' Neoplasms \item 240-279 Endocrine, Nutritional And Metabolic Diseases, And
+#' Immunity Disorders \item 280-289 Diseases Of The Blood And Blood-Forming
+#' Organs \item 290-319 Mental Disorders \item 320-389 Diseases Of The Nervous
+#' System And Sense Organs \item 390-459 Diseases Of The Circulatory System
+#' \item 460-519 Diseases Of The Respiratory System \item 520-579 Diseases Of
+#' The Digestive System \item 580-629 Diseases Of The Genitourinary System \item
+#' 630-679 Complications Of Pregnancy, Childbirth, And The Puerperium \item
+#' 680-709 Diseases Of The Skin And Subcutaneous Tissue \item 710-739 Diseases
+#' Of The Musculoskeletal System And Connective Tissue \item 740-759 Congenital
+#' Anomalies \item 760-779 Certain Conditions Originating In The Perinatal
+#' Period \item 780-799 Symptoms, Signs, And Ill-Defined Conditions \item
+#' 800-999 Injury And Poisoning \item V01-V91 Supplementary Classification Of
+#' Factors Influencing Health Status And Contact With Health Services \item
+#' E000-E999 Supplementary Classification Of External Causes Of Injury And
+#' Poisoning }
+#' @keywords datasets list category
 #' @docType data
-#' @keywords datasets
-#' @format list of character vectors
 #' @source
-#' \url{http://www.hcup-us.ahrq.gov/toolssoftware/comorbidity/comorbidity.jsp}
-#' \url{http://www.hcup-us.ahrq.gov/toolssoftware/comorbidityicd10/comorbidity_icd10.jsp}
-#' @name icd9_map_ahrq
-#' @aliases ahrq icd10_map_ahrq
-NULL
-
-#' Quan adaptation of Deyo/Charlson comorbidities
-#'
-#' Derived automatically from the SAS code used in the original
-#' publication. According to the referenced study, this provides the
-#' best predictor of in-patient to <30d mortality. Of note, Deyo drops
-#' the distinction between leukemia, lymphoma and non-metastatic cancer.
-#' As far as I have looked into this, in the rare cases where someone
-#' had two or three of leukemia, lymphoma and non-metastatic cancer, the
-#' Quan adaptation would give a lower Charlson score than the original
-#' scheme. The original Deyo Charlson to ICD-9-CM groups does include
-#' distinct categories for these things.
-#' @family comorbidity maps
-#' @family comorbidities
-#' @seealso \code{\link{comorbid_quan_deyo}}
-#'   \code{\link{icd9_comorbid_quan_deyo}}
-#'   \code{\link{icd10_comorbid_quan_deyo}}
-#' @docType data
-#' @keywords datasets
-#' @format list of character vectors, each named by co-morbidity
-#' @references Quan, Hude, Vijaya Sundararajan, Patricia Halfon, Andrew
-#'   Fong, Bernard Burnand, Jean-Christophe Luthi, L. Duncan Saunders,
-#'   Cynthia A. Beck, Thomas E. Feasby, and William A. Ghali. "Coding
-#'   Algorithms for Defining Comorbidities in ICD-9-CM and ICD-10
-#'   Administrative Data." Medical Care 43, no. 11 (November 1, 2005):
-#'   1130-39. \url{http://www.ncbi.nlm.nih.gov/pubmed/16224307}
-#'   \url{http://web.archive.org/web/20110225042437/http://www.chaps.ucalgary.ca/sas}
-#'
-#'
-#' @name icd9_map_quan_deyo
-#' @aliases icd10_map_quan_deyo icd9_map_charlson icd10_map_charlson
-NULL
-
-#' Quan adaptation of Elixhauser comorbidities
-#'
-#' These were transcribed directly from the Quan paper referenced.
-#' @family comorbidity maps
-#' @family comorbidities
-#' @seealso \code{\link{comorbid_quan_elix}}
-#'   \code{\link{icd9_comorbid_quan_elix}}
-#'   \code{\link{icd10_comorbid_quan_elix}}
-#' @docType data
-#' @keywords datasets
-#' @format list of character vectors, each named by co-morbidity
-#' @references Quan, Hude, Vijaya Sundararajan, Patricia Halfon, Andrew
-#'   Fong, Bernard Burnand, Jean-Christophe Luthi, L. Duncan Saunders,
-#'   Cynthia A. Beck, Thomas E. Feasby, and William A. Ghali. "Coding
-#'   Algorithms for Defining Comorbidities in ICD-9-CM and ICD-10
-#'   Administrative Data." Medical Care 43, no. 11 (November 1, 2005):
-#'   1130-39. \url{http://www.ncbi.nlm.nih.gov/pubmed/16224307}
-#'   \url{http://web.archive.org/web/20110225042437/http://www.chaps.ucalgary.ca/sas}
-#'
-#'
-#' @name icd9_map_quan_elix
-#' @aliases icd10_map_quan_elix
-NULL
-
-#' Elixhauser comorbidities
-#'
-#' This data comprises the original mapping of Elixhauser's ICD-9-CM to
-#' 30 comorbidities. According to Sharabiani, this mapping provides the
-#' best long-term mortality prediction. The weaknesses of this mapping
-#' are that it is based on slightly out-dated ICD-9 codes. I have not
-#' yet verified what changes to the ICD-9-CM specification between 1998
-#' and now would impact this mapping.
-#' @family comorbidity maps
-#' @family comorbidities
-#' @seealso \code{\link{comorbid_elix}} \code{\link{icd9_comorbid_elix}}
-#'   \code{\link{icd10_comorbid_elix}}
-#' @docType data
-#' @keywords datasets
-#' @format list of character vectors, each named by co-morbidity
-#' @references Sharabiani, Mansour T. A., Paul Aylin, and Alex Bottle.
-#'   "Systematic Review of Comorbidity Indices for Administrative Data."
-#'   Medical Care December 2012 50, no. 12 (2012): 1109-18.
-#'   doi:10.1097/MLR.0b013e31825f64d0.
-#'   \url{http://www.ncbi.nlm.nih.gov/pubmed/22929993}
-#'
-#'   Elixhauser, Anne, Claudia Steiner, D. Robert Harris, and Rosanna M.
-#'   Coffey. "Comorbidity Measures for Use with Administrative Data."
-#'   Medical Care January 1998 36, no. 1 (1998): 8-27.
-#' @name icd9_map_elix
-#' @aliases icd10_map_elix
-NULL
-
 # nolint start
-
-#' Medicare Hierarchical Condition Categories
-#'
-#' Medicare HCC model was developed to use current year diagnoses and
-#' demographics predict current year healthcare expenditure. This
-#' classification has been used for additional risk adjustment models.
-#' ICD codes are first assigned to numeric Condition Categories ('CCs').
-#' A hierarchy rule is then applied so that each patient is coded for
-#' only the most severe of the Condition Categories in a group. For
-#' example, if a patient has metastatic lung cancer, they will only be
-#' assigned the 'CC' for "Metastatic Cancer and Acute Leukemia", and
-#' will not be assigned the 'CC' for "Lung and other Severe Cancers".
-#' Once the hierarchy rules are applied, the codes are referred to as
-#' HCCs. This mapping can change over time. It remained the same from
-#' 2007-10
-#' @family comorbidity maps
-#' @family comorbidities
-#' @seealso \code{\link{comorbid_hcc}} \code{\link{icd9_comorbid_hcc}}
-#'   \code{\link{icd10_comorbid_hcc}}
-#' @docType data
-#' @keywords datasets
-#' @format \code{dataframe} with 3 columns (\code{icd_code}, \code{cc},
-#'   and \code{year})
-#' @references Pope, Gregory C., et al. "Diagnostic cost group
-#'   hierarchical condition category models for Medicare risk
-#'   adjustment." Health Economics Research, Inc. Waltham, MA (2000).
-#'   \url{https://www.cms.gov/Research-Statistics-Data-and-Systems/Statistics-Trends-and-Reports/Reports/Downloads/Pope_2000_2.pdf}
-#'
-#'   Risk Adjustment, Centers for Medicare and Medicaid Services
-#'   \url{https://www.cms.gov/Medicare/Health-Plans/MedicareAdvtgSpecRateStats/Risk-Adjustors.html}
-#' @name icd9_map_hcc
-#' @aliases icd9_map_cc icd10_map_cc icd_map_cc_hcc
-NULL
-
+#' \url{http://www.cms.gov/Medicare/Coding/ICD9ProviderDiagnosticCodes/codes.html}
 # nolint end
-
-#' Clinical Classifications Software (CCS) for ICD9/10-CM
 #'
-#' The Clinical Classifications Software (CCS) for ICD-9/10-CM is one in
-#' a family of databases and software tools developed as part of the
-#' Healthcare Cost and Utilization Project (HCUP),a
-#' Federal-State-Industry partnership sponsored by the Agency for
-#' Healthcare Research and Quality. HCUP databases, tools, and software
-#' inform decision making at the national, State, and community levels.
-#' The software contains two different mappings. One is a single level
-#' mapping and one is a multi level classification. This data set
-#' contains the numeric representations of all of the codes.
-#'
-#' This file contains the updated ICD9 version that includes categories
-#' for Mental Health and Substance Abuse. More information on the
-#' ICD-9-CM data set can be found
-#' \url{https://www.hcup-us.ahrq.gov/toolssoftware/ccs/ccs.jsp}.
-#'
-#' The file \code{icd10_map_ccs} contains the 2018.1 ICD10 Version of
-#' the mapping. More information on the ICD10 code set can be found at
-#' \url{https://www.hcup-us.ahrq.gov/toolssoftware/ccs10/ccs10.jsp}
-#' @family comorbidity maps
-#' @family comorbidities
-#' @seealso \code{\link{comorbid_ccs}} \code{\link{icd9_comorbid_ccs}}
-#'   \code{\link{icd10_comorbid_ccs}}
-#' @docType data
-#' @keywords datasets
-#' @format list of character vectors, each numbered by co-morbidity
-#' @name icd9_map_single_ccs
-#' @aliases icd9_map_multi_ccs icd10_map_ccs
-NULL
-
-#' Comorbidity names
-#'
-#' These lists provide correctly sorted names of the comorbidities and
-#' their particular permutations in both full and abbreviated forms.
-#'
-#' In the Elixhauser derived mappings, uncomplicated and complicated
-#' hypertension are listed separately, but are always combined in the
-#' final analyses. Uncomplicated and complicated hypertension are list
-#' separately and as "Hypertension, combined." _abbrev suffix indicates
-#' a very short space-free description. Quan's version of Elixhauser is
-#' identical. AHRQ updates drops the arrythmia field. The naming
-#' convention is a root, e.g. \code{icd9_map_elix} or
-#' \code{icd10_map_elix}, with neither/either/both suffixes \code{_htn}
-#' and \code{_abbrev}. The Charlson derived mappings do not include
-#' hypertension. _abbreviated comorbidity names are helpful for
-#' interactive work, whereas the full names might be preferred for
-#' plotting.
-#' @format list, with character/numeric code. 'Hypertension,
-#'   uncomplicated' and 'Hypertension, complicated' are labelled '6a'
-#'   and '6b'. Diabetes, cancer, and metastasis are counted
-#'   independently, as in the original paper, giving the original 30
-#'   groups. "01" to "30"
-#' @name names_elix
-#' @aliases names_elix_abbrev names_elix_htn names_elix_htn_abbrev
-#'   names_quan_elix names_quan_elix_abbrev names_quan_elix_htn
-#'   names_quan_elix_htn_abbrev names_ahrq names_ahrq_abbrev
-#'   names_ahrq_htn names_ahrq_htn_abbrev names_charlson
-#'   names_charlson_abbrev names_cc icd_names_elix icd_names_elix_abbrev
-#'   icd_names_elix_htn icd_names_elix_htn_abbrev icd_names_quan_elix
-#'   icd_names_quan_elix_abbrev icd_names_quan_elix_htn
-#'   icd_names_quan_elix_htn_abbrev icd_names_ahrq icd_names_ahrq_abbrev
-#'   icd_names_ahrq_htn icd_names_ahrq_htn_abbrev icd_names_charlson
-#'   icd_names_charlson_abbrev icd_names_cc icd9_names_multi_ccs
-#'   icd9_names_single_ccs icd10_names_ccs
-#' @keywords datasets
-#' @docType data
-NULL
-
-#' Pediatric Complex Chronic Conditions
-#'
-#' There are seven comorbidity maps which represent the combinations of
-#' ICD-9, ICD-10, diagnosis and procedure codes, and three also with a
-#' set of 'fixed' codes. (See reference).
-#' @references Feudtner C, Feinstein JA, Zhong W, Hall M, Dai D.
-#'   Pediatric complex chronic conditions classification system version
-#'   2: updated for ICD-10 and complex medical technology dependence and
-#'   transplantation. BMC Pediatr. 2014 Aug8;14:199. doi:
-#'   10.1186/1471-2431-14-199.
-#'   \url{https://www.ncbi.nlm.nih.gov/pubmed/25102958}
-#' @family comorbidity maps
-#' @family comorbidities
-#' @seealso \code{\link{comorbid_pccc_dx}}
-#'   \code{\link{icd9_comorbid_pccc_dx}}
-#'   \code{\link{icd10_comorbid_pccc_dx}}
-#'   \code{\link{comorbid_pccc_pcs}}
-#'   \code{\link{icd9_comorbid_pccc_pcs}}
-#'   \code{\link{icd10_comorbid_pccc_pcs}}
-#'   \url{https://feudtnerlab.research.chop.edu/ccc_version_2.php}
-#' @name icd9_map_pccc
-#' @aliases icd9_map_pccc_dx icd9_map_pccc_pcs icd10_map_pccc_dx
-#'   icd10_map_pccc_pcs
-#' @docType data
-#' @keywords datasets
-NULL
-
-#' AHRQ ICD-10-PCS categories
-#'
-#' The AHRQ has categorized each of the ICD-10-PCS (Procedure Codes)
-#' into one of four groups: minor diagnostic, minor therapeutic, major
-#' diagnostic or major therapeutic. This mapping can be used to get the
-#' type(s) of procedure(s) performed on a patient from a
-#' \code{data.frame} of patients and associated procedure codes in
-#' 'long' format. See the ICD-10 vignette for an example.
-#'
-#' Currently there is no specific comorbidity function to use this data,
-#' so the generic \code{\link{comorbid}} \code{\link{icd9_comorbid}}
-#' \code{\link{icd10_comorbid}} should be used, and this data specified
-#' as the \code{map}.
-#' @family comorbidity maps
-#' @family comorbidities
-#' @seealso \code{\link{comorbid}} \code{\link{icd9_comorbid}}
-#'   \code{\link{icd10_comorbid}}
-#'   \url{https://www.hcup-us.ahrq.gov/toolssoftware/procedureicd10/procedure_icd10.jsp}
-#' @name icd10_map_ahrq_pcs
-#' @docType data
-#' @keywords datasets
-#' @examples
-#'   icd10_map_ahrq_pcs[["Major Diagnostic"]][1:5]
-#'   icd10_map_ahrq_pcs[["Minor Therapeutic"]][1:5]
-NULL
-
+#' @details Format: list with chapter/sub-chapter or major names stored in list
+#'   names, each with two element named character vector with start and end
+#'   codes.
 #' @name icd9_chapters
-#' @aliases icd9_sub_chapters icd9_majors
-#' @docType data
-#' @keywords datasets
-#' @inherit icd.data::icd9_chapters
-#' @seealso \code{\link[icd.data]{ls_icd_data}}
+#' @aliases icd9_majors
 NULL
 
+#' ICD-9 sub-chapters
+#' @name icd9_sub_chapters
+#' @seealso \code{\link{icd9_chapters}}
+NULL
+
+#' ICD-10 chapters
+#'
+#' The WHO ICD-10 scheme chapters. The chapter level is the highest in the
+#' hierarchy, each chapter containing sets of codes which span multiple
+#' three-digit 'major' codes, and in some cases also span codes across two
+#' alphabetic initial characters. E.g. Chapter I spans A00 to B99.
+#'
+#' 2017 ICD-10-CM does not have any U codes (codes for special purposes).
+#' U00-U49 - Provisional assignment of new diseases of uncertain etiology or
+#' emergency use U82-U85 - Resistance to antimicrobial and anti-neoplastic drugs
+#' @source http://apps.who.int/classifications/icd10/browse/2016/en
+#' @details Format: list with chapter names stored in list names, each with two
+#'   element named character vector with start and end codes.
 #' @name icd10_chapters
+#' @aliases icd10_chapters_fr
+#' @seealso \code{\link{icd10_sub_chapters}}
 #' @docType data
 #' @keywords datasets
-#' @inherit icd.data::icd10_chapters
-#' @seealso \code{\link[icd.data]{ls_icd_data}}
 NULL
 
+#' ICD-10 sub-chapters
+#'
+#' The WHO ICD-10 scheme sub-chapters. N.b. there may be WHO vs CM differences:
+#' please file bug if noted. In the \code{XML} definition of ICD-10-CM there are
+#' some intermediate hierarchical levels, e.g. for neoplasms. Sub-chapter here
+#' is defined as the lowest-level grouping of three-digit codes, e.g. C00-C14
+#' "Malignant neoplasms of lip, oral cavity and pharynx", not C00-C96 "Malignant
+#' neoplasms" which itself is a subset of the chapter C00-D49 "Neoplasms"
+#' @source http://apps.who.int/classifications/icd10/browse/2016/en
+#' @details Format: list with sub-chapter or major names stored in list names,
+#'   each with two element named character vector with start and end codes.
+#' @seealso \code{\link{icd10_chapters}}
 #' @name icd10_sub_chapters
-#' @docType data
-#' @keywords datasets
-#' @inherit icd.data::icd10_sub_chapters
-#' @seealso \code{\link[icd.data]{ls_icd_data}}
+#' @aliases icd10_sub_chapters_fr
 NULL
 
+#' ICD-9-CM diagnosis codes including leaf nodes and branch names up to the
+#' three-digit codes.
+#'
+#' Unlike \code{\link{get_icd9cm2014_leaf}} and friends, these data frames
+#' contain the full structure of the ICD-9-CM scheme up to the three-digit
+#' codes. Unlike the equivalent ICD-10-CM data frames (e.g.,
+#' \code{\link{icd10cm2019}}), they do not have columns indicating billable/leaf
+#' status, or chapter designations.
+#'
+#' \code{icd9cm_hierarchy} is the deprecated name, which currently points to the
+#' final ICD-9-CM 2014 release. 2011 -- 2014 are in fact identical. These are
+#' generated dynamically by parsing an awkward RTF file, and only the 2011 --
+#' 2014 data has been tested and used thoroughly.
+#' @docType data
+#' @keywords datasets
+#' @details Format:  data frame
+#' @source
+#' \url{http://wonder.cdc.gov/wonder/sci_data/codes/icd9/type_txt/icd9cm.asp}
+#' @source Rich text descriptions here:
+#'   \url{http://www.cdc.gov/nchs/icd/icd9cm.htm}
+# nolint start
+#'   \url{http://www.cms.gov/Medicare/Coding/ICD9ProviderDiagnosticCodes/codes.html}
+# nolint end
+#'    This page has versions 23 to 32 (2005 to 2014). At present, only the 2014
+#'   data is included in this package.
+#' @source
+#' \url{http://wonder.cdc.gov/wonder/sci_data/codes/icd9/type_txt/icd9abb.asp}
+#' @source
+#' \url{http://wonder.cdc.gov/wonder/sci_data/codes/icd9/type_txt/icd9cm.asp}
+#' @source
+#' \url{http://wonder.cdc.gov/wonder/sci_data/codes/icd9/type_txt/icdcm.asp}
+#' @source
+#' \url{http://wonder.cdc.gov/wonder/sci_data/codes/icd9/type_txt/icd9abb.asp}
 #' @name icd9cm_hierarchy
-#' @docType data
-#' @keywords datasets
-#' @inherit icd.data::icd9cm_hierarchy
-#' @seealso \code{\link[icd.data]{ls_icd_data}}
 NULL
 
-#' @name icd10cm2016
+#' United States and Belgium ICD-10-CM
+#'
+#' The public domain modified ICD-10 classification as published in the public
+#' domain by the US CDC. Currently this has a slightly different structure to
+#' \code{icd9cm_hierarchy} because the published data helpfully has a
+#' \emph{leaf} flag indicating whether a code is a \emph{billable} leaf node, or
+#' a code higher in the hierarchy which nevertheless will have a description.
+#' @section Editions: There are annual revisions to this data in the US.
+#' @seealso \code{\link{get_icd10cm2014}} \code{\link{get_icd10cm2015}}
+#'   \code{\link{get_icd10cm2017}} \code{\link{get_icd10cm2018}}
+#' @source \url{http://www.cdc.gov/nchs/icd/icd10cm.htm}
 #' @docType data
 #' @keywords datasets
-#' @inherit icd.data::icd10cm2016
-#' @seealso \code{\link[icd.data]{ls_icd_data}}
+#' @details Format:  data frame, with columns for code, leaf status (0 or 1),
+#'   short and long descriptions.
+#' @references \url{https://www.cms.gov/Medicare/Coding/ICD10/}
+# nolint start
+#'   \url{https://www.cms.gov/Medicare/Coding/ICD10/Downloads/2018-ICD-10-PCS-Tables-And-Index.zip}
+#'   \url{https://www.cms.gov/Medicare/Coding/ICD10/Downloads/2018-ICD-10-PCS-Order-File.zip}
+#'   \url{https://www.cms.gov/Medicare/Coding/ICD10/Downloads/2017-PCS-Code-Tables.zip}
+#'   \url{https://www.cms.gov/Medicare/Coding/ICD10/Downloads/2017-PCS-Long-Abbrev-Titles.zip}
+#'   \url{https://www.cms.gov/Medicare/Coding/ICD10/Downloads/2016-Code-Descriptions-in-Tabular-Order.zip}
+#'   \url{https://www.cms.gov/Medicare/Coding/ICD10/Downloads/2015-code-descriptions.zip}
+#'   \url{https://www.cms.gov/Medicare/Coding/ICD10/Downloads/2015-tables-index.zip}
+#'   \url{https://www.cms.gov/Medicare/Coding/ICD10/Downloads/2015-Code_Tables-and-Index.zip}
+#'   \url{https://www.cms.gov/Medicare/Coding/ICD10/Downloads/2015-PCS-long-and-abbreviated-titles.zip}
+#'   \url{https://www.cms.gov/Medicare/Coding/ICD10/Downloads/2014-ICD10-Code-Descriptions.zip}
+#'   \url{https://www.cms.gov/Medicare/Coding/ICD10/Downloads/2014-ICD10-Code-Tables-and-Index.zip}
+#'   \url{https://www.cms.gov/Medicare/Coding/ICD10/Downloads/2014-Code-Tables-and-Index.zip}
+#'   \url{https://www.cms.gov/Medicare/Coding/ICD10/Downloads/2014-PCS-long-and-abbreviated-titles.zip}
+# nolint end
+#' @name icd10cm2019
 NULL
 
-#' @name icd9cm_billable
+#' @name get_icd10cm2014
+#' @title ICD-10-CM 2014
+#' @seealso \code{\link{icd10cm2019}}
 #' @docType data
 #' @keywords datasets
-#' @inherit icd.data::icd9cm_billable
-#' @seealso \code{\link[icd.data]{ls_icd_data}}
+#' @export
+NULL
+
+#' @name get_icd10cm2015
+#' @title ICD-10-CM 2015
+#' @seealso \code{\link{icd10cm2019}}
+#' @docType data
+#' @keywords datasets
+#' @export
+NULL
+
+#' @name get_icd10cm2016
+#' @title ICD-10-CM 2016
+#' @seealso \code{\link{icd10cm2019}}
+#' @docType data
+#' @keywords datasets
+#' @export
+NULL
+
+#' @name get_icd10cm2017
+#' @title ICD-10-CM 2017
+#' @seealso \code{\link{icd10cm2019}}
+#' @docType data
+#' @keywords datasets
+#' @export
+NULL
+
+#' @name get_icd10cm2018
+#' @title ICD-10-CM 2018
+#' @seealso \code{\link{icd10cm2019}}
+#' @docType data
+#' @keywords datasets
+#' @export
+NULL
+
+#' @name get_icd10cm2019
+#' @title ICD-10-CM 2019
+#' @seealso \code{\link{icd10cm2019}}
+#' @docType data
+#' @keywords datasets
+#' @export
+NULL
+
+#' 2016 WHO ICD-10 data
+#'
+#' This data must be downloaded on a per-user basis. A prompt is given when the
+#' data is first attempted to be accessed.
+#' @name get_icd10who2016
+#' @source \url{http://www.who.int}
+#' @docType data
+#' @keywords datasets
+#' @export
+NULL
+
+#' 2008 WHO ICD-10 data in French
+#'
+#' This data must be downloaded on a per-user basis. A prompt is given when the
+#' data is first attempted to be accessed.
+#' @name get_icd10who2008fr
+#' @source \url{http://www.who.int}
+#' @docType data
+#' @keywords datasets
+#' @export
+NULL
+
+#' French ICD-10-FR modification of WHO ICD-10 used in France
+#'
+#' La Classification internationale statistique des maladies (CIM), version 10,
+#' edition française (The International Classification of Diseases (ICD),
+#' version 10, French edition.) Comme la version américaine, l'édition française
+#' a beaucoup de changéements par rapport à l'édition de l'OMS. Juste l'année
+#' 2018 est présentée pour le moment.
+# "
+#' The short descriptions are capitalized, and, as is correct in French, do not
+#' require accents. These were not converted to lower or sentence case to avoid
+#' introducing spelling errors.
+#' Définitions CIM-10-FR de l'OMS (WHO ICD-10 definitions)
+#' @source \url{https://www.atih.sante.fr/cim-10-fr-2018-usage-pmsi}
+#' @references
+# nolint start
+#'   \href{https://www.atih.sante.fr/nomenclatures-de-recueil-de-linformation/cim}{ATIH
+#'   CIM-10-FR}
+# nolint end
+#' @docType data
+#' @keywords datasets
+#' @name get_icd10fr2019
+#' @export
+NULL
+
+#' Belgian ICD-10-BE
+#'
+#' This is based heavily on ICD-10-CM. 2014 is identical, with translations for
+#' most of the codes into Dutch and French. 2017 has about a hundred additional
+#' code definitions over ICD-10-CM 2017. The 2014 data also has the interesting
+#' fields for gender specificity of a given code, and whether it is permissible
+#' as Present-on-Arrival (POA).
+#' @source
+#' \url{https://www.health.belgium.be/en/node/30433}
+# nolint start
+#' \url{https://www.health.belgium.be/sites/default/files/uploads/fields/fpshealth_theme_file/fy2017_reflist_icd-10-be.xlsx_last_updatet_28-07-2017_1.xlsx}
+#' \url{https://www.health.belgium.be/fr/sante/organisation-des-soins-de-sante/hopitaux/systemes-denregistrement/icd-10-be}
+# nolint end
+#' \url{https://www.health.belgium.be/fr/fy2014reflisticd-10-bexlsx}
+#' @name get_icd10be2014
+#' @seealso \code{\link{get_icd10be2017}} \code{\link{get_icd10be2014_pc}}
+#'   \code{\link{get_icd10be2017_pc}}
+#' @docType data
+#' @keywords datasets
+#' @export
+NULL
+
+#' @title ICD-10-BE 2017
+#' @name get_icd10be2017
+#' @seealso \code{\link{get_icd10be2014}} \code{\link{get_icd10be2014_pc}}
+#'   \code{\link{get_icd10be2017_pc}}
+#' @docType data
+#' @keywords datasets
+#' @export
+NULL
+
+#' @title ICD-10-BE 2017 procedure codes
+#' @name get_icd10be2017_pc
+#' @seealso \code{\link{get_icd10be2014}} \code{\link{get_icd10be2014_pc}}
+#'   \code{\link{get_icd10be2017}}
+#' @docType data
+#' @keywords datasets
+#' @export
+NULL
+
+#' @title ICD-10-BE 2014 procedure codes
+#' @name get_icd10be2014_pc
+#' @seealso \code{\link{get_icd10be2014}} \code{\link{get_icd10be2017}}
+#'   \code{\link{get_icd10be2017_pc}}
+#' @docType data
+#' @keywords datasets
+#' @export
+NULL
+
+#' ICD-10-CM Procedure Codes
+#'
+#' ICD-10-PCS is the annually-updated set of procedure codes designed by 3M for
+#' the US CMS. There is no directory of WHO ICD procedure codes.
+#' @format A named list of data frames. The elements of the list are named by
+#'   the year, e.g., \code{"2018"}. Each data frame contains two character
+#'   columns, the first, named \code{code} is the procedure code; the second,
+#'   named \code{desc}, has the description.
+#' @name get_icd10cm2019_pc
+#' @seealso \code{get_icd10cm2014_pc} \code{get_icd10cm2015_pc}
+#'   \code{get_icd10cm2016_pc} \code{get_icd10cm2017_pc}
+#'   \code{get_icd10cm2018_pc}
+#' \url{https://www.cms.gov/Medicare/Coding/ICD10/downloads/pcs_refman.pdf}
+#' @docType data
+#' @keywords datasets
+#' @export
+NULL
+
+#' ICD-10-CM Procedure codes for 2014
+#' @name get_icd10cm2014_pc
+#' @seealso \code{get_icd10cm2015_pc} \code{get_icd10cm2016_pc}
+#'   \code{get_icd10cm2017_pc} \code{get_icd10cm2018_pc}
+#'   \code{get_icd10cm2019_pc}
+#' @docType data
+#' @keywords datasets
+#' @export
+NULL
+
+#' ICD-10-CM Procedure codes for 2015
+#' @name get_icd10cm2015_pc
+#' @seealso \code{get_icd10cm2014_pc} \code{get_icd10cm2016_pc}
+#'   \code{get_icd10cm2017_pc} \code{get_icd10cm2018_pc}
+#'   \code{get_icd10cm2019_pc}
+#' @docType data
+#' @keywords datasets
+#' @export
+NULL
+
+#' ICD-10-CM Procedure codes for 2016
+#' @name get_icd10cm2016_pc
+#' @seealso \code{get_icd10cm2014_pc} \code{get_icd10cm2015_pc}
+#'   \code{get_icd10cm2017_pc} \code{get_icd10cm2018_pc}
+#'   \code{get_icd10cm2019_pc}
+#' @docType data
+#' @keywords datasets
+#' @export
+NULL
+
+#' ICD-10-CM Procedure codes for 2017
+#' @name get_icd10cm2017_pc
+#' @seealso \code{get_icd10cm2014_pc} \code{get_icd10cm2015_pc}
+#'   \code{get_icd10cm2016_pc} \code{get_icd10cm2018_pc}
+#'   \code{get_icd10cm2019_pc}
+#' @docType data
+#' @keywords datasets
+#' @export
+NULL
+
+#' ICD-10-CM Procedure codes for 2018
+#' @name get_icd10cm2018_pc
+#' @seealso \code{get_icd10cm2014_pc} \code{get_icd10cm2015_pc}
+#'   \code{get_icd10cm2016_pc} \code{get_icd10cm2017_pc}
+#'   \code{get_icd10cm2019_pc}
+#' @docType data
+#' @keywords datasets
+#' @export
+NULL
+
+#' ICD-9-CM, just billable/leaf codes
+#'
+#' @details These are derived from the final CMS published version 32 for 2014,
+#'   which was unchanged since 2011. The short descriptions are in ASCII with no
+#'   special characters, whereas the long descriptions contain accented
+#'   characters which are stored as Unicode, \code{latin-1} or \code{cp1252}.
+#'
+#'   This all done during package creation, but can be repeated by package
+#'   users, including pulling the data from the web pages directly. Despite my
+#'   best efforts, current locale can give different results, but this packaged
+#'   data is correct, with some \code{UTF-8} encoded strings.
+#'   \code{icd9cm_billable} has been removed, and is replaced by
+#'   \code{icd9cm2014_leaf} now includes only the latest version (32).
+#' @docType data
+#' @keywords datasets
+#' @format data frames with columns \code{code}, \code{short_desc}, and
+#'   \code{long_desc}.
+#' @source
+# nolint start
+#' \url{http://www.cms.gov/Medicare/Coding/ICD9ProviderDiagnosticCodes/codes.html}
+# nolint end
+#' @name get_icd9cm2014_leaf
+#' @aliases get_cd9cm2005_leaf get_icd9cm2006_leaf get_icd9cm2007_leaf
+#'   get_icd9cm2008_leaf get_icd9cm2009_leaf get_icd9cm2010_leaf
+#'   get_icd9cm2011_leaf get_icd9cm2012_leaf get_icd9cm2013_leaf
+#'   get_icd9cm2014_leaf
+#' @export
+NULL
+
+#' The final ICD-9-CM list of leaf (\sQuote{billable}) codes
+#'
+#' Other years are available from \code{\link{get_icd9cm2013_leaf}}, etc..
+#' @name icd9cm2014_leaf
+#' @docType data
+#' @keywords datasets
+NULL
+
+#' @name get_icd9cm2005
+#' @rdname icd9cm_hierarchy
+#' @export
+NULL
+
+#' @name get_icd9cm2006
+#' @rdname icd9cm_hierarchy
+#' @export
+NULL
+
+#' @name get_icd9cm2007
+#' @rdname icd9cm_hierarchy
+#' @export
+NULL
+
+#' @name get_icd9cm2008
+#' @rdname icd9cm_hierarchy
+#' @export
+NULL
+
+#' @name get_icd9cm2009
+#' @rdname icd9cm_hierarchy
+#' @export
+NULL
+
+#' @name get_icd9cm2010
+#' @rdname icd9cm_hierarchy
+#' @export
+NULL
+
+#' @name get_icd9cm2011
+#' @rdname icd9cm_hierarchy
+#' @export
+NULL
+
+#' @name get_icd9cm2012
+#' @rdname icd9cm_hierarchy
+#' @export
+NULL
+
+#' @name get_icd9cm2013
+#' @rdname icd9cm_hierarchy
+#' @export
+NULL
+
+#' @name get_icd9cm2014
+#' @rdname icd9cm_hierarchy
+#' @export
+NULL
+
+#' @name get_icd9cm2005_leaf
+#' @rdname get_icd9cm2014_leaf
+#' @export
+NULL
+
+#' @name get_icd9cm2006_leaf
+#' @rdname get_icd9cm2014_leaf
+#' @export
+NULL
+
+#' @name get_icd9cm2007_leaf
+#' @rdname get_icd9cm2014_leaf
+#' @export
+NULL
+
+#' @name get_icd9cm2008_leaf
+#' @rdname get_icd9cm2014_leaf
+#' @export
+NULL
+
+#' @name get_icd9cm2009_leaf
+#' @rdname get_icd9cm2014_leaf
+#' @export
+NULL
+
+#' @name get_icd9cm2010_leaf
+#' @rdname get_icd9cm2014_leaf
+#' @export
+NULL
+
+#' @name get_icd9cm2011_leaf
+#' @rdname get_icd9cm2014_leaf
+#' @export
+NULL
+
+#' @name get_icd9cm2012_leaf
+#' @rdname get_icd9cm2014_leaf
+#' @export
+NULL
+
+#' @name get_icd9cm2013_leaf
+#' @rdname get_icd9cm2014_leaf
+#' @export
+NULL
+
+#' The latest available version of ICD-10-CM in this package
+#' @details This is an active binding, so is exported explicitly
+#' @docType data
+#' @keywords datasets
+#' @export
+get_icd10cm_latest <- function() {
+  get_icd10cm2019()
+}
+
+
+#' Hospital discharge data from Vermont
+#'
+#' Anonymous data from public Vermont source for 2013
+#'
+#' Conditions of Release Release of public use data is subject to the following
+#' conditions, which the requestor agrees to upon accepting copies of the data:
+#'
+#' 1. The data may not be used in any manner that attempts to or does identify,
+#' directly or indirectly, any individual patient or physician.
+#'
+#' 2. The requestor agrees to incorporate the following, or a substantially
+#' similar, disclaimer in all reports or publications that include public use
+#' data: \dQuote{Hospital discharge data for use in this study were supplied by
+#' the Vermont Association of Hospitals and Health Systems-Network Services
+#' Organization (VAHHS-NSO) and the Vermont Department of Banking, Insurance,
+#' Securities and Health Care Administration (BISHCA). All analyses,
+#' interpretations or conclusions based on these data are solely that of [the
+#' requestor]. VAHHS-NSO and BISHCA disclaim responsibility for any such
+#' analyses, interpretations or conclusions. In addition, as the data have been
+#' edited and processed by VAHHS-NSO, BISHCA assumes no responsibility for
+#' errors in the data due to coding or processing}
+#' @source
+# nolint start
+#' \url{http://www.healthvermont.gov/health-statistics-vital-records/health-care-systems-reporting/hospital-discharge-data}
+# nolint end
+#' @details Format:  CSV original, minimally processed into R data frame.
+#' @keywords datasets
+#' @author Vermont Division of Health Care Administration
+#' @docType data
+#' @name vermont_dx
+#' @noMd
+NULL
+
+#' United States Transuranium & Uranium Registries
+#'
+#' This is an ICD-10 data set (not ICD-10-CM) with mortality from the United
+#' States Transuranium & Uranium Registries, published in the public domain.
+#' @name uranium_pathology
+#' @source \url{https://ustur.wsu.edu/about-us/}
+#' @docType data
+#' @keywords datasets
 NULL

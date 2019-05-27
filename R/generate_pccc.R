@@ -1,4 +1,4 @@
-#nocov start
+# nocov start
 
 #' Generate PCCC data
 #'
@@ -8,23 +8,25 @@
 #'
 #' The 'fixed' data are those identified in the JAMA Pediatrics letter which
 #' required exact matching to avoid overly broad capture of diagnoses.
-#' @template save_data
+#' @template save_pkg_data
 #' @examples
 #' \dontrun{
-#' icd:::generate_maps_pccc(save_data = FALSE)
+#' icd:::generate_maps_pccc(save_pkg_data = FALSE)
 #' }
 #' @keywords internal
-generate_maps_pccc <- function(save_data = TRUE) {
-  icd9_generate_map_pccc_dx(save_data)
-  icd9_generate_map_pccc_pcs(save_data)
-  icd10_generate_map_pccc_dx(save_data)
-  icd10_generate_map_pccc_pcs(save_data)
+#' @noRd
+generate_maps_pccc <- function(save_pkg_data = TRUE) {
+  icd9_generate_map_pccc_dx(save_pkg_data)
+  icd9_generate_map_pccc_pcs(save_pkg_data)
+  icd10_generate_map_pccc_dx(save_pkg_data)
+  icd10_generate_map_pccc_pcs(save_pkg_data)
   # no icd10 fixed
 }
 
-#' @rdname generate_maps_pccc
+#' ICD-9 generate_maps_pccc
 #' @keywords internal
-icd9_generate_map_pccc_dx <- function(save_data = TRUE) {
+#' @noRd
+icd9_generate_map_pccc_dx <- function(save_pkg_data = TRUE) {
   icd9_map_pccc_orig_dx <- list(
     neuromusc = c(
       "3180", "3181", "3182", "330", "331", "3320", "3321",
@@ -35,7 +37,8 @@ icd9_generate_map_pccc_dx <- function(save_data = TRUE) {
       "3453", "34541", "34561", "34571", "34591", "3481", "3484",
       "3491", "43401", "43491", "740",
       "741", "742", "7595", "78003", "9962", "99663", "V452",
-      "V5301", "V5302"),
+      "V5301", "V5302"
+    ),
     cvd = c(
       "4161", "4168", "4169", "4240", "4258", "4242", "4243", "4250",
       "4251", "4252", "4253",
@@ -45,42 +48,52 @@ icd9_generate_map_pccc_dx <- function(save_data = TRUE) {
       "746", "7471", "7472", "7473", "7474",
       "74781", "74789", "9960", "9961", "99661", "99662", "V421", "V422",
       "V432", "V433", "V450", "V4581",
-      "V533"),
+      "V533"
+    ),
     respiratory = c(
       "32725", "4160", "4162", "51630", "51631", "51637",
       "51884", "5190", "2770", "748", "7704", "V426",
-      "V440", "V4576", "V460", "V461", "V550"),
+      "V440", "V4576", "V460", "V461", "V550"
+    ),
     renal = c(
       "34461", "585", "5964", "59653", "59654", "753", "99668",
       "V420", "V445", "V446",
-      "V451", "V4573", "V4574", "V536", "V555", "V556", "V56"),
+      "V451", "V4573", "V4574", "V536", "V555", "V556", "V56"
+    ),
     gi = c(
       "4530", "5364", "555", "556", "5571", "5602", "5647", "5714",
       "5715", "5716", "5717",
       "5718", "5719", "7503", "751", "V427", "V4283", "V4284", "V441",
       "V442", "V443", "V444", "V5350",
-      "V5351", "V5359", "V551", "V552", "V553", "V554"),
+      "V5351", "V5359", "V551", "V552", "V553", "V554"
+    ),
     hemato_immu = c(
       "042", "043", "044", "135", "279", "2820", "2821", "2822",
       "2823", "2824", "2825",
       "2826", "2881", "2882", "284", "2860", "2863", "28732",
       "28733", "28739", "28801", "28802",
       "2884", "4460", "4461", "44621", "4464", "4465", "4466",
-      "4467", "7100", "7101", "7103", "V08"),
+      "4467", "7100", "7101", "7103", "V08"
+    ),
     metabolic = c(
       "243", "2532", "2535", "2536", "2539", "2550", "25513",
       "2552", "270", "271", "272",
       "2750", "2751", "2752", "2753", "2772", "2773", "2774",
       "2775", "2776", "2778", "2779",
-      "V4585", "V5391", "V6546"),
+      "V4585", "V5391", "V6546"
+    ),
     congeni_genetic = c(
       "2594", "5533", "7373", "7560", "7561", "7562", "7563",
       "7564", "7565", "7566",
-      "7567", "758", "7597", "7598", "7599"),
+      "7567", "758", "7597", "7598", "7599"
+    ),
     malignancy = c(
-      apply(expand.grid(c("14", "15", "16", "17", "18", "19", "20",
-                          "23"), 0:9), MARGIN = 1, paste, collapse = ""),
-      "V4281", "V4282"),
+      apply(expand.grid(c(
+        "14", "15", "16", "17", "18", "19", "20",
+        "23"
+      ), 0:9), MARGIN = 1, paste, collapse = ""),
+      "V4281", "V4282"
+    ),
     neonatal = c(
       "76401", "76402", "76411", "76412", "76421", "76422", "76491",
       "76492", "76501",
@@ -88,7 +101,8 @@ icd9_generate_map_pccc_dx <- function(save_data = TRUE) {
       "7674", "7685", "7687", "7689",
       "7702", "7707", "7710", "7711", "77213", "77214", "7733",
       "7734", "7747", "7765", "77753", "7780",
-      "7797"),
+      "7797"
+    ),
     tech_dep = c(
       "5190", "5364", "9960", "9961", "9962", "9964", "99661",
       "99662", "99663", "99666", "99667",
@@ -97,16 +111,20 @@ icd9_generate_map_pccc_dx <- function(save_data = TRUE) {
       "V452", "V460", "V461", "V462", "V5301", "V5302", "V5331",
       "V5332", "V5339", "V5350", "V5351",
       "V5359", "V536", "V550", "V551", "V552", "V553", "V554",
-      "V555", "V556"),
+      "V555", "V556"
+    ),
     transplant = c(
       "99680", "99681", "99682", "99683", "99684", "99685",
       "99686", "99687", "99688", "99689",
       "V421", "V422", "V426", "V427", "V4281", "V4282", "V4283",
-      "V4284", "V432", "V4585", "V5391")
+      "V4284", "V432", "V4585", "V5391"
+    )
   )
   icd9_map_pccc_dx <- lapply(
     icd9_map_pccc_orig_dx,
-    children.icd9, short_code = TRUE, defined = FALSE)
+    children.icd9,
+    short_code = TRUE, defined = FALSE
+  )
   # the following are "fixed", replicating the JAMA Pediatrics Letter
   icd9_map_pccc_dx[["neuromusc"]] <-
     c(icd9_map_pccc_dx[["neuromusc"]], "359", "3592")
@@ -116,19 +134,22 @@ icd9_generate_map_pccc_dx <- function(save_data = TRUE) {
     c(icd9_map_pccc_dx[["respiratory"]], "5163")
   # TODO icd_names_pccc etc
   icd9_map_pccc_dx <- as.comorbidity_map(icd9_map_pccc_dx)
-  if (save_data)
-    save_in_data_dir(icd9_map_pccc_dx)
+  if (save_pkg_data) {
+    .save_in_data_dir(icd9_map_pccc_dx)
+  }
   invisible(icd9_map_pccc_dx)
 }
 
-#' @rdname generate_maps_pccc
+#' ICD-9 PCS generate_maps_pccc
 #' @keywords internal
-icd9_generate_map_pccc_pcs <- function(save_data = TRUE) {
+#' @noRd
+icd9_generate_map_pccc_pcs <- function(save_pkg_data = TRUE) {
   icd9_map_pccc_orig_pc <- list(
     neuromusc = c(
       "0152", "0153", "0221", "0222", "0231",
       "0232", "0233", "0234", "0235", "0239", "0241",
-      "0242", "0293", "0371", "0372", "0379", "0393", "0397", "0492"),
+      "0242", "0293", "0371", "0372", "0379", "0393", "0397", "0492"
+    ),
     cvd = c(
       "0050", "0051", "0053", "0054", "0055", "0057",
       "1751", "1752", "3581", "3582", "3583",
@@ -138,11 +159,13 @@ icd9_generate_map_pccc_pcs <- function(save_data = TRUE) {
       "3779", "3780", "3781", "3782", "3783", "3785",
       "3786", "3787", "3789", "3794", "3795", "3796",
       "3797", "3798", "3981", "3982", "3983", "3984",
-      "3985", "8945", "8946", "8947", "8948", "8949"),
+      "3985", "8945", "8946", "8947", "8948", "8949"
+    ),
     respiratory = c(
       "303", "304", "3121", "3129", "3141",
       "3174", "3241", "3249", "3250", "3259", "3321",
-      "3350", "3351", "3352", "336", "3485", "9655", "9723"),
+      "3350", "3351", "3352", "336", "3485", "9655", "9723"
+    ),
     renal = c(
       "3895", "3927", "3942", "3993", "3994", "3995",
       "5498", "5502", "5503", "5504", "5512",
@@ -150,7 +173,8 @@ icd9_generate_map_pccc_pcs <- function(save_data = TRUE) {
       "5593", "5594", "5597", "5641", "5642", "5651", "5652",
       "5661", "5662", "5671", "5672", "5673", "5674", "5675",
       "5679", "5721", "5722", "5771", "5779", "5993",
-      "5994", "8607", "9645", "9646", "9647"),
+      "5994", "8607", "9645", "9646", "9647"
+    ),
     gi = c(
       "253", "254", "4210", "4211", "4242", "4281",
       "4311", "4319", "4391", "4399", "4412",
@@ -158,16 +182,19 @@ icd9_generate_map_pccc_pcs <- function(save_data = TRUE) {
       "4583", "4613", "4622", "4623", "4632", "4640", "4641",
       "4643", "4697", "504", "5051", "5059", "526",
       "527", "5280", "5282", "5283", "5284", "5285", "5286",
-      "5471", "9624", "9636", "9702"),
+      "5471", "9624", "9636", "9702"
+    ),
     hemato_immu = c(
       "4100", "4101", "4102", "4103", "4104", "4105",
       "4106", "4107", "4108", "4109", "415",
-      "4194"),
+      "4194"
+    ),
     metabolic = c(
       "064", "0652", "0681", "073", "0764", "0765",
       "0768", "0769", "6241", "645", "6551",
       "6553", "6561", "6563", "6841", "6849", "6851",
-      "6859", "6861", "6869", "6871", "6879", "8606"),
+      "6859", "6861", "6869", "6871", "6879", "8606"
+    ),
     congeni_genetic = c(),
     malignancy = c("0010", "9925"),
     neonatal = c(),
@@ -183,25 +210,29 @@ icd9_generate_map_pccc_pcs <- function(save_data = TRUE) {
       "4210", "4211", "4281", "4311", "4319", "4412", "4432", "4438", "4439", "4613", "4622", "4623", "4632",
       "4640", "4641", "4643", "9624", "9636", "9702", "8100", "8101", "8102", "8103", "8104", "8105", "8106",
       "8107", "8108", "8109", "8130", "8131", "8132", "8133", "8134", "8135", "8136", "8137", "8138", "8139",
-      "8451"),
+      "8451"
+    ),
     transplant = c(
       "3751", "3350", "3351", "3352", "336", "5561",
       "5569", "4697", "5051", "5059", "5280", "5282",
       "5283", "5284", "5285", "5286", "4100", "4101",
       "4102", "4103", "4104", "4105", "4106", "4107", "4108",
-      "4109", "4194", "0091", "0092", "0093")
+      "4109", "4194", "0091", "0092", "0093"
+    )
   )
   icd9_map_pccc_orig_pc[["metabolic"]] <-
     c(icd9_map_pccc_orig_pc[["metabolic"]], "624")
   icd9_map_pccc_pcs <- as.comorbidity_map(icd9_map_pccc_orig_pc)
-  if (save_data)
-    save_in_data_dir(icd9_map_pccc_pcs)
+  if (save_pkg_data) {
+    .save_in_data_dir(icd9_map_pccc_pcs)
+  }
   invisible(icd9_map_pccc_pcs)
 }
 
-#' @rdname generate_maps_pccc
+#' ICD-10 generate_maps_pccc
 #' @keywords internal
-icd10_generate_map_pccc_dx <- function(save_data) {
+#' @noRd
+icd10_generate_map_pccc_dx <- function(save_pkg_data) {
   icd10_map_pccc_orig_dx <- list(
     neuromusc = c(
       "E75", "F71", "F72", "F73", "F842", "G111", "G112", "G114",
@@ -220,13 +251,14 @@ icd10_generate_map_pccc_dx <- function(save_data) {
       "G254", "G255", "G2581", "G2582", "G2583", "G2589",
       "G259", "R403", "G9782", "T8509XA",
       "T85190A", "T85192A", "T85199A", "T8579XA", "Z982",
-      "Z4541", "Z4542", "Q851"),
+      "Z4541", "Z4542", "Q851"
+    ),
     cvd = c(
       "I270", "I271", "I272", "I2781", "I2789", "I279", "I340", "I348", "I360",
       "I368", "I370", "I378", "I42", "I43", "I44", "I45", "I47", "I48", "I490",
       "I491", "I493", "I494", "I495", "I498", "I499", "I509", "I515", "I517",
-      "I5181", "I63139", "I63239", "Q20", "Q212",  "Q213", "Q214", "Q218",
-      "Q219", "Q22", "Q23", "Q24", "Q251", "Q252",  "Q253", "Q254", "Q255",
+      "I5181", "I63139", "I63239", "Q20", "Q212", "Q213", "Q214", "Q218",
+      "Q219", "Q22", "Q23", "Q24", "Q251", "Q252", "Q253", "Q254", "Q255",
       "Q256", "Q257", "Q258", "Q259", "Q26", "Q268", "R001", "Q282", "Q283",
       "Q289", "Z951", "T82519A", "T82529A", "T82539A", "T82599A",
       "T82110A", "T82111A", "T82120A", "T82121A",
@@ -236,28 +268,33 @@ icd10_generate_map_pccc_dx <- function(save_data) {
       "T82518A", "T82528A", "T82538A", "T82598A",
       "T826XXA", "T827XXA", "Z941", "Z950", "Z952", "Z95810",
       "Z95811", "Z95812", "Z95818", "Z953", "Z45010",
-      "Z45018", "Z4502", "Z4509", "Z959"),
+      "Z45018", "Z4502", "Z4509", "Z959"
+    ),
     respiratory = c(
       "E84", "G4735", "I2782", "Q30", "Q31", "Q32", "Q33",
       "Q34", "P280", "Z902", "J84112",
       "J9500", "J9501", "J9502", "J9503", "J9504", "J9509",
       "J9620", "Z430", "Z930", "Z942", "Z990", "J95850",
-      "Z9911", "Z9912", "T86810", "T86811", "T86819"),
+      "Z9911", "Z9912", "T86810", "T86811", "T86819"
+    ),
     renal = c(
       "N18", "Q60", "Q61", "Q62", "Q63", "Q64", "Z905",
       "Z906", "G834", "N312", "N319", "T8571XA",
       "Z940", "Z9350", "Z9351", "Z9352", "Z9359", "Z936",
       "Z9115", "Z992", "Z435", "Z436", "Z446", "Z4901",
-      "Z4902", "Z4931", "Z4932", "T8610", "T8611", "T8612"),
-    gi = c("K50", "K51", "K73", "K74", "K754", "K760", "K761",
-           "K762", "K763", "K768", "Q390", "Q391",
-           "Q392", "Q393", "Q394", "Q41", "Q42", "Q43", "Q44",
-           "Q45", "I820", "K551", "K562", "K593", "Z980", "Z903",
-           "Z9049", "K9420", "K9422", "K9423", "K9429", "Z944",
-           "Z9482", "Z9483", "Z931", "Z932", "Z933", "Z934",
-           "Z431", "Z432", "Z433", "Z434", "Z4651", "Z4659",
-           "T8640", "T8641", "T8642", "T86890", "T86891",
-           "T86899", "T86850", "T86851", "T86859"),
+      "Z4902", "Z4931", "Z4932", "T8610", "T8611", "T8612"
+    ),
+    gi = c(
+      "K50", "K51", "K73", "K74", "K754", "K760", "K761",
+      "K762", "K763", "K768", "Q390", "Q391",
+      "Q392", "Q393", "Q394", "Q41", "Q42", "Q43", "Q44",
+      "Q45", "I820", "K551", "K562", "K593", "Z980", "Z903",
+      "Z9049", "K9420", "K9422", "K9423", "K9429", "Z944",
+      "Z9482", "Z9483", "Z931", "Z932", "Z933", "Z934",
+      "Z431", "Z432", "Z433", "Z434", "Z4651", "Z4659",
+      "T8640", "T8641", "T8642", "T86890", "T86891",
+      "T86899", "T86850", "T86851", "T86859"
+    ),
     hemato_immu = c(
       "B20", "D55", "D56", "D57", "D58", "D60",
       "D61", "D71", "D720", "D80", "D81", "D82",
@@ -265,7 +302,8 @@ icd10_generate_map_pccc_dx <- function(save_data) {
       "M359", "B21", "B22", "B23", "B24", "D700", "D704",
       "D66", "D682", "D6941", "D6942", "D761", "D762",
       "D763", "M300", "M310", "M311", "M3130", "M314",
-      "M316", "M3210", "M3390", "M340", "M341", "M349", "Z21"),
+      "M316", "M3210", "M3390", "M340", "M341", "M349", "Z21"
+    ),
     metabolic = c(
       "E700", "E702", "E703", "E704", "E705",
       "E708", "E710", "E711", "E712", "E713",
@@ -278,7 +316,8 @@ icd10_generate_map_pccc_dx <- function(save_data) {
       "E830", "E831", "E833", "E834", "E88", "H498", "E85",
       "E009", "E230", "E232", "E222", "E233", "E237",
       "E240", "E242", "E243", "E248", "E249", "E2681",
-      "E250", "E258", "E259", "Z4681", "Z794", "Z9641"),
+      "E250", "E258", "E259", "Z4681", "Z794", "Z9641"
+    ),
     congeni_genetic = c(
       "E343", "K449", "M410", "M412", "M4130", "M418",
       "M419", "M4330", "M965", "Q722", "Q750",
@@ -288,13 +327,15 @@ icd10_generate_map_pccc_dx <- function(save_data) {
       "Q793", "Q794", "Q799", "Q795", "Q8740", "Q8781",
       "Q8789", "Q897", "Q899", "Q909", "Q913", "Q914", "Q917",
       "Q928", "Q93", "Q950", "Q969", "Q97", "Q98",
-      "Q992", "Q998", "Q999", "Q898", "Q81"),
+      "Q992", "Q998", "Q999", "Q898", "Q81"
+    ),
     malignancy = c(
       "C", "D00", "D01", "D02", "D03", "D04", "D05",
       "D06", "D07", "D08", "D09", "D37", "D38",
       "D39", "D3A0", "D40", "D41", "D42", "D43", "D44", "D45",
       "D46", "D47", "D48", "D49", "Q850", "Z9481",
-      "Z9484", "T8600", "T8601", "T8602", "T8609"),
+      "Z9484", "T8600", "T8601", "T8602", "T8609"
+    ),
     neonatal = c(
       "P0501", "P0511", "P0502", "P0512", "P052",
       "P059", "P0701", "P0702", "P0721", "P0722",
@@ -302,7 +343,8 @@ icd10_generate_map_pccc_dx <- function(save_data) {
       "P524", "P528", "P115", "P84", "P916", "P210", "P250",
       "P251", "P253", "P258", "P219", "P270", "P271", "P278",
       "P350", "P351", "P2521", "P2522", "P560", "P570",
-      "P578", "P613", "P614", "P773", "P832", "P912"),
+      "P578", "P613", "P614", "P773", "P832", "P912"
+    ),
     tech_dep = c(
       "T8509XA", "T85190A", "T85192A", "T85199A", "T8579XA",
       "Z982", "Z45441", "Z45442", "T82519A",
@@ -329,29 +371,32 @@ icd10_generate_map_pccc_dx <- function(save_data) {
       "T8642", "T8620", "T8621", "T8622", "T86810", "T86811",
       "T86819", "T8600", "T8601", "T8602", "T8609",
       "T86890", "T86891", "T86899", "T86850", "T86851", "T86859", "T865",
-      "T870X9", "T871X9", "T872", "Y831", "Y833"),
+      "T870X9", "T871X9", "T872", "Y831", "Y833"
+    ),
     transplant = c(
       "T8600", "T8601", "T8602", "T8609", "T8610",
       "T8611", "T8612", "T8620", "T8621", "T8622",
       "T86810", "T86811", "T86819", "T8640", "T8641",
       "T8642", "T86890", "T86891", "T86899", "T86850",
-      "T86851", "T86859", "T865", "T8690", "T8691", "T8692", "T8699")
+      "T86851", "T86859", "T865", "T8690", "T8691", "T8692", "T8699"
+    )
   )
-  icd10_map_pccc_dx <- lapply(
-    icd10_map_pccc_orig_dx,
-    children_defined.icd10cm, short_code = TRUE)
+  icd10_map_pccc_dx <- .apply_over_icd10cm_vers(icd10_map_pccc_orig_dx)
+  icd10_map_pccc_dx <- .apply_over_icd10who_vers(icd10_map_pccc_orig_dx)
   # add the fixed code, per JAMA Pediatrics Letter
   icd10_map_pccc_dx[["neuromusc"]] <-
     c(icd10_map_pccc_dx[["neuromusc"]], "G80")
   icd10_map_pccc_dx <- as.comorbidity_map(icd10_map_pccc_dx)
-  if (save_data)
-    save_in_data_dir(icd10_map_pccc_dx)
+  if (save_pkg_data) {
+    .save_in_data_dir(icd10_map_pccc_dx)
+  }
   invisible(icd10_map_pccc_dx)
 }
 
-#' @rdname generate_maps_pccc
+#' ICD-10 PCS generate_maps_pccc
 #' @keywords internal
-icd10_generate_map_pccc_pcs <- function(save_data = TRUE) {
+#' @noRd
+icd10_generate_map_pccc_pcs <- function(save_pkg_data = TRUE) {
   icd10_map_pccc_orig_pc <- list(
     neuromusc = c(
       "0016070", "0016071", "0016072", "0016073", "0016074", "0016075", "0016076", "0016077",
@@ -367,7 +412,8 @@ icd10_generate_map_pccc_pcs <- function(save_data = TRUE) {
       "00H00MZ", "00H03MZ", "00H04MZ", "00H60MZ", "00H63MZ", "00H64MZ", "00HE0MZ", "00HE3MZ", "00HE4MZ",
       "00HU0MZ", "00HU3MZ", "00HU4MZ", "00HV0MZ", "00HV3MZ", "00HV4MZ", "00T70ZZ", "00T73ZZ", "00T74ZZ",
       "00W60JZ", "00W63JZ", "00W64JZ", "00WU0JZ", "00WU3JZ", "01HY0MZ", "01HY3MZ", "0DH60MZ", "0DH63MZ",
-      "0DH64MZ", "0W110J9", "0W110JB", "0W110JG", "0W110JJ", "3E1Q38X", "3E1Q38Z"),
+      "0DH64MZ", "0W110J9", "0W110JB", "0W110JG", "0W110JJ", "3E1Q38X", "3E1Q38Z"
+    ),
     cvd = c(
       "02170ZP", "02170ZQ", "02170ZR", "02BK0ZZ", "02H40JZ", "02H40KZ", "02H43JZ", "02H44JZ",
       "02H44KZ", "02H60JZ", "02H60KZ", "02H63JZ", "02H63KZ", "02H63MZ", "02H64JZ", "02H64KZ", "02H70KZ",
@@ -384,7 +430,8 @@ icd10_generate_map_pccc_pcs <- function(save_data = TRUE) {
       "0JH63MZ", "0JH63PZ", "0JH70MZ", "0JH73MZ", "0JH800Z", "0JH805Z", "0JH806Z", "0JH807Z", "0JH808Z",
       "0JH809Z", "0JH80AZ", "0JH80MZ", "0JH80PZ", "0JH830Z", "0JH835Z", "0JH836Z", "0JH837Z", "0JH838Z",
       "0JH839Z", "0JH83AZ", "0JH83MZ", "0JH83PZ", "0JWT0MZ", "0JWT0PZ", "0JWT3MZ", "0JWT3PZ", "0JWTXMZ",
-      "4B02XSZ", "4B02XTZ", "5A02110", "5A02116", "5A0211D", "5A02210", "5A02216", "5A0221D"),
+      "4B02XSZ", "4B02XTZ", "5A02110", "5A02116", "5A0211D", "5A02210", "5A02216", "5A0221D"
+    ),
     respiratory = c(
       "0B110F4", "0B110Z4", "0B113F4", "0B113Z4", "0B114F4", "0B114Z4", "0B21XFZ", "0BHR0MZ",
       "0BHR3MZ", "0BHR4MZ", "0BHS0MZ", "0BHS3MZ", "0BHS4MZ", "0BTC0ZZ", "0BTC4ZZ", "0BTD0ZZ", "0BTD4ZZ",
@@ -393,7 +440,8 @@ icd10_generate_map_pccc_pcs <- function(save_data = TRUE) {
       "0BYD0Z0", "0BYD0Z1", "0BYD0Z2", "0BYF0Z0", "0BYF0Z1", "0BYF0Z2", "0BYG0Z0", "0BYG0Z1", "0BYG0Z2",
       "0BYH0Z0", "0BYH0Z1", "0BYH0Z2", "0BYJ0Z0", "0BYJ0Z1", "0BYJ0Z2", "0BYK0Z0", "0BYK0Z1", "0BYK0Z2",
       "0BYL0Z0", "0BYL0Z1", "0BYL0Z2", "0BYM0Z0", "0BYM0Z1", "0BYM0Z2", "0CTS0ZZ", "0CTS4ZZ", "0CTS7ZZ",
-      "0CTS8ZZ", "0JH604Z", "0JH634Z", "0JH804Z", "0JH834Z", "0WQ6XZ2", "3E1F78Z"),
+      "0CTS8ZZ", "0JH604Z", "0JH634Z", "0JH804Z", "0JH834Z", "0WQ6XZ2", "3E1F78Z"
+    ),
     renal = c(
       "031209D", "031209F", "03120AD", "03120AF", "03120JD", "03120JF", "03120KD", "03120KF",
       "03120ZD", "03120ZF", "031309D", "031309F", "03130AD", "03130AF", "03130JD", "03130JF", "03130KD",
@@ -423,7 +471,8 @@ icd10_generate_map_pccc_pcs <- function(save_data = TRUE) {
       "0TB77ZZ", "0TB78ZZ", "0TQ67ZZ", "0TQ77ZZ", "0TT00ZZ", "0TT04ZZ", "0TT10ZZ", "0TT14ZZ", "0TT20ZZ",
       "0TT24ZZ", "0TT60ZZ", "0TT64ZZ", "0TT67ZZ", "0TT68ZZ", "0TT70ZZ", "0TT74ZZ", "0TT77ZZ", "0TT78ZZ",
       "0TTB0ZZ", "0TTB4ZZ", "0TTB7ZZ", "0TTB8ZZ", "0TTD0ZZ", "0TTD4ZZ", "0TTD7ZZ", "0TTD8ZZ", "0TY00Z0",
-      "0TY00Z1", "0TY00Z2", "0TY10Z0", "0TY10Z1", "0TY10Z2", "3E1K38Z", "3E1M39Z", "5A1D60Z"),
+      "0TY00Z1", "0TY00Z2", "0TY10Z0", "0TY10Z1", "0TY10Z2", "3E1K38Z", "3E1M39Z", "5A1D60Z"
+    ),
     gi = c(
       "0CT70ZZ", "0CT7XZZ", "0D11074", "0D110J4", "0D110K4", "0D110Z4", "0D113J4", "0D11474",
       "0D114J4", "0D114K4", "0D114Z4", "0D13079", "0D1307A", "0D1307B", "0D15074", "0D150J4", "0D150K4",
@@ -440,7 +489,8 @@ icd10_generate_map_pccc_pcs <- function(save_data = TRUE) {
       "0DTE8ZZ", "0DW04UZ", "0DW08UZ", "0DY80Z0", "0DY80Z1", "0DY80Z2", "0DYE0Z0", "0DYE0Z1", "0DYE0Z2",
       "0FT00ZZ", "0FT04ZZ", "0FTG0ZZ", "0FTG4ZZ", "0FY00Z0", "0FY00Z1", "0FY00Z2", "0FYG0Z0", "0FYG0Z1",
       "0FYG0Z2", "0WQFXZ2", "3E030U0", "3E030U1", "3E033U0", "3E033U1", "3E0J3U0", "3E0J3U1", "3E0J7U0",
-      "3E0J7U1", "3E0J8U0", "3E0J8U1", "3E1G78Z", "3E1H78Z"),
+      "3E0J7U1", "3E0J8U0", "3E0J8U1", "3E1G78Z", "3E1H78Z"
+    ),
     hemato_immu = c(
       "07TP0ZZ", "07TP4ZZ", "07YP0Z0", "07YP0Z1", "07YP0Z2", "30230AZ", "30230G0", "30230G1",
       "30230X0", "30230X1", "30230Y0", "30230Y1", "30233AZ", "30233G0", "30233G1", "30233X0", "30233X1",
@@ -448,7 +498,8 @@ icd10_generate_map_pccc_pcs <- function(save_data = TRUE) {
       "30243AZ", "30243G0", "30243G1", "30243X0", "30243X1", "30243Y0", "30243Y1", "30250G0", "30250G1",
       "30250X0", "30250X1", "30250Y0", "30250Y1", "30253G0", "30253G1", "30253X0", "30253X1", "30253Y0",
       "30253Y1", "30260G0", "30260G1", "30260X0", "30260X1", "30260Y0", "30260Y1", "30263G0", "30263G1",
-      "30263X0", "30263X1", "30263Y0", "30263Y1"),
+      "30263X0", "30263X1", "30263Y0", "30263Y1"
+    ),
     metabolic = c(
       "0GT00ZZ", "0GT04ZZ", "0GT40ZZ", "0GT44ZZ", "0GTK0ZZ", "0GTK4ZZ", "0GTR0ZZ", "0GTR4ZZ",
       "0JH60VZ", "0JH63VZ", "0JH70VZ", "0JH73VZ", "0JH80VZ", "0JH83VZ", "0JHD0VZ", "0JHD3VZ", "0JHF0VZ",
@@ -456,7 +507,8 @@ icd10_generate_map_pccc_pcs <- function(save_data = TRUE) {
       "0JHN0VZ", "0JHN3VZ", "0JHP0VZ", "0JHP3VZ", "0JHT0VZ", "0JHT3VZ", "0UT20ZZ", "0UT24ZZ", "0UT27ZZ",
       "0UT28ZZ", "0UT2FZZ", "0UT40ZZ", "0UT44ZZ", "0UT47ZZ", "0UT48ZZ", "0UT70ZZ", "0UT74ZZ", "0UT90ZZ",
       "0UT94ZZ", "0UT97ZZ", "0UT98ZZ", "0UT9FZZ", "0UTC0ZZ", "0UTC7ZZ", "0UTC8ZZ", "0VTC0ZZ", "0VTC4ZZ",
-      "0W4M070", "0W4M0J0", "0W4M0K0", "0W4M0Z0", "0W4N071", "0W4N0J1", "0W4N0K1", "0W4N0Z1"),
+      "0W4M070", "0W4M0J0", "0W4M0K0", "0W4M0Z0", "0W4N071", "0W4N0J1", "0W4N0K1", "0W4N0Z1"
+    ),
     congeni_genetic = character(0),
     malignancy = c(
       "3E00X05", "3E01305", "3E02305", "3E03005", "3E03305", "3E04005", "3E04305", "3E05005",
@@ -464,7 +516,8 @@ icd10_generate_map_pccc_pcs <- function(save_data = TRUE) {
       "3E0G805", "3E0H305", "3E0H705", "3E0H805", "3E0J305", "3E0J705", "3E0J805", "3E0K305", "3E0K705",
       "3E0K805", "3E0L305", "3E0L705", "3E0M305", "3E0M705", "3E0N305", "3E0N705", "3E0N805", "3E0P305",
       "3E0P705", "3E0P805", "3E0Q305", "3E0Q705", "3E0R305", "3E0S305", "3E0V305", "3E0W305", "3E0Y305",
-      "3E0Y705"),
+      "3E0Y705"
+    ),
     neonatal = character(0),
     tech_dep = c(
       "00160J0", "00160J1", "00160J2", "00160J4", "00160J5", "00160J6", "00160J7", "00160J8",
@@ -545,7 +598,8 @@ icd10_generate_map_pccc_pcs <- function(save_data = TRUE) {
       "0RGA4KJ", "0RGA4Z0", "0RGA4Z1", "0RGA4ZJ", "0SG00J0", "0SG00J1", "0SG00JJ", "0SG00K0", "0SG00K1",
       "0SG00KJ", "0SG00Z0", "0SG00Z1", "0SG00ZJ", "0SG03J0", "0SG03J1", "0SG03JJ", "0SG03K0", "0SG03K1",
       "0SG03KJ", "0SG03Z0", "0SG03Z1", "0SG03ZJ", "0SG04J0", "0SG04J1", "0SG04JJ", "0SG04K0", "0SG04K1",
-      "0SG04KJ", "0SG04Z0", "0SG04Z1", "0SG04ZJ"),
+      "0SG04KJ", "0SG04Z0", "0SG04Z1", "0SG04ZJ"
+    ),
     transplant = c(
       "02YA0Z0", "02YA0Z1", "02YA0Z2", "0BYC0Z0", "0BYC0Z1", "0BYC0Z2", "0BYD0Z0", "0BYD0Z1",
       "0BYD0Z2", "0BYF0Z0", "0BYF0Z1", "0BYF0Z2", "0BYG0Z0", "0BYG0Z1", "0BYG0Z2", "0BYH0Z0", "0BYH0Z1",
@@ -559,11 +613,13 @@ icd10_generate_map_pccc_pcs <- function(save_data = TRUE) {
       "30240Y0", "30240Y1", "30243AZ", "30243G0", "30243G1", "30243X0", "30243X1", "30243Y0", "30243Y1",
       "30250G0", "30250G1", "30250X0", "30250X1", "30250Y0", "30250Y1", "30253G0", "30253G1", "30253X0",
       "30253X1", "30253Y0", "30253Y1", "30260G0", "30260G1", "30260X0", "30260X1", "30260Y0", "30260Y1",
-      "30263G0", "30263G1", "30263X0", "30263X1", "30263Y0", "30263Y1")
+      "30263G0", "30263G1", "30263X0", "30263X1", "30263Y0", "30263Y1"
+    )
   )
   icd10_map_pccc_pcs <- as.comorbidity_map(icd10_map_pccc_orig_pc)
-  if (save_data)
-    save_in_data_dir(icd10_map_pccc_pcs)
+  if (save_pkg_data) {
+    .save_in_data_dir(icd10_map_pccc_pcs)
+  }
   invisible(icd10_map_pccc_pcs)
 }
-#nocov end
+# nocov end

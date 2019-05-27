@@ -15,40 +15,61 @@ test_that("basic SAS VALUE declarations can be read into an R list", {
   )
   result <- sas_format_extract(c(
     'VALUE $RFRMSOMETHING 100-102 = "HTN" 103,104 = "CHF";\n',
-    ' VALUE otherstuff 105 = "YES"'))
-  expect_equal(result, list("$RFRMSOMETHING" = list(HTN = "100-102",
-                                                    CHF = c("103", "104")),
-                            otherstuff = list("YES" = "105")))
+    ' VALUE otherstuff 105 = "YES"'
+  ))
+  expect_equal(result, list(
+    "$RFRMSOMETHING" = list(
+      HTN = "100-102",
+      CHF = c("103", "104")
+    ),
+    otherstuff = list("YES" = "105")
+  ))
   result <- sas_format_extract(c(
     '   VALUE $RFRMSOMETHING 100-102 = "HTN" 103,104 = "CHF";',
-    'VALUE  otherstuff   105   =  "  Y E S " '))
-  expect_equal(result, list("$RFRMSOMETHING" = list(HTN = "100-102",
-                                                    CHF = c("103", "104")),
-                            otherstuff = list("YES" = "105")))
+    'VALUE  otherstuff   105   =  "  Y E S " '
+  ))
+  expect_equal(result, list(
+    "$RFRMSOMETHING" = list(
+      HTN = "100-102",
+      CHF = c("103", "104")
+    ),
+    otherstuff = list("YES" = "105")
+  ))
 })
 
 test_that("groups of SAS assignments can be extracted", {
   # this is a single assignment, but of the form of sub-part of
   # multi-assignment, so we should handle it.
-  expect_equal(sas_parse_assignments('"123" = "YES"'),
-               list(YES = "123"))
-  expect_equal(sas_parse_assignments('"123-456" = "YES"'),
-               list(YES = "123-456"))
-  expect_equal(sas_parse_assignments('123-456 = "YES"'),
-               list(YES = "123-456"))
+  expect_equal(
+    sas_parse_assignments('"123" = "YES"'),
+    list(YES = "123")
+  )
+  expect_equal(
+    sas_parse_assignments('"123-456" = "YES"'),
+    list(YES = "123-456")
+  )
+  expect_equal(
+    sas_parse_assignments('123-456 = "YES"'),
+    list(YES = "123-456")
+  )
   expect_equal(
     sas_parse_assignments(
-      paste('"41511"-"41519", "4160 "-"4169 ","4179 " = "PULMCIRC"',
-            '"5571 ","5579 ", "V434 "= "PERIVASC"')),
-    list(PULMCIRC = c("41511-41519", "4160-4169", "4179"),
-         PERIVASC = c("5571", "5579", "V434")
+      paste(
+        '"41511"-"41519", "4160 "-"4169 ","4179 " = "PULMCIRC"',
+        '"5571 ","5579 ", "V434 "= "PERIVASC"'
+      )
+    ),
+    list(
+      PULMCIRC = c("41511-41519", "4160-4169", "4179"),
+      PERIVASC = c("5571", "5579", "V434")
     )
   )
 })
 
 test_that("read LET string declarations from SAS code", {
   res_list <- sas_extract_let_strings(
-    "\t%LET DC16=%STR('196','197','198','199');      ")
+    "\t%LET DC16=%STR('196','197','198','199');      "
+  )
   expect_is(res_list, "list")
   expect_true(all(vapply(res_list, length, integer(1))))
   expect_true(all(vapply(res_list, is.character, logical(1))))
@@ -56,15 +77,18 @@ test_that("read LET string declarations from SAS code", {
   expect_equal(res_list[[1]], c("196", "197", "198", "199"))
   res_list <- sas_extract_let_strings(c(
     "\t%LET DC16=%STR('196','197','198','199');      ",
-    "\t%LET DC17=%STR('042','043','044');"))
+    "\t%LET DC17=%STR('042','043','044');"
+  ))
   expect_equal(res_list[["DC16"]], c("196", "197", "198", "199"))
   expect_equal(res_list[["DC17"]], c("042", "043", "044"))
   expect_equal(
     sas_extract_let_strings(
-      "\t%LET LBL16=%STR(Metastatic Carcinoma);")[["LBL16"]],
-    "Metastatic Carcinoma")
+      "\t%LET LBL16=%STR(Metastatic Carcinoma);"
+    )[["LBL16"]],
+    "Metastatic Carcinoma"
+  )
   expect_equal(
     sas_extract_let_strings('\t%LET ABC=%STR("123");")[["ABC"]]'),
-    list(ABC = "123"))
-
+    list(ABC = "123")
+  )
 })

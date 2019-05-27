@@ -41,19 +41,25 @@ diff_comorbid <- function(x, y, all_names = NULL, x_names = NULL,
 #' @export
 diff_comorbid.list <- function(x, y, all_names = NULL, x_names = NULL,
                                y_names = NULL, show = TRUE, explain = TRUE) {
-  assert_list(x, min.len = 1, any.missing = FALSE,
-              types = c("character"), names = "unique")
-  assert_list(y, min.len = 1, any.missing = FALSE,
-              types = c("character"), names = "unique")
+  assert_list(x,
+    min.len = 1, any.missing = FALSE,
+    types = c("character"), names = "unique"
+  )
+  assert_list(y,
+    min.len = 1, any.missing = FALSE,
+    types = c("character"), names = "unique"
+  )
   assert_flag(show)
   assert_flag(explain)
   stopifnot(all(x_names %in% names(x)), all(y_names %in% names(y)))
 
-  if (!is.null(names) && (!is.null(x_names) | !is.null(y_names)))
+  if (!is.null(names) && (!is.null(x_names) | !is.null(y_names))) {
     stop("if 'all_names' is specified, 'x_names' and 'y_names' should not be")
+  }
 
-  if (!is.null(all_names))
+  if (!is.null(all_names)) {
     x_names <- y_names <- all_names
+  }
 
   if (is.null(x_names)) x_names <- names(x)
   if (is.null(y_names)) y_names <- names(y)
@@ -80,20 +86,30 @@ diff_comorbid.list <- function(x, y, all_names = NULL, x_names = NULL,
         next
       }
       if (length(only.x) > 0) {
-        cat(sprintf("\n%s has %d codes not in %s. First few are: ",
-                    x.title, length(only.x), y.title))
+        cat(sprintf(
+          "\n%s has %d codes not in %s. First few are: ",
+          x.title, length(only.x), y.title
+        ))
         lapply(
-          explain_code(only.x, condense = TRUE,
-                       brief = TRUE, warn = FALSE)[1:5],
-          function(s) if (!is.na(s)) cat(sprintf("'%s' ", s)))
+          explain_code(only.x,
+            condense = TRUE,
+            brief = TRUE, warn = FALSE
+          )[1:5],
+          function(s) if (!is.na(s)) cat(sprintf("'%s' ", s))
+        )
       }
       if (length(only.y) > 0) {
-        cat(sprintf("\n%s has %d codes not in %s. First few are: ",
-                    y.title, length(only.y), x.title))
+        cat(sprintf(
+          "\n%s has %d codes not in %s. First few are: ",
+          y.title, length(only.y), x.title
+        ))
         lapply(
-          explain_code(only.y, condense = TRUE,
-                       brief = TRUE, warn = FALSE)[1:5],
-          function(s) if (!is.na(s)) cat(sprintf("'%s' ", s)))
+          explain_code(only.y,
+            condense = TRUE,
+            brief = TRUE, warn = FALSE
+          )[1:5],
+          function(s) if (!is.na(s)) cat(sprintf("'%s' ", s))
+        )
       }
       cat("\n")
     }

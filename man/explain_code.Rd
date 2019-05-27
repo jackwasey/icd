@@ -66,8 +66,8 @@ a warning.}
 
 \item{lang}{For WHO ICD-10 codes, the 2016 English and 2008 French
 translations are available. Use 'en' or 'fr' respectively. For ICD-10-CM
-codes, Dutch is also available, indicated by 'nl'. If `icd.data` 1.0 is
-installed, English descriptions are returned.}
+codes, Dutch is also available, indicated by 'nl'. If \code{icd.data} 1.0
+is installed, English descriptions are returned.}
 }
 \value{
 data frame, or list of data frames, with fields for ICD-9 code, name
@@ -76,9 +76,9 @@ data frame, or list of data frames, with fields for ICD-9 code, name
   reliable order (when not condensing codes, at least).
 }
 \description{
-Convert 'decimal' format (123.45 style) ICD-9 codes into the name and
-description for human review there are official ICD9-CM data tables, not with
-conversion to decimal notation, but to the textual format.
+Converts a vector of ICD codes to a vector of descriptions of these codes.
+The conversion is based on the edition (ICD-9 or ICD-10), and class (e.g.,
+\code{icd10who}) of the input vector. See examples.
 }
 \details{
 \code{explain_icd} is a synonym for \code{\link{explain_code}}.
@@ -108,23 +108,25 @@ ICD-10 WHO copyright workaround is available
 }}
 
 \examples{
-# by default, just show parent code and ignore children (428.0 not shown
-# because 428 is present):
-explain_code(icd9_map_ahrq$CHF[1:3])
-# same without condensing the list. In this case, 428.0 is shown:
-explain_code(icd9_map_ahrq$CHF[1:3], brief = TRUE)
-# The first three in the ICD-10 equivalent are a little different:
-explain_code(icd10_map_ahrq$CHF[1:3], brief = TRUE)
+if (requireNamespace("icd.data", quietly = TRUE)) {
+  # by default, just show parent code and ignore children (428.0 not shown
+  # because 428 is present):
+  explain_code(icd9_map_ahrq$CHF[1:3])
+  # same without condensing the list. In this case, 428.0 is shown:
+  explain_code(icd9_map_ahrq$CHF[1:3], brief = TRUE)
+  # The first three in the ICD-10 equivalent are a little different:
+  explain_code(icd10_map_ahrq$CHF[1:3], brief = TRUE)
+}
 # Belgian ICD-10 has three languages available
-\dontrun{
-explain_code(as.icd10be("C20"))
-# [1] "Malignant neoplasm of rectum"
-explain_code(as.icd10be("C20"), lang = "en")
-# [1] "Malignant neoplasm of rectum"
-explain_code(as.icd10be("C20"), lang = "fr")
-# [1] "néoplasme malin du rectum"
-explain_code(as.icd10be("C20"), lang = "nl")
-# [1] "maligne neoplasma van het rectum"
+if (icd:::icd_data_ver_ok()) {
+  explain_code(as.icd10be("C20"))
+  # [1] "Malignant neoplasm of rectum"
+  explain_code(as.icd10be("C20"), lang = "en")
+  # [1] "Malignant neoplasm of rectum"
+  explain_code(as.icd10be("C20"), lang = "fr")
+  # [1] "néoplasme malin du rectum"
+  explain_code(as.icd10be("C20"), lang = "nl")
+  # [1] "maligne neoplasma van het rectum"
 }
 }
 \keyword{internal}

@@ -22,15 +22,16 @@ filter_poa_not_yes(x, poa_name = "poa")
 \item{x}{input vector of ICD codes}
 
 \item{poa_name}{The name of column in the data frame which contains the
-Present On Arrival (POA) flag. The flag itself is a single character, typically
-one of "Y", "N", "E", "X", "U" or empty.}
+Present On Arrival (POA) flag. The flag itself is a single character,
+typically one of \sQuote{Y}, \sQuote{N}, \sQuote{E}, \sQuote{X},
+\sQuote{U}, or empty.}
 
 \item{poa}{single character value, being one of \code{Yes}, \code{No},
 \code{NotYes}, and \code{NotNo}, indicating whether to account for
 comorbidities flagged as present-on-arrival. This is not a simple flag,
 because many codes are exempt, unspecified, or unknown. The intermediate
-codes, such as "exempt", "unknown" and \code{NA} mean that "yes" is not the
-same as "not no."}
+codes, such as \sQuote{exempt}, \sQuote{unknown} and \code{NA} mean that
+\sQuote{yes} is not the same as \sQuote{not no}.}
 }
 \description{
 Present On Arrival (POA) is not a simple flag, since many codes are exempt,
@@ -60,6 +61,8 @@ out-of-hospital characteristics.
 
 \examples{
 \dontrun{
+library(icd)
+# magrittr not required for icd to work, just for this example
 library(magrittr, warn.conflicts = FALSE, quietly = TRUE)
 myData <- data.frame(
   visit_id = c("v1", "v2", "v3", "v4"),
@@ -67,16 +70,26 @@ myData <- data.frame(
   poa = c("Y", "N", NA, "Y"),
   stringsAsFactors = FALSE
 )
-myData \%>\% filter_poa_not_no() \%>\% comorbid_ahrq()
+myData \%>\%
+  filter_poa_not_no() \%>\%
+  comorbid_ahrq()
 # can fill out named fields also:
-myData \%>\% filter_poa_yes(poa_name="poa") \%>\%
-  comorbid_ahrq(icd_name = "diag", visit_name = "visit_id",
-  short_code = TRUE)
+myData \%>\%
+  filter_poa_yes(poa_name = "poa") \%>\%
+  comorbid_ahrq(
+    icd_name = "diag", visit_name = "visit_id",
+    short_code = TRUE
+  )
+my_map <- head(icd9_map_elix)
 # can call the core comorbid() function with an arbitrary mapping
 myData \%>\%
-  filter_poa_yes \%>\%
-  comorbid_elix(icd_name = "diag", visit_name = "visit_id",
-  short_mapping = TRUE)
+  filter_poa_yes() \%>\%
+  comorbid(
+    icd_name = "diag",
+    visit_name = "visit_id",
+    map = my_map,
+    short_map = TRUE
+  )
 }
 }
 \keyword{manip}

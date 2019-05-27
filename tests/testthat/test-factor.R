@@ -9,8 +9,10 @@ test_that("factors are same when levels given or not", {
       f1 <- factor(v, l)
       f2 <- factor_nosort(v, l)
       f3 <- factor_nosort_rcpp(v, l)
-      msg <- paste("v=", paste(v, collapse = ", "),
-                   "l=", paste(l, collapse = ", "))
+      msg <- paste(
+        "v=", paste(v, collapse = ", "),
+        "l=", paste(l, collapse = ", ")
+      )
       expect_identical(f2, f1, info = msg)
       expect_identical(f3, f1, info = msg)
     }

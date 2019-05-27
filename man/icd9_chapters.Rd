@@ -3,9 +3,11 @@
 \docType{data}
 \name{icd9_chapters}
 \alias{icd9_chapters}
-\alias{icd9_sub_chapters}
 \alias{icd9_majors}
 \title{ICD-9 chapters}
+\source{
+\url{http://www.cms.gov/Medicare/Coding/ICD9ProviderDiagnosticCodes/codes.html}
+}
 \description{
 \code{icd9_chapters}, \code{icd9_chapters_sub} and \code{icd9_majors} contain
 mappings from the higher level descriptions of ICD-9 codes to the ranges of
@@ -31,10 +33,10 @@ Factors Influencing Health Status And Contact With Health Services \item
 E000-E999 Supplementary Classification Of External Causes Of Injury And
 Poisoning }
 
-Format:  list with chapter/sub-chapter or major names stored in list names,
-each with two element named character vector with start and end codes.
+Format: list with chapter/sub-chapter or major names stored in list
+  names, each with two element named character vector with start and end
+  codes.
 }
-\seealso{
-\code{\link[icd.data]{ls_icd_data}}
-}
+\keyword{category}
 \keyword{datasets}
+\keyword{list}

@@ -3,13 +3,14 @@ title: "Charlson and Van Walraven scores"
 author: "Jack O. Wasey"
 date: "`r Sys.Date()`"
 output:
-  html_document:
+  html_vignette:
     toc: yes
 vignette: >
   %\VignetteIndexEntry{Charlson and Van Walraven scores}
   %\VignetteEngine{knitr::rmarkdown}
-  %\VignetteDepends{magrittr, icd.data}
+  %\VignetteDepends{magrittr}
   %\VignetteEncoding{UTF-8}
+  %\VignetteKeyword{risk score, Charlson score, van Walraven score, comorbidity, comorbidities, biomedical informatics, administrative data, ICD-9, ICD-10}
 ---
 <!--
 Copyright (C) 2014 - 2019  Jack O. Wasey
@@ -51,15 +52,15 @@ More complicated scoring systems may use lab values, patient demographic informa
 
 The Vermont data are actually discharge, not admission diagnoses, but can be used to demonstrate generating Charlson scores.
 ```{r vermont-charlson}
-head(icd.data::vermont_dx[1:10])
-vch <- charlson(icd.data::vermont_dx)
+head(vermont_dx[1:10])
+vch <- charlson(vermont_dx)
 summary(vch)
 head(vch)
 head(names(vch))
 ```
 This default result is a numeric vector with the names (top numbers) as the patient identifiers. Those who like working with 'tidy' data frames can use:
 ```{r charlsondf}
-head(charlson(icd.data::vermont_dx, return_df = TRUE))
+head(charlson(vermont_dx, return_df = TRUE))
 ```
 
 Behind the scenes, _icd_ calculates the Charlson comorbidities for those ICD codes, applies the Charlson scoring system, and returns the Charlson score for each patient.
@@ -69,7 +70,7 @@ Behind the scenes, _icd_ calculates the Charlson comorbidities for those ICD cod
 The same principle can be used to calculate the Van Walraven score, which is the Charlson score counterpart for Elixhauser comorbidities.
 
 ```{r vermontvanwalraven}
-`Vermont Van Walraven Scores` <- van_walraven(icd.data::vermont_dx)
+`Vermont Van Walraven Scores` <- van_walraven(vermont_dx)
 hist(`Vermont Van Walraven Scores`)
 ```
 

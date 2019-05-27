@@ -12,6 +12,6 @@ poa_choices
 See \link{filter_poa} for more details.
 }
 \examples{
-  poa_choices
+poa_choices
 }
 \keyword{character}

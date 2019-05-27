@@ -2,8 +2,6 @@
 # Generator token: 10BE3573-1514-4C36-9D1C-5A225CD40393
 
 #' Convert \code{mjr} and \code{mnr} vectors to single code
-#'
-#' In debug mode, will check that \code{mjr} and \code{mnr} are same length.
 #' @template mjr
 #' @template mnr
 #' @template isShort
@@ -51,8 +49,8 @@ categorize_rcpp <- function() {
     .Call(`_icd_categorize_rcpp`)
 }
 
-icd10_children_defined_rcpp <- function(x, lookup, nc) {
-    .Call(`_icd_icd10ChildrenDefined`, x, lookup, nc)
+icd10_children_defined_rcpp <- function(x, lookup, nc, warn = TRUE) {
+    .Call(`_icd_icd10ChildrenDefined`, x, lookup, nc, warn)
 }
 
 #' @title Internal function to simplify a comorbidity map by only including
@@ -73,12 +71,13 @@ icd10_children_defined_rcpp <- function(x, lookup, nc) {
 #' stopifnot(simple_map$CHF == "I0981")
 #' stopifnot(simple_map$PHTN != character(0))
 #' stopifnot(simple_map$PVD == "I26019")
-#' umap <- icd:::simplify_map_lex(icd.data::uranium_pathology$icd10, icd10_map_ahrq)
-#' head(icd:::categorize_simple(icd.data::uranium_pathology, icd10_map_ahrq,
+#' umap <- icd:::simplify_map_lex(uranium_pathology$icd10, icd10_map_ahrq)
+#' head(icd:::categorize_simple(uranium_pathology, icd10_map_ahrq,
 #'                       id_name = "case", code_name = "icd10"))
-#' head(icd:::categorize_simple(icd.data::uranium_pathology, umap,
+#' head(icd:::categorize_simple(uranium_pathology, umap,
 #'                              id_name = "case", code_name = "icd10"))
 #' @keywords internal
+#' @noRd
 simplify_map_lex <- function(pt_codes, map) {
     .Call(`_icd_simplifyMapLexicographic`, pt_codes, map)
 }
@@ -104,7 +103,8 @@ simplify_map_lex <- function(pt_codes, map) {
 #' dense matrix is then the comorbidity map
 #' \url{https://eigen.tuxfamily.org/dox/TopicMultiThreading.html}
 #' @keywords internal array algebra
-comorbidMatMulWide <- function(data, map, id_name, code_names, validate) {
+#' @noRd
+comorbid_mat_mul_wide_rcpp <- function(data, map, id_name, code_names, validate) {
     .Call(`_icd_comorbidMatMulWide`, data, map, id_name, code_names, validate)
 }
 
@@ -155,12 +155,13 @@ icd10DecimalToParts <- function(x, mnrEmpty = "") {
 }
 
 #' @title Convert integers to strings as quickly as possible
-#' @description Have tried R, `sprintf` with \pkg{Rcpp} and C++ standard
-#' library. Doesn't do bounds checking, but limited by length of integers.
+#' @description Have tried R, \code{sprintf} with \CRANpkg{Rcpp} and C++
+#'   standard library. Doesn't do bounds checking, but limited by length of
+#'   integers.
 #' @param x Vector of integers
 #' @return Vector of characters
-#' @md
 #' @keywords internal manip
+#' @noRd
 fastIntToStringRcpp <- function(x) {
     .Call(`_icd_fastIntToStringRcpp`, x)
 }
@@ -200,24 +201,28 @@ guess_short <- function(x_, short_code = NULL, n = 1000L, icd_name = NULL) {
 #' @param x \code{const char*} of choices of first character to match
 #' @param invert single logical, if TRUE, negates the condition
 #' @keywords internal
+#' @noRd
 icd9_is_n_rcpp <- function(sv) {
     .Call(`_icd_icd9_is_n_rcpp`, sv)
 }
 
-#' @rdname icd9_is_n_rcpp
+#' @title icd9_is_n_rcpp
 #' @keywords internal
+#' @noRd
 icd9_is_v_rcpp <- function(sv) {
     .Call(`_icd_icd9_is_v_rcpp`, sv)
 }
 
-#' @rdname icd9_is_n_rcpp
+#' @title icd9_is_n_rcpp
 #' @keywords internal
+#' @noRd
 icd9_is_e_rcpp <- function(sv) {
     .Call(`_icd_icd9_is_e_rcpp`, sv)
 }
 
 #' Simpler add leading zeroes without converting to parts and back
 #' @keywords internal manip
+#' @noRd
 icd9AddLeadingZeroesMajorSingle <- function(mjr) {
     .Call(`_icd_icd9AddLeadingZeroesMajorSingle`, mjr)
 }
@@ -238,58 +243,136 @@ icd9_add_leading_zeroes_major <- function(mjr) {
 #' @template short_code
 #' @return character vector of ICD-9 codes with leading zeroes
 #' @keywords internal manip
+#' @noRd
 icd9_add_leading_zeroes_rcpp <- function(x, short_code) {
     .Call(`_icd_icd9AddLeadingZeroes`, x, short_code)
 }
 
-icd9_expand_minor_wrap <- function(mnr, isE) {
+icd9_expand_minor_rcpp <- function(mnr, isE) {
     .Call(`_icd_icd9ExpandMinor`, mnr, isE)
 }
 
-icd9ChildrenShort <- function(icd9Short, icd9cmReal, onlyReal) {
+icd9_children_short_undefined_rcpp <- function(icd9Short) {
+    .Call(`_icd_icd9ChildrenShortUndefined`, icd9Short)
+}
+
+icd9_children_short_defined_rcpp <- function(icd9Short, icd9cmReal) {
+    .Call(`_icd_icd9ChildrenShortDefined`, icd9Short, icd9cmReal)
+}
+
+icd9_children_short_rcpp <- function(icd9Short, icd9cmReal, onlyReal) {
     .Call(`_icd_icd9ChildrenShort`, icd9Short, icd9cmReal, onlyReal)
 }
 
-icd9ChildrenShortUnordered <- function(icd9Short, icd9cmReal, onlyReal) {
+icd9_children_short_unordered_undefined_rcpp <- function(icd9Short) {
+    .Call(`_icd_icd9ChildrenShortUnorderedUndefined`, icd9Short)
+}
+
+icd9_children_short_unordered_defined_rcpp <- function(icd9Short, icd9cmReal) {
+    .Call(`_icd_icd9ChildrenShortUnorderedDefined`, icd9Short, icd9cmReal)
+}
+
+icd9_children_short_unordered_rcpp <- function(icd9Short, icd9cmReal, onlyReal) {
     .Call(`_icd_icd9ChildrenShortUnordered`, icd9Short, icd9cmReal, onlyReal)
 }
 
-icd9ChildrenDecimalCpp <- function(icd9Decimal, icd9cmReal, onlyReal) {
-    .Call(`_icd_icd9ChildrenDecimalCpp`, icd9Decimal, icd9cmReal, onlyReal)
+icd9_children_decimal_rcpp <- function(icd9Decimal, icd9cmReal, onlyReal) {
+    .Call(`_icd_icd9ChildrenDecimal`, icd9Decimal, icd9cmReal, onlyReal)
 }
 
-icd9ChildrenCpp <- function(icd9, isShort, icd9cmReal, onlyReal = TRUE) {
-    .Call(`_icd_icd9ChildrenCpp`, icd9, isShort, icd9cmReal, onlyReal)
+icd9_children_decimal_unordered_rcpp <- function(icd9Decimal, icd9cmReal, onlyReal) {
+    .Call(`_icd_icd9ChildrenDecimalUnordered`, icd9Decimal, icd9cmReal, onlyReal)
 }
 
-#' @describeIn factor_nosort \pkg{Rcpp} implementation, requiring character
-#' vector inputs only, no argument checking.
+icd9_children_decimal_unordered_undefined_rcpp <- function(icd9Decimal) {
+    .Call(`_icd_icd9ChildrenDecimalUnorderedUndefined`, icd9Decimal)
+}
+
+icd9_children_decimal_unordered_defined_rcpp <- function(icd9Decimal, icd9cmReal) {
+    .Call(`_icd_icd9ChildrenDecimalUnorderedDefined`, icd9Decimal, icd9cmReal)
+}
+
+icd9_children_rcpp <- function(icd9, isShort, icd9cmReal, onlyReal) {
+    .Call(`_icd_icd9Children`, icd9, isShort, icd9cmReal, onlyReal)
+}
+
+#' @title Factor without sorting \CRANpkg{Rcpp} implementation
+#' @description Requiring character vector inputs only, no argument checking.
 #' @keywords internal manip
+#' @noRd
 factor_nosort_rcpp_worker <- function(x, levels, na_rm) {
     .Call(`_icd_factorNoSort`, x, levels, na_rm)
 }
 
 #' @title Re-generate a factor with new levels, without doing string matching
-#' @description This is called by an R wrapper. There is an `na.rm` version,
-#'   too. Some work simply to mirror behavior of `base::factor`, e.g. when a
-#'   level is not available, but NA level is available, NA is inserted into the
-#'   integer vector, not an index to the NA level.
-#' @md
+#' @description This is called by an R wrapper. There is an \code{na.rm}
+#'   version, too. Some work simply to mirror behavior of \code{base::factor},
+#'   e.g. when a level is not available, but NA level is available, NA is
+#'   inserted into the integer vector, not an index to the NA level.
 #' @keywords internal manip
+#' @noRd
 refactor_worker <- function(x, new_levels, exclude_na, validate) {
     .Call(`_icd_refactor`, x, new_levels, exclude_na, validate)
 }
 
-#' @describeIn refactor_worker Drop all `NA` values from levels and values
+#' @describeIn refactor_worker Drop all \code{NA} values from levels and values
 #' @keywords internal
+#' @noRd
 refactor_narm_worker <- function(x, new_levels, validate) {
     .Call(`_icd_refactor_narm`, x, new_levels, validate)
 }
 
 #' @title Check a factor structure is valid
 #' @keywords internal
+#' @noRd
 factor_is_valid <- function(f) {
     .Call(`_icd_factorIsValid`, f)
+}
+
+icd9_compare_rcpp <- function(a, b) {
+    .Call(`_icd_icd9Compare`, a, b)
+}
+
+icd9_compare_vector_rcpp <- function(x, y) {
+    .Call(`_icd_icd9CompareVector`, x, y)
+}
+
+icd9_sort_rcpp <- function(x) {
+    .Call(`_icd_icd9Sort`, x)
+}
+
+icd9_order_rcpp <- function(x) {
+    .Call(`_icd_icd9Order`, x)
+}
+
+icd10cm_compare_c <- function(xstr, ystr) {
+    .Call(`_icd_icd10cmCompareC`, xstr, ystr)
+}
+
+icd10cm_compare_rcpp <- function(x, y) {
+    .Call(`_icd_icd10cmCompare`, x, y)
+}
+
+icd10cm_compare_vector_rcpp <- function(x, y) {
+    .Call(`_icd_icd10cmCompareVector`, x, y)
+}
+
+icd10cm_sort_rcpp <- function(x) {
+    .Call(`_icd_icd10cmSort`, x)
+}
+
+#' @title Order ICD-10-CM codes
+#' @description Currently required for C7A, C7B (which fall after C80 nad before C81), and
+#'   D3A, which falls after D48. C4A M1A Z3A are also problems within
+#'   sub-chapters.
+#' https://www.icd10data.com/ICD10CM/Codes/C00-D49
+#' https://www.icd10data.com/ICD10CM/Codes/C00-D49/C43-C44
+#' https://www.icd10data.com/ICD10CM/Codes/M00-M99/M05-M14
+#' https://www.icd10data.com/ICD10CM/Codes/Z00-Z99/Z30-Z39
+#' @keywords internal
+#' @noRd
+icd10cm_order_rcpp <- function(x) {
+    .Call(`_icd_icd10cmOrder`, x)
 }
 
 trimLeftCpp <- function(s) {
@@ -304,49 +387,24 @@ trimCpp <- function(sv) {
     .Call(`_icd_trimCpp`, sv)
 }
 
-icd9_compare_rcpp <- function(a, b) {
-    .Call(`_icd_icd9Compare`, a, b)
-}
-
-icd9_order_rcpp <- function(x) {
-    .Call(`_icd_icd9Order`, x)
-}
-
-icd10cm_compare_rcpp <- function(x, y) {
-    .Call(`_icd_icd10cmCompare`, x, y)
-}
-
-icd10cm_sort_rcpp <- function(x) {
-    .Call(`_icd_icd10cmSort`, x)
-}
-
-#' @title Order ICD-10-CM codes
-#' @description currently required for C7A, C7B (which fall after C80), and
-#'   D3A, which falls after D48. C4A M1A Z3A are also problems within
-#'   sub-chapters.
-#' @keywords internal
-icd10cm_order_rcpp <- function(x) {
-    .Call(`_icd_icd10cmOrder`, x)
-}
-
 #' @title Faster match
-#' @name match_rcpp
 #' @keywords internal
+#' @noRd
 match_rcpp <- function(x, table) {
     .Call(`_icd_matchFast`, x, table)
 }
 
-#' @describeIn match_rcpp Use faster matching for %in% equivalent.
+#' Use faster matching for %in% equivalent
 #' @keywords internal
+#' @noRd
 fin <- function(x, table) {
     .Call(`_icd_inFast`, x, table)
 }
 
-valgrindCallgrindStart <- function(zerostats = FALSE) {
-    .Call(`_icd_valgrindCallgrindStart`, zerostats)
-}
-
-valgrindCallgrindStop <- function() {
-    .Call(`_icd_valgrindCallgrindStop`)
+#' Get some information about how this DLL was compiled
+#' @keywords internal
+#' @noRd
+build_info <- function() {
+    invisible(.Call(`_icd_build_info`))
 }
 

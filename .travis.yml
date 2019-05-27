@@ -3,87 +3,216 @@ language: r
 # https://ropensci.org/blog/2016/07/12/travis-osx
 # https://docs.travis-ci.com/user/ci-environment/
 
+# for RcppEigen to compile, (but disable if brew gcc on mac to avoid conflict)
+# fortran: true # set explicitly in each stanza
+
+# may need this for clang:
+# export LD_LIBRARY_PATH=/usr/local/clang/lib:$LD_LIBRARY_PATH
+#
+# See this for more recent compiler support than old defaults:
+# https://docs.travis-ci.com/user/languages/c/
+#
+# and
+#
+# https://docs.travis-ci.com/user/languages/cpp/
+
 sudo: false
-cache: packages
+cache:
+  - packages
+  - ccache
 
-r_packages:
-  - covr
+addons:
+  apt:
+    packages:
+      - valgrind
+      #- r-cran-tinytex
 
-r_github_packages:
-  - jimhester/lintr
-  # for testing against icd.data which is not yet updated in CRAN
-#  - jackwasey/icd.data@WHO
-  - jackwasey/icd.data
+#r_packages:
+#  - tinytex
 
 cran: https://cloud.r-project.org
-
+# by default, DON'T do --as-cran, as it stops us using environment variables
+# that conflict. Instead, state approximate CRAN check environment variables explicitly.
+r_check_args: ""
 warnings_are_errors: true
 
 # try to speed up compilation time
 before_install:
+  # May need to set the R library directory so R CMD check finds packages
+  # installed by travis (automatically, and in my scripts) and by R itself
+  # https://stackoverflow.com/questions/31879011/r-cant-find-packages-installed-by-travis
+  # - mkdir -p "$HOME/R.icd.lib"
+  # - echo R_LIBS=$HOME/R.icd.lib:/usr/lib/R/site-library/" > ~/.Renviron
+  # - sudo chmod 2777 "$HOME/R.icd.lib"
+  #
+  # Work-around r-lib/remotes bug which prevents travis building.
+  # https://github.com/r-lib/devtools/issues/2020#issuecomment-481219296
+  - Rscript -e 'source("https://install-github.me/r-lib/remotes")'
+  # ready for Makevars
+  - mkdir -p ~/.R ;
+  - echo 'CXXFLAGS=-Wno-unused-parameter -Wno-unused-variable -Wno-ignored-attributes -Wno-cast-function-type -Wno-unknown-warning-option' >> ~/.R/Makevars ;
+  - echo 'CXX11FLAGS=-Wno-unused-parameter -Wno-unused-variable -Wno-ignored-attributes -Wno-cast-function-type -Wno-unknown-warning-option' >> ~/.R/Makevars ;
   - if [[ "$TRAVIS_R_VERSION_STRING" = 'devel' ]]; then
-      mkdir ~/.R ;
-      echo 'CC=clang' > ~/.R/Makevars ;
-      echo 'CXX=clang++' >> ~/.R/Makevars ;
-      echo 'CXX11=clang++' >> ~/.R/Makevars ;
-      echo 'CFLAGS=-O0 -march=native' >> ~/.R/Makevars ;
-      echo 'CXXFLAGS=-O0 -march=native' >> ~/.R/Makevars ;
-      echo 'CXX11FLAGS=-O0 -march=native' >> ~/.R/Makevars ;
+      echo 'CFLAGS=-O0' >> ~/.R/Makevars ;
+      echo 'CXXFLAGS=-O0' >> ~/.R/Makevars ;
+      echo 'CXX11FLAGS=-O0' >> ~/.R/Makevars ;
       fi
+  # ignore the stubs for the pre-built vignettes, as the latex environments on
+  # travis are heterogeneous!
+  - echo '^vignettes\/.*-vignette\.Rnw$' >> .Rbuildignore
+  # Homebrew GCC currently version 8.3 from
+  # https://github.com/Homebrew/homebrew-core/blob/master/Formula/gcc.rb
+  - if [[ "$(uname -s)" = 'Darwin' && x"$ICD_USE_XCODE_CLANG" != 'xtrue' ]]; then
+      brew upgrade gcc;
+      command -v g++-9 >/dev/null 2>&1 || brew install gcc && echo 'CC=gcc-9' >> ~/.R/Makevars && echo 'CXX=g++-9' >> ~/.R/Makevars && echo 'CXX11=g++-9' >> ~/.R/Makevars && Rscript -e 'install.packages("Rcpp", type = "source")';
+    fi
+  - cat ~/.R/Makevars
+  - cat .Rbuildignore
+  - Rscript -e '.libPaths()'
+  - pwd
+  - ls -R
+  # for the pre-built static vignette stubs to include the actual vignettes.
+  # Make sure travis latex option is not false for relevant builds.
+  # - Rscript -e 'if (!require("tinytex")) {quit(status=1)} else {tinytex::install_tinytex(); tinytex::tlmgr_install("pdfpages", "ae")}' || hash tlmgr 2>/dev/null && { tlmgr --usermode install pdfpages ae; }
 
 env:
   global:
     - _R_CHECK_CRAN_INCOMING_=FALSE
     - _R_CHECK_CRAN_INCOMING_REMOTE_=FALSE
     - _R_CHECK_FORCE_SUGGESTS_=FALSE
-    - LINTR_COMMENT_BOT=false
+    - _R_CHECK_USE_INSTALL_LOG_=TRUE
+    - _R_CHECK_LENGTH_1_CONDITION_="verbose,abort"
+    - _R_CHECK_LENGTH_1_LOGIC2_="verbose,abort"
+    - _R_CHECK_NO_STOP_ON_TEST_ERROR_=FALSE
+    # some of the following are ignored if --as-cran is set
+    - _R_CHECK_COMPILATION_FLAGS_=FALSE
+    # the following are to simulate cran, and
+    # help debugging if we didn't use --as-cran
+    - _R_CHECK_ALL_NON_ISO_C_=TRUE
+    - _R_CHECK_ALWAYS_LOG_VIGNETTE_OUTPUT_=TRUE
+    - _R_CHECK_CODE_ASSIGN_TO_GLOBALENV_=TRUE
+    - _R_CHECK_CODETOOLS_PROFILE_="suppressLocalUnused=FALSE"
+    - _R_CHECK_COMPILATION_FLAGS_=FALSE
+    - _R_CHECK_EXIT_ON_FIRST_ERROR_=FALSE
+    - _R_CHECK_NATIVE_ROUTINE_REGISTRATION_=TRUE
+    - _R_CHECK_NO_STOP_ON_TEST_ERROR_=TRUE
+    - _R_CHECK_RD_EXAMPLES_T_AND_F_=TRUE
+    - _R_CHECK_RD_LINE_WIDTHS_=true
+    - _R_CHECK_TESTS_NLINES_=0
+    - _R_CHECK_USE_INSTALL_LOG_=TRUE
+    - _R_CHECK_VIGNETTES_NLINES_=0
+    - _R_CHECK_PKG_SIZES_THRESHOLD_=50
     - ICD_COVERAGE=false
+    - ICD_MINI_BENCH=false
+    - ICD_DATA_VERBOSE=true
+    - ICD_DATA_OFFLINE=true
+    - ICD_DATA_INTERACT=false
+    # 4 is the official travis suggestion, but the docker images only seem to
+    # have access to two cores/threads.
+    - OMP_NUM_THREADS=2
 
 matrix:
   fast_finish: true
   include:
   - r: devel
-    env: LINTR_COMMENT_BOT=true
+    os: linux
+    dist: xenial
+    compiler:
+      - gcc
+      - clang
+    env:
+      - ICD_MINI_BENCH=true
   - r: release
-  - r: oldrel
-    r_build_args: --no-build-vignettes --no-manual --resave-data=no
-    r_check_args: --no-build-vignettes --no-vignettes --ignore-vignettes --no-codoc --no-manual
+    os: linux
+    compiler:
+      - gcc
+      - clang
+    dist: xenial
+    env:
+      - ICD_MINI_BENCH=true
+  # https://docs.travis-ci.com/user/languages/c/#gcc-on-macos
   - r: release
+    os: linux
+    compiler: gcc
+    latex: false
     r_build_args: --no-build-vignettes --no-manual --resave-data=no
     r_check_args: --no-build-vignettes --no-vignettes --ignore-vignettes --no-codoc --no-manual
     env:
     - ICD_COVERAGE=true
+    - ICD_MINI_BENCH=false
+    - ICD_TEST_SLOW=true
+  - r: oldrel
+    os: linux
+    dist: trusty
+    latex: false
+    r_build_args: --no-build-vignettes --no-manual --resave-data=no
+    r_check_args: --no-build-vignettes --no-vignettes --ignore-vignettes --no-codoc --no-manual
+  # MacOS:
+  - r: release
+    os: osx
+    # xcode image is needed so things like _stdio.h are available to GCC.
+    osx_image: xcode10.1
+#    compiler: gcc # redundant: done by logic in before_intall
+    fortran: false
+    env:
+      - ICD_MINI_BENCH=true
+  - r: devel
+    os: osx
+    osx_image: xcode10.2
+#    compiler: gcc # redundant: done by logic in before_intall
+    fortran: false
+  - r: devel
+    os: osx
+    # as of May 2019, default osx image is 9.4.1
+    # https://docs.travis-ci.com/user/reference/osx#xcode-version
+    # compiler: clang # redundant
+    fortran: true
+    env: ICD_USE_XCODE_CLANG=true
+  - r: release
+    os: osx
+    # compiler: clang # redundant
+    fortran: true
+    latex: false
+    r_build_args: --no-build-vignettes --no-manual --resave-data=no
+    r_check_args: --no-build-vignettes --no-vignettes --ignore-vignettes --no-codoc --no-manual
+    env:
+    - ICD_USE_XCODE_CLANG=true
+    - ICD_MINI_BENCH=true
   allow_failures:
-  # temporarily allow failure for lintr run on travis as a dependency of lintr fails to install.
+  # allow any osx to fail for now: error prone tool chain
+  - os: osx
   - r: oldrel
-    r_build_args: --no-build-vignettes --no-manual --resave-data=no
-    r_check_args: --no-build-vignettes --no-vignettes --ignore-vignettes --no-codoc --no-manual
   - r: release
+    os: linux
+    latex: false
     r_build_args: --no-build-vignettes --no-manual --resave-data=no
     r_check_args: --no-build-vignettes --no-vignettes --ignore-vignettes --no-codoc --no-manual
     env:
     - ICD_COVERAGE=true
+    - ICD_MINI_BENCH=false
     - ICD_TEST_SLOW=true
 
 before_script:
- - rm .Rinstignore  # do install everything for testing
- - sed -i'' '/.*[Dd]ata.*/d' .Rbuildignore # do include data for testing
- - sed -i'' '/\.covrignore/d' .Rbuildignore
- - sed -i'' '/\.lintr/d' .Rbuildignore
- - sed -i'' '/\benchmark/d' .Rbuildignore
- - Rscript -e "Rcpp::compileAttributes()" # make sure Rcpp generated code is updated, ideally this is not be checked in repo...
+ - if [ x"$ICD_TEST_SLOW" = x"true" ]; then
+     Rscript -e 'source("tools/split-tests.R"); testthat_split();';
+   fi
+
+after_script:
+ # should fail and stop travis with error if the quick benchmark code fails
+ - if [ x"$ICD_MINI_BENCH" = x"true" ]; then
+     cd benchmarks/icd-JSS3447-replication;
+     eval "make bench3"
+     eval "make replmat"
+     cd ../..;
+   fi
 
 after_success:
  - if [ "$ICD_COVERAGE" = "true" ]; then
-     cd benchmarks/icd-JSS3447-replication;
-     make bench3; make replmat;
+     Rscript -e 'source("tools/split-tests.R"); testthat_split();';
+     Rscript -e 'install.packages("covr"); covr::codecov(quiet = FALSE)';
    fi
- - if [ "$ICD_COVERAGE" = "true" ]; then
-     Rscript -e "covr::codecov(quiet = FALSE)"; fi
- - if [ "$LINTR_COMMENT_BOT" = "true" ]; then
-     Rscript -e "lintr::lint_package()"; fi
 
 notifications:
   email:
     on_success: change
-    on_failure: change
+    on_failure: always

@@ -3,13 +3,14 @@ title: "Ranges of ICD codes"
 author: "Jack O. Wasey"
 date: "`r Sys.Date()`"
 output:
-  html_document:
+  html_vignette:
     toc: yes
 vignette: >
   %\VignetteIndexEntry{Ranges of ICD codes}
   %\VignetteEngine{knitr::rmarkdown}
-  %\VignetteDepends{icd.data, magrittr, utils}
+  %\VignetteDepends{magrittr, utils}
   %\VignetteEncoding{UTF-8}
+  %\VignetteKeyword{ICD-9, ICD-10, ICD-9-CM, ICD-10-CM, algorithm}
 ---
 <!--
 Copyright (C) 2014 - 2019  Jack O. Wasey
@@ -49,7 +50,7 @@ knitr::opts_chunk$set(
 
 These internal functions generate ranges of valid ICD-9 codes, without including parent codes when the range limit would subset the parent. These were primarily designed to accurately reflect definitions for comorbidity maps. For example, the published article defining Quan's version of the Elixhauser comorbidities includes the following expression as part of the definition of the arrythmia comorbidity: _746.3 -- 746.6_.
 
-The functions can be used by running `devtools::load_all()` from the icd source tree available from [github](https://github.com/jackwasey/icd), or by using the 
+The functions can be used by running `devtools::load_all()` from the icd source tree available from [github](https://github.com/jackwasey/icd), or by using the
 
 Using icd, we can use this shortcut to expand decimal ICD-9 codes to all possible child codes:
 ```{r arrythmiaexpand, eval = FALSE}

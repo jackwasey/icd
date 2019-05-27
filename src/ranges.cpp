@@ -26,7 +26,7 @@ CV allMinors = {"",   "0",  "1",  "2",  "3",  "4",  "5",  "6",  "7",  "8",
                 "89", "90", "91", "92", "93", "94", "95", "96", "97", "98",
                 "99"};
 
-// [[Rcpp::export(icd9_expand_minor_wrap)]]
+// [[Rcpp::export(icd9_expand_minor_rcpp)]]
 CV icd9ExpandMinor(const Str &mnr, bool isE) {
   if (!isE) {
     switch (mnr.size()) {
@@ -56,14 +56,14 @@ CV icd9ExpandMinor(const Str &mnr, bool isE) {
         return v9;
       default:
         stop("unrecognized minor character");
-        return CV::create();
+      return CV::create();
       }
       break;
     case 2:
       return wrap(mnr);
     default:
       stop("minor of more than two characters");
-      return CV::create();
+    return CV::create();
     }
   } else {
     // is E code, so minor must be just one character
@@ -79,16 +79,11 @@ CV icd9ExpandMinor(const Str &mnr, bool isE) {
   return (NA_STRING); // should never get here
 }
 
-// [[Rcpp::export]]
-CV icd9ChildrenShort(CV icd9Short, const VecStr &icd9cmReal, bool onlyReal) {
+std::set<Str> icd9ChildrenShortWorker(const CV& icd9Short) {
   std::set<Str> out;
-  if (icd9Short.size() == 0) {
-    icd9Short.attr("icd_short_diag") = true;
-    return icd9Short;
-  }
-  List parts         = icd9ShortToParts(icd9Short, "");
-  CV mjr             = parts[0];
-  CV mnr             = parts[1];
+  List parts = icd9ShortToParts(icd9Short, "");
+  CV mjr = parts[0];
+  CV mnr = parts[1];
   CV::iterator itmjr = mjr.begin();
   CV::iterator itmnr = mnr.begin();
   for (; itmjr != mjr.end(); ++itmjr, ++itmnr) {
@@ -99,36 +94,58 @@ CV icd9ChildrenShort(CV icd9Short, const VecStr &icd9cmReal, bool onlyReal) {
     VecStr newshort = as<VecStr>(icd9MajMinToShort(thismjr, newminors));
     out.insert(newshort.begin(), newshort.end());
   }
-  if (onlyReal) {
-    std::set<Str> out_real;
-    const std::set<Str> reals(icd9cmReal.begin(), icd9cmReal.end());
-    std::set_intersection(out.begin(),
-                          out.end(),
-                          reals.begin(),
-                          reals.end(),
-                          std::inserter(out_real, out_real.begin()));
-    out = out_real;
+  return out;
+}
+
+// [[Rcpp::export(icd9_children_short_undefined_rcpp)]]
+CV icd9ChildrenShortUndefined(const CV& icd9Short) {
+  if (icd9Short.size() == 0) {
+    CV qout(0);
+    qout.attr("icd_short_diag") = true;
+    return qout;
   }
-  CV rcppOut                     = wrap(out);
+  std::set<Str> out = icd9ChildrenShortWorker(icd9Short);
+  CV rcppOut = wrap(out);
   rcppOut.attr("icd_short_diag") = true;
   return rcppOut;
 }
 
-// TODO: icd9ChildrenShortUnordered no NA version
+// [[Rcpp::export(icd9_children_short_defined_rcpp)]]
+CV icd9ChildrenShortDefined(const CV& icd9Short,
+                            const VecStr &icd9cmReal) {
+  if (icd9Short.size() == 0) {
+    CV qout(0);
+    qout.attr("icd_short_diag") = true;
+    return qout;
+  }
+  std::set<Str> out = icd9ChildrenShortWorker(icd9Short);
+  std::set<Str> out_real;
+  const std::set<Str> reals(icd9cmReal.begin(), icd9cmReal.end());
+  std::set_intersection(out.begin(),
+                        out.end(),
+                        reals.begin(),
+                        reals.end(),
+                        std::inserter(out_real, out_real.begin()));
+  CV rcppOut = wrap(out_real);
+  rcppOut.attr("icd_short_diag") = true;
+  return rcppOut;
+}
 
-// [[Rcpp::export]]
-CV icd9ChildrenShortUnordered(const CV &icd9Short,
-                              const VecStr &icd9cmReal,
-                              const bool onlyReal) {
+// [[Rcpp::export(icd9_children_short_rcpp)]]
+CV icd9ChildrenShort(const CV& icd9Short,
+                     const VecStr& icd9cmReal,
+                     bool onlyReal) {
+  if (onlyReal)
+    return icd9ChildrenShortDefined(icd9Short, icd9cmReal);
+  else
+    return icd9ChildrenShortUndefined(icd9Short);
+}
+
+icd_set icd9ChildrenShortUnorderedWorker(const CV& icd9Short) {
   icd_set out;
-  if (icd9Short.size() == 0) {
-    CV out;
-    out.attr("icd_short_diag") = true;
-    return out;
-  }
-  List parts         = icd9ShortToParts(icd9Short, "");
-  CV mjr             = parts[0];
-  CV mnr             = parts[1];
+  List parts = icd9ShortToParts(icd9Short, "");
+  CV mjr = parts[0];
+  CV mnr = parts[1];
   CV::iterator itmjr = mjr.begin();
   CV::iterator itmnr = mnr.begin();
   for (; itmjr != mjr.end(); ++itmjr, ++itmnr) {
@@ -139,35 +156,99 @@ CV icd9ChildrenShortUnordered(const CV &icd9Short,
     VecStr newshort = as<VecStr>(icd9MajMinToShort(thismjr, newminors));
     out.insert(newshort.begin(), newshort.end());
   }
-  if (onlyReal) {
-    icd_set out_real;
-    icd_set reals(icd9cmReal.begin(), icd9cmReal.end());
-    for (icd_set::iterator j = out.begin(); j != out.end(); ++j) {
-      if (reals.find(*j) != reals.end()) out_real.insert(*j);
-    }
-    out = out_real;
+  return out;
+}
+
+// [[Rcpp::export(icd9_children_short_unordered_undefined_rcpp)]]
+CV icd9ChildrenShortUnorderedUndefined(const CV& icd9Short) {
+  if (icd9Short.size() == 0) {
+    CV qout(0);
+    qout.attr("icd_short_diag") = true;
+    return qout;
   }
-  CV rcppOut                     = wrap(out);
+  icd_set out = icd9ChildrenShortUnorderedWorker(icd9Short);
+  CV rcppOut = wrap(out);
   rcppOut.attr("icd_short_diag") = true;
   return rcppOut;
 }
 
-// [[Rcpp::export]]
-CV icd9ChildrenDecimalCpp(CV icd9Decimal,
-                          const VecStr &icd9cmReal,
-                          bool onlyReal) {
-  CV shrt                    = icd9DecimalToShort(icd9Decimal);
-  CV kids                    = icd9ChildrenShort(shrt, icd9cmReal, onlyReal);
-  CV out                     = icd9ShortToDecimal(kids);
+// [[Rcpp::export(icd9_children_short_unordered_defined_rcpp)]]
+CV icd9ChildrenShortUnorderedDefined(const CV& icd9Short,
+                                     const VecStr& icd9cmReal) {
+  if (icd9Short.size() == 0) {
+    CV qout(0);
+    qout.attr("icd_short_diag") = true;
+    return qout;
+  }
+  icd_set out = icd9ChildrenShortUnorderedWorker(icd9Short);
+  icd_set out_real;
+  icd_set reals(icd9cmReal.begin(), icd9cmReal.end());
+  for (icd_set::iterator j = out.begin(); j != out.end(); ++j) {
+    if (reals.find(*j) != reals.end()) out_real.insert(*j);
+  }
+  CV rcppOut = wrap(out_real);
+  rcppOut.attr("icd_short_diag") = true;
+  return rcppOut;
+}
+
+// [[Rcpp::export(icd9_children_short_unordered_rcpp)]]
+CV icd9ChildrenShortUnordered(const CV& icd9Short,
+                              const VecStr& icd9cmReal,
+                              bool onlyReal) {
+  if (onlyReal)
+    return icd9ChildrenShortUnorderedDefined(icd9Short, icd9cmReal);
+  else
+    return icd9ChildrenShortUnorderedUndefined(icd9Short);
+}
+
+// [[Rcpp::export(icd9_children_decimal_rcpp)]]
+CV icd9ChildrenDecimal(const CV& icd9Decimal,
+                       const VecStr& icd9cmReal,
+                       bool onlyReal) {
+  // note that this uses icd9cm...
+  CV shrt = icd9DecimalToShort(icd9Decimal);
+  CV kids = icd9ChildrenShort(shrt, icd9cmReal, onlyReal);
+  CV out = icd9ShortToDecimal(kids);
   out.attr("icd_short_diag") = false;
   return out;
 }
 
-// [[Rcpp::export]]
-CV icd9ChildrenCpp(CV icd9,
-                   bool isShort,
-                   const VecStr icd9cmReal,
-                   bool onlyReal = true) {
+// [[Rcpp::export(icd9_children_decimal_unordered_rcpp)]]
+CV icd9ChildrenDecimalUnordered(const CV& icd9Decimal,
+                                const VecStr& icd9cmReal,
+                                bool onlyReal) {
+  // note that this uses icd9cm, but usually doesn't matter, and definitely not
+  // for 'undefined' children.
+  CV shrt = icd9DecimalToShort(icd9Decimal);
+  CV kids = icd9ChildrenShortUnordered(shrt, icd9cmReal, onlyReal);
+  CV out = icd9ShortToDecimal(kids);
+  out.attr("icd_short_diag") = false;
+  return out;
+}
+
+// [[Rcpp::export(icd9_children_decimal_unordered_undefined_rcpp)]]
+CV icd9ChildrenDecimalUnorderedUndefined(const CV& icd9Decimal) {
+  CV shrt = icd9DecimalToShort(icd9Decimal);
+  CV kids = icd9ChildrenShortUnorderedUndefined(shrt);
+  CV out = icd9ShortToDecimal(kids);
+  out.attr("icd_short_diag") = false;
+  return out;
+}
+
+// [[Rcpp::export(icd9_children_decimal_unordered_defined_rcpp)]]
+CV icd9ChildrenDecimalUnorderedDefined(const CV& icd9Decimal,
+                                const VecStr& icd9cmReal) {
+  CV shrt = icd9DecimalToShort(icd9Decimal);
+  CV kids = icd9ChildrenShortUnorderedDefined(shrt, icd9cmReal);
+  CV out = icd9ShortToDecimal(kids);
+  out.attr("icd_short_diag") = false;
+  return out;
+}
+// [[Rcpp::export(icd9_children_rcpp)]]
+CV icd9Children(const CV& icd9,
+                bool isShort,
+                const VecStr& icd9cmReal,
+                bool onlyReal) {
   if (isShort) return icd9ChildrenShort(icd9, icd9cmReal, onlyReal);
-  return icd9ChildrenDecimalCpp(icd9, icd9cmReal, onlyReal);
+  return icd9ChildrenDecimal(icd9, icd9cmReal, onlyReal);
 }

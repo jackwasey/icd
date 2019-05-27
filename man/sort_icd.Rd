@@ -22,7 +22,7 @@ sort_icd(x, decreasing = FALSE, short_code = guess_short(x), ...)
 \method{sort}{icd9}(x, decreasing = FALSE, short_code = guess_short(x),
   ...)
 
-order.icd9(x)
+order.icd9(x, na.last = TRUE)
 
 order.icd10cm(x)
 
@@ -38,6 +38,9 @@ code provided is in short (\code{TRUE}) or decimal (\code{FALSE}) form.
 Where reasonable, this is guessed from the input data.}
 
 \item{...}{arguments passed on to other functions}
+
+\item{na.last}{Logical, analogous to \code{order}, so \code{NA} drops NA.
+\code{FALSE} is not currently supported.}
 }
 \value{
 For sort, a sorted vector of ICD-9 codes. Numeric, then E codes, then
@@ -57,9 +60,10 @@ Note that \code{\link[base]{sort}} is an S3 generic, whereas
 }
 \section{ICD-9}{
  Sorts lists of numeric, V or E codes. Note that a simple
-  numeric sort does not work for ICD-9 codes, since "162" > "1620", and also
-  V codes precede E codes. Numeric codes are first, then 'V', then 'E'. Will
-  return a factor if a factor is given.
+  numeric sort does not work for ICD-9 codes, since \code{162 > 1620}, and
+  also \sQuote{V} codes precede \sQuote{E} codes. Numeric codes are first,
+  then \sQuote{V}, then \sQuote{E}. A factor is returned if a factor is
+  given.
 }
 
 \section{ICD-10-CM and ICD-10-BE}{
@@ -77,8 +81,11 @@ sort(codes)
 # attached using:
 library(icd)
 icd:::sort.icd10cm(c("C7A", "C79", "C80", "C81", "C7B"))
-stopifnot(!identical(order.icd10cm(as.character(codes)),
-                     order(codes)))
+stopifnot(!identical(
+  order.icd10cm(as.character(codes)),
+  order(codes)
+))
+icd::order.icd9(c("V20", NA, "100", NA, "E998", "101"))
 codes[order.icd10cm(codes)]
 # Note that base::order does NOT do S3 dispatch, so the following does not work:
 codes[order(codes)]

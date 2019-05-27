@@ -6,12 +6,13 @@
 using namespace Rcpp;
 
 //' @title Convert integers to strings as quickly as possible
-//' @description Have tried R, `sprintf` with \pkg{Rcpp} and C++ standard
-//' library. Doesn't do bounds checking, but limited by length of integers.
+//' @description Have tried R, \code{sprintf} with \CRANpkg{Rcpp} and C++
+//'   standard library. Doesn't do bounds checking, but limited by length of
+//'   integers.
 //' @param x Vector of integers
 //' @return Vector of characters
-//' @md
 //' @keywords internal manip
+//' @noRd
 // [[Rcpp::export]]
 CharacterVector fastIntToStringRcpp(IntegerVector x) {
   size_t len = x.size();

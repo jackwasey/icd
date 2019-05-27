@@ -35,9 +35,9 @@ was not specified, then the first column of the data frame is used.}
 \code{quan}. The first two will give the original Charlson weights for each
 comorbidity, whereas \code{quan} uses the updated weights from Quan 2011.}
 
-\item{return_df}{single logical value, if true, a two column data frame will
-be returned, with the first column named as in input data frame (i.e.
-\code{visit_name}), containing all the visits, and the second column
+\item{return_df}{single logical value, if \code{TRUE}, a two column data
+frame will be returned, with the first column named as in input data frame
+(i.e., \code{visit_name}), containing all the visits, and the second column
 containing the Charlson Comorbidity Index.}
 
 \item{stringsAsFactors}{single logical, passed on when constructing
@@ -50,22 +50,22 @@ your system default or this setting.}
 e.g. \code{name}}
 }
 \description{
-Charlson score is calculated in the basis of the Quan revision of Deyo's
-ICD-9 mapping. (Peptic ulcer disease no longer warrants a point.) Quan
-published an updated set of scores, but it seems most people use the original
-scores for easier comparison between studies, even though Quan's were more
-predictive.
+Charlson score is calculated in the basis of the Quan revision
+  of Deyo's ICD-9 mapping. (Peptic ulcer disease no longer warrants a point.)
+  Quan published an updated set of scores, but it seems most people use the
+  original scores for easier comparison between studies, even though Quan's
+  were more predictive.
 }
 \details{
-When used, hierarchy is applied per Quan, "The following comorbid
-  conditions were mutually exclusive: diabetes with chronic complications and
-  diabetes without chronic complications; mild liver disease and moderate or
-  severe liver disease; and any malignancy and metastatic solid tumor." The
-  Quan scoring weights come from the 2011 paper
-  (dx.doi.org/10.1093/aje/kwq433). The comorbidity weights were recalculated
-  using updated discharge data, and some changes, such as Myocardial
-  Infarction decreasing from 1 to 0, may reflect improved outcomes due to
-  advances in treatment since the original weights were determined in 1984.
+When used, hierarchy is applied per Quan, \dQuote{The following
+  comorbid conditions were mutually exclusive: diabetes with chronic
+  complications and diabetes without chronic complications; mild liver
+  disease and moderate or severe liver disease; and any malignancy and
+  metastatic solid tumor.} The Quan scoring weights come from the 2011 paper.
+  The comorbidity weights were recalculated using updated discharge data, and
+  some changes, such as Myocardial Infarction decreasing from 1 to 0, may
+  reflect improved outcomes due to advances in treatment since the original
+  weights were determined in 1984.
 }
 \section{Methods (by class)}{
 \itemize{
@@ -76,8 +76,10 @@ codes. ICD-10 Charlson can be calculated simply by getting the Charlson
 }}
 
 \examples{
-mydf <- data.frame(visit_name = c("a", "b", "c"),
-                   icd9 = c("441", "412.93", "042"))
+mydf <- data.frame(
+  visit_name = c("a", "b", "c"),
+  icd9 = c("441", "412.93", "042")
+)
 charlson(mydf)
 cmb <- icd9_comorbid_quan_deyo(mydf)
 cmb

@@ -14,7 +14,12 @@ test_that("find codes", {
   expect_false(is_major.icd9("E900.3"))
   expect_false(is_major.icd9("V903"))
   expect_false(is_major.icd9("E9003"))
-  # todo, what about "E800." or "100." ?
+  expect_true(is_major.icd9("E800."))
+  expect_false(is_major.icd9("E800.2"))
+  expect_true(is_major.icd9("100."))
+  expect_false(is_major.icd9("V20.3"))
+  expect_true(is_major.icd9("100."))
+  expect_false(is_major.icd9("V20.3"))
   expect_false(icd9_is_v(" E900.3 "))
   expect_false(icd9_is_e(" 80.2"))
   expect_false(icd9_is_n(" V10.1"))
@@ -42,12 +47,18 @@ test_that("'is' works for factors", {
 
 test_that("'is' mixed values, factors and vectors", {
   v <- c("E100.1", "V234", "12", "V34.2", "61523", "10.2", "E9991", " V45XX ")
-  expect_equal(icd9_is_n(v),
-               c(FALSE, FALSE, TRUE, FALSE, TRUE, TRUE, FALSE, FALSE))
-  expect_equal(icd9_is_v(v),
-               c(FALSE, TRUE, FALSE, TRUE, FALSE, FALSE, FALSE, TRUE))
-  expect_equal(icd9_is_e(v),
-               c(TRUE, FALSE, FALSE, FALSE, FALSE, FALSE, TRUE, FALSE))
+  expect_equal(
+    icd9_is_n(v),
+    c(FALSE, FALSE, TRUE, FALSE, TRUE, TRUE, FALSE, FALSE)
+  )
+  expect_equal(
+    icd9_is_v(v),
+    c(FALSE, TRUE, FALSE, TRUE, FALSE, FALSE, FALSE, TRUE)
+  )
+  expect_equal(
+    icd9_is_e(v),
+    c(TRUE, FALSE, FALSE, FALSE, FALSE, FALSE, TRUE, FALSE)
+  )
 })
 
 test_that("ICD-10 majors identified", {

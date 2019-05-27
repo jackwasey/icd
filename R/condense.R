@@ -44,12 +44,13 @@ condense.icd9 <- function(x, short_code = guess_short(x),
   assert_fac_or_char(x)
   assert_flag(short_code)
   stopifnot(is.null(defined) ||
-              (is.logical(defined) && length(defined) == 1L))
+    (is.logical(defined) && length(defined) == 1L))
   assert_flag(warn)
-  if (short_code)
+  if (short_code) {
     icd9_condense_short(x, defined = defined, warn = warn, ...)
-  else
+  } else {
     icd9_condense_decimal(x, defined = defined, warn = warn, ...)
+  }
 }
 
 # TODO: condense.icd10, especially thinking of the long lists of ICD-10 codes in
@@ -73,25 +74,45 @@ condense.character <- function(x, short_code = guess_short(x),
   }
 }
 
+#' @describeIn condense Condense a factor of ICD codes
+#' @export
+#' @keywords internal manip
+condense.factor <- function(x,
+                            short_code = guess_short(x),
+                            defined = NULL,
+                            ...) {
+  condense.character(levels(x),
+    short_code = short_code,
+    defined = defined,
+    ...
+  )
+}
+
 #' @rdname condense
 #' @keywords internal manip
 icd9_condense_decimal <- function(x, defined = NULL, warn = TRUE,
-                                  keep_factor_levels = FALSE)
+                                  keep_factor_levels = FALSE) {
   short_to_decimal.icd9(
     icd9_condense_short(
       decimal_to_short.icd9(x),
-      defined = defined, warn = warn, keep_factor_levels = keep_factor_levels))
+      defined = defined, warn = warn, keep_factor_levels = keep_factor_levels
+    )
+  )
+}
 
-#' @rdname condense
+#' Condense short ICD-9 codes
 #' @template warn
 #' @param keep_factor_levels single logical value, default \code{FALSE}. If
 #'   \code{TRUE}, will reuse the factor levels from the input data for the
 #'   output data. This only applies if a factor is given for the input codes.
 #' @keywords internal manip
-icd9_condense_short <- function(x, defined = NULL, warn = TRUE,
+#' @noRd
+icd9_condense_short <- function(x,
+                                defined = NULL,
+                                warn = TRUE,
                                 keep_factor_levels = FALSE) {
   stopifnot(is.null(defined) ||
-              (is.logical(defined) && length(defined) == 1L))
+    (is.logical(defined) && length(defined) == 1L))
   assert_flag(warn)
   assert_flag(keep_factor_levels)
   icd9Levels <- levels(x) # NULL if not a factor
@@ -103,35 +124,44 @@ icd9_condense_short <- function(x, defined = NULL, warn = TRUE,
   if (is.null(defined)) {
     if (all(is_defined.icd9(i9w, short_code = TRUE))) {
       defined <- TRUE
-      message("'defined' not given, but all codes are indeed defined")
+      if (warn) {
+        message("'defined' not given, but all codes are indeed defined")
+      }
     } else {
       defined <- FALSE
-      if (warn)
+      if (warn) {
         warning("'defined' not given, but not all codes are defined")
+      }
     }
   }
   if (warn && defined && !all(is_defined.icd9(x, short_code = TRUE))) {
     x <- get_defined.icd9(x, short_code = TRUE)
-    warning("only defined values requested, but some undefined ICD-9 code(s)",
-            " were given, so dropping them")
+    warning(
+      "only defined values requested, but some undefined ICD-9 code(s)",
+      " were given, so dropping them"
+    )
   }
   # any major codes are automatically in output (not condensing higher than
   # three digit code) and all their children can be removed from the work list
   out <- majors <- i9w[are_major <- is_major.icd9(i9w)]
   i9w <- i9w[!are_major]
-  i9w <- i9w[i9w %nin% children.icd9(majors, short_code = TRUE,
-                                     defined = defined)]
+  i9w <- i9w[i9w %nin% children.icd9(majors,
+    short_code = TRUE,
+    defined = defined
+  )]
   fout <- c()
   four_digit_parents <- unique(substr(i9w, 0, 4))
   for (fp in four_digit_parents) {
     # onlyBillable at 5th level is same as onlyReal
-    test_kids <- children.icd9(fp, defined = defined,
-                               short_code = TRUE, billable = FALSE)
+    test_kids <- children.icd9(fp,
+      defined = defined,
+      short_code = TRUE, billable = FALSE
+    )
     if (length(test_kids) > 0 && all(test_kids %in% c(fp, i9w))) {
-      #if ((length(test_kids) > 1) || (fp %in% i9w)) {
+      # if ((length(test_kids) > 1) || (fp %in% i9w)) {
       fout <- c(fout, fp)
       i9w <- i9w[-which(i9w %in% test_kids)]
-      #}
+      # }
     }
   }
   # 'out' now has original major codes, 'fout' has parent four digit codes. Now
@@ -155,13 +185,15 @@ icd9_condense_short <- function(x, defined = NULL, warn = TRUE,
   }
   out <- unique(sort.icd9(c(out, fout, i9w), short_code = TRUE))
   if (!is.null(icd9Levels)) {
-    if (keep_factor_levels)
+    if (keep_factor_levels) {
       out <- factor(out, icd9Levels)
-    else
+    } else {
       out <- factor(out)
+    }
   }
-  if (defined)
+  if (defined) {
     get_defined.icd9(out, short_code = TRUE)
-  else
+  } else {
     out
+  }
 }

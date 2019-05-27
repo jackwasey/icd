@@ -3,42 +3,52 @@ title: "Pediatric Complex Chronic Conditions"
 author: "Jack O. Wasey"
 date: "`r Sys.Date()`"
 output:
-  html_document:
+  html_vignette:
     toc: yes
 vignette: >
   %\VignetteIndexEntry{Pediatric Complex Chronic Conditions}
   %\VignetteEngine{knitr::rmarkdown}
-  %\VignetteDepends{icd.data}
   %\VignetteEncoding{UTF-8}
+  %\VignetteKeyword{PCCC, pediatric complex chronic conditions, comorbidity, comorbidities, biomedical informatics, administrative data, ICD-9, ICD-10, ICD-9-CM, ICD-10-CM, mapping, algorithm}
 bibliography: icdpkg.bib
 ---
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  out.width = "100%",
+  fig.width = 14,
+  fig.height = 10.5
+  # global.par = TRUE
+)
 library("icd")
-library("icd.data")
 n <- 10000
 set.seed(1441)
-nm <- "code"
-i <- if (icd:::icd_data_ver_ok()) {
-  icd:::get_from_icd_data("icd10cm2016_pc", lazy = TRUE)
-} else {
-  nm <- "pcs"
-  icd:::get_from_icd_data("icd10_pcs_2016", lazy = TRUE)
-}
+# load the dice with more PCCC diagnostic codes
+h <- c(
+  icd10cm2019$code,
+  rep(unlist(unname(icd10_map_pccc_dx)), 10)
+)
 dat <- data.frame(
   id = n + seq(n),
-  icd_dx1 = sample(icd.data::icd10cm2016$code, n, replace = TRUE),
-  icd_dx2 = sample(icd.data::icd10cm2016$code, n, replace = TRUE),
-  icd_pcs1 = sample(i[[nm]], n, replace = TRUE),
-  icd_pcs2 = sample(i[[nm]], n, replace = TRUE)
+  icd_dx1 = sample(h, n, replace = TRUE),
+  icd_dx2 = sample(h, n, replace = TRUE)
 )
+# for builds without the ability to download or use cached data, ignore pcs
+if (icd:::.exists_in_cache("icd10cm2019_pc")) {
+  i <- get_icd10cm2019_pc()$code
+  dat <- cbind(dat,
+               icd_pcs1 = sample(i, n, replace = TRUE),
+               icd_pcs2 = sample(i, n, replace = TRUE)
+  )
+}
 ```
 
 # Pediatric Complex Chronic Conditions
 
 ## Introduction
 
-The adult comorbidities defined by authors such as Charlson, Quan and Elixhuaser are not suitable for pediatric research. Feudtner and others produced comorbidity definitions suitable for infants and children, with mappings defined for both ICD-9 and ICD-10 codes [@Feinstein_packagepediatriccomplex_2018; Feudtner_Pediatriccomplexchronic_2014]. These are now included in the [icd package](https://cran.r-project.org/package=icd) for R, which enables [fast calculation of comorbidities](introduction.html) for PCCC and other ICD code to comorbidity maps.
+The adult comorbidities defined by authors such as Charlson, Quan and Elixhuaser are not suitable for pediatric research. Feudtner and others produced comorbidity definitions suitable for infants and children, with mappings defined for both ICD-9 and ICD-10 codes [@Feinstein_packagepediatriccomplex_2018; @Feudtner_Pediatriccomplexchronic_2014]. These are now included in the [icd package](https://cran.r-project.org/package=icd) for R, which enables [fast calculation of comorbidities](introduction.html) for PCCC and other ICD code to comorbidity maps.
 
 ## Calculating PCCC comorbidities.
 
@@ -48,17 +58,45 @@ The PCCC comorbidities may be derived from both diagnostic and procedure codes. 
 head(dat)
 ```
 The data is in 'wide' format. `icd` no longer needs the data to be in 'long' format. The PCCC comorbidity classes can be computed directly from the source data and summarized in a plot. Here we calculate the PCCC from ICD diagnostic codes and ICD procedure codes separately, and logically combine them to get the result.
-```{r calc}
+```{r calcpre, eval = TRUE, echo = FALSE}
+pccc_dx <- comorbid_pccc_dx(dat)
+if (icd:::.exists_in_cache("icd10cm2019_pc")) {
+  pccc_pcs <- icd10_comorbid_pccc_pcs(dat,
+                                      icd_name = c("icd_pcs1", "icd_pcs2")
+  )
+  res <- pccc_dx | pccc_pcs
+} else {
+  res <- pccc_dx
+}
+```
+```{r calc, eval = FALSE}
 pccc_dx <- comorbid_pccc_dx(dat)
 pccc_pcs <- icd10_comorbid_pccc_pcs(dat,
-                                    icd_name = c("icd_pcs1", "icd_pcs2"))
+  icd_name = c("icd_pcs1", "icd_pcs2")
+)
 res <- pccc_dx | pccc_pcs
 ```
 
-```{r pcccbarplot, fig.asp=0.5, echo=FALSE}
-barplot(sort(colSums(res), decreasing = TRUE),
-        ylim = c(0, signif(max(colSums(res)), 1)),
-        ylab = "count", las = 2)
+
+```{r}
+res[295:300, ]
+```
+Let's look at the summary results:
+
+```{r colsumpccc}
+colSums(res)
+```
+
+```{r par, include = FALSE}
+#graphics::par(mar = c(12, 4, 4, 2) + 0.1) # bottom, left, top, right
+```
+```{r pcccbarplot, echo=FALSE}
+graphics::barplot(sort(colSums(res), decreasing = TRUE),
+  names.arg = names_pccc,
+  ylab = "count",
+  las = 2,
+  cex.names = 0.75
+)
 ```
 
 # References

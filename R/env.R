@@ -15,8 +15,9 @@ vec_to_env_true <- function(x, val = TRUE,
 
 vec_to_env_count <- function(x,
                              env = new.env(hash = TRUE, parent = baseenv())) {
-  for (i in seq_along(x))
+  for (i in seq_along(x)) {
     env[[x[i]]] <- i
+  }
   env
 }
 
@@ -33,10 +34,13 @@ env_to_vec_flip <- function(env) {
   invisible(out)
 }
 
-vec_to_lookup_pair <- function(x, env = new.env(hash = TRUE,
-                                                parent = baseenv())) {
-  for (i in seq_along(x))
+vec_to_lookup_pair <- function(x, env = new.env(
+                                 hash = TRUE,
+                                 parent = baseenv()
+                               )) {
+  for (i in seq_along(x)) {
     env[[x[i]]] <- i
+  }
   invisible(list(env = env, vec = x))
 }
 
@@ -48,9 +52,10 @@ vec_to_lookup_pair <- function(x, env = new.env(hash = TRUE,
 #' @keywords internal
 "%eine%" <- function(x, table) {
   vapply(ls(name = x),
-         function(y) !is.null(table[[y]]),
-         FUN.VALUE = logical(1L),
-         USE.NAMES = FALSE)
+    function(y) !is.null(table[[y]]),
+    FUN.VALUE = logical(1L),
+    USE.NAMES = FALSE
+  )
 }
 
 "%ine%" <- function(x, table) {

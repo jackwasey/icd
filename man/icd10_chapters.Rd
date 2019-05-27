@@ -3,7 +3,11 @@
 \docType{data}
 \name{icd10_chapters}
 \alias{icd10_chapters}
+\alias{icd10_chapters_fr}
 \title{ICD-10 chapters}
+\source{
+http://apps.who.int/classifications/icd10/browse/2016/en
+}
 \description{
 The WHO ICD-10 scheme chapters. The chapter level is the highest in the
 hierarchy, each chapter containing sets of codes which span multiple
@@ -15,10 +19,10 @@ alphabetic initial characters. E.g. Chapter I spans A00 to B99.
 U00-U49 - Provisional assignment of new diseases of uncertain etiology or
 emergency use U82-U85 - Resistance to antimicrobial and anti-neoplastic drugs
 
-Format:  list with chapter names stored in list names, each with two element
-named character vector with start and end codes.
+Format: list with chapter names stored in list names, each with two
+  element named character vector with start and end codes.
 }
 \seealso{
-\code{\link[icd.data]{ls_icd_data}}
+\code{\link{icd10_sub_chapters}}
 }
 \keyword{datasets}

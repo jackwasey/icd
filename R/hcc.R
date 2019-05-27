@@ -22,10 +22,13 @@ globalVariables(c("icd10_map_cc", "icd9_map_cc", "icd_map_cc_hcc"))
 comorbid_hcc <- function(x, date_name = "date",
                          visit_name = get_visit_name(x),
                          icd_name = get_icd_name(x))
-  switch_ver_cmb(x, list(icd9 = icd9_comorbid_hcc,
-                         icd10 = icd10_comorbid_hcc),
-                 date_name = date_name, visit_name = visit_name,
-                 icd_name = icd_name)
+  switch_ver_cmb(x, list(
+    icd9 = icd9_comorbid_hcc,
+    icd10 = icd10_comorbid_hcc
+  ),
+  date_name = date_name, visit_name = visit_name,
+  icd_name = icd_name
+  )
 
 #' @describeIn comorbid_hcc Get HCCs from a data frame of ICD-9 codes
 #' @export
@@ -34,10 +37,11 @@ icd9_comorbid_hcc <- function(x,
                               visit_name = NULL,
                               icd_name = NULL)
   comorbid_hcc_worker(x,
-                      map = icd9_map_cc,
-                      date_name = date_name,
-                      visit_name = visit_name,
-                      icd_name = icd_name)
+    map = icd9_map_cc,
+    date_name = date_name,
+    visit_name = visit_name,
+    icd_name = icd_name
+  )
 
 #' @describeIn comorbid_hcc Get HCCs from a data frame of ICD-10 codes
 #' @export
@@ -46,14 +50,16 @@ icd10_comorbid_hcc <- function(x,
                                visit_name = NULL,
                                icd_name = NULL) {
   comorbid_hcc_worker(x,
-                      map = icd10_map_cc,
-                      date_name = date_name,
-                      visit_name = visit_name,
-                      icd_name = icd_name)
+    map = icd10_map_cc,
+    date_name = date_name,
+    visit_name = visit_name,
+    icd_name = icd_name
+  )
 }
 #' apply HCC rules to either ICD-9 or ICD-10 codes
 #'
 #' @keywords internal manip
+#' @noRd
 comorbid_hcc_worker <- function(x,
                                 map,
                                 date_name,
@@ -63,7 +69,7 @@ comorbid_hcc_worker <- function(x,
   stopifnot(ncol(x) >= 3L)
   stopifnot(!anyDuplicated(names(x)))
   stopifnot(is.null(visit_name) ||
-              (is.character(visit_name) && length(visit_name) == 1L))
+    (is.character(visit_name) && length(visit_name) == 1L))
   stopifnot(is.null(icd_name) || is.character(icd_name))
   visit_name <- get_visit_name(x, visit_name)
   icd_name <- get_icd_name(x, icd_name)
@@ -72,9 +78,11 @@ comorbid_hcc_worker <- function(x,
   assert_string(icd_name)
   x$year <- as.numeric(format(x[[date_name]], "%Y"))
   # merge CCs to patient data based on ICD and year drop ICD info
-  x <- merge(x, map, all.x = TRUE,
-             by.x = c(icd_name, "year"),
-             by.y = c("icd_code", "year"))
+  x <- merge(x, map,
+    all.x = TRUE,
+    by.x = c(icd_name, "year"),
+    by.y = c("icd_code", "year")
+  )
   # Drop missing CC and convert to numeric
   # Not all ICDs resolve to a CC by definition
   x <- x[!is.na(x$cc), ]

@@ -3,12 +3,13 @@ title: "ICD-10 comorbidities"
 author: "Jack O. Wasey"
 date: "`r Sys.Date()`"
 output:
-  html_document
+  html_vignette
 vignette: >
   %\VignetteIndexEntry{ICD-10 comorbidities}
   %\VignetteEngine{knitr::rmarkdown}
-  %\VignetteDepends{icd.data, magrittr}
+  %\VignetteDepends{magrittr}
   %\VignetteEncoding{UTF-8}
+  %\VignetteKeyword{comorbidity, comorbidities, biomedical informatics, administrative data, matrix algebra, ICD-10, ICD-10-CM, WHO, France, Belgium}
 ---
 <!--
 Copyright (C) 2014 - 2019  Jack O. Wasey
@@ -48,7 +49,7 @@ The [icd package](https://cran.r-project.org/package=icd) for R includes ICD-10-
 
 The sample data is in the 'long' format, i.e., multiple rows per case.
 ```{r uranium-long}
-icd.data::uranium_pathology[1:10, ]
+uranium_pathology[1:10, ]
 ```
 Pick a code, and see what it means.
 ```{r explain10}
@@ -56,9 +57,7 @@ explain_code("R55")
 ```
 `icd` can work with 'long' or 'wide' format data without modification. If the source database is not normalized, i.e., has multiple diagnostic code columns, `icd` can detect and efficiently work on all the columns at once.
 ```{r uranium-wide}
-head(icd.data::uranium_pathology)
-# attach icd.data for convenience
-library(icd.data)
+head(uranium_pathology)
 ```
 
 Now map these diagnoses to disease groups as defined by Quan et al:
@@ -78,11 +77,12 @@ comorbid_charlson(uranium_pathology, return_df = TRUE)[1:5, 1:5]
 
 ## Working with big data
 
-`icd` is carefully optimized to give accurate results as quickly as possible, and [shines](efficiency.html) with huge data sets. For users working with millions of rows of data and higher orders of magnitude, some options can improve throughput. 
+`icd` is carefully optimized to give accurate results as quickly as possible, and [shines](efficiency.html) with huge data sets. For users working with millions of rows of data and higher orders of magnitude, some options can improve throughput.
 
 In this example, we also return 'binary' numeric flags instead of a matrix of logical values. For very large data sets, matrices are faster both for `icd` and subsequent manipulation and analysis. Here we also show that we can request the 'id' field is return in the order the data was presented. Note that setting `restore_id_order` to `FALSE` does not sort: it simply returns the data as soon as it was calculated, and since parallel threads complete at different times, it is quicker, although not deterministic. Again, this is really for huge data sets, where the additional sorting and re-ordering may be very time consuming. Most users will not need to worry about this.
 ```{r big}
 # shuffle the rows:
+set.seed(1441)
 u <- uranium_pathology[sample(seq_len(nrow(uranium_pathology))), ]
 head(u)
 quan_comorbidities <- comorbid(u,
@@ -98,7 +98,7 @@ The ICD-10-CM mappings are recorded a bit differently from the ICD-9-CM mappings
 ```{r cholera}
 # create trivial comorbidity map:
 cholera_typhoid_map <- list(cholera = "A00", typhoid = "A01")
-patients <- data.frame(patient = c("0001", "0001", "0002"), 
+patients <- data.frame(patient = c("0001", "0001", "0002"),
                        code = c("A001234567", "A01", "A019"))
 comorbid(patients , map = cholera_typhoid_map)
 ```
@@ -112,20 +112,14 @@ icd10_map_quan_elix$HTNcx
 The AHRQ publishes an annually updated categorization of ICD-10-CM procedure codes into four classes, representing diagnostic and therapeutic procedures, each being either minor or major.
 
 ```{r setuppcs, echo = FALSE}
-nm = "code"
-pcs <- if (icd:::icd_data_ver_ok()) {
-  icd:::get_from_icd_data("icd10cm2018_pc", lazy = TRUE)
-} else {
-  nm <- "pcs"
-  icd:::get_from_icd_data("icd10_pcs_2018", lazy = TRUE)
-}
-```
-```{r icd10pcs}
+n <- 10
+nm <- "code"
 set.seed(1441)
-pts <- data.frame(id = sample(LETTERS, 10),
-                  pc = sample(pcs[[nm]], 10))
+pcs_sample <- sample(unname(unlist(icd10_map_ahrq_pcs)), n)
+pts <- data.frame(id = sample(LETTERS, n),
+                  pc = pcs_sample)
 res <- icd10_comorbid(pts,
-                      map = icd10_map_ahrq_pcs, 
+                      map = icd10_map_ahrq_pcs,
                       icd_name = "pc",
                       return_binary = TRUE)
 print(res)

@@ -72,10 +72,11 @@ Reshaping data is a common task, and is made easier here by knowing
 }
 
 \examples{
-widedf <- data.frame(visit_name = c("a", "b", "c"),
+widedf <- data.frame(
+  visit_name = c("a", "b", "c"),
   icd9_01 = c("441", "4424", "441"),
   icd9_02 = c(NA, "443", NA)
-  )
+)
 wide_to_long(widedf)
 }
 \seealso{

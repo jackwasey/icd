@@ -20,7 +20,7 @@ expand_range_major(start, end, defined)
 }
 \description{
 Expand a pair of major codes into a range of major codes. Primarily for use
-by `icd.data`.
+by \code{icd.data}.
 }
 \section{Methods (by class)}{
 \itemize{
@@ -34,6 +34,8 @@ major codes
 }}
 
 \examples{
-expand_range_major("100", "102")
+if (requireNamespace("icd.data", quietly = TRUE)) {
+  expand_range_major("100", "102")
+}
 }
 \keyword{internal}

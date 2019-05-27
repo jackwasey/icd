@@ -3,41 +3,42 @@
 
 using namespace Rcpp;
 
-//' @describeIn factor_nosort \pkg{Rcpp} implementation, requiring character
-//' vector inputs only, no argument checking.
+//' @title Factor without sorting \CRANpkg{Rcpp} implementation
+//' @description Requiring character vector inputs only, no argument checking.
 //' @keywords internal manip
+//' @noRd
 // [[Rcpp::export(factor_nosort_rcpp_worker)]]
 IntegerVector factorNoSort(const CharacterVector &x,
                            const CharacterVector &levels,
                            const bool na_rm) {
-  // TODO: use new factor code? but this is fine.
+  // Could re-purpose some of refactor to do this more quickly
   IntegerVector out  = match(x, levels);
   out.attr("levels") = (CharacterVector)levels;
   out.attr("class")  = "factor";
   if (!na_rm) return out;
-  return (out[!is_na(out)]);
+  return out[!is_na(out)];
 }
 
-// TODO someday: can the following be done using the R_StringHash global cache
+// SOMEDAY: can the following be done using the R_StringHash global cache
 // instead of making a new hash table to do the integer matching?
 
 //' @title Re-generate a factor with new levels, without doing string matching
-//' @description This is called by an R wrapper. There is an `na.rm` version,
-//'   too. Some work simply to mirror behavior of `base::factor`, e.g. when a
-//'   level is not available, but NA level is available, NA is inserted into the
-//'   integer vector, not an index to the NA level.
-//' @md
+//' @description This is called by an R wrapper. There is an \code{na.rm}
+//'   version, too. Some work simply to mirror behavior of \code{base::factor},
+//'   e.g. when a level is not available, but NA level is available, NA is
+//'   inserted into the integer vector, not an index to the NA level.
 //' @keywords internal manip
+//' @noRd
 // [[Rcpp::export(refactor_worker)]]
 IntegerVector refactor(const IntegerVector &x,
                        const CV &new_levels,
                        const bool exclude_na,
                        const bool validate) {
   TRACE("Refactoring, keeping NAs");
-#ifdef ICD_DEBUG
-  assert(factorIsValid(x));
-#endif
   if (validate && !factorIsValid(x)) stop("input is not a valid factor");
+  if (validate && is_true(any(duplicated(new_levels)))) {
+    stop("With validation, refactor requires no duplicated levels");
+  };
   IntegerVector f(x.size());
   CharacterVector lx = x.attr("levels");
   DEBUG_VEC(new_levels);
@@ -118,23 +119,24 @@ IntegerVector refactor(const IntegerVector &x,
   DEBUG_VEC(f);
   f.attr("levels") = no_na_new_levels;
   f.attr("class")  = "factor";
-  assert(factorIsValid(f));
-  return (f);
+  if (validate && !factorIsValid(f)) {
+    stop("Refactor has failed: new factor is not valid.");
+  }
+  return f;
 }
 
-//' @describeIn refactor_worker Drop all `NA` values from levels and values
+//' @describeIn refactor_worker Drop all \code{NA} values from levels and values
 //' @keywords internal
+//' @noRd
 // [[Rcpp::export(refactor_narm_worker)]]
 IntegerVector refactor_narm(const IntegerVector &x,
                             const CV &new_levels,
                             const bool validate) {
   TRACE("Refactoring, dropping NA");
-  if (validate && !factorIsValid(x)) {
-#ifdef ICD_DEBUG
-    assert(factorIsValid(x));
-#endif
-    stop("input is not a valid factor");
-  }
+  if (validate && !factorIsValid(x)) stop("input is not a valid factor");
+  if (validate && is_true(any(duplicated(new_levels)))) {
+    stop("With validation, refactor requires no duplicated levels");
+  };
   IntegerVector f(x.size()); // too many if we are dropping NA values.
   f.attr("class")    = "factor";
   CharacterVector lx = x.attr("levels");
@@ -144,8 +146,6 @@ IntegerVector refactor_narm(const IntegerVector &x,
   CV no_na_new_levels;
   // bool any_na_lx = false;
   LogicalVector is_na_new_levels = is_na(new_levels);
-  // TODO: get the position of the NA in new_levels for insertion later if
-  // needed.
   LogicalVector is_na_old_levels = is_na(lx);
   DEBUG("Dropping NA in input factor levels");
   DEBUG_VEC(is_na_old_levels);
@@ -212,19 +212,26 @@ IntegerVector refactor_narm(const IntegerVector &x,
   f.attr("class")  = "factor";
   DEBUG("final fi = " << fi);
   if (fi == fsz) {
-    assert(factorIsValid(f));
+    if (validate) {
+      if (validate && !factorIsValid(f)) {
+        stop("Refactor has failed: new factor is not valid.");
+      }
+    }
     return (f);
   }
   DEBUG("copying f to shorten since NAs may have been dropped");
   IntegerVector f_no_na(f.begin(), f.begin() + fi);
   f_no_na.attr("levels") = no_na_new_levels;
   f_no_na.attr("class")  = "factor";
-  assert(factorIsValid(f_no_na));
+  if (validate && !factorIsValid(f_no_na)) {
+    stop("Refactor has failed: new factor is not valid.");
+  }
   return (f_no_na);
 }
 
 //' @title Check a factor structure is valid
 //' @keywords internal
+//' @noRd
 // [[Rcpp::export(factor_is_valid)]]
 bool factorIsValid(const IntegerVector &f) {
   DEBUG("factorIsValid?");

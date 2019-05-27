@@ -11,7 +11,7 @@ j <- icd:::icd9cm_generate_chapters_hierarchy()
 Rprof(NULL)
 summaryRprof("/tmp/gh.txt", lines = "show")
 
-test_codes <- icd9cm_billable[["32"]][["code"]]
+test_codes <- icd9cm_hierarchy[icd9cm_hierarchy$billable, "code"]
 
 prf <- profr(
   icd9_get_chapters(x = test_codes[1:1000], short_code = TRUE),
@@ -29,11 +29,12 @@ summaryRprof("/tmp/gc.txt", lines = "show")
 # actually %i9mj% is the slowest part
 
 microbenchmark("100" %i9mj% "100",
-               "100" %i9mj% "110",
-               "100" %i9mj% "999",
-               icd:::expand_range_major.icd9("100", "999", defined = TRUE),
-               icd:::expand_range_major.icd9("100", "999", defined = FALSE),
-               times = 50)
+  "100" %i9mj% "110",
+  "100" %i9mj% "999",
+  icd:::expand_range_major.icd9("100", "999", defined = TRUE),
+  icd:::expand_range_major.icd9("100", "999", defined = FALSE),
+  times = 50
+)
 
 # baseline results:
 
@@ -43,14 +44,15 @@ microbenchmark("100" %i9mj% "100",
 # "100" %i9mj% "110"  8.851840  9.390647 11.51193  9.884331 10.92320 28.38282    50
 # "100" %i9mj% "999" 17.907386 19.016562 25.47287 21.088939 26.57372 78.33338    50
 
-#prf_i9mj <- profr("100" %i9mj% "110"))
-#prf_mj <- profr({
-    #icd:::icd_expand_range_major.icd9("100", "110", defined = TRUE)
+# prf_i9mj <- profr("100" %i9mj% "110"))
+# prf_mj <- profr({
+# icd:::icd_expand_range_major.icd9("100", "110", defined = TRUE)
 #  }) #, interval = 0.01, quiet = TRUE)
 
 Rprof(filename = "/tmp/mj.txt", interval = 0.001, line.profiling = TRUE)
 microbenchmark(
   icd:::expand_range_major.icd9("100", "999", defined = TRUE),
-  times = 100)
+  times = 100
+)
 Rprof(NULL)
 summaryRprof("/tmp/mj.txt", lines = "show")

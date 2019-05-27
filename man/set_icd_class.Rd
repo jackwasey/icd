@@ -55,14 +55,14 @@ Some features make more sense as attributes. E.g. setting code type to
 \section{Functions}{
 \itemize{
 \item \code{as.icd9}: Use generic ICD-9 class for this data. Ideally, use
-the more specific `icd9cm` or other sub-classes (when available).
+the more specific \code{icd9cm} or other sub-classes (when available).
 
 \item \code{as.icd9cm}: Use ICD-9-CM
 
 \item \code{as.icd9cm_pc}: Indicate the data are ICD-9-CM procedure codes.
 
 \item \code{as.icd10}: Use generic ICD-10 class for this data. If
-possible, use the more specific `icd10who` or `icd10cm`.
+possible, use the more specific \code{icd10who} or \code{icd10cm}.
 
 \item \code{as.icd10cm}: Use ICD-10-CM (USA) class for the given data
 
@@ -76,7 +76,7 @@ possible, use the more specific `icd10who` or `icd10cm`.
 }}
 
 \examples{
-x = as.icd10("A1009")
+x <- as.icd10("A1009")
 attr(x, "icd_short_diag") <- TRUE
 x
 attributes(x) <- list(icd_short_diag = NULL)

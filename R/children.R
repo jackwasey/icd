@@ -12,8 +12,8 @@
 #' @keywords manip
 #' @family ICD-9 ranges
 #' @examples
-#' library(magrittr, warn.conflicts = FALSE, quietly = TRUE) # optional
-#'
+#' # N.b. magrittr not required by icd
+#' library(magrittr, warn.conflicts = FALSE, quietly = TRUE)
 #' # no children other than self
 #' children("10201", short_code = TRUE, defined = FALSE)
 #'
@@ -31,8 +31,9 @@
 #' @return Returns a vector of ICD codes, with class of \code{character} and the
 #'   class of the identified or specified ICD code, e.g. \code{icd9}
 #' @export
-children <- function(x, ...)
+children <- function(x, ...) {
   UseMethod("children")
+}
 
 #' @describeIn children Get child codes, guessing ICD version and short
 #'   versus decimal format
@@ -41,49 +42,72 @@ children.character <- function(x, ...) {
   ver <- guess_version(x)
   # eventually UseMethod again, but this would be circular until the icd10
   # method is defined.
-  if (ver %in% icd9_classes)
+  if (ver %in% icd9_classes) {
     return(children.icd9cm(x = x, ...))
-  if (ver == "icd10")
+  }
+  if (ver == "icd10") {
     return(children.icd10(x = x, ...))
-  if (ver == "icd10cm")
+  }
+  if (ver == "icd10cm") {
     return(children.icd10cm(x = x, ...))
+  }
 }
 
 #' @describeIn children Get children of ICD-9-CM codes
 #' @export
-children.icd9cm <- function(x, short_code = guess_short(x),
-                            defined = TRUE, billable = FALSE, ...) {
+children.icd9cm <- function(x,
+                            short_code = guess_short(x),
+                            defined = TRUE,
+                            billable = FALSE,
+                            ...) {
   stopifnot(is.factor(x) || is.character(x))
   stopifnot(is.logical(short_code))
   stopifnot(is.logical(defined))
   stopifnot(is.logical(billable))
-  res <- if (short_code)
-    .Call("_icd_icd9ChildrenShortUnordered",
-          icd9Decimal = toupper(x),
-          icd9cmReal = icd.data::icd9cm_hierarchy$code,
-          onlyReal = defined)
-  else
-    .Call("_icd_icd9ChildrenDecimalCpp",
-          icd9Decimal = toupper(x),
-          icd9cmReal = icd.data::icd9cm_hierarchy$code,
-          onlyReal = defined)
+  res <-
+    if (short_code) {
+      if (defined) {
+        icd9_children_short_unordered_defined_rcpp(
+          icd9Short = toupper(x),
+          icd9cmReal = icd9cm_hierarchy$code
+        )
+      } else {
+        icd9_children_short_unordered_undefined_rcpp(toupper(x))
+      }
+    } else {
+      # TODO: unordered variant
+      icd9_children_decimal_rcpp(
+        icd9Decimal = toupper(x),
+        icd9cmReal = icd9cm_hierarchy$code,
+        onlyReal = defined
+      )
+    }
+  # ICD-9 and ICD-9-CM sort the same, I think.
   res <- sort.icd9(res)
-  res <- if (billable)
+  res <- if (billable) {
     get_billable.icd9cm(icd9cm(res), short_code)
-  else
+  } else {
     as.icd9(res)
-  if (is.icd9cm(x))
+  }
+  if (is.icd9cm(x)) {
     return(as.icd9cm(res))
+  }
   res
 }
 
 #' @describeIn children Get children of ICD-9 codes, based on the super-set
 #'   ICD-9-CM at present
 #' @export
-children.icd9 <- function(x, short_code = guess_short(x),
-                          defined = TRUE, billable = FALSE, ...)
-  children.icd9cm(x, short_code = short_code,
-                  defined = defined, billable = billable)
+children.icd9 <- function(x,
+                          short_code = guess_short(x),
+                          defined = TRUE,
+                          billable = FALSE,
+                          ...)
+  children.icd9cm(x,
+    short_code = short_code,
+    defined = defined,
+    billable = billable
+  )
 
 #' @describeIn children Get children of ICD-10 codes (warns because this
 #'   only applies to ICD-10-CM for now).
@@ -108,31 +132,31 @@ children.icd10cm <- function(x,
                              defined,
                              billable = FALSE,
                              ...) {
-  if (!missing(defined) && !defined)
+  if (!missing(defined) && !defined) {
     stop("Only finding children of 'defined' ICD-10-CM codes is supported.")
+  }
   children_defined.icd10cm(x = x, short_code = short_code)
 }
 
 #' @describeIn children Get children of ICD-10-CM codes
 #' @export
-children.icd10who <- function(
-  x,
-  short_code = guess_short(x),
-  defined,
-  billable = NULL,
-  leaf = NULL,
-  ...
-) {
-  if (!missing(defined) && !defined)
+children.icd10who <- function(x,
+                              short_code = guess_short(x),
+                              defined,
+                              billable = NULL,
+                              leaf = NULL,
+                              ...) {
+  if (!missing(defined) && !defined) {
     stop("Only finding children of 'defined' ICD-10-CM codes is supported.")
+  }
   children_defined.icd10who(x = x, short_code = short_code)
 }
 
 #' Find only the defined children of ICD codes
 #'
-#' Find defined ICD-10 children based on 2016 ICD-10-CM list. "defined" may be a
-#' three digit code, or a leaf node. This is distinct from 'billable'.
-#'
+#' Find defined ICD-10 children based on 2016 ICD-10-CM list. \sQuote{Defined}
+#' may mean a three-digit code, a non-leaf three- or four-digit code, or a leaf
+#' (\dQuote{billable} code).
 #' @keywords internal
 #' @noRd
 children_defined <- function(x)
@@ -148,37 +172,35 @@ children_defined <- function(x)
 #' @noRd
 children_defined.icd10cm <- function(x,
                                      short_code = guess_short(x),
-                                     warn = FALSE) {
+                                     warn = FALSE,
+                                     verbose = FALSE) {
   stopifnot(is.factor(x) || is.character(unclass(x)))
   stopifnot(is.logical(short_code))
   stopifnot(is.logical(warn))
-  x <- trim(x)
-  x <- toupper(x)
-  if (!short_code)
+  x <- trimws(toupper(x))
+  if (!short_code) {
     x <- decimal_to_short.icd10cm(x)
-  dat <- get_from_icd_data("icd10cm_active", alt = icd.data::icd10cm2016)
-  ver <- if (icd_data_ver_ok()) {
-    getOption("icd.data.icd10cm_active_ver")
-  } else {
-    "2016"
   }
-  nc <- .chars_in_icd10cm[[ver]]
-  if (is.null(nc))
-    stop("Unable to get precomputer string lengths for ICD-10-CM version: ",
-         ver,
-         call. = FALSE)
+  ver <- get_icd10cm_active_year()
+  if (verbose) message("Using ICD-10-CM version: ", ver)
+  nc <- .icd10cm_get_nchars(ver)
+  lu <- get_icd10cm_active()
+  stopifnot(!is.null(lu))
   kids <- icd10_children_defined_rcpp(
-    x,
-    dat,
-    nc)
+    x = x,
+    lookup = lu,
+    nc = nc
+  )
   as.icd10cm(kids, short_code)
 }
 
-#' @describeIn children_defined Internal function to get the children of
-#'   WHO ICD-10 code(s)
+#' @describeIn children_defined Internal function to get the children of WHO
+#'   ICD-10 code(s)
 #' @param warn single logical value, if \code{TRUE} will generate warnings when
 #'   some input codes are not known ICD-10-CM codes
 #' @param use_cpp single logical flag, whether to use C++ version
+#' @param who_ver Single character string of the name of the WHO ICD data to
+#'   use. Default is \code{icd10who2016}. Internal use only.
 #' @examples
 #' \dontrun{
 #' icd:::children_defined.icd10who("H16")
@@ -188,20 +210,25 @@ children_defined.icd10cm <- function(x,
 #' @export
 #' @keywords internal
 #' @noRd
-children_defined.icd10who <- function(
-  x,
-  short_code = guess_short(x),
-  warn = FALSE
-) {
-  req_icd_data()
+children_defined.icd10who <- function(x,
+                                      short_code = guess_short(x),
+                                      who_ver = "icd10who2016",
+                                      warn = FALSE) {
   stopifnot(is.factor(x) || is.character(unclass(x)))
   stopifnot(is.logical(short_code))
   stopifnot(is.logical(warn))
-  x <- trim(x)
-  x <- toupper(x)
-  if (!short_code)
+  x <- trimws(toupper(x))
+  if (!short_code) {
     x <- decimal_to_short.icd10cm(x)
-  d <- get_from_icd_data("icd10who2016")
-  kids <- icd10_children_defined_rcpp(x, d, nchar(d$code))
+  }
+  d <- if (who_ver == "icd10who2008fr") {
+    get_icd10who2008fr()
+  } else {
+    get_icd10who2016()
+  }
+  stopifnot(!is.null(d))
+  stopifnot(!is.null(d[["code"]]))
+  # TODO: cache nchar call, like with ICD-10-CM
+  kids <- icd10_children_defined_rcpp(x, d, nchar(d[["code"]]), warn = warn)
   as.icd10who(kids, short_code = short_code)
 }

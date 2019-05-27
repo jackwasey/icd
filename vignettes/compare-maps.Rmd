@@ -4,12 +4,12 @@ author:
 - Andrew Cooper (original)
 - Jack Wasey (minor updates)
 date: "March 1, 2018"
-output: html_document
+output: html_vignette
 vignette: >
   %\VignetteIndexEntry{Comparing Comorbidity Mappings}
   %\VignetteEngine{knitr::rmarkdown}
-  %\VignetteDepends{icd.data}
   %\VignetteEncoding{UTF-8}
+  %\VignetteKeyword{comorbidity, comorbidities, biomedical informatics, administrative data, ICD-9, ICD-10, mapping, algorithm}
 ---
 <!--
 Copyright (C) 2014 - 2019  Jack O. Wasey
@@ -38,7 +38,7 @@ When deciding which comorbidity mapping to use in research, it might be useful t
 
 To answer these questions, we can use the function `diff_comorbid` in the "ICD" package. This function takes in two mapping schemes and outputs a comorbidity-by-comorbidity comparison of the two assignments. The function identifies comorbidities that are shared by both mapping schemes. It then takes each shared comorbidity and returns a list of codes that both mapping schemes assign to that comorbidity. The function returns a list of character lists, and condenses it into a summary of comparisons.
 
-The following example demonstrates the comparison of two different mapping schemes. Say we were interested in comparing the mapping schemes of Elixhauser (1998) and Agency for Healthcare Research and Quality (AHRQ) in classifying ICD-9 codes. We can first use basic set operations to compare the comorbidity names. 
+The following example demonstrates the comparison of two different mapping schemes. Say we were interested in comparing the mapping schemes of Elixhauser (1998) and Agency for Healthcare Research and Quality (AHRQ) in classifying ICD-9 codes. We can first use basic set operations to compare the comorbidity names.
 
 ```{r setup}
 Elix_comor <- names(icd9_map_ahrq)
@@ -62,10 +62,10 @@ setdiff(Elix_comor, AHRQ_comor)
 
 We see that the comorbidity names are almost exactly the same except for Arrhythmia, which exists in the AHRQ mapping but not the Elixhauser mapping.
 
-Now we run the function `diff_comorbid` and input the ICD-9 mappings from Elixhauser and AHRQ that are included in the package. The `all_names` option can be used if one wants to compare only a selection of comorbidities, in which case one can give a list of comorbidity names. By default, the function will compare all comorbidites in both mapping schemes. Similarly, `x_names` and `y_names` can be used to specify the comorbidities to compare in the first and second mapping schemes, respectively. Setting the option `show` to `TRUE` tells the function to print out the comparison summary, and setting the option `explain` to `TRUE` tells the function to attempt to combine many low-level ICD codes to form just their parent codes for the output, which can be much more concise.
+Now we run the function `diff_comorbid` and input the ICD-9 mappings from Elixhauser and AHRQ that are included in the package. The `all_names` option can be used if one wants to compare only a selection of comorbidities, in which case one can give a list of comorbidity names. By default, the function will compare all comorbiditi.introduces in both mapping schemes. Similarly, `x_names` and `y_names` can be used to specify the comorbidities to compare in the first and second mapping schemes, respectively. Setting the option `show` to `TRUE` tells the function to print out the comparison summary, and setting the option `explain` to `TRUE` tells the function to attempt to combine many low-level ICD codes to form just their parent codes for the output, which can be much more concise.
 
 ```{r comparison}
-comp <- diff_comorbid(icd9_map_ahrq, icd9_map_elix, 
+comp <- diff_comorbid(icd9_map_ahrq, icd9_map_elix,
                       show = TRUE, explain = TRUE)
 ```
 

@@ -1,8 +1,10 @@
 if (!file.exists("install-dependencies.R")) {
   message("not running in the benchmark replication directory")
-  if (file.exists(file.path("benchmarks",
-                            "icd-JSS3447-replication",
-                            "install-dependencies.R"))) {
+  if (file.exists(file.path(
+    "benchmarks",
+    "icd-JSS3447-replication",
+    "install-dependencies.R"
+  ))) {
     message("setting directory to benchmark replication directory")
     setwd(file.path("benchmarks", "icd-JSS3447-replication"))
   } else {
@@ -18,7 +20,7 @@ source("install-dependencies.R")
 #
 # N.b., changing these numbers will interfere with Makefile knowing what to do.
 n_order_default <- 3L
-n_order_big = 6L # cut-off for only doing one iteration
+n_order_big <- 6L # cut-off for only doing one iteration
 dz_per_pt <- 20L
 
 # r-lib/bench package does memory profiling and garbage collection analysis,
@@ -28,19 +30,29 @@ dz_per_pt <- 20L
 # iteration counts.
 
 args <- commandArgs(trailingOnly = TRUE)
-if (length(args) > 1L) stop("Only one argument is accepted, which is the order",
-                            " of magitude of the biggest benchmark")
-if (length(args) == 1L)
+if (length(args) > 1L) {
+  stop(
+    "Only one argument is accepted, which is the order",
+    " of magitude of the biggest benchmark"
+  )
+}
+if (length(args) == 1L) {
   n_order_default <- as.integer(args[1])
-message("Running benchmarks, with biggest synthetic data set having 10^",
-        n_order_default, " rows.")
-if (n_order_default > 5L)
-  warning("Depending on hardware, running these benchmarks with 10^6 or more",
-          " rows may take hours.")
+}
+message(
+  "Running benchmarks, with biggest synthetic data set having 10^",
+  n_order_default, " rows."
+)
+if (n_order_default > 5L) {
+  warning(
+    "Depending on hardware, running these benchmarks with 10^6 or more",
+    " rows may take hours."
+  )
+}
 
 get_pts <- function(n = 1e6, dz_per_pt = 20) {
   set.seed(1441)
-  diags <- sample(icd.data::icd9cm_hierarchy$code, size = n, replace = TRUE)
+  diags <- sample(icd9cm_hierarchy$code, size = n, replace = TRUE)
   data.frame(
     visit_id = as.character(floor(seq_len(n) / dz_per_pt)),
     code = diags,
@@ -55,7 +67,7 @@ medicalrisk_fix <- function(pts_mr) {
 }
 
 bench_small <- function(n_order = n_order_default) {
-  ns = 10L^(1L:min(n_order, n_order_big - 1))
+  ns <- 10L^(1L:min(n_order, n_order_big - 1))
   bench::press(n = ns, {
     pts <- get_pts(n, dz_per_pt = dz_per_pt)
     pts_mr <- medicalrisk_fix(pts)
@@ -64,9 +76,12 @@ bench_small <- function(n_order = n_order_default) {
       local(icd::comorbid_charlson(pts)),
       local(comorbidity::comorbidity(
         x = pts, id = "visit_id", code = "code", score = "charlson_icd9",
-        parallel = n >= 1e5)),
+        parallel = n >= 1e5
+      )),
       local(medicalrisk::generate_comorbidity_df(
-        pts_mr, icd9mapfn = medicalrisk::icd9cm_charlson_quan)),
+        pts_mr,
+        icd9mapfn = medicalrisk::icd9cm_charlson_quan
+      )),
       filter_gc = TRUE,
       check = FALSE
     )
@@ -74,25 +89,30 @@ bench_small <- function(n_order = n_order_default) {
 }
 
 time_big <- function(n_order = n_order_default) {
-  n = 10L^(n_order_big:n_order)
-  res <- data.frame(datarows = integer(),
-                    icd = numeric(),
-                    comorbidity = numeric(),
-                    medicalrisk = numeric())
+  n <- 10L^(n_order_big:n_order)
+  res <- data.frame(
+    datarows = integer(),
+    icd = numeric(),
+    comorbidity = numeric(),
+    medicalrisk = numeric()
+  )
   if (n_order < n_order_big) return(res)
   message("Running one iteration with:")
   for (nit in seq_along(n)) {
     message(n[nit])
     pts <- get_pts(n[nit], dz_per_pt = dz_per_pt)
     pts_mr <- medicalrisk_fix(pts)
-    res[nit,] <- c(
+    res[nit, ] <- c(
       n[nit],
       system.time(icd::comorbid_charlson(pts))["elapsed"],
       system.time(comorbidity::comorbidity(
         x = pts, id = "visit_id", code = "code", score = "charlson_icd9",
-        parallel = TRUE))["elapsed"],
+        parallel = TRUE
+      ))["elapsed"],
       system.time(medicalrisk::generate_comorbidity_df(
-        pts_mr, icd9mapfn = medicalrisk::icd9cm_charlson_quan))["elapsed"]
+        pts_mr,
+        icd9mapfn = medicalrisk::icd9cm_charlson_quan
+      ))["elapsed"]
     )
   }
   res
@@ -102,16 +122,21 @@ get_bench_filename <- function(prefix, suffix, use_date = FALSE,
                                n_order = n_order_default) {
   paste0(
     paste(prefix, "n", n_order, "dz", dz_per_pt,
-          Sys.info()["nodename"], ifelse(use_date, Sys.Date(), ""), sep = "-"),
-    ".", suffix)
+      Sys.info()["nodename"], ifelse(use_date, Sys.Date(), ""),
+      sep = "-"
+    ),
+    ".", suffix
+  )
 }
 
 get_bench_short_filename <- function(prefix, suffix,
                                      n_order = n_order_default) {
   paste0(
     paste(prefix, "n", n_order, # "dz", dz_per_pt,
-          sep = "-"),
-    ".", suffix)
+      sep = "-"
+    ),
+    ".", suffix
+  )
 }
 
 bench_versus <- function(n_order = n_order_default) {
@@ -119,8 +144,10 @@ bench_versus <- function(n_order = n_order_default) {
   # now take the medians and make suitable for the article:
   res <- tidyr::spread(bres[c("expression", "n", "median")], expression, median)
   # name order is not deterministic!
-  names(res) <- c("datarows",
-                  sub("local\\(([^:]*).*", "\\1", names(res)[-1]))
+  names(res) <- c(
+    "datarows",
+    sub("local\\(([^:]*).*", "\\1", names(res)[-1])
+  )
   res <- res[c("datarows", "icd", "comorbidity", "medicalrisk")]
   res$icd <- as.numeric(res$icd)
   res$comorbidity <- as.numeric(res$comorbidity)

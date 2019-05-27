@@ -1,12 +1,12 @@
-#nocov start
-
-expect_no_warn <- function(object, expected, ...)
+expect_no_warn <- function(object, expected, ...) {
   testthat::expect_warning(object, regexp = NA, ...)
+}
 
-expect_no_error <- function(object, expected, ...)
+expect_no_error <- function(object, expected, ...) {
   testthat::expect_error(object, regexp = NA, ...)
+}
 
-#' expect equal, ignoring any ICD classes
+#' Expect equal, ignoring any ICD classes
 #'
 #' Strips any \code{icd} classes (but not others) before making comparison
 #' @noRd
@@ -24,43 +24,33 @@ expect_equal_no_class_order <- function(object, expected, ...) {
   eval(bquote(testthat::expect_equivalent(unclass(.(object)), unclass(.(expected)), ...)))
 }
 
-#' @describeIn classes_ordered \code{testthat} \code{expect} function
+#' classes ordered expectation \code{testthat} \code{expect} function
 #'   for ICD classes to be in correct order.
 #' @keywords internal debugging
 #' @noRd
-expect_classes_ordered <- function(x)
+expect_classes_ordered <- function(x) {
   eval(bquote(testthat::expect_true(classes_ordered(.(x)))))
-
-#' generate random ICD-9 codes
-#'
-#' @keywords internal debugging datagen
-generate_random_short_icd9 <- function(n = 50000)
-  as.character(floor(stats::runif(min = 1, max = 99999, n = n)))
-
-#' generate random ICD-9 codes
-#'
-#' Uses billable ICD-10-CM codes from current master list
-#' @param n number to select, passed to \code{sample}
-#' @template short_code
-#' @keywords internal debugging datagen
-generate_random_short_icd10cm_bill <- function(n = 10, short_code = TRUE) {
-  i <- get_from_icd_data("icd10cm_latest", icd.data::icd10cm2016)
-  x <- sample(
-    unlist(
-      i[i$billable == 1, "code"]),
-    replace = TRUE, size = n)
-  if (short_code) x else short_to_decimal(x)
 }
 
-generate_random_decimal_icd9 <- function(n = 50000)
+#' generate random ICD-9 codes
+#'
+#' @keywords internal debugging datagen
+#' @noRd
+generate_random_short_icd9 <- function(n = 50000) {
+  as.character(floor(stats::runif(min = 1, max = 99999, n = n)))
+}
+
+generate_random_decimal_icd9 <- function(n = 50000) {
   paste(
     round(stats::runif(min = 1, max = 999, n = n)),
     sample(expand_minor.icd9(""), replace = TRUE, size = n),
     sep = "."
   )
+}
 
-generate_random_pts <- function(...)
+generate_random_pts <- function(...) {
   generate_random_ordered_pts(...)
+}
 
 generate_random_ordered_pts <- function(...) {
   x <- generate_random_unordered_pts(...)
@@ -78,8 +68,11 @@ generate_random_unordered_pts <- function(num_patients = 50000,
     visit_id = as_char_no_warn(sample(seq(1, pts), replace = TRUE, size = n)),
     code = fun(n),
     poa = as.factor(
-      sample(x = c("Y", "N", "n", "n", "y", "X", "E", "", NA),
-             replace = TRUE, size = n)),
+      sample(
+        x = c("Y", "N", "n", "n", "y", "X", "E", "", NA),
+        replace = TRUE, size = n
+      )
+    ),
     stringsAsFactors = FALSE
   )
 }
@@ -91,13 +84,14 @@ generate_random_short_ahrq_icd9 <- function(n = 50000)
 #'
 #' Mixed upper and lower case, with replacement
 #' @keywords internal debugging datagen
+#' @noRd
 random_string <- function(n, max_chars = 4) {
   rand_ch <- function()
     sample(c(LETTERS, letters, 0:9, rep("", times = 50)), replace = TRUE, size = n)
 
   v <- vapply(1:max_chars,
-              FUN = function(x) rand_ch(),
-              FUN.VALUE = character(n)
+    FUN = function(x) rand_ch(),
+    FUN.VALUE = character(n)
   )
   apply(v, 1, paste0, collapse = "")
 }
@@ -106,27 +100,31 @@ random_string <- function(n, max_chars = 4) {
 #' @param x list of values to compare for identity, e.g. results from evaluated
 #'   expression in \code{microbenchmark::microbenchmark}
 #' @keywords internal
+#' @noRd
 all_identical <- function(x)
   all(vapply(x[-1], function(y) identical(x[[1]], y), FUN.VALUE = logical(1)))
 
 get_one_of_each <- function()
-  c("002.3", "140.25", "245", "285", "290.01", "389.00",
+  c(
+    "002.3", "140.25", "245", "285", "290.01", "389.00",
     "390.00", "518", "525", "581", "631", "700", "720", "759.99",
-    "765", "780.95", "800", "V02.34", "E900.4")
+    "765", "780.95", "800", "V02.34", "E900.4"
+  )
 
 #' Set up a test environment which also has the internal functions
 #' @keywords internal debugging data
+#' @noRd
 test_env <- function() {
   ns <- getNamespace("icd")
   list2env(as.list(ns, all.names = TRUE), parent = parent.env(ns))
 }
 
-#' Generate simulated NEDS data for PCCC and wide-data testing
+#' Generate simulated 'NEDS' data for 'PCCC' and bigger wide data testing
 #' @param n Integer number of rows of data to generate
 #' @param ncol Integer number of diagnostic code columns, default of 20 matches
 #'   NEDS
-#' @param icd10 Logical, default `TRUE` to sample ICD-10-CM codes. `FALSE` gives
-#'   `ICD-9`
+#' @param icd10 Logical, default \code{TRUE} to sample ICD-10-CM codes.
+#'   \code{FALSE} gives \code{ICD-9}
 #' @template verbose
 #' @examples
 #' summary(icd::comorbid_pccc_dx(icd:::generate_neds_pts()))
@@ -136,34 +134,37 @@ test_env <- function() {
 #' \dontrun{
 #' # original size data for PCCC benchmarking:
 #' set.seed(1441)
-#' neds <- icd:::generate_neds_pts(28584301L)
+#' # Large NEDS simulation: neds <- icd:::generate_neds_pts(28584301L)
+#' neds <- icd:::generate_neds_pts(2858L)
 #' neds_comorbid <- icd::comorbid_pccc_dx(neds)
 #' }
 #' @keywords internal
-generate_neds_pts <- function(
-  n = 1000L,
-  ncol = 20L,
-  icd10 = TRUE,
-  verbose = FALSE
-) {
+generate_neds_pts <- function(n = 1000L,
+                              ncol = 20L,
+                              icd10 = TRUE,
+                              verbose = FALSE) {
   codes <- if (icd10) {
-    i <- get_from_icd_data("icd10cm_latest", icd.data::icd10cm2016)
+    i <- icd10cm2019
     unclass(as_char_no_warn(i$code))
   } else {
-    unclass(as_char_no_warn(icd.data::icd9cm_hierarchy$code))
+    unclass(as_char_no_warn(icd9cm_hierarchy$code))
   }
-  dat <- data.frame(id = as.character(n + seq(n)),
-                    icd_code = sample(codes, n, replace = TRUE),
-                    stringsAsFactors = TRUE)
-  pts_per_code_pos <- as.integer(n / (seq(ncol)) ^ 4)
-  dat_wide_factors <- data.frame(id = dat$id,
-                                 dx01 = dat$icd_code,
-                                 stringsAsFactors = TRUE)
+  dat <- data.frame(
+    id = as.character(n + seq(n)),
+    icd_code = sample(codes, n, replace = TRUE),
+    stringsAsFactors = TRUE
+  )
+  pts_per_code_pos <- as.integer(n / (seq(ncol))^4)
+  dat_wide_factors <- data.frame(
+    id = dat$id,
+    dx01 = dat$icd_code,
+    stringsAsFactors = TRUE
+  )
   for (dx in seq(2L, ncol)) {
     dx_str <- sprintf("%02i", dx)
     if (verbose) message("building column:", dx_str)
     len <- pts_per_code_pos[dx]
-    l <-  unique(c(NA, sample(codes, len, replace = TRUE)))
+    l <- unique(c(NA, sample(codes, len, replace = TRUE)))
     f <- as.integer(sample(c(seq_along(l), rep(1L, n - length(l)))))
     attr(f, "levels") <- l
     attr(f, "class") <- "factor"
@@ -177,11 +178,6 @@ generate_neds_pts <- function(
   }
   dat_wide_str
 }
-
-.catch <- function() {
-  .Call("run_testthat_tests", PACKAGE = "icd")
-}
-#nocov end
 
 assert_flag <- function(x) {
   stopifnot(is.logical(x), length(x) == 1L)
@@ -233,38 +229,14 @@ expect_character <- function(x, ...) {
   testthat::expect_true(is.character(x))
 }
 
-# workaround so icd.data 1.0 will not cause CRAN or user errors
-skip_missing_icd10who <- function(ver = "2016", lang = "en") {
-  if (exists("skip_missing_icd10who",
-             envir = asNamespace("icd.data"),
-             inherits = FALSE)) {
-    f <- get("skip_missing_icd10who",
-             envir = asNamespace("icd.data"))
-    do.call(f,
-            args = list(ver = ver, lang = lang),
-            envir = asNamespace("icd.data"))
-  } else {
-    testthat::skip("No skip_missing_icd10who function, so no data")
-  }
+with_interact <- function(interact, code) {
+  old <- .set_opt("interact" = interact)
+  on.exit(options(old), add = TRUE)
+  force(code)
 }
 
-set_test_slow <- function(do_slow = TRUE) {
-  Sys.setenv("ICD_TEST_SLOW" = do_slow)
-}
-
-get_test_slow <- function() {
-  s <- tolower(Sys.getenv("ICD_TEST_SLOW"))
-  if (s == "") return(FALSE)
-  if (!startsWith(s, "t") &&
-      !startsWith(s, "y"))
-    return(FALSE)
-  TRUE
-}
-
-skip_slow <- function(msg = "Skipping slow test") {
-  testthat::skip_on_cran()
-  testthat::skip_on_travis()
-  testthat::skip_on_appveyor()
-  if (!get_test_slow())
-    testthat::skip(msg)
+with_absent_action <- function(absent_action, code) {
+  old <- .set_opt("absent_action" = absent_action)
+  on.exit(options(old), add = TRUE)
+  force(code)
 }

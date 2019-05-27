@@ -9,15 +9,23 @@ test_that("top level ICD-10 ranges of single code are expanded to real codes", {
 })
 
 test_that("simple ranges of real values works", {
-  expect_equal_no_icd(expand_range.icd10cm("A00", "A001"),
-                      c("A00", "A000", "A001"))
-  expect_equal_no_icd(expand_range.icd10cm("A00", "A009", short_code = TRUE),
-                      c("A00", "A000", "A001", "A009"))
+  expect_equal_no_icd(
+    expand_range.icd10cm("A00", "A001"),
+    c("A00", "A000", "A001")
+  )
+  expect_equal_no_icd(
+    expand_range.icd10cm("A00", "A009", short_code = TRUE),
+    c("A00", "A000", "A001", "A009")
+  )
   # same with S3 dispatch
-  expect_equal_no_icd(expand_range("A00", "A001"),
-                      c("A00", "A000", "A001"))
-  expect_equal_no_icd(expand_range("A00", "A009", short_code = TRUE),
-                      c("A00", "A000", "A001", "A009"))
+  expect_equal_no_icd(
+    expand_range("A00", "A001"),
+    c("A00", "A000", "A001")
+  )
+  expect_equal_no_icd(
+    expand_range("A00", "A009", short_code = TRUE),
+    c("A00", "A000", "A001", "A009")
+  )
 })
 
 test_that("range style used by Quan is accepted", {
@@ -35,7 +43,6 @@ test_that("range style used by Quan is accepted", {
       info = paste(pair, collapse = "-")
     )
   }
-
 })
 
 ################################################################################
@@ -49,10 +56,12 @@ test_that("completely invalid input fails", {
 })
 
 test_that("single value gives correct range", {
-  expect_equal(res <- children_defined.icd10cm("A00", short_code = TRUE),
-               structure(c("A00", "A000", "A001", "A009"),
-                         class = c("icd10cm", "icd10", "character"),
-                         icd_short_diag = TRUE)
+  expect_equal(
+    res <- children_defined.icd10cm("A00", short_code = TRUE),
+    structure(c("A00", "A000", "A001", "A009"),
+      class = c("icd10cm", "icd10", "character"),
+      icd_short_diag = TRUE
+    )
   )
   expect_true(is.icd10cm(res))
   expect_true(is.icd10(res))
@@ -60,20 +69,26 @@ test_that("single value gives correct range", {
 })
 
 test_that("icd10 range major expansions", {
-  expect_identical(expand_range_major.icd10cm("A00", "A01"),
-                   structure(c("A00", "A01"), class = c("icd10cm", "icd10", "character"))
+  expect_identical(
+    expand_range_major.icd10cm("A00", "A01"),
+    structure(c("A00", "A01"), class = c("icd10cm", "icd10", "character"))
   )
-  expect_identical(expand_range_major.icd10cm("A00", "A01"),
-                   expand_range_major(icd10cm("A00"), "A01"))
+  expect_identical(
+    expand_range_major.icd10cm("A00", "A01"),
+    expand_range_major(icd10cm("A00"), "A01")
+  )
 
   expect_equal(expand_range_major.icd10cm("A99", "B00"), as.icd10cm(c("A99", "B00")))
   expect_equal(expand_range_major.icd10cm("A96", "A96"), as.icd10cm("A96"))
 
-  expect_identical(expand_range_major.icd10cm("a00", "a01"),
-                   structure(c("A00", "A01"), class = c("icd10cm", "icd10", "character"))
+  expect_identical(
+    expand_range_major.icd10cm("a00", "a01"),
+    structure(c("A00", "A01"), class = c("icd10cm", "icd10", "character"))
   )
-  expect_identical(expand_range_major.icd10cm("a00", "a01"),
-                   expand_range_major(icd10cm("a00"), "a01"))
+  expect_identical(
+    expand_range_major.icd10cm("a00", "a01"),
+    expand_range_major(icd10cm("a00"), "a01")
+  )
 
   expect_equal(expand_range_major.icd10cm("a99", "b00"), as.icd10cm(c("A99", "B00")))
   expect_equal(expand_range_major.icd10cm("a96", "a96"), as.icd10cm("A96"))
@@ -96,6 +111,6 @@ test_that("icd10cm range errors", {
 test_that("expand range quirks", {
   expect_equal(
     icd:::expand_range_major.icd10cm("C43", "C44", defined = FALSE),
-    as.icd10cm(c("C43", "C4A", "C44")))
-  skip("more of these needed")
+    as.icd10cm(c("C43", "C4A", "C44"))
+  )
 })

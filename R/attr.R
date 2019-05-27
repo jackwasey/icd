@@ -79,6 +79,7 @@ is.icd_short_diag <- function(x) {
 
 #' Remove any attributes set by 'icd'
 #' @keywords internal
+#' @noRd
 icd_attr_clean <- function(x) {
   attr(x, "icd_short_diag") <- NULL
   x

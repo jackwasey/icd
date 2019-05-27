@@ -63,10 +63,12 @@ This is more complicated than expected using \code{base::reshape} or
 }
 
 \examples{
-  longdf <- data.frame(visit_name = c("a", "b", "b", "c"),
-    icd9 = c("441", "4424", "443", "441"))
-  long_to_wide(longdf)
-  long_to_wide(longdf, prefix = "ICD10_")
+longdf <- data.frame(
+  visit_name = c("a", "b", "b", "c"),
+  icd9 = c("441", "4424", "443", "441")
+)
+long_to_wide(longdf)
+long_to_wide(longdf, prefix = "ICD10_")
 }
 \seealso{
 Other ICD data conversion: \code{\link{comorbid_df_to_mat}},

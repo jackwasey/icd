@@ -85,7 +85,7 @@ context("matmul cpp") {
     f1.push_back(1);
     f1.attr("levels") = v1;
     f1.attr("class")  = "factor";
-    Relevant r(map, f1); // TODO: not implemented yet, but should be!
+    Relevant r(map, f1);
   }
 
   test_that("make a relevant object with map with matching items split") {

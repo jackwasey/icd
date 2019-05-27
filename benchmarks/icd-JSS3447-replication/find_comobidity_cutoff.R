@@ -11,10 +11,12 @@ cmb_res <- bench::press(n = n, {
   bench::mark(
     comorbidity::comorbidity(
       x = pts, id = "visit_id", code = "code", score = "charlson_icd9",
-      parallel = TRUE),
+      parallel = TRUE
+    ),
     comorbidity::comorbidity(
       x = pts, id = "visit_id", code = "code", score = "charlson_icd9",
-      parallel = FALSE)
+      parallel = FALSE
+    )
   )
 })
 print(cmb_res)

@@ -21,7 +21,6 @@ test_that("attribute is set by different mechanisms", {
   expect_false(attr(k, "icd_short_diag"))
   k <- as.short_diag("753")
   expect_true(attr(k, "icd_short_diag"))
-
 })
 
 
@@ -46,5 +45,4 @@ test_that("attribute is set by different mechanisms with icd_ functions", {
   expect_false(attr(k, "icd_short_diag"))
   k <- as.icd_short_diag("753")
   expect_true(attr(k, "icd_short_diag"))
-
 })

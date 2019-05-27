@@ -1,50 +1,60 @@
 context("categorize")
 
 test_that("categorize_simple result is empty", {
-  expect_equal(0,
-               nrow(res <- categorize_simple(one_icd10_pt[0, ],
-                                             map = icd10_map_ahrq,
-                                             id_name = "visit",
-                                             code_name = "icd"))
+  expect_equal(
+    0,
+    nrow(res <- categorize_simple(one_icd10_pt[0, ],
+      map = icd10_map_ahrq,
+      id_name = "visit",
+      code_name = "icd"
+    ))
   )
   expect_identical(colnames(res), names(icd10_map_ahrq))
-  expect_equal(0,
-               nrow(rdf <- categorize_simple(one_icd10_pt[0, ],
-                                             map = icd10_map_ahrq,
-                                             id_name = "visit",
-                                             code_name = "icd",
-                                             return_df = TRUE))
+  expect_equal(
+    0,
+    nrow(rdf <- categorize_simple(one_icd10_pt[0, ],
+      map = icd10_map_ahrq,
+      id_name = "visit",
+      code_name = "icd",
+      return_df = TRUE
+    ))
   )
   expect_identical(c("visit", names(icd10_map_ahrq)), colnames(rdf))
 })
 test_that("binary instead of logical can be returned", {
   expect_identical(
     categorize_simple(one_icd10_pt,
-                      map = icd10_map_ahrq,
-                      id_name = "visit",
-                      code_name = "icd",
-                      return_binary = TRUE),
+      map = icd10_map_ahrq,
+      id_name = "visit",
+      code_name = "icd",
+      return_binary = TRUE
+    ),
     logical_to_binary(
       categorize_simple(one_icd10_pt,
-                        map = icd10_map_ahrq,
-                        id_name = "visit",
-                        code_name = "icd",
-                        return_binary = FALSE))
+        map = icd10_map_ahrq,
+        id_name = "visit",
+        code_name = "icd",
+        return_binary = FALSE
+      )
+    )
   )
   expect_identical(
     categorize_simple(one_icd10_pt,
-                      map = icd10_map_ahrq,
-                      id_name = "visit",
-                      code_name = "icd",
-                      return_binary = TRUE,
-                      return_df = TRUE),
+      map = icd10_map_ahrq,
+      id_name = "visit",
+      code_name = "icd",
+      return_binary = TRUE,
+      return_df = TRUE
+    ),
     logical_to_binary(
       categorize_simple(one_icd10_pt,
-                        map = icd10_map_ahrq,
-                        id_name = "visit",
-                        code_name = "icd",
-                        return_binary = FALSE,
-                        return_df = TRUE))
+        map = icd10_map_ahrq,
+        id_name = "visit",
+        code_name = "icd",
+        return_binary = FALSE,
+        return_df = TRUE
+      )
+    )
   )
 })
 
@@ -60,21 +70,28 @@ test_that("different ID types are preserved w data frame return", {
   empty_f$visit_id <- factor()
   for (cat_fun in c("categorize_simple")) {
     ress <- lapply(
-      stats::setNames(list(pts_int, pts_num, pts_chr, pts_fac,
-                           empty_i, empty_n, empty_c, empty_f),
-                      c("i", "n", "c", "f", "ei", "en", "ec", "ef")),
+      stats::setNames(
+        list(
+          pts_int, pts_num, pts_chr, pts_fac,
+          empty_i, empty_n, empty_c, empty_f
+        ),
+        c("i", "n", "c", "f", "ei", "en", "ec", "ef")
+      ),
       function(x) eval(call(cat_fun, x,
-                            map = icd10_map_elix,
-                            id_name = "visit_id",
-                            code_name = "icd10",
-                            return_df = TRUE,
-                            preserve_id_type = TRUE)))
+          map = icd10_map_elix,
+          id_name = "visit_id",
+          code_name = "icd10",
+          return_df = TRUE,
+          preserve_id_type = TRUE
+        ))
+    )
     expect_equal(class(ress[["i"]][[1]]), "integer")
     expect_equal(class(ress[["n"]][[1]]), "numeric")
     expect_equal(class(ress[["c"]][[1]]), "character")
     expect_equal(class(ress[["f"]][[1]]), "factor")
     expect_equal(class(ress[["ei"]][[1]]), "integer",
-                 info = paste("fun = ", cat_fun))
+      info = paste("fun = ", cat_fun)
+    )
     expect_equal(class(ress[["en"]][[1]]), "numeric")
     expect_equal(class(ress[["ec"]][[1]]), "character")
     expect_equal(class(ress[["ef"]][[1]]), "factor")

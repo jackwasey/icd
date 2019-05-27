@@ -90,12 +90,14 @@ class is not known
 }}
 
 \examples{
-expand_range("428.0", "428.9")
-"4280" \%i9s\% "4289"
-"4280" \%i9s\% "42821"
-"42799" \%i9sa\% "42802" # doesn't include 428 or 4280
-"427.99" \%i9da\% "428.02"
-"V80" \%i9s\% "V810"
+if (requireNamespace("icd.data", quietly = TRUE)) {
+  expand_range("428.0", "428.9")
+  "4280" \%i9s\% "4289"
+  "4280" \%i9s\% "42821"
+  "42799" \%i9sa\% "42802" # doesn't include 428 or 4280
+  "427.99" \%i9da\% "428.02"
+  "V80" \%i9s\% "V810"
+}
 }
 \seealso{
 Other ICD-9 ranges: \code{\link{children}},

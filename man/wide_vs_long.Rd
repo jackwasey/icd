@@ -75,11 +75,14 @@ heuristics.
 }
 
 \examples{
-class(icd.data::uranium_pathology)
-class(icd.data::vermont_dx)
-icd_wide_data(id = c(1, 2, 3),
-              dx01 = c("100", "441", "V20"),
-              dx02 = c("E9981", "V10", "44004"))
+(w <- icd_wide_data(
+  id = c(1, 2, 3),
+  dx01 = c("100", "441", "V20"),
+  dx02 = c("E9981", "V10", "44004")
+))
+wide_to_long(w)
+class(uranium_pathology)
+class(vermont_dx)
 }
 \seealso{
 \code{\link{long_to_wide}} and \code{\link{wide_to_long}}
