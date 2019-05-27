@@ -59,7 +59,7 @@
 release_questions <- function() {
   c(
     # commands:
-    "clena data then download and update everything on all platforms",
+    "clean data then download and update everything on all platforms",
     "aspell_package_Rd_files('.')",
     # documentation:
     "manual rebuild efficiency & country-lang-vers vignettes, check in tarball",
@@ -73,7 +73,7 @@ release_questions <- function() {
     # testing and compilation and different platforms:
     "Are there any skipped tests which should be run?",
     "MacOS, Windows, Linux, r-hub, win-builder, travis, appveyor",
-    "Download and set data dir in vanilla bash and R, without library(icd)",
+    "Download and set data dir in vanilla bash and R, Windows, Mac and Linux without library(icd)",
     "styler::style_pkg()",
     # final manual check:
     "Have all unnecessary files been ignored in built source package?",

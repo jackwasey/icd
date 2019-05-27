@@ -278,7 +278,7 @@ set_icd_data_dir <- function(path = NULL) {
     )
   }
   if (!dir.exists(path)) {
-    created <- dir.create(path, showWarnings = TRUE)
+    created <- dir.create(path, showWarnings = TRUE, recursive = TRUE)
     if (!created) stop("Unable to create directory at: ", path)
   }
   .set_opt("cache" = path)

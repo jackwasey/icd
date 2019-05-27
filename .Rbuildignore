@@ -2,6 +2,7 @@
 ^.*callgrind.*\.out$
 ^(vignettes\/)?\.build\.timestamp$
 ^\.gdb_history$
+^\.gitconfig$
 ^.*\.Rprof.*$
 ^.*\.Rproj$
 ^.*\.xcworkspace$
