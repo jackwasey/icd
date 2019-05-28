@@ -10,15 +10,7 @@
   "codeRepository": "https://jackwasey.github.io/icd/",
   "issueTracker": "https://github.com/jackwasey/icd/issues",
   "license": "https://spdx.org/licenses/GPL-3.0",
-<<<<<<< HEAD
-<<<<<<< HEAD
-  "version": "4.0.7",
-=======
-  "version": "4.0.2",
->>>>>>> 4ba1c3c731203a5ec253ba58667ae3d26b206820
-=======
-  "version": "4.0.7",
->>>>>>> 1b4fa339f25d9562d4e6e40fe062294cc41e0deb
+  "version": "4.0.8",
   "programmingLanguage": {
     "@type": "ComputerLanguage",
     "name": "R",
@@ -284,7 +276,6 @@
     }
   ],
   "releaseNotes": "https://github.com/jackwasey/icd/blob/master/NEWS.md",
-  "readme": "https://github.com/jackwasey/icd/blob/master/README.md",
   "contIntegration": [
     "https://travis-ci.org/jackwasey/icd",
     "https://ci.appveyor.com/project/jackwasey/icd/branch/master",
