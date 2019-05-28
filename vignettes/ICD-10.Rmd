@@ -45,7 +45,7 @@ knitr::opts_chunk$set(
 
 # Introduction
 
-The [icd package](https://cran.r-project.org/package=icd) for R includes ICD-10-CM definitions, sample ICD-10-CM data, and [very fast](efficiency.html) [comorbidity calculations](introduction.html) from ICD-10 diagnostic and procedure codes (and ICD-9, or other schemes) to the standard comorbidities defined in the literature following Charlson [@charlson_new_1987], Quan, Deyo [@quan_coding_2005], Elixhauser [@elixhauser_comorbidity_1998], [pediatric complex chronic conditions](pccc.html) [@Feudtner_Pediatriccomplexchronic_2014] and the US AHRQ [@AgencyforHealthcareResearchandQuality_Elixhausercomorbiditysoftware_2018]. There are also 2018 ICD-10-CM procedure codes, and a mapping to categorize these. The sample data are from the [US Transuranium and Uranium Registries](https://ustur.wsu.edu/about-us/) where deidentified diagnoses are given for a few hundred pathology cases relating to uranium exposure.
+The [icd package](https://cran.r-project.org/package=icd) for R includes ICD-10-CM definitions, sample ICD-10-CM data, and [very fast](efficiency-prebuilt.html) [comorbidity calculations](introduction.html) from ICD-10 diagnostic and procedure codes (and ICD-9, or other schemes) to the standard comorbidities defined in the literature following Charlson [@charlson_new_1987], Quan, Deyo [@quan_coding_2005], Elixhauser [@elixhauser_comorbidity_1998], [pediatric complex chronic conditions](pccc.html) [@Feudtner_Pediatriccomplexchronic_2014] and the US AHRQ [@AgencyforHealthcareResearchandQuality_Elixhausercomorbiditysoftware_2018]. There are also 2018 ICD-10-CM procedure codes, and a mapping to categorize these. The sample data are from the [US Transuranium and Uranium Registries](https://ustur.wsu.edu/about-us/) where deidentified diagnoses are given for a few hundred pathology cases relating to uranium exposure.
 
 The sample data is in the 'long' format, i.e., multiple rows per case.
 ```{r uranium-long}
@@ -77,7 +77,7 @@ comorbid_charlson(uranium_pathology, return_df = TRUE)[1:5, 1:5]
 
 ## Working with big data
 
-`icd` is carefully optimized to give accurate results as quickly as possible, and [shines](efficiency.html) with huge data sets. For users working with millions of rows of data and higher orders of magnitude, some options can improve throughput.
+`icd` is carefully optimized to give accurate results as quickly as possible, and [shines](efficiency-prebuilt.html) with huge data sets. For users working with millions of rows of data and higher orders of magnitude, some options can improve throughput.
 
 In this example, we also return 'binary' numeric flags instead of a matrix of logical values. For very large data sets, matrices are faster both for `icd` and subsequent manipulation and analysis. Here we also show that we can request the 'id' field is return in the order the data was presented. Note that setting `restore_id_order` to `FALSE` does not sort: it simply returns the data as soon as it was calculated, and since parallel threads complete at different times, it is quicker, although not deterministic. Again, this is really for huge data sets, where the additional sorting and re-ordering may be very time consuming. Most users will not need to worry about this.
 ```{r big}
