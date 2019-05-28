@@ -1,4 +1,4 @@
-Submitting soon after previous due to important bug fix for using international ICD data on Windows platforms.
+Fixed link in vignette as requested by Dr. Ligges. Submitting soon after previous due to important bug fix for using international ICD data on Windows platforms.
 
 # Test environments
 
