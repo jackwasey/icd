@@ -8,13 +8,13 @@
 \alias{apply_hier_ahrq}
 \title{Apply hierarchy and choose naming for each comorbidity map}
 \usage{
-apply_hier_elix(x, abbrev_names, hierarchy = TRUE)
+apply_hier_elix(x, abbrev_names = TRUE, hierarchy = TRUE)
 
-apply_hier_quan_elix(cbd, abbrev_names, hierarchy = TRUE)
+apply_hier_quan_elix(cbd, abbrev_names = TRUE, hierarchy = TRUE)
 
-apply_hier_quan_deyo(cbd, abbrev_names, hierarchy = TRUE)
+apply_hier_quan_deyo(cbd, abbrev_names = TRUE, hierarchy = TRUE)
 
-apply_hier_ahrq(cbd, abbrev_names, hierarchy = TRUE)
+apply_hier_ahrq(cbd, abbrev_names = TRUE, hierarchy = TRUE)
 }
 \arguments{
 \item{x}{matrix or data.frame of comorbidities}

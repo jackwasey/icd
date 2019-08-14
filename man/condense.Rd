@@ -3,8 +3,8 @@
 \name{condense}
 \alias{condense}
 \alias{condense.character}
+\alias{condense.factor}
 \alias{icd9_condense_decimal}
-\alias{icd9_condense_short}
 \title{Condense ICD-9 code by replacing complete families with parent codes}
 \usage{
 condense(x, short_code = guess_short(x), defined = NULL, warn = TRUE,
@@ -13,10 +13,10 @@ condense(x, short_code = guess_short(x), defined = NULL, warn = TRUE,
 \method{condense}{character}(x, short_code = guess_short(x),
   defined = NULL, ...)
 
-icd9_condense_decimal(x, defined = NULL, warn = TRUE,
-  keep_factor_levels = FALSE)
+\method{condense}{factor}(x, short_code = guess_short(x),
+  defined = NULL, ...)
 
-icd9_condense_short(x, defined = NULL, warn = TRUE,
+icd9_condense_decimal(x, defined = NULL, warn = TRUE,
   keep_factor_levels = FALSE)
 }
 \arguments{
@@ -24,29 +24,23 @@ icd9_condense_short(x, defined = NULL, warn = TRUE,
 code provided is in short (\code{TRUE}) or decimal (\code{FALSE}) form.
 Where reasonable, this is guessed from the input data.}
 
-\item{warn}{single logical value, if \code{TRUE}, give warnings when
-there is discrepancy between \code{defined} being \code{TRUE} yet data
-containing undefined codes.}
-
 \item{...}{arguments passed on to other functions}
 
-\item{keep_factor_levels}{single logical value, default \code{FALSE}. If
-\code{TRUE}, will reuse the factor levels from the input data for the
-output data. This only applies if a factor is given for the input codes.}
-
-\item{icd9}{is a character vector or factor of ICD-9 codes. If fewer than five characters
+\item{icd9}{is
+a character vector or factor of ICD-9 codes. If fewer than five characters
 is given in a code, then the digits are greedily assigned to hundreds, then
-tens, then units, before the decimal parts. E.g. "10" becomes "010", not
-"0010".}
+tens, then units, before the decimal parts. E.g., \code{10} becomes
+\code{010}, not \code{0010} or \code{00010}.}
 
-\item{icd9Short}{is a character vector of ICD-9 codes. If fewer than five characters is
-given in a code, then the digits are greedily assigned to hundreds, then
-tens, then units, before the decimal parts. E.g. "10" becomes "010", not
-"0010"}
+\item{icd9Short}{is a character vector of ICD-9 codes. If fewer than five
+characters is given in a code, then the digits are greedily assigned to
+hundreds, then tens, then units, before the decimal parts. E.g., \code{10}
+becomes \code{010}, not \code{0010} or \code{00010}.}
 
-\item{icd9Decimal}{character vector of ICD-9 codes. If fewer than five characters is given in a
-code, then the digits are greedily assigned to hundreds, then tens, then
-units, before the decimal parts. E.g. "10" becomes "010", not "0010"}
+\item{character}{vector of ICD-9 codes. If fewer than five
+characters is given in a code, then the digits are greedily assigned to
+hundreds, then tens, then units, before the decimal parts. E.g., \code{10}
+becomes \code{010}, not \code{0010} or \code{00010}.}
 }
 \description{
 These functions take a set of ICD codes, and look for parent ICD codes in the
@@ -59,33 +53,33 @@ of as the inverse operation to \code{children}.
 \itemize{
 \item \code{character}: Condense a set of ICD codes, guessing ICD version
 from input data
+
+\item \code{factor}: Condense a factor of ICD codes
 }}
 
 \examples{
-if (requireNamespace("icd.data", quietly = TRUE)) {
-  kids <- children("V40")
-  kids
-  condense(kids, defined = TRUE)
-  kids_with_undefined <- children("V40", defined = FALSE)
-  head(kids_with_undefined)
-  length(kids_with_undefined)
-  condense(kids, defined = FALSE)
+kids <- children("V40")
+kids
+condense(kids, defined = TRUE)
+kids_with_undefined <- children("V40", defined = FALSE)
+head(kids_with_undefined)
+length(kids_with_undefined)
+condense(kids, defined = FALSE)
 
-  # what happens if we have additional codes?
-  # (condense will warn if we don't explicitly ask to condense
-  # based on defined or possible codes.)
-  condense(c(kids, "41100"), warn = FALSE)
+# what happens if we have additional codes?
+# (condense will warn if we don't explicitly ask to condense
+# based on defined or possible codes.)
+condense(c(kids, "41100"), warn = FALSE)
 
-  # a good use is to summarise the contents of a comorbidity:
-  icd9_map_elix$CHF
-  condense(icd9_map_elix$CHF, warn = FALSE)
-  # explaining big groups of codes takes advantage of this:
-  explain_code(icd9_map_elix$CHF, condense = TRUE, warn = FALSE)
-}
+# a good use is to summarise the contents of a comorbidity:
+icd9_map_elix$CHF
+condense(icd9_map_elix$CHF, warn = FALSE)
+# explaining big groups of codes takes advantage of this:
+explain_code(icd9_map_elix$CHF, condense = TRUE, warn = FALSE)
 }
 \seealso{
 Other ICD-9 ranges: \code{\link{children}},
-  \code{\link{expand_minor}}, \code{\link{expand_range}}
+  \code{\link{expand_range}}
 }
 \concept{ICD-9 ranges}
 \keyword{internal}
