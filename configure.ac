@@ -65,12 +65,9 @@ CXX=${CXX11}
 CXXFLAGS=${CXX11FLAGS}
 CXXSTD="${CXX11STD}"
 
-CPP=`"${R_BIN}" CMD config CPP`
 CFLAGS=`"${R_BIN}" CMD config CFLAGS`
 CPPFLAGS=`"${R_BIN}" CMD config CPPFLAGS`
 LIBS="${PKG_LIBS}"
-
-# AC_REQUIRE_CPP
 
 # changes what R_OPENMP and rest of script does:
 AC_LANG(C++)
