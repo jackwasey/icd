@@ -46,23 +46,22 @@ of the mapping is guessed in lieu of knowing the type of the input codes.
 \section{Representing the GEMs (uncondensed representation)}{
 
 
-The form of the mappings returned by \code{icd_map_9_to_10} and
-\code{icd_map_10_to_9} is slightly different depending on the value of
-\code{condense} (note that the form of the mappings is in fact the same
-whether you are converting from ICD-9 codes to ICD-10 codes or in the
-opposite direction).  We first describe the form of the mappings for when
-\code{condense} has a value of \code{FALSE}, and then later describe the form
-of the mappings for when \code{condense} has a value of \code{TRUE} (the
-latter of which are a simple transformation of former).
+The form of the mappings returned by \code{icd_gem} is slightly different
+depending on the value of \code{condense} (note that the form of the mappings
+is in fact the same whether you are converting from ICD-9 codes to ICD-10
+codes or in the opposite direction).  We first describe the form of the
+mappings for when \code{condense} has a value of \code{FALSE}, and then later
+describe the form of the mappings for when \code{condense} has a value of
+\code{TRUE} (the latter of which are a simple transformation of former).
 
-The mappings returned by \code{icd_map_9_to_10} and \code{icd_map_10_to_9}
-when \code{condense} has a value of \code{FALSE} take a form where each row
-in the data frame corresponds to a single scenario for a given code provided
-in the input to \code{codes}.  Thus, there are at least as many rows as the
-number of elements in \code{codes} since there is at least one row per
-element, and there will be more rows than elements if any of the codes in
-\code{codes} have more than one scenario.  The value of \code{source} and
-\code{scenario} together form a unique key for a given row.
+The mappings returned by \code{icd_gem} when \code{condense} has a value of
+\code{FALSE} take a form where each row in the data frame corresponds to a
+single scenario for a given code provided in the input to \code{codes}.
+Thus, there are at least as many rows as the number of elements in
+\code{codes} since there is at least one row per element, and there will be
+more rows than elements if any of the codes in \code{codes} have more than
+one scenario.  The value of \code{source} and \code{scenario} together form a
+unique key for a given row.
 
 The columns in the returned data frame are named \code{source},
 \code{scenario}, \code{type}, \code{approx}, and \code{codes}, and when the
