@@ -10,14 +10,29 @@
 \usage{
 is_defined(x, short_code = guess_short(x), ...)
 
-\method{is_defined}{icd9}(x, short_code = guess_short(x),
-  billable = FALSE, leaf = billable, ...)
+\method{is_defined}{icd9}(
+  x,
+  short_code = guess_short(x),
+  billable = FALSE,
+  leaf = billable,
+  ...
+)
 
-\method{is_defined}{icd10cm}(x, short_code = guess_short(x),
-  billable = FALSE, leaf = billable, ...)
+\method{is_defined}{icd10cm}(
+  x,
+  short_code = guess_short(x),
+  billable = FALSE,
+  leaf = billable,
+  ...
+)
 
-\method{is_defined}{icd10}(x, short_code = guess_short(x),
-  billable = FALSE, leaf = billable, ...)
+\method{is_defined}{icd10}(
+  x,
+  short_code = guess_short(x),
+  billable = FALSE,
+  leaf = billable,
+  ...
+)
 
 \method{is_defined}{default}(x, short_code = guess_short(x), ...)
 }
@@ -32,11 +47,6 @@ Where reasonable, this is guessed from the input data.}
 
 \item{billable}{single logical value, identical to 'leaf'. Leaf is preferred
 as most adaptations of WHO ICD codes are not oriented around money.}
-
-\item{leaf}{single logical value, whether to limit return codes also by
-whether they are billable, i.e. leaf nodes. This is really only designed
-for use with ICD-9-CM, ICD-10-CM etc, since the WHO versions are not
-designed for billing, but for public health and death reporting.}
 
 \item{leaf}{New synonym for 'billable', which will be deprecated.}
 }

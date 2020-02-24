@@ -4,8 +4,13 @@
 \alias{long_to_wide}
 \title{Convert ICD data from long to wide format}
 \usage{
-long_to_wide(x, visit_name = get_visit_name(x),
-  icd_name = get_icd_name(x), prefix = "icd_", min_width = 1L)
+long_to_wide(
+  x,
+  visit_name = get_visit_name(x),
+  icd_name = get_icd_name(x),
+  prefix = "icd_",
+  min_width = 1L
+)
 }
 \arguments{
 \item{x}{data.frame of long-form data, one column for visit_name and one for
@@ -71,10 +76,12 @@ long_to_wide(longdf)
 long_to_wide(longdf, prefix = "ICD10_")
 }
 \seealso{
-Other ICD data conversion: \code{\link{comorbid_df_to_mat}},
-  \code{\link{comorbid_mat_to_df}}, \code{\link{convert}},
-  \code{\link{decimal_to_short}},
-  \code{\link{short_to_decimal}},
-  \code{\link{wide_to_long}}
+Other ICD data conversion: 
+\code{\link{comorbid_df_to_mat}()},
+\code{\link{comorbid_mat_to_df}()},
+\code{\link{convert}},
+\code{\link{decimal_to_short}()},
+\code{\link{short_to_decimal}()},
+\code{\link{wide_to_long}()}
 }
 \concept{ICD data conversion}

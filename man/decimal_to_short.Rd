@@ -41,11 +41,13 @@ short format
 }}
 
 \seealso{
-Other ICD data conversion: \code{\link{comorbid_df_to_mat}},
-  \code{\link{comorbid_mat_to_df}}, \code{\link{convert}},
-  \code{\link{long_to_wide}},
-  \code{\link{short_to_decimal}},
-  \code{\link{wide_to_long}}
+Other ICD data conversion: 
+\code{\link{comorbid_df_to_mat}()},
+\code{\link{comorbid_mat_to_df}()},
+\code{\link{convert}},
+\code{\link{long_to_wide}()},
+\code{\link{short_to_decimal}()},
+\code{\link{wide_to_long}()}
 }
 \concept{ICD data conversion}
 \keyword{internal}

@@ -4,8 +4,7 @@
 \alias{get_defined}
 \title{Select only defined ICD codes}
 \usage{
-get_defined(x, short_code = guess_short(x), billable = FALSE,
-  leaf = billable)
+get_defined(x, short_code = guess_short(x), billable = FALSE, leaf = billable)
 }
 \arguments{
 \item{x}{input vector or factor, possibly with an ICD class}

@@ -13,21 +13,45 @@ Tabulates the decimal format alongside converted non-decimal format.}
 \usage{
 explain_table(...)
 
-\method{explain_table}{default}(x, short_code = guess_short(x),
-  condense = FALSE, brief = TRUE, warn = TRUE, ...)
+\method{explain_table}{default}(
+  x,
+  short_code = guess_short(x),
+  condense = FALSE,
+  brief = TRUE,
+  warn = TRUE,
+  ...
+)
 
 \method{explain_table}{icd9}(...)
 
 \method{explain_table}{icd10}(...)
 
-\method{explain_table}{icd9cm}(x, short_code = guess_short(x),
-  condense = FALSE, brief = TRUE, warn = TRUE, ...)
+\method{explain_table}{icd9cm}(
+  x,
+  short_code = guess_short(x),
+  condense = FALSE,
+  brief = TRUE,
+  warn = TRUE,
+  ...
+)
 
-\method{explain_table}{icd10cm}(x, short_code = guess_short(x),
-  condense = FALSE, brief = TRUE, warn = TRUE, ...)
+\method{explain_table}{icd10cm}(
+  x,
+  short_code = guess_short(x),
+  condense = FALSE,
+  brief = TRUE,
+  warn = TRUE,
+  ...
+)
 
-\method{explain_table}{icd10who}(x, short_code = guess_short(x),
-  condense = FALSE, brief = TRUE, warn = TRUE, ...)
+\method{explain_table}{icd10who}(
+  x,
+  short_code = guess_short(x),
+  condense = FALSE,
+  brief = TRUE,
+  warn = TRUE,
+  ...
+)
 }
 \arguments{
 \item{...}{arguments passed on to other functions}

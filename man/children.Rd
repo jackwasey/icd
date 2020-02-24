@@ -14,20 +14,22 @@ children(x, ...)
 
 \method{children}{character}(x, ...)
 
-\method{children}{icd9cm}(x, short_code = guess_short(x),
-  defined = TRUE, billable = FALSE, ...)
+\method{children}{icd9cm}(x, short_code = guess_short(x), defined = TRUE, billable = FALSE, ...)
 
-\method{children}{icd9}(x, short_code = guess_short(x), defined = TRUE,
-  billable = FALSE, ...)
+\method{children}{icd9}(x, short_code = guess_short(x), defined = TRUE, billable = FALSE, ...)
 
-\method{children}{icd10}(x, short_code = guess_short(x), defined,
-  billable = FALSE, ...)
+\method{children}{icd10}(x, short_code = guess_short(x), defined, billable = FALSE, ...)
 
-\method{children}{icd10cm}(x, short_code = guess_short(x), defined,
-  billable = FALSE, ...)
+\method{children}{icd10cm}(x, short_code = guess_short(x), defined, billable = FALSE, ...)
 
-\method{children}{icd10who}(x, short_code = guess_short(x), defined,
-  billable = NULL, leaf = NULL, ...)
+\method{children}{icd10who}(
+  x,
+  short_code = guess_short(x),
+  defined,
+  billable = NULL,
+  leaf = NULL,
+  ...
+)
 }
 \arguments{
 \item{x}{data, e.g. character vector of ICD codes.}
@@ -95,8 +97,9 @@ children(short_code = FALSE, "100.00")
 children(short_code = FALSE, "2.34")
 }
 \seealso{
-Other ICD-9 ranges: \code{\link{condense}},
-  \code{\link{expand_range}}
+Other ICD-9 ranges: 
+\code{\link{condense}()},
+\code{\link{expand_range}()}
 }
 \concept{ICD-9 ranges}
 \keyword{manip}

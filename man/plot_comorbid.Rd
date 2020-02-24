@@ -7,8 +7,14 @@
 \usage{
 plot_comorbid(x, comorbid_fun = icd::comorbid_ahrq, ...)
 
-plot_comorbid_results(x, sort = TRUE, fix_margin = FALSE, las = 2,
-  cex.names = 0.75, ...)
+plot_comorbid_results(
+  x,
+  sort = TRUE,
+  fix_margin = FALSE,
+  las = 2,
+  cex.names = 0.75,
+  ...
+)
 }
 \arguments{
 \item{x}{input patient data}

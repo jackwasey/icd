@@ -4,8 +4,12 @@
 \alias{count_codes_wide}
 \title{Count ICD codes given in wide format}
 \usage{
-count_codes_wide(x, visit_name = get_visit_name(x), return_df = FALSE,
-  aggr = FALSE)
+count_codes_wide(
+  x,
+  visit_name = get_visit_name(x),
+  return_df = FALSE,
+  aggr = FALSE
+)
 }
 \arguments{
 \item{x}{\code{data.frame} with one row per patient, hospital visit,

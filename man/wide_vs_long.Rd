@@ -87,13 +87,16 @@ class(vermont_dx)
 \seealso{
 \code{\link{long_to_wide}} and \code{\link{wide_to_long}}
 
-Other ICD data types: \code{\link{as.comorbidity_map}},
-  \code{\link{set_icd_class}}
+Other ICD data types: 
+\code{\link{as.comorbidity_map}()},
+\code{\link{set_icd_class}}
 
-Other ICD data types: \code{\link{as.comorbidity_map}},
-  \code{\link{set_icd_class}}
+Other ICD data types: 
+\code{\link{as.comorbidity_map}()},
+\code{\link{set_icd_class}}
 
-Other ICD data types: \code{\link{as.comorbidity_map}},
-  \code{\link{set_icd_class}}
+Other ICD data types: 
+\code{\link{as.comorbidity_map}()},
+\code{\link{set_icd_class}}
 }
 \concept{ICD data types}

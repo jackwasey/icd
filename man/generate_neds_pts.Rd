@@ -4,8 +4,7 @@
 \alias{generate_neds_pts}
 \title{Generate simulated 'NEDS' data for 'PCCC' and bigger wide data testing}
 \usage{
-generate_neds_pts(n = 1000L, ncol = 20L, icd10 = TRUE,
-  verbose = FALSE)
+generate_neds_pts(n = 1000L, ncol = 20L, icd10 = TRUE, verbose = FALSE)
 }
 \arguments{
 \item{n}{Integer number of rows of data to generate}

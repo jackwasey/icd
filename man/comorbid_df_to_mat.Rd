@@ -4,8 +4,11 @@
 \alias{comorbid_df_to_mat}
 \title{convert comorbidity matrix to data frame}
 \usage{
-comorbid_df_to_mat(x, visit_name = get_visit_name(x),
-  stringsAsFactors = getOption("stringsAsFactors"))
+comorbid_df_to_mat(
+  x,
+  visit_name = get_visit_name(x),
+  stringsAsFactors = getOption("stringsAsFactors")
+)
 }
 \arguments{
 \item{x}{data frame, with a \code{visit_name} column (not necessarily first),
@@ -46,10 +49,12 @@ mat.out[, 1:4]
 \seealso{
 \code{\link{comorbid_mat_to_df}}
 
-Other ICD data conversion: \code{\link{comorbid_mat_to_df}},
-  \code{\link{convert}}, \code{\link{decimal_to_short}},
-  \code{\link{long_to_wide}},
-  \code{\link{short_to_decimal}},
-  \code{\link{wide_to_long}}
+Other ICD data conversion: 
+\code{\link{comorbid_mat_to_df}()},
+\code{\link{convert}},
+\code{\link{decimal_to_short}()},
+\code{\link{long_to_wide}()},
+\code{\link{short_to_decimal}()},
+\code{\link{wide_to_long}()}
 }
 \concept{ICD data conversion}

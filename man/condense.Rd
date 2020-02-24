@@ -7,17 +7,18 @@
 \alias{icd9_condense_decimal}
 \title{Condense ICD-9 code by replacing complete families with parent codes}
 \usage{
-condense(x, short_code = guess_short(x), defined = NULL, warn = TRUE,
-  ...)
+condense(x, short_code = guess_short(x), defined = NULL, warn = TRUE, ...)
 
-\method{condense}{character}(x, short_code = guess_short(x),
-  defined = NULL, ...)
+\method{condense}{character}(x, short_code = guess_short(x), defined = NULL, ...)
 
-\method{condense}{factor}(x, short_code = guess_short(x),
-  defined = NULL, ...)
+\method{condense}{factor}(x, short_code = guess_short(x), defined = NULL, ...)
 
-icd9_condense_decimal(x, defined = NULL, warn = TRUE,
-  keep_factor_levels = FALSE)
+icd9_condense_decimal(
+  x,
+  defined = NULL,
+  warn = TRUE,
+  keep_factor_levels = FALSE
+)
 }
 \arguments{
 \item{short_code}{single logical value which determines whether the ICD-9
@@ -78,8 +79,9 @@ condense(icd9_map_elix$CHF, warn = FALSE)
 explain_code(icd9_map_elix$CHF, condense = TRUE, warn = FALSE)
 }
 \seealso{
-Other ICD-9 ranges: \code{\link{children}},
-  \code{\link{expand_range}}
+Other ICD-9 ranges: 
+\code{\link{children}()},
+\code{\link{expand_range}()}
 }
 \concept{ICD-9 ranges}
 \keyword{internal}

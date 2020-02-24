@@ -95,7 +95,8 @@ stopifnot(is.short_diag(j))
 stopifnot(is.icd10(j), is.icd10(j[2]), is.icd10(j[[2]]))
 }
 \seealso{
-Other ICD data types: \code{\link{as.comorbidity_map}},
-  \code{\link{wide_vs_long}}
+Other ICD data types: 
+\code{\link{as.comorbidity_map}()},
+\code{\link{wide_vs_long}}
 }
 \concept{ICD data types}
