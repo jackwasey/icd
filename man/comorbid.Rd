@@ -24,22 +24,46 @@
 \alias{comorbid_charlson}
 \title{Find comorbidities from ICD-9 codes.}
 \usage{
-comorbid(x, map, visit_name = NULL, icd_name = NULL,
+comorbid(
+  x,
+  map,
+  visit_name = NULL,
+  icd_name = NULL,
   short_code = guess_short(x, icd_name = icd_name),
-  short_map = guess_short(map), return_df = FALSE,
-  return_binary = FALSE, categorize_fun = categorize_simple, ...)
-
-icd10_comorbid(x, map, visit_name = NULL, icd_name = NULL,
-  short_code = NULL, short_map = guess_short(map), return_df = FALSE,
-  return_binary = FALSE, icd10_comorbid_fun = icd10_comorbid_reduce,
-  ...)
-
-icd9_comorbid(x, map, visit_name = NULL, icd_name = NULL,
-  short_code = guess_short(x, icd_name = icd_name),
-  short_map = guess_short(map), return_df = FALSE,
-  return_binary = FALSE, preclean = FALSE,
+  short_map = guess_short(map),
+  return_df = FALSE,
+  return_binary = FALSE,
   categorize_fun = categorize_simple,
-  comorbid_fun = comorbid_mat_mul_wide, ...)
+  ...
+)
+
+icd10_comorbid(
+  x,
+  map,
+  visit_name = NULL,
+  icd_name = NULL,
+  short_code = NULL,
+  short_map = guess_short(map),
+  return_df = FALSE,
+  return_binary = FALSE,
+  icd10_comorbid_fun = icd10_comorbid_reduce,
+  ...
+)
+
+icd9_comorbid(
+  x,
+  map,
+  visit_name = NULL,
+  icd_name = NULL,
+  short_code = guess_short(x, icd_name = icd_name),
+  short_map = guess_short(map),
+  return_df = FALSE,
+  return_binary = FALSE,
+  preclean = FALSE,
+  categorize_fun = categorize_simple,
+  comorbid_fun = comorbid_mat_mul_wide,
+  ...
+)
 
 icd9_comorbid_ahrq(x, ..., abbrev_names = TRUE, hierarchy = TRUE)
 
@@ -63,8 +87,14 @@ icd10_comorbid_charlson(...)
 
 comorbid_ccs(x, icd_name = get_icd_name(x), ...)
 
-icd9_comorbid_ccs(x, ..., single = TRUE, lvl = NULL,
-  map = icd::icd9_map_single_ccs, short_map = TRUE)
+icd9_comorbid_ccs(
+  x,
+  ...,
+  single = TRUE,
+  lvl = NULL,
+  map = icd::icd9_map_single_ccs,
+  short_map = TRUE
+)
 
 icd10_comorbid_ccs(x, ..., single = TRUE, lvl = NULL)
 
@@ -315,17 +345,21 @@ Consider using \code{\link{comorbid_ahrq}} instead of
   \code{\link{comorbid_elix}} for more recently updated mappings based on the
   Elixhauser scheme.
 
-Other comorbidity computations: \code{\link{comorbid_hcc}},
-  \code{\link{comorbid_pccc_dx}}
+Other comorbidity computations: 
+\code{\link{comorbid_hcc}()},
+\code{\link{comorbid_pccc_dx}()}
 
-Other comorbidities: \code{\link{comorbid_hcc}},
-  \code{\link{comorbid_pccc_dx}},
-  \code{\link{icd10_map_ahrq_pcs}},
-  \code{\link{icd9_map_ahrq}}, \code{\link{icd9_map_elix}},
-  \code{\link{icd9_map_hcc}}, \code{\link{icd9_map_pccc}},
-  \code{\link{icd9_map_quan_deyo}},
-  \code{\link{icd9_map_quan_elix}},
-  \code{\link{icd9_map_single_ccs}}
+Other comorbidities: 
+\code{\link{comorbid_hcc}()},
+\code{\link{comorbid_pccc_dx}()},
+\code{\link{icd10_map_ahrq_pcs}},
+\code{\link{icd9_map_ahrq}},
+\code{\link{icd9_map_elix}},
+\code{\link{icd9_map_hcc}},
+\code{\link{icd9_map_pccc}},
+\code{\link{icd9_map_quan_deyo}},
+\code{\link{icd9_map_quan_elix}},
+\code{\link{icd9_map_single_ccs}}
 }
 \concept{comorbidities}
 \concept{comorbidity computations}

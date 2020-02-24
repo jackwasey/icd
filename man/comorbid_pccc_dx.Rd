@@ -9,27 +9,66 @@
 \alias{icd10_comorbid_pccc_pcs}
 \title{Calculate pediatric complex chronic conditions (PCCC) comorbidities}
 \usage{
-comorbid_pccc_dx(x, visit_name = get_visit_name(x),
-  icd_name = get_icd_name(x), short_code = guess_short(x, icd_name =
-  icd_name), return_df = FALSE, return_binary = FALSE, ...)
+comorbid_pccc_dx(
+  x,
+  visit_name = get_visit_name(x),
+  icd_name = get_icd_name(x),
+  short_code = guess_short(x, icd_name = icd_name),
+  return_df = FALSE,
+  return_binary = FALSE,
+  ...
+)
 
-comorbid_pccc_pcs(x, visit_name = get_visit_name(x), icd_name,
-  return_df = FALSE, return_binary = FALSE, ...)
+comorbid_pccc_pcs(
+  x,
+  visit_name = get_visit_name(x),
+  icd_name,
+  return_df = FALSE,
+  return_binary = FALSE,
+  ...
+)
 
-icd9_comorbid_pccc_dx(x, visit_name = NULL, icd_name = NULL,
-  short_code = guess_short(x, icd_name = icd_name), return_df = FALSE,
-  return_binary = FALSE, ..., abbrev_names = TRUE)
+icd9_comorbid_pccc_dx(
+  x,
+  visit_name = NULL,
+  icd_name = NULL,
+  short_code = guess_short(x, icd_name = icd_name),
+  return_df = FALSE,
+  return_binary = FALSE,
+  ...,
+  abbrev_names = TRUE
+)
 
-icd10_comorbid_pccc_dx(x, visit_name = NULL, icd_name = NULL,
-  short_code = guess_short(x, icd_name = icd_name), return_df = FALSE,
-  return_binary = FALSE, ..., abbrev_names = TRUE)
+icd10_comorbid_pccc_dx(
+  x,
+  visit_name = NULL,
+  icd_name = NULL,
+  short_code = guess_short(x, icd_name = icd_name),
+  return_df = FALSE,
+  return_binary = FALSE,
+  ...,
+  abbrev_names = TRUE
+)
 
-icd9_comorbid_pccc_pcs(x, visit_name = get_visit_name(x),
-  icd_name = get_icd_pc_name(x), return_df = FALSE,
-  return_binary = FALSE, ..., abbrev_names = TRUE)
+icd9_comorbid_pccc_pcs(
+  x,
+  visit_name = get_visit_name(x),
+  icd_name = get_icd_pc_name(x),
+  return_df = FALSE,
+  return_binary = FALSE,
+  ...,
+  abbrev_names = TRUE
+)
 
-icd10_comorbid_pccc_pcs(x, visit_name = get_visit_name(x), icd_name,
-  return_df = FALSE, return_binary = FALSE, ..., abbrev_names = TRUE)
+icd10_comorbid_pccc_pcs(
+  x,
+  visit_name = get_visit_name(x),
+  icd_name,
+  return_df = FALSE,
+  return_binary = FALSE,
+  ...,
+  abbrev_names = TRUE
+)
 }
 \arguments{
 \item{x}{\code{data.frame} containing a column of patient-visit identifiers
@@ -120,16 +159,21 @@ pts <- data.frame(encounters = c(100), icd10_pcs = c("0016070"))
 icd10_comorbid_pccc_pcs(pts, icd_name = "icd10_pcs")
 }
 \seealso{
-Other comorbidity computations: \code{\link{comorbid_hcc}},
-  \code{\link{comorbid}}
+Other comorbidity computations: 
+\code{\link{comorbid_hcc}()},
+\code{\link{comorbid}()}
 
-Other comorbidities: \code{\link{comorbid_hcc}},
-  \code{\link{comorbid}}, \code{\link{icd10_map_ahrq_pcs}},
-  \code{\link{icd9_map_ahrq}}, \code{\link{icd9_map_elix}},
-  \code{\link{icd9_map_hcc}}, \code{\link{icd9_map_pccc}},
-  \code{\link{icd9_map_quan_deyo}},
-  \code{\link{icd9_map_quan_elix}},
-  \code{\link{icd9_map_single_ccs}}
+Other comorbidities: 
+\code{\link{comorbid_hcc}()},
+\code{\link{comorbid}()},
+\code{\link{icd10_map_ahrq_pcs}},
+\code{\link{icd9_map_ahrq}},
+\code{\link{icd9_map_elix}},
+\code{\link{icd9_map_hcc}},
+\code{\link{icd9_map_pccc}},
+\code{\link{icd9_map_quan_deyo}},
+\code{\link{icd9_map_quan_elix}},
+\code{\link{icd9_map_single_ccs}}
 }
 \concept{comorbidities}
 \concept{comorbidity computations}

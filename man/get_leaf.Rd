@@ -11,8 +11,7 @@ get_leaf(...)
 
 \method{get_leaf}{default}(x, short_code = guess_short(x), ...)
 
-\method{get_leaf}{icd9cm}(x, short_code = guess_short(x),
-  invert = FALSE, ...)
+\method{get_leaf}{icd9cm}(x, short_code = guess_short(x), invert = FALSE, ...)
 
 \method{get_leaf}{icd9}(...)
 }

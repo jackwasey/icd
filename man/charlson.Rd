@@ -5,14 +5,23 @@
 \alias{charlson.data.frame}
 \title{Calculate Charlson Comorbidity Index (Charlson Score)}
 \usage{
-charlson(x, visit_name = NULL, scoring_system = c("original",
-  "charlson", "quan"), return_df = FALSE,
-  stringsAsFactors = getOption("stringsAsFactors"), ...)
-
-\method{charlson}{data.frame}(x, visit_name = NULL,
+charlson(
+  x,
+  visit_name = NULL,
   scoring_system = c("original", "charlson", "quan"),
-  return_df = FALSE, stringsAsFactors = getOption("stringsAsFactors"),
-  ...)
+  return_df = FALSE,
+  stringsAsFactors = getOption("stringsAsFactors"),
+  ...
+)
+
+\method{charlson}{data.frame}(
+  x,
+  visit_name = NULL,
+  scoring_system = c("original", "charlson", "quan"),
+  return_df = FALSE,
+  stringsAsFactors = getOption("stringsAsFactors"),
+  ...
+)
 }
 \arguments{
 \item{x}{data frame containing a column of visit or patient identifiers, and

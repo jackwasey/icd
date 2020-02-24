@@ -4,8 +4,12 @@
 \alias{charlson_from_comorbid}
 \title{Calculate Charlson scores from precomputed Charlson comorbidities}
 \usage{
-charlson_from_comorbid(x, visit_name = NULL, hierarchy = FALSE,
-  scoring_system = c("original", "charlson", "quan"))
+charlson_from_comorbid(
+  x,
+  visit_name = NULL,
+  hierarchy = FALSE,
+  scoring_system = c("original", "charlson", "quan")
+)
 }
 \arguments{
 \item{x}{data.frame or matrix, typically the output of a comorbidity
