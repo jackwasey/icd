@@ -114,8 +114,9 @@ sort.icd9 <- function(x,
 }
 
 # simple backport
-isFALSE <- function(x)
+isFALSE <- function(x) {
   is.logical(x) && length(x) == 1L && !is.na(x) && !x
+}
 
 #' @rdname sort_icd
 #' @export

@@ -236,7 +236,7 @@ icd10_parse_ahrq_ccs <- function(version = "2018.1",
     }
     x[lvls]
   }
-  ccs_lvl_map <- function(col_name)
+  ccs_lvl_map <- function(col_name) {
     comorbidity_map(
       resort_lvls(
         tapply(
@@ -246,6 +246,7 @@ icd10_parse_ahrq_ccs <- function(version = "2018.1",
         )
       )
     )
+  }
   # list to define which columns match to which definition
   icd10_map_def <- list(
     single = "CCS.CATEGORY",

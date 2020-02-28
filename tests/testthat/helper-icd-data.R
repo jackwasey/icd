@@ -140,11 +140,12 @@ expect_chap_equal <- function(x, start, end, ver_chaps, ...) {
   )))
 }
 
-expect_icd10_sub_chap_equal <- function(x, start, end, ...)
+expect_icd10_sub_chap_equal <- function(x, start, end, ...) {
   eval(bquote(expect_chap_equal(.(x), .(start), .(end),
     ver_chaps = icd10_sub_chapters,
     ...
   )))
+}
 
 eee <- function(x, desc, ...) {
   x <- sub("\\.", "", x)
@@ -208,7 +209,7 @@ chap_present <- function(x, ver_chaps, ...) {
   x %in% lnames
 }
 
-expect_chap_missing <- function(x, ver_chaps, info = NULL, label = NULL, ...)
+expect_chap_missing <- function(x, ver_chaps, info = NULL, label = NULL, ...) {
   eval(
     bquote(
       expect_true(
@@ -218,18 +219,23 @@ expect_chap_missing <- function(x, ver_chaps, info = NULL, label = NULL, ...)
       )
     )
   )
+}
 
-expect_icd9_sub_chap_missing <- function(x, ...)
+expect_icd9_sub_chap_missing <- function(x, ...) {
   eval(bquote(expect_chap_missing(.(x), ver_chaps = icd9_sub_chapters, ...)))
+}
 
-expect_icd9_chap_missing <- function(x, ...)
+expect_icd9_chap_missing <- function(x, ...) {
   eval(bquote(expect_chap_missing(.(x), ver_chaps = icd9_chapters, ...)))
+}
 
-expect_icd10_sub_chap_missing <- function(x, ...)
+expect_icd10_sub_chap_missing <- function(x, ...) {
   eval(bquote(expect_chap_missing(.(x), ver_chaps = icd10_sub_chapters, ...)))
+}
 
-expect_icd10_chap_missing <- function(x, ...)
+expect_icd10_chap_missing <- function(x, ...) {
   eval(bquote(expect_chap_missing(.(x), ver_chaps = icd10_chapters, ...)))
+}
 
 # expect that a chapter with given title exists, case-insensitive
 expect_chap_present <- function(x, ver_chaps, info = NULL, label = NULL, ...) {

@@ -102,12 +102,13 @@ children.icd9 <- function(x,
                           short_code = guess_short(x),
                           defined = TRUE,
                           billable = FALSE,
-                          ...)
+                          ...) {
   children.icd9cm(x,
     short_code = short_code,
     defined = defined,
     billable = billable
   )
+}
 
 #' @describeIn children Get children of ICD-10 codes (warns because this
 #'   only applies to ICD-10-CM for now).
@@ -159,8 +160,9 @@ children.icd10who <- function(x,
 #' (\dQuote{billable} code).
 #' @keywords internal
 #' @noRd
-children_defined <- function(x)
+children_defined <- function(x) {
   UseMethod("children_defined")
+}
 
 #' @describeIn children_defined Internal function to get the children of
 #'   ICD-10-CM code(s)

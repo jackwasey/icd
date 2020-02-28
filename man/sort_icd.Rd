@@ -19,8 +19,7 @@ sort_icd(x, decreasing = FALSE, short_code = guess_short(x), ...)
 
 \method{sort}{icd10be}(x, decreasing = FALSE, ...)
 
-\method{sort}{icd9}(x, decreasing = FALSE, short_code = guess_short(x),
-  ...)
+\method{sort}{icd9}(x, decreasing = FALSE, short_code = guess_short(x), ...)
 
 order.icd9(x, na.last = TRUE)
 

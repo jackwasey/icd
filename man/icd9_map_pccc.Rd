@@ -22,29 +22,27 @@ Feudtner C, Feinstein JA, Zhong W, Hall M, Dai D.
   \url{https://www.ncbi.nlm.nih.gov/pubmed/25102958}
 }
 \seealso{
-\code{\link{comorbid_pccc_dx}}
-  \code{\link{icd9_comorbid_pccc_dx}}
-  \code{\link{icd10_comorbid_pccc_dx}}
-  \code{\link{comorbid_pccc_pcs}}
-  \code{\link{icd9_comorbid_pccc_pcs}}
-  \code{\link{icd10_comorbid_pccc_pcs}}
-  \url{https://feudtnerlab.research.chop.edu/ccc_version_2.php}
+\url{https://feudtnerlab.research.chop.edu/ccc_version_2.php}
 
-Other comorbidity maps: \code{\link{icd10_map_ahrq_pcs}},
-  \code{\link{icd9_map_ahrq}}, \code{\link{icd9_map_elix}},
-  \code{\link{icd9_map_hcc}},
-  \code{\link{icd9_map_quan_deyo}},
-  \code{\link{icd9_map_quan_elix}},
-  \code{\link{icd9_map_single_ccs}}
+Other comorbidity maps: 
+\code{\link{icd10_map_ahrq_pcs}},
+\code{\link{icd9_map_ahrq}},
+\code{\link{icd9_map_elix}},
+\code{\link{icd9_map_hcc}},
+\code{\link{icd9_map_quan_deyo}},
+\code{\link{icd9_map_quan_elix}},
+\code{\link{icd9_map_single_ccs}}
 
-Other comorbidities: \code{\link{comorbid_hcc}},
-  \code{\link{comorbid_pccc_dx}}, \code{\link{comorbid}},
-  \code{\link{icd10_map_ahrq_pcs}},
-  \code{\link{icd9_map_ahrq}}, \code{\link{icd9_map_elix}},
-  \code{\link{icd9_map_hcc}},
-  \code{\link{icd9_map_quan_deyo}},
-  \code{\link{icd9_map_quan_elix}},
-  \code{\link{icd9_map_single_ccs}}
+Other comorbidities: 
+\code{\link{comorbid_hcc}()},
+\code{\link{comorbid}()},
+\code{\link{icd10_map_ahrq_pcs}},
+\code{\link{icd9_map_ahrq}},
+\code{\link{icd9_map_elix}},
+\code{\link{icd9_map_hcc}},
+\code{\link{icd9_map_quan_deyo}},
+\code{\link{icd9_map_quan_elix}},
+\code{\link{icd9_map_single_ccs}}
 }
 \concept{comorbidities}
 \concept{comorbidity maps}
