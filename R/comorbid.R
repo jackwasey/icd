@@ -59,10 +59,9 @@ poa_choices <- c("yes", "no", "notYes", "notNo")
 #' @template hierarchy
 #' @template return_df
 #' @template return_binary
-#' @template dotdotdot
+#' @param ... Arguments passed through to \code{comorbid}, and ultimately \code{\link{categorize_simple}}, e.g. \code{restore_id_order}.
 #' @param categorize_fun Internal. Function used for the categorization problem.
 #' @param comorbid_fun Internal. Function used inside categorization.
-#' @inheritParams categorize restore_id_order
 #' @details The order of visits may change depending on the original sequence,
 #'   and the underlying algorithm used. Usually this would be the order of the
 #'   first occurrence of each visit/patient identifier, but this is not
@@ -361,22 +360,25 @@ icd10_comorbid_quan_deyo <- function(x,
 
 #' @describeIn comorbid Currently synonym for \code{icd9_comorbid_quan_deyo}
 #' @export
-icd9_comorbid_charlson <- function(...)
+icd9_comorbid_charlson <- function(...) {
   icd9_comorbid_quan_deyo(...)
+}
 
 #' @describeIn comorbid Currently synonym for \code{icd10_comorbid_quan_deyo}
 #' @export
-icd10_comorbid_charlson <- function(...)
+icd10_comorbid_charlson <- function(...) {
   icd10_comorbid_quan_deyo(...)
+}
 
 #' @describeIn comorbid Use AHRQ CCS for comorbidity classification
 #' @seealso \link{icd9_map_single_ccs}
 #' @export
-comorbid_ccs <- function(x, icd_name = get_icd_name(x), ...)
+comorbid_ccs <- function(x, icd_name = get_icd_name(x), ...) {
   switch_ver_cmb(x, list(
     icd9 = icd9_comorbid_ccs,
     icd10 = icd10_comorbid_ccs
   ), ...)
+}
 
 #' @describeIn comorbid Compute AHRQ Clinical Classifications Software (CCS)
 #'   scores from ICD-9 codes
@@ -419,11 +421,12 @@ icd10_comorbid_ccs <- function(x, ..., single = TRUE, lvl = NULL) {
 #' @describeIn comorbid AHRQ comorbidities, infers whether to use ICD-9 or
 #'   ICD-10 codes
 #' @export
-comorbid_ahrq <- function(x, ...)
+comorbid_ahrq <- function(x, ...) {
   switch_ver_cmb(x, list(
     icd9 = icd9_comorbid_ahrq,
     icd10 = icd10_comorbid_ahrq
   ), ...)
+}
 
 #' @describeIn comorbid Elixhauser comorbidities, infers whether to use ICD-9 or
 #'   ICD-10 codes
@@ -431,36 +434,40 @@ comorbid_ahrq <- function(x, ...)
 #'   \code{\link{comorbid_elix}} for more recently updated mappings based on the
 #'   Elixhauser scheme.
 #' @export
-comorbid_elix <- function(x, ...)
+comorbid_elix <- function(x, ...) {
   switch_ver_cmb(x, list(
     icd9 = icd9_comorbid_elix,
     icd10 = icd10_comorbid_elix
   ), ...)
+}
 
 #' @describeIn comorbid Quan's Elixhauser comorbidities, infers whether to use
 #'   ICD-9 or ICD-10 codes
 #' @export
-comorbid_quan_elix <- function(x, ...)
+comorbid_quan_elix <- function(x, ...) {
   switch_ver_cmb(x, list(
     icd9 = icd9_comorbid_quan_elix,
     icd10 = icd10_comorbid_quan_elix
   ), ...)
+}
 
 #' @describeIn comorbid Quan's Deyo (Charlson) comorbidities, infers whether to
 #'   use ICD-9 or ICD-10 codes
 #' @export
-comorbid_quan_deyo <- function(x, ...)
+comorbid_quan_deyo <- function(x, ...) {
   switch_ver_cmb(x, list(
     icd9 = icd9_comorbid_quan_deyo,
     icd10 = icd10_comorbid_quan_deyo
   ), ...)
+}
 
 #' @describeIn comorbid Calculate comorbidities using Charlson categories
 #'   according to Quan/Deyo ICD categories. Synonymous with
 #'   \code{link{comorbid_quan_deyo}} in this release.
 #' @export
-comorbid_charlson <- function(...)
+comorbid_charlson <- function(...) {
   comorbid_quan_deyo(...)
+}
 
 #' Apply hierarchy and choose naming for each comorbidity map
 #'

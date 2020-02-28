@@ -248,8 +248,9 @@ get_leaf.icd9cm <- function(x,
 #'   implemented assuming ICD-9-CM
 #' @export
 #' @keywords internal
-get_leaf.icd9 <- function(...)
+get_leaf.icd9 <- function(...) {
   get_leaf.icd9cm(...)
+}
 
 #' @describeIn get_leaf Get billable/leaf nodes from ICD-10-CM
 #' @export

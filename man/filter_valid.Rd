@@ -13,7 +13,8 @@ filter_valid(
   x,
   icd_name = get_icd_name(x),
   short_code = guess_short(.subset2(x, icd_name)),
-  invert = FALSE
+  invert = FALSE,
+  ...
 )
 
 filter_invalid(

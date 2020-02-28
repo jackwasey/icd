@@ -221,13 +221,7 @@ NULL
 #'   \url{https://www.ncbi.nlm.nih.gov/pubmed/25102958}
 #' @family comorbidity maps
 #' @family comorbidities
-#' @seealso \code{\link{comorbid_pccc_dx}}
-#'   \code{\link{icd9_comorbid_pccc_dx}}
-#'   \code{\link{icd10_comorbid_pccc_dx}}
-#'   \code{\link{comorbid_pccc_pcs}}
-#'   \code{\link{icd9_comorbid_pccc_pcs}}
-#'   \code{\link{icd10_comorbid_pccc_pcs}}
-#'   \url{https://feudtnerlab.research.chop.edu/ccc_version_2.php}
+#' @seealso \url{https://feudtnerlab.research.chop.edu/ccc_version_2.php}
 #' @name icd9_map_pccc
 #' @aliases icd9_map_pccc_dx icd9_map_pccc_pcs icd10_map_pccc_dx
 #'   icd10_map_pccc_pcs

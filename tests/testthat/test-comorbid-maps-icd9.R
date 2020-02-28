@@ -21,8 +21,9 @@ test_that("icd9 comorbidities correct, logical to binary ok", {
   )))
   ptdflogical <- logical_to_binary(ptdf)
   expect_true(all(vapply(names(icd9_map_ahrq),
-    function(x)
-      is.integer(ptdflogical[, x]),
+    function(x) {
+      is.integer(ptdflogical[, x])
+    },
     FUN.VALUE = logical(1)
   )))
   # do not expect all the rest of patient data to be returned - we

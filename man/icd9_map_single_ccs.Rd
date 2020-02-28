@@ -43,7 +43,6 @@ Other comorbidity maps:
 
 Other comorbidities: 
 \code{\link{comorbid_hcc}()},
-\code{\link{comorbid_pccc_dx}()},
 \code{\link{comorbid}()},
 \code{\link{icd10_map_ahrq_pcs}},
 \code{\link{icd9_map_ahrq}},

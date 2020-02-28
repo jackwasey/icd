@@ -21,7 +21,7 @@ globalVariables(c("icd10_map_cc", "icd9_map_cc", "icd_map_cc_hcc"))
 #' @export
 comorbid_hcc <- function(x, date_name = "date",
                          visit_name = get_visit_name(x),
-                         icd_name = get_icd_name(x))
+                         icd_name = get_icd_name(x)) {
   switch_ver_cmb(x, list(
     icd9 = icd9_comorbid_hcc,
     icd10 = icd10_comorbid_hcc
@@ -29,19 +29,21 @@ comorbid_hcc <- function(x, date_name = "date",
   date_name = date_name, visit_name = visit_name,
   icd_name = icd_name
   )
+}
 
 #' @describeIn comorbid_hcc Get HCCs from a data frame of ICD-9 codes
 #' @export
 icd9_comorbid_hcc <- function(x,
                               date_name = "date",
                               visit_name = NULL,
-                              icd_name = NULL)
+                              icd_name = NULL) {
   comorbid_hcc_worker(x,
     map = icd9_map_cc,
     date_name = date_name,
     visit_name = visit_name,
     icd_name = icd_name
   )
+}
 
 #' @describeIn comorbid_hcc Get HCCs from a data frame of ICD-10 codes
 #' @export

@@ -32,9 +32,11 @@
   }
   res <- lapply(
     string,
-    function(x) unlist(
+    function(x) {
+      unlist(
         regmatches(x, m = regexec(pattern = pattern, text = x, ...))
       )[-1]
+    }
   )
   res <- res[vapply(res, function(x) length(x) != 0, logical(1))]
   res <- do.call(rbind, res)

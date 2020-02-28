@@ -354,8 +354,9 @@ decimal_to_short.icd10 <- function(x) {
 #'   format
 #' @export
 #' @keywords internal manip
-decimal_to_short.icd10cm <- function(x)
+decimal_to_short.icd10cm <- function(x) {
   as.icd10cm(decimal_to_short.icd10(x))
+}
 
 #' @describeIn decimal_to_short Guess ICD version and convert decimal to
 #'   short format
@@ -408,14 +409,15 @@ short_to_parts.icd10cm <- function(x, mnr_empty = "") {
 #' @export
 #' @keywords internal manip
 #' @noRd
-short_to_parts.character <- function(x, mnr_empty = "")
-# No default values in header plus C++ function body, so shim here.
+short_to_parts.character <- function(x, mnr_empty = "") {
+  # No default values in header plus C++ function body, so shim here.
   switch(
     guess_version(x, short_code = TRUE),
     "icd9" = icd9ShortToParts(x, mnrEmpty = mnr_empty),
     "icd10" = short_to_parts.icd10(x, mnr_empty = mnr_empty),
     stop("Unknown ICD version guessed from input")
   )
+}
 
 #' Convert decimal ICD codes to component parts
 #' @keywords internal manip

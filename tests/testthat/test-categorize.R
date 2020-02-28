@@ -77,13 +77,15 @@ test_that("different ID types are preserved w data frame return", {
         ),
         c("i", "n", "c", "f", "ei", "en", "ec", "ef")
       ),
-      function(x) eval(call(cat_fun, x,
+      function(x) {
+        eval(call(cat_fun, x,
           map = icd10_map_elix,
           id_name = "visit_id",
           code_name = "icd10",
           return_df = TRUE,
           preserve_id_type = TRUE
         ))
+      }
     )
     expect_equal(class(ress[["i"]][[1]]), "integer")
     expect_equal(class(ress[["n"]][[1]]), "numeric")

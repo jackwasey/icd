@@ -14,8 +14,9 @@
 #' @param n number of elements or rows to sample
 #' @export
 #' @keywords internal
-guess_version <- function(x, short_code, ...)
+guess_version <- function(x, short_code, ...) {
   UseMethod("guess_version")
+}
 
 #' @keywords internal
 #' @export

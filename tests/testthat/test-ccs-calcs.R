@@ -160,8 +160,9 @@ test_that("ahrq css icd 10 is performing correctly", {
     )
   res <- icd10_comorbid_ccs(test_df)
   expect_true(all(mapply(
-    function(x, y)
-      res[x, y], test_df$visit_id, test_df$single
+    function(x, y) {
+      res[x, y]
+    }, test_df$visit_id, test_df$single
   )))
   expect_equal(dim(res), c(3, 283)) # there is no more cat 0 in icd10
   expect_error(
@@ -190,8 +191,9 @@ test_that("ahrq css icd 10 is performing correctly", {
       lvl = 1
     )
   expect_true(all(mapply(
-    function(x, y)
-      res[x, y], test_df$visit_id, test_df$lvl1
+    function(x, y) {
+      res[x, y]
+    }, test_df$visit_id, test_df$lvl1
   )))
   expect_equal(dim(res), c(3, 18))
   res <-
@@ -203,8 +205,9 @@ test_that("ahrq css icd 10 is performing correctly", {
       lvl = 2
     )
   expect_true(all(mapply(
-    function(x, y)
-      res[x, y], test_df$visit_id, test_df$lvl2
+    function(x, y) {
+      res[x, y]
+    }, test_df$visit_id, test_df$lvl2
   )))
   expect_equal(dim(res), c(3, 136))
 })

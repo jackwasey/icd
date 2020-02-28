@@ -222,7 +222,8 @@ for (i in list("icd9_chapters", "icd9_sub_chapters", "icd9_majors")) {
   })
 }
 test_that(
-  "parse icd9_majors vs other CDC source of the leaf definitions.", {
+  "parse icd9_majors vs other CDC source of the leaf definitions.",
+  {
     # get all the majors from the other list, to compare
     compare_majors <- unique(get_major.icd9(icd9cm_hierarchy[["code"]],
       short_code = TRUE
