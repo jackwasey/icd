@@ -70,8 +70,7 @@
       )
     }
   } # end 400+
-  json_data <- rawToChar(http_response$content)
-  jsonlite::fromJSON(json_data)
+  httr::content(http_response, simplifyDataFrame=TRUE)
 }
 
 #' Use WHO API to discover chapters
@@ -91,7 +90,7 @@
 }
 
 #' Get the children of a concept (ICD-10 chapter, code or range)
-#' @param concept_id NULl for root, concept string for any leaf or intermediate.
+#' @param concept_id NULL for root, concept string for any leaf or intermediate.
 #' @examples
 #' .dl_icd10who_children("XXII")
 #' .dl_icd10who_children("U84")
