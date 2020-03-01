@@ -48,8 +48,7 @@ test_that("only matrix or data.frame accepted", {
 test_that("Charlson score", {
   mydf <- data.frame(
     visit_id = c("a", "b", "c"),
-    icd9 = c("441", "412.93", "042"),
-    stringsAsFactors = TRUE
+    icd9 = c("441", "412.93", "042")
   )
   expect_equal(
     charlson_from_comorbid(
@@ -64,7 +63,6 @@ test_that("Charlson score", {
   expect_equivalent(
     charlson(mydf,
       return_df = TRUE,
-      stringsAsFactors = TRUE,
       short_code = FALSE
     ),
     structure(list(
@@ -75,77 +73,6 @@ test_that("Charlson score", {
       Charlson = c(1, 1, 6)
     ),
     .Names = c("visit_id", "Charlson"),
-    row.names = c(NA, -3L),
-    class = "data.frame"
-    )
-  )
-  mydff <- data.frame(
-    visit_id = c("a", "b", "c"),
-    icd9 = c("441", "412.93", "042"),
-    stringsAsFactors = FALSE
-  )
-  expect_identical(
-    charlson(mydff,
-      return_df = TRUE,
-      stringsAsFactors = FALSE,
-      short_code = FALSE
-    ),
-    structure(list(
-      visit_id = c("a", "b", "c"),
-      Charlson = c(1, 1, 6)
-    ),
-    .Names = c("visit_id", "Charlson"),
-    row.names = c(NA, -3L),
-    class = "data.frame"
-    )
-  )
-  expect_identical(
-    charlson(mydff,
-      return_df = TRUE,
-      stringsAsFactors = TRUE,
-      short_code = FALSE
-    ),
-    structure(list(
-      visit_id = factor(c("a", "b", "c")),
-      Charlson = c(1, 1, 6)
-    ),
-    .Names = c("visit_id", "Charlson"),
-    row.names = c(NA, -3L),
-    class = "data.frame"
-    )
-  )
-  mydfff <- mydff
-  names(mydfff)[1] <- "v"
-  expect_equivalent(
-    charlson(mydfff,
-      return_df = TRUE,
-      stringsAsFactors = FALSE,
-      short_code = FALSE
-    ),
-    structure(list(
-      v = c("a", "b", "c"),
-      Charlson = c(1, 1, 6)
-    ),
-    .Names = c("v", "Charlson"),
-    row.names = c(NA, -3L),
-    class = "data.frame"
-    )
-  )
-  mydffff <- cbind(mydfff, data.frame(v2 = mydfff$v, stringsAsFactors = FALSE))
-  mydffff$v <- NULL
-  expect_identical(get_icd_name(mydffff, NULL), "icd9")
-  expect_equivalent(
-    charlson(mydffff,
-      visit_name = "v2",
-      return_df = TRUE,
-      stringsAsFactors = FALSE,
-      short_code = FALSE
-    ),
-    structure(list(
-      v2 = c("a", "b", "c"),
-      Charlson = c(1, 1, 6)
-    ),
-    .Names = c("v2", "Charlson"),
     row.names = c(NA, -3L),
     class = "data.frame"
     )
@@ -308,7 +235,7 @@ test_that("van_walraven_from_comorbid score calculation", {
   )
 })
 
-test_that("van_walraven comodbidity index and score", {
+test_that("van_walraven comorbidity index and score", {
   mydf <- data.frame(
     id = factor(c(rep(1, 20), rep(2, 20), rep(3, 18))),
     value =
