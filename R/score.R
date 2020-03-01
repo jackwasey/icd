@@ -24,11 +24,6 @@
 #'   frame will be returned, with the first column named as in input data frame
 #'   (i.e., \code{visit_name}), containing all the visits, and the second column
 #'   containing the Charlson Comorbidity Index.
-#' @param stringsAsFactors single logical, passed on when constructing
-#'   data.frame if \code{return_df} is \code{TRUE}. If the input data frame
-#'   \code{x} has a factor for the \code{visit_name}, this is not changed, but a
-#'   non-factor \code{visit_name} may be converted or not converted according to
-#'   your system default or this setting.
 #' @param ... further arguments to pass on to \code{icd9_comorbid_quan_deyo},
 #'   e.g. \code{name}
 #' @examples
@@ -46,7 +41,6 @@
 charlson <- function(x, visit_name = NULL,
                      scoring_system = c("original", "charlson", "quan"),
                      return_df = FALSE,
-                     stringsAsFactors = getOption("stringsAsFactors"), # nolint
                      ...) {
   UseMethod("charlson")
 }
@@ -60,7 +54,6 @@ charlson.data.frame <- function(x,
                                 visit_name = NULL,
                                 scoring_system = c("original", "charlson", "quan"),
                                 return_df = FALSE,
-                                stringsAsFactors = getOption("stringsAsFactors"), # nolint
                                 ...) {
   stopifnot(is.data.frame(x), ncol(x) >= 2, !is.null(colnames(x)))
   stopifnot(is.null(visit_name) ||
@@ -68,7 +61,6 @@ charlson.data.frame <- function(x,
   stopifnot(is.null(visit_name) ||
     (is.character(visit_name) && length(visit_name) == 1L))
   assert_flag(return_df)
-  assert_flag(stringsAsFactors) # nolint
   visit_name <- get_visit_name(x, visit_name)
   res <- charlson_from_comorbid(
     comorbid_quan_deyo(x,
@@ -84,9 +76,8 @@ charlson.data.frame <- function(x,
     return(res)
   }
   out <- cbind(names(res),
-    data.frame("Charlson" = unname(res)),
-    stringsAsFactors = stringsAsFactors
-  ) # nolint
+    data.frame("Charlson" = unname(res))
+  )
   names(out)[1] <- visit_name
   out
 }
@@ -301,7 +292,6 @@ count_codes_wide <- function(x,
 #'   frame will be returned, with the first column named as in input data frame
 #'   (i.e., \code{visit_name}), containing all the visits, and the second column
 #'   containing the Charlson Comorbidity Index.
-#' @template stringsAsFactors
 #' @template dotdotdot
 #' @examples
 #' mydf <- data.frame(
@@ -325,7 +315,6 @@ count_codes_wide <- function(x,
 van_walraven <- function(x,
                          visit_name = NULL,
                          return_df = FALSE,
-                         stringsAsFactors = getOption("stringsAsFactors"), # nolint
                          ...) {
   UseMethod("van_walraven")
 }
@@ -336,13 +325,11 @@ van_walraven <- function(x,
 van_walraven.data.frame <- function(x,
                                     visit_name = NULL,
                                     return_df = FALSE,
-                                    stringsAsFactors = getOption("stringsAsFactors"), # nolint
                                     ...) {
   stopifnot(is.data.frame(x), ncol(x) >= 2, !is.null(colnames(x)))
   stopifnot(is.null(visit_name) ||
     (is.character(visit_name) && length(visit_name) == 1L))
   assert_flag(return_df)
-  assert_flag(stringsAsFactors) # nolint
   visit_name <- get_visit_name(x, visit_name)
   tmp <- icd9_comorbid_quan_elix(x,
     visit_name,
@@ -357,9 +344,8 @@ van_walraven.data.frame <- function(x,
     return(res)
   }
   out <- cbind(names(res),
-    data.frame("vanWalraven" = unname(res)),
-    stringsAsFactors = stringsAsFactors
-  ) # nolint
+    data.frame("vanWalraven" = unname(res))
+  )
   names(out)[1] <- visit_name
   out
 }
