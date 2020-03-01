@@ -398,7 +398,8 @@ capitalize_first <- function(x) {
 #' @noRd
 #' @keywords internal
 get_raw_data_dir <- function() {
-  system.file("data-raw", package = "icd")
+  # use mustWork = TRUE to throw an error if the directory is not found
+  system.file("data-raw", package = "icd", mustWork = TRUE)
 }
 
 .stopifnot_year <- function(year) {
