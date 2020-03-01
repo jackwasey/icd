@@ -31,6 +31,7 @@
 #' u$icd10 <- decimal_to_short(u$icd10)
 #' j <- categorize_simple(u, m, id_name = "case", code_name = "icd10")
 #' @keywords internal
+#' @export
 categorize_simple <- function(x,
                               map,
                               id_name,
