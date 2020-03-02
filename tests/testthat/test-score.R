@@ -308,7 +308,7 @@ test_that("van_walraven_from_comorbid score calculation", {
   )
 })
 
-test_that("van_walraven comodbidity index and score", {
+test_that("van_walraven comorbidity index and score", {
   mydf <- data.frame(
     id = factor(c(rep(1, 20), rep(2, 20), rep(3, 18))),
     value =
