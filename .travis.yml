@@ -86,6 +86,7 @@ env:
     - _R_CHECK_NO_STOP_ON_TEST_ERROR_=FALSE
     # some of the following are ignored if --as-cran is set
     - _R_CHECK_COMPILATION_FLAGS_=FALSE
+    - _R_CHECK_COMPILATION_FLAGS_KNOWN_="-Wno-unused-parameter -Wno-unused-variable -Wno-ignored-attributes -Wno-cast-function-type -Wno-unknown-warning-option"
     # the following are to simulate cran, and
     # help debugging if we didn't use --as-cran
     - _R_CHECK_ALL_NON_ISO_C_=TRUE
