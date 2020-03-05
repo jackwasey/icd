@@ -1,4 +1,4 @@
-Removed deprecated CPP flag as requested. Fixed new documentation-related warnings from CRAN.
+Removed deprecated CPP flag as requested. Fixed new documentation-related warnings from CRAN. Fixed 4.0-dev compatibility.
 
 # Test environments
 
