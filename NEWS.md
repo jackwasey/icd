@@ -1,6 +1,9 @@
 # Version 4.0.8
  * Work-around rappdirs problem affecting some Windows users with default cache data directory.
  * ICD-10 vignette link to efficiency vignette updated.
+ * CRAN: removed a deprecated compiler flag, and udpated documentation
+ * (pending updates for next release: fix for Windows JSON error for some ICD data downloads; ICD-9 to ICD-10 cross-walk)
+ * fix test failure due to new 4.0 R-devel policy for stringsAsFactors=FALSE by default, thanks to @patrickmdnet.
 
 # Version 4.0.6
  * Major update. Highlights include: wide/long data both handled efficiently without conversion; WHO, France, Belgium ICD-10 codes; more comprehensive ICD-10 comorbidity maps to span historic ICD-10 versions

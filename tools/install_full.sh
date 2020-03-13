@@ -9,4 +9,5 @@ MAKEFLAGS=-j$(getconf _NPROCESSORS_ONLN) \
 		--install-tests \
 		--data-compress=none \
 		--no-resave_data \
+        --strip \
 		"$(ls -t icd_*.tar.gz | head -1)"
