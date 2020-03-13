@@ -121,7 +121,7 @@
 #' @param url URL of a zip file
 #' @param file_name file name of the resource within the zip file
 #' @param save_path file path to save the first file from the zip
-#' @param insecure Logical value, wil disable certificate check which fails on
+#' @param insecure Logical value, will disable certificate check which fails on
 #'   some platforms for some ICD data from CDC and CMS, probably because of TLS
 #'   version or certificate key length issues. Default is \code{TRUE}.
 #' @param ... additional arguments passed to \code{utils::download.file}
