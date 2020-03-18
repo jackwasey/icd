@@ -14,10 +14,10 @@
   "programmingLanguage": {
     "@type": "ComputerLanguage",
     "name": "R",
-    "version": "3.6.0",
+    "version": "3.6.3",
     "url": "https://r-project.org"
   },
-  "runtimePlatform": "R version 3.6.0 (2019-04-26)",
+  "runtimePlatform": "R version 3.6.3 (2020-02-29)",
   "provider": {
     "@id": "https://cran.r-project.org",
     "@type": "Organization",
@@ -275,7 +275,7 @@
       "sameAs": "https://CRAN.R-project.org/package=Rcpp"
     }
   ],
-  "releaseNotes": "https://github.com/jackwasey/icd/blob/master/NEWS.md",
+  "releaseNotes": "ssh://git@github.com/jackwasey/icd/blob/master/NEWS.md",
   "contIntegration": [
     "https://travis-ci.org/jackwasey/icd",
     "https://ci.appveyor.com/project/jackwasey/icd/branch/master",
@@ -285,5 +285,6 @@
     "https://www.tidyverse.org/lifecycle/#stable",
     "https://www.repostatus.org/#active"
   ],
-  "relatedLink": "https://CRAN.R-project.org/package=icd"
+  "relatedLink": "https://CRAN.R-project.org/package=icd",
+  "readme": "https://github.com/jackwasey/icd/blob/master/README.md"
 }
