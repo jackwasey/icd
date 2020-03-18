@@ -71,6 +71,7 @@ LinkingTo:
     RcppEigen
 VignetteBuilder: 
     knitr
+Biarch: true
 Classification/ACM-2012: Social and professional topics~Medical
     records, Applied computing~Health care information systems, Applied
     computing~Health informatics, Applied computing~Bioinformatics
@@ -79,4 +80,4 @@ Encoding: UTF-8
 Language: en-US
 LazyData: true
 LazyDataCompression: xz
-RoxygenNote: 7.0.2
+RoxygenNote: 7.1.0

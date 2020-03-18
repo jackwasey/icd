@@ -6,7 +6,9 @@
 \alias{ahrq}
 \alias{icd10_map_ahrq}
 \title{AHRQ comorbidities}
-\format{list of character vectors}
+\format{
+list of character vectors
+}
 \source{
 \url{http://www.hcup-us.ahrq.gov/toolssoftware/comorbidity/comorbidity.jsp}
 \url{http://www.hcup-us.ahrq.gov/toolssoftware/comorbidityicd10/comorbidity_icd10.jsp}

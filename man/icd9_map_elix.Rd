@@ -5,7 +5,9 @@
 \alias{icd9_map_elix}
 \alias{icd10_map_elix}
 \title{Elixhauser comorbidities}
-\format{list of character vectors, each named by co-morbidity}
+\format{
+list of character vectors, each named by co-morbidity
+}
 \description{
 This data comprises the original mapping of Elixhauser's ICD-9-CM to
 30 comorbidities. According to Sharabiani, this mapping provides the

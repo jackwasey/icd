@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+#the goal here is to just go with the defaults from --as-cran for the active R release
+#shellcheck disable=SC2034
+ICD_TEST_SLOW=FALSE
+MAKEFLAGS=-j$(getconf _NPROCESSORS_ONLN)
+_R_CHECK_COMPILATION_FLAGS_=FALSE
+_R_CHECK_CRAN_INCOMING_=FALSE
+_R_CHECK_CRAN_INCOMING_REMOTE_=FALSE
+_R_CHECK_LENGTH_1_CONDITION_="verbose,abort"
+_R_CHECK_LENGTH_1_LOGIC2_="verbose,abort"
+_R_CHECK_NO_STOP_ON_TEST_ERROR_=FALSE
+_R_CHECK_PKG_SIZES_=FALSE
+_R_CHECK_USE_INSTALL_LOG_=TRUE

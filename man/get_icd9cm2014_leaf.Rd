@@ -14,8 +14,10 @@
 \alias{get_icd9cm2013_leaf}
 \alias{get_icd9cm2005_leaf}
 \title{ICD-9-CM, just billable/leaf codes}
-\format{data frames with columns \code{code}, \code{short_desc}, and
-  \code{long_desc}.}
+\format{
+data frames with columns \code{code}, \code{short_desc}, and
+  \code{long_desc}.
+}
 \source{
 \url{http://www.cms.gov/Medicare/Coding/ICD9ProviderDiagnosticCodes/codes.html}
 }

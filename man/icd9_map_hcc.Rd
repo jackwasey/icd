@@ -7,8 +7,10 @@
 \alias{icd10_map_cc}
 \alias{icd_map_cc_hcc}
 \title{Medicare Hierarchical Condition Categories}
-\format{\code{dataframe} with 3 columns (\code{icd_code}, \code{cc},
-  and \code{year})}
+\format{
+\code{dataframe} with 3 columns (\code{icd_code}, \code{cc},
+  and \code{year})
+}
 \description{
 Medicare HCC model was developed to use current year diagnoses and
 demographics predict current year healthcare expenditure. This

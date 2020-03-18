@@ -7,7 +7,9 @@
 \alias{icd9_map_charlson}
 \alias{icd10_map_charlson}
 \title{Quan adaptation of Deyo/Charlson comorbidities}
-\format{list of character vectors, each named by co-morbidity}
+\format{
+list of character vectors, each named by co-morbidity
+}
 \description{
 Derived automatically from the SAS code used in the original
 publication. According to the referenced study, this provides the
