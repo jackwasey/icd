@@ -4,7 +4,9 @@
 \name{poa_choices}
 \alias{poa_choices}
 \title{Present-on-admission flags}
-\format{An object of class \code{character} of length 4.}
+\format{
+An object of class \code{character} of length 4.
+}
 \usage{
 poa_choices
 }

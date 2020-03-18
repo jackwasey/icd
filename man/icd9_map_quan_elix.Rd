@@ -5,7 +5,9 @@
 \alias{icd9_map_quan_elix}
 \alias{icd10_map_quan_elix}
 \title{Quan adaptation of Elixhauser comorbidities}
-\format{list of character vectors, each named by co-morbidity}
+\format{
+list of character vectors, each named by co-morbidity
+}
 \description{
 These were transcribed directly from the Quan paper referenced.
 }

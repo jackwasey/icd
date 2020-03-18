@@ -6,7 +6,9 @@
 \alias{icd9_map_multi_ccs}
 \alias{icd10_map_ccs}
 \title{Clinical Classifications Software (CCS) for ICD9/10-CM}
-\format{list of character vectors, each numbered by co-morbidity}
+\format{
+list of character vectors, each numbered by co-morbidity
+}
 \description{
 The Clinical Classifications Software (CCS) for ICD-9/10-CM is one in
 a family of databases and software tools developed as part of the
