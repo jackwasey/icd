@@ -47,36 +47,40 @@ before_install:
   # - mkdir -p "$HOME/R.icd.lib"
   # - echo R_LIBS=$HOME/R.icd.lib:/usr/lib/R/site-library/" > ~/.Renviron
   # - sudo chmod 2777 "$HOME/R.icd.lib"
-  #
-  # Work-around r-lib/remotes bug which prevents travis building.
-  # https://github.com/r-lib/devtools/issues/2020#issuecomment-481219296
-  - Rscript -e 'source("https://install-github.me/r-lib/remotes")'
-  # ready for Makevars
+  # SOMEDAY: https://stackoverflow.com/questions/38745696/how-to-use-multiline-command-in-script-with-yaml
   - mkdir -p ~/.R ;
   - echo 'CXXFLAGS=-Wno-unused-parameter -Wno-unused-variable -Wno-ignored-attributes -Wno-cast-function-type -Wno-unknown-warning-option' >> ~/.R/Makevars ;
   - echo 'CXX11FLAGS=-Wno-unused-parameter -Wno-unused-variable -Wno-ignored-attributes -Wno-cast-function-type -Wno-unknown-warning-option' >> ~/.R/Makevars ;
-  - if [[ "$TRAVIS_R_VERSION_STRING" = 'devel' ]]; then
-      echo 'CFLAGS=-O0' >> ~/.R/Makevars ;
-      echo 'CXXFLAGS=-O0' >> ~/.R/Makevars ;
-      echo 'CXX11FLAGS=-O0' >> ~/.R/Makevars ;
-      fi
+  - echo 'CXX17FLAGS=-Wno-unused-parameter -Wno-unused-variable -Wno-ignored-attributes -Wno-cast-function-type -Wno-unknown-warning-option' >> ~/.R/Makevars ;
+  - echo 'CXX20FLAGS=-Wno-unused-parameter -Wno-unused-variable -Wno-ignored-attributes -Wno-cast-function-type -Wno-unknown-warning-option' >> ~/.R/Makevars ;
+  - [[ $TRAVIS_R_VERSION_STRING == devel ]]; then
+      echo -e "CFLAGS=-O0\\nCXXFLAGS=-O0\\nCXX11FLAGS=-O0\\nCXX17FLAGS=-O0\\nCXX20FLAGS=-O0" >> ~/.R/Makevars ;
+      fi ; # this is one of oldrel, release or devel per https://docs.travis-ci.com/user/languages/r#configuration-options
   # ignore the stubs for the pre-built vignettes, as the latex environments on
   # travis are heterogeneous!
   - echo '^vignettes\/.*-vignette\.Rnw$' >> .Rbuildignore
   # Homebrew GCC currently version 8.3 from
   # https://github.com/Homebrew/homebrew-core/blob/master/Formula/gcc.rb
-  - if [[ "$(uname -s)" = 'Darwin' && x"$ICD_USE_XCODE_CLANG" != 'xtrue' ]]; then
+  # I think PKG_CXX etc only needed if Makevars in the package itself, not .R
+  - if [[ "$(uname -s)" = 'Darwin' ]] && [[ $ICD_USE_XCODE_CLANG" != 'true' ]]; then
       brew upgrade gcc;
-      command -v g++-9 >/dev/null 2>&1 || brew install gcc && echo 'CC=gcc-9' >> ~/.R/Makevars && echo 'CXX=g++-9' >> ~/.R/Makevars && echo 'CXX11=g++-9' >> ~/.R/Makevars && Rscript -e 'install.packages("Rcpp", type = "source")';
+      command -v g++-9 >/dev/null 2>&1 || \
+      brew install gcc && echo 'CC=gcc-9' >> ~/.R/Makevars && \
+      echo 'CXX=g++-9' >> ~/.R/Makevars && \
+      echo 'CXX11=g++-9' >> ~/.R/Makevars && \
+      Rscript -e 'install.packages("Rcpp", type = "source")';
     fi
   - cat ~/.R/Makevars
   - cat .Rbuildignore
-  - Rscript -e '.libPaths()'
+  - Rscript -e '.libPaths(); getOption("repos")'
   - pwd
   - ls -R
   # for the pre-built static vignette stubs to include the actual vignettes.
-  # Make sure travis latex option is not false for relevant builds.
-  # - Rscript -e 'if (!require("tinytex")) {quit(status=1)} else {tinytex::install_tinytex(); tinytex::tlmgr_install("pdfpages", "ae")}' || hash tlmgr 2>/dev/null && { tlmgr --usermode install pdfpages ae; }
+  # Make sure travis latex: true is set just for relevant builds. Official way to add latex packages is:
+  # before_install:
+  #   - tlmgr install index
+  # and/or? something like:
+  # - Rscript -e 'if (!require("tinytex", character.only = TRUE, quietly = TRUE, warn.conflicts = FALSE)) {quit(status=1)} else {tinytex::install_tinytex(); tinytex::tlmgr_install("pdfpages", "ae")}' || hash tlmgr 2>/dev/null && { tlmgr --usermode install pdfpages ae; }
 
 env:
   global:
@@ -120,9 +124,7 @@ jobs:
   - r: devel
     os: linux
     dist: bionic
-    compiler:
-      - gcc
-      - clang
+    compiler: gcc
     env:
       - ICD_MINI_BENCH=true
   - r: release
@@ -145,6 +147,7 @@ jobs:
   - r: oldrel
     os: linux
     dist: xenial
+    compiler: gcc
     latex: false
     r_build_args: --no-build-vignettes --no-manual --resave-data=no
     r_check_args: --no-build-vignettes --no-vignettes --ignore-vignettes --no-codoc --no-manual
@@ -152,13 +155,13 @@ jobs:
   - r: release
     os: osx
     # xcode image is needed so things like _stdio.h are available to GCC.
-    osx_image: xcode10.1
+    osx_image: xcode10.3
 #    compiler: gcc # redundant: done by logic in before_intall
     env:
       - ICD_MINI_BENCH=true
   - r: devel
     os: osx
-    osx_image: xcode10.2
+    osx_image: xcode10.3
 #    compiler: gcc # redundant: done by logic in before_intall
   - r: devel
     os: osx

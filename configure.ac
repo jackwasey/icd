@@ -1,4 +1,4 @@
-# Copyright (C) 2014 - 2018  Jack O. Wasey
+# Copyright (C) 2014 - 2020  Jack O. Wasey
 #
 # This file is part of icd.
 #
@@ -17,7 +17,7 @@
 
 AC_PREREQ([2.62])
 AC_INIT(icd)
-AC_COPYRIGHT(Copyright (C) 2014 - 2019  Jack O. Wasey)
+AC_COPYRIGHT(Copyright (C) 2014 - 2020  Jack O. Wasey)
 AC_CONFIG_SRCDIR([src])
 AC_CONFIG_FILES([src/Makevars])
 AC_CONFIG_MACRO_DIR([m4])
@@ -74,7 +74,7 @@ AC_LANG(C++)
 
 # https://www.gnu.org/software/autoconf/manual/autoconf-2.67/html_node/Generic-Compiler-Characteristics.html
 
-# this macro is borrowed from R-devel source, and included in the icd/tools/m4 directory
+# this macro is borrowed from R-devel source, and included in the icd /inst/m4 directory
 R_OPENMP
 
 # since some systems have broken OMP libraries

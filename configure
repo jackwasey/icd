@@ -9,7 +9,7 @@
 # This configure script is free software; the Free Software Foundation
 # gives unlimited permission to copy, distribute and modify it.
 #
-# Copyright (C) 2014 - 2019  Jack O. Wasey
+# Copyright (C) 2014 - 2020  Jack O. Wasey
 ## -------------------- ##
 ## M4sh Initialization. ##
 ## -------------------- ##
@@ -1354,7 +1354,7 @@ Copyright (C) 2012 Free Software Foundation, Inc.
 This configure script is free software; the Free Software Foundation
 gives unlimited permission to copy, distribute and modify it.
 
-Copyright (C) 2014 - 2019  Jack O. Wasey
+Copyright (C) 2014 - 2020  Jack O. Wasey
 _ACEOF
   exit
 fi
@@ -1873,7 +1873,7 @@ ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
 
 # https://www.gnu.org/software/autoconf/manual/autoconf-2.67/html_node/Generic-Compiler-Characteristics.html
 
-# this macro is borrowed from R-devel source, and included in the icd/tools/m4 directory
+# this macro is borrowed from R-devel source, and included in the icd /inst/m4 directory
 ac_ext=cpp
 ac_cpp='$CXXCPP $CPPFLAGS'
 ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'

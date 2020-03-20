@@ -32,6 +32,7 @@
 ^data-raw$
 ^doc$
 ^docs$
+^Dockerfile$
 ^icd.*\.out$
 ^icd\.Rcheck$
 ^icd_.*tar\.gz
