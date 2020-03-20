@@ -4,7 +4,7 @@ language: r
 # https://docs.travis-ci.com/user/ci-environment/
 
 # for RcppEigen to compile, (but disable if brew gcc on mac to avoid conflict)
-# fortran: true # set explicitly in each stanza
+# fortran: true # set explicitly in each stanza? but not recognized by an "include" group.
 
 # may need this for clang:
 # export LD_LIBRARY_PATH=/usr/local/clang/lib:$LD_LIBRARY_PATH
@@ -16,7 +16,10 @@ language: r
 #
 # https://docs.travis-ci.com/user/languages/cpp/
 
-sudo: false
+# assert the defaults for os and dist - will add macos and bionic etc. later
+os: linux
+dist: xenial
+
 cache:
   - packages
   - ccache
@@ -111,12 +114,12 @@ env:
     # have access to two cores/threads.
     - OMP_NUM_THREADS=2
 
-matrix:
+jobs:
   fast_finish: true
   include:
   - r: devel
     os: linux
-    dist: xenial
+    dist: bionic
     compiler:
       - gcc
       - clang
@@ -124,10 +127,8 @@ matrix:
       - ICD_MINI_BENCH=true
   - r: release
     os: linux
-    compiler:
-      - gcc
-      - clang
-    dist: xenial
+    compiler: clang
+    dist: bionic
     env:
       - ICD_MINI_BENCH=true
   # https://docs.travis-ci.com/user/languages/c/#gcc-on-macos
@@ -143,7 +144,7 @@ matrix:
     - ICD_TEST_SLOW=true
   - r: oldrel
     os: linux
-    dist: trusty
+    dist: xenial
     latex: false
     r_build_args: --no-build-vignettes --no-manual --resave-data=no
     r_check_args: --no-build-vignettes --no-vignettes --ignore-vignettes --no-codoc --no-manual
@@ -153,25 +154,21 @@ matrix:
     # xcode image is needed so things like _stdio.h are available to GCC.
     osx_image: xcode10.1
 #    compiler: gcc # redundant: done by logic in before_intall
-    fortran: false
     env:
       - ICD_MINI_BENCH=true
   - r: devel
     os: osx
     osx_image: xcode10.2
 #    compiler: gcc # redundant: done by logic in before_intall
-    fortran: false
   - r: devel
     os: osx
     # as of May 2019, default osx image is 9.4.1
     # https://docs.travis-ci.com/user/reference/osx#xcode-version
     # compiler: clang # redundant
-    fortran: true
     env: ICD_USE_XCODE_CLANG=true
   - r: release
     os: osx
     # compiler: clang # redundant
-    fortran: true
     latex: false
     r_build_args: --no-build-vignettes --no-manual --resave-data=no
     r_check_args: --no-build-vignettes --no-vignettes --ignore-vignettes --no-codoc --no-manual
