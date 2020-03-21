@@ -62,12 +62,16 @@ before_install:
   # Homebrew GCC currently version 8.3 from
   # https://github.com/Homebrew/homebrew-core/blob/master/Formula/gcc.rb
   # I think PKG_CXX etc only needed if Makevars in the package itself, not .R
+  # openblas may need linking. may be best NOT to overwrite gfortran?
   - if [[ "$(uname -s)" = 'Darwin' ]] && [[ $ICD_USE_XCODE_CLANG" != 'true' ]]; then
-      brew upgrade gcc;
+      HOMEBREW_NO_INSTALL_CLEANUP=1 brew upgrade gcc;
+      HOMEBREW_NO_INSTALL_CLEANUP=1 brew link --overwrite gcc;
       command -v g++-9 >/dev/null 2>&1 || \
-      brew install gcc && echo 'CC=gcc-9' >> ~/.R/Makevars && \
+      brew install gcc && \
+      echo 'CC=gcc-9' >> ~/.R/Makevars && \
       echo 'CXX=g++-9' >> ~/.R/Makevars && \
       echo 'CXX11=g++-9' >> ~/.R/Makevars && \
+      export PATH="/usr/local/bin:$PATH" && \
       Rscript -e 'install.packages("Rcpp", type = "source")';
     fi
   - cat ~/.R/Makevars
@@ -133,7 +137,6 @@ jobs:
     dist: bionic
     env:
       - ICD_MINI_BENCH=true
-  # https://docs.travis-ci.com/user/languages/c/#gcc-on-macos
   - r: release
     os: linux
     compiler: gcc
@@ -151,7 +154,7 @@ jobs:
     latex: false
     r_build_args: --no-build-vignettes --no-manual --resave-data=no
     r_check_args: --no-build-vignettes --no-vignettes --ignore-vignettes --no-codoc --no-manual
-  # MacOS:
+  # MacOS: https://docs.travis-ci.com/user/languages/c/#gcc-on-macos
   - r: release
     os: osx
     # xcode image is needed so things like _stdio.h are available to GCC.
