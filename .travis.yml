@@ -53,11 +53,10 @@ before_install:
   - echo 'CXX11FLAGS=-Wno-unused-parameter -Wno-unused-variable -Wno-ignored-attributes -Wno-cast-function-type -Wno-unknown-warning-option' >> ~/.R/Makevars ;
   - echo 'CXX17FLAGS=-Wno-unused-parameter -Wno-unused-variable -Wno-ignored-attributes -Wno-cast-function-type -Wno-unknown-warning-option' >> ~/.R/Makevars ;
   - echo 'CXX20FLAGS=-Wno-unused-parameter -Wno-unused-variable -Wno-ignored-attributes -Wno-cast-function-type -Wno-unknown-warning-option' >> ~/.R/Makevars ;
-  - [[ $TRAVIS_R_VERSION_STRING == devel ]]; then
-      echo -e "CFLAGS=-O0\\nCXXFLAGS=-O0\\nCXX11FLAGS=-O0\\nCXX17FLAGS=-O0\\nCXX20FLAGS=-O0" >> ~/.R/Makevars ;
-      fi ; # this is one of oldrel, release or devel per https://docs.travis-ci.com/user/languages/r#configuration-options
-  # ignore the stubs for the pre-built vignettes, as the latex environments on
-  # travis are heterogeneous!
+  - if [[ $TRAVIS_R_VERSION_STRING == devel ]]; then echo "CFLAGS=-O0\\nCXXFLAGS=-O0\\nCXX11FLAGS=-O0\\nCXX17FLAGS=-O0\\nCXX20FLAGS=-O0" >> ~/.R/Makevars ; fi ;
+  # this is one of oldrel, release or devel per https://docs.travis-ci.com/user/languages/r#configuration-options
+  #
+  # ignore the stubs for the pre-built vignettes, as the latex environments on travis are heterogeneous!
   - echo '^vignettes\/.*-vignette\.Rnw$' >> .Rbuildignore
   # Homebrew GCC currently version 8.3 from
   # https://github.com/Homebrew/homebrew-core/blob/master/Formula/gcc.rb
