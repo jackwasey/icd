@@ -15,6 +15,10 @@
 # You should have received a copy of the GNU General Public License
 # along with icd. If not, see <http:#www.gnu.org/licenses/>.
 
+# to regenerate quickly and test:
+# # e..g. export ICD_HOME=~/icd
+# autoreconf -fv && "${ICD_HOME:-.}/configure" --enable-icd-strip --enable-icd-shutup && cat "${ICD_HOME:-.}/src/Makevars" && grep -v -q '@' "${ICD_HOME:-.}/src/Makevars" || echo "MISSING REPLACEMENT"
+
 AC_PREREQ([2.62])
 AC_INIT(icd)
 AC_COPYRIGHT(Copyright (C) 2014 - 2020  Jack O. Wasey)
@@ -22,6 +26,7 @@ AC_CONFIG_SRCDIR([src])
 AC_CONFIG_FILES([src/Makevars])
 AC_CONFIG_MACRO_DIR([m4])
 AC_CONFIG_MACRO_DIR([inst/m4])
+
 
 : ${R_HOME=$(R RHOME)}
 AC_MSG_CHECKING([R_HOME already set])
@@ -69,6 +74,14 @@ CFLAGS=`"${R_BIN}" CMD config CFLAGS`
 CPPFLAGS=`"${R_BIN}" CMD config CPPFLAGS`
 LIBS="${PKG_LIBS}"
 
+# try to shut up travis/r-hub builds with huge warning burden with default compiler settings (Eigen). Can't seem to do with MAKEFLAGS, or string of R CMD check --install-opts=.....
+AC_ARG_VAR(ICD_SHUTUP, "If ICD_SHUTUP is defined, it tells configure to silence all compiler warnings. Alternatively, use --enable-icd-shutup in configure")
+AC_ARG_ENABLE([icd-shutup], AS_HELP_STRING([--enable-icd-shutup], [Enable peaceful compilation on travis with yes or no]))
+
+AS_IF([test "x$enable_icd-shutup" = "xyes"], [
+       CXX11FLAGS="${CXX11FLAGS} -w"
+       ])
+
 # changes what R_OPENMP and rest of script does:
 AC_LANG(C++)
 
@@ -84,23 +97,24 @@ ac_pkg_openmp=no
 #  AC_MSG_RESULT([Do have OPENMP_CFLAGS from R_OPENMP])
 #fi
 if test -n "${OPENMP_CXXFLAGS}"; then
-  AC_MSG_CHECKING([OpenMP available, but does it work in a package])
-  AC_LANG_CONFTEST(
-  [AC_LANG_PROGRAM([[#include <omp.h>]], [[ omp_get_num_threads (); return 0; ]])])
-  PKG_CFLAGS="${OPENMP_CFLAGS}" PKG_LIBS="${OPENMP_CFLAGS}" "$R_BIN" CMD SHLIB conftest.c 1>&AS_MESSAGE_LOG_FD 2>&AS_MESSAGE_LOG_FD && "$R_BIN" --vanilla -q -e "dyn.load(paste('conftest',.Platform\$dynlib.ext,sep=''))" 1>&AS_MESSAGE_LOG_FD 2>&AS_MESSAGE_LOG_FD && ac_pkg_openmp=yes
-  AC_MSG_RESULT([OpenMP available and working: ${ac_pkg_openmp}])
-else
-  AC_MSG_RESULT([R did not think OpenMP is available])
-fi
+    AC_MSG_CHECKING([OpenMP available, but does it work in a package])
+    AC_LANG_CONFTEST(
+                     [AC_LANG_PROGRAM([[#include <omp.h>]], [[ omp_get_num_threads (); return 0; ]])])
+    PKG_CFLAGS="${OPENMP_CFLAGS}" PKG_LIBS="${OPENMP_CFLAGS}" "$R_BIN" CMD SHLIB conftest.c 1>&AS_MESSAGE_LOG_FD 2>&AS_MESSAGE_LOG_FD && "$R_BIN" --vanilla -q -e "dyn.load(paste('conftest',.Platform\$dynlib.ext,sep=''))" 1>&AS_MESSAGE_LOG_FD 2>&AS_MESSAGE_LOG_FD && ac_pkg_openmp=yes
+    AC_MSG_RESULT([OpenMP available and working: ${ac_pkg_openmp}])
+    else
+        AC_MSG_RESULT([R did not think OpenMP is available])
+        fi
 
-AC_MSG_RESULT([icd thinks openmp compilation possible: ${ac_pkg_openmp}])
+        AC_MSG_RESULT([icd thinks openmp compilation possible: ${ac_pkg_openmp}])
 
-# if ${ac_pkg_openmp} = "yes" then we have OMP, otherwise it will be "no"
-if test "${ac_pkg_openmp}" = no; then
-  ICD_OPENMP_FLAG=''
-else
-  ICD_OPENMP_FLAG='$(SHLIB_OPENMP_CXXFLAGS)'
-fi
+        # if ${ac_pkg_openmp} = "yes" then we have OMP, otherwise it will be "no"
+        if test "${ac_pkg_openmp}" = no; then
+            ICD_OPENMP_FLAG=''
+        else
+            ICD_OPENMP_FLAG='$(SHLIB_OPENMP_CXXFLAGS)'
+        fi
+AC_SUBST(ICD_OPENMP_FLAG)
 
 dnl Always write the stub as default to not include Makevars content:
 echo "unsigned char Makevars[[]] = { 0x00 };" > src/makevars.h
@@ -137,6 +151,14 @@ AC_ARG_ENABLE([makevars],
     AC_MSG_NOTICE([Not enabling Makevars inclusion])
   ]
 )
-# put the flag in Makevars
-AC_SUBST(ICD_OPENMP_FLAG)
+	
+AC_ARG_ENABLE([icd-strip], 
+              [AS_HELP_STRING([--enable-strip], [Enable stripping of binary on Linux and MacOS])],
+              [AC_MSG_NOTICE([icd strip enable, with arguments...])],
+              [AC_MSG_NOTICE([icd strip enabled.])])
+
+AS_IF([test "x$enable_icd-strip" != "xno"], [ICD_STRIP=[tools/mk/strip.mk]], [ICD_STRIP=''])
+AC_SUBST_FILE([ICD_STRIP])
+
+AC_SUBST(ICD_SHUTUP)
 AC_OUTPUT
