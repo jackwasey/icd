@@ -120,7 +120,7 @@ env:
     - ICD_DATA_INTERACT=false
     # 4 is the official travis suggestion, but the docker images only seem to
     # have access to two cores/threads.
-    - OMP_NUM_THREADS=2
+    - OMP_NUM_THREADS=2 # all travis environments are currently 2 CPU. (2020-03)
 
 jobs:
   fast_finish: true
@@ -128,6 +128,8 @@ jobs:
   - r: devel
     os: linux
     dist: bionic
+    # note that the default compilers are quite far behind, e.g. bionic is only gcc 7 by default. See:
+    # https://docs.travis-ci.com/user/languages/c/#choosing-compilers-to-test-against
     compiler: gcc
     env:
       - ICD_MINI_BENCH=true
@@ -181,9 +183,21 @@ jobs:
     env:
     - ICD_USE_XCODE_CLANG=true
     - ICD_MINI_BENCH=true
+  - r: release
+    os: linux
+    arch: arm64
+    r_build_args: --no-build-vignettes --no-manual --resave-data=no
+    r_check_args: --no-build-vignettes --no-vignettes --ignore-vignettes --no-codoc --no-manual
+    env:
+    - ICD_MINI_BENCH=true
+    - ICD_TEST_SLOW=true
   allow_failures:
   # allow any osx to fail for now: error prone tool chain
   - os: osx
+  - arch:
+    - arm64
+    - ppc64le
+    - s390x
   - r: oldrel
   - r: release
     os: linux
