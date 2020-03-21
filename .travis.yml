@@ -58,7 +58,7 @@ before_install:
   # https://github.com/Homebrew/homebrew-core/blob/master/Formula/gcc.rb
   # I think PKG_CXX etc only needed if Makevars in the package itself, not ~/.R/Makevars
   # openblas may need brew linking. may be best NOT to overwrite gfortran?
-  - if [[ "$(uname -s)" = 'Darwin' ]] && [[ $ICD_USE_XCODE_CLANG" != 'true' ]]; then
+  - if [[ "$(uname -s)" = 'Darwin' ]] && [[ $ICD_USE_XCODE_CLANG != 'true' ]]; then
       brew upgrade ;
       brew install gcc ;
       brew link --overwrite gcc ;
