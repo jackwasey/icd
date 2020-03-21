@@ -59,11 +59,11 @@ before_install:
   # I think PKG_CXX etc only needed if Makevars in the package itself, not ~/.R/Makevars
   # openblas may need brew linking. may be best NOT to overwrite gfortran?
   - if [[ "$(uname -s)" = 'Darwin' ]] && [[ $ICD_USE_XCODE_CLANG" != 'true' ]]; then
-      brew upgrade gcc &&
-      brew link --overwrite gcc &&
-      brew install gcc &&
-      cat tools/mk/travis-macos.mk  >> ~/.R/Makevars &&
-      Rscript -e 'install.packages("Rcpp", type = "source")';
+      brew upgrade ;
+      brew install gcc ;
+      brew link --overwrite gcc ;
+      cat tools/mk/travis-macos.mk  >> ~/.R/Makevars ;
+      Rscript -e 'install.packages("Rcpp", type = "source")' ;
     fi
   - cat ~/.R/Makevars
   - cat .Rbuildignore
