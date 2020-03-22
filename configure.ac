@@ -76,7 +76,11 @@ LIBS="${PKG_LIBS}"
 
 # try to shut up travis/r-hub builds with huge warning burden with default compiler settings (Eigen). Can't seem to do with MAKEFLAGS, or string of R CMD check --install-opts=.....
 AC_ARG_VAR(ICD_SHUTUP, "If ICD_SHUTUP is defined, it tells configure to silence all compiler warnings. Alternatively, use --enable-icd-shutup in configure")
-AC_ARG_ENABLE([icd-shutup], AS_HELP_STRING([--enable-icd-shutup], [Enable peaceful compilation on travis with yes or no]))
+
+AC_ARG_ENABLE([icd_shutup], 
+              [AS_HELP_STRING([--enable-icd-shutup], [Enable peaceful compilation on travis with yes or no])],
+              [AC_MSG_NOTICE([icd shutup enabled, without arguments.])],
+              [AC_MSG_NOTICE([icd shutup enabled, with arguments...])])
 
 AS_IF([test "x$enable_icd-shutup" = "xyes"], [
        CXX11FLAGS="${CXX11FLAGS} -w"
@@ -119,12 +123,12 @@ AC_SUBST(ICD_OPENMP_FLAG)
 dnl Always write the stub as default to not include Makevars content:
 echo "unsigned char Makevars[[]] = { 0x00 };" > src/makevars.h
 
-AC_ARG_ENABLE([makevars],
-    AS_HELP_STRING([--enable-makevars],
+AC_ARG_ENABLE([icd_makevars],
+    AS_HELP_STRING([--enable-icd-makevars],
       [keep ~/.R/Makevars contents in binary for debugging (default is no)]),
     [
     dnl also check that user didn't write --enable-makevars=no
-    AS_IF([test "x$enable_makevars" = "xyes"],
+    AS_IF([test "x$enable_icd_makevars" = "xyes"],
     [
       AC_MSG_NOTICE([Enabling Makevars inclusion for debugging])
       AC_MSG_CHECKING([$HOME/.R exists])
@@ -144,7 +148,7 @@ AC_ARG_ENABLE([makevars],
         AC_MSG_RESULT([no])
       fi
     ], [
-      AC_MSG_NOTICE([Not enabling Makevars inclusion due to --enable-makevars=!yes])
+      AC_MSG_NOTICE([Not enabling Makevars inclusion due to --enable-icd-makevars=!yes])
     ])
   ],
   [
@@ -152,12 +156,12 @@ AC_ARG_ENABLE([makevars],
   ]
 )
 	
-AC_ARG_ENABLE([icd-strip], 
-              [AS_HELP_STRING([--enable-strip], [Enable stripping of binary on Linux and MacOS])],
-              [AC_MSG_NOTICE([icd strip enable, with arguments...])],
-              [AC_MSG_NOTICE([icd strip enabled.])])
+AC_ARG_ENABLE([icd_strip], 
+              [AS_HELP_STRING([--enable-icd-strip], [Enable stripping of binary on Linux and MacOS])],
+              [AC_MSG_NOTICE([icd strip enable, without arguments.])],
+              [AC_MSG_NOTICE([icd strip enabled, with arguments...])])
 
-AS_IF([test "x$enable_icd-strip" != "xno"], [ICD_STRIP=[tools/mk/strip.mk]], [ICD_STRIP=''])
+AS_IF([test "x$enable_icd_strip" != "xno"], [ICD_STRIP=[tools/mk/strip.mk]], [ICD_STRIP=''])
 AC_SUBST_FILE([ICD_STRIP])
 
 AC_SUBST(ICD_SHUTUP)

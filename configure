@@ -641,7 +641,7 @@ ac_user_opts='
 enable_option_checking
 enable_icd_shutup
 enable_openmp
-enable_makevars
+enable_icd_makevars
 enable_icd_strip
 '
       ac_precious_vars='build_alias
@@ -1274,9 +1274,9 @@ Optional Features:
   --enable-FEATURE[=ARG]  include FEATURE [ARG=yes]
   --enable-icd-shutup     Enable peaceful compilation on travis with yes or no
   --disable-openmp        do not use OpenMP
-  --enable-makevars       keep ~/.R/Makevars contents in binary for debugging
+  --enable-icd-makevars   keep ~/.R/Makevars contents in binary for debugging
                           (default is no)
-  --enable-strip          Enable stripping of binary on Linux and MacOS
+  --enable-icd-strip      Enable stripping of binary on Linux and MacOS
 
 Some influential environment variables:
   ICD_SHUTUP  "If ICD_SHUTUP is defined
@@ -1873,9 +1873,14 @@ LIBS="${PKG_LIBS}"
 
 # try to shut up travis/r-hub builds with huge warning burden with default compiler settings (Eigen). Can't seem to do with MAKEFLAGS, or string of R CMD check --install-opts=.....
 
-# Check whether --enable-icd-shutup was given.
+
+# Check whether --enable-icd_shutup was given.
 if test "${enable_icd_shutup+set}" = set; then :
-  enableval=$enable_icd_shutup;
+  enableval=$enable_icd_shutup; { $as_echo "$as_me:${as_lineno-$LINENO}: icd shutup enabled, without arguments." >&5
+$as_echo "$as_me: icd shutup enabled, without arguments." >&6;}
+else
+  { $as_echo "$as_me:${as_lineno-$LINENO}: icd shutup enabled, with arguments..." >&5
+$as_echo "$as_me: icd shutup enabled, with arguments..." >&6;}
 fi
 
 
@@ -2514,10 +2519,10 @@ $as_echo "icd thinks openmp compilation possible: ${ac_pkg_openmp}" >&6; }
 
 echo "unsigned char Makevars[] = { 0x00 };" > src/makevars.h
 
-# Check whether --enable-makevars was given.
-if test "${enable_makevars+set}" = set; then :
-  enableval=$enable_makevars;
-        if test "x$enable_makevars" = "xyes"; then :
+# Check whether --enable-icd_makevars was given.
+if test "${enable_icd_makevars+set}" = set; then :
+  enableval=$enable_icd_makevars;
+        if test "x$enable_icd_makevars" = "xyes"; then :
 
       { $as_echo "$as_me:${as_lineno-$LINENO}: Enabling Makevars inclusion for debugging" >&5
 $as_echo "$as_me: Enabling Makevars inclusion for debugging" >&6;}
@@ -2546,8 +2551,8 @@ $as_echo "no" >&6; }
 
 else
 
-      { $as_echo "$as_me:${as_lineno-$LINENO}: Not enabling Makevars inclusion due to --enable-makevars=!yes" >&5
-$as_echo "$as_me: Not enabling Makevars inclusion due to --enable-makevars=!yes" >&6;}
+      { $as_echo "$as_me:${as_lineno-$LINENO}: Not enabling Makevars inclusion due to --enable-icd-makevars=!yes" >&5
+$as_echo "$as_me: Not enabling Makevars inclusion due to --enable-icd-makevars=!yes" >&6;}
 
 fi
 
@@ -2560,17 +2565,17 @@ $as_echo "$as_me: Not enabling Makevars inclusion" >&6;}
 fi
 
 
-# Check whether --enable-icd-strip was given.
+# Check whether --enable-icd_strip was given.
 if test "${enable_icd_strip+set}" = set; then :
-  enableval=$enable_icd_strip; { $as_echo "$as_me:${as_lineno-$LINENO}: icd strip enable, with arguments..." >&5
-$as_echo "$as_me: icd strip enable, with arguments..." >&6;}
+  enableval=$enable_icd_strip; { $as_echo "$as_me:${as_lineno-$LINENO}: icd strip enable, without arguments." >&5
+$as_echo "$as_me: icd strip enable, without arguments." >&6;}
 else
-  { $as_echo "$as_me:${as_lineno-$LINENO}: icd strip enabled." >&5
-$as_echo "$as_me: icd strip enabled." >&6;}
+  { $as_echo "$as_me:${as_lineno-$LINENO}: icd strip enabled, with arguments..." >&5
+$as_echo "$as_me: icd strip enabled, with arguments..." >&6;}
 fi
 
 
-if test "x$enable_icd-strip" != "xno"; then :
+if test "x$enable_icd_strip" != "xno"; then :
   ICD_STRIP=tools/mk/strip.mk
 else
   ICD_STRIP=''
