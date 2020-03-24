@@ -113,20 +113,36 @@ jobs:
     # xcode image is needed so things like _stdio.h are available to GCC.
     osx_image: xcode10.3
 #    compiler: gcc # redundant: done by logic in before_intall
+    addons:
+      homebrew:
+        packages:
+          - checkbashisms
     env:
       - ICD_MINI_BENCH=true
   - r: devel
     os: osx
     osx_image: xcode10.3
+    addons:
+      homebrew:
+        packages:
+          - checkbashisms
 #    compiler: gcc # redundant: done by logic in before_intall
   - r: devel
     os: osx
+    addons:
+      homebrew:
+        packages:
+          - checkbashisms
     # as of May 2019, default osx image is 9.4.1
     # https://docs.travis-ci.com/user/reference/osx#xcode-version
     # compiler: clang # redundant
     env: ICD_USE_XCODE_CLANG=true
   - r: release
     os: osx
+    addons:
+      homebrew:
+        packages:
+          - checkbashisms
     # compiler: clang # redundant
     latex: false
     r_build_args: --no-build-vignettes --no-manual --resave-data=no
