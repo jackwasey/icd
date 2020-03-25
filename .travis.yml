@@ -39,9 +39,8 @@ cran: https://cloud.r-project.org
 r_check_args: ""
 warnings_are_errors: true
 
-# try to speed up compilation time
 before_install:
-  - set -o allexport; source tools/env/travis-global; set +o allexport;
+  # - set -o allexport; source tools/env/travis-global; set +o allexport;
   # May need to set the R library directory so R CMD check finds packages
   # installed by travis (automatically, and in my scripts) and by R itself
   # https://stackoverflow.com/questions/31879011/r-cant-find-packages-installed-by-travis
@@ -58,7 +57,7 @@ before_install:
   # https://github.com/Homebrew/homebrew-core/blob/master/Formula/gcc.rb
   # I think PKG_CXX etc only needed if Makevars in the package itself, not ~/.R/Makevars
   # openblas may need brew linking. may be best NOT to overwrite gfortran?
-  - if [[ "$(uname -s)" = 'Darwin' ]] && [[ $ICD_USE_XCODE_CLANG != 'true' ]]; then
+  - export HOMEBREW_NO_INSTALL_CLEANUP=1 && if [[ "$(uname -s)" = 'Darwin' ]] && [[ $ICD_USE_XCODE_CLANG != 'true' ]]; then
       brew upgrade ;
       brew install gcc ;
       brew link --overwrite gcc ;
@@ -174,6 +173,9 @@ jobs:
     - ICD_TEST_SLOW=true
 
 before_script:
+# n.b., before_install bash exports are not preserved beyond each shell invocation.
+ - set -o allexport; source tools/env/travis-global; set +o allexport;
+ - set
  - echo "$LD_LIBRARY_PATH"
  - if [ x"$ICD_TEST_SLOW" = x"true" ]; then
      Rscript -e 'source("tools/split-tests.R"); testthat_split();';
