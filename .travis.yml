@@ -33,6 +33,12 @@ cache:
 #r_packages:
 #  - tinytex
 
+# git conflict if I modify above lines
+addons:
+  apt:
+    packages:
+      - qpdf
+
 cran: https://cloud.r-project.org
 # by default, DON'T do --as-cran, as it stops us using environment variables
 # that conflict. Instead, state approximate CRAN check environment variables explicitly.
