@@ -24,10 +24,9 @@ cache:
   - packages
   - ccache
 
-addons:
-  apt:
-    packages:
-      - qpdf
+#addons:
+#  apt:
+#   packages:
 #      - valgrind # when I do do this (probably too slow for travis anyway, then just put the apt addon in the specific build)
       #- r-cran-tinytex
 
