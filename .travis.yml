@@ -25,6 +25,8 @@ addons:
   apt:
     packages:
       - valgrind
+      # avoid "WARNING 'qpdf' is needed for checks on size reduction of PDFs"
+      - qpdf
       #- r-cran-tinytex
 
 #r_packages:
