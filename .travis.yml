@@ -177,6 +177,10 @@ before_script:
  - set -o allexport; source tools/env/travis-global; set +o allexport;
  - set
  - echo "$LD_LIBRARY_PATH"
+ # qpdf debugging start
+ - which qpdf || true
+ - which gs || true
+# qpdf debugging end
  - if [ x"$ICD_TEST_SLOW" = x"true" ]; then
      Rscript -e 'source("tools/split-tests.R"); testthat_split();';
    fi
