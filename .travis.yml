@@ -179,8 +179,8 @@ before_script:
  - echo "$LD_LIBRARY_PATH"
  # qpdf debugging start
  - which qpdf || true
- - echo "_R_CHECK_DOC_SIZES_: $_R_CHECK_DOC_SIZES_"
- - echo "R_QPDF: $R_QPDF"
+ - echo "$_R_CHECK_DOC_SIZES_"
+ - echo "$R_QPDF"
 # qpdf debugging end
  - if [ x"$ICD_TEST_SLOW" = x"true" ]; then
      Rscript -e 'source("tools/split-tests.R"); testthat_split();';
