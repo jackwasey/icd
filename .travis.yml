@@ -24,9 +24,10 @@ cache:
   - packages
   - ccache
 
-#addons:
-#  apt:
-#    packages:
+addons:
+  apt:
+    packages:
+      - ghostscript
 #      - valgrind # when I do do this (probably too slow for travis anyway, then just put the apt addon in the specific build)
       #- r-cran-tinytex
 
@@ -179,8 +180,7 @@ before_script:
  - echo "$LD_LIBRARY_PATH"
  # qpdf debugging start
  - which qpdf || true
- - echo "$_R_CHECK_DOC_SIZES_"
- - echo "$R_QPDF"
+ - which gs || true
 # qpdf debugging end
  - if [ x"$ICD_TEST_SLOW" = x"true" ]; then
      Rscript -e 'source("tools/split-tests.R"); testthat_split();';
