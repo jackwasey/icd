@@ -12,7 +12,7 @@ install:
 
 # temporarily disable cache if error?
 cache:
-- C:\RLibrary
+#- C:\RLibrary
 
 # Adapt as necessary starting from here
 
