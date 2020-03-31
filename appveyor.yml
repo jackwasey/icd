@@ -45,12 +45,14 @@ environment:
   ICD_DATA_VERBOSE: true
   ICD_DATA_OFFLINE: true
   ICD_DATA_INTERACT: false
+  R_COMPILE_AND_INSTALL_PACKAGES: always
 # by default, don't set environment, to be more like CRAN?
 #  ICD_DATA_ABSENT_ACTION: 'message'
   matrix:
     - R_VERSION: release
       MINI_BENCH: "yes"
     - R_VERSION: devel
+      PKGTYPE: both
 
 matrix:
   fast_finish: false
