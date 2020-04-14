@@ -4,7 +4,9 @@
 \alias{icd_gem}
 \alias{icd_gem.default}
 \alias{icd_gem.icd9}
+\alias{icd_gem.icd9cm_pc}
 \alias{icd_gem.icd10}
+\alias{icd_gem.icd10cm_pc}
 \title{Create An ICD-9 / ICD-10 GEM for the Specified Codes}
 \usage{
 icd_gem(codes, condense = FALSE)
@@ -13,11 +15,20 @@ icd_gem(codes, condense = FALSE)
 
 \method{icd_gem}{icd9}(codes, condense = FALSE)
 
+\method{icd_gem}{icd9cm_pc}(codes, condense = FALSE)
+
 \method{icd_gem}{icd10}(codes, condense = FALSE)
+
+\method{icd_gem}{icd10cm_pc}(codes, condense = FALSE)
 }
 \arguments{
 \item{codes}{A character vector or subclass of a character vector providing
-codes that we wish to obtain the mappings for.}
+codes that we wish to obtain the mappings for.  In the event that you have
+procedure codes, it is necessary that \code{codes} is a subclass of either
+\code{icd9cm_pc}, or \code{icd10cm_pc}.  If \code{codes} represents
+diagnosis codes and does not have a subclass known to \code{icd}, then the
+function will try to guess whether they are ICD-9 or ICD-10 diagnosis
+codes.}
 
 \item{condense}{Either a value of \code{TRUE} or \code{FALSE} specifying
 whether entries should be condensed into a single row.}
@@ -28,19 +39,30 @@ A data frame that takes different forms depending on the value of
 }
 \description{
 Takes a set of ICD-9 or ICD-10 codes as inputs and returns a representation
-of the General Equivalence Mappings (GEMs) for the target code set.
-The returned mapping does not take the same structure as the GEMs, but
-instead takes an equivalent form that is intended to be more amenable for
-querying.
+of the General Equivalence Mappings (GEMs) for the target code set.  The
+input codes may be either diagnosis or procedure codes.  The returned mapping
+does not take the same structure as the GEMs, but instead takes an equivalent
+form that is intended to be more amenable for querying.
 }
 \section{Methods (by class)}{
 \itemize{
 \item \code{default}: Obtain a representation of the GEM, where the direction
 of the mapping is guessed in lieu of knowing the type of the input codes.
+**Warning:** that this function is only able to guess ICD-9 or ICD-10
+_diagnosis_ codes, and it will never guess procedure codes.  In the event
+that you do have procedure codes, then you will have to explicitly mark
+your data using one of `icd9cm_pc`, `as.icd9cm_pc`, `icd10cm_pc`, or
+`as.icd10cm_pc` prior to calling `icd_gem`.
 
 \item \code{icd9}: Obtain a representation of the ICD-9 to ICD-10 GEM.
 
+\item \code{icd9cm_pc}: Obtain a representation of the ICD-9 PC to ICD-10 PCS
+GEM.
+
 \item \code{icd10}: Obtain a representation of the ICD-10 to ICD-9 GEM.
+
+\item \code{icd10cm_pc}: Obtain a representation of the ICD-10 PCS to ICD-9 PC
+GEM.
 }}
 
 \section{Representing the GEMs (uncondensed representation)}{
@@ -75,14 +97,6 @@ of the GEMs see the documentation for the \code{\link{icd_gem_9_to_10}}.
   \item \code{source}: A vector of the same type as the input to
     \code{source} providing of ICD codes corresponding to one of the input
     codes.
-
-  \item \code{converted} (optional): A character vector providing the
-    converted short form representation of the codes when the input to
-    \code{codes} is in decimal form representation.  Since the raw GEMs are
-    provided in short form representation the input codes are converted to
-    short form internally, and for this reason the conversions are provided
-    so that they can be checked by the user to ensure that they have the
-    expected values.
 
   \item \code{scenario}: A character vector providing the scenario for each
     row.  In the case where the input source code either doesn't have a value
@@ -139,9 +153,9 @@ a data frame with columns named \code{source} and \code{mapping}.
 
   \item \code{mapping}: A data frame providing with the number of rows equal
     to the number of scenarios for the corresponding source code, and the
-    columns \code{scenario}, \code{type}, \code{approx}, and \code{codes} and
-    optionally \code{converted}.  These columns have the same meaning as the
-    corresponding columns in the uncondensed representation of the GEMs.
+    columns \code{scenario}, \code{type}, \code{approx}, and \code{codes}.
+    These columns have the same meaning as the corresponding columns in the
+    uncondensed representation of the GEMs.
 
 }
 }

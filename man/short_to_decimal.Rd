@@ -4,6 +4,7 @@
 \alias{short_to_decimal}
 \alias{short_to_decimal.default}
 \alias{short_to_decimal.icd9}
+\alias{short_to_decimal.icd9cm_pc}
 \alias{short_to_decimal.icd10}
 \alias{short_to_decimal.icd10cm}
 \title{Convert ICD codes from short to decimal forms}
@@ -13,6 +14,8 @@ short_to_decimal(x)
 \method{short_to_decimal}{default}(x)
 
 \method{short_to_decimal}{icd9}(x)
+
+\method{short_to_decimal}{icd9cm_pc}(x)
 
 \method{short_to_decimal}{icd10}(x)
 
@@ -32,6 +35,9 @@ to decimal format
 \item \code{icd9}: convert ICD-9 codes from short to decimal
 format
 
+\item \code{icd9cm_pc}: convert ICD-9 codes from short to decimal
+format
+
 \item \code{icd10}: convert ICD-10 codes from short to decimal
 format
 
@@ -40,10 +46,13 @@ format
 }}
 
 \seealso{
-Other ICD data conversion: \code{\link{comorbid_df_to_mat}},
-  \code{\link{comorbid_mat_to_df}}, \code{\link{convert}},
-  \code{\link{decimal_to_short}},
-  \code{\link{long_to_wide}}, \code{\link{wide_to_long}}
+Other ICD data conversion: 
+\code{\link{comorbid_df_to_mat}()},
+\code{\link{comorbid_mat_to_df}()},
+\code{\link{convert}},
+\code{\link{decimal_to_short}()},
+\code{\link{long_to_wide}()},
+\code{\link{wide_to_long}()}
 }
 \concept{ICD data conversion}
 \keyword{internal}

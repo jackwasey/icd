@@ -1,10 +1,10 @@
 #' Create An ICD-9 / ICD-10 GEM for the Specified Codes
 #'
 #' Takes a set of ICD-9 or ICD-10 codes as inputs and returns a representation
-#' of the General Equivalence Mappings (GEMs) for the target code set.
-#' The returned mapping does not take the same structure as the GEMs, but
-#' instead takes an equivalent form that is intended to be more amenable for
-#' querying.
+#' of the General Equivalence Mappings (GEMs) for the target code set.  The
+#' input codes may be either diagnosis or procedure codes.  The returned mapping
+#' does not take the same structure as the GEMs, but instead takes an equivalent
+#' form that is intended to be more amenable for querying.
 #'
 #' @section Representing the GEMs (uncondensed representation):
 #'
@@ -37,14 +37,6 @@
 #'   \item \code{source}: A vector of the same type as the input to
 #'     \code{source} providing of ICD codes corresponding to one of the input
 #'     codes.
-#'
-#'   \item \code{converted} (optional): A character vector providing the
-#'     converted short form representation of the codes when the input to
-#'     \code{codes} is in decimal form representation.  Since the raw GEMs are
-#'     provided in short form representation the input codes are converted to
-#'     short form internally, and for this reason the conversions are provided
-#'     so that they can be checked by the user to ensure that they have the
-#'     expected values.
 #'
 #'   \item \code{scenario}: A character vector providing the scenario for each
 #'     row.  In the case where the input source code either doesn't have a value
@@ -99,14 +91,19 @@
 #'
 #'   \item \code{mapping}: A data frame providing with the number of rows equal
 #'     to the number of scenarios for the corresponding source code, and the
-#'     columns \code{scenario}, \code{type}, \code{approx}, and \code{codes} and
-#'     optionally \code{converted}.  These columns have the same meaning as the
-#'     corresponding columns in the uncondensed representation of the GEMs.
+#'     columns \code{scenario}, \code{type}, \code{approx}, and \code{codes}.
+#'     These columns have the same meaning as the corresponding columns in the
+#'     uncondensed representation of the GEMs.
 #'
 #' }
 #'
 #' @param codes A character vector or subclass of a character vector providing
-#'   codes that we wish to obtain the mappings for.
+#'   codes that we wish to obtain the mappings for.  In the event that you have
+#'   procedure codes, it is necessary that \code{codes} is a subclass of either
+#'   \code{icd9cm_pc}, or \code{icd10cm_pc}.  If \code{codes} represents
+#'   diagnosis codes and does not have a subclass known to \code{icd}, then the
+#'   function will try to guess whether they are ICD-9 or ICD-10 diagnosis
+#'   codes.
 #' @param condense Either a value of \code{TRUE} or \code{FALSE} specifying
 #'   whether entries should be condensed into a single row.
 #' @return A data frame that takes different forms depending on the value of
@@ -137,6 +134,11 @@ icd_gem <- function(codes, condense = FALSE) {
 
 #' @describeIn icd_gem Obtain a representation of the GEM, where the direction
 #'   of the mapping is guessed in lieu of knowing the type of the input codes.
+#'   **Warning:** that this function is only able to guess ICD-9 or ICD-10
+#'   _diagnosis_ codes, and it will never guess procedure codes.  In the event
+#'   that you do have procedure codes, then you will have to explicitly mark
+#'   your data using one of `icd9cm_pc`, `as.icd9cm_pc`, `icd10cm_pc`, or
+#'   `as.icd10cm_pc` prior to calling `icd_gem`.
 #' @export
 icd_gem.default <- function(codes, condense = FALSE) {
   switch(
@@ -155,6 +157,14 @@ icd_gem.icd9 <- function(codes, condense = FALSE) {
 }
 
 
+#' @describeIn icd_gem Obtain a representation of the ICD-9 PC to ICD-10 PCS
+#'   GEM.
+#' @export
+icd_gem.icd9cm_pc <- function(codes, condense = FALSE) {
+  icd_gem_impl(codes, icd::icd_gem_9pc_to_10pc, condense)
+}
+
+
 #' @describeIn icd_gem Obtain a representation of the ICD-10 to ICD-9 GEM.
 #' @export
 icd_gem.icd10 <- function(codes, condense = FALSE) {
@@ -162,7 +172,15 @@ icd_gem.icd10 <- function(codes, condense = FALSE) {
 }
 
 
-#' the Implementation of the ICD GEM Routines
+#' @describeIn icd_gem Obtain a representation of the ICD-10 PCS to ICD-9 PC
+#'   GEM.
+#' @export
+icd_gem.icd10cm_pc <- function(codes, condense = FALSE) {
+  icd_gem_impl(codes, icd::icd_gem_10pc_to_9pc, condense)
+}
+
+
+#' The Implementation of the ICD GEM Routines
 #'
 #' See the documentation for \code{icd_gem} for a description of this function.
 #'
@@ -172,6 +190,16 @@ icd_gem.icd10 <- function(codes, condense = FALSE) {
 #'   \code{icd_gem}.
 #' @noRd
 icd_gem_impl <- function(codes, icd_gem, condense = FALSE) {
+
+  # this can be removed if `[.icd9cm_pc` and `[.icd10cm_pc` methods are
+  # implemented
+  make_recover_source_type_info <- function(codes) {
+    function(out_df) {
+      attr(out_df$source, "icd_short_diag") <- attr(codes, "icd_short_diag")
+      class(out_df$source) <- class(codes)
+      out_df
+    }
+  }
 
   # return TRUE if `codes` is in short form, or FALSE otherwise
   check_if_short <- function(codes) {
@@ -195,19 +223,22 @@ icd_gem_impl <- function(codes, icd_gem, condense = FALSE) {
     stop("'codes' must either be or inherit from a character vector")
   }
   if (! is.data.frame(icd_gem)) {
-    stop("'condense' must be a data frame")
+    stop("'icd_gem' must be a data frame")
   }
   if (! check_if_bool(condense)) {
     stop("'condense' must either be TRUE or FALSE")
   }
 
+  # create a function to recover the source column type info
+  recover_source_type_info <- make_recover_source_type_info(codes)
+
   # create the ICD code mapping based on whether we've been given short form or
   # decimal form ICD codes
   if (check_if_short(codes)) {
-    icd_map_df <- icd_map_impl_create_icd_map_from_short(codes, icd_gem)
+    icd_map_df <- icd_map_impl_create_map(codes, icd_gem, "source_short", "codes_short")
   }
   else {
-    icd_map_df <- icd_map_impl_create_icd_map_from_decimal(codes, icd_gem)
+    icd_map_df <- icd_map_impl_create_map(codes, icd_gem, "source_decimal", "codes_decimal")
   }
 
   # clean up rows for codes that couldn't be found in the GEM, and conditionally
@@ -218,9 +249,9 @@ icd_gem_impl <- function(codes, icd_gem, condense = FALSE) {
   # a single row
   icd_map_df <- icd_map_impl_modify_within_entries(icd_map_df, condense)
 
-  # normalize the row names
+  # normalize the row names and recover the source type information
   row.names(icd_map_df) <- seq_len(nrow(icd_map_df))
-  icd_map_df
+  recover_source_type_info(icd_map_df)
 }
 
 
@@ -232,48 +263,29 @@ icd_gem_impl <- function(codes, icd_gem, condense = FALSE) {
 #'   codes that we wish to obtain the mappings for.
 #' @param icd_gem A data frame providing a GEM with at least a column named
 #'   \code{source}.
-#' @return A data frame with the same columns as \code{icd_gem,} and rows that have a
-#'   value for \code{source} that is in \code{codes}.
+#' @param source_nm A string providing the name of the column providing the
+#'   source codes.
+#' @param codes_nm A string providing the name of the column providing the
+#'   output codes.
+#' @return A data frame with the same columns as \code{icd_gem} and rows that
+#'   have a value for \code{source} that is in \code{codes}.
 #' @noRd
-icd_map_impl_create_icd_map_from_short <- function(codes, icd_gem) {
-  source_df <- data.frame (
-    source           = codes,
-    stringsAsFactors = FALSE
-  )
-  merge(
-    x     = source_df,
-    y     = icd_gem,
-    all.x = TRUE,
-    by    = "source",
-    sort  = FALSE
-  )
-}
-
-
-#' @rdname icd_map_impl_create_icd_map_from_short
-#' @noRd
-icd_map_impl_create_icd_map_from_decimal <- function(codes, icd_gem) {
-
-  reorder_cols <- function(df) {
-    assert_nm <- c("converted", "source", "scenario", "type", "approx", "codes")
-    stopifnot(identical(names(df), assert_nm))
-    df[, c("source", "converted", "scenario", "type", "approx", "codes")]
-  }
-
-  source_df <- data.frame (
-    source           = codes,
-    converted        = decimal_to_short(codes),
-    stringsAsFactors = FALSE
+icd_map_impl_create_map <- function(codes, icd_gem, source_nm, codes_nm) {
+  source_df <- setNames(
+    object = data.frame(codes, stringsAsFactors = FALSE),
+    nm     = source_nm
   )
   out <- merge(
     x     = source_df,
     y     = icd_gem,
     all.x = TRUE,
-    by.x  = "converted",
-    by.y  = "source",
+    by    = source_nm,
     sort  = FALSE
   )
-  reorder_cols(out)
+  setNames(
+    object = out[, c(source_nm, "scenario", "type", "approx", codes_nm)],
+    nm     = c("source", "scenario", "type", "approx", "codes")
+  )
 }
 
 
