@@ -38,11 +38,13 @@
 \alias{names_pccc}
 \alias{names_pccc_abbrev}
 \title{Comorbidity names}
-\format{list, with character/numeric code. 'Hypertension,
+\format{
+list, with character/numeric code. 'Hypertension,
   uncomplicated' and 'Hypertension, complicated' are labelled '6a'
   and '6b'. Diabetes, cancer, and metastasis are counted
   independently, as in the original paper, giving the original 30
-  groups. "01" to "30"}
+  groups. "01" to "30"
+}
 \description{
 These lists provide correctly sorted names of the comorbidities and
 their particular permutations in both full and abbreviated forms.

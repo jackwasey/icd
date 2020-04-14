@@ -77,8 +77,9 @@ generate_random_unordered_pts <- function(num_patients = 50000,
   )
 }
 
-generate_random_short_ahrq_icd9 <- function(n = 50000)
+generate_random_short_ahrq_icd9 <- function(n = 50000) {
   sample(unname(unlist(icd::icd9_map_ahrq)), size = n, replace = TRUE)
+}
 
 #' generate random strings
 #'
@@ -86,8 +87,9 @@ generate_random_short_ahrq_icd9 <- function(n = 50000)
 #' @keywords internal debugging datagen
 #' @noRd
 random_string <- function(n, max_chars = 4) {
-  rand_ch <- function()
+  rand_ch <- function() {
     sample(c(LETTERS, letters, 0:9, rep("", times = 50)), replace = TRUE, size = n)
+  }
 
   v <- vapply(1:max_chars,
     FUN = function(x) rand_ch(),
@@ -101,15 +103,17 @@ random_string <- function(n, max_chars = 4) {
 #'   expression in \code{microbenchmark::microbenchmark}
 #' @keywords internal
 #' @noRd
-all_identical <- function(x)
+all_identical <- function(x) {
   all(vapply(x[-1], function(y) identical(x[[1]], y), FUN.VALUE = logical(1)))
+}
 
-get_one_of_each <- function()
+get_one_of_each <- function() {
   c(
     "002.3", "140.25", "245", "285", "290.01", "389.00",
     "390.00", "518", "525", "581", "631", "700", "720", "759.99",
     "765", "780.95", "800", "V02.34", "E900.4"
   )
+}
 
 #' Set up a test environment which also has the internal functions
 #' @keywords internal debugging data

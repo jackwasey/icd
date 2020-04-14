@@ -5,7 +5,9 @@
 \alias{icd9_map_quan_elix}
 \alias{icd10_map_quan_elix}
 \title{Quan adaptation of Elixhauser comorbidities}
-\format{list of character vectors, each named by co-morbidity}
+\format{
+list of character vectors, each named by co-morbidity
+}
 \description{
 These were transcribed directly from the Quan paper referenced.
 }
@@ -23,19 +25,25 @@ Quan, Hude, Vijaya Sundararajan, Patricia Halfon, Andrew
   \code{\link{icd9_comorbid_quan_elix}}
   \code{\link{icd10_comorbid_quan_elix}}
 
-Other comorbidity maps: \code{\link{icd10_map_ahrq_pcs}},
-  \code{\link{icd9_map_ahrq}}, \code{\link{icd9_map_elix}},
-  \code{\link{icd9_map_hcc}}, \code{\link{icd9_map_pccc}},
-  \code{\link{icd9_map_quan_deyo}},
-  \code{\link{icd9_map_single_ccs}}
+Other comorbidity maps: 
+\code{\link{icd10_map_ahrq_pcs}},
+\code{\link{icd9_map_ahrq}},
+\code{\link{icd9_map_elix}},
+\code{\link{icd9_map_hcc}},
+\code{\link{icd9_map_pccc}},
+\code{\link{icd9_map_quan_deyo}},
+\code{\link{icd9_map_single_ccs}}
 
-Other comorbidities: \code{\link{comorbid_hcc}},
-  \code{\link{comorbid_pccc_dx}}, \code{\link{comorbid}},
-  \code{\link{icd10_map_ahrq_pcs}},
-  \code{\link{icd9_map_ahrq}}, \code{\link{icd9_map_elix}},
-  \code{\link{icd9_map_hcc}}, \code{\link{icd9_map_pccc}},
-  \code{\link{icd9_map_quan_deyo}},
-  \code{\link{icd9_map_single_ccs}}
+Other comorbidities: 
+\code{\link{comorbid_hcc}()},
+\code{\link{comorbid}()},
+\code{\link{icd10_map_ahrq_pcs}},
+\code{\link{icd9_map_ahrq}},
+\code{\link{icd9_map_elix}},
+\code{\link{icd9_map_hcc}},
+\code{\link{icd9_map_pccc}},
+\code{\link{icd9_map_quan_deyo}},
+\code{\link{icd9_map_single_ccs}}
 }
 \concept{comorbidities}
 \concept{comorbidity maps}

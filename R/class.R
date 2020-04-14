@@ -59,16 +59,18 @@ icd_system_classes <- c(
 #' @param do_stop logical, if \code{TRUE}, execution will stop with an error
 #' @keywords internal
 #' @noRd
-icd_conflicts <- function(x, do_stop = FALSE)
+icd_conflicts <- function(x, do_stop = FALSE) {
   UseMethod("icd_conflicts")
+}
 
-stop_conflict <- function(x)
+stop_conflict <- function(x) {
   stop("Cannot set requested class as the current data already has the ",
     "following incompatible classes: ", paste(class(x), sep = ", "),
     ". If you really wish to do this, use unclass, then set the desired ",
     "icd class",
     call. = FALSE
   )
+}
 
 #' @export
 icd_conflicts.icd9 <- function(x, do_stop = FALSE) {
@@ -604,14 +606,16 @@ as.icd_wide_data <- function(x, warn = TRUE) {
 #'   \code{icd_long_data} class.
 #' @family ICD data types
 #' @export
-icd_long_data <- function(..., warn = TRUE)
+icd_long_data <- function(..., warn = TRUE) {
   as.icd_long_data(data.frame(...), warn = warn)
+}
 
 #' @describeIn wide_vs_long Construct a \code{data.frame}, adding the
 #'   \code{icd_wide_data} class.
 #' @export
-icd_wide_data <- function(x, ..., warn = TRUE)
+icd_wide_data <- function(x, ..., warn = TRUE) {
   as.icd_wide_data(data.frame(...), warn = warn)
+}
 
 #' @details Using \code{attributes} instead of \code{class} is a better fit for
 #'   the data. It simplifies S3 dispatch, and appears to be very fast to get or
@@ -900,12 +904,13 @@ is.comorbidity_map <- function(x) inherits(x, "comorbidity_map")
 #'   codes.
 #' @template dotdotdot
 #' @export
-print.icd9 <- function(x, verbose = FALSE, ...)
+print.icd9 <- function(x, verbose = FALSE, ...) {
   print_codes(
     x,
     ifelse(is.icd9cm(x), "ICD-9-CM", "ICD-9"),
     ...
   )
+}
 
 #' @rdname print.icd9
 #' @examples

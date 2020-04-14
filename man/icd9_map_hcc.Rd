@@ -7,8 +7,10 @@
 \alias{icd10_map_cc}
 \alias{icd_map_cc_hcc}
 \title{Medicare Hierarchical Condition Categories}
-\format{\code{dataframe} with 3 columns (\code{icd_code}, \code{cc},
-  and \code{year})}
+\format{
+\code{dataframe} with 3 columns (\code{icd_code}, \code{cc},
+  and \code{year})
+}
 \description{
 Medicare HCC model was developed to use current year diagnoses and
 demographics predict current year healthcare expenditure. This
@@ -36,21 +38,25 @@ Pope, Gregory C., et al. "Diagnostic cost group
 \code{\link{comorbid_hcc}} \code{\link{icd9_comorbid_hcc}}
   \code{\link{icd10_comorbid_hcc}}
 
-Other comorbidity maps: \code{\link{icd10_map_ahrq_pcs}},
-  \code{\link{icd9_map_ahrq}}, \code{\link{icd9_map_elix}},
-  \code{\link{icd9_map_pccc}},
-  \code{\link{icd9_map_quan_deyo}},
-  \code{\link{icd9_map_quan_elix}},
-  \code{\link{icd9_map_single_ccs}}
+Other comorbidity maps: 
+\code{\link{icd10_map_ahrq_pcs}},
+\code{\link{icd9_map_ahrq}},
+\code{\link{icd9_map_elix}},
+\code{\link{icd9_map_pccc}},
+\code{\link{icd9_map_quan_deyo}},
+\code{\link{icd9_map_quan_elix}},
+\code{\link{icd9_map_single_ccs}}
 
-Other comorbidities: \code{\link{comorbid_hcc}},
-  \code{\link{comorbid_pccc_dx}}, \code{\link{comorbid}},
-  \code{\link{icd10_map_ahrq_pcs}},
-  \code{\link{icd9_map_ahrq}}, \code{\link{icd9_map_elix}},
-  \code{\link{icd9_map_pccc}},
-  \code{\link{icd9_map_quan_deyo}},
-  \code{\link{icd9_map_quan_elix}},
-  \code{\link{icd9_map_single_ccs}}
+Other comorbidities: 
+\code{\link{comorbid_hcc}()},
+\code{\link{comorbid}()},
+\code{\link{icd10_map_ahrq_pcs}},
+\code{\link{icd9_map_ahrq}},
+\code{\link{icd9_map_elix}},
+\code{\link{icd9_map_pccc}},
+\code{\link{icd9_map_quan_deyo}},
+\code{\link{icd9_map_quan_elix}},
+\code{\link{icd9_map_single_ccs}}
 }
 \concept{comorbidities}
 \concept{comorbidity maps}

@@ -1,12 +1,11 @@
-Fixed link in vignette as requested by Dr. Ligges. Submitting soon after previous due to important bug fix for using international ICD data on Windows platforms.
+Removed deprecated CPP flag as requested. Fixed new documentation-related warnings from CRAN. Fixed 4.0-dev compatibility.
 
 # Test environments
 
-  * Ubuntu 18.10 R 3.6.0, clang 8.0, gcc 8.3, 
+  * Ubuntu 18.10 R 3.6.3, clang 9, gcc 9
   * Travis CI: MacOS, Ubuntu 16.04, 18.04 (Travis) R-devel, R-release, gcc, clang
   * Windows Server 2012 R2 x64 (Appveyor), R devel 32 and 64 bit
-  * MacOS Mojave, R 3.6.0 brew clang 8.0, GCC-9.0.1-HEAD
-  * R-hub (sanitizer, valgrind)
+  * MacOS Mojave 10.14.16, R 3.6.3, brew clang 9
 
 # R CMD check results
 

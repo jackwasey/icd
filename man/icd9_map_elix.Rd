@@ -5,7 +5,9 @@
 \alias{icd9_map_elix}
 \alias{icd10_map_elix}
 \title{Elixhauser comorbidities}
-\format{list of character vectors, each named by co-morbidity}
+\format{
+list of character vectors, each named by co-morbidity
+}
 \description{
 This data comprises the original mapping of Elixhauser's ICD-9-CM to
 30 comorbidities. According to Sharabiani, this mapping provides the
@@ -29,21 +31,25 @@ Sharabiani, Mansour T. A., Paul Aylin, and Alex Bottle.
 \code{\link{comorbid_elix}} \code{\link{icd9_comorbid_elix}}
   \code{\link{icd10_comorbid_elix}}
 
-Other comorbidity maps: \code{\link{icd10_map_ahrq_pcs}},
-  \code{\link{icd9_map_ahrq}}, \code{\link{icd9_map_hcc}},
-  \code{\link{icd9_map_pccc}},
-  \code{\link{icd9_map_quan_deyo}},
-  \code{\link{icd9_map_quan_elix}},
-  \code{\link{icd9_map_single_ccs}}
+Other comorbidity maps: 
+\code{\link{icd10_map_ahrq_pcs}},
+\code{\link{icd9_map_ahrq}},
+\code{\link{icd9_map_hcc}},
+\code{\link{icd9_map_pccc}},
+\code{\link{icd9_map_quan_deyo}},
+\code{\link{icd9_map_quan_elix}},
+\code{\link{icd9_map_single_ccs}}
 
-Other comorbidities: \code{\link{comorbid_hcc}},
-  \code{\link{comorbid_pccc_dx}}, \code{\link{comorbid}},
-  \code{\link{icd10_map_ahrq_pcs}},
-  \code{\link{icd9_map_ahrq}}, \code{\link{icd9_map_hcc}},
-  \code{\link{icd9_map_pccc}},
-  \code{\link{icd9_map_quan_deyo}},
-  \code{\link{icd9_map_quan_elix}},
-  \code{\link{icd9_map_single_ccs}}
+Other comorbidities: 
+\code{\link{comorbid_hcc}()},
+\code{\link{comorbid}()},
+\code{\link{icd10_map_ahrq_pcs}},
+\code{\link{icd9_map_ahrq}},
+\code{\link{icd9_map_hcc}},
+\code{\link{icd9_map_pccc}},
+\code{\link{icd9_map_quan_deyo}},
+\code{\link{icd9_map_quan_elix}},
+\code{\link{icd9_map_single_ccs}}
 }
 \concept{comorbidities}
 \concept{comorbidity maps}

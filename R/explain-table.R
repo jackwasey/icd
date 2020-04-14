@@ -83,13 +83,15 @@ explain_table.icd10 <- function(...) {
 #' Does not convert between decimal and short codes. Calling
 #' \code{short_to_decimal} should convert and set the attribute.
 #' @keywords internal
-shortcode_icd9 <- function(x, short_code = guess_short(x))
+shortcode_icd9 <- function(x, short_code = guess_short(x)) {
   if (!short_code) decimal_to_short.icd9(x) else x
+}
 
 #' @rdname shortcode_icd9
 #' @keywords internal
-shortcode_icd10 <- function(x, short_code = guess_short(x))
+shortcode_icd10 <- function(x, short_code = guess_short(x)) {
   if (!short_code) decimal_to_short.icd10(x) else x
+}
 
 #' generate table of ICD code explanations
 #'

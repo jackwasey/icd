@@ -3,6 +3,10 @@
 #' This is the function which prepares the input data for the categorization,
 #' and forms the core of the package, along with the C++ matrix code. This is
 #' pure data manipulation and generalizable beyond medical data.
+#'
+#' The roadmap for \CRANpkg{icd} includes the optimized categorization component
+#' being packaged independently, and the comorbidity package taking on the
+#' front-end for doing ICD-code-based comorbidities. This is in discussion.
 #' @param x Data frame containing a column for an 'id' and a column for a code,
 #'   e.g., an ICD-10 code.
 #' @template mapping
@@ -29,9 +33,8 @@
 #' u <- uranium_pathology
 #' m <- icd10_map_ahrq
 #' u$icd10 <- decimal_to_short(u$icd10)
-#' j <- categorize_simple(u, m, id_name = "case", code_name = "icd10")
+#' j <- icd:::categorize_simple(u, m, id_name = "case", code_name = "icd10")
 #' @keywords internal
-#' @noRd
 categorize_simple <- function(x,
                               map,
                               id_name,

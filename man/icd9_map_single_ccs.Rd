@@ -6,7 +6,9 @@
 \alias{icd9_map_multi_ccs}
 \alias{icd10_map_ccs}
 \title{Clinical Classifications Software (CCS) for ICD9/10-CM}
-\format{list of character vectors, each numbered by co-morbidity}
+\format{
+list of character vectors, each numbered by co-morbidity
+}
 \description{
 The Clinical Classifications Software (CCS) for ICD-9/10-CM is one in
 a family of databases and software tools developed as part of the
@@ -32,19 +34,25 @@ the mapping. More information on the ICD10 code set can be found at
 \code{\link{comorbid_ccs}} \code{\link{icd9_comorbid_ccs}}
   \code{\link{icd10_comorbid_ccs}}
 
-Other comorbidity maps: \code{\link{icd10_map_ahrq_pcs}},
-  \code{\link{icd9_map_ahrq}}, \code{\link{icd9_map_elix}},
-  \code{\link{icd9_map_hcc}}, \code{\link{icd9_map_pccc}},
-  \code{\link{icd9_map_quan_deyo}},
-  \code{\link{icd9_map_quan_elix}}
+Other comorbidity maps: 
+\code{\link{icd10_map_ahrq_pcs}},
+\code{\link{icd9_map_ahrq}},
+\code{\link{icd9_map_elix}},
+\code{\link{icd9_map_hcc}},
+\code{\link{icd9_map_pccc}},
+\code{\link{icd9_map_quan_deyo}},
+\code{\link{icd9_map_quan_elix}}
 
-Other comorbidities: \code{\link{comorbid_hcc}},
-  \code{\link{comorbid_pccc_dx}}, \code{\link{comorbid}},
-  \code{\link{icd10_map_ahrq_pcs}},
-  \code{\link{icd9_map_ahrq}}, \code{\link{icd9_map_elix}},
-  \code{\link{icd9_map_hcc}}, \code{\link{icd9_map_pccc}},
-  \code{\link{icd9_map_quan_deyo}},
-  \code{\link{icd9_map_quan_elix}}
+Other comorbidities: 
+\code{\link{comorbid_hcc}()},
+\code{\link{comorbid}()},
+\code{\link{icd10_map_ahrq_pcs}},
+\code{\link{icd9_map_ahrq}},
+\code{\link{icd9_map_elix}},
+\code{\link{icd9_map_hcc}},
+\code{\link{icd9_map_pccc}},
+\code{\link{icd9_map_quan_deyo}},
+\code{\link{icd9_map_quan_elix}}
 }
 \concept{comorbidities}
 \concept{comorbidity maps}

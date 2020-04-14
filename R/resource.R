@@ -136,8 +136,8 @@
 .make_getter <- function(var_name) {
   force(var_name)
   getter_fun <- function(alt = NULL,
-                           must_work = TRUE,
-                           msg = paste("Unable to find", var_name)) {
+                         must_work = TRUE,
+                         msg = paste("Unable to find", var_name)) {
     verbose <- .verbose()
     .msg("Starting getter for: ", var_name)
     stopifnot(is.character(var_name))
@@ -175,8 +175,8 @@
   parse_fun_name <- .get_parser_name(var_name)
   # Fetcher function (this is the get_ exported in NAMESPACE for the user)
   fetcher_fun <- function(alt = NULL,
-                            must_work = is.null(alt),
-                            msg = paste("Unable to find", var_name)) {
+                          must_work = is.null(alt),
+                          msg = paste("Unable to find", var_name)) {
     verbose <- .verbose()
     .msg("Starting fetcher for ", var_name)
     if (.exists_anywhere(var_name)) {

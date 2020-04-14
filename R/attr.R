@@ -29,8 +29,9 @@
 #' codes <- as.decimal_diag(codes)
 #' codes
 #' @export
-as.decimal_diag <- function(x, value = TRUE)
+as.decimal_diag <- function(x, value = TRUE) {
   as.icd_decimal_diag(x, value)
+}
 
 #' @rdname as.decimal_diag
 #' @export
@@ -42,8 +43,9 @@ as.icd_decimal_diag <- function(x, value = TRUE) {
 
 #' @rdname as.decimal_diag
 #' @export
-as.short_diag <- function(x, value = TRUE)
+as.short_diag <- function(x, value = TRUE) {
   as.icd_short_diag(x, value)
+}
 
 #' @rdname as.decimal_diag
 #' @export
@@ -55,8 +57,9 @@ as.icd_short_diag <- function(x, value = TRUE) {
 
 #' @rdname as.decimal_diag
 #' @export
-is.decimal_diag <- function(x)
+is.decimal_diag <- function(x) {
   is.icd_decimal_diag(x)
+}
 
 #' @rdname as.decimal_diag
 #' @export
@@ -68,8 +71,9 @@ is.icd_decimal_diag <- function(x) {
 
 #' @rdname as.decimal_diag
 #' @export
-is.short_diag <- function(x)
+is.short_diag <- function(x) {
   is.icd_short_diag(x)
+}
 
 #' @rdname as.decimal_diag
 #' @export
