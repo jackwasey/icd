@@ -293,6 +293,14 @@ short_to_decimal.icd9 <- function(x) {
   icd9(as.decimal_diag(icd9_short_to_decimal_rcpp(x)))
 }
 
+#' @describeIn short_to_decimal convert ICD-9 codes from short to decimal
+#'   format
+#' @export
+#' @keywords internal manip
+short_to_decimal.icd9cm_pc <- function(x) {
+  icd10cm_pc(as.decimal_diag(paste0(substr(x, 1L, 2L), ".", substr(x, 3L, 4L))))
+}
+
 #' @describeIn short_to_decimal convert ICD-10 codes from short to decimal
 #'   format
 #' @export

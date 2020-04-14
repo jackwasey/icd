@@ -595,7 +595,9 @@ NULL
 #'
 #' \itemize{
 #'
-#'   \item \code{source}: The source ICD codes.
+#'   \item \code{source_short}: The source ICD codes in short form.
+#'
+#'   \item \code{source_decimal}: The source ICD codes in decimal form.
 #'
 #'   \item \code{scenario}: The scenario.
 #'
@@ -604,32 +606,36 @@ NULL
 #'   \item \code{approx}: Whether the mapping is an exact or an approximate
 #'     mapping.
 #'
-#'   \item \code{codes}: A list with 0 or more code sets with the semantics that
-#'     there must be at least one code from the target set in every one of the
-#'     code sets for the scenario to be satisfied.
+#'   \item \code{codes_short}: A list with 0 or more code sets in short form
+#'     with the semantics that there must be at least one code from the target
+#'     set in every one of the code sets for the scenario to be satisfied.
+#'
+#'   \item \code{codes_decimal}: A list with the same form as
+#'   \code{codes_short}, but in decimal rather than short form.
 #'
 #' }
 #'
 #' @section Example ICD-9 to ICD-10 mapping:
 #'
 #' For a concrete example, suppose that we want to map ICD-9 codes to ICD-10
-#' codes.  Further suppose that for a given row that the value of \code{source}
-#' (i.e. the ICD-9 code) is \code{"24951"}, the value of \code{scenario} is
-#' \code{"0"}, and the contents of the value of \code{codes} is a single vector
-#' \code{c("E0839", "E0939")}.  Then one of the ICD-10 codes in our dataset must
-#' have a value of \code{E0839} or \code{E0939} for our data to have an event
-#' corresponding to the ICD-9 code 24951 by way of scenario 0.
+#' codes.  Further suppose that for a given row that the value of
+#' \code{source_short} (i.e. the short form ICD-9 code) is \code{"24951"}, the
+#' value of \code{scenario} is \code{"0"}, and the contents of the value of
+#' \code{codes_short} is a single vector \code{c("E0839", "E0939")}.  Then one
+#' of the ICD-10 codes in our dataset must have a value of \code{E0839} or
+#' \code{E0939} for our data to have an event corresponding to the ICD-9 code
+#' 24951 by way of scenario 0.
 #'
 #' Continuing this example, as it happens there are two scenarios for source
 #' ICD-9 code 24951, and thus there is another row of the data, and for which
-#' the value of \code{source} is \code{"24951"}, the value of \code{scenario} is
-#' \code{"1"}, and the contents of the value of \code{codes} is the vectors
-#' \code{c("E08311", "E08319", "E0836", "E09311", "E09319", "E0936")} and
-#' \code{"E0865"}.  Then one of the ICD-10 codes in our dataset must have a
-#' value of one of \code{c("E08311", "E08319", "E0836", "E09311", "E09319",
-#' "E0936")}, \emph{and} another of the ICD-10 codes in our dataset must have
-#' value of \code{E0939} for our data to have an event corresponding to the
-#' ICD-9 code 24951 by way of scenario 1.
+#' the value of \code{source_short} is \code{"24951"}, the value of
+#' \code{scenario} is \code{"1"}, and the contents of the value of
+#' \code{codes_short} is the vectors \code{c("E08311", "E08319", "E0836",
+#' "E09311", "E09319", "E0936")} and \code{"E0865"}.  Then one of the ICD-10
+#' codes in our dataset must have a value of one of \code{c("E08311", "E08319",
+#' "E0836", "E09311", "E09319", "E0936")}, \emph{and} another of the ICD-10
+#' codes in our dataset must have value of \code{E0939} for our data to have an
+#' event corresponding to the ICD-9 code 24951 by way of scenario 1.
 #'
 #' Since these are the only two scenarios corresponding to ICD-9 code 24951, we
 #' must have ICD-10 codes in our data that satisfy either scenario 0 or scenario
