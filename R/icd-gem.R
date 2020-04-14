@@ -309,7 +309,7 @@ icd_map_impl_modify_unmatched_rows <- function(icd_map_df) {
   icd_map_df$scenario[not_in_gem_idx] <- "0"
   icd_map_df$type[not_in_gem_idx] <- "not in GEM"
   icd_map_df$approx[not_in_gem_idx] <- TRUE
-  icd_map_df$codes[[not_in_gem_idx]] <- list()
+  icd_map_df$codes[not_in_gem_idx] <- list(list())
   icd_map_df
 }
 
