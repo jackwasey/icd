@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-set -xu
+set -u
 declare -i ok=0
 declare -i wcres=0
 

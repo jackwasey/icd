@@ -1,4 +1,8 @@
+# vim: set shiftwidth=2 tabstop=2 softtabstop=-1 expandtab:
 # DO NOT CHANGE the "init" and "install" sections below
+#
+# https://github.com/krlmlr/r-appveyor
+# for many environment variables to configure
 
 # Download script file from GitHub
 init:
@@ -10,55 +14,59 @@ init:
 install:
   ps: Bootstrap
 
-# temporarily disable cache if error?
 cache:
-- C:\RLibrary
+  - C:\RLibrary
 
-# Adapt as necessary starting from here
+before_build:
+  - ls -aR
+  - bash tools/dump-env.sh
+  - rm .Rinstignore  # do install everything for testing
+  - sed -i'' -e '/.*[Dd]ata.*/d' .Rbuildignore # do include data for testing, some data not in github though
+
+environment:
+  # env vars that may need to be set, at least temporarily, from time to time
+  # see https://github.com/krlmlr/r-appveyor#readme for details
+  # USE_RTOOLS: true
+  NOT_CRAN: true
+  WARNINGS_ARE_ERRORS: 0
+  _R_CHECK_EXIT_ON_FIRST_ERROR_: true
+  USE_RTOOLS: true
+  R_BUILD_ARGS: "--no-manual --no-build-vignettes"
+  R_CHECK_ARGS: "--no-manual --ignore-vignettes --no-build-vignettes"
+  # TODO: use an environment script in tools/env
+  #_R_CHECK_FORCE_SUGGESTS_: false
+  ICD_DATA_VERBOSE: true
+  ICD_DATA_OFFLINE: true
+  ICD_DATA_INTERACT: false
+  # KEEP_VIGNETTES: ""
+  # by default, don't set environment, to be more like CRAN?
+  #  ICD_DATA_ABSENT_ACTION: 'message'
+  #  R_REMOTES_STANDALONE: Set this to true if builds are failing due to the inability to update infrastructure packages such as curl, git2r and rlang. Read more in the docs for the remotes package.
+
+  matrix:
+    - R_VERSION: patched
+      MINI_BENCH: "no"
+
+    - R_VERSION: release
+      MINI_BENCH: "yes"
+
+    - R_VERSION: devel
+      MINI_BENCH: "no"
 
 platform:
   - x86
   - x64
 
-before_build:
-#  - ls -aR
-  - rm .Rinstignore  # do install everything for testing
-  - sed -i'' -e '/.*[Dd]ata.*/d' .Rbuildignore # do include data for testing, some data not in github though
-  # make sure Rcpp generated code is made, if not checked in to repo
-  - Rscript -e "install.packages(c('remotes', 'Rcpp', 'knitr'), repos = 'https://cloud.r-project.org/'); Rcpp::compileAttributes()"
-  # temporarily used while latest icd.data is not on CRAN
-  #- Rscript -e "remotes::install_github(\"jackwasey/icd.data\", ref = \"WHO\")"
-  # CRAN of course doesn't do this, but Travis has build without nhds available
-  - Rscript -e "remotes::install_github(\"jackwasey/nhds\")"
+matrix:
+  fast_finish: false
+  allow_failures:
+    - platform: x64
+      MINI_BENCH: "yes"
 
 build_script:
   - travis-tool.sh install_deps
-
-environment:
-  # APPVEYOR_CACHE_SKIP_RESTORE: true
-  WARNINGS_ARE_ERRORS: 1
-  _R_CHECK_EXIT_ON_FIRST_ERROR_: true
-  USE_RTOOLS: true
-  R_BUILD_ARGS: ""
-  NOT_CRAN: true
-  ICD_DATA_VERBOSE: true
-  ICD_DATA_OFFLINE: true
-  ICD_DATA_INTERACT: false
-# by default, don't set environment, to be more like CRAN?
-#  ICD_DATA_ABSENT_ACTION: 'message'
-  matrix:
-    - R_VERSION: release
-      MINI_BENCH: "yes"
-    - R_VERSION: devel
-
-matrix:
-  fast_finish: false
-#  allow_failures:
-#    - platform: x64
-#      MINI_BENCH: "yes"
-#  exclude:
-#    - platform: x86
-#      MINI_BENCH: "yes"
+  #- see https://github.com/craigcitro/r-travis/wiki#configuration-options
+  #- travis-tool.sh install_github r-lib/covr
 
 test_script:
   - travis-tool.sh run_tests
@@ -67,12 +75,12 @@ on_failure:
   - 7z a failure.zip *.Rcheck\*
   - appveyor PushArtifact failure.zip
 
-after_build:
-  - pwd
-  - IF NOT "%MINI_BENCH%"=="" cd benchmarks/icd-JSS3447-replication
-  - IF NOT "%MINI_BENCH%"=="" make bench3
-#  - IF NOT "%MINI_BENCH%"=="" make replmat # needs to call Rscript on appveyor path.
-  - IF NOT "%MINI_BENCH%"=="" cd ../..
+on_success:
+  - IF "%MINI_BENCH%"=="yes" cd benchmarks/icd-JSS3447-replication
+  - IF "%MINI_BENCH%"=="yes" make bench3
+    #  - IF NOT "%MINI_BENCH%"=="" make replmat # needs to call Rscript on appveyor path.
+  - IF "%MINI_BENCH%"=="yes" cd ../..
+  #- Rscript -e "covr::codecov()"
 
 artifacts:
   - path: '*.Rcheck\**\*.log'
@@ -94,11 +102,11 @@ artifacts:
     name: Bits
 
 notifications:
- - provider: Email
-   to:
-     - appveyor@jackwasey.com
-#   subject: 'r-appveyor build {{status}}'                  # optional
-#   message: "https://ci.appveyor.com/project/krlmlr/r-appveyor"    # optional
-   on_build_success: false
-   on_build_failure: true
-   on_build_status_changed: true
+  - provider: Email
+    to:
+      - appveyor@jackwasey.com
+        #   subject: 'r-appveyor build {{status}}'                  # optional
+        #   message: "https://ci.appveyor.com/project/krlmlr/r-appveyor"    # optional
+    on_build_success: false
+    on_build_failure: true
+    on_build_status_changed: true
