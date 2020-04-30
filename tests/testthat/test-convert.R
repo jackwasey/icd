@@ -160,17 +160,17 @@ test_that("icd10 short to decimal", {
   expect_true(is.decimal_diag(short_to_decimal.icd10("A009")))
   expect_true(is.decimal_diag(short_to_decimal.icd10cm("A009")))
 
-  expect_equal(
-    short_to_decimal("A00"), as.icd10("A00") %>% as.decimal_diag()
+  expect_equivalent(
+    as.decimal_diag(short_to_decimal("A00")), as.icd10("A00")
   )
-  expect_equal(
-    short_to_decimal.icd10("A00"), as.icd10("A00") %>% as.decimal_diag()
+  expect_equivalent(
+    as.decimal_diag(short_to_decimal.icd10("A00")), as.icd10("A00")
   )
-  expect_equal(
-    short_to_decimal("A000"), as.icd10("A00.0") %>% as.decimal_diag()
+  expect_equivalent(
+    as.decimal_diag(short_to_decimal("A000")), as.icd10("A00.0")
   )
-  expect_equal(
-    short_to_decimal.icd10("A000"), as.icd10("A00.0") %>% as.decimal_diag()
+  expect_equivalent(
+    as.decimal_diag(short_to_decimal.icd10("A000")), as.icd10("A00.0")
   )
 })
 
@@ -219,19 +219,19 @@ test_that("icd10 short to decimal for multiple codes", {
 test_that("icd10 short to decimal and back", {
   expect_identical(
     short_to_decimal(decimal_to_short("A00.0")),
-    as.icd10("A00.0") %>% as.decimal_diag()
+    as.decimal_diag(as.icd10("A00.0"))
   )
   expect_identical(
     decimal_to_short(short_to_decimal("A000")),
-    as.icd10("A000") %>% as.short_diag()
+    as.short_diag(as.icd10("A000"))
   )
   expect_identical(
     short_to_decimal.icd10(decimal_to_short.icd10("A00.0")),
-    as.icd10("A00.0") %>% as.decimal_diag()
+    as.decimal_diag(as.icd10("A00.0"))
   )
   expect_identical(
     decimal_to_short.icd10(short_to_decimal.icd10("A000")),
-    as.icd10("A000") %>% as.short_diag()
+    as.short_diag(as.icd10("A000"))
   )
 })
 

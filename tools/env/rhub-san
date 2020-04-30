@@ -1,8 +1,8 @@
-CXX=g++ -std=c++11
-CXX11=g++ -std=c++11
-MAKEFLAGS = "CXX11FLAGS+=-std=c++11\\ -Wno-ignored-attributes CXXFLAGS+=-std=c++11\\ -Wno-ignored-attributes")
-GNUMAKEFLAGS = "CXX11FLAGS+=-std=c++11\\ -Wno-ignored-attributes CXXFLAGS+=-std=c++11\\ -Wno-ignored-attributes")
-ICD_TEST_SLOW=TRUE
+#!/usr/bin/env bash
+#shellcheck disable=SC2034
+#
+#
+#
 _R_CHECK_COMPACT_DATA_=FALSE
 _R_CHECK_COMPILATION_FLAGS_=FALSE
 _R_CHECK_CRAN_INCOMING_=FALSE
@@ -19,3 +19,8 @@ _R_CHECK_NO_STOP_ON_TEST_ERROR_=FALSE
 _R_CHECK_OVERWRITE_REGISTERED_S3_METHODS_=FALSE
 _R_CHECK_PKG_SIZES_=FALSE
 _R_CHECK_S3_METHODS_NOT_REGISTERED_=TRUE
+CXX11="g++ -std=c++11"
+CXX="g++ -std=c++11"
+GNUMAKEFLAGS="CXX11FLAGS+=-std=c++11\\ -Wno-ignored-attributes CXXFLAGS+=-std=c++11\\ -Wno-ignored-attributes"
+ICD_TEST_SLOW=TRUE
+MAKEFLAGS="CXX11FLAGS+=-std=c++11\\ -Wno-ignored-attributes CXXFLAGS+=-std=c++11\\ -Wno-ignored-attributes"

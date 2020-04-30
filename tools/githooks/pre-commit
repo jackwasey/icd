@@ -1,42 +1,59 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
-Rscript -e '
-  devnull <- desc::desc_reformat_fields();
-  devnull <- desc::desc_reorder_fields();
-'
+set -xu
+declare -i ok=0
+declare -i wcres=0
 
 MSG="use 'git commit --no-verify' to override this check"
 
-DESCRIPTION=($(git diff --cached --name-only | grep 'DESCRIPTION'))
-if [[ ${#DESCRIPTION[@]} == 0 ]]; then
-  exit 0
+toplevel="$(git rev-parse --show-toplevel)"
+if ! "${toplevel}/tools/travis-yaml-check.sh"; then
+    echo ".travis.yml is invalid."
+    echo "${MSG}"
+    ok=1
 fi
 
-if [[ DESCRIPTION -nt codemeta.json ]]; then
-	# echo -e "codemeta.json is out of date; re-running codemetar::write_codemeta()\n$MSG"
-  # exit 1
-	Rscript -e 'codemetar::write_codemeta()'
-	git add codemeta.json
-	# git commit --amend -m"$(git log --format=%B -n1)" -m"Updated codemeta.json automatically."
+git diff --cached --name-only | grep -q 'DESCRIPTION' &&
+    [[ DESCRIPTION -nt codemeta.json ]] && {
+    Rscript -e 'codemetar::write_codemeta()'
+    git add codemeta.json
+    # git commit --amend -m"$(git log --format=%B -n1)" -m"Updated codemeta.json automatically."
+    ok=1
+    true
+    }
+
+README=("$(git diff --cached --name-only | grep 'README.Rmd')")
+if [[ ${#README[@]} != 0 ]] && [[ README.Rmd -nt README.md ]]; then
+    {
+        # echo -e "README.md is out of date; please re-run rmarkdown::render(\"README.Rmd\")\n$MSG"
+        Rscript -e 'rmarkdown::render("README.Rmd")'
+        git add README.md man/figures/README*.png
+        # git commit --amend -m"$(git log --format=%B -n1)" -m"Updated README.md automatically."
+        ok=1
+    };
 fi
 
-README=($(git diff --cached --name-only | grep 'README.Rmd'))
-if [[ ${#README[@]} == 0 ]]; then
-  exit 0
-fi
+# check copyright dates, and fix
+#sed -i -E -e '/(Copyright \(C\) 2014-201)[[:digit]]/s/(Copyright \(C\) 2014-20)[[:digit:]]{2}[[:space:]]+/\1'$(date +"%y")' Jack/'
+#ok+=$(grep -r -E -e 'Copyright.* 2014[ -]+2019' ./* | tee /dev/stderr | wc -l)
 
-if [[ README.Rmd -nt README.md ]]; then
-	# echo -e "README.md is out of date; please re-run rmarkdown::render(\"README.Rmd\")\n$MSG"
-  # exit 1
-  Rscript -e 'rmarkdown::render("README.Rmd")'
-  git add README.md man/figures/README*.png
-  # git commit --amend -m"$(git log --format=%B -n1)" -m"Updated README.md automatically."
-fi
+# TODO add check for copyright dates and package version string in several places
+# TODO shellcheck bash scripts
 
-wcres=($(git diff --name-only | wc))
-if [[ ${wcres[0] != 0 ]]; then
-  echo "pre-commit updated files:"
-  git diff --name-only
-  echo "review and commit these changes"
-  exit 1
-fi
+Rscript -e '
+devnull <- desc::desc_reformat_fields();
+devnull <- desc::desc_reorder_fields();
+'
+
+wcres=$(git diff --name-only |
+    grep -c -e "README.md" -e "codemeta.json"
+    )
+    if (( wcres != 0 )); then
+        echo "pre-commit updated files:"
+        git diff --name-only
+        echo "review and commit these changes"
+        ok=1
+    fi
+
+    (( ok != 0 )) && echo "githooks/pre-commit failed" >&1 && exit ${ok}
+    exit 0

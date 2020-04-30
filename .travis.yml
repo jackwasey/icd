@@ -1,200 +1,168 @@
+# vim: tabstop=2 softtabstop=2 expandtab
 # https://docs.travis-ci.com/user/languages/r
-language: r
 # https://ropensci.org/blog/2016/07/12/travis-osx
 # https://docs.travis-ci.com/user/ci-environment/
-
-# for RcppEigen to compile, (but disable if brew gcc on mac to avoid conflict)
-# fortran: true # set explicitly in each stanza? but not recognized by an "include" group.
-
-# may need this for clang:
-# export LD_LIBRARY_PATH=/usr/local/clang/lib:$LD_LIBRARY_PATH
-#
-# See this for more recent compiler support than old defaults:
-# https://docs.travis-ci.com/user/languages/c/
-#
-# and
-#
+# https://docs.travis-ci.com/user/languages/r
+# https://docs.travis-ci.com/user/build-matrix/
 # https://docs.travis-ci.com/user/languages/cpp/
-
-# assert the defaults for os and dist - will add macos and bionic etc. later
-os: linux
-dist: xenial
-
+#
+# Use environment variables to tell R CMD check/build where to get environments
+# https://cran.r-project.org/doc/manuals/r-release/R-exts.html#Checking-and-building-packages
+# https://github.com/travis-ci/travis-build/blob/master/lib/travis/build/script/r.rb
+language: r
+# ccache would need installing, configuring, can't just add ccache here, I don't think. Would it cache between builds if not here?
 cache:
   - packages
-  - ccache
+  - $HOME/.ccache
+# TODO: make warnings cause job failure once environment is fixed
+warnings_are_errors: false
+# I think fortran may be a downstream dependency of RcppEigen, but start v minimal. fortran config only recognized on osx travis builds?
+fortran: false
+pandoc: false
+latex: false
+use_devtools: false
+disable_homebrew: true
+# can/will also set any/all build/check args with environment variables. --as-cran is default, which I do NOT want. Using tailored environment from tools/env/cran
+r_build_args: --no-build-vignettes --no-manual --resave-data=no
+r_check_args: --no-build-vignettes --no-manual --no-vignettes --ignore-vignettes --no-codoc
+os:
+  - linux
+  - osx
 
-#addons:
-#  apt:
-#    packages:
-#      - valgrind # when I do do this (probably too slow for travis anyway, then just put the apt addon in the specific build)
-      #- r-cran-tinytex
+# default 2020-04-01 is xenial, not bionic
+dist:
+  - xenial
+  - bionic
 
-#r_packages:
-#  - tinytex
+r:
+  - devel
+  - release
+  - oldrel
 
-cran: https://cloud.r-project.org
-# by default, DON'T do --as-cran, as it stops us using environment variables
-# that conflict. Instead, state approximate CRAN check environment variables explicitly.
-r_check_args: ""
-warnings_are_errors: true
+compiler:
+  - gcc
+  - clang
 
+addons:
+  apt:
+    packages:
+     - ccache
+
+# Rcpp*, rappdirs and testthat all contain compiled code, so including here for much faster travis init.
+# However, the R travis ruby script installs Depends _and_ Recommended r-cran-xxx, and this commonly brings in r-cran-testthat, and thus a ton of dependencies. This is fine, except some are not built for R-4.0.0 yet: at least R6 and callr. Thus I want here to install as many dependencies here, which do nor Depend on testthat, R6, callr and cli? Dirk Eddelbeuttel suggests there is a bug with circular testthat and pkgbuild dependency.
+
+#r_binary_packages: # there are not 4.0 built packages available for binary installation yet
+#- Rcpp
+#- RcppEigen
+#- testthat
+#- rappdirs
+#- 'Rcpp --no-install-recommends' # this, amazingly, works, but not on osx, which reverts to regular package installation. Consider using TRAVIS_OS_NAME=osx
+# temporarily disabled because of R6 depdence, which isn't built for CRAN yet with R-4.0.0
+# adding other testthat deps here in the meantime? R6 and callr trouble so far. travis R installs apt recommended packages, which often bring in testthat, then problems. Probably because i've now let apt cran builds take precedence?
+# - testthat
+# - assertthat
+# - cli
+# - crayon
+# - evaluate
+# - magrittr
+# - pkgbuild
+# - praise
+# - rlang
+# - rmarkdown
+# - withr
+# - xml2
+
+# see also travis-global environment file
+env:
+  global:
+    - ICD_SHUTUP=true
+    - ICD_TEST_SLOW=false
+    - ICD_DATA_OFFLINE=true
+    - ICD_DATA_INTERACT=false
+    - ICD_KEEP_MAKEVARS=true
+    - R_CHECK_ENVIRON=tools/env/travis-global
+
+# Cannot export shell environment variables in these stanzas:
+# https://github.com/travis-ci/travis-ci/issues/7472
 before_install:
-  # - set -o allexport; source tools/env/travis-global; set +o allexport;
-  # May need to set the R library directory so R CMD check finds packages
-  # installed by travis (automatically, and in my scripts) and by R itself
-  # https://stackoverflow.com/questions/31879011/r-cant-find-packages-installed-by-travis
-  # - mkdir -p "$HOME/R.icd.lib"
-  # - echo R_LIBS=$HOME/R.icd.lib:/usr/lib/R/site-library/" > ~/.Renviron
-  # - sudo chmod 2777 "$HOME/R.icd.lib"
-  - mkdir -p ~/.R ;
-  - if [[ $TRAVIS_R_VERSION_STRING == devel ]]; then cat tools/mk/travis-debug.mk >> ~/.R/Makevars; fi;
-  # this is one of oldrel, release or devel per https://docs.travis-ci.com/user/languages/r#configuration-options
-  - cat tools/mk/travis-nowarn.mk >> ~/.R/Makevars
-  # ignore the stubs for the pre-built vignettes, as the latex environments on travis are heterogeneous!
-  - echo '^vignettes\/.*-vignette\.Rnw$' >> .Rbuildignore
-
-  # https://github.com/Homebrew/homebrew-core/blob/master/Formula/gcc.rb
-  # I think PKG_CXX etc only needed if Makevars in the package itself, not ~/.R/Makevars
-  # openblas may need brew linking. may be best NOT to overwrite gfortran?
-  - export HOMEBREW_NO_INSTALL_CLEANUP=1 && if [[ "$(uname -s)" = 'Darwin' ]] && [[ $ICD_USE_XCODE_CLANG != 'true' ]]; then
-      brew upgrade ;
-      brew install gcc ;
-      brew link --overwrite gcc ;
-      cat tools/mk/travis-macos.mk  >> ~/.R/Makevars ;
-      Rscript -e 'install.packages("Rcpp", type = "source")' ;
-    fi
-  - cat ~/.R/Makevars
-  - cat .Rbuildignore
-  - Rscript -e '.libPaths(); getOption("repos")'
-  - pwd
-  # for the pre-built static vignette stubs to include the actual vignettes.
-  # Make sure travis latex: true is set just for relevant builds. Official way to add latex packages is:
-  # before_install:
-  #   - tlmgr install index
-  # and/or? something like:
-  # - Rscript -e 'if (!require("tinytex", character.only = TRUE, quietly = TRUE, warn.conflicts = FALSE)) {quit(status=1)} else {tinytex::install_tinytex(); tinytex::tlmgr_install("pdfpages", "ae")}' || hash tlmgr 2>/dev/null && { tlmgr --usermode install pdfpages ae; }
-
-#env: #  global: instead of defining here, source tools/env/travis-global
-
-jobs:
-  fast_finish: true
-  include:
-  - r: devel
-    dist: bionic
-    # note that the default compilers are quite far behind, e.g. bionic is only gcc 7 by default. See:
-    # https://docs.travis-ci.com/user/languages/c/#choosing-compilers-to-test-against
-    compiler: gcc
-    env:
-      - ICD_MINI_BENCH=true
-  - r: release
-    compiler: clang
-    dist: bionic
-    env:
-      - ICD_MINI_BENCH=true
-  - r: release
-    compiler: gcc
-    latex: false
-    r_build_args: --no-build-vignettes --no-manual --resave-data=no
-    r_check_args: --no-build-vignettes --no-vignettes --ignore-vignettes --no-codoc --no-manual
-    env:
-    - ICD_COVERAGE=true
-    - ICD_MINI_BENCH=false
-    - ICD_TEST_SLOW=true
-  - r: oldrel
-    compiler: gcc
-    latex: false
-    r_build_args: --no-build-vignettes --no-manual --resave-data=no
-    r_check_args: --no-build-vignettes --no-vignettes --ignore-vignettes --no-codoc --no-manual
-  # MacOS: https://docs.travis-ci.com/user/languages/c/#gcc-on-macos
-  - r: release
-    os: osx
-    # xcode image is needed so things like _stdio.h are available to GCC.
-    osx_image: xcode10.3
-#    compiler: gcc # redundant: done by logic in before_intall
-    addons:
-      homebrew:
-        packages:
-          - checkbashisms
-    env:
-      - ICD_MINI_BENCH=true
-  - r: devel
-    os: osx
-    osx_image: xcode10.3
-    addons:
-      homebrew:
-        packages:
-          - checkbashisms
-#    compiler: gcc # redundant: done by logic in before_intall
-  - r: devel
-    os: osx
-    addons:
-      homebrew:
-        packages:
-          - checkbashisms
-    # as of May 2019, default osx image is 9.4.1
-    # https://docs.travis-ci.com/user/reference/osx#xcode-version
-    # compiler: clang # redundant
-    env: ICD_USE_XCODE_CLANG=true
-  - r: release
-    os: osx
-    addons:
-      homebrew:
-        packages:
-          - checkbashisms
-    # compiler: clang # redundant
-    latex: false
-    r_build_args: --no-build-vignettes --no-manual --resave-data=no
-    r_check_args: --no-build-vignettes --no-vignettes --ignore-vignettes --no-codoc --no-manual
-    env:
-    - ICD_USE_XCODE_CLANG=true
-    - ICD_MINI_BENCH=true
-  - r: release
-    arch: arm64
-    r_build_args: --no-build-vignettes --no-manual --resave-data=no
-    r_check_args: --no-build-vignettes --no-vignettes --ignore-vignettes --no-codoc --no-manual
-    env:
-    - ICD_MINI_BENCH=true
-    - ICD_TEST_SLOW=true
-  allow_failures:
-  # allow any osx to fail for now: error prone tool chain
-  - os: osx
-  - arch: arm64
-  - arch: ppc64le
-  - arch: s390x
-  - r: oldrel
-  - r: release
-    latex: false
-    r_build_args: --no-build-vignettes --no-manual --resave-data=no
-    r_check_args: --no-build-vignettes --no-vignettes --ignore-vignettes --no-codoc --no-manual
-    env:
-    - ICD_COVERAGE=true
-    - ICD_MINI_BENCH=false
-    - ICD_TEST_SLOW=true
+  - tools/dump-env.sh;
+  - mkdir -p $HOME/.R;
+    # if mixed source/binary, e.g., macos, do not upgrade (if even asked) if source is newer.
+  - echo 'options(install.packages.check.source = "no")' >> $HOME/.Rprofile;
+# see https://pat-s.me/post/using-ccache-to-speed-up-r-package-checks-on-travis-ci/
+# may not have ccache without brew on macos. Use recursive dependency evaluation of Make here.
+  #- if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then cp tools/mk/travis-macos.mk $HOME/Makevars; fi;
+  - if command -v ccache >/dev/null; then echo -e 'CCACHE=ccache\n' >> $HOME/.R/Makevars; fi;
+  #- echo -e 'VER=\nCCACHE=ccache\nCC=$(CCACHE) gcc$(VER) -std=gnu99\nCXX=$(CCACHE) g++$(VER)\nCXX11=$(CCACHE) g++$(VER)\nCXX14=$(CCACHE) g++$(VER)\nCXX17=$(CCACHE) g++$(VER)\nCXX20=$(CCACHE) g++$(VER)\nFC=$(CCACHE) gfortran$(VER)\nF77=$(CCACHE) gfortran$(VER)' >> $HOME/.R/Makevars;
+  - cp tools/travis-ccache.conf $HOME/.ccache/ccache.conf;
+  - echo '^vignettes\/.*-vignette\.Rnw$' >> .Rbuildignore;
+    # the DESCRIPTION file is used to determine required dependenices, including many that we do not ever, or usually, need on travis. E.g. we never rebuild RData on travis, nor process XML from the ICD sources. For building vignettes, will have to manually install relevant dependencies later, or accept tthe regular description here, and the fact the travis will take ages and fail often.
+  - tools/DESCRIPTION-minimalize.sh > DESC.min && cp DESCRIPTION DESC.orig && cp -f DESC.min DESCRIPTION;
+    # workaround osx/R-devel travis issue, where binary packages missing from CRAN. May well be useful on other combos.
+  - if [[ "$TRAVIS_R_VERSION" == "devel" ]] && [[ "$TRAVIS_OS_NAME" == "osx" ]]; then
+    echo "options(pkgType='source')" >> ~/.Rprofile;
+    Rscript -e 'install.packages("remotes", type="source", dependencies=NA); remotes::install_deps(dependencies = NA, upgrade = FALSE, type = "source");';
+    fi;
+    # check by default ignores user paths, and the library path doesn't include the r_binary_packages paths, AFAICT. DYLD_LIBRARY_PATH for MacOS may be needed for brew-installed compilers?
+    #  - if [[ "$TRAVIS_R_VERSION" != "4.0.0" ]]; then echo "R_LD_LIBRARY_PATH=/usr/lib/R/site-library/RcppEigen/libs:/usr/lib/R/site-library/Rcpp/libs:${R_LD_LIBRARY_PATH}" | tee -a "${HOME}/.R/Renviron" "${HOME}/.R/build.Renviron" "${HOME}/.R/check.Renviron" "tools/env/travis-global"; fi
+    #- Rscript -e 'update.packages(checkBuilt=TRUE, ask=FALSE)'
+    #- Rscript -e 'install.packages(c("callr", "cli",  "R6"), dependencies=NA)' # in order that testthat apt CRAN binary is met while travis is catching up with R-4.0.E0
+  - tools/dump-env.sh;
 
 before_script:
-# n.b., before_install bash exports are not preserved beyond each shell invocation.
- - set -o allexport; source tools/env/travis-global; set +o allexport;
- - set
- - echo "$LD_LIBRARY_PATH"
- - if [ x"$ICD_TEST_SLOW" = x"true" ]; then
-     Rscript -e 'source("tools/split-tests.R"); testthat_split();';
-   fi
-
-after_script:
- # should fail and stop travis with error if the quick benchmark code fails
- - if [ x"$ICD_MINI_BENCH" = x"true" ]; then
-     cd benchmarks/icd-JSS3447-replication;
-     eval "make bench3"
-     eval "make replmat"
-     cd ../..;
-   fi
+  - tools/dump-env.sh;
+    # now fully install all necessary dependencies for the 'heavy' build. Do not need to recreate data, so not that much in fact.
+  - if [[ "$ICD_TRAVIS_HEAVY" == "true" ]]; then
+    cp -f DESC.orig DESCRIPTION;
+    sed -i '/vignette\\\.Rnw\$$/d' .Rbuildignore;
+    Rscript -e 'install.packages(c("knitr", "nhds", "rmarkdown"))';
+    fi;
 
 after_success:
- - if [ "$ICD_COVERAGE" = "true" ]; then
+  - tools/dump-env.sh
+  - if [[ "$ICD_MINI_BENCH" == "true" ]]; then
+    cd benchmarks/icd-JSS3447-replication;
+    eval "make bench3";
+    eval "make replmat";
+    cd ../..;
+    fi
+  - if [[ "$ICD_COVERAGE" == "true" ]]; then
      Rscript -e 'source("tools/split-tests.R"); testthat_split();';
      Rscript -e 'install.packages("covr"); covr::codecov(quiet = FALSE)';
    fi
+
+after_failure:
+  - tools/dump-env.sh;
+
+jobs:
+  fast_finish: true
+  allow_failures:
+    - os: osx
+    - r: oldrel
+    - r: devel
+    - dist: bionic
+  exclude:
+    - os: osx
+      r: devel
+      fortran: false
+  include:
+    - os: osx
+      r: devel
+      fortran: true
+    - os: linux
+      r: release
+      dist: bionic
+      compiler: clang
+      pandoc: true
+      latex: true
+      env:
+        - ICD_MINI_BENCH=true
+        - ICD_COVERAGE=true
+        - ICD_TEST_SLOW=true
+        - ICD_TRAVIS_HEAVY=true
+      r_build_args: --resave-data=yes
+      r_check_args: --no-codoc --no-manual
+
 
 notifications:
   email:

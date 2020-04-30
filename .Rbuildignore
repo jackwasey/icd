@@ -17,7 +17,7 @@
 ^\.git/.*
 ^\.lintr$
 ^\.settings$
-^\.travis\.yml$
+^\.travis\..*$
 ^_config\.yml$
 ^aclocal\.m4$
 ^appveyor\.yml$

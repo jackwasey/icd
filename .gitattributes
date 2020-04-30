@@ -17,3 +17,4 @@
 # *RcppExports* merge=theirs
 # *.Rd merge=theirs
 
+/NEWS.md merge=union

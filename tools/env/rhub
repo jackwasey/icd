@@ -1,3 +1,10 @@
-_R_CHECK_DOC_SIZES_=FALSE
+#!/usr/bin/env bash
+#shellcheck disable=SC2034
+#
+#
+#
+#MAKEFLAGS="CXXFLAGS=-Wno-unused-parameter\\ -Wno-unused-variable\\ -Wno-ignored-attributes\\ -Wno-cast-function-type\\ -Wno-unknown-warning-option\\ -Wno-unknown-pragma"
+_R_CHECK_ASCII_DATA_=FALSE
 _R_CHECK_DOC_SIZES2_=FALSE
-MAKEFLAGS="CXXFLAGS=-Wno-unused-parameter\\ -Wno-unused-variable\\ -Wno-ignored-attributes\\ -Wno-cast-function-type\\ -Wno-unknown-warning-option\\ -Wno-unknown-pragma"
+_R_CHECK_DOC_SIZES_=FALSE
+MAKEFLAGS="CXXFLAGS=-w CXX11FLAGS=-w"

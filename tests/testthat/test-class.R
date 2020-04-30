@@ -219,9 +219,8 @@ test_that("printing a comorbidity map works very simply", {
 })
 
 test_that("is comorbidity map?", {
-  icd9_map_ahrq %>%
-    unclass() %>%
-    comorbidity_map() -> x
+  x <- comorbidity_map(unclass(icd9_map_ahrq))
+  expect_false(is.comorbidity_map(unclass(icd9_map_ahrq)))
   expect_true(is.comorbidity_map(icd9_map_ahrq))
   expect_true(is.comorbidity_map(x))
   expect_is(icd9_map_ahrq, "comorbidity_map")
@@ -232,17 +231,17 @@ context("class conflicts")
 
 test_that("no conflict for standard classes", {
   expect_false(icd_classes_conflict(icd9("100.1")))
-  expect_false(icd_classes_conflict(icd9("100.1") %>% as.decimal_diag()))
-  expect_false(icd_classes_conflict(icd9("1001") %>% as.short_diag()))
+  expect_false(as.decimal_diag(icd_classes_conflict(icd9("100.1"))))
+  expect_false(as.short_diag(icd_classes_conflict(icd9("1001"))))
   expect_false(icd_classes_conflict(icd9cm("100.1")))
-  expect_false(icd_classes_conflict(icd9cm("100.1") %>% as.decimal_diag()))
-  expect_false(icd_classes_conflict(icd9cm("1001") %>% as.short_diag()))
+  expect_false(as.decimal_diag(icd_classes_conflict(icd9cm("100.1"))))
+  expect_false(as.short_diag(icd_classes_conflict(icd9cm("1001"))))
   expect_false(icd_classes_conflict(icd10("A00.0")))
-  expect_false(icd_classes_conflict(icd10("A00.0") %>% as.decimal_diag()))
-  expect_false(icd_classes_conflict(icd10("A000") %>% as.short_diag()))
+  expect_false(as.decimal_diag(icd_classes_conflict(icd10("A00.0"))))
+  expect_false(as.short_diag(icd_classes_conflict(icd10("A000"))))
   expect_false(icd_classes_conflict(icd10cm("A00.0")))
-  expect_false(icd_classes_conflict(icd10cm("A00.0") %>% as.decimal_diag()))
-  expect_false(icd_classes_conflict(icd10cm("A000") %>% as.short_diag()))
+  expect_false(as.decimal_diag(icd_classes_conflict(icd10cm("A00.0"))))
+  expect_false(as.short_diag(icd_classes_conflict(icd10cm("A000"))))
 })
 
 test_that("no conflict for built-in data", {

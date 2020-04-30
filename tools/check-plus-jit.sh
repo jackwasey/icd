@@ -15,7 +15,7 @@ trap finish EXIT
 #rsync -r --exclude=".git" "${ICD_HOME:-$HOME/rprojects/icd}" "$tmpd"
 cd "$tmpd"
 # build with standard release options, i.e. compacting vignettes.
-"${whereami}"/build.sh
+"${whereami}"/build-full.sh
 # for all environment variable options see here:
 # https://cran.r-project.org/doc/manuals/r-release/R-ints.html#Tools
 #R_MAKEVARS_USER="$HOME/.R/Makevars.clang" \
