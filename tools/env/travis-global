@@ -3,6 +3,7 @@
 #
 #https://github.com/r-lib/remotes for R_REMOTE_UPGRADE and R_REMOTES_STANDALONE info. may need to upgrade with install_deps, but maybe not. if pkgbuild etc must be upgraded, then standalone makes it actually work, albeit slower. This can avoid upgrading binary-installed packages.
 #see github.com/travis-ci/travis-build in lib/travis/build/script/r.rb 
+_R_BUILD_COMPACT_VIGNETTES_=gs+qpdf
 _R_CHECK_ALL_NON_ISO_C_=TRUE
 _R_CHECK_ALWAYS_LOG_VIGNETTE_OUTPUT_=TRUE
 _R_CHECK_ASCII_DATA_=FALSE
