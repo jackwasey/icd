@@ -39,7 +39,7 @@
   icd9_generate_map_elix(save_pkg_data = TRUE)
   # ICD 10
   .parse_icd10cm_all(save_pkg_data = TRUE)
-  icd10_parse_ahrq_sas(save_pkg_data = TRUE)
+  icd10_parse_ahrq_sas(version = "2018", save_pkg_data = TRUE)
   .parse_icd10cm_cc(save_pkg_data = TRUE)
   icd10_generate_map_quan_elix(save_pkg_data = TRUE)
   icd10_generate_map_quan_deyo(save_pkg_data = TRUE)
