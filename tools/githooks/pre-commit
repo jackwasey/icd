@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
 set -u
+declare desc_ver
 declare -i ok=0
 declare -i wcres=0
 
@@ -37,8 +38,25 @@ fi
 #sed -i -E -e '/(Copyright \(C\) 2014-201)[[:digit]]/s/(Copyright \(C\) 2014-20)[[:digit:]]{2}[[:space:]]+/\1'$(date +"%y")' Jack/'
 #ok+=$(grep -r -E -e 'Copyright.* 2014[ -]+2019' ./* | tee /dev/stderr | wc -l)
 
-# TODO add check for copyright dates and package version string in several places
-# TODO shellcheck bash scripts
+# check for copyright dates
+declare -i this_year
+this_year="$(date +"%Y")"
+this_year=$((this_year-1))
+re_older_yrs="$(seq -s'|' 2005 $((this_year - 1)))"
+
+grep -E -r -i -q "Copyright.*(${re_older_yrs%?}).*Wasey" . || ok=1
+
+# check package version correct everywhere, with non_GNU sed
+desc_ver="$(sed -n '/^Version/,/Version/s/Version: \([[:digit:].]\{3,\}\)/\1/p' DESCRIPTION)"
+news_ver="$(sed '1s/# Version \([[:digit:].]\{3,\}\)[[:space:]]*$/\1/;q' NEWS.md)"
+conf_ver="$(sed -n '/AC_INIT/,/AC_INIT/s/[[:space:]]*AC_INIT.*\[\([[:digit:].]\{3,\}\)\].*/\1/p' configure.ac)"
+
+if [[ "${desc_ver}" == "${news_ver}" ]] && [[ "${desc_ver}" == "${conf_ver}" ]]; then
+    :
+else
+    { echo "version mismatch: DESCRIPTION=${desc_ver}, NEWS.md${news_ver}, configure.ac${conf_ver}" >&2; ok=1; }
+fi
+
 
 Rscript -e '
 devnull <- desc::desc_reformat_fields();
@@ -47,13 +65,13 @@ devnull <- desc::desc_reorder_fields();
 
 wcres=$(git diff --name-only |
     grep -c -e "README.md" -e "codemeta.json"
-    )
-    if (( wcres != 0 )); then
-        echo "pre-commit updated files:"
-        git diff --name-only
-        echo "review and commit these changes"
-        ok=1
-    fi
+)
+if (( wcres != 0 )); then
+    echo "pre-commit updated files:"
+    git diff --name-only
+    echo "review and commit these changes"
+    ok=1
+fi
 
-    (( ok != 0 )) && echo "githooks/pre-commit failed" >&1 && exit ${ok}
-    exit 0
+(( ok != 0 )) && echo "githooks/pre-commit failed" >&1 && exit ${ok}
+exit 0

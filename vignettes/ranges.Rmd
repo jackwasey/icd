@@ -13,7 +13,7 @@ vignette: >
   %\VignetteKeyword{ICD-9, ICD-10, ICD-9-CM, ICD-10-CM, algorithm}
 ---
 <!--
-Copyright (C) 2014 - 2019  Jack O. Wasey
+Copyright (C) 2014 - 2020  Jack O. Wasey
 
 This file is part of icd.
 

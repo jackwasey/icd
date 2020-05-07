@@ -29,7 +29,7 @@ Authors@R:
              comment = "explain codes in table format"),
       person(given = "Michel",
              family = "Lang",
-             role = c("aut"),
+             role = "aut",
              email = "michellang@gmail.com",
              comment = "backport of R_user-dir for R version >4. ORCID = 0000-0001-9754-0393"),
       person(given = "R Core Team",

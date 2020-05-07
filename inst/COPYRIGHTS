@@ -1,7 +1,7 @@
 Format: http://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
 
 Files: *
-Copyright: 2014-2019 Jack O Wasey
+Copyright: 2014-2020 Jack O Wasey
 License: GPL-3
 
 Files: m4/openmp.m4

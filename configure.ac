@@ -20,7 +20,7 @@
 # autoreconf -fv && "${ICD_HOME:-.}/configure" --enable-icd-strip --enable-icd-shutup && cat "${ICD_HOME:-.}/src/Makevars" && grep -v -q '@' "${ICD_HOME:-.}/src/Makevars" || echo "MISSING REPLACEMENT"
 
 AC_PREREQ([2.62])
-AC_INIT(icd, [], [jack@jackwasey.com])
+AC_INIT(icd, [4.0.9], [jack@jackwasey.com])
 AC_COPYRIGHT([Copyright (C) 2014 - 2020  Jack O. Wasey])
 AC_CONFIG_SRCDIR([src])
 AC_CONFIG_FILES([src/Makevars])
