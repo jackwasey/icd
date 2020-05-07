@@ -19,7 +19,7 @@
   # memoise package has given me problems and crashes. DIY
   mem_file_name <- paste(
     "WHO", year, lang,
-    gsub("JsonGetChildrenConcepts\\?ConceptId=|&useHtml=false", "", resource),
+    gsub("JsonGetChildrenConcepts\\?ConceptId=|(&|\\?)useHtml=false", "", resource),
     "json",
     sep = "."
   )
