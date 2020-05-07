@@ -376,7 +376,7 @@ Referring back to the pseudocode in Section \ref{pseudocode}, integer representa
 [^factor]: \proglang{R} uses a data structure called a `factor` in which each element is stored as an integer index into an array of strings. The strings are unique, whereas the integers may be repeated.
 
 
-\begin{figure}[h]
+\begin{figure}[ht]
 \centering
 \setlength{\fboxsep}{1em}
 \setlength{\fboxrule}{1pt}
