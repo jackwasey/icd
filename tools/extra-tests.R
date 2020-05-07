@@ -1,11 +1,20 @@
 #!/usr/bin/env Rscript
 
 release_sanity_checks <- function() {
+  message("superficially checking data download before attaching 'icd' with library")
+  icd::download_all_icd_data()
+
   suppressPackageStartupMessages(library("icd", quietly = TRUE, warn.conflicts = FALSE))
+  message("superficially checking data download again after attaching 'icd'")
+  icd::download_all_icd_data()
   message("codetools")
   codetools::checkUsagePackage('icd', all = TRUE, suppressLocal = TRUE)
   message("Missing NAMESPACE S3")
   s <- devtools::missing_s3(); if (length(s)) s
+  message("style check")
+  styler::style_pkg(exclude_files = c("R/RcppExports.R", "R/R_user_dir.R"), dry = "fail")
+message("spelling")
+aspell_package_Rd_files('.')
 }
 
 check_rhub_no_prebuilt_vign <- function(
