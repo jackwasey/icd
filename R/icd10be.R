@@ -6,7 +6,7 @@
                             ...) {
   site_file_2017 <-
     "fy2017_reflist_icd-10-be.xlsx_last_updatet_28-07-2017_1.xlsx"
-  fnp <- .download_to_data_raw(
+  fnp <- .download_to_data_cache(
     paste(.icd10be_site,
       .icd10be_url_path,
       site_file_2017,
@@ -28,7 +28,7 @@
   }
   site_file <- "fy2014_reflist_icd-10-be.xlsx"
   .msg("Downloading or getting cached icd10be2014 data")
-  .download_to_data_raw(
+  .download_to_data_cache(
     paste(.icd10be_site,
       .icd10be_url_path,
       site_file,
@@ -58,7 +58,7 @@
 #' \url{https://www.health.belgium.be/sites/default/files/uploads/fields/fpshealth_theme_file/fy2017_reflist_icd-10-be.xlsx_last_updatet_28-07-2017_1.xlsx}
 # nolint end
 #' \url{https://www.health.belgium.be/fr/fy2014reflisticd-10-bexlsx}
-#' @param ... passed to \code{.download_to_data_raw}, e.g., \code{offline =
+#' @param ... passed to \code{.download_to_data_cache}, e.g., \code{offline =
 #'   FALSE}.
 #' @seealso \code{link{parse_icd10be2014_be}}
 #' @keywords internal
@@ -133,7 +133,7 @@
 #'   \url{https://www.health.belgium.be/fr/sante/organisation-des-soins-de-sante/hopitaux/systemes-denregistrement/icd-10-be}
 # nolint end
 #'    \url{https://www.health.belgium.be/fr/fy2014reflisticd-10-bexlsx}
-#' @param ... passed to \code{.download_to_data_raw}, e.g., \code{offline =
+#' @param ... passed to \code{.download_to_data_cache}, e.g., \code{offline =
 #'   FALSE}.
 #' @seealso \code{link{parse_icd10be2014_be}}
 #' @keywords internal
