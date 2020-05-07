@@ -620,6 +620,7 @@ infodir
 docdir
 oldincludedir
 includedir
+runstatedir
 localstatedir
 sharedstatedir
 sysconfdir
@@ -695,6 +696,7 @@ datadir='${datarootdir}'
 sysconfdir='${prefix}/etc'
 sharedstatedir='${prefix}/com'
 localstatedir='${prefix}/var'
+runstatedir='${localstatedir}/run'
 includedir='${prefix}/include'
 oldincludedir='/usr/include'
 docdir='${datarootdir}/doc/${PACKAGE_TARNAME}'
@@ -947,6 +949,15 @@ do
   | -silent | --silent | --silen | --sile | --sil)
     silent=yes ;;
 
+  -runstatedir | --runstatedir | --runstatedi | --runstated \
+  | --runstate | --runstat | --runsta | --runst | --runs \
+  | --run | --ru | --r)
+    ac_prev=runstatedir ;;
+  -runstatedir=* | --runstatedir=* | --runstatedi=* | --runstated=* \
+  | --runstate=* | --runstat=* | --runsta=* | --runst=* | --runs=* \
+  | --run=* | --ru=* | --r=*)
+    runstatedir=$ac_optarg ;;
+
   -sbindir | --sbindir | --sbindi | --sbind | --sbin | --sbi | --sb)
     ac_prev=sbindir ;;
   -sbindir=* | --sbindir=* | --sbindi=* | --sbind=* | --sbin=* \
@@ -1084,7 +1095,7 @@ fi
 for ac_var in	exec_prefix prefix bindir sbindir libexecdir datarootdir \
 		datadir sysconfdir sharedstatedir localstatedir includedir \
 		oldincludedir docdir infodir htmldir dvidir pdfdir psdir \
-		libdir localedir mandir
+		libdir localedir mandir runstatedir
 do
   eval ac_val=\$$ac_var
   # Remove trailing slashes.
@@ -1237,6 +1248,7 @@ Fine tuning of the installation directories:
   --sysconfdir=DIR        read-only single-machine data [PREFIX/etc]
   --sharedstatedir=DIR    modifiable architecture-independent data [PREFIX/com]
   --localstatedir=DIR     modifiable single-machine data [PREFIX/var]
+  --runstatedir=DIR       modifiable per-process data [LOCALSTATEDIR/run]
   --libdir=DIR            object code libraries [EPREFIX/lib]
   --includedir=DIR        C header files [PREFIX/include]
   --oldincludedir=DIR     C header files for non-gcc [/usr/include]
@@ -1877,7 +1889,7 @@ $as_echo "Using existing ${CXX11FLAGS}" >&6; }
 
 fi
 
-# We enforce at least C++11
+# We enforce at least C++11 (as does R4.0.0 now)
 CXX="${CXX11}"
 CXXFLAGS="${CXX11FLAGS}"
 CXXSTD="${CXX11STD}"
@@ -2532,30 +2544,6 @@ DO_KEEP_MAKEVARS="${ICD_KEEP_MAKEVARS}"
 
 #Always write the stub as default to not include Makevars content
 echo "unsigned char Makevars[] = { 0x00 };" > src/makevars.h
-
-# AC_ARG_ENABLE([icd_keep_makevars],
-#               AS_HELP_STRING([--enable-icd-keep-makevars],
-#                              [keep user Makevars in binary for debug default no]),
-#                              [],
-#                              [DO_KEEP_MAKEVARS=yes]
-#                              )
-#
-# # TODO: standard way to check these exist using ac
-# #AS_IF([test -d "${HOME}/.R"], [AS_IF([test -f "${HOME}/.R/Makevars"], [], [DO_KEEP_MAKEVARS=no])], [DO_KEEP_MAKEVARS=no])
-# # AC_CHECK_FILES([${HOME}/.R/Makevars], [], [DO_KEEP_MAKEVARS=no])
-# # AC_CHECK_FILES([${HOME}/.R/Makevars], [], [DO_KEEP_MAKEVARS=no])
-#
-# # also check that user didn't write --enable-makevars=no
-# AC_IF([test -n ${DO_KEEP_MAKEVARS}],
-#       [
-#        AC_MSG_NOTICE([Enabling Makevars inclusion for debugging])
-#        echo 'unsigned char Makevars[[]] = {' > src/makevars.h;
-#        xxd -i < "${HOME}/.R/Makevars" >> src/makevars.h;
-#        dnl must NULL terminate
-#        echo ", 0x00 };" >> src/makevars.h;
-#        ],
-#        [AC_MSG_NOTICE([Keep Makevars not activated])]
-#        )
 
 # Check whether --enable-icd_strip was given.
 if test "${enable_icd_strip+set}" = set; then :

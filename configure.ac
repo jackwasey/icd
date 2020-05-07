@@ -75,7 +75,7 @@ AS_IF([test "${CXX11FLAGS-unset} = unset" ],
        [AC_MSG_RESULT([Using existing ${CXX11FLAGS}])]
        )
 
-# We enforce at least C++11
+# We enforce at least C++11 (as does R4.0.0 now)
 CXX="${CXX11}"
 CXXFLAGS="${CXX11FLAGS}"
 CXXSTD="${CXX11STD}"
@@ -128,30 +128,6 @@ AC_ARG_VAR([ICD_KEEP_MAKEVARS],
            [If defined, the makefile contents will be included in the built binary, to help with debugging])
 #Always write the stub as default to not include Makevars content
 echo "unsigned char Makevars[[]] = { 0x00 };" > src/makevars.h
-
-# AC_ARG_ENABLE([icd_keep_makevars],
-#               AS_HELP_STRING([--enable-icd-keep-makevars],
-#                              [keep user Makevars in binary for debug default no]),
-#                              [],
-#                              [DO_KEEP_MAKEVARS=yes]
-#                              )
-# 
-# # TODO: standard way to check these exist using ac
-# #AS_IF([test -d "${HOME}/.R"], [AS_IF([test -f "${HOME}/.R/Makevars"], [], [DO_KEEP_MAKEVARS=no])], [DO_KEEP_MAKEVARS=no])
-# # AC_CHECK_FILES([${HOME}/.R/Makevars], [], [DO_KEEP_MAKEVARS=no])
-# # AC_CHECK_FILES([${HOME}/.R/Makevars], [], [DO_KEEP_MAKEVARS=no])
-# 
-# # also check that user didn't write --enable-makevars=no
-# AC_IF([test -n ${DO_KEEP_MAKEVARS}],
-#       [
-#        AC_MSG_NOTICE([Enabling Makevars inclusion for debugging])
-#        echo 'unsigned char Makevars[[]] = {' > src/makevars.h;
-#        xxd -i < "${HOME}/.R/Makevars" >> src/makevars.h;
-#        dnl must NULL terminate
-#        echo ", 0x00 };" >> src/makevars.h;
-#        ], 
-#        [AC_MSG_NOTICE([Keep Makevars not activated])]
-#        )
 
 AC_ARG_ENABLE([icd_strip], AS_HELP_STRING([--enable-icd-strip], [Enable stripping of binary on Linux and MacOS]))
 AS_IF([test "x$enable_icd_strip" != "xno"], [ICD_STRIP=[tools/mk/strip.mk]], [ICD_STRIP=''])
