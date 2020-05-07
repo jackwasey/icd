@@ -1,3 +1,8 @@
+# Version 4.0.9
+
+ * TODO: Update French ICD code URL
+ * dropped r-lib/rappdirs in favor of copy of backports::R_app_dirs
+
 # Version 4.0.8
  * Work-around rappdirs problem affecting some Windows users with default cache data directory.
  * ICD-10 vignette link to efficiency vignette updated.

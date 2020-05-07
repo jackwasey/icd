@@ -325,7 +325,7 @@
 #' @keywords internal
 #' @noRd
 .default_icd_data_dir <- function() {
-  rappdirs::user_data_dir(appname = "icd")
+  R_user_dir("icd", which = "data")
 }
 
 #' @describeIn set_icd_data_dir Get the currently active data directory, and

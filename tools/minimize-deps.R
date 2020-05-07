@@ -1,7 +1,7 @@
 # try to minimize dependency for some/all builds
 
 # current minimal non-base R deps for ICD github:
-# rappdirs, Rcpp RcppEigen
+# Rcpp RcppEigen
 
 library(magrittr)
 requireNamespace(c("igraph"), character.only = TRUE)
@@ -12,7 +12,7 @@ requireNamespace(c("miniCRAN"), character.only = TRUE)
 
 # taken from DESCRIPTION initially
 bse_deps <- c("methods", "utils", "stats", "graphics")
-def_deps <- c("Rcpp", "RcppEigen", "rappdirs")
+def_deps <- c("Rcpp", "RcppEigen")
 # to build the vignettes (and therefore run the code therein)
 vgn_deps <- c("knitr", "rmarkdown", "rticles", "magrittr")
 # to build the documentation and run examples in a check, not roxygen2 stuff

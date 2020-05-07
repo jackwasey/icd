@@ -1,7 +1,7 @@
 Package: icd
 Title: Comorbidity Calculations and Tools for ICD-9 and ICD-10
     Codes
-Version: 4.0.8
+Version: 4.0.9
 Authors@R: 
     c(person(given = "Jack O.",
              family = "Wasey",
@@ -27,6 +27,11 @@ Authors@R:
              family = "Lee",
              role = "ctb",
              comment = "explain codes in table format"),
+      person(given = "Michel",
+             family = "Lang",
+             role = c("aut"),
+             email = "michellang@gmail.com",
+             comment = "backport of R_user-dir for R version >4. ORCID = 0000-0001-9754-0393"),
       person(given = "R Core Team",
              role = c("aut", "cph"),
              comment = "utils::askYesNo backport and m4 script for OpenMP detection."))
@@ -49,7 +54,6 @@ Depends:
     R (>= 3.4)
 Imports:
     methods,
-    rappdirs,
     Rcpp (>= 0.12.3)
 Suggests:
     graphics,

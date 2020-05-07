@@ -48,14 +48,13 @@ addons:
     packages:
      - ccache
 
-# Rcpp*, rappdirs and testthat all contain compiled code, so including here for much faster travis init.
+# Rcpp* and testthat all contain compiled code, so including here for much faster travis init.
 # However, the R travis ruby script installs Depends _and_ Recommended r-cran-xxx, and this commonly brings in r-cran-testthat, and thus a ton of dependencies. This is fine, except some are not built for R-4.0.0 yet: at least R6 and callr. Thus I want here to install as many dependencies here, which do nor Depend on testthat, R6, callr and cli? Dirk Eddelbeuttel suggests there is a bug with circular testthat and pkgbuild dependency.
 
 #r_binary_packages: # there are not 4.0 built packages available for binary installation yet
 #- Rcpp
 #- RcppEigen
 #- testthat
-#- rappdirs
 #- 'Rcpp --no-install-recommends' # this, amazingly, works, but not on osx, which reverts to regular package installation. Consider using TRAVIS_OS_NAME=osx
 # temporarily disabled because of R6 depdence, which isn't built for CRAN yet with R-4.0.0
 # adding other testthat deps here in the meantime? R6 and callr trouble so far. travis R installs apt recommended packages, which often bring in testthat, then problems. Probably because i've now let apt cran builds take precedence?
