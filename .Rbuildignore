@@ -38,7 +38,11 @@
 ^icd_.*tar\.gz
 ^inst\/doc\/benchresults\\.ods$
 ^.*efficiency.*_files$
+^.*efficiency.*\.knit\..*$
+^.*efficiency.*\.utf8\..*$
 ^.*country-lang-vers.*_files$
+^.*country-lang-vers.*\.knit\..*$
+^.*country-lang-vers.*\.utf8\..*$
 ^lib-bench$
 ^man-roxygen$
 ^revdep$
@@ -56,6 +60,9 @@
 ^src\/test-cpp.*$
 ^src\/test-runner.*$
 ^tools$
-^vignettes\/efficiency-prebuilt\.(Rmd|tex)$
-^vignettes\/country-lang-vers-prebuilt\.(Rmd|tex)$
+^.*\.tex$
+^vignettes\/efficiency-prebuilt\.(Rmd|tex|pdf)$
+^vignettes\/prebuilt/efficiency-prebuilt\.pdf$
+^vignettes\/country-lang-vers-prebuilt\.(Rmd|tex|pdf)$
+^vignettes\/prebuilt/country-lang-vers-prebuilt\.pdf$
 ^vignettes\/jss\..*$

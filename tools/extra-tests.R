@@ -1,32 +1,43 @@
+#!/usr/bin/env Rscript
 
-check_no_static_vignettes <- function(
-  check_fun = rhub::check_for_cran,
-  check_fun_args = list()) {
+release_sanity_checks <- function() {
+  suppressPackageStartupMessages(library("icd", quietly = TRUE, warn.conflicts = FALSE))
+  message("codetools")
+  codetools::checkUsagePackage('icd', all = TRUE, suppressLocal = TRUE)
+  message("Missing NAMESPACE S3")
+  s <- devtools::missing_s3(); if (length(s)) s
+}
+
+check_rhub_no_prebuilt_vign <- function(
+                                      check_fun = rhub::check_for_cran,
+                                      check_fun_args = list()) {
   td <- tempfile("icd-no-static-vignettes")
   dir.create(td)
   message("Using temp dir: ", td)
-  file.copy("~/icd", td, recursive = TRUE, overwrite = TRUE)
-  setwd(icd_tmp_path <- file.path(td, "icd"))
-  cat('^vignettes\\/.*-vignette\\.Rnw$',
-      fill = TRUE,
-      append = TRUE,
-      file = file.path(icd_tmp_path, ".Rbuildignore")
+  ih <- Sys.getenv("ICD_HOME")
+  if (ih == "") ih <- file.path("~","icd")
+  file.copy(ih, td, recursive = TRUE, overwrite = TRUE)
+  icd_tmp_path <- file.path(td, "icd")
+  setwd(icd_tmp_path)
+  cat("^vignettes\\/.*\\.Rnw$",
+    fill = TRUE,
+    append = TRUE,
+    file = file.path(icd_tmp_path, ".Rbuildignore")
   )
   do.call(check_fun, check_fun_args)
   message("Completed check using tree at: ", td)
 }
 
-check_local_gctorture <- function(filter = ".*") {
+check_local_gctorture <- function(filter = ".*", args = character()) {
   with_split_tests(
-    rcmdcheck::rcmdcheck(args = c("--use-gct", check_args))
+    rcmdcheck::rcmdcheck(args = c("--use-gct", args = args))
   )
 }
 
 # THIS DOESN'T WORK! Eigen spews out warnings when RcppEigen itself is
 # installed, not when icd is installed.
-check_rhub_valgrind_quiet <- function(
-  fun = rhub::check_with_valgrind,
-  filter = ".*") {
+check_rhub_valgrind <- function(fun = rhub::check_with_valgrind,
+                                filter = ".*") {
   shutup <-
     paste0(
       "CXX11FLAGS=",
@@ -55,4 +66,3 @@ check_rhub_valgrind_quiet <- function(
     )
   )
 }
-

@@ -1,3 +1,5 @@
+# !diagnostics off
+
 #' @title Backport of R_user_dir for R < 4.0.0
 #'
 #' @description
@@ -11,6 +13,9 @@
 #' bp_R_user_dir = getFromNamespace("R_user_dir", "backports")
 #'
 #' bp_R_user_dir("backports")
+#' @author Michael Lang
+#' @keywords internal
+#' @noRd
 R_user_dir <- function(package, which = c("data", "config", "cache")) {
   stopifnot(is.character(package), length(package) == 1L)
 

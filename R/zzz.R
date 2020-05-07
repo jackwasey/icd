@@ -63,11 +63,12 @@ release_questions <- function() {
     "aspell_package_Rd_files('.')",
     # documentation:
     "manual rebuild efficiency & country-lang-vers vignettes, check in tarball",
-    "Do all examples look ok (not just run without errors)?",
+    "Do all examples look okay (not just run without errors)?",
     # code quality:
     ".test_slow(TRUE); test_all()",
-    "icd::download_all_icd_data() and other major functions pre-library call",
-    "codetools::checkUsagePackage('icd', all = TRUE, suppressLocal = TRUE)",
+    "tools/test-plus.sh",
+    "icd::download_all_icd_data() and other major functions pre- and post-call to library('icd')",
+    "library('icd'); codetools::checkUsagePackage('icd', all = TRUE, suppressLocal = TRUE)",
     "devtools::missing_s3()", # http://r-pkgs.had.co.nz/namespace.html
     "Use clang scan-build, with latest version of clang",
     # testing and compilation and different platforms:

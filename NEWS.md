@@ -2,6 +2,7 @@
 
  * TODO: Update French ICD code URL
  * dropped r-lib/rappdirs in favor of copy of backports::R_app_dirs
+ * dropped extraneous files from source tarball sent to CRAN
 
 # Version 4.0.8
  * Work-around rappdirs problem affecting some Windows users with default cache data directory.
