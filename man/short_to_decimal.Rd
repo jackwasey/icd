@@ -4,6 +4,7 @@
 \alias{short_to_decimal}
 \alias{short_to_decimal.default}
 \alias{short_to_decimal.icd9}
+\alias{short_to_decimal.icd9cm_pc}
 \alias{short_to_decimal.icd10}
 \alias{short_to_decimal.icd10cm}
 \title{Convert ICD codes from short to decimal forms}
@@ -13,6 +14,8 @@ short_to_decimal(x)
 \method{short_to_decimal}{default}(x)
 
 \method{short_to_decimal}{icd9}(x)
+
+\method{short_to_decimal}{icd9cm_pc}(x)
 
 \method{short_to_decimal}{icd10}(x)
 
@@ -30,6 +33,9 @@ Convert from short to decimal forms of ICD codes.
 to decimal format
 
 \item \code{icd9}: convert ICD-9 codes from short to decimal
+format
+
+\item \code{icd9cm_pc}: convert ICD-9 codes from short to decimal
 format
 
 \item \code{icd10}: convert ICD-10 codes from short to decimal
