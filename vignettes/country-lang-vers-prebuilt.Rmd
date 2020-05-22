@@ -6,10 +6,10 @@ output: rmarkdown::pdf_document
 
 `icd` 4.0+ offers some international support.
 
- - World Health Organization (WHO) codes for 2016 in English, the latest release.
- - World Health Organization (WHO) codes for 2008 in French, the latest available online data.
- - ICD-10-FR in French, with modifications as used in France.
- - Translations of the US ICD-10-CM codes in French and Dutch, which are used in Belgium.
+- World Health Organization (WHO) codes for 2016 in English, the latest release.
+- World Health Organization (WHO) codes for 2008 in French, the latest available online data.
+- ICD-10-FR in French, with modifications as used in France.
+- Translations of the US ICD-10-CM codes in French and Dutch, which are used in Belgium.
 
 All of this should be considered beta quality, and I would much appreciate testing and bug reports. I would especially be interested if someone has experience internationalizing an R package like this.
 
@@ -46,6 +46,7 @@ get_icd10who2016()[1:5, ]
 get_icd10fr2019()[1:5, ]
 summary(get_icd10who2016())
 ```
+
 ```{r quicklookeval, echo = FALSE}
 get_icd10who2016()[1:5, ]
 get_icd10fr2019()[1:5, ]
@@ -54,7 +55,7 @@ summary(get_icd10who2016())
 
 # French edition of ICD-10
 
-ICD-10-FR is significantly different from the WHO version, and is used by official bodies and health systems in France. As with all the features in this document, this is an early attempt at the complex problem of providing all the codes, transtatlanguages, 
+ICD-10-FR is significantly different from the WHO version, and is used by official bodies and health systems in France. As with all the features in this document, this is an early attempt at broadening the international capabilities of this package.
 
 ```{r french}
 fr <- get_icd10fr2019()
@@ -82,18 +83,18 @@ The function `with_icd10cm_version` allows temporarily using a particular data s
   with_icd10cm_version(ver = "2018",
                                  is_leaf(as.icd10cm("C4311"))
   )
-  with_icd10cm_version(ver = "2019", 
+  with_icd10cm_version(ver = "2019",
                                  is_leaf(as.icd10cm("C4311"))
   )
   # In 2018 the following code was not even defined, but in 2019 was a new child
   # code of "C4311"s
-  with_icd10cm_version(ver = "2018", 
+  with_icd10cm_version(ver = "2018",
                                  {
                                    print(is_defined(as.icd10cm("C4311")))
                                    print(is_leaf(as.icd10cm("C4311")))
                                  }
   )
-  with_icd10cm_version(ver = "2019", 
+  with_icd10cm_version(ver = "2019",
                                  is_leaf("C43111")
   )
 ```

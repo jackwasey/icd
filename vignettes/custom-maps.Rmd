@@ -17,20 +17,20 @@ knitr::opts_chunk$set(
 )
 ```
 
-
 Many problems with clinical data are best solved using the standard and widely validated comorbidities, mapped to subsets of ICD-9 or ICD-10 codes, as published by authors including Elixhauser, Quan, Deyo and the AHRQ. It is also common to have a pre-defined specific set of ICD codes. Examples of this include:
 
- - Studying sub-types of a common comorbidity, such as obesity: although obesity is in the AHRQ and Elixhauser mappings, there is no granularity.
- - Studying a particular disease: most diseases are not in the standard comorbidity maps. To distinguish patients having or not having a particular set of diseases is usually not possible using the standard comorbidity maps. E.g. Which patients have eczema? Which emergency room patients presented with a sexual health problem?
+- Studying sub-types of a common comorbidity, such as obesity: although obesity is in the AHRQ and Elixhauser mappings, there is no granularity.
+- Studying a particular disease: most diseases are not in the standard comorbidity maps. To distinguish patients having or not having a particular set of diseases is usually not possible using the standard comorbidity maps. E.g. Which patients have eczema? Which emergency room patients presented with a sexual health problem?
 
- `icd` has a simple mechanism to use custom category-ICD maps. A comorbidity map is a list of character vectors. Each list must be named to reflect the ICD codes it contains; the character vector contains the ICD codes themselves.
+`icd` has a simple mechanism to use custom category-ICD maps. A comorbidity map is a list of character vectors. Each list must be named to reflect the ICD codes it contains; the character vector contains the ICD codes themselves.
 
- Let's take a look at the first few items in the Charlson map from Quan and Deyo:
+Let's take a look at the first few items in the Charlson map from Quan and Deyo:
+
 ```{r charlsonexample}
 print(icd::icd10_map_quan_deyo, n_comorbidities = 3, n_codes = 8)
 ```
 
-## Obesity example
+# Obesity example
 
 Now we can make our own comorbidity map, and apply it to [a question on 'Stackoverflow'](https://stackoverflow.com/questions/53954537/creating-categorical-variable-in-r/53954950#53954950).
 
@@ -65,6 +65,7 @@ icd::icd10_comorbid_quan_elix(
   obesity,
   return_df = TRUE)["Obesity"]
 ```
+
 ## Maps with ranges of codes
 
 Sometimes there are a large number of ICD codes, and they can be defined more succinctly with ranges, then by specifying every single code. In addition, as new codes are added to ICD-10-CM, (especially ICD-10-CM -- it moves much faster than ICD-10 from the WHO) having specific hard-coded ICD-10 codes will miss closely related codes in the future. Using the ranges functions from `icd` helps with both these problems.

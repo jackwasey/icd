@@ -64,6 +64,7 @@ release_questions <- function() {
     # documentation:
     "manual rebuild efficiency & country-lang-vers vignettes, check correct in the tarball",
     "Do all examples look okay (not just run without errors)?",
+    "Consider markdownlint mdl https://github.com/markdownlint/markdownlint",
     # code quality:
     "tools/test-plus.sh",
     "Use clang scan-build, with latest version of clang (clang-tools in apt)",

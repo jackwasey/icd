@@ -46,16 +46,19 @@ AHRQ_comor <- names(icd9_map_elix)
 ```
 
 These comorbidities are shared:
+
 ```{r shared}
 intersect(AHRQ_comor, Elix_comor)
 ```
 
 These comorbidities are in AHRQ but not in the Elixhauser sets:
+
 ```{r in_ahrq}
 setdiff(AHRQ_comor, Elix_comor)
 ```
 
 Finally, these comorbidities are in Elixhauser but not in the AHRQ sets:
+
 ```{r in_elix}
 setdiff(Elix_comor, AHRQ_comor)
 ```
@@ -75,6 +78,6 @@ The comparison summary provides the size of the asymmetric difference between ma
 comp$CHF
 ```
 
-In this example we look at the shared comorbidity Congestive Heart Failure (CHF). Note the list first gives us all the ICD codes that exist in both comorbidity mappings. Then it gives a list called `only.x`, followed by a list called `only.y`. `x` and `y` refer to the first and second mappings given to the function call. In this case, `x` refers to the AHRQ ICD-9 mapping, and `y` refers to the Elixhauser original 1998 ICD-9 mapping. So `only.x` lists all the ICD codes in the AHRQ comorbidity but not the Elixhauser comorbidity. Conversely, `only.y` lists all the ICD codes in the Elixhauser comorbidity but not in the AHRQ comorbidity, which in this case is none.   
+In this example we look at the shared comorbidity Congestive Heart Failure (CHF). Note the list first gives us all the ICD codes that exist in both comorbidity mappings. Then it gives a list called `only.x`, followed by a list called `only.y`. `x` and `y` refer to the first and second mappings given to the function call. In this case, `x` refers to the AHRQ ICD-9 mapping, and `y` refers to the Elixhauser original 1998 ICD-9 mapping. So `only.x` lists all the ICD codes in the AHRQ comorbidity but not the Elixhauser comorbidity. Conversely, `only.y` lists all the ICD codes in the Elixhauser comorbidity but not in the AHRQ comorbidity, which in this case is none.
 
 We can see from this comparison that the two mapping schemes are quite similar for this comorbidity. Most of the ICD codes exist in both mappings, and only a handful of mappings exist in the AHRQ mapping but not in the Elixhauser mapping. This makes sense since AHRQ was designed to update the original Elixhauser 1998 comorbidities, and has expanded the comorbidities in annual updates. This means any analysis of CHF that uses either Elixhauser or AHRQ should produce comparable results, since the comorbidity mappings are not wildly different.
