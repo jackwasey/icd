@@ -21,7 +21,7 @@ git diff --cached --name-only | grep -q 'DESCRIPTION' &&
     # git commit --amend -m"$(git log --format=%B -n1)" -m"Updated codemeta.json automatically."
     ok=1
     true
-    }
+}
 
 README=("$(git diff --cached --name-only | grep 'README.Rmd')")
 if [[ ${#README[@]} != 0 ]] && [[ README.Rmd -nt README.md ]]; then
@@ -57,6 +57,28 @@ else
     { echo "version mismatch: DESCRIPTION=${desc_ver}, NEWS.md${news_ver}, configure.ac${conf_ver}" >&2; ok=1; }
 fi
 
+# make sure we usr /usr/bin/env bash for scripts
+find "${ICD_HOME}" \
+    -type d -name '.*' -prune -o \
+    ! -name "pre-commit" \
+    -type f \
+    -exec grep -q '#!/bin/bash' '{}' \; \
+    -print |
+    while read -r badbash
+    do {
+        echo "Use /usr/bin/env bash in ${badbash}" >&2;
+        ok=1;
+    }
+done
+
+# check bash scripts
+find "${ICD_HOME}" -type d -name '.*' -prune -o -type f -exec grep -q '#!/usr/bin/env bash' '{}' \; -print |
+    while read -r scbash
+    do {
+        shellcheck "${scbash}"
+        ok=1;
+    }
+done
 
 Rscript -e '
 devnull <- desc::desc_reformat_fields();

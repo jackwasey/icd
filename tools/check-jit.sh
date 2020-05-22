@@ -1,11 +1,8 @@
-#!/bin/bash
+#!/usr/bin/env bash
 #shellcheck disable=SC2012
 set -euo pipefail
 IFS=$'\n\t'
 whereami="$(dirname "${BASH_SOURCE[0]}")"
-#shellcheck source=find-icd-home.sh
-source "${whereami}/find-icd-home.sh"
-# ICD_HOME=$(find_icd_home)
 tmpd=$(mktemp -d /tmp/icdcheckcranplusjit.XXXXXXXXXXX)
 function finish {
     #	  rm -rf "$tmpd"
@@ -61,6 +58,5 @@ MAKEFLAGS=-j$(getconf _NPROCESSORS_ONLN) \
     R_CHECK_CONSTANTS=5 \
     R_JIT_STRATEGY=3 \
     R CMD check "$(ls -t "$tmpd"/icd*.tar.gz | head -1)"
-    popd
 
 # N.b. R_CHECK_CONSTANTS and R_JIT_STRATEGY work together, but can make examples and tests run very slowly.

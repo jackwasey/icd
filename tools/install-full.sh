@@ -1,7 +1,8 @@
-#!/bin/bash
+#!/usr/bin/env bash
+# shellcheck disable=SC2012
 set -euo pipefail
 IFS=$'\n\t'
-${ICD_HOME:-$HOME/icd}/tools/build.sh
+"${ICD_HOME:-$HOME/icd}"/tools/build.sh
 MAKEFLAGS=-j$(getconf _NPROCESSORS_ONLN) \
 	R CMD INSTALL \
 		--no-clean-on-error \
