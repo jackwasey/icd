@@ -7,7 +7,6 @@
 ^.*\.Rproj$
 ^.*\.xcworkspace$
 ^CONTRIBUTING\.md$
-^configure.ac$
 ^travis-notes\.txt$
 ^Meta$
 ^README-*\.png$
