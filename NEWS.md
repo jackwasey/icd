@@ -1,8 +1,9 @@
 # Version 4.0.9
 
- * TODO: Update French ICD code URL
+ * Updated French ICD code URL
  * dropped r-lib/rappdirs in favor of copy of backports::R_app_dirs
  * dropped extraneous files from source tarball sent to CRAN
+ * clean-up prebuilt pdf paths, both keeping package smaller, and fixing broken links, as noted by CRAN but missed by R CMD check somehow.
 
 # Version 4.0.8
  * Work-around rappdirs problem affecting some Windows users with default cache data directory.

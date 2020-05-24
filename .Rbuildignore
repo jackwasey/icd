@@ -32,6 +32,7 @@
 ^data-raw$
 ^doc$
 ^docs$
+^docs\/.*$
 ^Dockerfile$
 ^icd.*\.out$
 ^icd\.Rcheck$
@@ -61,8 +62,6 @@
 ^src\/test-runner.*$
 ^tools$
 ^.*\.tex$
-^vignettes\/efficiency-prebuilt\.(Rmd|tex|pdf)$
-^vignettes\/prebuilt/efficiency-prebuilt\.pdf$
-^vignettes\/country-lang-vers-prebuilt\.(Rmd|tex|pdf)$
-^vignettes\/prebuilt/country-lang-vers-prebuilt\.pdf$
+^vignettes\/efficiency-prebuilt\.(Rmd|tex)$
+^vignettes\/country-lang-vers-prebuilt\.(Rmd|tex)$
 ^vignettes\/jss\..*$

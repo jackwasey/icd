@@ -62,7 +62,7 @@ release_questions <- function() {
     # data
     "clean data then download and update everything on all platforms",
     # documentation:
-    "manual rebuild efficiency & country-lang-vers vignettes, check correct in the tarball",
+    "manual render prebuilt efficiency & country-lang-vers vignettes, check correct in the tarball",
     "Do all examples look okay (not just run without errors)?",
     "Consider markdownlint mdl https://github.com/markdownlint/markdownlint",
     # code quality:
