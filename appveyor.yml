@@ -35,9 +35,9 @@ environment:
   R_CHECK_ARGS: "--no-manual --ignore-vignettes --no-build-vignettes"
   # TODO: use an environment script in tools/env
   #_R_CHECK_FORCE_SUGGESTS_: false
-  ICD_DATA_VERBOSE: true
-  ICD_DATA_OFFLINE: true
-  ICD_DATA_INTERACT: false
+  ICD_VERBOSE: true
+  ICD_OFFLINE: true
+  ICD_INTERACT: false
   # KEEP_VIGNETTES: ""
   # by default, don't set environment, to be more like CRAN?
   #  ICD_DATA_ABSENT_ACTION: 'message'

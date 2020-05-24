@@ -2,6 +2,8 @@
 #R_MAKEVARS_USER=${ICD_HOME}/tools/Makevars.quick - this then ignores ~/.R/Makevars.*
 #shellcheck disable=SC2034
 ICD_TEST_SLOW=FALSE
+ICD_OFFLINE=TRUE
+ICD_INTERACT=FALSE
 MAKEFLAGS=-j$(getconf _NPROCESSORS_ONLN)
 _R_CHECK_ALL_NON_ISO_C_=TRUE
 _R_CHECK_ASCII_DATA_=FALSE

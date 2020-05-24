@@ -36,7 +36,7 @@
 #' These are subject to change, and intended for package internals only.
 #'
 #' \code{icd.offline} - default is \code{TRUE}, unless the system
-#' environment vairable \code{ICD_DATA_OFFLINE} is \sQuote{false} or
+#' environment vairable \code{ICD_OFFLINE} is \sQuote{false} or
 #' \sQuote{no}. This will only ever be turned on with explicit user
 #' authorization (or by directly setting it). Turning this on also results in
 #' data being saved in the data directory. See below.
@@ -90,9 +90,9 @@ NULL
     if (is.numeric(x)) x <- as.integer(x)
     .set_opt("verbose" = x)
   } else {
-    ev <- .env_var_is_true("ICD_DATA_VERBOSE")
+    ev <- .env_var_is_true("ICD_VERBOSE")
     .set_opt("verbose" = ev)
-    if (ev) message("Reset verbose option to ICD_DATA_VERBOSE")
+    if (ev) message("Reset verbose option to ICD_VERBOSE")
   }
   gcinfo(x > 5)
   invisible(.get_opt("verbose"))
@@ -101,9 +101,9 @@ NULL
 .interact <- function(x) {
   if (missing(x)) {
     if (is.na(.get_opt("interact", default = NA)) &&
-      !is.na(Sys.getenv("ICD_DATA_INTERACT", unset = NA))) {
+      !is.na(Sys.getenv("ICD_INTERACT", unset = NA))) {
       .msg("Setting interactivity with env var")
-      .set_opt("interact" = .env_var_is_true("ICD_DATA_INTERACT"))
+      .set_opt("interact" = .env_var_is_true("ICD_INTERACT"))
     }
     opt <- .get_opt("interact", default = NA)
     if (is.na(opt)) {
@@ -263,8 +263,8 @@ set_icd_data_dir <- function(path = NULL) {
     .msg("Trying the icd data cache set by option(\"icd.cache\"): ", path) # nolint
   }
   if (is.null(path)) {
-    path <- Sys.getenv("ICD_DATA_CACHE", unset = NA)
-    .msg("Trying the icd data cache set by the environment variable ICD_DATA_CACHE: ", path) # nolint
+    path <- Sys.getenv("ICD_CACHE", unset = NA)
+    .msg("Trying the icd data cache set by the environment variable ICD_CACHE: ", path) # nolint
     if (is.na(path)) path <- NULL
   }
   if (is.null(path)) {

@@ -76,8 +76,8 @@ env:
   global:
     - ICD_SHUTUP=true
     - ICD_TEST_SLOW=false
-    - ICD_DATA_OFFLINE=true
-    - ICD_DATA_INTERACT=false
+    - ICD_OFFLINE=true
+    - ICD_INTERACT=false
     - ICD_KEEP_MAKEVARS=true
     - R_CHECK_ENVIRON=tools/env/travis-global
 
