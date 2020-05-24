@@ -63,3 +63,4 @@ bench-refactor.html
 .gdb_history
 
 .travis.yml.*
+travis-notes.txt
