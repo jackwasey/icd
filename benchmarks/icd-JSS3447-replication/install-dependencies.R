@@ -1,20 +1,32 @@
 install_jss3447_deps <- function() {
-  repos <- options("repos")[1]
-  # don't even assume the option for CRAN repo is correct...
-  cran_ok <- TRUE
+  old_repos <- options("repos")
+  on.exit(options(old_repos), add = TRUE)
+  # don't assume anything, and I do not wish to prompt user, e.g. if repos = "@CRAN@"
+  repos <- old_repos["repos"]
+  repo_ok <- TRUE
+  if (any(repos == "@CRAN@")) {
+    repo_ok <- FALSE
+  }
+
   tryCatch(readLines(url(repos)),
-    error = function(e) cran_ok <<- FALSE,
+    error = function(e) repo_ok <<- FALSE,
     warning = function(e) {}
   )
-  if (is.null(repos$repos) || !cran_ok) {
-    repos <- c(CRAN = "https://cloud.r-project.org/")
+  if (is.null(repos$repos) ||
+    length(repos$repos) == 1 ||
+    !repo_ok
+  ) {
+    repos <- c(
+      CRAN = "https://cloud.r-project.org/",
+      CRAN_http = "http://cloud.r-project.org/"
+    )
   }
   for (p in c(
-#    "utf8", # what for?
+    #    "utf8", # what for?
     "bench",
-    #"backports",
+    # "backports",
     "checkmate", # imported by comorbidity
-    #"magrittr", # no need
+    # "magrittr", # no need
     "parallel", # used by 'comorbidity' for maximum speed
     "plyr", "reshape2", "hash", # imported by 'medicalrisk'
     # "testthat", # not testing any packages here
@@ -35,7 +47,7 @@ install_jss3447_deps <- function() {
       install.packages(p, character.only = TRUE, repos = repos)
     }
     library(p,
-      character.only =TRUE,
+      character.only = TRUE,
       quietly = TRUE, warn.conflicts = FALSE
     )
   }
@@ -53,21 +65,21 @@ install_jss3447_deps <- function() {
   )) {
     message("icd not yet installed, so installing from CRAN")
     if ("icd" %in% available.packages()["Package"]) {
-        install.packages("icd", quiet = TRUE, repos = repos)
+      install.packages("icd", quiet = TRUE, repos = repos)
     } else {
-        message("icd does not seem to be available in current repos. Installing from source")
+      message("icd does not seem to be available in current repos. Installing from source")
       icd_home_path <- normalizePath("../..")
       Sys.setenv("ICD_HOME" = icd_home_path)
-        system2("bash", "../../tools/install-quick.sh") #, env = c(ICD_HOME = icd_home_path))
+      system2("bash", "../../tools/install-quick.sh") # , env = c(ICD_HOME = icd_home_path))
     }
-
   }
   library("icd", quietly = TRUE)
-  # create the .deps file so Makefile knows we are done
-  if (!file.exists(".deps")) {
-    file.create(".deps", showWarnings = FALSE)
+  # re-create the .deps file so Makefile knows that we are done
+  if (file.exists(".deps")) {
+    unlink(".deps", force = TRUE, recursive = FALSE, expand = FALSE)
   }
-  invisible()
+  file.create(".deps", showWarnings = FALSE)
+  invisible(NULL)
 }
 
 install_jss3447_deps()
