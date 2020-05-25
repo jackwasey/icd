@@ -79,7 +79,7 @@ on_failure:
   - exit 1 # with APPVEYOR_SKIP_FINALIZE_ON_EXIT: true, this should exit immediately
 
 on_finish:
-  - IF NOT "%MINI_BENCH%"=="yes" exit 1 # with APPVEYOR_SKIP_FINALIZE_ON_EXIT: true, this should exit immediately
+  - IF NOT "%MINI_BENCH%"=="yes" exit 0 # with APPVEYOR_SKIP_FINALIZE_ON_EXIT: true, this should exit immediately
   - cd benchmarks/icd-JSS3447-replication && make bench3
   # - make replmat # needs to call the Rscript on appveyor path.
   # - cd ../.. && Rscript -e "covr::codecov()"
