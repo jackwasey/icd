@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 # shellcheck disable=SC2012
-set -euo pipefail
+set -eu
 IFS=$'\n\t'
 "${ICD_HOME:-$HOME/icd}"/tools/build.sh
 MAKEFLAGS=-j$(getconf _NPROCESSORS_ONLN) \

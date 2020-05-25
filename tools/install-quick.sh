@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-set -euo pipefail
+set -eu
 IFS=$'\n\t'
 # shellcheck disable=SC1090
 source "${ICD_HOME:-$HOME/icd}/tools/build-quick.sh"

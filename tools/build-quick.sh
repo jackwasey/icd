@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-set -euo pipefail
+set -eu
 IFS=$'\n\t'
 
 # quickly build the pacakge, and put it in the current directory

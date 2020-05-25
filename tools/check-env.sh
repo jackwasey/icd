@@ -4,7 +4,7 @@
 
 #shellcheck disable=SC2012,SC1091
 #shellcheck source=find-icd-home.sh
-set -euo pipefail
+set -eu
 IFS=$'\n\t'
 function whereami() {
     local dir SOURCE

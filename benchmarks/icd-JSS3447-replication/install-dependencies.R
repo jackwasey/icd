@@ -10,22 +10,22 @@ install_jss3447_deps <- function() {
     repos <- c(CRAN = "https://cloud.r-project.org/")
   }
   for (p in c(
-    "utf8",
+#    "utf8", # what for?
     "bench",
-    "backports",
-    "checkmate",
-    "magrittr",
-    "parallel", # used by 'comorbidity'
-    "plyr", "reshape2", "hash", # used by 'medicalrisk'
-    "testthat",
-    "knitr",
-    "profmem",
+    #"backports",
+    "checkmate", # imported by comorbidity
+    #"magrittr", # no need
+    #"parallel", # base package imported by 'comorbidity'
+    "plyr", "reshape2", "hash", # imported by 'medicalrisk'
+    # "testthat", # not testing any packages here
+    # "knitr", # not building any vignettes
+    # "profmem", # do someday
     "Rcpp",
     "RcppEigen",
-    "tidyr",
+    # "tidyr", # really?
     #    "comorbidity", # CRAN version has incompatible updates
     #    "medicalrisk", # CRAN version from 2016 unchanged at time of submission
-    "icd.data" # TODO: discontinue, but currently required with submitted icd version
+    NULL
   )) {
     if (!require(p,
       character.only = TRUE,
@@ -35,7 +35,7 @@ install_jss3447_deps <- function() {
       install.packages(p, character.only = TRUE, repos = repos)
     }
     library(p,
-      character.only = TRUE,
+      character.only =TRUE,
       quietly = TRUE, warn.conflicts = FALSE
     )
   }
@@ -52,7 +52,13 @@ install_jss3447_deps <- function() {
     )
   )) {
     message("icd not yet installed, so installing from CRAN")
-    install.packages("icd", repos = repos)
+    if ("icd" %in% available.packages()["Package"]) {
+        install.packages("icd", repos = repos)
+    } else {
+        message("icd does not seem to be available in current repos. Installing from source")
+        system2("../../tools/install-quick.sh") 
+    }
+
   }
   library("icd", quietly = TRUE)
   # create the .deps file so Makefile knows we are done

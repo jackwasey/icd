@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #shellcheck disable=SC2012
-set -euo pipefail
+set -eu
 IFS=$'\n\t'
 ICD_HOME="${ICD_HOME:-${HOME}/icd}"
 tmpd=$(mktemp -d /tmp/icdcheckfull.XXXXXXXXXXX)

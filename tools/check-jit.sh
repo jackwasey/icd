@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #shellcheck disable=SC2012
-set -euo pipefail
+set -eu
 IFS=$'\n\t'
 whereami="$(dirname "${BASH_SOURCE[0]}")"
 tmpd=$(mktemp -d /tmp/icdcheckcranplusjit.XXXXXXXXXXX)
