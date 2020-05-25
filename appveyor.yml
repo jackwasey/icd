@@ -22,7 +22,7 @@ before_build:
   - bash tools/dump-env.sh
   - rm .Rinstignore  # do install everything for testing
   - sed -i'' -e '/.*[Dd]ata.*/d' .Rbuildignore # do include data for testing, some data not in github though
-  - tools/DESCRIPTION-minimalize.sh > DESC.min && cp DESCRIPTION DESC.orig && cp -f DESC.min DESCRIPTION;
+  - bash -c 'tools/DESCRIPTION-minimalize.sh > DESC.min && cp DESCRIPTION DESC.orig && cp -f DESC.min DESCRIPTION;'
 
 environment:
   global:
