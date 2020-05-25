@@ -20,6 +20,7 @@ install_jss3447_deps <- function() {
       CRAN = "https://cloud.r-project.org/",
       CRAN_http = "http://cloud.r-project.org/"
     )
+    options("repos" = repos)
   }
   for (p in c(
     #    "utf8", # what for?
