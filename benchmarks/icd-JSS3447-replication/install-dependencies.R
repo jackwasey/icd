@@ -58,7 +58,7 @@ install_jss3447_deps <- function() {
         message("icd does not seem to be available in current repos. Installing from source")
       icd_home_path <- normalizePath("../..")
       Sys.setenv("ICD_HOME" = icd_home_path)
-        system2("../../tools/install-quick.sh") #, env = c(ICD_HOME = icd_home_path))
+        system2("bash", "../../tools/install-quick.sh") #, env = c(ICD_HOME = icd_home_path))
     }
 
   }
