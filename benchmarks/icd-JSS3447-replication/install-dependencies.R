@@ -15,7 +15,7 @@ install_jss3447_deps <- function() {
     #"backports",
     "checkmate", # imported by comorbidity
     #"magrittr", # no need
-    #"parallel", # base package imported by 'comorbidity'
+    "parallel", # used by 'comorbidity' for maximum speed
     "plyr", "reshape2", "hash", # imported by 'medicalrisk'
     # "testthat", # not testing any packages here
     # "knitr", # not building any vignettes
