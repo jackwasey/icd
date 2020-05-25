@@ -3,6 +3,7 @@
 ^(vignettes\/)?\.build\.timestamp$
 ^\.gdb_history$
 ^\.gitconfig$
+^\.deps$
 ^.*\.Rprof.*$
 ^.*\.Rproj$
 ^.*\.xcworkspace$

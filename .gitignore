@@ -61,6 +61,7 @@ tests/testthat/Rplots.pdf
 testthat-disabled.R
 bench-refactor.html
 .gdb_history
-
 .travis.yml.*
 travis-notes.txt
+.deps
+*build.log
