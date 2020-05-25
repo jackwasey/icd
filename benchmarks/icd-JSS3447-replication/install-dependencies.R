@@ -27,7 +27,7 @@ install_jss3447_deps <- function() {
     "bench",
     # "backports",
     "checkmate", # imported by comorbidity
-    # "magrittr", # no need
+    # "magrittr", # no need?
     "parallel", # used by 'comorbidity' for maximum speed
     "plyr", "reshape2", "hash", # imported by 'medicalrisk'
     # "testthat", # not testing any packages here
@@ -35,7 +35,8 @@ install_jss3447_deps <- function() {
     # "profmem", # do someday
     "Rcpp",
     "RcppEigen",
-    # "tidyr", # really?
+    "touch", # but this will not be in JSS submission
+    "tidyr", # really - I should do this with base R - just one invocation
     #    "comorbidity", # CRAN version has incompatible updates
     #    "medicalrisk", # CRAN version from 2016 unchanged at time of submission
     NULL
