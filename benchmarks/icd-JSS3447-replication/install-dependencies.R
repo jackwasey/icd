@@ -53,10 +53,12 @@ install_jss3447_deps <- function() {
   )) {
     message("icd not yet installed, so installing from CRAN")
     if ("icd" %in% available.packages()["Package"]) {
-        install.packages("icd", repos = repos)
+        install.packages("icd", quiet = TRUE, repos = repos)
     } else {
         message("icd does not seem to be available in current repos. Installing from source")
-        system2("../../tools/install-quick.sh") 
+      icd_home_path <- normalizePath("../..")
+      Sys.setenv("ICD_HOME" = icd_home_path)
+        system2("../../tools/install-quick.sh") #, env = c(ICD_HOME = icd_home_path))
     }
 
   }
