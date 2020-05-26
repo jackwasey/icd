@@ -12,6 +12,7 @@ release_sanity_checks <- function() {
   message("Missing NAMESPACE S3")
   s <- devtools::missing_s3(); if (length(s)) s
   message("style check")
+  # exclude R_user_dir.R so easier to diff with upstream
   styler::style_pkg(exclude_files = c("R/RcppExports.R", "R/R_user_dir.R"), dry = "fail")
 message("spelling")
 aspell_package_Rd_files('.')

@@ -6,17 +6,29 @@
 #' See the original description in \code{tools::R_user_dir}.
 #'
 #' @keywords internal
-#' @rawNamespace if (getRversion() < "4.0.0") export(R_user_dir)
 #' @examples
+#' \dontrun{
 #' # get function from namespace instead of possibly getting
 #' # implementation shipped with recent R versions:
-#' bp_R_user_dir = getFromNamespace("R_user_dir", "backports")
-#'
-#' bp_R_user_dir("backports")
-#' @author Michael Lang
+#' f = getFromNamespace("R_user_dir", "icd")
+#' cached <- f("icd", "cache")
+#' confd <- f("icd", "config")
+#' datad <- f("icd", "data")
+#' dir.exists(c(cached, confd, datad))
+#' prnts <- vapply(c(cached, confd, datad), dirname, character(1))
+#' dir.exists(prnts)
+#' p_prt <- vapply(prnts, dirname, character(1))
+#' dir.exists(p_prt)
+#' q_prt <- vapply(p_prt, dirname, character(1))
+#' dir.exists(q_prt)
+#' r_prt <- vapply(q_prt, dirname, character(1))
+#' dir.exists(r_prt)
+#' vapply(list(prnts, p_prt, q_prt, r_prt), `[[`, FUN.VALUE = character(1), 1)
+#' }
+#' @author Michael Lang, adapted by Jack Wasey
 #' @keywords internal
 #' @noRd
-R_user_dir <- function(package, which = c("data", "config", "cache")) {
+R_user_dir <- function(package = "icd", which = c("data", "config", "cache")) {
   stopifnot(is.character(package), length(package) == 1L)
 
   which <- match.arg(which)

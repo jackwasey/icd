@@ -31,7 +31,7 @@ Authors@R:
              family = "Lang",
              role = "aut",
              email = "michellang@gmail.com",
-             comment = "backport of R_user-dir for R version >4. ORCID = 0000-0001-9754-0393"),
+             comment = "backport of R_user_dir for R version >4. ORCID = 0000-0001-9754-0393"),
       person(given = "R Core Team",
              role = c("aut", "cph"),
              comment = "utils::askYesNo backport and m4 script for OpenMP detection."))
