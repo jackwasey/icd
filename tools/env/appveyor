@@ -1,28 +1,21 @@
 #!/usr/bin/env bash
 #shellcheck disable=SC2034
-#
-#https://github.com/r-lib/remotes for R_REMOTE_UPGRADE and R_REMOTES_STANDALONE info. may need to upgrade with install_deps, but maybe not. if pkgbuild etc must be upgraded, then standalone makes it actually work, albeit slower. This can avoid upgrading binary-installed packages.
-#see github.com/travis-ci/travis-build in lib/travis/build/script/r.rb
-_R_BUILD_COMPACT_VIGNETTES_=gs+qpdf
-_R_CHECK_ALL_NON_ISO_C_=TRUE
 _R_CHECK_ALWAYS_LOG_VIGNETTE_OUTPUT_=TRUE
-_R_CHECK_ASCII_DATA_=FALSE
 _R_CHECK_AUTOCONF_=TRUE
 _R_CHECK_BASHISMS_=true
-_R_CHECK_CLEAN_VIGN_TEST_=false
 _R_CHECK_CODE_ASSIGN_TO_GLOBALENV_=TRUE
 _R_CHECK_CODE_ATTACH_=TRUE
 _R_CHECK_CODE_USAGE_VIA_NAMESPACES_=TRUE
 _R_CHECK_CODETOOLS_PROFILE_="suppressLocalUnused=FALSE"
-_R_CHECK_COMPILATION_FLAGS_=FALSE
+#_R_CHECK_COMPILATION_FLAGS_=FALSE
 _R_CHECK_COMPILATION_FLAGS_KNOWN_="-Wno-unused-parameter -Wno-unused-variable -Wno-ignored-attributes -Wno-cast-function-type -Wno-unknown-warning-option -Wno-unknown-pragmas -Wno-unknown-warning -Wno-unknown-warning-option"
 _R_CHECK_CONNECTIONS_LEFT_OPEN_=TRUE
 _R_CHECK_CRAN_INCOMING_=FALSE
 _R_CHECK_CRAN_INCOMING_REMOTE_=FALSE
-_R_CHECK_DOC_SIZES2_=FALSE
-_R_CHECK_DOC_SIZES_=FALSE
+#_R_CHECK_DOC_SIZES2_=FALSE
+#_R_CHECK_DOC_SIZES_=FALSE
 _R_CHECK_EXIT_ON_FIRST_ERROR_=FALSE
-_R_CHECK_FORCE_SUGGESTS_=FALSE
+#_R_CHECK_FORCE_SUGGESTS_=FALSE
 _R_CHECK_LENGTH_1_CONDITION_="verbose,abort"
 _R_CHECK_LENGTH_1_LOGIC2_="verbose,abort"
 _R_CHECK_NATIVE_ROUTINE_REGISTRATION_=TRUE
@@ -39,7 +32,6 @@ ICD_COVERAGE=false
 ICD_INTERACT=false
 ICD_OFFLINE=true
 ICD_VERBOSE=true
-ICD_MINI_BENCH=false
 OMP_NUM_THREADS=4
 R_REMOTES_NO_ERRORS_FROM_WARNINGS="true"
 R_REMOTES_STANDALONE="true"

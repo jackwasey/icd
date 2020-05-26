@@ -35,6 +35,7 @@ environment:
     USE_RTOOLS: true
     R_BUILD_ARGS: "--no-manual --no-build-vignettes"
     R_CHECK_ARGS: "--no-manual --ignore-vignettes --no-build-vignettes"
+    R_CHECK_ENVIRON: "tools/env/appveyor"
     # TODO: use an environment script in tools/env
     #_R_CHECK_FORCE_SUGGESTS_: false
     ICD_VERBOSE: true
@@ -47,10 +48,10 @@ environment:
 
   matrix:
     - R_VERSION: patched
-      MINI_BENCH: "no"
+      MINI_BENCH: "yes"
 
     - R_VERSION: release
-      MINI_BENCH: "yes"
+      MINI_BENCH: "no"
 
     - R_VERSION: devel
       MINI_BENCH: "no"
