@@ -48,7 +48,7 @@ environment:
 
   matrix:
     - R_VERSION: patched
-      MINI_BENCH: "yes"
+      MINI_BENCH: "no"
 
     - R_VERSION: release
       MINI_BENCH: "no"
