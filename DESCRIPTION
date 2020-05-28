@@ -2,7 +2,7 @@ Package: icd
 Title: Comorbidity Calculations and Tools for ICD-9 and ICD-10
     Codes
 Version: 4.0.9
-Authors@R: 
+Authors@R:
     c(person(given = "Jack O.",
              family = "Wasey",
              role = c("aut", "cre", "cph"),
