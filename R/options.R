@@ -279,7 +279,9 @@ set_icd_data_dir <- function(path = NULL) {
   }
   if (!dir.exists(path)) {
     created <- dir.create(path, showWarnings = TRUE, recursive = TRUE)
-    if (!created) stop("Unable to create directory at: ", path)
+    if (!created) stop("Unable to create directory at: ", path, " Try ",
+                       sQuote("set_icd_data_dir(\"/path/with/write/access\")")
+    )
   }
   .set_opt("cache" = path)
   if (!.all_cached() && "download_all_icd_data" %nin% names(sys.calls())) {
@@ -319,6 +321,6 @@ download_all_icd_data <- function() {
   .set_opt("offline" = FALSE)
   for (d in .data_names) {
     message("Working on: ", d)
-    .get_fetcher_fun(d)()
+    try(.get_fetcher_fun(d)())
   }
 }

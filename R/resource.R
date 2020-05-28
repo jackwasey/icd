@@ -325,7 +325,7 @@
 #' @keywords internal
 #' @noRd
 .default_icd_data_dir <- function() {
-  R_user_dir("icd", which = "data")
+  R_user_dir("icd", which = "cache")
 }
 
 #' @describeIn set_icd_data_dir Get the currently active data directory, and
