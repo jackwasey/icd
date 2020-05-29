@@ -1,6 +1,6 @@
-pandoc: 2.2.1
-pkgdown: 1.3.0.9000
-pkgdown_sha: 96e12f83bb3f92e4a30309181cc14134bd92b644
+pandoc: '2.5'
+pkgdown: 1.5.1
+pkgdown_sha: ~
 articles:
   CMS-HCC: CMS-HCC.html
   ICD-10: ICD-10.html
@@ -12,6 +12,7 @@ articles:
   efficiency-prebuilt: efficiency-prebuilt.html
   introduction: introduction.html
   ranges: ranges.html
+last_built: 2020-05-29T12:13Z
 urls:
   reference: https://jackwasey.github.io/icd//reference
   article: https://jackwasey.github.io/icd//articles

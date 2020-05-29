@@ -8,19 +8,29 @@
 
 <title>Find comorbidities from ICD-9 codes. — comorbid • icd: Comorbidities and tools for ICD codes</title>
 
-<!-- jquery -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
-<!-- Bootstrap -->
-<link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.7/cosmo/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous" />
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
+<!-- jquery -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+<!-- Bootstrap -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.4.0/cosmo/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous" />
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script>
+
+<!-- bootstrap-toc -->
+<link rel="stylesheet" href="../bootstrap-toc.css">
+<script src="../bootstrap-toc.js"></script>
 
 <!-- Font Awesome icons -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous" />
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous" />
 
 <!-- clipboard.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script>
+
+<!-- headroom.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
@@ -29,13 +39,13 @@
 
 <!-- docsearch -->
 <script src="../docsearch.js"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/docsearch.js/2.6.1/docsearch.min.css" integrity="sha256-QOSRU/ra9ActyXkIBbiIB144aDBdtvXBcNc3OTNuX/Q=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/docsearch.js/2.6.3/docsearch.min.css" integrity="sha256-QOSRU/ra9ActyXkIBbiIB144aDBdtvXBcNc3OTNuX/Q=" crossorigin="anonymous" />
 <link href="../docsearch.css" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/jquery.mark.min.js" integrity="sha256-4HLtjeVgH0eIB3aZ9mLYF6E8oU5chNdjU6p6rrXpl9U=" crossorigin="anonymous"></script>
 
 
-<meta property="og:title" content="Find comorbidities from ICD-9 codes. — comorbid" />
 
+<meta property="og:title" content="Find comorbidities from ICD-9 codes. — comorbid" />
 <meta property="og:description" content="This is the main function which extracts comorbidities from a set of ICD-9
 codes. Some comorbidity schemes have rules, for example, what to do when both
 'hypertension' and 'hypertension with complications' are present. These rules
@@ -46,7 +56,7 @@ about computing Hierarchical Condition Codes (HCC), see
 comorbid_hcc For more about comorbidities following the
 Clinical Classification Software (CCS) rules from AHRQ, see
 comorbid_ccs." />
-<meta name="twitter:card" content="summary" />
+
 
 
 
@@ -60,9 +70,10 @@ comorbid_ccs." />
 <![endif]-->
 
 
+
   </head>
 
-  <body>
+  <body data-spy="scroll" data-target="#toc">
     <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -76,7 +87,7 @@ comorbid_ccs." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">icd: Comorbidities and tools for ICD codes</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">4.0.6.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">4.0.9</span>
       </span>
     </div>
 
@@ -91,52 +102,20 @@ comorbid_ccs." />
 <li>
   <a href="../reference/index.html">Reference</a>
 </li>
-<li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-    Articles
-     
-    <span class="caret"></span>
-  </a>
-  <ul class="dropdown-menu" role="menu">
-    <li>
-      <a href="../articles/CMS-HCC.html">Using Hierarchical Condition Codes</a>
-    </li>
-    <li>
-      <a href="../articles/ICD-10.html">ICD-10 comorbidities</a>
-    </li>
-    <li>
-      <a href="../articles/PCCC.html">Pediatric Complex Chronic Conditions</a>
-    </li>
-    <li>
-      <a href="../articles/charlson-scores.html">Charlson and Van Walraven scores</a>
-    </li>
-    <li>
-      <a href="../articles/compare-maps.html">Comparing Comorbidity Mappings</a>
-    </li>
-    <li>
-      <a href="../articles/country-lang-vers-prebuilt.html">Working with World Health Organization ICD codes and national editions, and different languages</a>
-    </li>
-    <li>
-      <a href="../articles/custom-maps.html">Quick custom comorbidity maps are helpful</a>
-    </li>
-    <li>
-      <a href="../articles/efficiency-prebuilt.pdf">icd: Efficient Computation of Comorbidities from ICD Codes Using Sparse Matrix Multiplication in R (PDF)</a>
-    </li>
-    <li>
-      <a href="../articles/introduction.html">An Introduction to icd</a>
-    </li>
-    <li>
-      <a href="../articles/ranges.html">Ranges of ICD codes</a>
-    </li>
-  </ul>
+<li>
+  <a href="../articles/index.html">Articles</a>
 </li>
 <li>
   <a href="../news/index.html">Changelog</a>
 </li>
       </ul>
-      
       <ul class="nav navbar-nav navbar-right">
-        
+        <li>
+  <a href="https://github.com/jackwasey/icd/">
+    <span class="fab fa fab fa-github fa-lg"></span>
+     
+  </a>
+</li>
       </ul>
       
       <form class="navbar-form navbar-right hidden-xs hidden-sm" role="search">
@@ -150,18 +129,18 @@ comorbid_ccs." />
 </div><!--/.navbar -->
 
       
+
       </header>
 
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Find comorbidities from ICD-9 codes.</h1>
-    
+    <small class="dont-index">Source: <a href='https://github.com/jackwasey/icd/blob/master/R/comorbid.R'><code>R/comorbid.R</code></a>, <a href='https://github.com/jackwasey/icd/blob/master/R/comorbid_pccc.R'><code>R/comorbid_pccc.R</code></a></small>
     <div class="hidden name"><code>comorbid.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    
     <p>This is the main function which extracts comorbidities from a set of ICD-9
 codes. Some comorbidity schemes have rules, for example, what to do when both
 'hypertension' and 'hypertension with complications' are present. These rules
@@ -172,25 +151,48 @@ about computing Hierarchical Condition Codes (HCC), see
 <code><a href='comorbid_hcc.html'>comorbid_hcc</a></code> For more about comorbidities following the
 Clinical Classification Software (CCS) rules from AHRQ, see
 <code>comorbid_ccs</code>.</p>
-    
     </div>
 
-    <pre class="usage"><span class='fu'>comorbid</span>(<span class='no'>x</span>, <span class='no'>map</span>, <span class='kw'>visit_name</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>icd_name</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+    <pre class="usage"><span class='fu'>comorbid</span>(
+  <span class='no'>x</span>,
+  <span class='no'>map</span>,
+  <span class='kw'>visit_name</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>icd_name</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
   <span class='kw'>short_code</span> <span class='kw'>=</span> <span class='fu'><a href='guess_short.html'>guess_short</a></span>(<span class='no'>x</span>, <span class='kw'>icd_name</span> <span class='kw'>=</span> <span class='no'>icd_name</span>),
-  <span class='kw'>short_map</span> <span class='kw'>=</span> <span class='fu'><a href='guess_short.html'>guess_short</a></span>(<span class='no'>map</span>), <span class='kw'>return_df</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>return_binary</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>categorize_fun</span> <span class='kw'>=</span> <span class='no'>categorize_simple</span>, <span class='no'>...</span>)
-
-<span class='fu'>icd10_comorbid</span>(<span class='no'>x</span>, <span class='no'>map</span>, <span class='kw'>visit_name</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>icd_name</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>short_code</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>short_map</span> <span class='kw'>=</span> <span class='fu'><a href='guess_short.html'>guess_short</a></span>(<span class='no'>map</span>), <span class='kw'>return_df</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>return_binary</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>icd10_comorbid_fun</span> <span class='kw'>=</span> <span class='no'>icd10_comorbid_reduce</span>,
-  <span class='no'>...</span>)
-
-<span class='fu'>icd9_comorbid</span>(<span class='no'>x</span>, <span class='no'>map</span>, <span class='kw'>visit_name</span> <span class='kw'>=</span> <span class='kw'>NULL</span>, <span class='kw'>icd_name</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>short_code</span> <span class='kw'>=</span> <span class='fu'><a href='guess_short.html'>guess_short</a></span>(<span class='no'>x</span>, <span class='kw'>icd_name</span> <span class='kw'>=</span> <span class='no'>icd_name</span>),
-  <span class='kw'>short_map</span> <span class='kw'>=</span> <span class='fu'><a href='guess_short.html'>guess_short</a></span>(<span class='no'>map</span>), <span class='kw'>return_df</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
-  <span class='kw'>return_binary</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>, <span class='kw'>preclean</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>short_map</span> <span class='kw'>=</span> <span class='fu'><a href='guess_short.html'>guess_short</a></span>(<span class='no'>map</span>),
+  <span class='kw'>return_df</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>return_binary</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
   <span class='kw'>categorize_fun</span> <span class='kw'>=</span> <span class='no'>categorize_simple</span>,
-  <span class='kw'>comorbid_fun</span> <span class='kw'>=</span> <span class='no'>comorbid_mat_mul_wide</span>, <span class='no'>...</span>)
+  <span class='no'>...</span>
+)
+
+<span class='fu'>icd10_comorbid</span>(
+  <span class='no'>x</span>,
+  <span class='no'>map</span>,
+  <span class='kw'>visit_name</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>icd_name</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>short_code</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>short_map</span> <span class='kw'>=</span> <span class='fu'><a href='guess_short.html'>guess_short</a></span>(<span class='no'>map</span>),
+  <span class='kw'>return_df</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>return_binary</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>icd10_comorbid_fun</span> <span class='kw'>=</span> <span class='no'>icd10_comorbid_reduce</span>,
+  <span class='no'>...</span>
+)
+
+<span class='fu'>icd9_comorbid</span>(
+  <span class='no'>x</span>,
+  <span class='no'>map</span>,
+  <span class='kw'>visit_name</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>icd_name</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>short_code</span> <span class='kw'>=</span> <span class='fu'><a href='guess_short.html'>guess_short</a></span>(<span class='no'>x</span>, <span class='kw'>icd_name</span> <span class='kw'>=</span> <span class='no'>icd_name</span>),
+  <span class='kw'>short_map</span> <span class='kw'>=</span> <span class='fu'><a href='guess_short.html'>guess_short</a></span>(<span class='no'>map</span>),
+  <span class='kw'>return_df</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>return_binary</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>preclean</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>categorize_fun</span> <span class='kw'>=</span> <span class='no'>categorize_simple</span>,
+  <span class='kw'>comorbid_fun</span> <span class='kw'>=</span> <span class='no'>comorbid_mat_mul_wide</span>,
+  <span class='no'>...</span>
+)
 
 <span class='fu'>icd9_comorbid_ahrq</span>(<span class='no'>x</span>, <span class='no'>...</span>, <span class='kw'>abbrev_names</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>hierarchy</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
 
@@ -214,8 +216,14 @@ Clinical Classification Software (CCS) rules from AHRQ, see
 
 <span class='fu'>comorbid_ccs</span>(<span class='no'>x</span>, <span class='kw'>icd_name</span> <span class='kw'>=</span> <span class='fu'>get_icd_name</span>(<span class='no'>x</span>), <span class='no'>...</span>)
 
-<span class='fu'>icd9_comorbid_ccs</span>(<span class='no'>x</span>, <span class='no'>...</span>, <span class='kw'>single</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>lvl</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>map</span> <span class='kw'>=</span> <span class='kw pkg'>icd</span><span class='kw ns'>::</span><span class='no'><a href='https://jackwasey.github.io/icd//reference/icd9_map_single_ccs.html'>icd9_map_single_ccs</a></span>, <span class='kw'>short_map</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
+<span class='fu'>icd9_comorbid_ccs</span>(
+  <span class='no'>x</span>,
+  <span class='no'>...</span>,
+  <span class='kw'>single</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>,
+  <span class='kw'>lvl</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>map</span> <span class='kw'>=</span> <span class='kw pkg'>icd</span><span class='kw ns'>::</span><span class='no'><a href='icd9_map_single_ccs.html'>icd9_map_single_ccs</a></span>,
+  <span class='kw'>short_map</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>
+)
 
 <span class='fu'>icd10_comorbid_ccs</span>(<span class='no'>x</span>, <span class='no'>...</span>, <span class='kw'>single</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>, <span class='kw'>lvl</span> <span class='kw'>=</span> <span class='kw'>NULL</span>)
 
@@ -227,8 +235,69 @@ Clinical Classification Software (CCS) rules from AHRQ, see
 
 <span class='fu'>comorbid_quan_deyo</span>(<span class='no'>x</span>, <span class='no'>...</span>)
 
-<span class='fu'>comorbid_charlson</span>(<span class='no'>...</span>)</pre>
-    
+<span class='fu'>comorbid_charlson</span>(<span class='no'>...</span>)
+
+<span class='fu'>comorbid_pccc_dx</span>(
+  <span class='no'>x</span>,
+  <span class='kw'>visit_name</span> <span class='kw'>=</span> <span class='fu'>get_visit_name</span>(<span class='no'>x</span>),
+  <span class='kw'>icd_name</span> <span class='kw'>=</span> <span class='fu'>get_icd_name</span>(<span class='no'>x</span>),
+  <span class='kw'>short_code</span> <span class='kw'>=</span> <span class='fu'><a href='guess_short.html'>guess_short</a></span>(<span class='no'>x</span>, <span class='kw'>icd_name</span> <span class='kw'>=</span> <span class='no'>icd_name</span>),
+  <span class='kw'>return_df</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>return_binary</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='no'>...</span>
+)
+
+<span class='fu'>comorbid_pccc_pcs</span>(
+  <span class='no'>x</span>,
+  <span class='kw'>visit_name</span> <span class='kw'>=</span> <span class='fu'>get_visit_name</span>(<span class='no'>x</span>),
+  <span class='no'>icd_name</span>,
+  <span class='kw'>return_df</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>return_binary</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='no'>...</span>
+)
+
+<span class='fu'>icd9_comorbid_pccc_dx</span>(
+  <span class='no'>x</span>,
+  <span class='kw'>visit_name</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>icd_name</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>short_code</span> <span class='kw'>=</span> <span class='fu'><a href='guess_short.html'>guess_short</a></span>(<span class='no'>x</span>, <span class='kw'>icd_name</span> <span class='kw'>=</span> <span class='no'>icd_name</span>),
+  <span class='kw'>return_df</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>return_binary</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='no'>...</span>,
+  <span class='kw'>abbrev_names</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>
+)
+
+<span class='fu'>icd10_comorbid_pccc_dx</span>(
+  <span class='no'>x</span>,
+  <span class='kw'>visit_name</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>icd_name</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>short_code</span> <span class='kw'>=</span> <span class='fu'><a href='guess_short.html'>guess_short</a></span>(<span class='no'>x</span>, <span class='kw'>icd_name</span> <span class='kw'>=</span> <span class='no'>icd_name</span>),
+  <span class='kw'>return_df</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>return_binary</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='no'>...</span>,
+  <span class='kw'>abbrev_names</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>
+)
+
+<span class='fu'>icd9_comorbid_pccc_pcs</span>(
+  <span class='no'>x</span>,
+  <span class='kw'>visit_name</span> <span class='kw'>=</span> <span class='fu'>get_visit_name</span>(<span class='no'>x</span>),
+  <span class='kw'>icd_name</span> <span class='kw'>=</span> <span class='fu'>get_icd_pc_name</span>(<span class='no'>x</span>),
+  <span class='kw'>return_df</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>return_binary</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='no'>...</span>,
+  <span class='kw'>abbrev_names</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>
+)
+
+<span class='fu'>icd10_comorbid_pccc_pcs</span>(
+  <span class='no'>x</span>,
+  <span class='kw'>visit_name</span> <span class='kw'>=</span> <span class='fu'>get_visit_name</span>(<span class='no'>x</span>),
+  <span class='no'>icd_name</span>,
+  <span class='kw'>return_df</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='kw'>return_binary</span> <span class='kw'>=</span> <span class='fl'>FALSE</span>,
+  <span class='no'>...</span>,
+  <span class='kw'>abbrev_names</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>
+)</pre>
+
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
@@ -309,7 +378,7 @@ other tools, e.g. <code><a href='https://rdrr.io/r/base/apply.html'>apply(x, 2, 
     </tr>
     <tr>
       <th>...</th>
-      <td><p>Arguments passed through to <code>comorbid</code></p></td>
+      <td><p>Arguments passed through to <code>comorbid</code>, and ultimately <code><a href='categorize_simple.html'>categorize_simple</a></code>, e.g. <code>restore_id_order</code>.</p></td>
     </tr>
     <tr>
       <th>icd10_comorbid_fun</th>
@@ -355,7 +424,7 @@ otherwise use multi level</p></td>
 between one and four.</p></td>
     </tr>
     </table>
-    
+
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>The order of visits may change depending on the original sequence,
@@ -369,10 +438,10 @@ between one and four.</p></td>
   comorbidities, and dispatches to the appropriate function, but right now
   the user must call the <code>icd9_</code> or <code>icd10_</code> prefixed function
   directly.</p>
-    
     <h2 class="hasAnchor" id="functions"><a class="anchor" href="#functions"></a>Functions</h2>
 
-    <ul>
+    
+<ul>
 <li><p><code>icd10_comorbid</code>: ICD-10 comorbidities</p></li>
 <li><p><code>icd9_comorbid</code>: Get comorbidities from <code>data.frame</code> of ICD-9
 codes</p></li>
@@ -402,25 +471,52 @@ use ICD-9 or ICD-10 codes</p></li>
 <li><p><code>comorbid_charlson</code>: Calculate comorbidities using Charlson categories
 according to Quan/Deyo ICD categories. Synonymous with
 <code>link{comorbid_quan_deyo}</code> in this release.</p></li>
+<li><p><code>comorbid_pccc_dx</code>: Calculate pediatric complex chronic conditions (PCCC) comorbidities</p>
+<p>Unlike with ICD-9 and ICD-10 diagnostic codes, 'icd' doesn't
+currently have a method for guessing which fields are procedure
+codes, so <code>icd_name</code> must be specified for the <code>_pcs</code>
+functions.</p></li>
+<li><p><code>comorbid_pccc_pcs</code>: Calculate the PCCC comorbidities based
+on procedure codes,</p></li>
+<li><p><code>icd9_comorbid_pccc_dx</code>: Calculate PCCC comorbidities from ICD-9
+diagnosis codes</p></li>
+<li><p><code>icd10_comorbid_pccc_dx</code>: Calculate PCCC comorbidities from ICD-10
+diagnosis codes</p></li>
+<li><p><code>icd9_comorbid_pccc_pcs</code>: Calculate PCCC comorbidities from ICD-9
+procedure codes</p></li>
+<li><p><code>icd10_comorbid_pccc_pcs</code>: Calculate PCCC comorbidities from ICD-10
+procedure codes</p></li>
 </ul>
-    
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p><a href='icd9_map_single_ccs.html'>icd9_map_single_ccs</a></p>
 <p>Consider using <code>comorbid_ahrq</code> instead of
   <code>comorbid_elix</code> for more recently updated mappings based on the
   Elixhauser scheme.</p>
-<p>Other comorbidity computations: <code><a href='comorbid_hcc.html'>comorbid_hcc</a></code>,
-  <code><a href='comorbid_pccc_dx.html'>comorbid_pccc_dx</a></code></p>
-<p>Other comorbidities: <code><a href='comorbid_hcc.html'>comorbid_hcc</a></code>,
-  <code><a href='comorbid_pccc_dx.html'>comorbid_pccc_dx</a></code>,
-  <code><a href='icd10_map_ahrq_pcs.html'>icd10_map_ahrq_pcs</a></code>,
-  <code><a href='icd9_map_ahrq.html'>icd9_map_ahrq</a></code>, <code><a href='icd9_map_elix.html'>icd9_map_elix</a></code>,
-  <code><a href='icd9_map_hcc.html'>icd9_map_hcc</a></code>, <code><a href='icd9_map_pccc.html'>icd9_map_pccc</a></code>,
-  <code><a href='icd9_map_quan_deyo.html'>icd9_map_quan_deyo</a></code>,
-  <code><a href='icd9_map_quan_elix.html'>icd9_map_quan_elix</a></code>,
-  <code><a href='icd9_map_single_ccs.html'>icd9_map_single_ccs</a></code></p></div>
-    
+<p>Other comorbidity computations: 
+<code><a href='comorbid_hcc.html'>comorbid_hcc</a>()</code></p>
+<p>Other comorbidities: 
+<code><a href='comorbid_hcc.html'>comorbid_hcc</a>()</code>,
+<code><a href='icd10_map_ahrq_pcs.html'>icd10_map_ahrq_pcs</a></code>,
+<code><a href='icd9_map_ahrq.html'>icd9_map_ahrq</a></code>,
+<code><a href='icd9_map_elix.html'>icd9_map_elix</a></code>,
+<code><a href='icd9_map_hcc.html'>icd9_map_hcc</a></code>,
+<code><a href='icd9_map_pccc.html'>icd9_map_pccc</a></code>,
+<code><a href='icd9_map_quan_deyo.html'>icd9_map_quan_deyo</a></code>,
+<code><a href='icd9_map_quan_elix.html'>icd9_map_quan_elix</a></code>,
+<code><a href='icd9_map_single_ccs.html'>icd9_map_single_ccs</a></code></p>
+<p>Other comorbidity computations: 
+<code><a href='comorbid_hcc.html'>comorbid_hcc</a>()</code></p>
+<p>Other comorbidities: 
+<code><a href='comorbid_hcc.html'>comorbid_hcc</a>()</code>,
+<code><a href='icd10_map_ahrq_pcs.html'>icd10_map_ahrq_pcs</a></code>,
+<code><a href='icd9_map_ahrq.html'>icd9_map_ahrq</a></code>,
+<code><a href='icd9_map_elix.html'>icd9_map_elix</a></code>,
+<code><a href='icd9_map_hcc.html'>icd9_map_hcc</a></code>,
+<code><a href='icd9_map_pccc.html'>icd9_map_pccc</a></code>,
+<code><a href='icd9_map_quan_deyo.html'>icd9_map_quan_deyo</a></code>,
+<code><a href='icd9_map_quan_elix.html'>icd9_map_quan_elix</a></code>,
+<code><a href='icd9_map_single_ccs.html'>icd9_map_single_ccs</a></code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/library.html'>library</a></span>(<span class='no'>icd</span>)
@@ -552,7 +648,7 @@ according to Quan/Deyo ICD categories. Synonymous with
 #&gt; c     FALSE      FALSE
 #&gt; d     FALSE      FALSE
 #&gt; e     FALSE      FALSE</div><div class='input'><span class='co'># or if library(icd) hasn't been called first:</span>
-<span class='kw pkg'>icd</span><span class='kw ns'>::</span><span class='fu'><a href='https://jackwasey.github.io/icd//reference/comorbid.html'>icd10_comorbid</a></span>(<span class='no'>pts10</span>, <span class='kw'>map</span> <span class='kw'>=</span> <span class='kw pkg'>icd</span><span class='kw ns'>::</span><span class='no'><a href='https://jackwasey.github.io/icd//reference/icd9_map_ahrq.html'>icd10_map_ahrq</a></span>)</div><div class='output co'>#&gt;     CHF Valvular  PHTN   PVD   HTN HTNcx Paralysis NeuroOther Pulmonary    DM
+<span class='kw pkg'>icd</span><span class='kw ns'>::</span><span class='fu'>icd10_comorbid</span>(<span class='no'>pts10</span>, <span class='kw'>map</span> <span class='kw'>=</span> <span class='kw pkg'>icd</span><span class='kw ns'>::</span><span class='no'><a href='icd9_map_ahrq.html'>icd10_map_ahrq</a></span>)</div><div class='output co'>#&gt;     CHF Valvular  PHTN   PVD   HTN HTNcx Paralysis NeuroOther Pulmonary    DM
 #&gt; a FALSE     TRUE FALSE FALSE FALSE FALSE     FALSE      FALSE     FALSE FALSE
 #&gt; b FALSE    FALSE FALSE FALSE FALSE FALSE     FALSE      FALSE     FALSE FALSE
 #&gt; c FALSE    FALSE  TRUE FALSE FALSE FALSE     FALSE      FALSE     FALSE FALSE
@@ -576,7 +672,7 @@ according to Quan/Deyo ICD categories. Synonymous with
 #&gt; c     FALSE      FALSE
 #&gt; d     FALSE      FALSE
 #&gt; e     FALSE      FALSE</div><div class='input'><span class='co'># or most simply:</span>
-<span class='kw pkg'>icd</span><span class='kw ns'>::</span><span class='fu'><a href='https://jackwasey.github.io/icd//reference/comorbid.html'>icd10_comorbid_ahrq</a></span>(<span class='no'>pts10</span>)</div><div class='output co'>#&gt;     CHF Valvular  PHTN   PVD   HTN Paralysis NeuroOther Pulmonary    DM  DMcx
+<span class='kw pkg'>icd</span><span class='kw ns'>::</span><span class='fu'>icd10_comorbid_ahrq</span>(<span class='no'>pts10</span>)</div><div class='output co'>#&gt;     CHF Valvular  PHTN   PVD   HTN Paralysis NeuroOther Pulmonary    DM  DMcx
 #&gt; a FALSE     TRUE FALSE FALSE FALSE     FALSE      FALSE     FALSE FALSE FALSE
 #&gt; b FALSE    FALSE FALSE FALSE FALSE     FALSE      FALSE     FALSE FALSE FALSE
 #&gt; c FALSE    FALSE  TRUE FALSE FALSE     FALSE      FALSE     FALSE FALSE FALSE
@@ -612,33 +708,67 @@ according to Quan/Deyo ICD categories. Synonymous with
 )
 <span class='fu'>comorbid</span>(<span class='no'>two_pts</span>, <span class='kw'>map</span> <span class='kw'>=</span> <span class='no'>my_map</span>)</div><div class='output co'>#&gt;     malady ailment
 #&gt; v01  FALSE    TRUE
-#&gt; v02   TRUE   FALSE</div></pre>
+#&gt; v02   TRUE   FALSE</div><div class='input'><span class='co'># not pediatric data, but let's look for this example</span>
+<span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span>(<span class='fu'>icd9_comorbid_pccc_dx</span>(<span class='no'>vermont_dx</span>))</div><div class='output co'>#&gt;    Neuromusc   CVD Respiratory Renal    GI HematoImmu Metabolic CongeniGenetic
+#&gt; 7      FALSE  TRUE       FALSE  TRUE FALSE      FALSE     FALSE          FALSE
+#&gt; 10     FALSE  TRUE       FALSE FALSE FALSE      FALSE      TRUE          FALSE
+#&gt; 13     FALSE FALSE       FALSE FALSE FALSE      FALSE     FALSE          FALSE
+#&gt; 16     FALSE FALSE       FALSE FALSE FALSE      FALSE     FALSE          FALSE
+#&gt; 37     FALSE FALSE       FALSE FALSE FALSE      FALSE      TRUE          FALSE
+#&gt; 41     FALSE FALSE       FALSE FALSE FALSE      FALSE     FALSE          FALSE
+#&gt;    Malignancy Neonatal TechDep Transplant
+#&gt; 7        TRUE    FALSE   FALSE      FALSE
+#&gt; 10      FALSE    FALSE   FALSE      FALSE
+#&gt; 13      FALSE    FALSE   FALSE      FALSE
+#&gt; 16      FALSE    FALSE   FALSE      FALSE
+#&gt; 37      FALSE    FALSE   FALSE      FALSE
+#&gt; 41      FALSE    FALSE   FALSE      FALSE</div><div class='input'><span class='co'># Six random codes from each PCCC procedure code map. 'icd' will use</span>
+<span class='co'># an heuristic to guess whether ICD-9 or ICD-10:</span>
+<span class='no'>pts</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span>(
+  <span class='kw'>encounters</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>10</span>, <span class='fl'>11</span>, <span class='fl'>12</span>),
+  <span class='kw'>icd9_pcs</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"0152"</span>, <span class='st'>"304"</span>, <span class='st'>"0050"</span>),
+  <span class='kw'>icd10_pcs</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"0B110Z4"</span>, <span class='st'>"02YA0Z2"</span>, <span class='st'>"031209D"</span>)
+)
+<span class='fu'>comorbid_pccc_pcs</span>(<span class='no'>pts</span>, <span class='kw'>icd_name</span> <span class='kw'>=</span> <span class='st'>"icd9_pcs"</span>, <span class='kw'>return_binary</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt;    Neuromusc CVD Respiratory Renal GI HematoImmu Metabolic CongeniGenetic
+#&gt; 10         1   0           0     0  0          0         0              0
+#&gt; 11         0   0           1     0  0          0         0              0
+#&gt; 12         0   1           0     0  0          0         0              0
+#&gt;    Malignancy Neonatal TechDep Transplant
+#&gt; 10          0        0       0          0
+#&gt; 11          0        0       0          0
+#&gt; 12          0        0       1          0</div><div class='input'><span class='fu'>comorbid_pccc_pcs</span>(<span class='no'>pts</span>, <span class='kw'>icd_name</span> <span class='kw'>=</span> <span class='st'>"icd10_pcs"</span>, <span class='kw'>return_binary</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</div><div class='output co'>#&gt;    Neuromusc CVD Respiratory Renal GI HematoImmu Metabolic CongeniGenetic
+#&gt; 10         0   0           1     0  0          0         0              0
+#&gt; 11         0   1           0     0  0          0         0              0
+#&gt; 12         0   0           0     1  0          0         0              0
+#&gt;    Malignancy Neonatal TechDep Transplant
+#&gt; 10          0        0       0          0
+#&gt; 11          0        0       0          1
+#&gt; 12          0        0       1          0</div><div class='input'>
+<span class='co'># All ICD-9 procedure codes are numeric, some ICD-10 procedure codes</span>
+<span class='co'># are numeric, so best to call functions directly:</span>
+<span class='no'>pts</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span>(<span class='kw'>encounters</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='fl'>100</span>), <span class='kw'>icd10_pcs</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"0016070"</span>))
+<span class='fu'>icd10_comorbid_pccc_pcs</span>(<span class='no'>pts</span>, <span class='kw'>icd_name</span> <span class='kw'>=</span> <span class='st'>"icd10_pcs"</span>)</div><div class='output co'>#&gt;     Neuromusc   CVD Respiratory Renal    GI HematoImmu Metabolic CongeniGenetic
+#&gt; 100      TRUE FALSE       FALSE FALSE FALSE      FALSE     FALSE          FALSE
+#&gt;     Malignancy Neonatal TechDep Transplant
+#&gt; 100      FALSE    FALSE   FALSE      FALSE</div></pre>
   </div>
-  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
-    <h2>Contents</h2>
-    <ul class="nav nav-pills nav-stacked">
-      <li><a href="#arguments">Arguments</a></li>
-      
-      <li><a href="#details">Details</a></li>
-
-      <li><a href="#functions">Functions</a></li>
-
-      <li><a href="#see-also">See also</a></li>
-      
-      <li><a href="#examples">Examples</a></li>
-    </ul>
-
+  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
+    <nav id="toc" data-toggle="toc" class="sticky-top">
+      <h2 data-toc-skip>Contents</h2>
+    </nav>
   </div>
 </div>
+
 
       <footer>
       <div class="copyright">
-  <p>Developed by Jack O. Wasey, R Core Team.</p>
+  <p>Developed by Jack O. Wasey, Michel Lang, R Core Team.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.3.0.9000.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
 </div>
+
       </footer>
    </div>
 
@@ -661,6 +791,8 @@ according to Quan/Deyo ICD categories. Synonymous with
 </script>
 
 
+
   </body>
 </html>
+
 

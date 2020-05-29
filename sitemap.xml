@@ -19,6 +19,9 @@
     <loc>https://jackwasey.github.io/icd//reference/attr_short_diag.html</loc>
   </url>
   <url>
+    <loc>https://jackwasey.github.io/icd//reference/categorize_simple.html</loc>
+  </url>
+  <url>
     <loc>https://jackwasey.github.io/icd//reference/chapters_to_map.html</loc>
   </url>
   <url>
@@ -44,9 +47,6 @@
   </url>
   <url>
     <loc>https://jackwasey.github.io/icd//reference/comorbid_mat_to_df.html</loc>
-  </url>
-  <url>
-    <loc>https://jackwasey.github.io/icd//reference/comorbid_pccc_dx.html</loc>
   </url>
   <url>
     <loc>https://jackwasey.github.io/icd//reference/condense.html</loc>

@@ -8,19 +8,29 @@
 
 <title>Convert ICD data from wide to long format — wide_to_long • icd: Comorbidities and tools for ICD codes</title>
 
-<!-- jquery -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
-<!-- Bootstrap -->
-<link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.7/cosmo/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous" />
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
+<!-- jquery -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+<!-- Bootstrap -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.4.0/cosmo/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous" />
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script>
+
+<!-- bootstrap-toc -->
+<link rel="stylesheet" href="../bootstrap-toc.css">
+<script src="../bootstrap-toc.js"></script>
 
 <!-- Font Awesome icons -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous" />
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous" />
 
 <!-- clipboard.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script>
+
+<!-- headroom.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
@@ -29,17 +39,17 @@
 
 <!-- docsearch -->
 <script src="../docsearch.js"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/docsearch.js/2.6.1/docsearch.min.css" integrity="sha256-QOSRU/ra9ActyXkIBbiIB144aDBdtvXBcNc3OTNuX/Q=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/docsearch.js/2.6.3/docsearch.min.css" integrity="sha256-QOSRU/ra9ActyXkIBbiIB144aDBdtvXBcNc3OTNuX/Q=" crossorigin="anonymous" />
 <link href="../docsearch.css" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/jquery.mark.min.js" integrity="sha256-4HLtjeVgH0eIB3aZ9mLYF6E8oU5chNdjU6p6rrXpl9U=" crossorigin="anonymous"></script>
 
 
-<meta property="og:title" content="Convert ICD data from wide to long format — wide_to_long" />
 
+<meta property="og:title" content="Convert ICD data from wide to long format — wide_to_long" />
 <meta property="og:description" content="Convert ICD data from wide to long format
 Note the distinction between labelling existing data with any classes which
 icd provides, and actually converting the structure of the data." />
-<meta name="twitter:card" content="summary" />
+
 
 
 
@@ -53,9 +63,10 @@ icd provides, and actually converting the structure of the data." />
 <![endif]-->
 
 
+
   </head>
 
-  <body>
+  <body data-spy="scroll" data-target="#toc">
     <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -69,7 +80,7 @@ icd provides, and actually converting the structure of the data." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">icd: Comorbidities and tools for ICD codes</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">4.0.6.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">4.0.9</span>
       </span>
     </div>
 
@@ -84,52 +95,20 @@ icd provides, and actually converting the structure of the data." />
 <li>
   <a href="../reference/index.html">Reference</a>
 </li>
-<li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-    Articles
-     
-    <span class="caret"></span>
-  </a>
-  <ul class="dropdown-menu" role="menu">
-    <li>
-      <a href="../articles/CMS-HCC.html">Using Hierarchical Condition Codes</a>
-    </li>
-    <li>
-      <a href="../articles/ICD-10.html">ICD-10 comorbidities</a>
-    </li>
-    <li>
-      <a href="../articles/PCCC.html">Pediatric Complex Chronic Conditions</a>
-    </li>
-    <li>
-      <a href="../articles/charlson-scores.html">Charlson and Van Walraven scores</a>
-    </li>
-    <li>
-      <a href="../articles/compare-maps.html">Comparing Comorbidity Mappings</a>
-    </li>
-    <li>
-      <a href="../articles/country-lang-vers-prebuilt.html">Working with World Health Organization ICD codes and national editions, and different languages</a>
-    </li>
-    <li>
-      <a href="../articles/custom-maps.html">Quick custom comorbidity maps are helpful</a>
-    </li>
-    <li>
-      <a href="../articles/efficiency-prebuilt.pdf">icd: Efficient Computation of Comorbidities from ICD Codes Using Sparse Matrix Multiplication in R (PDF)</a>
-    </li>
-    <li>
-      <a href="../articles/introduction.html">An Introduction to icd</a>
-    </li>
-    <li>
-      <a href="../articles/ranges.html">Ranges of ICD codes</a>
-    </li>
-  </ul>
+<li>
+  <a href="../articles/index.html">Articles</a>
 </li>
 <li>
   <a href="../news/index.html">Changelog</a>
 </li>
       </ul>
-      
       <ul class="nav navbar-nav navbar-right">
-        
+        <li>
+  <a href="https://github.com/jackwasey/icd/">
+    <span class="fab fa fab fa-github fa-lg"></span>
+     
+  </a>
+</li>
       </ul>
       
       <form class="navbar-form navbar-right hidden-xs hidden-sm" role="search">
@@ -143,27 +122,31 @@ icd provides, and actually converting the structure of the data." />
 </div><!--/.navbar -->
 
       
+
       </header>
 
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Convert ICD data from wide to long format</h1>
-    
+    <small class="dont-index">Source: <a href='https://github.com/jackwasey/icd/blob/master/R/convert.R'><code>R/convert.R</code></a></small>
     <div class="hidden name"><code>wide_to_long.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    
     <p>Convert ICD data from wide to long format</p>
 <p>Note the distinction between labelling existing data with any classes which
 <code>icd</code> provides, and actually converting the structure of the data.</p>
-    
     </div>
 
-    <pre class="usage"><span class='fu'>wide_to_long</span>(<span class='no'>x</span>, <span class='kw'>visit_name</span> <span class='kw'>=</span> <span class='fu'>get_visit_name</span>(<span class='no'>x</span>), <span class='kw'>icd_labels</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
-  <span class='kw'>icd_name</span> <span class='kw'>=</span> <span class='st'>"icd_code"</span>, <span class='kw'>icd_regex</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"icd"</span>, <span class='st'>"diag"</span>, <span class='st'>"dx_"</span>, <span class='st'>"dx"</span>))</pre>
-    
+    <pre class="usage"><span class='fu'>wide_to_long</span>(
+  <span class='no'>x</span>,
+  <span class='kw'>visit_name</span> <span class='kw'>=</span> <span class='fu'>get_visit_name</span>(<span class='no'>x</span>),
+  <span class='kw'>icd_labels</span> <span class='kw'>=</span> <span class='kw'>NULL</span>,
+  <span class='kw'>icd_name</span> <span class='kw'>=</span> <span class='st'>"icd_code"</span>,
+  <span class='kw'>icd_regex</span> <span class='kw'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span>(<span class='st'>"icd"</span>, <span class='st'>"diag"</span>, <span class='st'>"dx_"</span>, <span class='st'>"dx"</span>)
+)</pre>
+
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
@@ -207,13 +190,12 @@ to identify ICD-9 diagnosis columns to try (case-insensitive) in order.
 Default is <code><a href='https://rdrr.io/r/base/c.html'>c("icd", "diag", "dx_", "dx")</a></code></p></td>
     </tr>
     </table>
-    
+
     <h2 class="hasAnchor" id="value"><a class="anchor" href="#value"></a>Value</h2>
 
     <p><code>data.frame</code> with visit_name column named the same as input, and
   a column named by <code>icd.name</code> containing all the non-NA and non-empty
   codes found in the wide input data.</p>
-    
     <h2 class="hasAnchor" id="details"><a class="anchor" href="#details"></a>Details</h2>
 
     <p>Reshaping data is a common task, and is made easier here by knowing
@@ -221,7 +203,6 @@ Default is <code><a href='https://rdrr.io/r/base/c.html'>c("icd", "diag", "dx_",
   <code><a href='https://rdrr.io/r/stats/reshape.html'>reshape</a></code> function with specific behavior and checks
   related to ICD codes. Empty strings and NA values will be dropped, and
   everything else kept. No validation of the ICD codes is done.</p>
-    
     <h2 class="hasAnchor" id="long-and-wide-formats"><a class="anchor" href="#long-and-wide-formats"></a>Long and Wide Formats</h2>
 
     <p>As is common with many data sets, key
@@ -229,7 +210,6 @@ Default is <code><a href='https://rdrr.io/r/base/c.html'>c("icd", "diag", "dx_",
   format of clinical and administrative hospital data, we can perform the
   conversion efficiently and accurately, while keeping some metadata about
   the codes intact, e.g. whether they are ICD-9 or ICD-10.</p>
-    
     <h2 class="hasAnchor" id="data-structure"><a class="anchor" href="#data-structure"></a>Data structure</h2>
 
     <p>Long or wide format ICD data are all expected to be
@@ -237,15 +217,15 @@ Default is <code><a href='https://rdrr.io/r/base/c.html'>c("icd", "diag", "dx_",
   classes at the top level, even if it only contains one type of code;
   whereas its constituent columns may have a class specified, e.g.
   <code>icd9</code> or <code>icd10who</code>.</p>
-    
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
-    <div class='dont-index'><p>Other ICD data conversion: <code><a href='comorbid_df_to_mat.html'>comorbid_df_to_mat</a></code>,
-  <code><a href='comorbid_mat_to_df.html'>comorbid_mat_to_df</a></code>, <code><a href='convert.html'>convert</a></code>,
-  <code><a href='decimal_to_short.html'>decimal_to_short</a></code>,
-  <code><a href='long_to_wide.html'>long_to_wide</a></code>,
-  <code><a href='short_to_decimal.html'>short_to_decimal</a></code></p></div>
-    
+    <div class='dont-index'><p>Other ICD data conversion: 
+<code><a href='comorbid_df_to_mat.html'>comorbid_df_to_mat</a>()</code>,
+<code><a href='comorbid_mat_to_df.html'>comorbid_mat_to_df</a>()</code>,
+<code><a href='convert.html'>convert</a></code>,
+<code><a href='decimal_to_short.html'>decimal_to_short</a>()</code>,
+<code><a href='long_to_wide.html'>long_to_wide</a>()</code>,
+<code><a href='short_to_decimal.html'>short_to_decimal</a>()</code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'><span class='no'>widedf</span> <span class='kw'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span>(
@@ -259,35 +239,23 @@ Default is <code><a href='https://rdrr.io/r/base/c.html'>c("icd", "diag", "dx_",
 #&gt; 3          b      443
 #&gt; 4          c      441</div></pre>
   </div>
-  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
-    <h2>Contents</h2>
-    <ul class="nav nav-pills nav-stacked">
-      <li><a href="#arguments">Arguments</a></li>
-      
-      <li><a href="#value">Value</a></li>
-
-      <li><a href="#details">Details</a></li>
-
-      <li><a href="#long-and-wide-formats">Long and Wide Formats</a></li>
-
-      <li><a href="#data-structure">Data structure</a></li>
-
-      <li><a href="#see-also">See also</a></li>
-      
-      <li><a href="#examples">Examples</a></li>
-    </ul>
-
+  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
+    <nav id="toc" data-toggle="toc" class="sticky-top">
+      <h2 data-toc-skip>Contents</h2>
+    </nav>
   </div>
 </div>
 
+
       <footer>
       <div class="copyright">
-  <p>Developed by Jack O. Wasey, R Core Team.</p>
+  <p>Developed by Jack O. Wasey, Michel Lang, R Core Team.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.3.0.9000.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
 </div>
+
       </footer>
    </div>
 
@@ -310,6 +278,8 @@ Default is <code><a href='https://rdrr.io/r/base/c.html'>c("icd", "diag", "dx_",
 </script>
 
 
+
   </body>
 </html>
+
 

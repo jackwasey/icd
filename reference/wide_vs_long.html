@@ -8,19 +8,29 @@
 
 <title>Set the ICD data structure class of a <code>matrix</code> or <code>data.frame</code>. — wide_vs_long • icd: Comorbidities and tools for ICD codes</title>
 
-<!-- jquery -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
-<!-- Bootstrap -->
-<link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.7/cosmo/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous" />
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
+<!-- jquery -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+<!-- Bootstrap -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.4.0/cosmo/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous" />
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script>
+
+<!-- bootstrap-toc -->
+<link rel="stylesheet" href="../bootstrap-toc.css">
+<script src="../bootstrap-toc.js"></script>
 
 <!-- Font Awesome icons -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous" />
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous" />
 
 <!-- clipboard.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script>
+
+<!-- headroom.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
@@ -29,18 +39,18 @@
 
 <!-- docsearch -->
 <script src="../docsearch.js"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/docsearch.js/2.6.1/docsearch.min.css" integrity="sha256-QOSRU/ra9ActyXkIBbiIB144aDBdtvXBcNc3OTNuX/Q=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/docsearch.js/2.6.3/docsearch.min.css" integrity="sha256-QOSRU/ra9ActyXkIBbiIB144aDBdtvXBcNc3OTNuX/Q=" crossorigin="anonymous" />
 <link href="../docsearch.css" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/jquery.mark.min.js" integrity="sha256-4HLtjeVgH0eIB3aZ9mLYF6E8oU5chNdjU6p6rrXpl9U=" crossorigin="anonymous"></script>
 
 
-<meta property="og:title" content="Set the ICD data structure class of a <code>matrix</code> or <code>data.frame</code>. — wide_vs_long" />
 
+<meta property="og:title" content="Set the ICD data structure class of a <code>matrix</code> or <code>data.frame</code>. — wide_vs_long" />
 <meta property="og:description" content="These functions take your patient data, and allow you to describe whether it
 is wide or long. icd never requires you do this, but it may help avoid
 errors, especially if you have atypical data that might confuse icd's
 heuristics." />
-<meta name="twitter:card" content="summary" />
+
 
 
 
@@ -54,9 +64,10 @@ heuristics." />
 <![endif]-->
 
 
+
   </head>
 
-  <body>
+  <body data-spy="scroll" data-target="#toc">
     <div class="container template-reference-topic">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -70,7 +81,7 @@ heuristics." />
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">icd: Comorbidities and tools for ICD codes</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">4.0.6.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">4.0.9</span>
       </span>
     </div>
 
@@ -85,52 +96,20 @@ heuristics." />
 <li>
   <a href="../reference/index.html">Reference</a>
 </li>
-<li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-    Articles
-     
-    <span class="caret"></span>
-  </a>
-  <ul class="dropdown-menu" role="menu">
-    <li>
-      <a href="../articles/CMS-HCC.html">Using Hierarchical Condition Codes</a>
-    </li>
-    <li>
-      <a href="../articles/ICD-10.html">ICD-10 comorbidities</a>
-    </li>
-    <li>
-      <a href="../articles/PCCC.html">Pediatric Complex Chronic Conditions</a>
-    </li>
-    <li>
-      <a href="../articles/charlson-scores.html">Charlson and Van Walraven scores</a>
-    </li>
-    <li>
-      <a href="../articles/compare-maps.html">Comparing Comorbidity Mappings</a>
-    </li>
-    <li>
-      <a href="../articles/country-lang-vers-prebuilt.html">Working with World Health Organization ICD codes and national editions, and different languages</a>
-    </li>
-    <li>
-      <a href="../articles/custom-maps.html">Quick custom comorbidity maps are helpful</a>
-    </li>
-    <li>
-      <a href="../articles/efficiency-prebuilt.pdf">icd: Efficient Computation of Comorbidities from ICD Codes Using Sparse Matrix Multiplication in R (PDF)</a>
-    </li>
-    <li>
-      <a href="../articles/introduction.html">An Introduction to icd</a>
-    </li>
-    <li>
-      <a href="../articles/ranges.html">Ranges of ICD codes</a>
-    </li>
-  </ul>
+<li>
+  <a href="../articles/index.html">Articles</a>
 </li>
 <li>
   <a href="../news/index.html">Changelog</a>
 </li>
       </ul>
-      
       <ul class="nav navbar-nav navbar-right">
-        
+        <li>
+  <a href="https://github.com/jackwasey/icd/">
+    <span class="fab fa fab fa-github fa-lg"></span>
+     
+  </a>
+</li>
       </ul>
       
       <form class="navbar-form navbar-right hidden-xs hidden-sm" role="search">
@@ -144,23 +123,22 @@ heuristics." />
 </div><!--/.navbar -->
 
       
+
       </header>
 
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
     <h1>Set the ICD data structure class of a <code>matrix</code> or <code>data.frame</code>.</h1>
-    
+    <small class="dont-index">Source: <a href='https://github.com/jackwasey/icd/blob/master/R/class.R'><code>R/class.R</code></a></small>
     <div class="hidden name"><code>wide_vs_long.Rd</code></div>
     </div>
 
     <div class="ref-description">
-    
     <p>These functions take your patient data, and allow you to describe whether it
 is wide or long. <code>icd</code> never requires you do this, but it may help avoid
 errors, especially if you have atypical data that might confuse <code>icd</code>'s
 heuristics.</p>
-    
     </div>
 
     <pre class="usage"><span class='fu'>as.icd_long_data</span>(<span class='no'>x</span>, <span class='kw'>warn</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
@@ -170,7 +148,7 @@ heuristics.</p>
 <span class='fu'>icd_long_data</span>(<span class='no'>...</span>, <span class='kw'>warn</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)
 
 <span class='fu'>icd_wide_data</span>(<span class='no'>x</span>, <span class='no'>...</span>, <span class='kw'>warn</span> <span class='kw'>=</span> <span class='fl'>TRUE</span>)</pre>
-    
+
     <h2 class="hasAnchor" id="arguments"><a class="anchor" href="#arguments"></a>Arguments</h2>
     <table class="ref-arguments">
     <colgroup><col class="name" /><col class="desc" /></colgroup>
@@ -190,10 +168,11 @@ shown if changing class between long and wide types.</p></td>
 class.</p></td>
     </tr>
     </table>
-    
+
     <h2 class="hasAnchor" id="functions"><a class="anchor" href="#functions"></a>Functions</h2>
 
-    <ul>
+    
+<ul>
 <li><p><code>as.icd_long_data</code>: Set class on a matrix or data.frame to
 <code>icd_long_data</code>. To convert wide to long data, use
 <code><a href='wide_to_long.html'>wide_to_long</a></code>.</p></li>
@@ -204,7 +183,6 @@ class.</p></td>
 <li><p><code>icd_wide_data</code>: Construct a <code>data.frame</code>, adding the
 <code>icd_wide_data</code> class.</p></li>
 </ul>
-    
     <h2 class="hasAnchor" id="long-and-wide-formats"><a class="anchor" href="#long-and-wide-formats"></a>Long and Wide Formats</h2>
 
     <p>As is common with many data sets, key
@@ -212,7 +190,6 @@ class.</p></td>
   format of clinical and administrative hospital data, we can perform the
   conversion efficiently and accurately, while keeping some metadata about
   the codes intact, e.g. whether they are ICD-9 or ICD-10.</p>
-    
     <h2 class="hasAnchor" id="data-structure"><a class="anchor" href="#data-structure"></a>Data structure</h2>
 
     <p>Long or wide format ICD data are all expected to be
@@ -220,7 +197,6 @@ class.</p></td>
   classes at the top level, even if it only contains one type of code;
   whereas its constituent columns may have a class specified, e.g.
   <code>icd9</code> or <code>icd10who</code>.</p>
-    
     <h2 class="hasAnchor" id="conversion"><a class="anchor" href="#conversion"></a>Conversion</h2>
 
     <p>To convert between long and wide data, use
@@ -230,17 +206,18 @@ class.</p></td>
   diagnostic codes. This is not done with <code>ddplyr</code>, <code>data.table</code>
   etc because it would add a big dependency burden. This package aims to be
   agnostic and use base R as much as possible.</p>
-    
     <h2 class="hasAnchor" id="see-also"><a class="anchor" href="#see-also"></a>See also</h2>
 
     <div class='dont-index'><p><code><a href='long_to_wide.html'>long_to_wide</a></code> and <code><a href='wide_to_long.html'>wide_to_long</a></code></p>
-<p>Other ICD data types: <code><a href='as.comorbidity_map.html'>as.comorbidity_map</a></code>,
-  <code><a href='set_icd_class.html'>set_icd_class</a></code></p>
-<p>Other ICD data types: <code><a href='as.comorbidity_map.html'>as.comorbidity_map</a></code>,
-  <code><a href='set_icd_class.html'>set_icd_class</a></code></p>
-<p>Other ICD data types: <code><a href='as.comorbidity_map.html'>as.comorbidity_map</a></code>,
-  <code><a href='set_icd_class.html'>set_icd_class</a></code></p></div>
-    
+<p>Other ICD data types: 
+<code><a href='as.comorbidity_map.html'>as.comorbidity_map</a>()</code>,
+<code><a href='set_icd_class.html'>set_icd_class</a></code></p>
+<p>Other ICD data types: 
+<code><a href='as.comorbidity_map.html'>as.comorbidity_map</a>()</code>,
+<code><a href='set_icd_class.html'>set_icd_class</a></code></p>
+<p>Other ICD data types: 
+<code><a href='as.comorbidity_map.html'>as.comorbidity_map</a>()</code>,
+<code><a href='set_icd_class.html'>set_icd_class</a></code></p></div>
 
     <h2 class="hasAnchor" id="examples"><a class="anchor" href="#examples"></a>Examples</h2>
     <pre class="examples"><div class='input'>(<span class='no'>w</span> <span class='kw'>&lt;-</span> <span class='fu'>icd_wide_data</span>(
@@ -258,35 +235,23 @@ class.</p></td>
 #&gt; 5  3      V20
 #&gt; 6  3    44004</div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/class.html'>class</a></span>(<span class='no'>uranium_pathology</span>)</div><div class='output co'>#&gt; [1] "icd_long_data" "data.frame"   </div><div class='input'><span class='fu'><a href='https://rdrr.io/r/base/class.html'>class</a></span>(<span class='no'>vermont_dx</span>)</div><div class='output co'>#&gt; [1] "icd_wide_data" "data.frame"   </div></pre>
   </div>
-  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
-    <h2>Contents</h2>
-    <ul class="nav nav-pills nav-stacked">
-      <li><a href="#arguments">Arguments</a></li>
-      
-      <li><a href="#functions">Functions</a></li>
-
-      <li><a href="#long-and-wide-formats">Long and Wide Formats</a></li>
-
-      <li><a href="#data-structure">Data structure</a></li>
-
-      <li><a href="#conversion">Conversion</a></li>
-
-      <li><a href="#see-also">See also</a></li>
-      
-      <li><a href="#examples">Examples</a></li>
-    </ul>
-
+  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
+    <nav id="toc" data-toggle="toc" class="sticky-top">
+      <h2 data-toc-skip>Contents</h2>
+    </nav>
   </div>
 </div>
 
+
       <footer>
       <div class="copyright">
-  <p>Developed by Jack O. Wasey, R Core Team.</p>
+  <p>Developed by Jack O. Wasey, Michel Lang, R Core Team.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.3.0.9000.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
 </div>
+
       </footer>
    </div>
 
@@ -309,6 +274,8 @@ class.</p></td>
 </script>
 
 
+
   </body>
 </html>
+
 

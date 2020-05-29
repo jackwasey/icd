@@ -6,21 +6,21 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Comparing Comorbidity Mappings • icd: Comorbidities and tools for ICD codes</title>
-<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script><!-- Bootstrap --><link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.7/cosmo/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous">
-<!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
-<script src="../pkgdown.js"></script><!-- docsearch --><script src="../docsearch.js"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/docsearch.js/2.6.1/docsearch.min.css" integrity="sha256-QOSRU/ra9ActyXkIBbiIB144aDBdtvXBcNc3OTNuX/Q=" crossorigin="anonymous">
+<!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script><!-- Bootstrap --><link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.4.0/cosmo/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script><!-- bootstrap-toc --><link rel="stylesheet" href="../bootstrap-toc.css">
+<script src="../bootstrap-toc.js"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous">
+<!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><!-- headroom.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
+<script src="../pkgdown.js"></script><!-- docsearch --><script src="../docsearch.js"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/docsearch.js/2.6.3/docsearch.min.css" integrity="sha256-QOSRU/ra9ActyXkIBbiIB144aDBdtvXBcNc3OTNuX/Q=" crossorigin="anonymous">
 <link href="../docsearch.css" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/jquery.mark.min.js" integrity="sha256-4HLtjeVgH0eIB3aZ9mLYF6E8oU5chNdjU6p6rrXpl9U=" crossorigin="anonymous"></script><meta property="og:title" content="Comparing Comorbidity Mappings">
-<meta property="og:description" content="">
-<meta name="twitter:card" content="summary">
+<meta property="og:description" content="icd">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
 <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
 <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 <![endif]-->
 </head>
-<body>
+<body data-spy="scroll" data-target="#toc">
     <div class="container template-article">
       <header><div class="navbar navbar-default navbar-fixed-top" role="navigation">
   <div class="container">
@@ -33,7 +33,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">icd: Comorbidities and tools for ICD codes</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">4.0.6.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">4.0.9</span>
       </span>
     </div>
 
@@ -48,50 +48,21 @@
 <li>
   <a href="../reference/index.html">Reference</a>
 </li>
-<li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-    Articles
-     
-    <span class="caret"></span>
-  </a>
-  <ul class="dropdown-menu" role="menu">
 <li>
-      <a href="../articles/CMS-HCC.html">Using Hierarchical Condition Codes</a>
-    </li>
-    <li>
-      <a href="../articles/ICD-10.html">ICD-10 comorbidities</a>
-    </li>
-    <li>
-      <a href="../articles/PCCC.html">Pediatric Complex Chronic Conditions</a>
-    </li>
-    <li>
-      <a href="../articles/charlson-scores.html">Charlson and Van Walraven scores</a>
-    </li>
-    <li>
-      <a href="../articles/compare-maps.html">Comparing Comorbidity Mappings</a>
-    </li>
-    <li>
-      <a href="../articles/country-lang-vers-prebuilt.html">Working with World Health Organization ICD codes and national editions, and different languages</a>
-    </li>
-    <li>
-      <a href="../articles/custom-maps.html">Quick custom comorbidity maps are helpful</a>
-    </li>
-    <li>
-      <a href="../articles/efficiency-prebuilt.pdf">icd: Efficient Computation of Comorbidities from ICD Codes Using Sparse Matrix Multiplication in R (PDF)</a>
-    </li>
-    <li>
-      <a href="../articles/introduction.html">An Introduction to icd</a>
-    </li>
-    <li>
-      <a href="../articles/ranges.html">Ranges of ICD codes</a>
-    </li>
-  </ul>
+  <a href="../articles/index.html">Articles</a>
 </li>
 <li>
   <a href="../news/index.html">Changelog</a>
 </li>
       </ul>
-<ul class="nav navbar-nav navbar-right"></ul>
+<ul class="nav navbar-nav navbar-right">
+<li>
+  <a href="https://github.com/jackwasey/icd/">
+    <span class="fab fa fab fa-github fa-lg"></span>
+     
+  </a>
+</li>
+      </ul>
 <form class="navbar-form navbar-right hidden-xs hidden-sm" role="search">
         <div class="form-group">
           <input type="search" class="form-control" name="search-input" id="search-input" placeholder="Search..." aria-label="Search for..." autocomplete="off">
@@ -106,16 +77,17 @@
 <!--/.navbar -->
 
       
+
       </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
-      <h1>Comparing Comorbidity Mappings</h1>
+      <h1 data-toc-skip>Comparing Comorbidity Mappings</h1>
                         <h4 class="author">Andrew Cooper (original)</h4>
                         <h4 class="author">Jack Wasey (minor updates)</h4>
             
             <h4 class="date">March 1, 2018</h4>
       
-      
+      <small class="dont-index">Source: <a href="https://github.com/jackwasey/icd/blob/master/vignettes/compare-maps.Rmd"><code>vignettes/compare-maps.Rmd</code></a></small>
       <div class="hidden name"><code>compare-maps.Rmd</code></div>
 
     </div>
@@ -123,7 +95,7 @@
     
     
 <!--
-Copyright (C) 2014 - 2019  Jack O. Wasey
+Copyright (C) 2014 - 2020  Jack O. Wasey
 
 This file is part of icd.
 
@@ -143,28 +115,26 @@ along with icd. If not, see <http:#www.gnu.org/licenses/>.
 <p>When deciding which comorbidity mapping to use in research, it might be useful to compare mapping schemes. For instance, it would be useful to know which comorbidities a pair of mapping schemes share, and which comorbidities only exist in only one mapping scheme. For comorbidites that exist in both mapping schemes, how many ICD codes assigned to those comorbidities overlap? In other words, how similar are the mapping schemes structurally?</p>
 <p>To answer these questions, we can use the function <code>diff_comorbid</code> in the “ICD” package. This function takes in two mapping schemes and outputs a comorbidity-by-comorbidity comparison of the two assignments. The function identifies comorbidities that are shared by both mapping schemes. It then takes each shared comorbidity and returns a list of codes that both mapping schemes assign to that comorbidity. The function returns a list of character lists, and condenses it into a summary of comparisons.</p>
 <p>The following example demonstrates the comparison of two different mapping schemes. Say we were interested in comparing the mapping schemes of Elixhauser (1998) and Agency for Healthcare Research and Quality (AHRQ) in classifying ICD-9 codes. We can first use basic set operations to compare the comorbidity names.</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1">Elix_comor &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/names.html">names</a></span>(icd9_map_ahrq)</a>
-<a class="sourceLine" id="cb1-2" title="2">AHRQ_comor &lt;-<span class="st"> </span><span class="kw"><a href="https://rdrr.io/r/base/names.html">names</a></span>(icd9_map_elix)</a></code></pre></div>
+<div class="sourceCode" id="cb1"><html><body><pre class="r"><span class="no">Elix_comor</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span>(<span class="no">icd9_map_ahrq</span>)
+<span class="no">AHRQ_comor</span> <span class="kw">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span>(<span class="no">icd9_map_elix</span>)</pre></body></html></div>
 <p>These comorbidities are shared:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" title="1"><span class="kw"><a href="https://rdrr.io/r/base/sets.html">intersect</a></span>(AHRQ_comor, Elix_comor)</a></code></pre></div>
-<pre><code>##  [1] "CHF"          "Valvular"     "PHTN"         "PVD"         
-##  [5] "HTN"          "HTNcx"        "Paralysis"    "NeuroOther"  
-##  [9] "Pulmonary"    "DM"           "DMcx"         "Hypothyroid" 
-## [13] "Renal"        "Liver"        "PUD"          "HIV"         
-## [17] "Lymphoma"     "Mets"         "Tumor"        "Rheumatic"   
-## [21] "Coagulopathy" "Obesity"      "WeightLoss"   "FluidsLytes" 
-## [25] "BloodLoss"    "Anemia"       "Alcohol"      "Drugs"       
-## [29] "Psychoses"    "Depression"</code></pre>
+<div class="sourceCode" id="cb2"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/sets.html">intersect</a></span>(<span class="no">AHRQ_comor</span>, <span class="no">Elix_comor</span>)</pre></body></html></div>
+<pre><code>##  [1] "CHF"          "Valvular"     "PHTN"         "PVD"          "HTN"         
+##  [6] "HTNcx"        "Paralysis"    "NeuroOther"   "Pulmonary"    "DM"          
+## [11] "DMcx"         "Hypothyroid"  "Renal"        "Liver"        "PUD"         
+## [16] "HIV"          "Lymphoma"     "Mets"         "Tumor"        "Rheumatic"   
+## [21] "Coagulopathy" "Obesity"      "WeightLoss"   "FluidsLytes"  "BloodLoss"   
+## [26] "Anemia"       "Alcohol"      "Drugs"        "Psychoses"    "Depression"</code></pre>
 <p>These comorbidities are in AHRQ but not in the Elixhauser sets:</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" title="1"><span class="kw"><a href="https://rdrr.io/r/base/sets.html">setdiff</a></span>(AHRQ_comor, Elix_comor)</a></code></pre></div>
+<div class="sourceCode" id="cb4"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/sets.html">setdiff</a></span>(<span class="no">AHRQ_comor</span>, <span class="no">Elix_comor</span>)</pre></body></html></div>
 <pre><code>## [1] "Arrhythmia"</code></pre>
 <p>Finally, these comorbidities are in Elixhauser but not in the AHRQ sets:</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" title="1"><span class="kw"><a href="https://rdrr.io/r/base/sets.html">setdiff</a></span>(Elix_comor, AHRQ_comor)</a></code></pre></div>
+<div class="sourceCode" id="cb6"><html><body><pre class="r"><span class="fu"><a href="https://rdrr.io/r/base/sets.html">setdiff</a></span>(<span class="no">Elix_comor</span>, <span class="no">AHRQ_comor</span>)</pre></body></html></div>
 <pre><code>## character(0)</code></pre>
 <p>We see that the comorbidity names are almost exactly the same except for Arrhythmia, which exists in the AHRQ mapping but not the Elixhauser mapping.</p>
 <p>Now we run the function <code>diff_comorbid</code> and input the ICD-9 mappings from Elixhauser and AHRQ that are included in the package. The <code>all_names</code> option can be used if one wants to compare only a selection of comorbidities, in which case one can give a list of comorbidity names. By default, the function will compare all comorbiditi.introduces in both mapping schemes. Similarly, <code>x_names</code> and <code>y_names</code> can be used to specify the comorbidities to compare in the first and second mapping schemes, respectively. Setting the option <code>show</code> to <code>TRUE</code> tells the function to print out the comparison summary, and setting the option <code>explain</code> to <code>TRUE</code> tells the function to attempt to combine many low-level ICD codes to form just their parent codes for the output, which can be much more concise.</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" title="1">comp &lt;-<span class="st"> </span><span class="kw"><a href="../reference/diff_comorbid.html">diff_comorbid</a></span>(icd9_map_ahrq, icd9_map_elix,</a>
-<a class="sourceLine" id="cb8-2" title="2">                      <span class="dt">show =</span> <span class="ot">TRUE</span>, <span class="dt">explain =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb8"><html><body><pre class="r"><span class="no">comp</span> <span class="kw">&lt;-</span> <span class="fu"><a href="../reference/diff_comorbid.html">diff_comorbid</a></span>(<span class="no">icd9_map_ahrq</span>, <span class="no">icd9_map_elix</span>,
+                      <span class="kw">show</span> <span class="kw">=</span> <span class="fl">TRUE</span>, <span class="kw">explain</span> <span class="kw">=</span> <span class="fl">TRUE</span>)</pre></body></html></div>
 <pre><code>## Comorbidity CHF: 
 ## icd9_map_ahrq has 4 codes not in icd9_map_elix. First few are: 'Mal hypert hrt dis w hf' 'Mal hyp ht/kd I-IV w hf' 'Mal hyp ht/kd stg V w hf' 'Heart failure' 
 ## Comorbidity Valvular: 
@@ -231,23 +201,21 @@ along with icd. If not, see <http:#www.gnu.org/licenses/>.
 ## Comorbidity Depression: match.
 ## Comorbidities only defined in icd9_map_elix are: Arrhythmia</code></pre>
 <p>The comparison summary provides the size of the asymmetric difference between mapping schemes for each shared comorbidity, along with a list of a few code descriptions in that difference. This summary doesn’t provide a very detailed look at the similarities between comorbidity mappings. We can get a more detailed look at a particular comorbidity by specifying it.</p>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" title="1">comp<span class="op">$</span>CHF</a></code></pre></div>
+<div class="sourceCode" id="cb10"><html><body><pre class="r"><span class="no">comp</span>$<span class="no">CHF</span></pre></body></html></div>
 <pre><code>## $both
-##   [1] "39891" "40211" "40291" "40411" "40413" "40491" "40493" "4280" 
-##   [9] "42800" "42801" "42802" "42803" "42804" "42805" "42806" "42807"
-##  [17] "42808" "42809" "4281"  "42810" "42811" "42812" "42813" "42814"
-##  [25] "42815" "42816" "42817" "42818" "42819" "4282"  "42820" "42821"
-##  [33] "42822" "42823" "42824" "42825" "42826" "42827" "42828" "42829"
-##  [41] "4283"  "42830" "42831" "42832" "42833" "42834" "42835" "42836"
-##  [49] "42837" "42838" "42839" "4284"  "42840" "42841" "42842" "42843"
-##  [57] "42844" "42845" "42846" "42847" "42848" "42849" "4285"  "42850"
-##  [65] "42851" "42852" "42853" "42854" "42855" "42856" "42857" "42858"
-##  [73] "42859" "4286"  "42860" "42861" "42862" "42863" "42864" "42865"
-##  [81] "42866" "42867" "42868" "42869" "4287"  "42870" "42871" "42872"
-##  [89] "42873" "42874" "42875" "42876" "42877" "42878" "42879" "4288" 
-##  [97] "42880" "42881" "42882" "42883" "42884" "42885" "42886" "42887"
-## [105] "42888" "42889" "4289"  "42890" "42891" "42892" "42893" "42894"
-## [113] "42895" "42896" "42897" "42898" "42899"
+##   [1] "39891" "40211" "40291" "40411" "40413" "40491" "40493" "4280"  "42800"
+##  [10] "42801" "42802" "42803" "42804" "42805" "42806" "42807" "42808" "42809"
+##  [19] "4281"  "42810" "42811" "42812" "42813" "42814" "42815" "42816" "42817"
+##  [28] "42818" "42819" "4282"  "42820" "42821" "42822" "42823" "42824" "42825"
+##  [37] "42826" "42827" "42828" "42829" "4283"  "42830" "42831" "42832" "42833"
+##  [46] "42834" "42835" "42836" "42837" "42838" "42839" "4284"  "42840" "42841"
+##  [55] "42842" "42843" "42844" "42845" "42846" "42847" "42848" "42849" "4285" 
+##  [64] "42850" "42851" "42852" "42853" "42854" "42855" "42856" "42857" "42858"
+##  [73] "42859" "4286"  "42860" "42861" "42862" "42863" "42864" "42865" "42866"
+##  [82] "42867" "42868" "42869" "4287"  "42870" "42871" "42872" "42873" "42874"
+##  [91] "42875" "42876" "42877" "42878" "42879" "4288"  "42880" "42881" "42882"
+## [100] "42883" "42884" "42885" "42886" "42887" "42888" "42889" "4289"  "42890"
+## [109] "42891" "42892" "42893" "42894" "42895" "42896" "42897" "42898" "42899"
 ## 
 ## $only.x
 ## [1] "40201" "40401" "40403" "428"  
@@ -258,19 +226,22 @@ along with icd. If not, see <http:#www.gnu.org/licenses/>.
 <p>We can see from this comparison that the two mapping schemes are quite similar for this comorbidity. Most of the ICD codes exist in both mappings, and only a handful of mappings exist in the AHRQ mapping but not in the Elixhauser mapping. This makes sense since AHRQ was designed to update the original Elixhauser 1998 comorbidities, and has expanded the comorbidities in annual updates. This means any analysis of CHF that uses either Elixhauser or AHRQ should produce comparable results, since the comorbidity mappings are not wildly different.</p>
   </div>
 
-  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
+  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
+
       </div>
 
 </div>
 
 
+
       <footer><div class="copyright">
-  <p>Developed by Jack O. Wasey, R Core Team.</p>
+  <p>Developed by Jack O. Wasey, Michel Lang, R Core Team.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.3.0.9000.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
 </div>
+
       </footer>
 </div>
 

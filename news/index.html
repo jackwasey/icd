@@ -8,19 +8,29 @@
 
 <title>Changelog • icd: Comorbidities and tools for ICD codes</title>
 
-<!-- jquery -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
-<!-- Bootstrap -->
-<link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.7/cosmo/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous" />
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script>
+<!-- jquery -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+<!-- Bootstrap -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.4.0/cosmo/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous" />
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js" integrity="sha256-nuL8/2cJ5NDSSwnKD8VqreErSWHtnEP9E7AySL+1ev4=" crossorigin="anonymous"></script>
+
+<!-- bootstrap-toc -->
+<link rel="stylesheet" href="../bootstrap-toc.css">
+<script src="../bootstrap-toc.js"></script>
 
 <!-- Font Awesome icons -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/all.min.css" integrity="sha256-nAmazAk6vS34Xqo0BSrTb+abbtFlgsFK7NKSi6o7Y78=" crossorigin="anonymous" />
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.7.1/css/v4-shims.min.css" integrity="sha256-6qHlizsOWFskGlwVOKuns+D1nB6ssZrHQrNj1wGplHc=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/v4-shims.min.css" integrity="sha256-wZjR52fzng1pJHwx4aV2AO3yyTOXrcDW7jBpJtTwVxw=" crossorigin="anonymous" />
 
 <!-- clipboard.js -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script>
+
+<!-- headroom.js -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/headroom.min.js" integrity="sha256-AsUX4SJE1+yuDu5+mAVzJbuYNPHj/WroHuZ8Ir/CkE0=" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/headroom/0.11.0/jQuery.headroom.min.js" integrity="sha256-ZX/yNShbjqsohH1k95liqY9Gd8uOiE1S4vZc+9KQ1K4=" crossorigin="anonymous"></script>
 
 <!-- pkgdown -->
 <link href="../pkgdown.css" rel="stylesheet">
@@ -29,12 +39,14 @@
 
 <!-- docsearch -->
 <script src="../docsearch.js"></script>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/docsearch.js/2.6.1/docsearch.min.css" integrity="sha256-QOSRU/ra9ActyXkIBbiIB144aDBdtvXBcNc3OTNuX/Q=" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/docsearch.js/2.6.3/docsearch.min.css" integrity="sha256-QOSRU/ra9ActyXkIBbiIB144aDBdtvXBcNc3OTNuX/Q=" crossorigin="anonymous" />
 <link href="../docsearch.css" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/jquery.mark.min.js" integrity="sha256-4HLtjeVgH0eIB3aZ9mLYF6E8oU5chNdjU6p6rrXpl9U=" crossorigin="anonymous"></script>
 
 
+
 <meta property="og:title" content="Changelog" />
+
 
 
 
@@ -48,9 +60,10 @@
 <![endif]-->
 
 
+
   </head>
 
-  <body>
+  <body data-spy="scroll" data-target="#toc">
     <div class="container template-news">
       <header>
       <div class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -64,7 +77,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">icd: Comorbidities and tools for ICD codes</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">4.0.6.9000</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">4.0.9</span>
       </span>
     </div>
 
@@ -79,52 +92,20 @@
 <li>
   <a href="../reference/index.html">Reference</a>
 </li>
-<li class="dropdown">
-  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-    Articles
-     
-    <span class="caret"></span>
-  </a>
-  <ul class="dropdown-menu" role="menu">
-    <li>
-      <a href="../articles/CMS-HCC.html">Using Hierarchical Condition Codes</a>
-    </li>
-    <li>
-      <a href="../articles/ICD-10.html">ICD-10 comorbidities</a>
-    </li>
-    <li>
-      <a href="../articles/PCCC.html">Pediatric Complex Chronic Conditions</a>
-    </li>
-    <li>
-      <a href="../articles/charlson-scores.html">Charlson and Van Walraven scores</a>
-    </li>
-    <li>
-      <a href="../articles/compare-maps.html">Comparing Comorbidity Mappings</a>
-    </li>
-    <li>
-      <a href="../articles/country-lang-vers-prebuilt.html">Working with World Health Organization ICD codes and national editions, and different languages</a>
-    </li>
-    <li>
-      <a href="../articles/custom-maps.html">Quick custom comorbidity maps are helpful</a>
-    </li>
-    <li>
-      <a href="../articles/efficiency-prebuilt.pdf">icd: Efficient Computation of Comorbidities from ICD Codes Using Sparse Matrix Multiplication in R (PDF)</a>
-    </li>
-    <li>
-      <a href="../articles/introduction.html">An Introduction to icd</a>
-    </li>
-    <li>
-      <a href="../articles/ranges.html">Ranges of ICD codes</a>
-    </li>
-  </ul>
+<li>
+  <a href="../articles/index.html">Articles</a>
 </li>
 <li>
   <a href="../news/index.html">Changelog</a>
 </li>
       </ul>
-      
       <ul class="nav navbar-nav navbar-right">
-        
+        <li>
+  <a href="https://github.com/jackwasey/icd/">
+    <span class="fab fa fab fa-github fa-lg"></span>
+     
+  </a>
+</li>
       </ul>
       
       <form class="navbar-form navbar-right hidden-xs hidden-sm" role="search">
@@ -138,23 +119,47 @@
 </div><!--/.navbar -->
 
       
+
       </header>
 
 <div class="row">
   <div class="col-md-9 contents">
     <div class="page-header">
-      <h1>Changelog <small></small></h1>
-      
+      <h1 data-toc-skip>Changelog <small></small></h1>
+      <small>Source: <a href='https://github.com/jackwasey/icd/blob/master/NEWS.md'><code>NEWS.md</code></a></small>
     </div>
 
-    <div id="version-4-0-2" class="section level1">
-<h1 class="page-header">
-<a href="#version-4-0-2" class="anchor"></a>Version 4.0.2<small> Unreleased </small>
+    <div id="version-409" class="section level1">
+<h1 class="page-header" data-toc-text="4.0.9">
+<a href="#version-409" class="anchor"></a>Version 4.0.9<small> Unreleased </small>
+</h1>
+<ul>
+<li>Updated French ICD code URL</li>
+<li>dropped r-lib/rappdirs in favor of copy of backports::R_app_dirs</li>
+<li>dropped extraneous files from source tarball sent to CRAN</li>
+<li>clean-up prebuilt pdf paths, both keeping package smaller, and fixing broken links, as noted by CRAN but missed by R CMD check somehow.</li>
+</ul>
+</div>
+    <div id="version-408" class="section level1">
+<h1 class="page-header" data-toc-text="4.0.8">
+<a href="#version-408" class="anchor"></a>Version 4.0.8<small> Unreleased </small>
+</h1>
+<ul>
+<li>Work-around rappdirs problem affecting some Windows users with default cache data directory.</li>
+<li>ICD-10 vignette link to efficiency vignette updated.</li>
+<li>CRAN: removed a deprecated compiler flag, and udpated documentation</li>
+<li>(pending updates for next release: fix for Windows JSON error for some ICD data downloads; ICD-9 to ICD-10 cross-walk)</li>
+<li>fix test failure due to new 4.0 R-devel policy for stringsAsFactors=FALSE by default, thanks to <a href='https://github.com/patrickmdnet'>@patrickmdnet</a>.</li>
+</ul>
+</div>
+    <div id="version-406" class="section level1">
+<h1 class="page-header" data-toc-text="4.0.6">
+<a href="#version-406" class="anchor"></a>Version 4.0.6<small> 2019-05-07 </small>
 </h1>
 <ul>
 <li>Major update. Highlights include: wide/long data both handled efficiently without conversion; WHO, France, Belgium ICD-10 codes; more comprehensive ICD-10 comorbidity maps to span historic ICD-10 versions</li>
 <li>The ICD-10 comorbidity maps have been expanded to include the union of all codes for each year in which ICD-10-CM and WHO ICD-10 are available. E.g., HIV in WHO scheme has more detail than the US version. (The ICD-9 code algorithm does not rely on exact ICD-10 codes in maps, so is unchanged). This will flag a few more comorbidities than before, especially when data doesn’t correspond to the most recent map. CCS maps are only expanded over history ICD-10-CM since they are US-oriented. This is an important user-facing change which will improve capture of comorbidities in international and historic ICD-10 data. Again, ICD-9 computations are unaffected.</li>
-<li>Thanks to <a href='https://github.com/vitallish'>@vitallish</a> for update to CCS maps see #163, #168</li>
+<li>Thanks to <a href='https://github.com/vitallish'>@vitallish</a> for update to CCS maps see <a href='https://github.com/jackwasey/icd/issues/163'>#163</a>, <a href='https://github.com/jackwasey/icd/issues/168'>#168</a></li>
 <li>Framework for using WHO ICD-10 codes, which the ‘icd.data’ package will download as needed from the WHO web site. English and French are available, but currently only for the years 2016 and 2008 respectively. Update ‘icd.data’ package to version &gt;= 1.1 to enable.</li>
 <li>Access to French and Dutch translations of ICD-10-CM, used in Belgium.</li>
 <li>Handle ‘wide’ format data much more efficiently, without having to convert to long format first.</li>
@@ -178,31 +183,31 @@
 <li>code cleaning, simplification and linting, e.g. replaced sapply with vapply throughout, and dropped custom wide-long-wide conversion C++ code in favour of base R.</li>
 </ul>
 </div>
-    <div id="version-3-3" class="section level1">
-<h1 class="page-header">
-<a href="#version-3-3" class="anchor"></a>Version 3.3<small> 2018-11-18 </small>
+    <div id="version-33" class="section level1">
+<h1 class="page-header" data-toc-text="3.3">
+<a href="#version-33" class="anchor"></a>Version 3.3<small> 2018-11-18 </small>
 </h1>
 <ul>
-<li>Fixes #160, #161</li>
+<li>Fixes <a href='https://github.com/jackwasey/icd/issues/160'>#160</a>, <a href='https://github.com/jackwasey/icd/issues/161'>#161</a></li>
 <li>Includes replication code for benchmarking, showing enormous speed of ‘icd’ over alternatives.</li>
 <li>Improved referencing and documentation</li>
 <li>Functions to print vectors of ICD codes more cleanly when they have ‘icd’ classes or attributes.</li>
 </ul>
 </div>
-    <div id="version-3-2-1" class="section level1">
-<h1 class="page-header">
-<a href="#version-3-2-1" class="anchor"></a>Version 3.2.1<small> 2018-08-18 </small>
+    <div id="version-321" class="section level1">
+<h1 class="page-header" data-toc-text="3.2.1">
+<a href="#version-321" class="anchor"></a>Version 3.2.1<small> 2018-08-18 </small>
 </h1>
 <ul>
 <li>Pediatric Complex Chronic Condition functions more consistent with the other comorbidity functions</li>
 <li>Minor bug fixes</li>
-<li>Fixes #157</li>
+<li>Fixes <a href='https://github.com/jackwasey/icd/issues/157'>#157</a></li>
 <li>Eigen library is multi-threaded, so OpenMP dependencies now dropped from this package, simplifying and speeding up build, dropping configure script, etc..</li>
 </ul>
 </div>
-    <div id="version-3-2-0" class="section level1">
-<h1 class="page-header">
-<a href="#version-3-2-0" class="anchor"></a>Version 3.2.0<small> 2018-06-07 </small>
+    <div id="version-320" class="section level1">
+<h1 class="page-header" data-toc-text="3.2.0">
+<a href="#version-320" class="anchor"></a>Version 3.2.0<small> 2018-06-07 </small>
 </h1>
 <ul>
 <li>added <a href="https://jackwasey.github.io/icd/articles/PCCC.html">Pediatric Complex Chronic Condition comorbidity classification</a>
@@ -217,20 +222,20 @@
 <li>depend on new package <a href="https://github.com/jackwasey/icd.data">icd.data</a> for large, rarely modified data files</li>
 </ul>
 </div>
-    <div id="version-3-1-2" class="section level1">
-<h1 class="page-header">
-<a href="#version-3-1-2" class="anchor"></a>Version 3.1.2<small> 2018-05-09 </small>
+    <div id="version-312" class="section level1">
+<h1 class="page-header" data-toc-text="3.1.2">
+<a href="#version-312" class="anchor"></a>Version 3.1.2<small> 2018-05-09 </small>
 </h1>
 <ul>
 <li>Documentation improved</li>
 <li>
 <a href="https://jackwasey.github.io/icd/" class="uri">https://jackwasey.github.io/icd/</a> now has <code>pkgdown</code> generated site in <code>gh-pages</code> branch.</li>
-<li>Allow more functions to work without having called <code><a href="https://rdrr.io/r/base/library.html">library(icd)</a></code> first</li>
+<li>Allow more functions to work without having called <code><a href="https://jackwasey.github.io/icd//reference">library(icd)</a></code> first</li>
 </ul>
 </div>
-    <div id="version-3-1-1" class="section level1">
-<h1 class="page-header">
-<a href="#version-3-1-1" class="anchor"></a>Version 3.1.1<small> Unreleased </small>
+    <div id="version-311" class="section level1">
+<h1 class="page-header" data-toc-text="3.1.1">
+<a href="#version-311" class="anchor"></a>Version 3.1.1<small> Unreleased </small>
 </h1>
 <ul>
 <li>Includes article submitted to the Journal of Statistical Software, brings in minimal new dependencies with <code>rticles</code> and <code>tinytex</code>
@@ -238,72 +243,72 @@
 <li>Drop RODBC dependency. Uranium sample data can still be reproduced offline.</li>
 </ul>
 </div>
-    <div id="version-3-0" class="section level1">
-<h1 class="page-header">
-<a href="#version-3-0" class="anchor"></a>Version 3.0<small> Unreleased </small>
+    <div id="version-30" class="section level1">
+<h1 class="page-header" data-toc-text="3.0">
+<a href="#version-30" class="anchor"></a>Version 3.0<small> Unreleased </small>
 </h1>
 <ul>
 <li>major improvement in comorbidity calculation speed using matrix multiplication behind the scenes. ICD-10 codes were slower than ICD-9 code comorbidities before, and are now 1.5 - 2 orders of magnitude faster.</li>
-<li>Added AHRQ clinical condition software (CCS) classification for ICD-9 and ICD-10, thanks to Vitaly Druker, fixes #127</li>
+<li>Added AHRQ clinical condition software (CCS) classification for ICD-9 and ICD-10, thanks to Vitaly Druker, fixes <a href='https://github.com/jackwasey/icd/issues/127'>#127</a></li>
 <li>added ‘charlson’ synonyms for ‘Quan/Deyo’, e.g. Charlson comorbidities can now be found using <code><a href="../reference/comorbid.html">comorbid_charlson(patient_data)</a></code>
 </li>
-<li>Added AHRQ clinical condition software (CCS) classification for ICD-9 and ICD-10, thanks to Vitaly Druker, fixes #127</li>
+<li>Added AHRQ clinical condition software (CCS) classification for ICD-9 and ICD-10, thanks to Vitaly Druker, fixes <a href='https://github.com/jackwasey/icd/issues/127'>#127</a></li>
 <li>function names have lost the ‘icd_’ prefix, old names kept for compatibility, but easier now to write <code><a href="../reference/comorbid.html">comorbid(patient_data)</a></code>, and <code><a href="../reference/comorbid.html">icd::comorbid</a></code> may also be used, and which many consider good practice. <code>explain_icd</code> synonym avoids name conflict with the popular <code>dplyr</code> package, but <code>icd::explain</code> also a nice option.</li>
 <li>Assume C++11, which is now four years old, enabling code simplification</li>
 <li>rename all functions to remove the icd_, people can use the concise icd:: if library(icd) was not called</li>
 <li>deprecated rarely or unused code, including %i9in%</li>
 </ul>
 </div>
-    <div id="version-2-4-1" class="section level1">
-<h1 class="page-header">
-<a href="#version-2-4-1" class="anchor"></a>Version 2.4.1<small> 2018-03-10 </small>
+    <div id="version-241" class="section level1">
+<h1 class="page-header" data-toc-text="2.4.1">
+<a href="#version-241" class="anchor"></a>Version 2.4.1<small> 2018-03-10 </small>
 </h1>
 <ul>
-<li>updated HCC to include 2017 data, thanks to <a href='https://github.com/anobel'>@anobel</a> fixes #136</li>
-<li>fixed github #133 - segfault with empty ICD-10 string in icd10_comorbid</li>
+<li>updated HCC to include 2017 data, thanks to <a href='https://github.com/anobel'>@anobel</a> fixes <a href='https://github.com/jackwasey/icd/issues/136'>#136</a></li>
+<li>fixed github <a href='https://github.com/jackwasey/icd/issues/133'>#133</a> - segfault with empty ICD-10 string in icd10_comorbid</li>
 <li>add Suggested dependency on microbenchmark, now CRAN is sensibly not requiring Suggests to be installed even for testing</li>
 <li>re-enabled testthat C++ Catch tests and make examples tests run correctly</li>
 <li>drop Wercker continuous integration support</li>
-<li>fixed #108 - when no valid codes are given to icd_explain_table</li>
+<li>fixed <a href='https://github.com/jackwasey/icd/issues/108'>#108</a> - when no valid codes are given to icd_explain_table</li>
 </ul>
 </div>
-    <div id="version-2-3" class="section level1">
-<h1 class="page-header">
-<a href="#version-2-3" class="anchor"></a>Version 2.3<small> Unreleased </small>
+    <div id="version-23" class="section level1">
+<h1 class="page-header" data-toc-text="2.3">
+<a href="#version-23" class="anchor"></a>Version 2.3<small> Unreleased </small>
 </h1>
 <ul>
-<li>Fixed nasty bug which failed to sort the names of a vector of ICD codes correctly, resulting in some incorrect icd_explain. Fixes github #123, #124, #126.</li>
+<li>Fixed nasty bug which failed to sort the names of a vector of ICD codes correctly, resulting in some incorrect icd_explain. Fixes github <a href='https://github.com/jackwasey/icd/issues/123'>#123</a>, <a href='https://github.com/jackwasey/icd/issues/124'>#124</a>, <a href='https://github.com/jackwasey/icd/issues/126'>#126</a>.</li>
 <li>update stale URLs for example data sources</li>
 </ul>
 </div>
-    <div id="version-2-2" class="section level1">
-<h1 class="page-header">
-<a href="#version-2-2" class="anchor"></a>Version 2.2<small> 2017-05-14 </small>
+    <div id="version-22" class="section level1">
+<h1 class="page-header" data-toc-text="2.2">
+<a href="#version-22" class="anchor"></a>Version 2.2<small> 2017-05-14 </small>
 </h1>
 <ul>
 <li>Removed deprecated functions and data. <code>icd9</code> still available in CRAN repo, but not being updated. This greatly speeds up and simplifies the test suite.</li>
-<li>Bug fixes #89 #99 #106 #109 #100 #111 #113 #115 #116 #117 with many thanks to bug reporters and users</li>
+<li>Bug fixes <a href='https://github.com/jackwasey/icd/issues/89'>#89</a> <a href='https://github.com/jackwasey/icd/issues/99'>#99</a> <a href='https://github.com/jackwasey/icd/issues/106'>#106</a> <a href='https://github.com/jackwasey/icd/issues/109'>#109</a> <a href='https://github.com/jackwasey/icd/issues/100'>#100</a> <a href='https://github.com/jackwasey/icd/issues/111'>#111</a> <a href='https://github.com/jackwasey/icd/issues/113'>#113</a> <a href='https://github.com/jackwasey/icd/issues/115'>#115</a> <a href='https://github.com/jackwasey/icd/issues/116'>#116</a> <a href='https://github.com/jackwasey/icd/issues/117'>#117</a> with many thanks to bug reporters and users</li>
 <li>stopped changing an attribute by reference, thanks to Tomas Kalibera for highlighting.</li>
 </ul>
 </div>
-    <div id="version-2-1" class="section level1">
-<h1 class="page-header">
-<a href="#version-2-1" class="anchor"></a>Version 2.1<small> 2016-09-02 </small>
+    <div id="version-21" class="section level1">
+<h1 class="page-header" data-toc-text="2.1">
+<a href="#version-21" class="anchor"></a>Version 2.1<small> 2016-09-02 </small>
 </h1>
 <ul>
 <li>Many thanks to <a href='https://github.com/anobel'>@anobel</a> for providing parsing and lookup of Hierarchical Condition Codes.</li>
 <li>Many thanks to <a href='https://github.com/edlee123'>@edlee123</a> for contributing <code>explain_table</code> which tabulates results of looking up various information about a list of ICD codes. This is a new feature which may be changed as it is used in the real world, and more tests are developed.</li>
 <li>removed <code>stringr</code> family of dependencies: it was often slower on benchmarking than built-ins, and no clear benefits other than internally consistent syntax, and stringr updates caused CRAN warnings due to a documentation change.</li>
-<li>Fixes #86, thanks to <a href='https://github.com/anobel'>@anobel</a></li>
-<li>Fixes #91</li>
-<li>Fixes #93 thanks to <a href='https://github.com/nancyorgan'>@nancyorgan</a></li>
-<li>Fixes #97, thanks to <a href='https://github.com/michaelgao8'>@michaelgao8</a></li>
+<li>Fixes <a href='https://github.com/jackwasey/icd/issues/86'>#86</a>, thanks to <a href='https://github.com/anobel'>@anobel</a></li>
+<li>Fixes <a href='https://github.com/jackwasey/icd/issues/91'>#91</a></li>
+<li>Fixes <a href='https://github.com/jackwasey/icd/issues/93'>#93</a> thanks to <a href='https://github.com/nancyorgan'>@nancyorgan</a></li>
+<li>Fixes <a href='https://github.com/jackwasey/icd/issues/97'>#97</a>, thanks to <a href='https://github.com/michaelgao8'>@michaelgao8</a></li>
 <li>Speed improvements, mostly simply from using base R hashed Environments instead of lists</li>
 </ul>
 </div>
-    <div id="version-2-0" class="section level1">
-<h1 class="page-header">
-<a href="#version-2-0" class="anchor"></a>Version 2.0<small> 2016-04-11 </small>
+    <div id="version-20" class="section level1">
+<h1 class="page-header" data-toc-text="2.0">
+<a href="#version-20" class="anchor"></a>Version 2.0<small> 2016-04-11 </small>
 </h1>
 <ul>
 <li>ICD-10 support, including ICD-10 comorbidity mappings, validation and explanations (code to description). ICD-10-CM 2016 is included.</li>
@@ -312,21 +317,21 @@
 <li>Simplify functions</li>
 <li>Automatic detection of ICD version when not specified</li>
 <li>Automatic detection of use of short or decimal format codes</li>
-<li>e.g. <code>icd9ExplainShort</code> becomes <code>icd_explain</code>
+<li>e.g. <code>icd9ExplainShort</code> becomes <code>icd_explain</code>
 </li>
-<li>Optional use of the S3 class system so data can be described as ICD-9 or ICD-10, so appropriate functions are used without guesswork. This means that you can optionally label your data with the appropriate class, e.g. <code><a href="../reference/set_icd_class.html">as.icd10("A01")</a></code> or <code><a href="../reference/set_icd_class.html">as.icd9cm("0101")</a></code>. This will help avoid mistakes when working with mixed data.</li>
+<li>Optional use of the S3 class system so data can be described as ICD-9 or ICD-10, so appropriate functions are used without guesswork. This means that you can optionally label your data with the appropriate class, e.g. <code><a href="../reference/set_icd_class.html">as.icd10("A01")</a></code> or <code><a href="../reference/set_icd_class.html">as.icd9cm("0101")</a></code>. This will help avoid mistakes when working with mixed data.</li>
 <li>ICD-9 and ICD-10 sub-versions, particularly for distinguishing of ICD-9 (WHO) from ICD-9-CM, and same for ICD-10. This can also be extended to other countries, e.g. ICD-10-CA, or other code types altogether.</li>
 <li>Soft deprecated all <code>icd9</code> prefix functions, now this package equally covers ICD-10. New naming scheme follows Hadley Wickham’s preferred coding style, using underscores. Most public functions begin with <code>icd_</code>. Package data, and version specific functions, are named with <code>icd_</code>, <code>icd9_</code>, <code>icd10_</code>, prefixes. E.g. <code>icd10_chapters</code> and <code>icd9cm_hierarchy</code>. All deprecated functions will still work, but they give warnings (sometimes many). The warnings can be turned off with an option. The original test suite from <code>icd9</code> runs and passes on the <code>icd</code> package, with only minimal changes.</li>
-<li>Completely deprecated some previously soft deprecated functions, e.g. <code>icd9ValidDecimal</code>
+<li>Completely deprecated some previously soft deprecated functions, e.g. <code>icd9ValidDecimal</code>
 </li>
 <li>Works with very latest <code>testthat</code> which has backward-incompatible changes</li>
 <li>Minimized dependencies, but <code>icd</code> does import <code>stringi</code> via <code>stringr</code> to give cleaner string processing. Base string processing is still used as it is often faster. <code>magrittr</code> is now too useful not to import, has no dependencies of its own, and is imported by <code>stringr</code> anyway. CRAN now also seems to need base packages to be listed as imports.</li>
 <li>More automated testing with Travis and Wercker, Codecov and Coveralls.</li>
 </ul>
 </div>
-    <div id="version-1-3" class="section level1">
-<h1 class="page-header">
-<a href="#version-1-3" class="anchor"></a>Version 1.3<small> Unreleased </small>
+    <div id="version-13" class="section level1">
+<h1 class="page-header" data-toc-text="1.3">
+<a href="#version-13" class="anchor"></a>Version 1.3<small> Unreleased </small>
 </h1>
 <ul>
 <li>With many thanks to <a href='https://github.com/wmurphyrd'>@wmurphyrd</a>, Quan’s revised scoring system for Charlson comorbidities is now included.</li>
@@ -334,25 +339,25 @@
 <li>Use <code>fastmatch</code> for fast factor generation, but with the tweak of not sorting the levels. This had been by far the slowest step in generating comorbidities.</li>
 </ul>
 </div>
-    <div id="version-1-2-2" class="section level1">
-<h1 class="page-header">
-<a href="#version-1-2-2" class="anchor"></a>Version 1.2.2<small> Unreleased </small>
+    <div id="version-122" class="section level1">
+<h1 class="page-header" data-toc-text="1.2.2">
+<a href="#version-122" class="anchor"></a>Version 1.2.2<small> Unreleased </small>
 </h1>
 <ul>
-<li>Completed fix from version 1.2.1 by temporarily disabling OpenMP on all platforms. Still runs quickly due to other optimizations made in supporting the OpenMP. It’ll be back, but only when I or someone else can create a docker or VM image which runs Clang 3.7 or greater, OpenMP, with/without LLVM C++ standard library. See #75</li>
+<li>Completed fix from version 1.2.1 by temporarily disabling OpenMP on all platforms. Still runs quickly due to other optimizations made in supporting the OpenMP. It’ll be back, but only when I or someone else can create a docker or VM image which runs Clang 3.7 or greater, OpenMP, with/without LLVM C++ standard library. See <a href='https://github.com/jackwasey/icd/issues/75'>#75</a></li>
 </ul>
 </div>
-    <div id="version-1-2-1" class="section level1">
-<h1 class="page-header">
-<a href="#version-1-2-1" class="anchor"></a>Version 1.2.1<small> Unreleased </small>
+    <div id="version-121" class="section level1">
+<h1 class="page-header" data-toc-text="1.2.1">
+<a href="#version-121" class="anchor"></a>Version 1.2.1<small> Unreleased </small>
 </h1>
 <ul>
 <li>Partly fixed obscure memory access violation error seen only when using OpenMP clang 3.7 on fedora, and maybe OS X.</li>
 </ul>
 </div>
-    <div id="version-1-2" class="section level1">
-<h1 class="page-header">
-<a href="#version-1-2" class="anchor"></a>Version 1.2<small> Unreleased </small>
+    <div id="version-12" class="section level1">
+<h1 class="page-header" data-toc-text="1.2">
+<a href="#version-12" class="anchor"></a>Version 1.2<small> Unreleased </small>
 </h1>
 <ul>
 <li>Make annual revisions of ICD-9-CM available. The package includes data from each year which CMS has published (versions 23 to 32). The default is to use version 32. More work will be needed to make it straightforward to use an arbitrary version when running <code>icd9</code> commands. These are available in the package data <code>icd9Billable</code>. See vignette for examples.</li>
@@ -369,25 +374,25 @@
 <li>included first thousand patients from a public domain dataset from Vermont, available as <code>vermont_dx</code>.</li>
 </ul>
 </div>
-    <div id="version-1-1" class="section level1">
-<h1 class="page-header">
-<a href="#version-1-1" class="anchor"></a>Version 1.1<small> Unreleased </small>
+    <div id="version-11" class="section level1">
+<h1 class="page-header" data-toc-text="1.1">
+<a href="#version-11" class="anchor"></a>Version 1.1<small> Unreleased </small>
 </h1>
 <ul>
 <li>C++ OpenMP parallel processing of comorbidities for further many-fold speed improvement, scaling to cores available in a machine, allocating about a million rows of comorbidities in a second or two, on a moderate workstation. Some speed is lost by (optionally) allowing disordered input visit IDs.</li>
 <li>C++ optimization using simpler, faster STL structures, working with R factors (converted automatically) so comorbidity assignment is done using integer logic only</li>
-<li>drop unwanted old vignette from the build. Fixes #42</li>
-<li>refinement of many functions to specifically accept factors or character vectors, but not integers in most cases. Fixes #38</li>
+<li>drop unwanted old vignette from the build. Fixes <a href='https://github.com/jackwasey/icd/issues/42'>#42</a></li>
+<li>refinement of many functions to specifically accept factors or character vectors, but not integers in most cases. Fixes <a href='https://github.com/jackwasey/icd/issues/38'>#38</a></li>
 <li>more natural use of matrix for comorbidities, with option to return data frames. Allow matrix or data.frame in functions which accept comorbidities</li>
-<li>bug fixes with thanks to <a href='https://github.com/wmurhpyrd'>@wmurhpyrd</a>. Fixes #44, fixes #46</li>
-<li>fixes #41</li>
+<li>bug fixes with thanks to <a href='https://github.com/wmurhpyrd'>@wmurhpyrd</a>. Fixes <a href='https://github.com/jackwasey/icd/issues/44'>#44</a>, fixes <a href='https://github.com/jackwasey/icd/issues/46'>#46</a></li>
+<li>fixes <a href='https://github.com/jackwasey/icd/issues/41'>#41</a></li>
 <li>extensive use of the excellent and very efficient checkmate package for validating function arguments</li>
-<li>improved test coverage, demonstrated by the excellent covr package and coveralls.io . Fixes #4</li>
+<li>improved test coverage, demonstrated by the excellent covr package and coveralls.io . Fixes <a href='https://github.com/jackwasey/icd/issues/4'>#4</a></li>
 </ul>
 </div>
-    <div id="version-1-0" class="section level1">
-<h1 class="page-header">
-<a href="#version-1-0" class="anchor"></a>Version 1.0<small> Unreleased </small>
+    <div id="version-10" class="section level1">
+<h1 class="page-header" data-toc-text="1.0">
+<a href="#version-10" class="anchor"></a>Version 1.0<small> Unreleased </small>
 </h1>
 <ul>
 <li>Calculate Charlson scores</li>
@@ -409,39 +414,39 @@
 </li>
 </ul>
 </div>
-    <div id="version-0-5" class="section level1">
-<h1 class="page-header">
-<a href="#version-0-5" class="anchor"></a>Version 0.5<small> Unreleased </small>
+    <div id="version-05" class="section level1">
+<h1 class="page-header" data-toc-text="0.5">
+<a href="#version-05" class="anchor"></a>Version 0.5<small> Unreleased </small>
 </h1>
 <ul>
-<li>Filter icd9 data for validity or existence. Fixes issue #27</li>
-<li>Guess whether a code is short or decimal. Fixes #22</li>
-<li>Enable ranges for Exxx codes. Fixes #9</li>
-<li>Explain and condense long lists of ICD-9 codes using maximum number of higher-level descriptions without being overly broad. Fixes #3</li>
-<li>Include high level descriptions, chapters, majors, which do not have CMS descriptions because they are not themselves billable codes. Fixes #2</li>
-<li>E codes &lt;800 can be valid in 2014. Fixes #1</li>
+<li>Filter icd9 data for validity or existence. Fixes issue <a href='https://github.com/jackwasey/icd/issues/27'>#27</a></li>
+<li>Guess whether a code is short or decimal. Fixes <a href='https://github.com/jackwasey/icd/issues/22'>#22</a></li>
+<li>Enable ranges for Exxx codes. Fixes <a href='https://github.com/jackwasey/icd/issues/9'>#9</a></li>
+<li>Explain and condense long lists of ICD-9 codes using maximum number of higher-level descriptions without being overly broad. Fixes <a href='https://github.com/jackwasey/icd/issues/3'>#3</a></li>
+<li>Include high level descriptions, chapters, majors, which do not have CMS descriptions because they are not themselves billable codes. Fixes <a href='https://github.com/jackwasey/icd/issues/2'>#2</a></li>
+<li>E codes &lt;800 can be valid in 2014. Fixes <a href='https://github.com/jackwasey/icd/issues/1'>#1</a></li>
 <li>Bug fixes, vignette and other documentation updated.</li>
 <li>Test suite ever more comprehensive.</li>
 <li>Rename Elixhauser arguments and functions to “Elix” for clarity of code, and ease of typing.</li>
 </ul>
 </div>
-    <div id="version-0-4" class="section level1">
-<h1 class="page-header">
-<a href="#version-0-4" class="anchor"></a>Version 0.4<small> Unreleased </small>
+    <div id="version-04" class="section level1">
+<h1 class="page-header" data-toc-text="0.4">
+<a href="#version-04" class="anchor"></a>Version 0.4<small> Unreleased </small>
 </h1>
 <ul>
 <li>Present-on-arrival field handled gracefully</li>
 <li>Revised co-morbidity handling, with functions specific to each mapping</li>
 <li>Standardized naming of fields across Elixhauser and Charlson based mappings for clarity, consistency and comparability</li>
-<li>Handle mild and severe co-morbidities without double-counting. Fixes issue #23</li>
-<li>Enable magrittr-style piping as option to clarify chains of operations. Issue #5</li>
+<li>Handle mild and severe co-morbidities without double-counting. Fixes issue <a href='https://github.com/jackwasey/icd/issues/23'>#23</a></li>
+<li>Enable magrittr-style piping as option to clarify chains of operations. Issue <a href='https://github.com/jackwasey/icd/issues/5'>#5</a></li>
 <li>many more test cases, including specific tests for individual values in each computed mapping, and also for the new comorbidity functions</li>
 <li>Vignette updated to demonstrate clearer new functions</li>
 </ul>
 </div>
-    <div id="version-0-3" class="section level1">
-<h1 class="page-header">
-<a href="#version-0-3" class="anchor"></a>Version 0.3<small> Unreleased </small>
+    <div id="version-03" class="section level1">
+<h1 class="page-header" data-toc-text="0.3">
+<a href="#version-03" class="anchor"></a>Version 0.3<small> Unreleased </small>
 </h1>
 <ul>
 <li>Addition of several utility functions, mostly kept for internal use, but which clarify the code</li>
@@ -455,17 +460,17 @@
 <li>The included pre-parsed data are slightly updated to include some missing top-level numbers when all the children were also present. (“043” %i9s% “04499” should equal “043” %i9s% “044”)</li>
 </ul>
 </div>
-    <div id="version-0-2-1" class="section level1">
-<h1 class="page-header">
-<a href="#version-0-2-1" class="anchor"></a>Version 0.2.1<small> Unreleased </small>
+    <div id="version-021" class="section level1">
+<h1 class="page-header" data-toc-text="0.2.1">
+<a href="#version-021" class="anchor"></a>Version 0.2.1<small> Unreleased </small>
 </h1>
 <ul>
 <li>trivial changes to appease CRAN</li>
 </ul>
 </div>
-    <div id="version-0-2" class="section level1">
-<h1 class="page-header">
-<a href="#version-0-2" class="anchor"></a>Version 0.2<small> Unreleased </small>
+    <div id="version-02" class="section level1">
+<h1 class="page-header" data-toc-text="0.2">
+<a href="#version-02" class="anchor"></a>Version 0.2<small> Unreleased </small>
 </h1>
 <ul>
 <li>Added more co-morbidity mappings, Elixhauser original and Quan/Elixhauser.</li>
@@ -476,9 +481,9 @@
 <li>Improved documentation</li>
 </ul>
 </div>
-    <div id="version-0-1-1" class="section level1">
-<h1 class="page-header">
-<a href="#version-0-1-1" class="anchor"></a>Version 0.1.1<small> Unreleased </small>
+    <div id="version-011" class="section level1">
+<h1 class="page-header" data-toc-text="0.1.1">
+<a href="#version-011" class="anchor"></a>Version 0.1.1<small> Unreleased </small>
 </h1>
 <ul>
 <li>Include missing import for memoise</li>
@@ -486,9 +491,9 @@
 <li>include the processed binary data. Unlikely to change often, and not too big.</li>
 </ul>
 </div>
-    <div id="version-0-1" class="section level1">
-<h1 class="page-header">
-<a href="#version-0-1" class="anchor"></a>Version 0.1<small> Unreleased </small>
+    <div id="version-01" class="section level1">
+<h1 class="page-header" data-toc-text="0.1">
+<a href="#version-01" class="anchor"></a>Version 0.1<small> Unreleased </small>
 </h1>
 <ul>
 <li>First release. Fully functional, no known bugs, but will benefit from addition of planned features described in README.</li>
@@ -496,49 +501,24 @@
 </div>
   </div>
 
-  <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
-    <div id="tocnav">
-      <h2>Contents</h2>
-      <ul class="nav nav-pills nav-stacked">
-        <li><a href="#version-4-0-2">4.0.2</a></li>
-        <li><a href="#version-3-3">3.3</a></li>
-        <li><a href="#version-3-2-1">3.2.1</a></li>
-        <li><a href="#version-3-2-0">3.2.0</a></li>
-        <li><a href="#version-3-1-2">3.1.2</a></li>
-        <li><a href="#version-3-1-1">3.1.1</a></li>
-        <li><a href="#version-3-0">3.0</a></li>
-        <li><a href="#version-2-4-1">2.4.1</a></li>
-        <li><a href="#version-2-3">2.3</a></li>
-        <li><a href="#version-2-2">2.2</a></li>
-        <li><a href="#version-2-1">2.1</a></li>
-        <li><a href="#version-2-0">2.0</a></li>
-        <li><a href="#version-1-3">1.3</a></li>
-        <li><a href="#version-1-2-2">1.2.2</a></li>
-        <li><a href="#version-1-2-1">1.2.1</a></li>
-        <li><a href="#version-1-2">1.2</a></li>
-        <li><a href="#version-1-1">1.1</a></li>
-        <li><a href="#version-1-0">1.0</a></li>
-        <li><a href="#version-0-5">0.5</a></li>
-        <li><a href="#version-0-4">0.4</a></li>
-        <li><a href="#version-0-3">0.3</a></li>
-        <li><a href="#version-0-2-1">0.2.1</a></li>
-        <li><a href="#version-0-2">0.2</a></li>
-        <li><a href="#version-0-1-1">0.1.1</a></li>
-        <li><a href="#version-0-1">0.1</a></li>
-      </ul>
-    </div>
+  <div class="col-md-3 hidden-xs hidden-sm" id="pkgdown-sidebar">
+    <nav id="toc" data-toggle="toc" class="sticky-top">
+      <h2 data-toc-skip>Contents</h2>
+    </nav>
   </div>
 
 </div>
 
+
       <footer>
       <div class="copyright">
-  <p>Developed by Jack O. Wasey, R Core Team.</p>
+  <p>Developed by Jack O. Wasey, Michel Lang, R Core Team.</p>
 </div>
 
 <div class="pkgdown">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.3.0.9000.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/">pkgdown</a> 1.5.1.</p>
 </div>
+
       </footer>
    </div>
 
@@ -561,6 +541,8 @@
 </script>
 
 
+
   </body>
 </html>
+
 
