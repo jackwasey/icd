@@ -30,4 +30,7 @@
 
 
 setwd(Sys.getenv("ICD_HOME"))
-rhub::check_with_sanitizers(env_vars = c(MAKEFLAGS = "CXX11FLAGS+=-w CXXFLAGS+=-w"))
+rhub_env <- read.delim(comment.char="#", sep="=", file="tools/env/rhub", header=FALSE, strip.white=TRUE, blank.lines.skip=TRUE, quote='"', col.names=c("name", "value"), row.names = 1)
+rhe=c(); for (n in rownames(rhub_env)) { rhe[n] = rhub_env[n, "value"]; }
+#rhub::check_with_sanitizers(env_vars = c(MAKEFLAGS = "CXX11FLAGS+=-w CXXFLAGS+=-w"))
+rhub::check_on_windows(env_vars = rhe)
