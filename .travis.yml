@@ -127,8 +127,9 @@ after_success:
     fi
   - if [[ "$ICD_COVERAGE" == "true" ]]; then
     Rscript -e 'source("tools/split-tests.R"); testthat_split();';
-    Rscript -e 'install.packages("covr"); covr::codecov(quiet = FALSE)';
-   fi
+    Rscript -e 'install.packages("remotes", dependencies = FALSE)';
+    Rscript -e 'remotes::install_github("r-lib/covr"); covr::codecov(quiet = FALSE)';
+    fi
    # consider something like this, if needed for it to work, or at least shut up Eigen warnings: Rscript -e "options(covr.flags = list(CXXFLAGS = '', LDFLAGS = '')); covr::codecov()"
 
 after_failure:

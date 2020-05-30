@@ -1,4 +1,4 @@
-With apologies for inability to fix the check warnings for compiler flags and documentation. I have now Removed deprecated CPP flag as requested. Fixed new documentation-related warnings from CRAN. Thanks for your work.
+Re-submission, with corrected links in documentation, and package sized reduced under 5 Mb as requested by Dr. Ligges. With apologies for inability to fix the check warnings for compiler flags and documentation. I have now Removed deprecated CPP flag as requested. Fixed new documentation-related warnings from CRAN. Thanks for your work.
 
 # Test environments
 

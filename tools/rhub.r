@@ -33,4 +33,14 @@ setwd(Sys.getenv("ICD_HOME"))
 rhub_env <- read.delim(comment.char="#", sep="=", file="tools/env/rhub", header=FALSE, strip.white=TRUE, blank.lines.skip=TRUE, quote='"', col.names=c("name", "value"), row.names = 1)
 rhe=c(); for (n in rownames(rhub_env)) { rhe[n] = rhub_env[n, "value"]; }
 #rhub::check_with_sanitizers(env_vars = c(MAKEFLAGS = "CXX11FLAGS+=-w CXXFLAGS+=-w"))
-rhub::check_on_windows(env_vars = rhe)
+#rhub::check_on_windows(env_vars = rhe)
+
+rhub_res <- list()
+plats <- c("macos-highsierra-release-cran", "linux-x86_64-rocker-gcc-san", "fedora-clang-devel", "debian-gcc-patched", "windows-x86_64-patched", "ubuntu-gcc-devel", "solaris-x86-patched")
+for (p in plats) {
+try({
+    rhub_res[p] <- rhub::check(env_vars = rhe, platform = p)
+})
+}
+
+rhub_res
