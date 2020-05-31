@@ -14,7 +14,23 @@ if ! "${toplevel}/tools/travis-yaml-check.sh"; then
     ok=1
 fi
 
-git diff --cached --name-only | grep -q 'DESCRIPTION' &&
+# update DESCRIPTION automatically, before codemetar update
+desc_tmp="/tmp/DESCRIPTION-$(date "$@" +"%Y%m%d_%H%M%S")"
+cp DESCRIPTION "${desc_tmp}"
+Rscript -e "devnull <- desc::desc_normalize('${desc_tmp}');"
+cmp DESCRIPTION "${desc_tmp}"
+declare -i desc_cmp
+desc_cmp=$?
+if (( desc_cmp == 1 )); then 
+    mv "${desc_tmp}" DESCRIPTION
+    ok=1
+elif (( desc_cmp == 2 )); then
+    echo "comparison error when checking DESCRIPTION normalization" >&2;
+    exit 1;
+fi
+
+git diff --cached --name-only |
+    grep -q 'DESCRIPTION' &&
     [[ DESCRIPTION -nt codemeta.json ]] && {
     Rscript -e 'codemetar::write_codemeta()'
     git add codemeta.json
@@ -48,13 +64,13 @@ grep -E -r -i -q "Copyright.*(${re_older_yrs%?}).*Wasey" . || ok=1
 
 # check package version correct everywhere, with non_GNU sed
 desc_ver="$(sed -n '/^Version/,/Version/s/Version: \([[:digit:].]\{3,\}\)/\1/p' DESCRIPTION)"
-news_ver="$(sed '1s/# Version \([[:digit:].]\{3,\}\)[[:space:]]*$/\1/;q' NEWS.md)"
+news_ver="$(sed -n '/^## Version/ {s/## Version \([[:digit:].]\{3,\}\)[[:space:]]*$/\1/;p;q}' NEWS.md)"
 conf_ver="$(sed -n '/AC_INIT/,/AC_INIT/s/[[:space:]]*AC_INIT.*\[\([[:digit:].]\{3,\}\)\].*/\1/p' configure.ac)"
 
 if [[ "${desc_ver}" == "${news_ver}" ]] && [[ "${desc_ver}" == "${conf_ver}" ]]; then
     :
 else
-    { echo "version mismatch: DESCRIPTION=${desc_ver}, NEWS.md${news_ver}, configure.ac${conf_ver}" >&2; ok=1; }
+    { echo "version mismatch: DESCRIPTION=${desc_ver}, NEWS.md=${news_ver}, configure.ac=${conf_ver}" >&2; ok=1; }
 fi
 
 # make sure we usr /usr/bin/env bash for scripts
@@ -79,11 +95,6 @@ find "${ICD_HOME}" -type d -name '.*' -prune -o -type f -exec grep -q '#!/usr/bi
         ok=1;
     }
 done
-
-Rscript -e '
-devnull <- desc::desc_reformat_fields();
-devnull <- desc::desc_reorder_fields();
-'
 
 wcres=$(git diff --name-only |
     grep -c -e "README.md" -e "codemeta.json"
