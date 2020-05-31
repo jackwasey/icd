@@ -1,8 +1,8 @@
 Package: icd
 Title: Comorbidity Calculations and Tools for ICD-9 and ICD-10
     Codes
-Version: 4.0.8
-Authors@R: 
+Version: 4.0.9.9000
+Authors@R:
     c(person(given = "Jack O.",
              family = "Wasey",
              role = c("aut", "cre", "cph"),
@@ -83,7 +83,6 @@ LinkingTo:
     RcppEigen
 VignetteBuilder: 
     knitr
-SystemRequirements: pandoc >= 2.2 to build the JSS vignette
 Biarch: true
 Classification/ACM-2012: Social and professional topics~Medical
     records, Applied computing~Health care information systems, Applied
@@ -94,3 +93,4 @@ Language: en-US
 LazyData: true
 LazyDataCompression: xz
 RoxygenNote: 7.1.0
+SystemRequirements: pandoc >= 2.2 to build the JSS vignette
