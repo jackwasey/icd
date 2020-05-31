@@ -113,6 +113,7 @@ comorbid_quan_elix(x, ...)
 comorbid_quan_deyo(x, ...)
 
 comorbid_charlson(...)
+
 comorbid_pccc_dx(
   x,
   visit_name = get_visit_name(x),
@@ -339,6 +340,7 @@ use ICD-9 or ICD-10 codes
 \item \code{comorbid_charlson}: Calculate comorbidities using Charlson categories
 according to Quan/Deyo ICD categories. Synonymous with
 \code{link{comorbid_quan_deyo}} in this release.
+
 \item \code{comorbid_pccc_dx}: Calculate pediatric complex chronic conditions (PCCC) comorbidities
 
 Unlike with ICD-9 and ICD-10 diagnostic codes, 'icd' doesn't
@@ -453,7 +455,7 @@ Other comorbidity computations:
 
 Other comorbidities: 
 \code{\link{comorbid_hcc}()},
-  \code{\link{icd10_map_ahrq_pcs}},
+\code{\link{icd10_map_ahrq_pcs}},
 \code{\link{icd9_map_ahrq}},
 \code{\link{icd9_map_elix}},
 \code{\link{icd9_map_hcc}},
@@ -472,9 +474,9 @@ Other comorbidities:
 \code{\link{icd9_map_elix}},
 \code{\link{icd9_map_hcc}},
 \code{\link{icd9_map_pccc}},
-  \code{\link{icd9_map_quan_deyo}},
-  \code{\link{icd9_map_quan_elix}},
-  \code{\link{icd9_map_single_ccs}}
+\code{\link{icd9_map_quan_deyo}},
+\code{\link{icd9_map_quan_elix}},
+\code{\link{icd9_map_single_ccs}}
 }
 \concept{comorbidities}
 \concept{comorbidity computations}
