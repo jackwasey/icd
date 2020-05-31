@@ -284,7 +284,7 @@
   "developmentStatus": ["https://www.tidyverse.org/lifecycle/#stable", "https://www.repostatus.org/#active"],
   "relatedLink": ["https://jackwasey.github.io/icd/", "https://CRAN.R-project.org/package=icd"],
   "readme": "https://github.com/jackwasey/icd/blob/master/README.md",
-  "fileSize": "36317.842KB",
+  "fileSize": "36317.793KB",
   "keywords": [
     "comorbidities",
     "icd",
