@@ -58,25 +58,23 @@
 
 release_questions <- function() {
   c(
-    # commands:
+    "run release_sanity_checks() in tools/extra-tests.R",
+    # data
     "clean data then download and update everything on all platforms",
-    "aspell_package_Rd_files('.')",
     # documentation:
-    "manual rebuild efficiency & country-lang-vers vignettes, check in tarball",
-    "Do all examples look ok (not just run without errors)?",
+    "manual render prebuilt efficiency & country-lang-vers vignettes, check correct in the tarball",
+    "Do all examples look okay (not just run without errors)?",
+    "Consider markdownlint mdl https://github.com/markdownlint/markdownlint",
+    "tools/publish.sh and note check for broken links",
     # code quality:
-    ".test_slow(TRUE); test_all()",
-    "icd::download_all_icd_data() and other major functions pre-library call",
-    "codetools::checkUsagePackage('icd', all = TRUE, suppressLocal = TRUE)",
-    "devtools::missing_s3()", # http://r-pkgs.had.co.nz/namespace.html
-    "Use clang scan-build, with latest version of clang",
+    "tools/test-plus.sh",
+    "Use clang scan-build, with latest version of clang (clang-tools in apt)",
     # testing and compilation and different platforms:
     "Are there any skipped tests which should be run?",
     "MacOS, Windows, Linux, r-hub, win-builder, travis, appveyor",
-    "Download and set data dir in vanilla bash and R, Windows, Mac and Linux without library(icd)",
-    "styler::style_pkg()",
+    "Download and set data dir in vanilla bash and R, Windows, Mac and Linux without library(icd) using icd::download_all_icd_data()",
     # final manual check:
-    "Have all unnecessary files been ignored in built source package?",
+    "Have all unnecessary files been ignored in built source tarball?",
     # post-release
     "Have all the fixed github issues been closed",
     "update version number to devel",

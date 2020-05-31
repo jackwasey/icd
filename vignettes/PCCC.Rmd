@@ -50,14 +50,16 @@ if (icd:::.exists_in_cache("icd10cm2019_pc")) {
 
 The adult comorbidities defined by authors such as Charlson, Quan and Elixhuaser are not suitable for pediatric research. Feudtner and others produced comorbidity definitions suitable for infants and children, with mappings defined for both ICD-9 and ICD-10 codes [@Feinstein_packagepediatriccomplex_2018; @Feudtner_Pediatriccomplexchronic_2014]. These are now included in the [icd package](https://cran.r-project.org/package=icd) for R, which enables [fast calculation of comorbidities](introduction.html) for PCCC and other ICD code to comorbidity maps.
 
-## Calculating PCCC comorbidities.
+## Calculating PCCC comorbidities
 
 The PCCC comorbidities may be derived from both diagnostic and procedure codes. The following simulated data has both:
 
 ```{r headdat}
 head(dat)
 ```
+
 The data is in 'wide' format. `icd` no longer needs the data to be in 'long' format. The PCCC comorbidity classes can be computed directly from the source data and summarized in a plot. Here we calculate the PCCC from ICD diagnostic codes and ICD procedure codes separately, and logically combine them to get the result.
+
 ```{r calcpre, eval = TRUE, echo = FALSE}
 pccc_dx <- comorbid_pccc_dx(dat)
 if (icd:::.exists_in_cache("icd10cm2019_pc")) {
@@ -69,6 +71,7 @@ if (icd:::.exists_in_cache("icd10cm2019_pc")) {
   res <- pccc_dx
 }
 ```
+
 ```{r calc, eval = FALSE}
 pccc_dx <- comorbid_pccc_dx(dat)
 pccc_pcs <- icd10_comorbid_pccc_pcs(dat,
@@ -77,10 +80,10 @@ pccc_pcs <- icd10_comorbid_pccc_pcs(dat,
 res <- pccc_dx | pccc_pcs
 ```
 
-
 ```{r}
 res[295:300, ]
 ```
+
 Let's look at the summary results:
 
 ```{r colsumpccc}
@@ -90,6 +93,7 @@ colSums(res)
 ```{r par, include = FALSE}
 #graphics::par(mar = c(12, 4, 4, 2) + 0.1) # bottom, left, top, right
 ```
+
 ```{r pcccbarplot, echo=FALSE}
 graphics::barplot(sort(colSums(res), decreasing = TRUE),
   names.arg = names_pccc,

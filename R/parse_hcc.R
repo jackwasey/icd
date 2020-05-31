@@ -16,7 +16,7 @@
 #' @noRd
 .parse_icd9cm_cc <- function(save_pkg_data = FALSE) {
   assert_flag(save_pkg_data)
-  hcc_icd9_dir <- file.path(get_raw_data_dir(), "icd_hcc_rawdata", "icd9")
+  hcc_icd9_dir <- file.path(.get_raw_data_path(), "icd_hcc_rawdata", "icd9")
   icd9_map_cc <- lapply(
     list.files(hcc_icd9_dir, full.names = TRUE),
     FUN = read.fwf, widths = c(7, 4), header = FALSE, stringsAsFactors = FALSE
@@ -91,7 +91,7 @@
     p2 <- sub("[[:alpha:]]$", "", trimws(p2))
     sprintf("%-8s%-4s", p1, p2)
   }
-  hcc_icd10_dir <- file.path(get_raw_data_dir(), "icd_hcc_rawdata", "icd10")
+  hcc_icd10_dir <- file.path(.get_raw_data_path(), "icd_hcc_rawdata", "icd10")
   for (f in list.files(hcc_icd10_dir, full.names = TRUE)) {
     tabbed <- readLines(f)
     writeLines(.fix(tabbed), f)
@@ -104,7 +104,7 @@
 #' @noRd
 .parse_icd10cm_cc <- function(save_pkg_data = FALSE) {
   assert_flag(save_pkg_data)
-  hcc_icd10_dir <- file.path(get_raw_data_dir(), "icd_hcc_rawdata", "icd10")
+  hcc_icd10_dir <- file.path(.get_raw_data_path(), "icd_hcc_rawdata", "icd10")
   # Import raw CMS data for ICD-9
   icd10_map_cc <- lapply(
     list.files(hcc_icd10_dir,
@@ -171,7 +171,7 @@
   # Define Hierarchy
   # import raw hierarchy files from CMS
   hierarchy_path <- file.path(
-    get_raw_data_dir(),
+    .get_raw_data_path(),
     "icd_hcc_rawdata", "hierarchy"
   )
   stopifnot(dir.exists(hierarchy_path))

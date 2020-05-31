@@ -49,8 +49,12 @@ test_that("all available ICD-10-CM data is reported and gettable", {
         info = paste("Running fetcher for: r =", r, "and pc =", pc)
       )
       cache_getter_name <- .get_getter_name(r)
+      # either it is gettable (downloadable, potentially)...
+      dat <- do.call(cache_getter_name, args = list(must_work = FALSE))
+      # or can by got from the package data
+      if (is.null(dat)) dat <- .get_anywhere(r, fetch = FALSE)
       expect_is(
-        object = do.call(cache_getter_name, args = list()),
+        object = dat,
         class = "data.frame",
         info = paste(
           "Calling cache getter :", cache_getter_name,

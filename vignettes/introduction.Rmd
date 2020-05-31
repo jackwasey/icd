@@ -15,7 +15,7 @@ vignette: >
   %\VignetteKeyword{comorbidity, comorbidities, biomedical informatics, administrative data, matrix algebra, ICD-9, ICD-10, ICD-9-CM, ICD-10-CM, mapping, algorithm}
 ---
 <!--
-Copyright (C) 2014 - 2019  Jack O. Wasey
+Copyright (C) 2014 - 2020  Jack O. Wasey
 
 This file is part of icd.
 
@@ -32,6 +32,7 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with icd. If not, see <http:#www.gnu.org/licenses/>.
 -->
+
 ```{r setup, echo = FALSE, cache = FALSE}
 suppressWarnings({
   suppressPackageStartupMessages({
@@ -58,7 +59,7 @@ patients_icd9 <- data.frame(
   )
 ```
 
-## Quick Start
+# Quick Start
 
 ```{r quickstart}
 library(icd)
@@ -72,7 +73,7 @@ hist(charlson(uranium_pathology),
      xlab = "Charlson Score")
 ```
 
-## Introduction
+# Introduction
 
 ```{r pkgdesc, results='asis', echo = FALSE}
 cat(utils::packageDescription("icd")$Description)
@@ -81,6 +82,7 @@ cat(utils::packageDescription("icd")$Description)
 **This package is what you need to generate data for 'Table 1' of your prospective or retrospective study.**
 
 When calculating which patients have which comorbidities, the data are typically structured in long (one column of diagnostic codes, multiple codes per patient) or wide (multiple diagnostic code columns, one row per patient) formats -- 'icd' comorbidity calculation handles either transparently.
+
 ```{r show data formats, echo=TRUE}
 # long format ICD-9-CM codes, with present-on-arrival flags
 patients_icd9
@@ -102,6 +104,7 @@ comorbid_quan_elix(vermont_dx)[1:5, 1:8]
 ```
 
 Things work beautifully using [magrittr](https://cran.r-project.org/package=magrittr) `%>%` to chain functions together. `magrittr` is useful for chains of commands, such as the following:
+
 ```{r getcomorbidities2}
 # find Elixhauser comorbidities which were present-on-arrival
 patients_icd9 %>%
@@ -129,6 +132,7 @@ plot_comorbid(vermont_dx, comorbid_fun = comorbid_ahrq,
 ```
 
 The above can also be written in classic R with many parentheses:
+
 ```{r lots of brackets, eval = FALSE}
 head(apply(icd9_comorbid_quan_deyo(vermont_dx), 2, as.integer))
 ```
@@ -136,6 +140,7 @@ head(apply(icd9_comorbid_quan_deyo(vermont_dx), 2, as.integer))
 ## Specifying data types
 
 `icd` will guess the type and form of input data when possible, but there are sometimes ambiguities when ICD-9 and ICD-10 codes are mixed.
+
 ```{r type guessing}
 is_valid("100") # valid ICD-9 code
 is_valid("A1001") # valid ICD-10 code
@@ -143,6 +148,7 @@ is_valid(c("100", "A1001")) # they can't both be valid
 ```
 
 You can let `icd` guess types, or specify the type of your data explicitly:
+
 ```{r set type}
 # decimal format ICD-10 codes
 codes <- c("A10.01", "L40.50", "Z77.098")
@@ -151,10 +157,13 @@ as.icd10cm(codes)
 # indicate decimal code and icd10 (not necessarily icd10cm)
 codes %>% as.decimal_diag %>% as.icd10
 ```
+
 Doing this avoids mistakes in guessing type. For example code `V10` is valid in both ICD-9 and ICD-10.
 
 ## Converting ICD codes between types
+
 ICD codes are usually presented in *decimal* format (beware, for this is not a number), e.g., the ICD-9 code `003.21`, or ICD-10 code `T81.10XD`, whereas most electronic records seem to use the *short* form without a decimal place. These are not interchangeable simply by removing the decimal place, and great care is taken to do this correctly. Most ICD-9 codes do not have a letter prefix, so there is possible ambiguity here. icd was designed to deal with the common problem of incorrectly formatted ICD codes. The assumption is made that short codes of three or fewer characters are  describing only the 'major' part: there is no other reasonable interpretation. For example, `020` must be taken to mean `20`, not `2.0` or even `0.20`. In most cases, when *icd* works on ICD-9 codes, it will convert any codes of fewer than three characters into zero-padded three-digit codes.
+
 ```{r simple conversion}
 decimal_to_short(c("1", "10.20", "100", "123.45"))
 short_to_decimal(c("1", "22", "2244", "1005"))
@@ -165,10 +174,10 @@ decimal_to_short(codes)
 
 # ICD-10
 decimal_to_short("T81.10XD")
-
 ```
 
 ## Validation of ICD-9 codes
+
 ```{r validation}
 # guess both ICD version (9, but could be 10?), and decimal vs short form
 is_valid("V10.2")
@@ -180,7 +189,9 @@ is_valid(c("1", "001", "100", "123456", "003.21"), short_code = TRUE)
 ```
 
 ## Decoding ICD-9 codes to descriptions
+
 There are various ways of extracting the description of the condition described by an ICD-9 code. the explain group of functions return a data frame with a column for the ICD-9 code, a column for the full length Diagnosis, and a column for the short Description.
+
 ```{r explain simple}
 explain_code("1.0") # 'decimal' format code inferred
 explain_code("0019") # 'short' format code inferred
@@ -196,20 +207,28 @@ explain_code(c("43410", "43491"), short_code = TRUE)
 "391" %>% children %>% explain_code # children condensed to parent code
 "391" %>% children %>% explain_code(condense = FALSE) # prevent condense
 ```
+
 Arbitrary named list(s) of codes:
+
 ```{r explainarbitrary}
 explain_code(list(somecodes = as.icd9(c("001", "391")),
                  morecodes = as.icd9cm(c("001.1", "001.9"))))
 ```
+
 `001` (Cholera) isn't itself a diagnostic code, i.e. leaf node in the hierarchy, but `390` (Rheumatic fever without heart involvement) is. Both are explained correctly:
+
 ```{r cholera}
 explain_code(list(cholera = "001", rheumatic_heart = "390"))
 ```
+
 Now try to explain on a non-existent (but 'valid') ICD-9 code:
+
 ```{r noexplain, eval = FALSE}
 s <- explain_code("001.5") # gives warning
 ```
+
 As we have just seen, `explain_code` can convert lists of ICD-9 or ICD-10 codes to a human-readable format. Let's apply the `explain_code` to a list of comorbidity ICD-9 codes in one of the commonly-used mappings. This makes comprehending a complicated list much easier. Taking the list for dementia:
+
 ```{r Example Dementia}
 length(icd9_map_quan_deyo[["Dementia"]]) # 133 possible ICD-9 codes
 length(icd10_map_quan_deyo[["Dementia"]]) # the ICD-10 map is different
@@ -218,31 +237,40 @@ icd9_map_quan_deyo[["Dementia"]] %>% explain_code(warn = FALSE)
 # contrast with:
 icd9_map_quan_deyo[["Dementia"]] %>% explain_code(condense = TRUE, warn = FALSE)
 ```
+
 Use a range with more than two hundred ICD-9 codes (most of them not real):
+
 ```{r Show Range Operator}
 length("390" %i9da% "392.1")
 "390" %i9da% "392.1" %>% explain_code(warn = FALSE)
 ```
+
 The warnings here are irrelevant because we know that `%i9da% produces codes which do not correspond to diagnoses. However, in other usage, the user would typically expect the ICD-9 codes he or she is using to be diagnostic, hence the default to warn.
 
 ## Filtering by Present-on-Arrival
 
 This flag is recorded with each ICD-9 code, indicating whether that diagnosis was present on admission. With some caution, codes flagged specifically not *POA* can be treated as new diseases during an admission.
 
-Present-on-arrival (POA) is typically a factor, or vector of values such as "Y", "N", "X", "E", or NA. Intermediate codes, such as "exempt", "unknown" and NA mean that "yes" is not the same as "not no." This requires four functions to cover the possibilities stored in `poa_choices`:
+Present-on-arrival (POA) is typically a factor, or vector of values such as "Y", "N", "X", "E", or NA. Intermediate codes, such as "exempt", "unknown" and NA mean that "yes" is not the same as "not no." This requires four functions to cover the possibilities stored in `poa_choices:
+
 ```{r Show POA Choices, echo=FALSE}
 poa_choices
 ```
+
 Filter for present-on-arrival being "Y"
+
 ```{r simplepoa}
 patients_icd9 %>% filter_poa_yes
 ```
+
 Show that *yes* is not equal to *not no* (e.g. due to NA in `poa` field)
+
 ```{r notnopoa}
 patients_icd9 %>% filter_poa_not_no
 ```
 
 ## Comorbidities
+
 The comorbidities from different sources are provided as lists. At present only the most recent mapping of ICD-9 codes to comorbidities is provided. See these [github](https://github.com/jackwasey/icd/issues/6) [issues](https://github.com/jackwasey/icd/issues/7).
 
 This package contains ICD-9-CM to comorbidity mappings from several sources, based on either the Charlson or Elixhauser lists of comorbidities. Updated versions of these lists from [AHRQ](http://www.hcup-us.ahrq.gov/toolssoftware/comorbidity/comorbidity.jsp) and [Quan et al](http://www.ncbi.nlm.nih.gov/pubmed/16224307) are included, along with the original Elixhauser mapping . Since some data is provided in SAS source code format, this package has internal functions to parse this SAS source code and generate R data structures. This processing is limited to what is needed for this purpose, although may be generalizable and useful in other contexts. Other lists are transcribed directly from the published articles, but interpretation of SAS code used for the original publications is preferable.
@@ -250,6 +278,7 @@ This package contains ICD-9-CM to comorbidity mappings from several sources, bas
 ### AHRQ comorbidity classification
 
 The AHRQ keeps an updated version of the Elixhauser classification of ICD-9-CM codes into comorbidities, useful for research. They provide the data in the form of SAS code [@AgencyforHealthcareResearchandQuality_Elixhausercomorbiditysoftware_2018]. The names of the comorbidities derived from ICD-9 and ICD-10 codes are the same. Maps contain the ICD code to comorbidity mappings; the functions that apply those mappings are called things like `icd10_comorbid_ahrq`.
+
 ```{r ahrq}
 names(icd9_map_ahrq)
 icd9_map_ahrq$CHF[1:5]
@@ -257,7 +286,9 @@ icd10_map_ahrq$CHF[1:5]
 ```
 
 ### Elixhauser comorbidities
+
 Elixhauser originally developed this set of comorbidities to predict long term mortality based on hospital ICD-9-CM coding records [@elixhauser_comorbidity_1998]. The AHRQ comorbidities are an updated version of this, however the original Elixhauser have been used in many publications.
+
 ```{r elix}
 # the names of the comorbidities in each map are available as named lists:
 names_elix[1:5]
@@ -268,7 +299,9 @@ icd10_map_elix$HTNcx
 ```
 
 ### Quan
+
 In a classic paper, Quan [@quan_updating_2011] paper looked at indices using both ICD-10 and ICD-9-CM. Quan generated updated ICD-9-CM codes for all 30 of Elixhauser and all 17 of Charlson/Deyo's comorbidities. Thus there are two 'Quan' comorbidity mappings.
+
 ```{r quan elix}
 names(icd10_map_quan_deyo)
 names(icd10_map_quan_elix)
@@ -277,7 +310,9 @@ names(icd10_map_quan_elix)
 ## Examples
 
 ### Filter patients and create comorbidities
+
 Take my patients, find the ones where there definitely or maybe was a diagnosis present on admission, then generate comorbidities based on the AHRQ mapping. N.b. `NotNo` is not the same as `Yes` because of some exempt, unclassifiable conditions, or `NA` values for the present-on-admission flag.
+
 ```{r chainpoatocomorbid}
 patients_icd9 %>%
   filter_poa_not_no %>%
@@ -286,20 +321,26 @@ patients_icd9 %>%
 ```
 
 ### Compare two comorbidity definitions
+
 We will find the differences between some categories of the original Elixhauser and the updated version by Quan. Just taking the select few comorbidity groups for brevity:
+
 ```{r elixvsquanelix}
 difference <- diff_comorbid(icd9_map_elix, icd9_map_quan_elix,
                             all_names = c("CHF", "PHTN", "HTN", "Valvular"))
 # reuslts also returned as data
 str(difference)
 ```
+
 Which pulmonary hypertension codes are only in Quan's version?
+
 ```{r quanonlyphtn}
 difference$PHTN$only.y %>% get_defined %>% explain_code
 ```
+
 (Passing through `get_defined` stops `explain_code` complaining that some of the input codes don't exist. This is because the comorbidity mappings have every possible numerical ICD-9 code, not just the official ones. Could also use `warn = FALSE` option in `explain_code`)
 
 ### Find cardiac ICD-9 codes
+
 ```{r cardiacgrep}
 icd9cm_hierarchy[
   grepl(pattern = "(heart)|(cardiac)",
@@ -307,13 +348,17 @@ icd9cm_hierarchy[
         ignore.case = TRUE),
   "code"] %>% unique -> cardiac
 ```
+
 then explain the list, just showing the first ten:
+
 ```{r cardiac Chain Explain Example}
 as.icd9(cardiac) %>% explain_code(warn = FALSE) %>% head(10)
 ```
 
 ### Find comorbidities for a large number of patients
+
 I understand that comorbidity assignment using SAS is a lengthy business. Let's generate 100,000 patients with a random selection of comorbidities:
+
 ```{r speed, eval = FALSE}
 # codes selected from AHRQ mapping
 many_patients <- icd:::generate_random_pts(1e7)
@@ -321,6 +366,7 @@ system.time(
   comorbid_ahrq(many_patients)
   )[["elapsed"]]
 ```
+
 This takes about five seconds on a 2016 8-core workstation. More detailed benchmarks can be seen comparing icd to other packages in the vignette article in this package.
 
 ### Use an arbitrary ICD-9 mapping
@@ -328,6 +374,7 @@ This takes about five seconds on a 2016 8-core workstation. More detailed benchm
 The user can provide any ICD-9, ICD-10 or other code mapping to comorbidities they wish. Submissions of other peer-reviewed published mappings could be included in this package, if their license permits. Create an issue in [github](https://github.com/jackwasey/icd/issues) or email me at jack@jackwasey.com) Included in this package is a small data set called `icd9_chapters`, which lists the ICD-9-CM (and indeed ICD-9) Chapters. These can easily be expanded out and used as a mapping, so instead of a comorbidity, we see which patients have codes in each chapter of the ICD-9 definition.
 
 See the [custom comorbidity map vignette](custom-maps.html).
+
 ```{r arbitrary Mapping}
 names(icd9_chapters)[c(1:5, 14)]
 my_map <- icd:::chapters_to_map(icd9_chapters[c(2, 5, 14)])
@@ -335,6 +382,7 @@ icd9_comorbid(patients_icd9, my_map) # no positive
 ```
 
 ### Reduce comorbidity mapping from possible values to defined diagnostic codes
+
 Suppose we want to exact match only real ICD-9 codes when looking up comorbdities for some patients. E.g. if the coder accidentally omitted a trailing zero, e.g. code `003.20` (*Localized salmonella infection, unspecified*) might have been written as `003.2` which has a heading (*Localized salmonella infections*) but is not itself billable. Use of ICD-9 codes for comorbidities generally assumes the codes are either right or wrong. How do we match only real codes, for a strict interpretation of comorbidities? It's one line or R code:
 
 ```{r realmapping}
@@ -342,9 +390,11 @@ ahrq_strict <- lapply(icd9_map_ahrq, get_defined)
 str(icd9_map_ahrq[1:5]) # first five of the original:
 str(ahrq_strict[1:5]) # and first five of the result:
 ```
+
 Note the much smaller numbers of codes in each group, now we have discarded all the ones which are not defined as diagnoses.
 
 ### Which three-character ICD-9 codes have no child codes
+
 The ICD-9-CM scheme is structured as follows:
  - Chapter
  - Sub-chapter

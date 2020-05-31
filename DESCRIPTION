@@ -17,7 +17,7 @@ Authors@R:
              family = "Odisho",
              role = "ctb",
              email = "anobel.odisho@ucsf.edu",
-             comment = "Hierarchical Condition Codes"),
+             comment = "CMS Hierarchical Condition Codes"),
       person(given = "Vitaly",
              family = "Druker",
              role = "ctb",
@@ -26,19 +26,35 @@ Authors@R:
       person(given = "Ed",
              family = "Lee",
              role = "ctb",
-             comment = "explain codes in table format"))
+             comment = "explain codes in table format"),
+      person(given = "Patrick",
+             family = "McCormick",
+             role = "ctb",
+             email = "patrick@patrickmd.net",
+             comment = "Multiple great pull requests"),
+      person(given = "Alessandro",
+             family = "Gasparini",
+             role = "ctb"),
+      person(given = "Michel",
+             family = "Lang",
+             role = "aut",
+             email = "michellang@gmail.com",
+             comment = "backport of R_user-dir for R version >4. ORCID = 0000-0001-9754-0393"),
+      person(given = "R Core Team",
+             role = c("aut", "cph"),
+             comment = "utils::askYesNo backport and m4 script for OpenMP detection."))
 Maintainer: Jack O. Wasey <jack@jackwasey.com>
 Description: Calculate comorbidities, medical risk scores, and
-    work very quickly and precisely with ICD-9 and ICD-10 codes. This package
-    enables a work flow from raw tables of ICD codes in hospital databases
-    to comorbidities. ICD-9 and ICD-10 comorbidity mappings from Quan
-    (Deyo and Elixhauser versions), Elixhauser and AHRQ included.  Common
-    ambiguities and code formats are handled. Comorbidity computation
-    includes Hierarchical Condition Codes, and a reimplementation of the
-    AHRQ Clinical Classifications Software. Risk scores include those of
-    Charlson and van Walraven.  US Clinical Modification, Word Health
-    Organization, Belgian and French ICD-10 codes are supported through
-    the 'icd.data' package, some of which are downloaded on demand.
+    work very quickly and precisely with ICD-9 and ICD-10 codes. This
+    package enables a work flow from raw tables of ICD codes in hospital
+    databases to comorbidities. ICD-9 and ICD-10 comorbidity mappings from
+    Quan (Deyo and Elixhauser versions), Elixhauser and AHRQ included.
+    Common ambiguities and code formats are handled. Comorbidity
+    computation includes Hierarchical Condition Codes, and an
+    implementation of AHRQ Clinical Classifications. Risk scores include
+    those of Charlson and van Walraven.  US Clinical Modification, Word
+    Health Organization, Belgian and French ICD-10 codes are supported,
+    most of which are downloaded on demand.
 License: GPL-3
 URL: https://jackwasey.github.io/icd/
 BugReports: https://github.com/jackwasey/icd/issues
@@ -49,16 +65,17 @@ Imports:
     Rcpp (>= 0.12.3)
 Suggests:
     graphics,
-    icd.data,
+    httr,
+    jsonlite,
     knitr,
     magrittr,
     nhds,
-    rmarkdown,
+    readxl,
+    rmarkdown (>= 1.11),
+    RODBC,
     roxygen2 (>= 5.0.0),
-    rticles,
     stats,
     testthat (>= 0.11.1),
-    tinytex,
     utils,
     xml2
 LinkingTo:
@@ -67,6 +84,7 @@ LinkingTo:
 VignetteBuilder: 
     knitr
 SystemRequirements: pandoc >= 2.2 to build the JSS vignette
+Biarch: true
 Classification/ACM-2012: Social and professional topics~Medical
     records, Applied computing~Health care information systems, Applied
     computing~Health informatics, Applied computing~Bioinformatics

@@ -1,42 +1,99 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
-Rscript -e '
-  devnull <- desc::desc_reformat_fields();
-  devnull <- desc::desc_reorder_fields();
-'
+set -u
+declare desc_ver
+declare -i ok=0
+declare -i wcres=0
 
 MSG="use 'git commit --no-verify' to override this check"
 
-DESCRIPTION=($(git diff --cached --name-only | grep 'DESCRIPTION'))
-if [[ ${#DESCRIPTION[@]} == 0 ]]; then
-  exit 0
+toplevel="$(git rev-parse --show-toplevel)"
+if ! "${toplevel}/tools/travis-yaml-check.sh"; then
+    echo ".travis.yml is invalid."
+    echo "${MSG}"
+    ok=1
 fi
 
-if [[ DESCRIPTION -nt codemeta.json ]]; then
-	# echo -e "codemeta.json is out of date; re-running codemetar::write_codemeta()\n$MSG"
-  # exit 1
-	Rscript -e 'codemetar::write_codemeta()'
-	git add codemeta.json
-	# git commit --amend -m"$(git log --format=%B -n1)" -m"Updated codemeta.json automatically."
+git diff --cached --name-only | grep -q 'DESCRIPTION' &&
+    [[ DESCRIPTION -nt codemeta.json ]] && {
+    Rscript -e 'codemetar::write_codemeta()'
+    git add codemeta.json
+    # git commit --amend -m"$(git log --format=%B -n1)" -m"Updated codemeta.json automatically."
+    ok=1
+    true
+}
+
+README=("$(git diff --cached --name-only | grep 'README.Rmd')")
+if [[ ${#README[@]} != 0 ]] && [[ README.Rmd -nt README.md ]]; then
+    {
+        # echo -e "README.md is out of date; please re-run rmarkdown::render(\"README.Rmd\")\n$MSG"
+        Rscript -e 'rmarkdown::render("README.Rmd")'
+        git add README.md man/figures/README*.png
+        # git commit --amend -m"$(git log --format=%B -n1)" -m"Updated README.md automatically."
+        ok=1
+    };
 fi
 
-README=($(git diff --cached --name-only | grep 'README.Rmd'))
-if [[ ${#README[@]} == 0 ]]; then
-  exit 0
+# check copyright dates, and fix
+#sed -i -E -e '/(Copyright \(C\) 2014-201)[[:digit]]/s/(Copyright \(C\) 2014-20)[[:digit:]]{2}[[:space:]]+/\1'$(date +"%y")' Jack/'
+#ok+=$(grep -r -E -e 'Copyright.* 2014[ -]+2019' ./* | tee /dev/stderr | wc -l)
+
+# check for copyright dates
+declare -i this_year
+this_year="$(date +"%Y")"
+this_year=$((this_year-1))
+re_older_yrs="$(seq -s'|' 2005 $((this_year - 1)))"
+
+grep -E -r -i -q "Copyright.*(${re_older_yrs%?}).*Wasey" . || ok=1
+
+# check package version correct everywhere, with non_GNU sed
+desc_ver="$(sed -n '/^Version/,/Version/s/Version: \([[:digit:].]\{3,\}\)/\1/p' DESCRIPTION)"
+news_ver="$(sed '1s/# Version \([[:digit:].]\{3,\}\)[[:space:]]*$/\1/;q' NEWS.md)"
+conf_ver="$(sed -n '/AC_INIT/,/AC_INIT/s/[[:space:]]*AC_INIT.*\[\([[:digit:].]\{3,\}\)\].*/\1/p' configure.ac)"
+
+if [[ "${desc_ver}" == "${news_ver}" ]] && [[ "${desc_ver}" == "${conf_ver}" ]]; then
+    :
+else
+    { echo "version mismatch: DESCRIPTION=${desc_ver}, NEWS.md${news_ver}, configure.ac${conf_ver}" >&2; ok=1; }
 fi
 
-if [[ README.Rmd -nt README.md ]]; then
-	# echo -e "README.md is out of date; please re-run rmarkdown::render(\"README.Rmd\")\n$MSG"
-  # exit 1
-  Rscript -e 'rmarkdown::render("README.Rmd")'
-  git add README.md man/figures/README*.png
-  # git commit --amend -m"$(git log --format=%B -n1)" -m"Updated README.md automatically."
+# make sure we usr /usr/bin/env bash for scripts
+find "${ICD_HOME}" \
+    -type d -name '.*' -prune -o \
+    ! -name "pre-commit" \
+    -type f \
+    -exec grep -q '#!/bin/bash' '{}' \; \
+    -print |
+    while read -r badbash
+    do {
+        echo "Use /usr/bin/env bash in ${badbash}" >&2;
+        ok=1;
+    }
+done
+
+# check bash scripts
+find "${ICD_HOME}" -type d -name '.*' -prune -o -type f -exec grep -q '#!/usr/bin/env bash' '{}' \; -print |
+    while read -r scbash
+    do {
+        shellcheck "${scbash}"
+        ok=1;
+    }
+done
+
+Rscript -e '
+devnull <- desc::desc_reformat_fields();
+devnull <- desc::desc_reorder_fields();
+'
+
+wcres=$(git diff --name-only |
+    grep -c -e "README.md" -e "codemeta.json"
+)
+if (( wcres != 0 )); then
+    echo "pre-commit updated files:"
+    git diff --name-only
+    echo "review and commit these changes"
+    ok=1
 fi
 
-wcres=($(git diff --name-only | wc))
-if [[ ${wcres[0] != 0 ]]; then
-  echo "pre-commit updated files:"
-  git diff --name-only
-  echo "review and commit these changes"
-  exit 1
-fi
+(( ok != 0 )) && echo "githooks/pre-commit failed" >&1 && exit ${ok}
+exit 0

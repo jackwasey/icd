@@ -308,7 +308,7 @@ test_that("van_walraven_from_comorbid score calculation", {
   )
 })
 
-test_that("van_walraven comodbidity index and score", {
+test_that("van_walraven comorbidity index and score", {
   mydf <- data.frame(
     id = factor(c(rep(1, 20), rep(2, 20), rep(3, 18))),
     value =
@@ -332,10 +332,17 @@ test_that("van_walraven comodbidity index and score", {
   )
   expect_equivalent(
     van_walraven(mydf, visit_name = "id", icd_name = "value", return_df = TRUE),
-    data.frame(
-      id = factor(c(1, 2, 3)),
-      vanWalraven = c(10, 12, -2)
-    )
+    if (getOption("stringsAsFactors")) {
+      data.frame(
+        id = factor(c("1", "2", "3")),
+        vanWalraven = c(10, 12, -2)
+      )
+    } else {
+      data.frame(
+        id = c("1", "2", "3"),
+        vanWalraven = c(10, 12, -2)
+      )
+    }
   )
   expect_equal(
     van_walraven(mydf, icd_name = "value"),
@@ -343,7 +350,7 @@ test_that("van_walraven comodbidity index and score", {
   )
 })
 
-test_that("github issue #64 - quan revised charleson scores", {
+test_that("github issue #64 - quan revised Charlson scores", {
   mydf <- data.frame(visit_id = "a", icd9 = "250.0")
   comorbids <- comorbid_quan_deyo(mydf, short_code = FALSE, return_df = TRUE)
 

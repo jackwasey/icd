@@ -391,16 +391,6 @@ capitalize_first <- function(x) {
 }
 # nocov end
 
-#' Get the raw data directory
-#'
-#' Following Hadley Wickham recommendations in R Packages, this should be in
-#' \code{inst/extdata}. \pkg{devtools} overrides \code{system.file}.
-#' @noRd
-#' @keywords internal
-get_raw_data_dir <- function() {
-  system.file("data-raw", package = "icd")
-}
-
 .stopifnot_year <- function(year) {
   if (!all(grepl("^[[:digit:]]{4}$", as.character(year)))) {
     stop(year, " is not a four-digit year.", call. = FALSE)

@@ -10,10 +10,10 @@ if (!icd:::.env_var_is_true("NOT_CRAN")) {
 } else {
   old_offline <- options("icd.offline" = FALSE)
   on.exit(options(old_offline), add = TRUE)
-}
-if (icd:::.env_var_is_true("ICD_TEST_SLOW")) {
-  old_test_slow <- options("icd.test_slow" = TRUE)
-  on.exit(options(old_test_slow), add = TRUE)
+  if (icd:::.env_var_is_true("ICD_TEST_SLOW")) {
+    old_test_slow <- options("icd.test_slow" = TRUE)
+    on.exit(options(old_test_slow), add = TRUE)
+  }
 }
 old_interact <- options("icd.interact" = FALSE)
 on.exit(options(old_interact), add = TRUE)

@@ -13,7 +13,7 @@ vignette: >
   %\VignetteKeyword{risk score, Charlson score, van Walraven score, comorbidity, comorbidities, biomedical informatics, administrative data, ICD-9, ICD-10}
 ---
 <!--
-Copyright (C) 2014 - 2019  Jack O. Wasey
+Copyright (C) 2014 - 2020  Jack O. Wasey
 
 This file is part of icd.
 

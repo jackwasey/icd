@@ -1,6 +1,21 @@
+# Version 4.0.9
+
+ * happy to add Alessandro Gasparini as collaborator, as we move comorbidity API from icd to the comorbidity package in subsequent releases, and separate out the fast comorbidity calculation engine into a new, tighter package. icd will continue to provide icd conversion, validation, translation, mapping, etc., and keep backward compatibility for a year during this migration.
+ * also adding the tireless @patrickmd as a contributor, with his significant pull requests, testing and patience.
+ * likewise for
+ * fixed CRAN submission broken links
+ * Updated French ICD code URL
+ * dropped r-lib/rappdirs in favor of copy of backports::R_app_dirs
+ * dropped extraneous files from source tarball sent to CRAN
+ * clean-up prebuilt pdf paths, both keeping package smaller, and fixing broken links, as noted by CRAN but missed by R CMD check somehow.
+ * anticipate next version including work from the NIH hackathon for general equivalence mapping of ICD-9-CM to ICD-10-CM codes, thanks to those women, and also the contributions from @dapritchard @dprtichlibre
+
 # Version 4.0.8
  * Work-around rappdirs problem affecting some Windows users with default cache data directory.
  * ICD-10 vignette link to efficiency vignette updated.
+ * CRAN: removed a deprecated compiler flag, and udpated documentation
+ * (pending updates for next release: fix for Windows JSON error for some ICD data downloads; ICD-9 to ICD-10 cross-walk)
+ * fix test failure due to new 4.0 R-devel policy for stringsAsFactors=FALSE by default, thanks to @patrickmdnet.
 
 # Version 4.0.6
  * Major update. Highlights include: wide/long data both handled efficiently without conversion; WHO, France, Belgium ICD-10 codes; more comprehensive ICD-10 comorbidity maps to span historic ICD-10 versions

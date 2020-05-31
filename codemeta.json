@@ -5,19 +5,18 @@
   ],
   "@type": "SoftwareSourceCode",
   "identifier": "icd",
-  "description": "Calculate comorbidities, medical risk scores, and\n    work very quickly and precisely with ICD-9 and ICD-10 codes. This package\n    enables a work flow from raw tables of ICD codes in hospital databases\n    to comorbidities. ICD-9 and ICD-10 comorbidity mappings from Quan\n    (Deyo and Elixhauser versions), Elixhauser and AHRQ included.  Common\n    ambiguities and code formats are handled. Comorbidity computation\n    includes Hierarchical Condition Codes, and a reimplementation of the\n    AHRQ Clinical Classifications Software. Risk scores include those of\n    Charlson and van Walraven.  US Clinical Modification, Word Health\n    Organization, Belgian and French ICD-10 codes are supported through\n    the 'icd.data' package, some of which are downloaded on demand.",
+  "description": "Calculate comorbidities, medical risk scores, and\n    work very quickly and precisely with ICD-9 and ICD-10 codes. This\n    package enables a work flow from raw tables of ICD codes in hospital\n    databases to comorbidities. ICD-9 and ICD-10 comorbidity mappings from\n    Quan (Deyo and Elixhauser versions), Elixhauser and AHRQ included.\n    Common ambiguities and code formats are handled. Comorbidity\n    computation includes Hierarchical Condition Codes, and an\n    implementation of AHRQ Clinical Classifications. Risk scores include\n    those of Charlson and van Walraven.  US Clinical Modification, Word\n    Health Organization, Belgian and French ICD-10 codes are supported,\n    most of which are downloaded on demand.",
   "name": "icd: Comorbidity Calculations and Tools for ICD-9 and ICD-10\n    Codes",
-  "codeRepository": "https://jackwasey.github.io/icd/",
+  "codeRepository": "https://github.com/jackwasey/icd",
   "issueTracker": "https://github.com/jackwasey/icd/issues",
   "license": "https://spdx.org/licenses/GPL-3.0",
-  "version": "4.0.8",
+  "version": "4.0.9",
   "programmingLanguage": {
     "@type": "ComputerLanguage",
     "name": "R",
-    "version": "3.6.2",
     "url": "https://r-project.org"
   },
-  "runtimePlatform": "R version 3.6.2 (2019-12-12)",
+  "runtimePlatform": "R version 4.0.0 (2020-04-24)",
   "provider": {
     "@id": "https://cran.r-project.org",
     "@type": "Organization",
@@ -31,6 +30,16 @@
       "familyName": "Wasey",
       "email": "jack@jackwasey.com",
       "@id": "https://orcid.org/0000-0003-3738-4637"
+    },
+    {
+      "@type": "Person",
+      "givenName": "Michel",
+      "familyName": "Lang",
+      "email": "michellang@gmail.com"
+    },
+    {
+      "@type": "Organization",
+      "name": "R Core Team"
     }
   ],
   "contributor": [
@@ -56,6 +65,17 @@
       "@type": "Person",
       "givenName": "Ed",
       "familyName": "Lee"
+    },
+    {
+      "@type": "Person",
+      "givenName": "Patrick",
+      "familyName": "McCormick",
+      "email": "patrick@patrickmd.net"
+    },
+    {
+      "@type": "Person",
+      "givenName": "Alessandro",
+      "familyName": "Gasparini"
     }
   ],
   "copyrightHolder": [
@@ -65,6 +85,10 @@
       "familyName": "Wasey",
       "email": "jack@jackwasey.com",
       "@id": "https://orcid.org/0000-0003-3738-4637"
+    },
+    {
+      "@type": "Organization",
+      "name": "R Core Team"
     }
   ],
   "funder": {},
@@ -85,15 +109,27 @@
     },
     {
       "@type": "SoftwareApplication",
-      "identifier": "icd.data",
-      "name": "icd.data",
+      "identifier": "httr",
+      "name": "httr",
       "provider": {
         "@id": "https://cran.r-project.org",
         "@type": "Organization",
         "name": "Comprehensive R Archive Network (CRAN)",
         "url": "https://cran.r-project.org"
       },
-      "sameAs": "https://CRAN.R-project.org/package=icd.data"
+      "sameAs": "https://CRAN.R-project.org/package=httr"
+    },
+    {
+      "@type": "SoftwareApplication",
+      "identifier": "jsonlite",
+      "name": "jsonlite",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=jsonlite"
     },
     {
       "@type": "SoftwareApplication",
@@ -133,8 +169,21 @@
     },
     {
       "@type": "SoftwareApplication",
+      "identifier": "readxl",
+      "name": "readxl",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=readxl"
+    },
+    {
+      "@type": "SoftwareApplication",
       "identifier": "rmarkdown",
       "name": "rmarkdown",
+      "version": ">= 1.11",
       "provider": {
         "@id": "https://cran.r-project.org",
         "@type": "Organization",
@@ -142,6 +191,18 @@
         "url": "https://cran.r-project.org"
       },
       "sameAs": "https://CRAN.R-project.org/package=rmarkdown"
+    },
+    {
+      "@type": "SoftwareApplication",
+      "identifier": "RODBC",
+      "name": "RODBC",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=RODBC"
     },
     {
       "@type": "SoftwareApplication",
@@ -155,18 +216,6 @@
         "url": "https://cran.r-project.org"
       },
       "sameAs": "https://CRAN.R-project.org/package=roxygen2"
-    },
-    {
-      "@type": "SoftwareApplication",
-      "identifier": "rticles",
-      "name": "rticles",
-      "provider": {
-        "@id": "https://cran.r-project.org",
-        "@type": "Organization",
-        "name": "Comprehensive R Archive Network (CRAN)",
-        "url": "https://cran.r-project.org"
-      },
-      "sameAs": "https://CRAN.R-project.org/package=rticles"
     },
     {
       "@type": "SoftwareApplication",
@@ -185,18 +234,6 @@
         "url": "https://cran.r-project.org"
       },
       "sameAs": "https://CRAN.R-project.org/package=testthat"
-    },
-    {
-      "@type": "SoftwareApplication",
-      "identifier": "tinytex",
-      "name": "tinytex",
-      "provider": {
-        "@id": "https://cran.r-project.org",
-        "@type": "Organization",
-        "name": "Comprehensive R Archive Network (CRAN)",
-        "url": "https://cran.r-project.org"
-      },
-      "sameAs": "https://CRAN.R-project.org/package=tinytex"
     },
     {
       "@type": "SoftwareApplication",
@@ -240,22 +277,23 @@
         "url": "https://cran.r-project.org"
       },
       "sameAs": "https://CRAN.R-project.org/package=Rcpp"
-    },
-    {
-      "@type": "SoftwareApplication",
-      "identifier": "https://sysreqs.r-hub.io/get/pandoc"
     }
   ],
   "releaseNotes": "https://github.com/jackwasey/icd/blob/master/NEWS.md",
+  "contIntegration": ["https://travis-ci.org/jackwasey/icd", "https://ci.appveyor.com/project/jackwasey/icd/branch/master", "https://codecov.io/github/jackwasey/icd?branch=master"],
+  "developmentStatus": ["https://www.tidyverse.org/lifecycle/#stable", "https://www.repostatus.org/#active"],
+  "relatedLink": "https://jackwasey.github.io/icd/",
   "readme": "https://github.com/jackwasey/icd/blob/master/README.md",
-  "contIntegration": [
-    "https://travis-ci.org/jackwasey/icd",
-    "https://ci.appveyor.com/project/jackwasey/icd/branch/master",
-    "https://codecov.io/github/jackwasey/icd?branch=master"
-  ],
-  "developmentStatus": [
-    "https://www.tidyverse.org/lifecycle/#stable",
-    "https://www.repostatus.org/#active"
-  ],
-  "relatedLink": "https://CRAN.R-project.org/package=icd"
+  "fileSize": "47528.784KB",
+  "keywords": [
+    "comorbidities",
+    "icd",
+    "icd-10",
+    "icd-9",
+    "comorbidity",
+    "cran",
+    "icd-codes",
+    "charlson-comorbidity-index",
+    "charlson"
+  ]
 }

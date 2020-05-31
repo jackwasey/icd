@@ -113,7 +113,6 @@ comorbid_quan_elix(x, ...)
 comorbid_quan_deyo(x, ...)
 
 comorbid_charlson(...)
-
 comorbid_pccc_dx(
   x,
   visit_name = get_visit_name(x),
@@ -178,12 +177,12 @@ icd10_comorbid_pccc_pcs(
 \arguments{
 \item{x}{\code{data.frame} containing a column of patient-visit identifiers
 and a column of ICD codes. The \code{data.frame} may be in \sQuote{long} or
-\sQuote{wide} format, like the example \code{\link[icd.data]{vermont_dx}}
-and \code{\link[icd.data]{uranium_pathology}} data.}
+\sQuote{wide} format, like the example \code{\link{vermont_dx}}
+and \code{\link{uranium_pathology}} data.}
 
 \item{map}{A named list of the comorbidities with each list item containing a
 vector of decimal ICD-9 codes. \pkg{icd} includes a number of these, e.g.,
-\code{\link{icd9_map_elix}}. Alternatively, this can be omited if the
+\code{\link{icd9_map_elix}}. Alternatively, this can be omitted if the
 convenience functions, such as \code{icd10_comorbid_charlson} are used
 directly. \code{map} should be in the form of a list, with the names of the
 items corresponding to the comorbidities (e.g. \sQuote{HTN}, or
@@ -233,7 +232,7 @@ other tools, e.g. \code{apply(x, 2, as.integer)}}
 
 \item{categorize_fun}{Internal. Function used for the categorization problem.}
 
-\item{...}{arguments passed on to other functions}
+\item{...}{Arguments passed through to \code{comorbid}, and ultimately \code{\link{categorize_simple}}, e.g. \code{restore_id_order}.}
 
 \item{icd10_comorbid_fun}{Internal function Default will be fast and
 accurate. A function which calculates comorbidities for ICD-10 codes, in
@@ -278,9 +277,9 @@ Clinical Classification Software (CCS) rules from AHRQ, see
 }
 \details{
 The order of visits may change depending on the original sequence,
-and the underlying algorithm used. Usually this would be the order of the
-first occurrence of each visit/patient identifier, but this is not
-guaranteed unless \code{restore_id_order} is set to \code{TRUE}.
+  and the underlying algorithm used. Usually this would be the order of the
+  first occurrence of each visit/patient identifier, but this is not
+  guaranteed unless \code{restore_id_order} is set to \code{TRUE}.
 
 \code{data.frame}s of patient data may have columns within them
   which are of class \code{icd9}, \code{icd10} etc., but do not themselves
@@ -340,7 +339,6 @@ use ICD-9 or ICD-10 codes
 \item \code{comorbid_charlson}: Calculate comorbidities using Charlson categories
 according to Quan/Deyo ICD categories. Synonymous with
 \code{link{comorbid_quan_deyo}} in this release.
-
 \item \code{comorbid_pccc_dx}: Calculate pediatric complex chronic conditions (PCCC) comorbidities
 
 Unlike with ICD-9 and ICD-10 diagnostic codes, 'icd' doesn't
@@ -365,27 +363,25 @@ procedure codes
 }}
 
 \examples{
-# Need icd.data for Vermont and Uranium patients,
-# not for the comorbidity calculations
-if (requireNamespace("icd.data", quietly = TRUE)) {
-  icd.data::vermont_dx[1:5, 1:10]
-  # get first few rows and columns of Charlson comorbidities using Quan/Deyo
-  # mapping of ICD-9 or ICD-10 codes Charlson categories
-  comorbid_quan_deyo(icd.data::vermont_dx)[1:5, 1:14]
+library(icd)
+vermont_dx[1:5, 1:10]
+# get first few rows and columns of Charlson comorbidities using Quan/Deyo
+# mapping of ICD-9 or ICD-10 codes Charlson categories
+comorbid_quan_deyo(vermont_dx)[1:5, 1:14]
 
-  # Note that the comorbidity calculations automatically finds the ICD code
-  # columns, and uses 'wide' or 'long' format data.
+# Note that the comorbidity calculations automatically finds the ICD code
+# columns, and uses 'wide' or 'long' format data.
 
-  stopifnot(
-    identical(
-      comorbid_quan_deyo(icd.data::vermont_dx),
-      comorbid_quan_deyo(wide_to_long(icd.data::vermont_dx))
-    )
+stopifnot(
+  identical(
+    comorbid_quan_deyo(vermont_dx),
+    comorbid_quan_deyo(wide_to_long(vermont_dx))
   )
+)
 
-  # get summary AHRQ (based on Elixhauser) comorbidities for the Uranium data:
-  summary(comorbid_ahrq(icd.data::uranium_pathology))
-}
+# get summary AHRQ (based on Elixhauser) comorbidities for the Uranium data:
+summary(comorbid_ahrq(uranium_pathology))
+
 pts <- icd_long_data(
   visit_name = c("2", "1", "2", "3", "3"),
   icd9 = c("39891", "40110", "09322", "41514", "39891")
@@ -457,7 +453,7 @@ Other comorbidity computations:
 
 Other comorbidities: 
 \code{\link{comorbid_hcc}()},
-\code{\link{icd10_map_ahrq_pcs}},
+  \code{\link{icd10_map_ahrq_pcs}},
 \code{\link{icd9_map_ahrq}},
 \code{\link{icd9_map_elix}},
 \code{\link{icd9_map_hcc}},
@@ -476,9 +472,9 @@ Other comorbidities:
 \code{\link{icd9_map_elix}},
 \code{\link{icd9_map_hcc}},
 \code{\link{icd9_map_pccc}},
-\code{\link{icd9_map_quan_deyo}},
-\code{\link{icd9_map_quan_elix}},
-\code{\link{icd9_map_single_ccs}}
+  \code{\link{icd9_map_quan_deyo}},
+  \code{\link{icd9_map_quan_elix}},
+  \code{\link{icd9_map_single_ccs}}
 }
 \concept{comorbidities}
 \concept{comorbidity computations}

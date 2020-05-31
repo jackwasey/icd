@@ -1,2 +1,5 @@
 ^COPYING$
 ^doc\/efficiency\.pdf$
+^doc\/country-lang-vers\.pdf$
+^vignettes\/efficiency-prebuilt\.pdf$
+^vignettes\/country-lang-vers-prebuilt\.pdf$

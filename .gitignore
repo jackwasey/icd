@@ -1,4 +1,5 @@
 **/*.un~
+*.orig
 *.bak
 *.dll
 *.gcno
@@ -63,3 +64,7 @@ bench-refactor.html
 .gdb_history
 
 benchmarks/icd-JSS3447-replication/*.log
+.travis.yml.*
+travis-notes.txt
+.deps
+*build.log

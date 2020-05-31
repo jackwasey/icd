@@ -1,6 +1,7 @@
 [diff "png"]
     textconv = identify -quiet -format "%#"
 [diff "pdf"]
+    # or consider pdftotext
     textconv = identify -quiet -format "%#"
 [diff "nodiff"]
     command = /bin/true

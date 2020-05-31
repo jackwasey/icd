@@ -46,6 +46,7 @@ preamble: |
   \author{Jack O. Wasey\\Children's Hospital\\of Philadelphia \And Steven M. Frank\\Johns Hopkins Medical\\Institutions \And Mohamed A. Rehman\\Johns Hopkins All\\Children's Hospital}
 # graphicx, color, hyperref, ae, fancyverb and natbib are included by jss.cls
 biblio-style: jss
+documentclass: jss
 output: 
   rticles::jss_article:
     keep_tex: true
@@ -76,7 +77,7 @@ pkgdown:
 # pandoc 2.something dependency which r-hub, CRAN etc do not have April 2019.
 # rmarkdown::render("vignettes/efficiency.Rmd", output_dir = "inst/doc")
 # # or, to juggle pkgbuild::build trashing inst/doc..., using .install_extras
-# rmarkdown::render("vignettes/efficiency-prebuilt.Rmd", output_dir = "vignettes/prebuilt")
+# rmarkdown::render("vignettes/efficiency-prebuilt.Rmd", output_dir = "vignettes")
 ```
 
 ```{r setup, echo=FALSE, message=FALSE, warning=FALSE, cache=FALSE}
@@ -190,7 +191,6 @@ The ubiquity of ICD codes means there is a long history of grouping them to form
 Charlson did not initially use ICD codes to define the comorbidities, but various authors \citep[e.g.,][]{quan_coding_2005} have since classified  ICD codes into those 17 comorbidity categories. Elixhauser [-@elixhauser_comorbidity_1998] developed ICD-based comorbidities for 31 diseases, and the US-based Agency for Healthcare Research and Quality (AHRQ) used this as a foundation for its own comorbidity groups [@AgencyforHealthcareResearchandQuality_Elixhausercomorbiditysoftware_2018]. Elixhauser and Charlson comorbidities have undergone refinement over the years, especially by \citet{quan_updating_2011} whose meticulous work on ICD-9 and ICD-10 codes has been included in \pkg{icd}, alongside the AHRQ mappings.
 
 ## Medical codes
-
 Medical coding has a complicated history beginning with epidemiology, and snowballing to include medical billing and research. There are several major coding schemes, including the WHO ICD family, various national modifications and extensions of the WHO ICD codes, the extensive USA ICD-CM (Clinical Modification), and several unrelated schemes with similar goals. There are codes for diagnoses, procedures, medical equipment, and causes and circumstances of disease or injury. Codes sometimes have detail beyond what seems useful for routine clinical care, for example:
 
 ```{r suckedintoengine}
@@ -225,7 +225,7 @@ explain_code("100")
 
 ### Breakdown of an ICD-10 code
 
-Let us breakdown a single ICD-10-CM code, chosen to illustrate the hierarchical nature of the codes, and to show difference between WHO ICD-10 and ICD-10-CM. The following two codes are shared by the WHO definitions and ICD-10-CM.[^libraryicd]
+This is a breakdown of an ICD-10-CM code, chosen to illustrate the hierarchical nature of the codes, and difference between WHO ICD-10 and ICD-10-CM. The following two codes are shared by the WHO definitions and ICD-10-CM.[^libraryicd]
 ```{r exampleicdcodewho}
 explain_code(c("S62", "S62.6"))
 ```
@@ -235,7 +235,7 @@ These three are refinements offered only by ICD-10-CM:
 ```{r exampleicdcodecm}
 explain_code(c("S62.60", "S62.607", "S62.607S"))
 ```
-These codes are all contained in the sub-chapter, `Injuries To The Wrist, Hand And Fingers,` (S60 -- S69) and the chapter `Injury, poisoning and certain other consequences of external causes.` (S00 -- T88). 
+These codes are all contained in the sub-chapter, `Injuries To The Wrist, Hand And Fingers,` (S60 to S69) and the chapter `Injury, poisoning and certain other consequences of external causes.` (S00 to T88). 
 
 [^libraryicd]: Here the \pkg{icd} function `explain_code` is used. More detail on this can be found in Section \ref{other-functionality}.
 
@@ -359,19 +359,16 @@ The main internal feature of this software is the algorithm for assigning the di
 <!-- label{itm:dataprep} -->
 
 ICD-9 and ICD-10 data preparation differs:
-
-  - ICD-9: all possible ICD-9 codes are pre-calculated in ICD-9 maps.
-  - \label{itm:partialstring} ICD-10: Partial matching to create map with relevant codes.[^notregex]: $\mathcal{O}(n)$
-    
+    - ICD-9: all possible ICD-9 codes are pre-calculated in ICD-9 maps.
+    - \label{itm:partialstring} ICD-10: Partial matching to create map with relevant codes.[^notregex]: $\mathcal{O}(n)$
 ### Step 2
 
 Reduce the problem to a matrix multiplication:
 
   a. \label{itm:intersect} Compute the intersection of ICD codes from the patient data and the comorbidity map of interest: $\mathcal{O}(\log{}n)$ for time with a tree-based data structure. For ICD-10, this is done at the same time as Step \ref{itm:partialstring}, for no additional time complexity.
-  a. \label{itm:encode} Encode the ICD codes as consecutive integers: $\mathcal{O}(n)$ but could be optimized to $\mathcal{O}(1)$ by using the knowledge that there are now no duplicates.
-  a. \label{itm:gensparse} Generate a sparse patient-visit matrix, with one row per patient, and a column for each ICD code defined by the consecutive integers from the previous step: $\mathcal{O}(n)$
-  a. \label{itm:gendense} Generate a dense comorbidity matrix, with one column for each comorbidity, and one row for each ICD code: $\mathcal{O}(1)$ in relation to $n$ patient-visits.
-    
+    a. \label{itm:encode} Encode the ICD codes as consecutive integers: $\mathcal{O}(n)$ but could be optimized to $\mathcal{O}(1)$ by using the knowledge that there are now no duplicates.
+    a. \label{itm:gensparse} Generate a sparse patient-visit matrix, with one row per patient, and a column for each ICD code defined by the consecutive integers from the previous step: $\mathcal{O}(n)$
+    a. \label{itm:gendense} Generate a dense comorbidity matrix, with one column for each comorbidity, and one row for each ICD code: $\mathcal{O}(1)$ in relation to $n$ patient-visits.
 ### Step 3.
 
 Perform matrix multiplication, which has $\mathcal{O}(R_m\cdot n)$ time complexity where $R_m$ is the ratio of non-zero to zero elements per row. 
@@ -393,7 +390,6 @@ For typical patient data, the mean is around five to ten codes per patient-visit
 ICD-10 codes are more complex and have many more possible permutations: the same ICD-9 technique could be used, but the ICD-10 maps would be huge, and vulnerable to unexpected modifications; for example, a national ICD-10 variant using a localized letter suffix which would not be captured. The solution is to have ICD-10 comorbidity maps that only include the level of detail specified by the original authors of the comorbidity maps -- often just the top-level three-digit codes -- then use partial string matching,[^notregex] combining steps \ref{itm:partialstring} and \ref{itm:intersect} during one scan of the patient data.
 
 ## Problem reduction
-
 There are some major simplifications:
 
 1. Only a fraction of possible ICD codes typically appear in health data, in step \ref{itm:intersect}

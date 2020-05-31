@@ -1,5 +1,9 @@
 # Auto detect text files and perform LF normalization
 * text=auto
+data/* binary
+src/* text=lf
+R/* text=lf
+tools/* text=lf
 *.rtf	 diff=astextplain
 *.RTF	 diff=astextplain
 
@@ -10,6 +14,7 @@
 *.png diff=png
 *.pdf diff=pdf
 
+## after my bug report, I think Rcpp is now more deterministic
 ## git config diff.nodiff.command /usr/bin/true or /bin/true
 # *RcppExports* diff=nodiff
 # *.Rd diff=nodiff
@@ -17,3 +22,4 @@
 # *RcppExports* merge=theirs
 # *.Rd merge=theirs
 
+/NEWS.md merge=union

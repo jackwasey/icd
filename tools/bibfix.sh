@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 #all=all.bib
 
@@ -17,11 +17,12 @@ do
     echo "Underscores found in $bib entries. Fixing now."
     for n in {0..12}
     do
+        [[ -v VERBOSE ]] && "echo ${n}"
       echo -n "."
       perl -pi -e 's/(url.*[^\\])_(.*)/\1\\_\2/g' "$bib"
     done
   else
-    echo "\nNo underscores found in $bib"
+    echo -e "\nNo underscores found in $bib" >&2
   fi
 done
 
