@@ -10,7 +10,7 @@
   "codeRepository": "https://github.com/jackwasey/icd",
   "issueTracker": "https://github.com/jackwasey/icd/issues",
   "license": "https://spdx.org/licenses/GPL-3.0",
-  "version": "4.0.9",
+  "version": "4.0.9.9000",
   "programmingLanguage": {
     "@type": "ComputerLanguage",
     "name": "R",
@@ -282,9 +282,9 @@
   "releaseNotes": "https://github.com/jackwasey/icd/blob/master/NEWS.md",
   "contIntegration": ["https://travis-ci.org/jackwasey/icd", "https://ci.appveyor.com/project/jackwasey/icd/branch/master", "https://codecov.io/github/jackwasey/icd?branch=master"],
   "developmentStatus": ["https://www.tidyverse.org/lifecycle/#stable", "https://www.repostatus.org/#active"],
-  "relatedLink": "https://jackwasey.github.io/icd/",
+  "relatedLink": ["https://jackwasey.github.io/icd/", "https://CRAN.R-project.org/package=icd"],
   "readme": "https://github.com/jackwasey/icd/blob/master/README.md",
-  "fileSize": "47528.784KB",
+  "fileSize": "36317.793KB",
   "keywords": [
     "comorbidities",
     "icd",
