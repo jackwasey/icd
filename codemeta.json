@@ -75,7 +75,9 @@
     {
       "@type": "Person",
       "givenName": "Alessandro",
-      "familyName": "Gasparini"
+      "familyName": "Gasparini",
+      "email": "alessandro.gasparini@ki.se",
+      "@id": "https://orcid.org/0000-0002-8319-7624"
     }
   ],
   "copyrightHolder": [
@@ -284,7 +286,7 @@
   "developmentStatus": ["https://www.tidyverse.org/lifecycle/#stable", "https://www.repostatus.org/#active"],
   "relatedLink": ["https://jackwasey.github.io/icd/", "https://CRAN.R-project.org/package=icd"],
   "readme": "https://github.com/jackwasey/icd/blob/master/README.md",
-  "fileSize": "36317.793KB",
+  "fileSize": "36317.78KB",
   "keywords": [
     "comorbidities",
     "icd",
