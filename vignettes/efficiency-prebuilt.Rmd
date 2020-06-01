@@ -66,7 +66,7 @@ bibliography:
   - other.bib
   - icdjss.bib
 vignette: >
-  % The resuling PDF is included by vignettes/efficiency-vignette.Rnw which contains the Vignette info
+  % The resuling PDF is included by vignettes/efficiency.Rnw which contains the Vignette info
   %\ %VignetteIndexEntry{icd: Efficient Computation of Comorbidities from ICD Codes Using Sparse Matrix Multiplication in R}
   %\ %VignetteDepends{rticles}
   %\ %VignetteEngine{knitr::rmarkdown}
@@ -83,10 +83,10 @@ pkgdown:
 # https://www.jstatsoft.org/pages/view/style
 # generate replication code (done in Makefile for JSS submission, also manually
 # for vignette index)
-# knitr::purl("Efficient_calculation_of_comorbidities_from_medical_codes.Rmd")
+# knitr::purl("efficiency-prebuilt.Rmd")
 # build vignette for package (not done by CRAN, devotols, etc), to avoid a
-# pandoc 2.something dependency which r-hub, CRAN etc do not have April 2019.
-# rmarkdown::render("vignettes/efficiency.Rmd", output_dir = "inst/doc")
+# pandoc 2.2 dependency which r-hub, CRAN etc did not have April 2019.
+# rmarkdown::render("vignettes/efficiency-prebuilt.Rmd")
 # # or, to juggle pkgbuild::build trashing inst/doc..., using .install_extras
 # rmarkdown::render("vignettes/efficiency-prebuilt.Rmd", output_dir = "vignettes")
 # Consider vim :SyntasticCheck markdown/mdl
@@ -356,6 +356,7 @@ These three are refinements offered only by ICD-10-CM:
 
 ```{r exampleicdcodecm}
 explain_code(c("S62.60", "S62.607", "S62.607S"))
+```
 
 These codes are all contained in the sub-chapter, `Injuries To The Wrist, Hand
 And Fingers,` (S60 to S69) and the chapter `Injury, poisoning and certain other
@@ -456,14 +457,14 @@ with scaling. This is demonstrated by the benchmarks in the
 The problem of determining which patients have which disease classes can be
 expressed in pseudocode as nested loops:
 
-    \begin{Code}
+\begin{Code}
     for each patient-visit, get the ICD codes
       for each ICD code
         for each comorbidity
           search the lists of codes for that comorbidity
           if a matching diagnostic code is found, then
             record that comorbidity for the current patient-visit
-    \end{Code}\label{pseudocode}
+\end{Code}\label{pseudocode}
 
 This is an $\mathcal{O}(n)$ computation because the search element is limited
 to the fixed comorbidity map, thus making it asymptotically unimportant.
