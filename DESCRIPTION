@@ -17,7 +17,7 @@ Authors@R:
              family = "Odisho",
              role = "ctb",
              email = "anobel.odisho@ucsf.edu",
-             comment = "CMS Hierarchical Condition Codes"),
+             comment = "ORCID = 0000-0003-0975-0812, CMS Hierarchical Condition Codes"),
       person(given = "Vitaly",
              family = "Druker",
              role = "ctb",
@@ -31,15 +31,17 @@ Authors@R:
              family = "McCormick",
              role = "ctb",
              email = "patrick@patrickmd.net",
-             comment = "Multiple great pull requests"),
+             comment = "ORCID = 0000-0002-7062-2409,  Multiple great pull requests"),
       person(given = "Alessandro",
              family = "Gasparini",
-             role = "ctb"),
+             role = "ctb",
+             email = "alessandro.gasparini@ki.se",
+             comment = c(ORCID = "0000-0002-8319-7624")),
       person(given = "Michel",
              family = "Lang",
              role = "aut",
              email = "michellang@gmail.com",
-             comment = "backport of R_user-dir for R version >4. ORCID = 0000-0001-9754-0393"),
+             comment = "ORCID = 0000-0001-9754-0393, backport of R_user-dir for R version >4."),
       person(given = "R Core Team",
              role = c("aut", "cph"),
              comment = "utils::askYesNo backport and m4 script for OpenMP detection."))
@@ -87,7 +89,7 @@ Biarch: true
 Classification/ACM-2012: Social and professional topics~Medical
     records, Applied computing~Health care information systems, Applied
     computing~Health informatics, Applied computing~Bioinformatics
-Copyright: See file (inst/)COPYRIGHTS
+Copyright: See files (inst/)COPYRIGHTS and (inst/)COPYING
 Encoding: UTF-8
 Language: en-US
 LazyData: true

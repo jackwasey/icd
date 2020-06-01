@@ -7,8 +7,8 @@ declare -i wcres=0
 
 MSG="use 'git commit --no-verify' to override this check"
 
-toplevel="$(git rev-parse --show-toplevel)"
-if ! "${toplevel}/tools/travis-yaml-check.sh"; then
+ICD_HOME="$(git rev-parse --show-toplevel)"
+if ! "${ICD_HOME?}/tools/travis-yaml-check.sh"; then
     echo ".travis.yml is invalid."
     echo "${MSG}"
     ok=1
@@ -74,7 +74,7 @@ else
 fi
 
 # make sure we usr /usr/bin/env bash for scripts
-find "${ICD_HOME}" \
+find "${ICD_HOME?}" \
     -type d -name '.*' -prune -o \
     ! -name "pre-commit" \
     -type f \
@@ -88,7 +88,7 @@ find "${ICD_HOME}" \
 done
 
 # check bash scripts
-find "${ICD_HOME}" -type d -name '.*' -prune -o -type f -exec grep -q '#!/usr/bin/env bash' '{}' \; -print |
+find "${ICD_HOME?}" -type d -name '.*' -prune -o -type f -exec grep -q '#!/usr/bin/env bash' '{}' \; -print |
     while read -r scbash
     do {
         shellcheck "${scbash}"
