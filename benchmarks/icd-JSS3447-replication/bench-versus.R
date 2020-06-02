@@ -21,6 +21,7 @@ source("install-dependencies.R")
 # N.b., changing these numbers will interfere with Makefile knowing what to do.
 n_order_default <- 3L
 n_order_big <- 6L # cut-off for only doing one iteration
+n_order_prl_cmb <- 5L # best cut-off found for using 'parallel = TRUE' for 'comorbidity' package call
 dz_per_pt <- 20L
 
 # r-lib/bench package does memory profiling and garbage collection analysis,
@@ -76,7 +77,7 @@ bench_small <- function(n_order = n_order_default) {
       local(icd::comorbid_charlson(pts)),
       local(comorbidity::comorbidity(
         x = pts, id = "visit_id", code = "code", score = "charlson_icd9",
-        parallel = n >= 1e5
+        parallel = n >= 10 ^ n_order_prl_cmb
       )),
       local(medicalrisk::generate_comorbidity_df(
         pts_mr,
@@ -97,7 +98,7 @@ time_big <- function(n_order = n_order_default) {
     medicalrisk = numeric()
   )
   if (n_order < n_order_big) return(res)
-  message("Running one iteration with:")
+  message("Running with bigger data")
   for (nit in seq_along(n)) {
     message(n[nit])
     pts <- get_pts(n[nit], dz_per_pt = dz_per_pt)
@@ -139,8 +140,12 @@ get_bench_short_filename <- function(prefix, suffix,
   )
 }
 
+# combine small and big benchmark results, and deal with tibble/bench S3 problems
 bench_versus <- function(n_order = n_order_default) {
-  bres <- bench_small(n_order)
+  bres_tbl <- bench_small(n_order)
+  bref <- bres_tbl[c("expression", "n", "median")]
+  bref[["median"]] <- as.numeric(bref[["median"]])
+  bres <- as.data.frame(bref)
   # now take the medians and make suitable for the article:
   res <- tidyr::spread(bres[c("expression", "n", "median")], expression, median)
   # name order is not deterministic!
@@ -149,10 +154,10 @@ bench_versus <- function(n_order = n_order_default) {
     sub("local\\(([^:]*).*", "\\1", names(res)[-1])
   )
   res <- res[c("datarows", "icd", "comorbidity", "medicalrisk")]
-  res$icd <- as.numeric(res$icd)
-  res$comorbidity <- as.numeric(res$comorbidity)
-  res$medicalrisk <- as.numeric(res$medicalrisk)
-  res <- as.data.frame(res)
+  # res$icd <- as.numeric(res$icd)
+  # res$comorbidity <- as.numeric(res$comorbidity)
+  # res$medicalrisk <- as.numeric(res$medicalrisk)
+  # res <- as.data.frame(res)
   # add the timings for the very long-running computations (which bench only does
   # once anyway, and which are dominated by the computations themselves)
   rbind(res, time_big(n_order))
@@ -168,3 +173,4 @@ dput(res, get_bench_short_filename("dput-latest", "R"))
 # and a dated version
 dput(res, get_bench_filename("dput-dated", "R", use_date = TRUE))
 options(old_opt_dml)
+
