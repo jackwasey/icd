@@ -7,14 +7,13 @@
   "identifier": "icd",
   "description": "Calculate comorbidities, medical risk scores, and\n    work very quickly and precisely with ICD-9 and ICD-10 codes. This\n    package enables a work flow from raw tables of ICD codes in hospital\n    databases to comorbidities. ICD-9 and ICD-10 comorbidity mappings from\n    Quan (Deyo and Elixhauser versions), Elixhauser and AHRQ included.\n    Common ambiguities and code formats are handled. Comorbidity\n    computation includes Hierarchical Condition Codes, and an\n    implementation of AHRQ Clinical Classifications. Risk scores include\n    those of Charlson and van Walraven.  US Clinical Modification, Word\n    Health Organization, Belgian and French ICD-10 codes are supported,\n    most of which are downloaded on demand.",
   "name": "icd: Comorbidity Calculations and Tools for ICD-9 and ICD-10\n    Codes",
-  "codeRepository": "https://jackwasey.github.io/icd/",
+  "codeRepository": "https://github.com/jackwasey/icd",
   "issueTracker": "https://github.com/jackwasey/icd/issues",
   "license": "https://spdx.org/licenses/GPL-3.0",
-  "version": "4.0.9.9000",
+  "version": "4.0.10",
   "programmingLanguage": {
     "@type": "ComputerLanguage",
     "name": "R",
-    "version": "4.0.0",
     "url": "https://r-project.org"
   },
   "runtimePlatform": "R version 4.0.0 (2020-04-24)",
@@ -284,22 +283,12 @@
       "identifier": "https://sysreqs.r-hub.io/get/pandoc"
     }
   ],
-  "releaseNotes": "ssh://git@github.com/jackwasey/icd/blob/master/NEWS.md",
-  "contIntegration": [
-    "https://travis-ci.org/jackwasey/icd",
-    "https://ci.appveyor.com/project/jackwasey/icd/branch/master",
-    "https://codecov.io/github/jackwasey/icd?branch=master"
-  ],
-  "developmentStatus": [
-    "https://www.tidyverse.org/lifecycle/#stable",
-    "https://www.repostatus.org/#active"
-  ],
-  "relatedLink": [
-    "https://jackwasey.github.io/icd/",
-    "https://CRAN.R-project.org/package=icd"
-  ],
+  "releaseNotes": "https://github.com/jackwasey/icd/blob/master/NEWS.md",
+  "contIntegration": ["https://travis-ci.org/jackwasey/icd", "https://ci.appveyor.com/project/jackwasey/icd/branch/master", "https://codecov.io/github/jackwasey/icd?branch=master"],
+  "developmentStatus": ["https://www.tidyverse.org/lifecycle/#stable", "https://www.repostatus.org/#active"],
+  "relatedLink": ["https://jackwasey.github.io/icd/", "https://CRAN.R-project.org/package=icd"],
   "readme": "https://github.com/jackwasey/icd/blob/master/README.md",
-  "fileSize": "5004.054KB",
+  "fileSize": "35371.015KB",
   "keywords": [
     "comorbidities",
     "icd",
