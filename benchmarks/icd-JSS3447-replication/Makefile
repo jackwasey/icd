@@ -15,13 +15,14 @@ RES7 := dput-latest-n-7.R
 RES8 := dput-latest-n-8.R
 NAME := icd-JSS3447-replication
 DTAG := icdjss3447repl
-RMD := efficiency
+RMD := efficiency-prebuilt
 ARTICLE := Efficient_calculation_of_comorbidities_from_medical_codes
-UPDATED := $(ARTICLE).UPDATED
+UPDATED := $(ARTICLE)_UPDATED
 ARTICLEPDF := $(UPDATED).pdf
 README := README-replication
 SUB := JSS3447_updated_article_and_replication.tar.gz
 
+# a quick run of the quickest part of the benchmarking, to show it works
 default: result3
 
 submission: $(SUB)
