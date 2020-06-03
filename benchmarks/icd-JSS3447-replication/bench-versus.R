@@ -145,20 +145,19 @@ bench_versus <- function(n_order = n_order_default) {
   bres_tbl <- bench_small(n_order)
   bref <- bres_tbl[c("expression", "n", "median")]
   bref[["median"]] <- as.numeric(bref[["median"]])
+  # reduce the long calling expressions down to the package names
   bres <- as.data.frame(bref)
+  names(bres)[which(names(bres) == "n")] <- "datarows"
+  bres[["expression"]] <- sub(pattern = "local\\(([^:]*).*",
+                              replacement = "\\1",
+                              x = bres[["expression"]])
   # now take the medians and make suitable for the article:
-  res <- tidyr::spread(bres[c("expression", "n", "median")], expression, median)
-  # name order is not deterministic!
-  names(res) <- c(
-    "datarows",
-    sub("local\\(([^:]*).*", "\\1", names(res)[-1])
-  )
+  #res <- tidyr::spread(bres[c("expression", "n", "median")], expression, median)
+  res <- reshape(data = bres, idvar = "datarows", direction = "wide", timevar = "expression")
+  names(res) <- sub("median\\.", "", names(res))
+  # ensure name order is consistent
   res <- res[c("datarows", "icd", "comorbidity", "medicalrisk")]
-  # res$icd <- as.numeric(res$icd)
-  # res$comorbidity <- as.numeric(res$comorbidity)
-  # res$medicalrisk <- as.numeric(res$medicalrisk)
-  # res <- as.data.frame(res)
-  # add the timings for the very long-running computations (which bench only does
+  # now add the timings for the very long-running computations (which bench only does
   # once anyway, and which are dominated by the computations themselves)
   rbind(res, time_big(n_order))
 }
