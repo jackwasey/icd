@@ -113,6 +113,7 @@ saveRDS(
   version = 2
 )
 # now take the medians and make suitable for the article:
+# TODO: replace with base R reshape, like in bench-versus
 res <- tidyr::spread(bres[c(1, 2, 5)], expression, median)
 names(res) <- c("datarows", "icd", "comorbidity", "medicalrisk", "touch")
 res$icd <- as.numeric(res$icd)

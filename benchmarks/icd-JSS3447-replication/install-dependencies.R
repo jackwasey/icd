@@ -35,8 +35,6 @@ install_jss3447_deps <- function() {
     # "profmem", # do someday
     "Rcpp",
     "RcppEigen",
-    #"touch", # will add to benchmark, but probably not JSS revision
-    "tidyr", # really - I should do this with base R - just one invocation
     #    "comorbidity", # CRAN version has incompatible updates
     #    "medicalrisk", # CRAN version from 2016 unchanged at time of submission
     NULL

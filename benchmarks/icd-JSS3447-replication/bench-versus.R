@@ -152,7 +152,6 @@ bench_versus <- function(n_order = n_order_default) {
                               replacement = "\\1",
                               x = bres[["expression"]])
   # now take the medians and make suitable for the article:
-  #res <- tidyr::spread(bres[c("expression", "n", "median")], expression, median)
   res <- reshape(data = bres, idvar = "datarows", direction = "wide", timevar = "expression")
   names(res) <- sub("median\\.", "", names(res))
   # ensure name order is consistent
