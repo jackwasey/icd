@@ -24,14 +24,15 @@
 #' @param var_name character name of variable or its symbol either of which
 #'   would find \code{myvar} in the parent environment, and save it as
 #'   \code{myvar.RData} in \code{package_root/data}.
-#' @param compress gzip default because it is fastest to unzip
+#' @param compress xz now default, as reasonably close to gzip speed for
+#'   decompression and compression approaching twice as compact archives. 
 #' @param envir environment in which to look for the variable to save
 #' @return invisibly returns the data
 #' @keywords internal
 #' @noRd
 .save_in_data_dir <- function(var_name,
                               x = NULL,
-                              compress = "gzip",
+                              compress = "xz",
                               envir = parent.frame()) {
   if (!is.character(var_name)) {
     var_name <- as.character(substitute(var_name))
