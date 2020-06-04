@@ -25,11 +25,11 @@ SUB := JSS3447_updated_article_and_replication.tar.gz
 # a quick run of the quickest part of the benchmarking, to show it works
 default: result3
 
-submission: $(SUB)
-
-replmat: $(NAME).tar.gz readme
+# make the replications materials for JSS submission, without running heavy benchmarks, but run small benchmark to make finally sure it works...
+replicationmaterials replmat repmat submission: $(SUB) bench3
 
 $(SUB): .icd.built $(NAME).tar.gz purl readme $(ARTICLEPDF)
+	$(RSCRIPT) bench-versus.R 3
 	COPYFILE_DISABLE=1 tar -cvzf "$(SUB)" \
 	$(NAME).tar.gz \
 	medicalrisk_1.2.tar.gz \

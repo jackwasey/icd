@@ -154,6 +154,7 @@ bench_versus <- function(n_order = n_order_default) {
   # now take the medians and make suitable for the article:
   res <- reshape(data = bres, idvar = "datarows", direction = "wide", timevar = "expression")
   names(res) <- sub("median\\.", "", names(res))
+  rownames(res) <- NULL
   # ensure name order is consistent
   res <- res[c("datarows", "icd", "comorbidity", "medicalrisk")]
   # now add the timings for the very long-running computations (which bench only does
