@@ -23,7 +23,8 @@ decimal_to_short(x)
 }
 \description{
 This usually just entails removing the decimal point, but also does some
-limited validation and tidying up. Missing leading zeroes will be added for correctness of the shortened codes.
+limited validation and tidying up. Missing leading zeroes will be added for
+correctness of the shortened codes.
 }
 \section{Methods (by class)}{
 \itemize{

@@ -10,7 +10,7 @@
   "codeRepository": "https://github.com/jackwasey/icd",
   "issueTracker": "https://github.com/jackwasey/icd/issues",
   "license": "https://spdx.org/licenses/GPL-3.0",
-  "version": "4.0.10",
+  "version": "4.0.9.1",
   "programmingLanguage": {
     "@type": "ComputerLanguage",
     "name": "R",
@@ -75,7 +75,9 @@
     {
       "@type": "Person",
       "givenName": "Alessandro",
-      "familyName": "Gasparini"
+      "familyName": "Gasparini",
+      "email": "alessandro.gasparini@ki.se",
+      "@id": "https://orcid.org/0000-0002-8319-7624"
     }
   ],
   "copyrightHolder": [
@@ -277,10 +279,6 @@
         "url": "https://cran.r-project.org"
       },
       "sameAs": "https://CRAN.R-project.org/package=Rcpp"
-    },
-    {
-      "@type": "SoftwareApplication",
-      "identifier": "https://sysreqs.r-hub.io/get/pandoc"
     }
   ],
   "releaseNotes": "https://github.com/jackwasey/icd/blob/master/NEWS.md",
@@ -288,7 +286,7 @@
   "developmentStatus": ["https://www.tidyverse.org/lifecycle/#stable", "https://www.repostatus.org/#active"],
   "relatedLink": ["https://jackwasey.github.io/icd/", "https://CRAN.R-project.org/package=icd"],
   "readme": "https://github.com/jackwasey/icd/blob/master/README.md",
-  "fileSize": "35371.015KB",
+  "fileSize": "65506.975KB",
   "keywords": [
     "comorbidities",
     "icd",

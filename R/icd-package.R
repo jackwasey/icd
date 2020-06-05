@@ -2,8 +2,7 @@
 #'   comorbidities for a set of patients with one or more ICD codes each. All
 #'   the comorbidity functions guess which columns are the identifiers and which
 #'   are ICD code fields. You may also specify these. Most 'long' or 'wide' data
-#'   can simply be passed directly, e.g.:
-#'   \code{\link{comorbid(patient_data_frame)}}.
+#'   can simply be passed directly, e.g.: \code{comorbid(patient_data_frame)}.
 #'
 #'   \itemize{
 #'
@@ -57,14 +56,14 @@
 #'   (although not necessarily genuine ICD diagnoses). In contrast,
 #'   \code{\link{is_defined}} checks whether ICD-9 codes correspond to defined
 #'   diagnoses or diagnostic groups in the hierarchy of ICD codes.
-#'   \code{link{is_leaf}} (and for the US, \code{link{is_billable}}) determine
-#'   whether given codes are leaves in the hierarchy, or not. These functions
-#'   (and \code{\link{explain_code}}) rely on the \CRANpkg{icd.data} package,
-#'   which is not installed by default.  \CRANpkg{icd.data} may need to download
-#'   data due to package size or copyright restrictions on redistributing data,
-#'   and needs a cache directory and your permission to do this. Use
-#'   \code{icd.data::setup_icd_data()} to do this, or
-#'   \code{icd.data::download_icd_data()} to download everything at once, which
+#'   \code{\link{is_leaf}} (and for the US, \code{\link{is_billable}}) determine
+#'   whether given codes are leaves in the hierarchy, or not. \pkg{icd} may need
+#'   to download data due to package size or copyright restrictions on
+#'   redistributing data, and needs a cache directory and your permission to do
+#'   this. Use \code{\link{set_icd_data_dir}} to do this, e.g.,
+#'   \code{set_icd_data_dir()} for a default location in a suitable place for
+#'   your OS, e.g. \code{~/.local/icd/icd-ver-num} on Linux. Use
+#'   \code{\link{download_all_icd_data}} to download everything at once, which
 #'   will take a few minutes on a broadband connection.
 #'
 #'   Validation depends on the class of code, and is different if the code is
@@ -117,7 +116,7 @@
 #'   package-icd10
 #' @author Jack O. Wasey \email{jack@@jackwasey.com}
 #' @keywords misc utilities internal
-#' @concept ICD-9 ICD-10 comorbidity comorbidities
+#' @concept comorbidity comorbidities comorbid ICD-9 ICD-10 ICD
 #' @useDynLib icd, .registration=TRUE
 #' @importFrom Rcpp cppFunction
 #' @importFrom utils head tail read.fwf

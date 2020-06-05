@@ -62,7 +62,6 @@ tests/testthat/Rplots.pdf
 testthat-disabled.R
 bench-refactor.html
 .gdb_history
-
 benchmarks/icd-JSS3447-replication/*.log
 .travis.yml.*
 travis-notes.txt
