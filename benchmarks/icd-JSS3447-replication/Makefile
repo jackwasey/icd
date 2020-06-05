@@ -21,6 +21,8 @@ UPDATED := $(ARTICLE)_UPDATED
 ARTICLEPDF := $(UPDATED).pdf
 README := README-replication
 SUB := JSS3447_updated_article_and_replication.tar.gz
+ICD_VER := $(shell sed -n '/^Version: /s/Version: //p' ../../DESCRIPTION)
+ICD_SRC_PKG := icd_$(ICD_VER).tar.gz
 
 # a quick run of the quickest part of the benchmarking, to show it works
 default: result3
@@ -28,13 +30,13 @@ default: result3
 # make the replications materials for JSS submission, without running heavy benchmarks, but run small benchmark to make finally sure it works...
 replicationmaterials replmat repmat submission: $(SUB) bench3
 
-$(SUB): .icd.built $(NAME).tar.gz purl readme $(ARTICLEPDF)
+$(SUB): $(NAME).tar.gz purl readme $(ARTICLEPDF) $(ICD_SRC_PKG)
 	$(RSCRIPT) bench-versus.R 3
 	COPYFILE_DISABLE=1 tar -cvzf "$(SUB)" \
 	$(NAME).tar.gz \
 	medicalrisk_1.2.tar.gz \
 	comorbidity_0.1.1.tar.gz \
-	icd_*.tar.gz \
+	$(ICD_SRC_PKG) \
 	$(ARTICLEPDF)
 
 $(ARTICLEPDF):
@@ -127,16 +129,15 @@ $(NAME).tar.gz: purl readme
 	cp $(ICDTMP)/$(NAME).tar.gz "$$olddir"; \
 	rm -rf "$(ICDTMP)"
 
-.icd.built: ../../DESCRIPTION
-	R CMD build --compact-vignettes ../..
-	touch .icd.built
+$(ICD_SRC_PKG): ../../DESCRIPTION
+	R CMD build --compact-vignettes=gs+qpdf ../..
 
 clean:
 	rm -f $(ARTICLE).R
 	rm -rf $(UPDATED)_files/
 	rm -f $(UPDATED).*
 	rm -f $(README).html
-	rm -f .deps .icd.built
+	rm -f .deps
 	rm -f $(NAME).tar.gz icd_*.tar.gz JSS*.tar.gz
 
 cleanbench:

@@ -1,6 +1,6 @@
 # icd NEWS
 
-## Version 4.0.10
+## Version 4.0.9.1
 
 * updates to 'efficiency' vignette, benchmarking, replication materials. JSS submission, otherwise same as 4.0.9
 

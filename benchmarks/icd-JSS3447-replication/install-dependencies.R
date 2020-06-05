@@ -30,8 +30,6 @@ install_jss3447_deps <- function() {
     # "magrittr", # no need?
     "parallel", # used by 'comorbidity' for maximum speed
     "plyr", "reshape2", "hash", # imported by 'medicalrisk'
-    # "testthat", # not testing any packages here
-    # "knitr", # not building any vignettes
     # "profmem", # do someday
     "Rcpp",
     "RcppEigen",
@@ -63,8 +61,9 @@ install_jss3447_deps <- function() {
       op = ">="
     )
   )) {
-    message("icd not yet installed, so installing from CRAN")
+    message("icd of sufficient recency not yet installed, so installing from local source package")
     if ("icd" %in% available.packages()["Package"]) {
+      stop("WIP - build a slim - no documentation source package")
       install.packages("icd", quiet = TRUE, repos = repos)
     } else {
       message("icd does not seem to be available in current repos. Installing from source")
