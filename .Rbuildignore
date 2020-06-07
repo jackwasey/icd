@@ -48,6 +48,7 @@
 ^.*country-lang-vers.*\.utf8\..*$
 ^lib-bench$
 ^man-roxygen$
+_pkgdown\.yml$
 ^revdep$
 ^src\/.*\.gc(da|h|no|ov)$
 ^src\/.*\.o$
