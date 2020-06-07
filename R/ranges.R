@@ -130,8 +130,9 @@ expand_range.icd10cm <- function(start,
 
 #' Expand two major codes to a range
 #'
-#' Expand a pair of major codes into a range of major codes. Primarily for use
-#' by \code{icd.data}.
+#' Expand a pair of major codes into a range of major codes.
+#'
+#' Primarily for internal use
 #' @examples
 #' expand_range_major("100", "102")
 #' @template dotdotdot

@@ -242,7 +242,7 @@ with_absent_action <- function(absent_action = c(
 #' \dontrun{
 #' set_icd_data_dir()
 #' # or choose another directory:
-#' # set_icd_data_dir("/var/cache/icd.data")
+#' # set_icd_data_dir("/var/cache/icd")
 #' # If you choose a custom directory, you may wish to add this command to your .Rprofile .
 #' # then you may use:
 #' # download_all_icd_data()
@@ -279,9 +279,12 @@ set_icd_data_dir <- function(path = NULL) {
   }
   if (!dir.exists(path)) {
     created <- dir.create(path, showWarnings = TRUE, recursive = TRUE)
-    if (!created) stop("Unable to create directory at: ", path, " Try ",
-                       sQuote("set_icd_data_dir(\"/path/with/write/access\")")
-    )
+    if (!created) {
+      stop(
+        "Unable to create directory at: ", path, " Try ",
+        sQuote("set_icd_data_dir(\"/path/with/write/access\")")
+      )
+    }
   }
   .set_opt("cache" = path)
   if (!.all_cached() && "download_all_icd_data" %nin% names(sys.calls())) {

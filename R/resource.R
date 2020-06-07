@@ -605,7 +605,7 @@ get_icd_data_dir <- function(must_work = TRUE) {
     return(.get_fetcher_fun(var_name)())
   }
   .absent_action_switch(
-    paste(var_name, "not available in icd.data regular or lazy data")
+    paste(var_name, "not available in icd, even via as-yet-unloaded lazy data")
   )
 }
 
