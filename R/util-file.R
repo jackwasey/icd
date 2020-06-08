@@ -25,7 +25,7 @@
 #'   would find \code{myvar} in the parent environment, and save it as
 #'   \code{myvar.RData} in \code{package_root/data}.
 #' @param compress xz now default, as reasonably close to gzip speed for
-#'   decompression and compression approaching twice as compact archives. 
+#'   decompression and compression approaching twice as compact archives.
 #' @param envir environment in which to look for the variable to save
 #' @return invisibly returns the data
 #' @keywords internal

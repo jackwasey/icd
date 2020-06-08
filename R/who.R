@@ -70,7 +70,7 @@
       )
     }
   } # end 400+
-  json_data <- httr::content(http_response, simplifyDataFrame=TRUE)
+  json_data <- httr::content(http_response, simplifyDataFrame = TRUE)
   jsonlite::fromJSON(json_data)
 }
 
