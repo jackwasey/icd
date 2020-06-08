@@ -19,8 +19,10 @@ expand_range_major(start, end, defined = TRUE)
 \item{...}{arguments passed on to other functions}
 }
 \description{
-Expand a pair of major codes into a range of major codes. Primarily for use
-by \code{icd.data}.
+Expand a pair of major codes into a range of major codes.
+}
+\details{
+Primarily for internal use
 }
 \section{Methods (by class)}{
 \itemize{

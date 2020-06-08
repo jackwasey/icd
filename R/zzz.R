@@ -46,7 +46,7 @@
         " package is deprecated from ",
         sQuote("icd"), " version 4.0. ",
         "The content from ", sQuote("icd.data"),
-        " is now available via ", sQuote("icd"), "."
+        " is all available via ", sQuote("icd"), "."
       )
     }
   }

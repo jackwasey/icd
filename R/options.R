@@ -242,7 +242,7 @@ with_absent_action <- function(absent_action = c(
 #' \dontrun{
 #' set_icd_data_dir()
 #' # or choose another directory:
-#' # set_icd_data_dir("/var/cache/icd.data")
+#' # set_icd_data_dir("/var/cache/icd")
 #' # If you choose a custom directory, you may wish to add this command to your .Rprofile .
 #' # then you may use:
 #' # download_all_icd_data()
