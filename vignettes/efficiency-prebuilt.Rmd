@@ -672,14 +672,26 @@ unique, whereas the integers may be repeated.
 ### Sparse matrix representation
 
 In a large data set, less common codes are more likely to appear, resulting in
-more nearly empty columns in the patient-visit matrix. Since this
-representation is used primarily to facilitate calculation of huge datasets, we
-ignore the fact that sparse format may be less efficient than dense for small
-datasets. Row-major representation also makes sense, with each row
-corresponding to a patient-visit. This is done in step \ref{itm:gensparse} of
-the algorithm.
+many more almost empty columns in the patient-visit matrix. A rare disease
+might affect about one in a million people: suppose one patient happened to
+have the disease in sample of a million patients: the remaining 999,999 must be
+marked as not having the disease, since the rare disease has its own column.
 
-The comorbidity matrix is more sparse than the patient-visit matrix, but is
+Since this
+representation is used primarily to facilitate calculation of huge data sets, we
+ignore the fact that sparse format may be less efficient than dense for small
+data sets. This is done in step \ref{itm:gensparse} of the algorithm.
+
+Row-major representation is the storage of data in the computer consisting of
+the data in each row being stored, followed by the data in the next row, and so
+on. This further improves efficiency because the patient-visit is the unit of
+interest when analyzing the data. The memory access for a whole patient is
+therefore limited to a small (hopefully) contiguous chunk; with column-major
+matrix representation, the codes for a patient could be spread across system
+memory, particularly problematic when the data overflows into slow disk swap
+space. 
+
+The comorbidity matrix is also quite sparsely populated, but is
 implemented as a dense data structure in step \ref{itm:gendense} of the
 algorithm for two reasons: firstly, linear algebra software is often optimized
 for row-major sparse multiplications with dense matrices; secondly, this matrix
@@ -691,7 +703,7 @@ megabytes,[^wordagain] which compares favorably to the eight megabyte CPU cache
 in the modest workstation used in the benchmarks presented in Section
 \ref{results}.
 
-[^wordagain]: Again the calculation is done using a 32-bit word for each flag.
+[^wordagain]: This calculation is done using a 32-bit word for each flag.
 
 There is a detailed example below in Section \ref{workedex}, but a better idea
 of the bulk structure of this matrix can be seen below for a fictitious
