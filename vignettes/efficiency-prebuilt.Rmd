@@ -4,7 +4,7 @@ author:
     affiliation: Children's Hospital of Philadelphia
     address: >
       3401 Civic Center Blvd.
-      Philadelphia, PA 19102, USA
+      Philadelphia, PA 19104, USA
       email: \email{waseyj@chop.edu}
       url: http://www.chop.edu/doctors/wasey-jack
   - name: Steven M. Frank
@@ -343,7 +343,7 @@ explain_code("100")
 
 ### Breakdown of an ICD-10 code
 
-This is a breakdown of an ICD-10-CM code, chosen to illustrate the hierarchical
+The following is a breakdown of an ICD-10-CM code, chosen to illustrate the hierarchical
 nature of the codes, and difference between WHO ICD-10 and ICD-10-CM. The
 following two codes are shared by the WHO definitions and
 ICD-10-CM.[^libraryicd]
@@ -481,9 +481,9 @@ minimizing the memory requirements of the problem.
 
 # Main features
 
-## User-facing
+The main features of \pkg{icd} exposed to the user fall into three groups: those which calculate comorbidities from diagnostic codes; those which interpret and convert ICD data; and, those which use comorbidity results to calculate risk using well known scoring systems.
 
-The following features are made available to end-users, via exported functions:
+## User-facing
 
 - Comorbidity computations
   - compute comorbidities based on ICD-9 or ICD-10 codes
@@ -503,7 +503,7 @@ The following features are made available to end-users, via exported functions:
     (HCC) scores
 
 [^crosswalk]: \pkg{icd} does not yet convert (also known as 'cross-walk')
-between ICD-9-CM and ICD-10-CM.
+between ICD-9-CM and ICD-10-CM, but the foundational work was done during the 2019 NIH hackathon, for which \pkg{icd} was selected.
 
 ## Internal
 
@@ -515,7 +515,7 @@ with big datasets.
   (journal articles and, where available, \proglang{SAS} code) in a
   reproducible and verifiable manner
 - \proglang{C} and \proglang{C++} code and accelerated matrix algebra to give
-  accurate results quickly with big data extensive test suite
+  accurate results quickly with big datasets, with an extensive test suite
 
 ## Included comorbidity maps
 
@@ -1112,16 +1112,16 @@ xmin = 10
 
 ## Derivation of the comorbidity maps
 
-It is important to have a reproducible audit trail for foundational work, so
+It is important to have a reproducible audit trail for fundamental work, so
 \pkg{icd} contains code which parses \proglang{SAS} source code in order to
 derive the original intent of the author in how the comorbidity maps were
-implemented. The AHRQ and \cite{quan_updating_2011} provide such \proglang{SAS}
+implemented. The AHRQ and \citet{quan_updating_2011} provide such \proglang{SAS}
 source code, whereas other maps are only available in the form of tabulated
 data in journal articles.
 
 ### Parsing original SAS code
 
-For example, \cite{quan_updating_2011} offer the following code for pulmonary
+For example, \citet{quan_updating_2011} offer the following code for pulmonary
 disease in the ICD-9 Charlson map:
 
 ```
