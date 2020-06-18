@@ -7,12 +7,12 @@ tools/* text=lf
 *.rtf	 diff=astextplain
 *.RTF	 diff=astextplain
 
-# WIP:
+# WIP: but do outside of repository gitattributes
 # need to run:
 # git config --local include.path ../.gitconfig
 # for local PNG/PDF friendly diffing to work
-*.png diff=png
-*.pdf diff=pdf
+#*.png diff=png
+#*.pdf diff=pdf
 
 ## after my bug report, I think Rcpp is now more deterministic
 ## git config diff.nodiff.command /usr/bin/true or /bin/true

@@ -58,7 +58,7 @@ preamble: |
 # graphicx, color, hyperref, ae, fancyverb and natbib are included by jss.cls
 biblio-style: jss
 documentclass: jss
-output: 
+output:
   rticles::jss_article:
     keep_tex: true
 bibliography:
@@ -124,12 +124,12 @@ kable_caption_bottom <- function(x) {
 
 my_kable <- function(x, col.names, caption, ...)
   kable_caption_bottom(
-    knitr::kable(x, 
+    knitr::kable(x,
                  col.names = sprintf("%s", col.names),
                  escape = FALSE,
                  format = "latex",
                  longtable = TRUE,
-                 caption = caption, 
+                 caption = caption,
                  ...))
 ```
 
@@ -138,7 +138,7 @@ my_kable <- function(x, col.names, caption, ...)
 ICD diagnostic codes are used to define tens of thousands of diseases.
 Originally from the World Health Organization (WHO; Organisation mondiale de la
 santé, OMS), their purpose was to allow epidemiologists to study global health
-[@WHO_Internationalclassificationdiseases_2018]. In the USA, and elsewhere, the
+[@WHO_Internationalclassificationdiseases_2018]. In the USA the
 WHO ICD codes have been extended for administrative purposes by the government
 Centers for Medicare and Medicaid Services (CMS), notably for billing
 [@CMS_CentersMedicareMedicaid_2018]. All over the world, ICD codes are the
@@ -180,20 +180,20 @@ h <- inverse.rle(structure(list(
     1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 1, 1, 1, 1, 1, 2, 2, 1, 1, 1,
     2, 1, 1, 1, 1, 1, 3, 1, 2, 1, 1, 1, 4, 2, 1, 1, 2, 2, 4, 4, 2, 1,
     1, 2, 1, 1, 1, 3, 1, 2, 1, 4, 1, 2, 4, 4, 3, 2, 3, 7, 5, 2, 10, 4,
-    4, 4, 5, 6, 6, 1, 8, 13, 9, 11, 10, 13, 13, 14, 10, 16, 23, 18, 
+    4, 4, 5, 6, 6, 1, 8, 13, 9, 11, 10, 13, 13, 14, 10, 16, 23, 18,
     24, 27, 32, 39, 45, 33, 51, 87, 86, 76, 126, 166, 240, 365, 632,
     1401),
   values = c(
-    525, 405, 296, 283, 281, 268, 227, 209, 193, 180, 168, 166, 156, 
+    525, 405, 296, 283, 281, 268, 227, 209, 193, 180, 168, 166, 156,
     146, 144, 135, 134, 131, 120, 116, 115, 113, 110, 106, 103, 90, 88,
     86, 85, 82, 81, 80, 78, 77, 76, 75, 73, 72, 71, 70, 69, 68, 67, 64,
-    63, 62, 61, 56, 55, 54, 53, 51, 50, 49, 48, 46, 45, 44, 43, 41, 40, 
+    63, 62, 61, 56, 55, 54, 53, 51, 50, 49, 48, 46, 45, 44, 43, 41, 40,
     39, 38, 37, 36, 35, 34, 33, 32, 31, 30, 29, 28, 27, 26, 25, 24, 23,
     22, 21, 20, 19, 18, 17, 16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5,
     4, 3, 2, 1)), class = "rle"))
-  plot(h, type = "h", 
-       xlab = "ICD code, by descending frequency", 
-       ylab = "count", 
+  plot(h, type = "h",
+       xlab = "ICD code, by descending frequency",
+       ylab = "count",
        xlim = c(0, 4000),
        log = "y")
 ```
@@ -203,10 +203,10 @@ termdf <- as.data.frame(
   matrix(byrow = TRUE, ncol = 2,
          data = c(
            "comorbidity", "broad category of disease, e.g., Cancer",
-           "comorbidity map", 
+           "comorbidity map",
            "set of comorbidities, each defined by diagnostic codes",
            "patient-visit",
-           paste("record identifier, unique for each", 
+           paste("record identifier, unique for each",
                  "encounter with a patient, but could",
                  "represent a patient at one moment, or a",
                  "summation of all conditions a patient has",
@@ -299,13 +299,15 @@ library("icd")
 explain_code("V97.33XD")
 ```
 
-Because the WHO ICD is a subset of ICD Clinical Modification, \pkg{icd} is
-driven by ICD-9-CM and ICD-10-CM, both of which are available in the public
-domain, allowing analysis of WHO codes and more detailed USA or other national
-sets of codes. Unfortunately, the WHO exercises copyright over the
-international ICD-10 scheme, so \pkg{icd} (from version 4.0) prompts the user
-to download the codes when needed. Once they are downloaded, they may be used
-seamlessly.
+The US ICD Clinical Modification is much more extensive than the original WHO
+ICD definitions. \pkg{icd} is driven by ICD-9-CM and ICD-10-CM, because both
+are super-sets of the original definitions from the WHO, and they are available
+in the public domain. Since the codes are hierarchical, and deviations from the
+WHO or US versions as implemented by other countries are minor, the algorithms
+described below are robust to unrecognized codes.  Unfortunately, the WHO
+exercises copyright over the international ICD-10 scheme, so \pkg{icd} (from
+version 4.0) prompts the user to download the codes when needed. Once they are
+downloaded, they may be used seamlessly.
 
 ```{r results="asis", echo=FALSE}
 who_fr_ex <- '
@@ -343,9 +345,9 @@ explain_code("100")
 
 ### Breakdown of an ICD-10 code
 
-The following is a breakdown of an ICD-10-CM code, chosen to illustrate the hierarchical
-nature of the codes, and difference between WHO ICD-10 and ICD-10-CM. The
-following two codes are shared by the WHO definitions and
+The following is a breakdown of an ICD-10-CM code, chosen to illustrate the
+hierarchical nature of the codes, and difference between WHO ICD-10 and
+ICD-10-CM. The following two codes are shared by the WHO definitions and
 ICD-10-CM.[^libraryicd]
 
 ```{r exampleicdcodewho}
@@ -481,12 +483,15 @@ minimizing the memory requirements of the problem.
 
 # Main features
 
-The main features of \pkg{icd} exposed to the user fall into three groups: those which calculate comorbidities from diagnostic codes; those which interpret and convert ICD data; and, those which use comorbidity results to calculate risk using well known scoring systems.
+The main features of \pkg{icd} exposed to the user fall into three groups:
+those which calculate comorbidities from diagnostic codes; those which
+interpret and convert ICD data; and, those which use comorbidity results to
+calculate risk using well known scoring systems.
 
 ## User-facing
 
 - Comorbidity computations
-  - compute comorbidities based on ICD-9 or ICD-10 codes
+  - compute comorbidities based on any derivates of ICD-9 or ICD-10 codes, such as ICD-10-CM
   - offer a framework for comorbidity computations based on other medical codes
 - ICD code processing and comprehension
   - validate ICD codes
@@ -587,7 +592,7 @@ a tree-based data structure. For ICD-10, this is done at the same time as Step
 ### Step 3.
 
 Perform matrix multiplication, which has $\mathcal{O}(R_m\cdot n)$ time
-complexity where $R_m$ is the ratio of non-zero to zero elements per row. 
+complexity where $R_m$ is the ratio of non-zero to zero elements per row.
 
 For typical patient data, the mean is around five to ten codes per
 patient-visit, with many administrative data being limited to thirty. This low
@@ -608,7 +613,7 @@ bandwidth.
 
 ## Data preparation
 
-### ICD-9 
+### ICD-9
 
 [Step 1](#algostep1) <!--\ref{itm:dataprep}--> of the algorithm is only
 applicable to ICD-9 codes. The comorbidity maps for ICD-9 codes already contain
@@ -689,7 +694,7 @@ interest when analyzing the data. The memory access for a whole patient is
 therefore limited to a small (hopefully) contiguous chunk; with column-major
 matrix representation, the codes for a patient could be spread across system
 memory, particularly problematic when the data overflows into slow disk swap
-space. 
+space.
 
 The comorbidity matrix is also quite sparsely populated, but is
 implemented as a dense data structure in step \ref{itm:gendense} of the
@@ -836,7 +841,7 @@ workedexinput <- matrix(
     "", "C450", "I10", "H40001",
     "", "", "", "I10"))
 my_kable(
-  workedexinput, 
+  workedexinput,
   col.names = c("Patient-Visit", sprintf("Code %i", 1:3)),
   caption = paste("Four patient-visits with some ICD-10 codes in",
                   "`wide' format for worked example"))
@@ -991,35 +996,35 @@ shows the relative speed up \pkg{icd} offers in comparison to the alternatives.
 ```{r bench, echo=FALSE}
 fac <- 1e-3
 res <- structure(list(
-  datarows = c(10, 100, 1000, 10000, 1e+05, 1e+06, 1e+07), 
+  datarows = c(10, 100, 1000, 10000, 1e+05, 1e+06, 1e+07),
   icd = c(
     0.0010278929839842,
     0.00120355357648805,
     0.00180120998993516,
-    0.008042294124607, 
-    0.062866612104699, 
+    0.008042294124607,
+    0.062866612104699,
     1.573,
     15.609
     ),
   comorbidity = c(
-    0.0132215245394036, 
+    0.0132215245394036,
     0.0231163185089827,
-    0.111484928464051, 
+    0.111484928464051,
     1.00265117513482,
-    5.36533053999301, 
-    87.162, 
+    5.36533053999301,
+    87.162,
     10986.539
     ),
   medicalrisk = c(
-    0.00351565598975867, 
-    0.0102955044712871, 
-    0.0715644441079348, 
+    0.00351565598975867,
+    0.0102955044712871,
+    0.0715644441079348,
     0.756538210087456,
-    7.0441670359578, 
-    72.286, 
+    7.0441670359578,
+    72.286,
     854.759
-    )), 
-  row.names = c(NA, -7L), 
+    )),
+  row.names = c(NA, -7L),
   class = "data.frame")
 fit_res <- log10(res[4:7, ])
 icd_model <- lm(icd ~ datarows, data = fit_res)
@@ -1059,7 +1064,7 @@ xmin = 10
        xlim = c(xmin, max(res$datarows)),
        ylim = c(fac, max(c(res$medicalrisk, res$comorbidity))),
        xaxt = "n", yaxt = "n"
-  )  
+  )
   axis(1, 10^xseq, logxaxis)
   axis(2, 10^yseq, logyaxis)
   lines(res$datarows, res$comorbidity, col = colours["comorbidity"])
@@ -1092,8 +1097,8 @@ xmin = 10
   lines(rr$datarows, rr$icd, col = colours["icd"])
   lines(rr$datarows, rr$comorbidity, col = colours["comorbidity"])
   lines(rr$datarows, rr$medicalrisk, col = colours["medicalrisk"])
-  legend("topleft", inset = plt_inset, 
-         legend = names(rr[-1]), 
+  legend("topleft", inset = plt_inset,
+         legend = names(rr[-1]),
          fill = colours[names(rr[-1])])
 }
 ```
