@@ -1,26 +1,26 @@
 ---
 author:
   - name: Jack O. Wasey
-    affiliation: Children's Hospital of Philadelphia
+    affiliation: "Children's Hospital of Philadelphia"
+    email: \email{waseyj@chop.edu}
+    url: http://www.chop.edu/doctors/wasey-jack
     address: >
       3401 Civic Center Blvd.
       Philadelphia, PA 19104, USA
-      email: \email{waseyj@chop.edu}
-      url: http://www.chop.edu/doctors/wasey-jack
   - name: Steven M. Frank
     affiliation: Johns Hopkins Medical Institutions
+    email: sfrank3@jhmi.edu
+    url: https://www.hopkinsmedicine.org/profiles/results/directory/profile/1819685/steven-frank
     address: >
       1800 Orleans St.
       Baltimore, MD 21287, USA
-      email: sfrank3@jhmi.edu
-      url: https://www.hopkinsmedicine.org/profiles/results/directory/profile/1819685/steven-frank
   - name: Mohamed A. Rehman
-    affiliation: Johns Hopkins All Children's Hospital
+    affiliation: "Johns Hopkins All Children's Hospital"
+    email: rehman@jhmi.edu
+    url: http://www.jhmi.edu
     address: >
       501 6th Ave S.
       St Petersburg, FL 33701, USA
-      email: rehman@jhmi.edu
-      url: http://www.jhmi.edu
 title:
   plain: "icd: Efficient Computation of Comorbidities from ICD Codes Using Sparse Matrix Multiplication in R"
   formatted: |
@@ -55,9 +55,8 @@ preamble: |
   \raggedbottom
   \shortcites{quan_coding_2005,quan_updating_2011, Pope_RiskadjustmentMedicare_2004,Lee_Predictingmortalitypatients_2003,frank_risk-adjusted_2014,elixhauser_comorbidity_1998}
   \author{Jack O. Wasey\\Children's Hospital\\of Philadelphia \And Steven M. Frank\\Johns Hopkins Medical\\Institutions \And Mohamed A. Rehman\\Johns Hopkins All\\Children's Hospital}
-# graphicx, color, hyperref, ae, fancyverb and natbib are included by jss.cls
-biblio-style: jss
 documentclass: jss
+biblio-style: jss
 output:
   rticles::jss_article:
     keep_tex: true
@@ -79,6 +78,7 @@ pkgdown:
   extension: pdf
 ---
 ```{r comments, purl=FALSE, eval=FALSE, echo=FALSE}
+# graphicx, color, hyperref, ae, fancyverb and natbib are included by jss.cls
 # https://www.jstatsoft.org/pages/view/authors
 # https://www.jstatsoft.org/pages/view/style
 # generate replication code (done in Makefile for JSS submission, also manually
