@@ -65,7 +65,7 @@ release_questions <- function() {
     "manual render prebuilt efficiency & country-lang-vers vignettes, check correct in the tarball",
     "Do all examples look okay (not just run without errors)?",
     "Consider markdownlint mdl https://github.com/markdownlint/markdownlint",
-    "tools/publish.sh and note check for broken links",
+    "tools/publish.sh and note check for broken links, e.g. `linklint -host jackwasey.github.io/icd`",
     # code quality:
     "tools/test-plus.sh",
     "Use clang scan-build, with latest version of clang (clang-tools in apt)",
