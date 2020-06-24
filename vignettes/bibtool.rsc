@@ -2,10 +2,6 @@
 
 preserve.keys=on
 preserve.key.case=on
-pass.comments=on
+%pass.comments=on
 
-delete.field={abstract}
-delete.field={url}
-delete.field={pmcid}
-delete.field={pmid}
-delete.field={eprinttype}
+delete.field={abstract url eprint eprinttype pmcid pmid}

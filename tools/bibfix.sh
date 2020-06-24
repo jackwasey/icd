@@ -19,9 +19,9 @@ fi
 declare -i bad=0
 
 # make sure there are no unescaped underscores in the URLs:
-for bib in $(echo ./icd.bib ./icdjss.bib ./icdpkg.bib ./other.bib ./gplv3.bib ./*.bib | tr ' ' $'\n' | sort -u)
+for bib in *.bib
 do {
-    [[ -f "${bib}" ]] || continue
+    [[ -f "${bib}" ]] || { echo "${bib} not found. Continuing..."; continue; }
     echo "Working on ${bib}"
     if grep -q '[^\]_' "${bib}" | grep -v ^@
     then
