@@ -63,7 +63,7 @@ output:
 bibliography:
   - gplv3.bib
   - other.bib
-  - icdjss.bib
+  - icdjss-mac.bib
 vignette: >
   % The resuling PDF is included by vignettes/efficiency.Rnw which contains the Vignette info
   %\ %VignetteIndexEntry{icd: Efficient Computation of Comorbidities from ICD Codes Using Sparse Matrix Multiplication in R}
@@ -717,9 +717,9 @@ comorbidity map with five categories, and also in Figure
 appears in the first and third comorbidities, whereas the others are all unique
 to one comorbidity.
 
-<!-- TODO: check this reformat looks okay -->
+<!-- check this reformat looks okay. dollar-dollar must start at beginning of line. -->
 
-    $$ B_{p,q} =
+$$ B_{p,q} =
     \begin{matrix}
     1 & 0 & 0 & 0 & 0 \\
     1 & 0 & 0 & 0 & 0 \\
@@ -732,9 +732,7 @@ to one comorbidity.
     0 & 0 & 1 & 0 & 0 \\
     1 & 0 & 1 & 0 & 0 \\
     \vdots & \vdots & \vdots & \vdots & \vdots
-    \end{matrix}$$
-
-    \label{eq:bulk}
+    \end{matrix}$$\label{eq:bulk}
 
 ```{r comorbidmatrix, echo=FALSE, fig.cap="These are visualizations of some complete maps, black representing the appearance of a particular ICD code in a comorbidity column", dev="png", dpi=bitmap_dpi}
 cmbimage <- function(map, xlab, ...) {
