@@ -553,6 +553,41 @@ decimal divider.
 
 # Methods
 
+The algorithm comprises several steps in order that an efficient matrix operation will work. The steps are summarized in \ref{algorecap}, and are described in detail below.
+
+\begin{figure}[h]
+\centering
+\setlength{\fboxsep}{1em}
+\setlength{\fboxrule}{1pt}
+\fbox{%
+\begin{minipage}{12 cm}
+\begin{enumerate}
+  \def\labelenumi{\arabic{enumi}.}
+  \item Prepare
+  \begin{itemize}
+    \itemsep0em 
+    \def\labelenumii{\alph{enumii}.}
+      \item ICD-9: All permutations already in maps
+      \item ICD-10: String match to reduce map to relevant codes
+  \end{itemize}
+  \item Reduce the problem
+    \begin{enumerate}
+    \itemsep0em
+    \def\labelenumii{\alph{enumii}.}
+      \item Intersection of patient and map codes
+      \item Encode as integer indices
+      \item Generate sparse patient-visit matrix
+      \item Generate dense comorbidity matrix
+    \end{enumerate}
+  \item Perform matrix multiplication
+\end{enumerate}
+\end{minipage}
+}%
+\caption{Recap of algorithm}
+\label{algorecap}
+\end{figure}
+
+
 ## Algorithm for comorbidity computation
 
 The main internal feature of this software is the algorithm for assigning the
@@ -611,7 +646,7 @@ case: in this problem, only one dimension of one matrix grows with increasing
 patient-visits. These are asymptotic limits for time, not for memory or
 bandwidth.
 
-## Data preparation
+## Step 1: Data preparation
 
 ### ICD-9
 
@@ -638,7 +673,7 @@ three-digit codes -- then use partial string matching,[^notregex] combining
 steps \ref{itm:partialstring} and \ref{itm:intersect} during one scan of the
 patient data.
 
-## Problem reduction
+## Step 2: Problem reduction
 
 There are some major simplifications:
 
@@ -755,7 +790,7 @@ cmbimage <- function(map, xlab, ...) {
 }
 ```
 
-### Matrix multiplication
+## Step 3: Matrix multiplication
 
 This section first describes steps \ref{itm:gensparse} and \ref{itm:gendense}
 of the algorithm in Section \ref{algorithm-for-comorbidity-computation}. Let
