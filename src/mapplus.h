@@ -12,6 +12,7 @@ public:
   List map; // consider ListOf<IntegerVector>
   DenseMap mat;
   R_xlen_t rows() { return mat.rows(); }
+  R_xlen_t cols() { return mat.cols(); }
 };
 
 #endif // MAPPLUS_H

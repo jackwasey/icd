@@ -17,7 +17,7 @@
 
 # to regenerate quickly and test:
 # # e..g. export ICD_HOME=~/icd
-# autoreconf -fv && "${ICD_HOME:-.}/configure" --enable-icd-strip --enable-icd-shutup && cat "${ICD_HOME:-.}/src/Makevars" && grep -v -q '@' "${ICD_HOME:-.}/src/Makevars" || echo "MISSING REPLACEMENT"
+# autoreconf -fv && "${ICD_HOME:-.}/configure" --disable-icd-strip --enable-icd-shutup && cat "${ICD_HOME:-.}/src/Makevars" && grep -v -q '@' "${ICD_HOME:-.}/src/Makevars" || echo "MISSING REPLACEMENT"
 
 AC_PREREQ([2.62])
 AC_INIT(icd, [4.0.9.9000], [jack@jackwasey.com])
@@ -33,11 +33,11 @@ AC_CONFIG_MACRO_DIR([inst/m4])
 
 : ${R_HOME=$(R RHOME)}
 AC_MSG_CHECKING([R_HOME already set])
-AS_IF([ test -z "${R_HOME}" ], 
+AS_IF([ test -z "${R_HOME}" ],
       [
        AC_MSG_RESULT([No])
-       AC_MSG_ERROR([Cannot proceed.]) 
-       ], 
+       AC_MSG_ERROR([Cannot proceed.])
+       ],
        [
         AC_MSG_RESULT([${R_HOME}])
         R_BIN=[${R_HOME}/bin/R]
@@ -53,16 +53,16 @@ AS_IF([test "${CXX11-unset}" = unset ],
       [
        CXX11=`"${R_BIN}" CMD config CXX11`
        AC_MSG_RESULT([Setting ${CXX11}])
-       ], 
+       ],
        [AC_MSG_RESULT([Using pre-set ${CXX11}])]
        )
 
 AC_MSG_CHECKING([R CXX11STD])
-AS_IF([ test "${CXX11STD-unset}" = unset ], 
+AS_IF([ test "${CXX11STD-unset}" = unset ],
       [
        CXX11STD=`"${R_BIN}" CMD config CXX11STD`
        AC_MSG_RESULT([Setting R ${CXX11STD}]);
-       ], 
+       ],
        [AC_MSG_RESULT([Using existing ${CXX11STD}])]
        )
 
@@ -86,8 +86,8 @@ LIBS="${PKG_LIBS}"
 
 # try to shut up travis/r-hub builds with huge warning burden with default compiler settings (Eigen). Can't seem to do with MAKEFLAGS, or string of R CMD check --install-opts=.....
 ICD_SHUTUP_FLAG=""
-AC_ARG_VAR([ICD_SHUTUP], 
-           [[If ICD_SHUTUP is defined, it tells configure to try to silence all compiler warnings. Alternatively, use --enable-icd-shutup in configure, which will override ICD_SHUTUP, if it is set.]])
+AC_ARG_VAR([ICD_SHUTUP],
+           [[If ICD_SHUTUP is defined, it tells configure to try to silence all compiler warnings, especially from noise Rcpp and Eigen. Alternatively, use --enable-icd-shutup in configure, which will override ICD_SHUTUP.]])
 
 AC_ARG_ENABLE([icd_shutup], AS_HELP_STRING([--enable-icd-shutup], [Peaceful compilation]))
 
@@ -124,13 +124,14 @@ AS_IF([test ! "x${ac_pkg_openmp}" = xno], [ ICD_OPENMP_FLAG='$(SHLIB_OPENMP_CXXF
 AC_SUBST(ICD_OPENMP_FLAG)
 
 DO_KEEP_MAKEVARS="${ICD_KEEP_MAKEVARS}"
-AC_ARG_VAR([ICD_KEEP_MAKEVARS], 
+AC_ARG_VAR([ICD_KEEP_MAKEVARS],
            [If defined, the makefile contents will be included in the built binary, to help with debugging])
 #Always write the stub as default to not include Makevars content
 echo "unsigned char Makevars[[]] = { 0x00 };" > src/makevars.h
 
-AC_ARG_ENABLE([icd_strip], AS_HELP_STRING([--enable-icd-strip], [Enable stripping of binary on Linux and MacOS]))
-AS_IF([test "x$enable_icd_strip" != "xno"], [ICD_STRIP=[tools/mk/strip.mk]], [ICD_STRIP=''])
+AC_ARG_ENABLE([icd_strip], AS_HELP_STRING([--disable-icd-strip], [Disable stripping of binary on Linux and MacOS]))
+AS_IF([test "x$disable_icd_strip" != "xyes"], [ICD_STRIP=[tools/mk/strip.mk]], [ICD_STRIP=''])
 AC_SUBST_FILE([ICD_STRIP])
+# ideally shutup would replace -I with -isystem for Rcpp, but it is not yet appended by R when running this script
 AC_SUBST(ICD_SHUTUP_FLAG)
 AC_OUTPUT

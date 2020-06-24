@@ -25,12 +25,20 @@ void printCornerSparse(PtsSparse x);
 #endif
 // # nocov end
 
+#ifdef ICD_TIME
+#include <iostream>
+#include <ctime>
+#include <ratio>
+#include <chrono>
+using namespace std::chrono;
+#endif // ICD_TIME
+
 void buildVisitCodesSparseWide(
   const DataFrame &data,
   const std::string id_name,
   const CV code_names,
   const bool validate,
-  Relevant &rh,
+  Relevant &relevant,
   // output
   PtsSparse &visMat,
   // output: can get this from sparse matrix at end? Needed?

@@ -1,7 +1,7 @@
 # From Writing R Extensions: "As from version 3.6.241, R selects a default C++ compiler with options that conform as far as possible42 to C++11. Packages which do not specify ‘R (>= 3.6.2)’ in their DESCRIPTION files need to explicitly require C++11, hence the rest of this section."
 # @configure_input@
-CXX_STD=CXX11
+CXX_STD=CXX17
 
-PKG_CXXFLAGS=-DEIGEN_PERMANENTLY_DISABLE_STUPID_WARNINGS @ICD_SHUTUP_FLAG@ @ICD_OPENMP_FLAG@ 
+PKG_CXXFLAGS=-DEIGEN_PERMANENTLY_DISABLE_STUPID_WARNINGS @ICD_SHUTUP_FLAG@ @ICD_OPENMP_FLAG@ -DICD_TIME -DRCPP_DEBUG_LEVEL=1 -DRCPP_DEBUG_MODULE_LEVEL=1
 PKG_LIBS=@ICD_OPENMP_FLAG@
 @ICD_STRIP@

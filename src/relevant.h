@@ -12,18 +12,18 @@ private:
 
 public:
   const List &src_map;
-  const CV relevant;
-  std::unordered_map<std::string, int> rel;
+  const CV str_codes;
+  std::unordered_map<std::string, int> rel_map;
   IHS hash;
   CV keys;
   // construct from a vector of codes only
-  Relevant(const List &map, const SEXP &codes)
-      : src_map(map), relevant(findRelevant(codes)), rel(findRel(relevant)),
-        hash(IHS(relevant).fill()), keys(hash.keys()) {}
+  Relevant(const List &map, const SEXP &codes_in)
+      : src_map(map), str_codes(findRelevant(codes_in)), rel_map(findRel(str_codes)),
+        hash(IHS(str_codes).fill()), keys(hash.keys()) {}
   // construct from a dataframe with given columns
-  Relevant(const List &map, const List &data, CV code_names)
-      : src_map(map), relevant(findRelevant(data, code_names)),
-        rel(findRel(relevant)), hash(IHS(relevant).fill()), keys(hash.keys()) {
+  Relevant(const List &map, const List &data, CV col_names)
+      : src_map(map), str_codes(findRelevant(data, col_names)),
+        rel_map(findRel(str_codes)), hash(IHS(str_codes).fill()), keys(hash.keys()) {
   }
   void buildCodeSetCV(const CV &codes);
   void buildCodeSetInt(const IntegerVector &codes);

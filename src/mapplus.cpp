@@ -11,7 +11,7 @@
 using namespace Rcpp;
 
 // MapPlus constructor - a reduced comobidity map for one computation
-MapPlus::MapPlus(const List &mapList, const Relevant &r) {
+MapPlus::MapPlus(const List &mapList, const Relevant &relevant) {
   // take a map of character vectors and reduce it to only relevant
   // codes using hashmap
   //
@@ -26,15 +26,15 @@ MapPlus::MapPlus(const List &mapList, const Relevant &r) {
     TRACE("character vector in input map");
     CV this_map_cmb = mapList[i];
     // make factor using existing hash, so R-indexed numbers.
-    IntegerVector this_cmb  = (IntegerVector)r.hash.lookup(this_map_cmb);
-    this_cmb.attr("levels") = (CharacterVector)r.keys;
+    IntegerVector this_cmb  = (IntegerVector)relevant.hash.lookup(this_map_cmb);
+    this_cmb.attr("levels") = (CharacterVector)relevant.keys;
     this_cmb.attr("class")  = "factor";
     this_cmb                = this_cmb[!is_na(this_cmb)];
     TRACE_VEC(this_cmb);
     map[cmb_name] = this_cmb;
   } // for
   DEBUG("Map reduced. Initializing the Eigen matrix");
-  mat = DenseMap(r.keys.size(), mapList.size());
+  mat = DenseMap(relevant.keys.size(), mapList.size());
   mat.setZero();
   DEBUG("mat rows: " << mat.rows() << ", cols: " << mat.cols());
   buildMatrix();

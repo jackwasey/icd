@@ -1280,12 +1280,13 @@ Optional Features:
   --enable-FEATURE[=ARG]  include FEATURE [ARG=yes]
   --enable-icd-shutup     Peaceful compilation
   --disable-openmp        do not use OpenMP
-  --enable-icd-strip      Enable stripping of binary on Linux and MacOS
+  --disable-icd-strip     Disable stripping of binary on Linux and MacOS
 
 Some influential environment variables:
   ICD_SHUTUP  [If ICD_SHUTUP is defined, it tells configure to try to silence
-              all compiler warnings. Alternatively, use --enable-icd-shutup in
-              configure, which will override ICD_SHUTUP, if it is set.]
+              all compiler warnings, especially from noise Rcpp and Eigen.
+              Alternatively, use --enable-icd-shutup in configure, which will
+              override ICD_SHUTUP.]
   CXX         C++ compiler command
   CXXFLAGS    C++ compiler flags
   LDFLAGS     linker flags, e.g. -L<lib dir> if you have libraries in a
@@ -2550,12 +2551,13 @@ if test "${enable_icd_strip+set}" = set; then :
   enableval=$enable_icd_strip;
 fi
 
-if test "x$enable_icd_strip" != "xno"; then :
+if test "x$disable_icd_strip" != "xyes"; then :
   ICD_STRIP=tools/mk/strip.mk
 else
   ICD_STRIP=''
 fi
 
+# ideally shutup would replace -I with -isystem for Rcpp, but it is not yet appended by R when running this script
 
 cat >confcache <<\_ACEOF
 # This file is a shell script that caches the results of configure

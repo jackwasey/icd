@@ -58,7 +58,7 @@ context("matmul cpp") {
                       _["stringsAsFactors"] = true);
   test_that("make a relevant object with character vectors") {
     Relevant r1(map, v1);
-    expect_true(r1.relevant.size() == v1.size());
+    expect_true(r1.str_codes.size() == v1.size());
     expect_true(r1.hash.size() == v1.size());
     expect_true(r1.keys.size() == v1.size());
     Relevant r2(map, v2);
@@ -66,7 +66,7 @@ context("matmul cpp") {
 
   test_that("make a relevant object with character vectors") {
     Relevant r0(map_v1, v2);
-    expect_true(r0.relevant.size() == 0);
+    expect_true(r0.str_codes.size() == 0);
     expect_true(r0.hash.size() == 0);
     expect_true(r0.keys.size() == 0);
   }
@@ -90,11 +90,11 @@ context("matmul cpp") {
 
   test_that("make a relevant object with map with matching items split") {
     Relevant r12(map_v12, v1);
-    expect_true(r12.relevant.size() == 1);
+    expect_true(r12.str_codes.size() == 1);
     expect_true(r12.hash.size() == 1);
     expect_true(r12.keys.size() == 1);
     Relevant r12b(map_v12, v2);
-    expect_true(r12b.relevant.size() == 1);
+    expect_true(r12b.str_codes.size() == 1);
     expect_true(r12b.hash.size() == 1);
     expect_true(r12b.keys.size() == 1);
   }
@@ -115,14 +115,14 @@ context("matmul cpp") {
   test_that("TEMPORARY! use rel unordered map test lookup") {
     Relevant r12(map, df1, CharacterVector::create("dx0", "dx1"));
     RelMap::iterator got;
-    got = r12.rel.find("V10");
-    expect_true(got != r12.rel.end());
-    got = r12.rel.find("V11");
-    expect_true(got != r12.rel.end());
-    got = r12.rel.find("V12");
-    expect_true(got != r12.rel.end());
-    got = r12.rel.find("V13");
-    expect_true(got != r12.rel.end());
+    got = r12.rel_map.find("V10");
+    expect_true(got != r12.rel_map.end());
+    got = r12.rel_map.find("V11");
+    expect_true(got != r12.rel_map.end());
+    got = r12.rel_map.find("V12");
+    expect_true(got != r12.rel_map.end());
+    got = r12.rel_map.find("V13");
+    expect_true(got != r12.rel_map.end());
   }
 }
 #endif
