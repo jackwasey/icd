@@ -38,8 +38,10 @@ do {
 			's/[[:space:]]+'"${del}"'[[:space:]]+=[[:space:]]+\{[^}]*\},\n//g' \
 			"${bib}"; }
 		done
-		bibtool -s -i "${bib}" -o "${bib}" -- preserve.key.case=on
-		bibtool -s -i "${bib}" -o "${bib}" -- "delete.field = { abstract }"
+		bibtool -s -i "${bib}" -o "${bib}" -r bibtool.rsc
+		#bibtool -s -i "${bib}" -o "${bib}" -- preserve.key.case=on
+		#bibtool -s -i "${bib}" -o "${bib}" -- "delete.field = { abstract }"
+		#bibtool -s -i "${bib}" -o "${bib}" -- "delete.field = { url }"
 	}
 done
 
