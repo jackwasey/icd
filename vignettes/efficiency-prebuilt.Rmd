@@ -285,13 +285,33 @@ ICD-10 codes has been included in \pkg{icd}, alongside the AHRQ mappings.
 
 ## Medical codes
 
-Medical coding has a complicated history beginning with epidemiology to enable basic understanding of global health and causes of death. 
-There are now several major, with many countries having tailored the WHO editions to their own needs. The parent resource for ICD codes is the WHO, which recently defined [ICD-11](https://icd.who.int/browse11), although [ICD-10](https://icd.who.int/browse10) remains widely used. Examples of countries with national modifications are [France](https://www.atih.sante.fr/plateformes-de-transmission-et-logiciels/logiciels-espace-de-telechargement), Belgium](https://www.health.belgium.be/fr/icd-10-be-manuel-de-codage-icd-10-be-v30-version-2019-pdf), and the USA.
+Medical coding has a complicated history beginning with epidemiology to enable
+basic understanding of global health and causes of death.  There are now
+several major, with many countries having tailored the WHO editions to their
+own needs. The parent resource for ICD codes is the WHO, which recently defined
+[ICD-11](https://icd.who.int/browse11), although
+[ICD-10](https://icd.who.int/browse10) remains widely used. Examples of
+countries with national modifications are
+[France](https://www.atih.sante.fr/plateformes-de-transmission-et-logiciels/logiciels-espace-de-telechargement),
+Belgium](https://www.health.belgium.be/fr/icd-10-be-manuel-de-codage-icd-10-be-v30-version-2019-pdf),
+and the USA.
 
-The USA in particular has made extensive modifications and extensions, forming their Clinical Modification, resulting in [ICD-9-CM](https://www.cms.gov/Medicare/Coding/ICD9ProviderDiagnosticCodes/codes) and [ICD-10-CM](https://www.cms.gov/Medicare/Coding/ICD10/index?redirect=/ICD10), with a focus on money, but with collateral benefits in research and public health. There are
-codes for diagnoses, procedures, and causes and
-circumstances of disease or injury. Codes sometimes have detail beyond what
-seems useful for routine clinical care, for example:
+The USA in particular has made extensive modifications and extensions, forming
+their Clinical Modification, resulting in
+[ICD-9-CM](https://www.cms.gov/Medicare/Coding/ICD9ProviderDiagnosticCodes/codes)
+and
+[ICD-10-CM](https://www.cms.gov/Medicare/Coding/ICD10/index?redirect=/ICD10),
+with a focus on money, but with collateral benefits in research and public
+health. There are codes for diagnoses, procedures, and causes and circumstances
+of disease or injury.  Many years of ICD-9 data remain in the electronic health
+records era, with ICD-9-CM being used from 1996 to 2011. The WHO ICD-9 codes
+were in use for global health from 1979 to 1998.<!--
+https://www.cdc.gov/nchs/icd/icd9.htm and
+https://www.cdc.gov/nchs/icd/icd9cm.htm -->
+
+The Clinical Modification codes sometimes have detail beyond what seems useful
+for routine clinical care, whereas the WHO editions, with their basis in global
+health, are broader., For example, ICD-10-CM has:
 
 ```{r suckedintoengine}
 library("icd")
