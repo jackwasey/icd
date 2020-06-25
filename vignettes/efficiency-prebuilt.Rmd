@@ -338,8 +338,7 @@ transparent offline usage thereafter. Users are asked for their permission
 before internet access or cache files are created.
 
 ```{r results="asis", echo=FALSE}
-who_fr_ex <- '
-\\begin{CodeChunk}
+who_fr_ex <- '\\begin{CodeChunk}
 \\begin{CodeInput}
 explain_code(as.icd10who("R11"), lang = "fr")
 \\end{CodeInput}
@@ -348,6 +347,10 @@ explain_code(as.icd10who("R11"), lang = "fr")
 \\end{CodeOutput}
 \\end{CodeChunk}'
 cat(who_fr_ex)
+```
+
+```{r vomissements}
+explain_code(as.icd10who("R11"), lang = "fr")
 ```
 
 They may also be downloaded explicitly using `fetch_icd10who2008_fr(save_data =
@@ -581,7 +584,7 @@ decimal divider.
 
 # Methods
 
-The algorithm comprises several steps in order that an efficient matrix operation will work. The steps are summarized in Figure \ref{algorecap}, and are described in detail below.
+The algorithm comprises several steps in order that an efficient matrix operation will work. The steps are summarized in Figure \ref{algorecap}, and and detailed below, followed by a [worked example](#workedex).
 
 \begin{figure}[ht]
 \centering
@@ -607,7 +610,8 @@ The algorithm comprises several steps in order that an efficient matrix operatio
       \item Generate sparse patient-visit matrix
       \item Generate dense comorbidity matrix
     \end{enumerate}
-  \item Perform matrix multiplication
+  \item Matrix multiplication
+  \item Label and optionally restructure output
 \end{enumerate}
 \end{minipage}
 }%
@@ -615,28 +619,86 @@ The algorithm comprises several steps in order that an efficient matrix operatio
 \label{algorecap}
 \end{figure}
 
-
 ## Algorithm for comorbidity computation
 
 The main internal feature of this software is the algorithm for assigning the
 diagnostic codes of a patient into comorbidities. The core of this
 implementation is a matrix multiplication, but this is only possible with
-careful pre-processing.
+careful pre-processing, and some post-processing to correctly label the output matrix. A data frame or a matrix is returned, optionally re-ordering the output to match the user's order of patient-visits.
 
 ### Step 1 {#algostep1}
 
-<!-- label{itm:dataprep} -->
+ICD-9 and ICD-10 data preparation differs. As there are fewer ICD-9 codes, and far fewer permutations permissible according to the definition, all possible ICD-9 codes are pre-calculated in ICD-9 maps, avoiding string processing in later steps. ICD-10 codes are handled differently.
 
-ICD-9 and ICD-10 data preparation differs:
+#### ICD-9
 
-- ICD-9: all possible ICD-9 codes are pre-calculated in ICD-9 maps.
-- \label{itm:partialstring} ICD-10: Partial matching to create map with
-  relevant codes.[^notregex]: $\mathcal{O}(n)$
+The comorbidity maps for ICD-9 codes already contain
+all the syntactically valid permutations of codes in the hierarchy according to
+the ICD-9 and ICD-9-CM specifications. This is a super-set of the codes actually in use, and anticipates both international variations and future extensions, assuming unknown ICD-9 follow the defined syntax. Exact matching can be done in subsequent steps. The generation of the ICD-9 maps is done at package creation time, using internal functions which
+are included for reproducibility, as seen in: `icd:::icd10_generate_map_quan_elix`, and
+`icd:::icd9_parse_ahrq_sas`.
 
-### Step 2
+For example, the Elixhauser ICD-9 map generation contains the following for list item for congestive heart failure (CHF):
 
-Reduce the problem to a matrix multiplication:
-<!-- % TODO: check this looks okay after re-flow. -->
+```{r icd9chfmap, eval=FALSE, echo=TRUE}
+CHF <- c(
+  "I099", "I110", "I130", "I132", "I255", "I420", "I425", "I426",
+  "I427", "I428", "I429",
+  "I43", "I50", "P290"
+)
+```
+
+that expands to 117 unique codes:
+
+```{r icd9chfmap2, eval=TRUE}
+icd9_map_elix$CHF
+```
+
+#### ICD-10
+
+\label{itm:partialstring}Many more ICD-10 codes are defined than there are for ICD-9, especially so for ICD-10-CM. In addition, with a greater number of suffices and modifiers, the number of permutations of possible ICD-10 codes is huge, so pre-computing comprehensive comorbidity maps is not feasible. partial matching to create map with
+  relevant codes. This partial matching is not based on regular expressions, but
+simply identifying whether the more significant characters of a longer code
+match a known parent. e.g., using the previous example, if S62.6 appeared in a
+comorbidity map, then S62.607S would be matched. $\mathcal{O}(n)$
+
+The solution is to
+have ICD-10 comorbidity maps that only include the level of detail specified by
+the original authors of the comorbidity maps -- often just the top-level
+three-digit codes -- then use partial string matching, combining
+steps \ref{itm:partialstring} and \ref{itm:intersect} during one scan of the
+patient data.
+
+The ICD-10 method can be applied to any input strings, which need not be medical codes. Any coding scheme with a lexicographically defined hierarchy will work.
+
+For example, the Quan-Deyo ICD-10 map contains the following for CHF:
+```{r icd10chf}
+icd10_map_quan_deyo$CHF
+```
+
+Note that I50 appears here, but any of the following patient-visit ICD-10 codes would match.
+
+```{r icd10chf2, eval=TRUE, echo=TRUE}
+grep(pattern = "I50", icd10cm2019$code, value = TRUE)
+# I50 should match exactly:
+icd10_comorbid_quan_deyo(data.frame(id = 1, code = "I50"))[1, "CHF"]
+# I502 is a defined ICD-10-CM code
+explain_code("I502")
+icd10_comorbid_quan_deyo(data.frame(id = 1, code = "I502"))[1, "CHF"]
+# a fictitious code anywhere beneath I50 should match:
+is_defined("I502X9")
+icd10_comorbid_quan_deyo(data.frame(id = 1, code = "I502X9"))[1, "CHF"]
+```
+Similarly, if a patient has a more general code, it should not match a more specific code in an ICD-10 map. I099 appears in the map above, but, if a patient was assigned I09, should not match, since it may well include diagnoses not intended by the map author.
+
+```{r icd10chf3}
+is_defined("I09")
+explain_code("I09")
+icd10_comorbid_quan_deyo(data.frame(id = 1, code = "I09"))[1, "CHF"]
+```
+
+### Step 2 Reduce to matrix multiplication {#algostep2}
+
 
 a. \label{itm:intersect} Compute the intersection of ICD codes from the patient
 data and the comorbidity map of interest: $\mathcal{O}(\log{}n)$ for time with
@@ -652,58 +714,7 @@ a tree-based data structure. For ICD-10, this is done at the same time as Step
   for each comorbidity, and one row for each ICD code: $\mathcal{O}(1)$ in
   relation to $n$ patient-visits.
 
-### Step 3
-
-Perform matrix multiplication, which has $\mathcal{O}(R_m\cdot n)$ time
-complexity where $R_m$ is the ratio of non-zero to zero elements per row.
-
-For typical patient data, the mean is around five to ten codes per
-patient-visit, with many administrative data being limited to thirty. This low
-number compares favorably to the matrix width of tens of thousands.[^crs]
-
-[^notregex]: This partial matching is not based on regular expressions, but
-simply identifying whether the more significant characters of a longer code
-match a known parent. e.g., using the previous example, if S62.6 appeared in a
-comorbidity map, then S62.607S would be matched.
-
-[^crs]: Sparse matrix multiplication with dense matrices is already
-$\mathcal{O}(n)$ using the widespread Compressed Row -- or Column -- Storage
-(CRS or CCS) scheme. Even if dense matrix multiplication were used, it would
-still be $\mathcal{O}(n)$, despite being $\mathcal{O}(n^3)$ in the general
-case: in this problem, only one dimension of one matrix grows with increasing
-patient-visits. These are asymptotic limits for time, not for memory or
-bandwidth.
-
-## Step 1: Data preparation
-
-### ICD-9
-
-[Step 1](#algostep1) <!--\ref{itm:dataprep}--> of the algorithm is only
-applicable to ICD-9 codes. The comorbidity maps for ICD-9 codes already contain
-all the syntactically valid permutations of codes in the hierarchy according to
-the ICD-9 specification. This is a superset of the codes with definitions. This
-means exact matching can be done in subsequent steps. The pre-calculation of
-the ICD-9 maps is done at package creation time, using internal functions which
-are included for reproducibility. These may be seen in the function
-`update_everything`, e.g., `icd10_generate_map_quan_elix`, and
-`icd9_parse_ahrq_sas`, which parses \proglang{SAS} source code to generate a
-map.
-
-### ICD-10
-
-ICD-10 codes are more complex and have many more possible permutations: the
-same ICD-9 technique could be used, but the ICD-10 maps would be huge, and
-vulnerable to unexpected modifications; for example, a national ICD-10 variant
-using a localized letter suffix which would not be captured. The solution is to
-have ICD-10 comorbidity maps that only include the level of detail specified by
-the original authors of the comorbidity maps -- often just the top-level
-three-digit codes -- then use partial string matching,[^notregex] combining
-steps \ref{itm:partialstring} and \ref{itm:intersect} during one scan of the
-patient data.
-
-## Step 2: Problem reduction
-
-There are some major simplifications:
+Some major simplifications are possible:
 
 1. Only a fraction of possible ICD codes typically appear in health data, in
    step \ref{itm:intersect}
@@ -736,6 +747,30 @@ solutions exist.
 [^factor]: \proglang{R} uses a data structure called a `factor` in which each
 element is stored as an integer index into an array of strings. The strings are
 unique, whereas the integers may be repeated.
+### Step 3: Matrix multiplication {#algostep3}
+
+Perform matrix multiplication, which has $\mathcal{O}(R_m\cdot n)$ time
+complexity where $R_m$ is the ratio of non-zero to zero elements per row.
+
+For typical patient data, the mean is around five to ten codes per
+patient-visit, with many administrative data being limited to thirty. This low
+number compares favorably to the matrix width of tens of thousands.[^crs]
+
+[^crs]: Sparse matrix multiplication with dense matrices is already
+$\mathcal{O}(n)$ using the widespread Compressed Row -- or Column -- Storage
+(CRS or CCS) scheme. Even if dense matrix multiplication were used, it would
+still be $\mathcal{O}(n)$, despite being $\mathcal{O}(n^3)$ in the general
+case: in this problem, only one dimension of one matrix grows with increasing
+patient-visits. These are asymptotic limits for time, not for memory or
+bandwidth.
+
+### Step 4: Transform back to user-requested structure
+
+
+
+## Step 2: Problem reduction
+
+
 
 ### Sparse matrix representation
 
