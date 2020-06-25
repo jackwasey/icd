@@ -204,7 +204,7 @@ termdf <- as.data.frame(
          data = c(
            "comorbidity", "broad category of disease, e.g., Cancer",
            "comorbidity map",
-           "set of comorbidities, each defined by diagnostic codes",
+           "set of comorbidities, each comorbidity defined by set of codes",
            "patient-visit",
            paste("record identifier, unique for each",
                  "encounter with a patient, but could",
@@ -466,7 +466,7 @@ each individual code. This is partly a function of the various annual and
 international revisions of ICD codes, and also the need for brevity in
 publications, so ranges of codes are specified. For example, in the Valvular
 Heart Disease comorbidity in the ICD-9 Elixhauser scheme, we see it contains
-the range 394.0 -- 397.1 . In the ICD-10 version of the Elixhauser map, there
+the range 394.0--397.1 . In the ICD-10 version of the Elixhauser map, there
 are many top-level codes, such as I34, I35 and I36, which themselves are never
 or rarely used for diagnostic coding. Therefore, there are few or no exact
 matches between candidate ICD codes and the codes or ranges in the
@@ -483,7 +483,7 @@ multi-hospital patient registries often have many more. Initial work using pure
 minutes for about ten thousand patients. Although the problem is
 parallelizable, performance analysis on early versions using string matching
 showed that there was a lot of pressure on the CPU caches, so massive
-parallelization -- when even an option -- would have had diminishing returns
+parallelization---if even an option---would have had diminishing returns
 with scaling. This is demonstrated by the benchmarks in the
 [Results](#results).
 
@@ -660,12 +660,12 @@ icd9_map_elix$CHF
   relevant codes. This partial matching is not based on regular expressions, but
 simply identifying whether the more significant characters of a longer code
 match a known parent. e.g., using the previous example, if S62.6 appeared in a
-comorbidity map, then S62.607S would be matched. $\mathcal{O}(n)$
+comorbidity map, then S62.607S would be matched. More detailed examples are shown later in this section. This computation tends to $\mathcal{O}(n)$ as, $n$ (number of patient-visits) increases. This is because the comorbidity map size is small, so the string matching within each set of codes in the map becomes insignificant.
 
 The solution is to
-have ICD-10 comorbidity maps that only include the level of detail specified by
-the original authors of the comorbidity maps -- often just the top-level
-three-digit codes -- then use partial string matching, combining
+use ICD-10 comorbidity maps that only include the level of detail specified by
+the creators of the comorbidity maps [e.g., @quan_coding_2005;
+@elixhauser_comorbidity_1998], then use partial string matching, combining
 steps \ref{itm:partialstring} and \ref{itm:intersect} during one scan of the
 patient data.
 
@@ -689,6 +689,7 @@ icd10_comorbid_quan_deyo(data.frame(id = 1, code = "I502"))[1, "CHF"]
 is_defined("I502X9")
 icd10_comorbid_quan_deyo(data.frame(id = 1, code = "I502X9"))[1, "CHF"]
 ```
+
 Similarly, if a patient has a more general code, it should not match a more specific code in an ICD-10 map. I099 appears in the map above, but, if a patient was assigned I09, should not match, since it may well include diagnoses not intended by the map author.
 
 ```{r icd10chf3}
@@ -757,20 +758,22 @@ patient-visit, with many administrative data being limited to thirty. This low
 number compares favorably to the matrix width of tens of thousands.[^crs]
 
 [^crs]: Sparse matrix multiplication with dense matrices is already
-$\mathcal{O}(n)$ using the widespread Compressed Row -- or Column -- Storage
-(CRS or CCS) scheme. Even if dense matrix multiplication were used, it would
-still be $\mathcal{O}(n)$, despite being $\mathcal{O}(n^3)$ in the general
+$\mathcal{O}(n)$ using the Compressed Row or Column Storage
+(CRS or CCS) scheme, where $n$ is the number of patient-visits.
+Even if dense matrix multiplication could be used, it would
+tend towards $\mathcal{O}(n)$, despite being $\mathcal{O}(n^3)$ in the general
 case: in this problem, only one dimension of one matrix grows with increasing
-patient-visits. These are asymptotic limits for time, not for memory or
-bandwidth.
+patient-visits. These are asymptotic limits for time, not accounting for memory or
+storage bandwidth.
 
 ### Step 4: Transform back to user-requested structure
 
+%TODO
 
 
 ## Step 2: Problem reduction
 
-
+%TODO move/fix next bit
 
 ### Sparse matrix representation
 
@@ -1070,6 +1073,22 @@ edited and processed by VAHHS-NSO, GMCB assumes no responsibility for errors in
 the data due to coding or processing by hospitals, VAHHS-NSO or any other
 organization, including \[the requestor\]."
 
+## Example: National Hospital Discharge Database (NHDS) {#nhdsex}
+
+The \pkg{nhds} package from [CRAN](https://cran.r-project.org/package=nhds) provides anonymous 2010 data from this US-based survey. This examples show extraction of a single comorbidity of interest, and showing prevalence varying with age.
+
+```{r nhdsexample}
+# start with all the adults
+adults2010 <- nhds::nhds_adult()
+# count patient-visits:
+nrow(adults2010)
+# use icd to determine which has congestive heart failure:
+adults2010$CHF <- comorbid_ahrq(adults2010)[, "CHF"]
+boxplot(age_years ~ CHF,
+        data = adults2010,
+        outline = FALSE,
+        ylab = "Age")
+```
 # Results
 
 There are now three active CRAN packages which calculate comorbidities:
@@ -1235,7 +1254,7 @@ disease in the ICD-9 Charlson map:
 '5064','5081','5088');
 ```
 
-Note that 497 -- 499 are undefined in ICD-9. What should be done if 497 appears
+Note that 497--499 are undefined in ICD-9. What should be done if 497 appears
 in a data set? Here an argument is made that this is completely invalid.
 Firstly, see the sub-chapter definitions:
 
@@ -1287,7 +1306,7 @@ comorbid_charlson(alice, return_df = TRUE)[["Pulmonary"]]
 
 For some mappings, no source code was available, but the comorbidities are
 described in journals using ranges. e.g., in the ICD-9 Elixhauser mapping, we
-find 243 -- 244.2 in the thyroid disease definition. This is a subset of the
+find 243--244.2 in the thyroid disease definition. This is a subset of the
 entire range of thyroid diseases in ICD-9: 244.3, 244.8 and 244.9 also exist.
 \pkg{icd} takes great care with false positives here by carefully excluding
 parent codes which might have been captured by a pattern matching approach. In
@@ -1304,6 +1323,28 @@ Note that 244 is too broad to fit the original Elixhauser description, because
 it implies all its children, which would go beyond 244.2.
 
 ## Other Functionality
+
+### Risk scores
+
+Scoring systems to estimate risk are commonly used in the medical literature, one example being the Charlson score. It is calculated by adding up comorbidities for a patient, with more for particular diseases, and avoiding double-counting (e.g., diabetes, and diabetes with complications). It is a non-negative integer.
+
+#### Example: Charlson score
+
+Extending the [NHDS example](#nhdsex), a user can show the relative risk of death on hospital admission in each category of patients:
+
+```{r nhdscharlsonexample}
+adults2010_charl <- adults2010
+adults2010_charl$charlson <- icd::charlson(adults2010)
+adults2010_charl["adm_type"] <- factor(adults2010_charl$adm_type, 
+                                    c("emergency", "urgent", "elective"))
+boxplot(charlson ~ adm_type,
+        data = adults2010_charl,
+        las = 2, 
+        varwidth = TRUE, 
+        outline = FALSE,
+        xlab = NULL,
+        ylab = "Charlson Score")
+```
 
 ### Validation
 
