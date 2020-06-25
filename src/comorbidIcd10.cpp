@@ -51,24 +51,19 @@ Rcpp::List simplifyMapLexicographic(const CV &pt_codes, const List map) {
       const CV &cmbCodes = map[j];
       for (R_xlen_t k = 0; k != cmbCodes.length(); ++k) {
         cmb_len = cmbCodes[k].size();
-        // if map code is longer than the patient's code, it'll never match
-        if (cmb_len > codeLen) continue; // TODO: or != ???
+        // if map code is longer than the patient's code, it should never match
+        if (cmb_len > codeLen) continue;
         // we always have at least 3 characters, so spare looping inside strcmp
-        TRACE("cmbCodes[k][0] = " << cmbCodes[k][0]);
-        TRACE("cmbCodes[k][1] = " << cmbCodes[k][1]);
-        TRACE("cmbCodes[k][2] = " << cmbCodes[k][2]);
-        TRACE("ptCode[k][0] = " << ptCode[0]);
-        TRACE("ptCode[k][1] = " << ptCode[1]);
-        TRACE("ptCode[k][2] = " << ptCode[2]);
         if (cmbCodes[k][0] != ptCode[0] || cmbCodes[k][1] != ptCode[1] ||
             cmbCodes[k][2] != ptCode[2])
           goto no_match;
         searchLen = std::min(cmb_len, codeLen);
-        TRACE("searchLen = " << searchLen);
         pos = 3;
+        // this could be a series of subtractions, in multiple bytes at a time,
+        // or simply write it out manually here up to, say, ten, then loop any
+        // more (for non-ICD or very unusual future ICD codes). Jump table?
         while (pos != searchLen) {
           if (cmbCodes[k][pos] != ptCode[pos]) {
-            TRACE("mismatch, going to no_match");
             goto no_match;
           }
           ++pos;
