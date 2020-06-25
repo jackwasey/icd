@@ -63,7 +63,7 @@ output:
 bibliography:
   - gplv3.bib
   - other.bib
-  - icdjss-mac.bib
+  - icdjss.bib
 vignette: >
   % The resuling PDF is included by vignettes/efficiency.Rnw which contains the Vignette info
   %\ %VignetteIndexEntry{icd: Efficient Computation of Comorbidities from ICD Codes Using Sparse Matrix Multiplication in R}
@@ -88,7 +88,7 @@ pkgdown:
 # pandoc 2.2 dependency which r-hub, CRAN etc did not have April 2019.
 # rmarkdown::render("vignettes/efficiency-prebuilt.Rmd")
 # # or, to juggle pkgbuild::build trashing inst/doc..., using .install_extras
-# rmarkdown::render("vignettes/efficiency-prebuilt.Rmd", output_dir = "vignettes")
+# rmarkdown::render("vignettes/efficiency-prebuilt.Rmd", output_dir = "vignettes", clean = FALSE)
 # Consider vim :SyntasticCheck markdown/mdl
 ```
 
@@ -138,7 +138,7 @@ my_kable <- function(x, col.names, caption, ...)
 ICD diagnostic codes are used to define tens of thousands of diseases.
 Originally from the World Health Organization (WHO; Organisation mondiale de la
 santé, OMS), their purpose was to allow epidemiologists to study global health
-[@WHO_Internationalclassificationdiseases_2018]. In the USA the
+[@WHO_InternationalClassificationDiseases_2018]. In the USA the
 WHO ICD codes have been extended for administrative purposes by the government
 Centers for Medicare and Medicaid Services (CMS), notably for billing
 [@CMS_CentersMedicareMedicaid_2018]. All over the world, ICD codes are the
@@ -561,9 +561,9 @@ decimal divider.
 
 # Methods
 
-The algorithm comprises several steps in order that an efficient matrix operation will work. The steps are summarized in \ref{algorecap}, and are described in detail below.
+The algorithm comprises several steps in order that an efficient matrix operation will work. The steps are summarized in Figure \ref{algorecap}, and are described in detail below.
 
-\begin{figure}[h]
+\begin{figure}[ht]
 \centering
 \setlength{\fboxsep}{1em}
 \setlength{\fboxrule}{1pt}
@@ -632,7 +632,7 @@ a tree-based data structure. For ICD-10, this is done at the same time as Step
   for each comorbidity, and one row for each ICD code: $\mathcal{O}(1)$ in
   relation to $n$ patient-visits.
 
-### Step 3.
+### Step 3
 
 Perform matrix multiplication, which has $\mathcal{O}(R_m\cdot n)$ time
 complexity where $R_m$ is the ratio of non-zero to zero elements per row.
@@ -869,8 +869,7 @@ in Table \ref{tab:workedexinput}, and this simple comorbidity map:
 list(
   "Rheumatic Heart Disease" = "I098",
   "Hypertension" = c("I10", "I11"),
-  "Heart failure" = c("I50", "I110")
-)
+  "Heart failure" = c("I50", "I110"))
 ```
 
 ```{r workedexinput, echo=FALSE, results="asis"}
@@ -898,10 +897,14 @@ There are several things to note, which represent common features in real data:
 - Patient two has code I0981, but only the parent code I098 appears in the
   comorbidity map.
 
+Stepping through the algorithm:
+
+1. These are ICD-10 codes, so there is some additional character string processing to do.
+
 Let $\boldsymbol{A}$ be a simplified set of patient-visits, where the columns
 represent the ICD-10 codes I0981 (rheumatic heart failure), I10 (essential
-hypertension), and I110 (hypertensive heart disease with heart failure). Again,
-each row is a different patient-visit.
+hypertension), and I110 (hypertensive heart disease with heart failure);
+each row represents a different patient.
 
 Let $\boldsymbol{B}$ be a simplified comorbidity map, where the columns
 represent congestive heart failure and hypertension, in that order. Note that
