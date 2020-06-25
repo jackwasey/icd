@@ -1,7 +1,25 @@
-# From Writing R Extensions: "As from version 3.6.241, R selects a default C++ compiler with options that conform as far as possible42 to C++11. Packages which do not specify ‘R (>= 3.6.2)’ in their DESCRIPTION files need to explicitly require C++11, hence the rest of this section."
-# @configure_input@
-CXX_STD=CXX17
+#!/usr/bin/env make
 
-PKG_CXXFLAGS=-DEIGEN_PERMANENTLY_DISABLE_STUPID_WARNINGS @ICD_SHUTUP_FLAG@ @ICD_OPENMP_FLAG@ -DICD_TIME -DRCPP_DEBUG_LEVEL=1 -DRCPP_DEBUG_MODULE_LEVEL=1
-PKG_LIBS=@ICD_OPENMP_FLAG@
+# From Writing R Extensions: "As from version 3.6.2, R selects a default C++
+# compiler with options that conform as far as possible to C++11. Packages
+# which do not specify ‘R (>= 3.6.2)’ in their DESCRIPTION files need to
+# explicitly require C++11, hence the rest of this section."
+
+# @configure_input@
+
+CXX_STD = CXX17
+
+PKG_CXXFLAGS = -DEIGEN_PERMANENTLY_DISABLE_STUPID_WARNINGS \
+			   @ICD_SHUTUP_FLAG@ \
+			   @ICD_OPENMP_FLAG@
+			   #-DICD_TIME \
+			   #-DRCPP_DEBUG_LEVEL=1 \
+			   #-DRCPP_DEBUG_MODULE_LEVEL=1 \
+
+PKG_LIBS = @ICD_OPENMP_FLAG@
+
+# by default, strip binary. This both saves space on user side, and has
+# possible performance benefits if whole binary can be cached more easily on
+# older machines.
+
 @ICD_STRIP@
