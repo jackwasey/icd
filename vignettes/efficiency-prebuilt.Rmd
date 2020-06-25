@@ -285,12 +285,11 @@ ICD-10 codes has been included in \pkg{icd}, alongside the AHRQ mappings.
 
 ## Medical codes
 
-Medical coding has a complicated history beginning with epidemiology, and
-snowballing to include medical billing and research. There are several major
-coding schemes, including the WHO ICD family, various national modifications
-and extensions of the WHO ICD codes, the extensive USA ICD-CM (Clinical
-Modification), and several unrelated schemes with similar goals. There are
-codes for diagnoses, procedures, medical equipment, and causes and
+Medical coding has a complicated history beginning with epidemiology to enable basic understanding of global health and causes of death. 
+There are now several major, with many countries having tailored the WHO editions to their own needs. The parent resource for ICD codes is the WHO, which recently defined [ICD-11](https://icd.who.int/browse11), although [ICD-10](https://icd.who.int/browse10) remains widely used. Examples of countries with national modifications are [France](https://www.atih.sante.fr/plateformes-de-transmission-et-logiciels/logiciels-espace-de-telechargement), Belgium](https://www.health.belgium.be/fr/icd-10-be-manuel-de-codage-icd-10-be-v30-version-2019-pdf), and the USA.
+
+The USA in particular has made extensive modifications and extensions, forming their Clinical Modification, resulting in [ICD-9-CM](https://www.cms.gov/Medicare/Coding/ICD9ProviderDiagnosticCodes/codes) and [ICD-10-CM](https://www.cms.gov/Medicare/Coding/ICD10/index?redirect=/ICD10), with a focus on money, but with collateral benefits in research and public health. There are
+codes for diagnoses, procedures, and causes and
 circumstances of disease or injury. Codes sometimes have detail beyond what
 seems useful for routine clinical care, for example:
 
@@ -306,8 +305,17 @@ in the public domain. Since the codes are hierarchical, and deviations from the
 WHO or US versions as implemented by other countries are minor, the algorithms
 described below are robust to unrecognized codes.  Unfortunately, the WHO
 exercises copyright over the international ICD-10 scheme, so \pkg{icd} (from
-version 4.0) prompts the user to download the codes when needed. Once they are
-downloaded, they may be used seamlessly.
+version 4.0) prompts the user to download the French or English WHO codes when
+requested. Once they are downloaded, they may be used seamlessly. The same
+applies to code descriptions from France, Belgium, and historic years for some
+countries.
+
+The core package data, with a recent ICD-9-CM and ICD-10-CM versions is
+included. Other data is downloaded as needed, and is cached avoiding ongoing
+need for an internet connection after this step. This can be done in bulk, or
+as needed either requirng one-off internet access for the requested data, and
+transparent offline usage thereafter. Users are asked for their permission
+before internet access or cache files are created.
 
 ```{r results="asis", echo=FALSE}
 who_fr_ex <- '
@@ -468,8 +476,8 @@ expressed in pseudocode as nested loops:
             record that comorbidity for the current patient-visit
 \end{Code}\label{pseudocode}
 
-This is an $\mathcal{O}(n)$ computation because the search element is limited
-to the fixed comorbidity map, thus making it asymptotically unimportant.
+For large $n$, this is an $\mathcal{O}(n)$ computation, where $n$ is the number of patients or visits because the search element is limited
+to the fixed comorbidity map, thus making the map scan or search asymptotically unimportant. There are only between around ten to a few hundred codes in each comorbidity group, with only the cancer-related group having more: 5865 at present for ICD-9. Each patient has a limited number of diagnoses, and this is often capped at 15 or 30 per visit in the USA. When there are millions of patients, with multiple visits to hospitals, the number of patients is dominant. For small numbers of patient visits, the search or scan in the above method does indeed become more significant, and much more dependent on the embedded search algorithm and hardware.
 
 The benchmarks in the [Results](#results) section show \pkg{icd} is much more
 efficient than string matching approaches.
