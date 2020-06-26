@@ -89,6 +89,7 @@ pkgdown:
 # rmarkdown::render("vignettes/efficiency-prebuilt.Rmd")
 # # or, to juggle pkgbuild::build trashing inst/doc..., using .install_extras
 # rmarkdown::render("vignettes/efficiency-prebuilt.Rmd", output_dir = "vignettes", clean = FALSE)
+# Note that rstudio will delete this after kniting into vignettes/
 # Consider vim :SyntasticCheck markdown/mdl
 ```
 
