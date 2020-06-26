@@ -58,6 +58,9 @@
 
 release_questions <- function() {
   c(
+    # first:
+    "ensure all packages are either at most recent CRAN versions, not bleeding edge, not old",
+    "tinytex::tlmgr_update()",
     "run release_sanity_checks() in tools/extra-tests.R",
     # data
     "clean data then download and update everything on all platforms",
