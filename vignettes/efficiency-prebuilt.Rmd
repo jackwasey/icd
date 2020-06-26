@@ -749,32 +749,6 @@ solutions exist.
 [^factor]: \proglang{R} uses a data structure called a `factor` in which each
 element is stored as an integer index into an array of strings. The strings are
 unique, whereas the integers may be repeated.
-### Step 3: Matrix multiplication {#algostep3}
-
-Perform matrix multiplication, which has $\mathcal{O}(R_m\cdot n)$ time
-complexity where $R_m$ is the ratio of non-zero to zero elements per row.
-
-For typical patient data, the mean is around five to ten codes per
-patient-visit, with many administrative data being limited to thirty. This low
-number compares favorably to the matrix width of tens of thousands.[^crs]
-
-[^crs]: Sparse matrix multiplication with dense matrices is already
-$\mathcal{O}(n)$ using the Compressed Row or Column Storage
-(CRS or CCS) scheme, where $n$ is the number of patient-visits.
-Even if dense matrix multiplication could be used, it would
-tend towards $\mathcal{O}(n)$, despite being $\mathcal{O}(n^3)$ in the general
-case: in this problem, only one dimension of one matrix grows with increasing
-patient-visits. These are asymptotic limits for time, not accounting for memory or
-storage bandwidth.
-
-### Step 4: Transform back to user-requested structure
-
-%TODO
-
-
-## Step 2: Problem reduction
-
-%TODO move/fix next bit
 
 ### Sparse matrix representation
 
@@ -857,7 +831,23 @@ cmbimage <- function(map, xlab, ...) {
 }
 ```
 
-## Step 3: Matrix multiplication
+### Step 3: Matrix multiplication {#algostep3}
+
+Perform matrix multiplication, which has $\mathcal{O}(R_m\cdot n)$ time
+complexity where $R_m$ is the ratio of non-zero to zero elements per row.
+
+For typical patient data, the mean is around five to ten codes per
+patient-visit, with many administrative data being limited to thirty. This low
+number compares favorably to the matrix width of tens of thousands.[^crs]
+
+[^crs]: Sparse matrix multiplication with dense matrices is already
+$\mathcal{O}(n)$ using the Compressed Row or Column Storage
+(CRS or CCS) scheme, where $n$ is the number of patient-visits.
+Even if dense matrix multiplication could be used, it would
+tend towards $\mathcal{O}(n)$, despite being $\mathcal{O}(n^3)$ in the general
+case: in this problem, only one dimension of one matrix grows with increasing
+patient-visits. These are asymptotic limits for time, not accounting for memory or
+storage bandwidth.
 
 This section first describes steps \ref{itm:gensparse} and \ref{itm:gendense}
 of the algorithm in Section \ref{algorithm-for-comorbidity-computation}. Let
@@ -918,6 +908,45 @@ c_{2,1} & c_{2,2} & \cdots & c_{2,q} \\
 \vdots  & \vdots  & \ddots & \vdots  \\
 c_{m,1} & c_{m,2} & \cdots & c_{m,q}
 \end{pmatrix}$$\label{eq:C}
+
+### Step 4: Transform back to user-requested structure
+
+The matrix product may need post-processing to return data structures expected by the user. By default a logical matrix is returned, but many users prefer data frames. Although it is not difficult for a user to make the conversion, \pkg{icd} takes responsibility for restoring any factors given in the input data, labelling rows and columns of the matrix, or inserting an identifier column to data frames. The identifier may be a vector of numeric or string values, or be a factor. In addition, the order of patient-visit rows in the output is not necessarily the same as the input.
+
+A typical user workflow involves gathering patient data, using \pkg{icd} to extract comorbidities, then merging the comorbidities with patient information such as age, height and weight. Therefore, \pkg{icd} does not by default restore the order of patients, which can be a significantly computationally expensive process with a large number of patient-visits, since merging will does not require ordered data. 
+
+Furthermore, if the patient-visit identifiers are not in 'long' form
+
+```{r transformoutput}
+library(icd)
+# Packaged sample Vermont data is already one row per patient, so order should be restored in output
+v <- comorbid_charlson(vermont_dx)
+identical(as.integer(rownames(v)), vermont_dx[["visit_id"]])
+
+vermont_shuffled <- vermont_dx[sample(seq_len(nrow(vermont_dx))), ]
+w <- comorbid_charlson(vermont_shuffled)
+identical(as.integer(rownames(w)), vermont_shuffled[["visit_id"]])
+
+# Packaged sample Uranium Pathology data is 'long' with one row per diagnostic code, multiple rows
+# per patient. The case id increases monotonically.
+u <- comorbid_charlson(uranium_pathology)
+uranium_shuffled <- uranium_pathology[sample(seq_len(nrow(uranium_pathology))), ]
+# avoiding restoring the order can be avoided, but the identifiers then differ in order
+s1 <- comorbid_charlson(uranium_shuffled, restore_id_order = FALSE)
+identical(as.integer(rownames(s1)), unique(uranium_shuffled[["case"]]))
+# the default does restore the order as given:
+s2 <- comorbid_charlson(uranium_shuffled)
+identical(as.integer(rownames(s2)), unique(uranium_shuffled[["case"]]))
+# and we can confirm that the output data is identical when re-ordered
+s3 <- s1[order(as.integer(rownames(s1))), ]
+s4 <- s2[order(as.integer(rownames(s2))), ]
+identical(as.integer(rownames(s3)), unique(uranium_pathology[["case"]]))
+identical(as.integer(rownames(s4)), unique(uranium_pathology[["case"]]))
+# and that the re-ordered results from the shuffled data are the same as for unshuffled
+identical(s3, u)
+identical(s4, u)
+```
+
 
 ## Worked example using ICD-10 codes {#workedex}
 
