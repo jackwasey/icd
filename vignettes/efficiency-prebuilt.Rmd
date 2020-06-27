@@ -199,6 +199,15 @@ h <- inverse.rle(structure(list(
        log = "y")
 ```
 
+A 'comorbidity' is used in this article to refer more specifically to a defined set of diagnostic codes for a comorbidity. For example, one can see the ICD-10 map for Hude Quan's published definition of the Charlson comorbidities, includes the following within the congestive heart failure (CHF) comorbidity:
+
+```{r cmbexplainchf, echo=FALSE}
+my_kable(
+  tail(explain_table(icd::icd10_map_quan_deyo$CHF)[c("code", "short_desc")]),
+  col.names = c("ICD-10 code", "Definition"),
+  caption = "Excerpt from an ICD-10 comorbidity map for CHF.")
+```
+
 ```{r terminology, echo=FALSE, eval=TRUE, results='asis'}
 termdf <- as.data.frame(
   matrix(byrow = TRUE, ncol = 2,
@@ -211,7 +220,9 @@ termdf <- as.data.frame(
                  "encounter with a patient, but could",
                  "represent a patient at one moment, or a",
                  "summation of all conditions a patient has",
-                 "ever had"))))
+                 "ever had"),
+           "CHF", "congestive heart failure, a comorbidity used in examples"
+           )))
 my_kable(termdf, col.names = c("Term", "Description"),
          align = c("l", "p{10 cm}"),
          caption = "Terminology")
@@ -546,13 +557,13 @@ between ICD-9-CM and ICD-10-CM, but the foundational work was done during the 20
 
 \pkg{icd} has some important internal design choices made to make it faithful to
 the intention of the original comorbidity map authors, accurate, and fast, even
-with big datasets.
+with hundreds of millions of rows of input data. 
 
-- ICD and comorbidity map data is extracted directly from published sources
+- During the package creation, ICD definitions and comorbidity map data is extracted directly from published sources as far as possible
   (journal articles and, where available, \proglang{SAS} code) in a
-  reproducible and verifiable manner
+  reproducible and verifiable manner; this is not done by the user. It is included so the process may be examined by a user to verify the source data is correctly processedl; and so changes can be tracked, which may have implications for reproducibility.
 - \proglang{C} and \proglang{C++} code and accelerated matrix algebra to give
-  accurate results quickly with big datasets, with an extensive test suite
+  accurate results quickly with big data-sets, with an extensive test suite.
 
 ## Included comorbidity maps
 
@@ -627,7 +638,9 @@ diagnostic codes of a patient into comorbidities. The core of this
 implementation is a matrix multiplication, but this is only possible with
 careful pre-processing, and some post-processing to correctly label the output matrix. A data frame or a matrix is returned, optionally re-ordering the output to match the user's order of patient-visits.
 
-### Step 1 {#algostep1}
+### Step 1 {#algostep1} Pre-processing user data
+
+\pkg{icd} takes care of accepting a range of possible input data structures.
 
 ICD-9 and ICD-10 data preparation differs. As there are fewer ICD-9 codes, and far fewer permutations permissible according to the definition, all possible ICD-9 codes are pre-calculated in ICD-9 maps, avoiding string processing in later steps. ICD-10 codes are handled differently.
 
@@ -639,7 +652,7 @@ the ICD-9 and ICD-9-CM specifications. This is a super-set of the codes actually
 are included for reproducibility, as seen in: `icd:::icd10_generate_map_quan_elix`, and
 `icd:::icd9_parse_ahrq_sas`.
 
-For example, the Elixhauser ICD-9 map generation contains the following for list item for congestive heart failure (CHF):
+For example, the Elixhauser ICD-9 map generation contains the following for list item for CHF:
 
 ```{r icd9chfmap, eval=FALSE, echo=TRUE}
 CHF <- c(
@@ -740,11 +753,20 @@ the comorbidity map, making matrix $\boldsymbol{A}$ narrower and matrix
 $\boldsymbol{B}$ shorter. String searching strategies miss this optimization.
 
 Referring back to the pseudocode in Section \ref{pseudocode}, integer
-representation would allow much faster binary or linear searches than repeated
+representation allows much faster binary or linear searches than repeated
 string pattern matching, but all this is avoided by a matrix multiplication.
+String matching requires transferring more memory, filling the CPU cache lines
+with data more quickly, then sequentially looping through characters; worse
+still, \proglang{R} stores strings in a global cache: although hashed, each
+string fetch is much more likely to require accessing a memory area not in the
+CPU cache, and \proglang{R}'s hash lookup itself is overhead in both CPU time
+and memory access.  Early benchmarking and profiling during development clearly
+showed string comparison was the bottleneck.
+
 Although the matrix multiplication probably performs more computations than
-needed, it has simpler flow control and is a problem for which highly-optimized
-solutions exist.
+needed (loop and string-based approaches could break if or when a match is
+found for one patient-visit, for one comorbidity), matrix multiplication is
+simpler highly-optimized by multiple libraries.
 
 [^factor]: \proglang{R} uses a data structure called a `factor` in which each
 element is stored as an integer index into an array of strings. The strings are
@@ -758,10 +780,10 @@ might affect about one in a million people: suppose one patient happened to
 have the disease in sample of a million patients: the remaining 999,999 must be
 marked as not having the disease, since the rare disease has its own column.
 
-Since this
-representation is used primarily to facilitate calculation of huge data sets, we
-ignore the fact that sparse format may be less efficient than dense for small
-data sets. This is done in step \ref{itm:gensparse} of the algorithm.
+Since this representation is used primarily to facilitate calculation of huge
+data sets, we ignore the fact that sparse format may be less efficient than
+dense for small data sets. This is done in step \ref{itm:gensparse} of the
+algorithm.
 
 Row-major representation is the storage of data in the computer consisting of
 the data in each row being stored, followed by the data in the next row, and so
@@ -911,15 +933,28 @@ c_{m,1} & c_{m,2} & \cdots & c_{m,q}
 
 ### Step 4: Transform back to user-requested structure
 
-The matrix product may need post-processing to return data structures expected by the user. By default a logical matrix is returned, but many users prefer data frames. Although it is not difficult for a user to make the conversion, \pkg{icd} takes responsibility for restoring any factors given in the input data, labelling rows and columns of the matrix, or inserting an identifier column to data frames. The identifier may be a vector of numeric or string values, or be a factor. In addition, the order of patient-visit rows in the output is not necessarily the same as the input.
+The matrix product may need post-processing to return data structures expected
+by the user. By default a logical matrix is returned, but many users prefer
+data frames. Although it is not difficult for a user to make the conversion,
+\pkg{icd} takes responsibility for restoring any factors given in the input
+data, labelling rows and columns of the matrix, or inserting an identifier
+column to data frames. The identifier may be a vector of numeric or string
+values, or be a factor. In addition, the order of patient-visit rows in the
+output is not necessarily the same as the input.
 
-A typical user workflow involves gathering patient data, using \pkg{icd} to extract comorbidities, then merging the comorbidities with patient information such as age, height and weight. Therefore, \pkg{icd} does not by default restore the order of patients, which can be a significantly computationally expensive process with a large number of patient-visits, since merging will does not require ordered data. 
+A typical user workflow involves gathering patient data, using \pkg{icd} to
+extract comorbidities, then merging the comorbidities with patient information
+such as age, height and weight. Therefore, \pkg{icd} does not by default
+restore the order of patients, which can be a significantly computationally
+expensive process with a large number of patient-visits, since merging will
+does not require ordered data. 
 
 Furthermore, if the patient-visit identifiers are not in 'long' form
 
 ```{r transformoutput}
 library(icd)
-# Packaged sample Vermont data is already one row per patient, so order should be restored in output
+# Packaged sample Vermont data is already one row per patient, so order should
+# be restored in output
 v <- comorbid_charlson(vermont_dx)
 identical(as.integer(rownames(v)), vermont_dx[["visit_id"]])
 
@@ -927,8 +962,8 @@ vermont_shuffled <- vermont_dx[sample(seq_len(nrow(vermont_dx))), ]
 w <- comorbid_charlson(vermont_shuffled)
 identical(as.integer(rownames(w)), vermont_shuffled[["visit_id"]])
 
-# Packaged sample Uranium Pathology data is 'long' with one row per diagnostic code, multiple rows
-# per patient. The case id increases monotonically.
+# Packaged sample Uranium Pathology data is 'long' with one row per diagnostic
+# code, multiple rows per patient. The case identifier increases monotonically.
 u <- comorbid_charlson(uranium_pathology)
 uranium_shuffled <- uranium_pathology[sample(seq_len(nrow(uranium_pathology))), ]
 # avoiding restoring the order can be avoided, but the identifiers then differ in order
@@ -987,7 +1022,8 @@ There are several things to note, which represent common features in real data:
 
 Stepping through the algorithm:
 
-1. These are ICD-10 codes, so there is some additional character string processing to do.
+1. These are ICD-10 codes, so there is some additional character string
+   processing to do.
 
 Let $\boldsymbol{A}$ be a simplified set of patient-visits, where the columns
 represent the ICD-10 codes I0981 (rheumatic heart failure), I10 (essential
@@ -995,7 +1031,7 @@ hypertension), and I110 (hypertensive heart disease with heart failure);
 each row represents a different patient.
 
 Let $\boldsymbol{B}$ be a simplified comorbidity map, where the columns
-represent congestive heart failure and hypertension, in that order. Note that
+represent CHF and hypertension, in that order. Note that
 110 is found in both these comorbidities.
 
 $$\boldsymbol{A} =
@@ -1105,7 +1141,10 @@ organization, including \[the requestor\]."
 
 ## Example: National Hospital Discharge Database (NHDS) {#nhdsex}
 
-The \pkg{nhds} package from [CRAN](https://cran.r-project.org/package=nhds) provides anonymous 2010 data from this US-based survey. This examples show extraction of a single comorbidity of interest, and showing prevalence varying with age.
+The \pkg{nhds} package from [CRAN](https://cran.r-project.org/package=nhds)
+provides anonymous 2010 data from this US-based survey. This examples show
+extraction of a single comorbidity of interest, and showing prevalence varying
+with age.
 
 ```{r nhdsexample}
 # start with all the adults
@@ -1201,6 +1240,15 @@ rr <- data.frame(datarows = res$datarows,
                        medicalrisk = res$medicalrisk / res$icd)
 ```
 
+```{r eval=TRUE,echo=FALSE}
+
+versus_fig_cap <- paste("Performance comparison of comorbidity packages up to
+10,000,000 rows, with 500,000 patient-visits and 20 comorbidities per visit.
+Models are fitted where the log-log relationship becomes linear, where rows >
+1,000. Using an eight core 3.40GHz CPU, 32GB RAM R 3.5.1 using Linux, kernel
+4.15. \\pkg{comorbidity} was run with and without parallel option, and the best
+strategy was chosen for each number of iterations."}
+```
 ```{r versus, echo=FALSE, fig.cap="Performance comparison of comorbidity packages up to 10,000,000 rows, with 500,000 patient-visits and 20 comorbidities per visit. Models are fitted where the log-log relationship becomes linear, where rows > 1,000. Using an eight core 3.40GHz CPU, 32GB RAM R 3.5.1 using Linux, kernel 4.15. \\pkg{comorbidity} was run with and without parallel option, and the best strategy was chosen for each number of iterations."}
 plt_inset <- 0.05
 xmin = 10
