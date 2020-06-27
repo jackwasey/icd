@@ -46,10 +46,11 @@ keywords:
   formatted: [medical informatics, administrative data, matrix algebra,
     "\\proglang{R}", "\\proglang{C++}", ICD, mapping]
   plain: [biomedical informatics, administrative data, matrix algebra, R, "C++", ICD, mapping]
-preamble: >
-  \pdftrailerid{}
+preamble: '\pdftrailerid{}
   \pdfsuppressptexinfo15
   \usepackage{longtable}
+  \usepackage{booktabs}
+  \usepackage{thumbpdf}
   \usepackage{amsmath}
   \raggedbottom
   \shortcites{
@@ -57,10 +58,18 @@ preamble: >
     Pope_RiskadjustmentMedicare_2004,
     Lee_Predictingmortalitypatients_2003,
     Frank_RiskadjustedClinicalOutcomes_2014,
+    tsugawa_comparison_2016,
+    Odisho_ClassicRiskAdjustment_2018a,
+    Bishop-Fitzpatrick_UsingMachineLearning_2018,
+    Kiyota_RiskOutcomesAortic_2017,
+    Lane_IdentificationManagementSepsis_2018,
+    Lane_ClassificationPredictionMortality_2019,
+    hand_validation_2016,
+    Mundell_PredictorsReceivingProsthesis_2016,
     elixhauser_comorbidity_1998}
-  \author{Jack O. Wasey\\\\Childrens Hospital\\of Philadelphia \And
+  \author{Jack O. Wasey\\Children''s Hospital\\of Philadelphia \And
   Steven M. Frank\\Johns Hopkins Medical\\Institutions \And
-  Mohamed A. Rehman\\Johns Hopkins All\\Childrens Hospital}
+  Mohamed A. Rehman\\Johns Hopkins All\\Children''s Hospital}'
 documentclass: jss
 biblio-style: jss
 output:
@@ -119,6 +128,7 @@ requireNamespace("rticles")
 fig.width = 6.5
 fig.height = fig.width / ((1 + sqrt(5)) / 2)
 bitmap_dpi = 600
+knitr::opts_chunk$set(verbose = TRUE)
 knitr::opts_chunk$set(fig.width = fig.width)
 knitr::opts_chunk$set(fig.height = fig.height)
 knitr::opts_chunk$set(cache = FALSE) # slower but okay, and error-prone to cache
@@ -138,52 +148,81 @@ kable_caption_bottom <- function(x) {
   y
 }
 
+clean_cap <- function(x) sub("[[:space:]]+", " ", x)
+# see https://bookdown.org/yihui/rmarkdown-cookbook/kable.html
+# longtable may not be needed, but booktabs looks important.
 my_kable <- function(x, col.names, caption, ...)
   kable_caption_bottom(
     knitr::kable(x,
-                 col.names = sprintf("%s", col.names),
-                 escape = FALSE,
+                 #col.names = sprintf("%s", col.names),
+                 col.names = col.names,
+                 escape = FALSE, # keep my latex markup
                  format = "latex",
-                 longtable = TRUE,
-                 caption = caption,
+                 #longtable = TRUE,
+                 booktabs = TRUE,
+                 caption = clean_cap(caption),
                  ...))
-clean_cap <- function(x) sub("[\\n\\r  ]+", " ", x)
 
-longtail_fig_cap <- clean_cap("Frequency distribution of ICD codes in 5,000
-pediatric hospital inpatients showing nearly 4,000 unique ICD codes; 1,401
-appear only once, making them and the many other low-frequency codes of low or
-negative value in inter-group comparisons.")
+longtail_fig_cap <- "Frequency distribution of ICD codes in 5,000 pediatric
+hospital inpatients showing nearly 4,000 unique ICD codes; 1,401 of them appear
+only once. Low-frequency codes like these are of minimal use when statistically
+comparing groups, unless they are categorized into comorbidities."
 
-versus_fig_cap <- clean_cap("Performance comparison of comorbidity
-packages up to 10,000,000 rows, with 500,000 patient-visits and 20
-comorbidities per visit.  Models are fitted where the log-log relationship
-becomes linear, where rows > 1,000. Using a four-core eight-thread 3.40GHz CPU, 32GB RAM R
-3.5.1 using Linux, kernel 4.15. \\pkg{comorbidity} was run with and without
-parallel option, and the best strategy was chosen for each number of
-iterations.")
+versus_fig_cap <- "Performance comparison of comorbidity packages up to
+10,000,000 rows, with 500,000 patient-visits and 20 comorbidities per visit.
+Models are fitted where the log-log relationship becomes linear, where rows >
+1,000. Using a four-core eight-thread 3.40GHz CPU, 32GB RAM R 3.5.1 using
+Linux, kernel 4.15. \\pkg{comorbidity} was run with and without parallel
+option, and the best strategy was chosen for each number of iterations."
 
-speedup_fig_cap <- clean_cap("Relative speed-up using icd compared to
-the alternatives, using the same numbers of patient-visits and comorbidities as
-in Figure \\ref{fig:versus}.")
+speedup_fig_cap <- "Relative speed-up using \\pkg{icd} compared to the
+alternatives, using the same numbers of patient-visits and comorbidities as in
+Figure \\ref{fig:versus}. The variation in the ratio of improvement \\pkg{icd}
+offers is likely due to the varying bottlenecks experienced by each package as
+the problem scales."
+
 ```
 
 # Introduction
 
 ICD diagnostic codes are used to define tens of thousands of diseases.
 Originally from the World Health Organization (WHO, or Organisation mondiale de
-la santé, OMS), their purpose was to allow epidemiologists to study global
-health [@WHO_InternationalClassificationDiseases_2018]. In the USA the WHO ICD
-codes have been extended for administrative purposes by the government Centers
-for Medicare and Medicaid Services (CMS), notably for billing
-[@CMS_CentersMedicareMedicaid_2018]. All over the world, ICD codes are the
-primary method by which diseases are recorded, often using national variants.
-This makes ICD codes important in many kinds of medical research, e.g., for
-defining national health metrics [@Lee_Predictingmortalitypatients_2003], and
-in many of clinical studies, especially those in which groups of patients are
-compared [e.g., @Frank_RiskadjustedClinicalOutcomes_2014]. \pkg{icd} was made to meet the need
-for ICD code interpretation in \proglang{R}, and, in particular, it is designed
-to compute comorbidities quickly, enabling a reproducible workflow when used
-with big or small data.
+la santé, OMS), they helped epidemiologists study global health
+[@WHO_InternationalClassificationDiseases_2018]. In the USA, the WHO ICD codes
+have been extended for administrative purposes by the government Centers for
+Medicare and Medicaid Services (CMS), notably for billing and the insurance
+industry [@CMS_CentersMedicareMedicaid_2018]. All over the world, ICD codes are
+used to record diseases and causes of death, sometimes using national variants.
+ICD codes are important in many kinds of medical research, e.g., for defining
+national health metrics [@Lee_Predictingmortalitypatients_2003]; and in
+clinical studies in which patients are compared, or risk is calculated [e.g.,
+@Frank_RiskadjustedClinicalOutcomes_2014].
+
+A widespread use of ICD codes is to show the differences between patient
+groups, often seen in the first table of published clinical studies [e.g.,
+@tsugawa_comparison_2016]. ICD codes are grouped in categories, such as liver
+disease and diabetes. Patients' categories of diseases are compared instead of
+directly trying to compare their diverse ICD codes. These categories are known
+as _comorbidites_.
+
+An unexpected use of \pkg{icd} with big national datasets was by Propublica for
+their Pulitzer finalist work exposing disparities in maternal health in the USA
+[@Pulitzer_FinalistStaffProPublica_2018; @Martin_LostMothers_2017].[^pulitzer]
+Scientific work citing \pkg{icd} spans a wide variety of research areas,
+including cancer [@Odisho_ClassicRiskAdjustment_2018a], autism
+[@Bishop-Fitzpatrick_UsingMachineLearning_2018], cardiac surgery
+[@Kiyota_RiskOutcomesAortic_2017], infectious disease
+[@Lane_IdentificationManagementSepsis_2018], emergency medicine
+[@Lane_ClassificationPredictionMortality_2019], nutrition
+[@hand_validation_2016], and rehabilition
+[@Mundell_PredictorsReceivingProsthesis_2016].
+
+[^pulitzer]: Use of this package discovered via personal communication with one of the authors from Propublica.
+
+\pkg{icd} was made to meet the need for ICD code interpretation in
+\proglang{R}, and to compute comorbidities quickly and robustly, enabling a
+reproducible workflow when used with big or small data, on big or small
+computers.
 
 ## What is a comorbidity?
 
@@ -201,12 +240,10 @@ problem.
 For example, a diabetic patient presents to hospital with a stroke: diabetes is
 the comorbidity and stroke is the presenting complaint. During or after an
 hospital admission, medical coders review the records and assign specific ICD
-(and other) codes. In this example, the patient might get the ICD-10 code E11.2
+ codes. In this example, the patient might get the ICD-10 code E11.2
 meaning 'Type 2 diabetes mellitus with renal complications', and I63.0 meaning
 'Cerebral infarction due to thrombosis of precerebral arteries'. In this case,
-the comorbidities might be regarded as: 'Diabetes' and 'Renal'. The term
-comorbidity generally refers to classes of diseases, not specific diagnoses,
-and that is how the term is used in the rest of this paper.
+the comorbidities might be regarded as: _Diabetes_ and _Renal_.
 
 ```{r longtail, eval=TRUE, echo=FALSE, fig.cap=longtail_fig_cap}
 h <- inverse.rle(structure(list(
@@ -233,22 +270,33 @@ h <- inverse.rle(structure(list(
 ```
 
 The term _comorbidity_ is used in this article to refer more specifically to a
-defined set of diagnostic codes for a comorbidity. For example, one can see the
-published Quan ICD-10 map for definition of the Charlson comorbidities,
-includes the following within the congestive heart failure (CHF) comorbidity:
+defined set of diagnostic codes for a comorbidity. In Table
+\ref{tab:cmbexplainchf}, one can see the published Quan ICD-10 map
+[@quan_coding_2005] defining ICD codes for the standard Charlson comorbidities,
+includes the following for congestive heart failure (CHF):
 
 ```{r cmbexplainchf, echo=FALSE}
+{
+chftail <- tail(
+  explain_table(
+    icd10_map_quan_deyo[["CHF"]])[c("code", "short_desc")]
+)
+rownames(chftail) <- NULL
 my_kable(
-  tail(explain_table(icd::icd10_map_quan_deyo[["CHF"]])[c("code", "short_desc")]),
+  chftail,
+  row.names = NA,
   col.names = c("ICD-10 code", "Definition"),
+  linesep = "", # only a few, so don't space every five lines.
   caption = "Excerpt from an ICD-10 comorbidity map for CHF.")
+}
 ```
 
 ```{r terminology, echo=FALSE, eval=TRUE, results='asis'}
 termdf <- as.data.frame(
   matrix(byrow = TRUE, ncol = 2,
          data = c(
-           "comorbidity", "broad category of disease, e.g., Cancer",
+           "comorbidity",
+           "broad category of disease, e.g., cancer. A set of diagnostic codes that are defined as belonging to this category of diseases.",
            "comorbidity map",
            "set of comorbidities, each comorbidity defined by set of codes",
            "patient-visit",
@@ -257,14 +305,13 @@ termdf <- as.data.frame(
                  "represent a patient at one moment, or a",
                  "summation of all conditions a patient has",
                  "ever had"),
-           "CHF", "congestive heart failure, a comorbidity used in examples"
+           "CHF",
+           "congestive heart failure, a comorbidity used in examples"
            )))
 my_kable(termdf, col.names = c("Term", "Description"),
-         align = c("l", "p{10 cm}"),
+         align = "lp{10cm}",
          caption = "Terminology")
 ```
-
-\newpage
 
 ## Uses of comorbidities
 
@@ -426,8 +473,8 @@ explain_code("100")
 ### Structure of an ICD code
 
 The following is a breakdown of an ICD-10-CM code, chosen to illustrate the
-hierarchical nature of the codes, and difference between WHO ICD-10 and
-ICD-10-CM\\\@. The following two codes are shared by the WHO and
+hierarchical nature of the codes, and differences between WHO ICD-10 and
+ICD-10-CM. The following two codes are shared by the WHO and
 ICD-10-CM definitions.
 
 ```{r exampleicdcodewho}
@@ -630,7 +677,7 @@ systems. Updated versions of these lists from
 \proglang{SAS} source code format, this package has internal functions to parse
 this \proglang{SAS} source code and generate R data structures. Some lists are
 transcribed directly from the published articles, but interpretation of
-\proglang{SAS} code used for the original publications is preferable.
+\proglang{SAS} code used for the original publications was chosen when the source ICD codes were given as ranges, or they were numerous.
 
 For example, here are the names of the comorbidities in the Charlson map:
 
@@ -652,7 +699,7 @@ decimal divider.
 
 The algorithm comprises several steps in order that an efficient matrix
 operation will work. The steps are summarized in Figure \ref{algorecap}, and
-and detailed below, followed by a worked example in Section \ref{workedex}.
+and detailed below, followed by examples from Section \ref{workedex}.
 
 ```{=latex}
 \begin{figure}[ht]
@@ -680,7 +727,7 @@ and detailed below, followed by a worked example in Section \ref{workedex}.
       \item Generate dense comorbidity matrix
     \end{enumerate}
   \item Matrix multiplication
-  \item Label and optionally restructure output
+  \item Label, then restructure output when requested
 \end{enumerate}
 \end{minipage}
 }%
@@ -696,6 +743,16 @@ careful pre-processing, and some post-processing to correctly label the output
 matrix. A data frame or a matrix is returned, optionally re-ordering the output
 to match the user's order of patient-visits.
 
+Some major simplifications are possible:
+
+- Only a fraction of possible ICD codes typically appear in health data, in
+  step \ref{itm:intersect}.
+- ICD codes are codified as integers in step \ref{itm:encode}.
+- Sparse matrix representation can be used to dramatically reduce the memory
+  requirement of the patient-visit matrix, in step \ref{itm:gensparse}.
+- Avoid complex restructuring of output matrix; the user can perform only if
+  needed, in \ref{algostep4}.
+
 ### Step 1: Pre-processing user data {#algostep1}
 
 \pkg{icd} takes care of accepting a range of possible input data structures.
@@ -705,7 +762,7 @@ The user may provide input data as follows:
   - \code{data.frame}
   - class that inherits from a \code{data.frame} e.g., using \pkg{tibble} or
     \pkg{data.table})
-- Identifier within the data frame:
+- Identifier within the data frame
   - integer vector, character vector or factor
   - one or multiple rows of data per patient-visit
   - ordered or unordered
@@ -713,7 +770,7 @@ The user may provide input data as follows:
   - single or multiple columns
   - ICD-9 or ICD-10 (but should all be the same for one invocation of an
     \pkg{icd} comorbidity function)
-  - 'short' or 'long' format codes (see Section \ref{icdquirks}).
+  - _short_ or _long_ format codes (see Section \ref{icdquirks}).
 
 The columns used for the identifier and ICD codes should be stated explicitly
 for reproducibility, but heuristics will select appropriate columns if they are
@@ -749,7 +806,7 @@ icd9_map_elix[["CHF"]]
 #### ICD-10
 
 \label{itm:partialstring}Many more ICD-10 codes are defined than there are for
-ICD-9, especially so for ICD-10-CM\@. In addition, with a greater number of
+ICD-9, especially so for ICD-10-CM. In addition, with a greater number of
 suffices and modifiers, the number of permutations of possible ICD-10 codes is
 huge, so pre-computing comprehensive comorbidity maps is not feasible. Partial
 matching to create map with relevant codes. This partial matching is not based
@@ -771,7 +828,7 @@ The ICD-10 method can be applied to any input strings, which need not be
 medical codes. Any coding scheme with a lexicographically defined hierarchy
 will work.
 
-For example, the Quan-Deyo ICD-10 map contains the following for CHF:
+For example, the Quan-Deyo ICD-10 map [@quan_coding_2005] contains the following for CHF:
 
 ```{r icd10chf}
 icd10_map_quan_deyo[["CHF"]]
@@ -821,27 +878,23 @@ CHF <- c(
 
 ### Step 2: Reduce to matrix multiplication {#algostep2}
 
+This step is critical in allowing subsequent matrix computation of the problem. The key steps are elaborated below. In summary:
+
 a. \label{itm:intersect} Compute the intersection of ICD codes from the patient
-data and the comorbidity map of interest: $\mathcal{O}(\log{}n)$ for time with
-a tree-based data structure. For ICD-10, this is done at the same time as Step
-\ref{itm:partialstring}, for no additional time complexity.
-  a. \label{itm:encode} Encode the ICD codes as consecutive integers:
+  data and the comorbidity map of interest: $\mathcal{O}(\log{}n)$ for time
+  with a tree-based data structure. For ICD-10, this is done at the same time
+  as Step \ref{itm:partialstring}, for no additional time complexity.
+
+a. \label{itm:encode} Encode the ICD codes as consecutive integers:
   $\mathcal{O}(n)$ but could be optimized to $\mathcal{O}(1)$ by using the
   knowledge that there are now no duplicates.
-  a. \label{itm:gensparse} Generate a sparse patient-visit matrix, with one row
+
+a. \label{itm:gensparse} Generate a sparse patient-visit matrix, with one row
   per patient, and a column for each ICD code defined by the consecutive
   integers from the previous step: $\mathcal{O}(n)$
-  a. \label{itm:gendense} Generate a dense comorbidity matrix, with one column
+a. \label{itm:gendense} Generate a dense comorbidity matrix, with one column
   for each comorbidity, and one row for each ICD code: $\mathcal{O}(1)$ in
   relation to $n$ patient-visits.
-
-Some major simplifications are possible:
-
-1. Only a fraction of possible ICD codes typically appear in health data, in
-   step \ref{itm:intersect}
-1. ICD codes are codified as integers in step \ref{itm:encode}
-1. Sparse matrix representation can be used to dramatically reduce the memory
-   requirement of the patient-visit matrix, in step \ref{itm:gensparse}
 
 #### Reduce size of problem space
 
@@ -1048,7 +1101,7 @@ c_{m,1} & c_{m,2} & \cdots & c_{m,q}
 \end{pmatrix}$$\label{eq:C}
 ```
 
-### Step 4: Transform back to user-requested structure {#algostep4}
+### Step 4: Label, and transform to user-requested structure {#algostep4}
 
 The matrix product may need post-processing to return data structures expected
 by the user. By default a logical matrix is returned, but many users prefer
@@ -1066,7 +1119,7 @@ restore the order of patients, which can be a significantly computationally
 expensive process with a large number of patient-visits, since merging will
 does not require ordered data. 
 
-Furthermore, if the patient-visit identifiers are not in 'long' form
+Furthermore, if the patient-visit identifiers are not in _long_ form
 
 ```{r transformoutput}
 library(icd)
@@ -1100,7 +1153,7 @@ identical(s4, u)
 ```
 
 
-## Worked example using ICD-10 codes {#workedex}
+## Example: using ICD-10 codes {#workedex}
 
 Take four patient-visits with the following ICD-10 codes in wide format, seen
 in Table \ref{tab:workedexinput}, and this simple comorbidity map:
@@ -1124,7 +1177,7 @@ my_kable(
   workedexinput,
   col.names = c("Patient-Visit", sprintf("Code %i", 1:3)),
   caption = paste("Four patient-visits with some ICD-10 codes in",
-                  "wide format for worked example"))
+                  "wide format"))
 ```
 
 There are several things to note, which represent common features in real data:
@@ -1210,12 +1263,12 @@ workedexinput <- matrix(
 my_kable(
   workedexinput,
   col.names = c("Patient-Visit", "Rheum", "HTN", "CHF"),
-  caption = paste("Output of the worked example using ICD-10 codes.",
-                  "\"Rheum\" is Rheumatic Disease, \"HTN\" is",
-                  "hypertension, \"CHF\" is Congestive Heart Failure."))
+  caption = paste("Output of the example using ICD-10 codes.",
+                  "\\textit{Rheum} is rheumatic disease, \\textit{HTN} is",
+                  "hypertension, \\textit{CHF} is congestive heart failure."))
 ```
 
-## Worked example with anonymous patient data
+## Example: comorbidities from real ICD-9 data
 
 The US State of Vermont offers anonymized public hospital discharge data
 [@VermontDepartmentofHealth_VermontHospitalDischarge_2016]. A sample is
@@ -1255,24 +1308,22 @@ comorbid_matrix <- comorbid_ahrq(v)
 ```
 
 [^disclaimer]: A condition of use of this data requires the following text be
-included.
-
-> Hospital discharge data for use in this study were supplied by the Vermont
-> Association of Hospitals and Health Systems-Network Services Organization
-> (VAHHS-NSO) and the Vermont Green Mountain Care Board (GMCB). All analyses,
-> interpretations or conclusions based on these data are solely that of [the
-> requestor]\@. VAHHS-NSO and GMCB disclaim responsibility for any such
-> analyses, interpretations or conclusions. In addition, as the data have been
-> edited and processed by VAHHS-NSO, GMCB assumes no responsibility for errors
-> in the data due to coding or processing by hospitals, VAHHS-NSO or any other
-> organization, including [the requestor].
+included. "Hospital discharge data for use in this study were supplied by the
+Vermont Association of Hospitals and Health Systems-Network Services
+Organization (VAHHS-NSO) and the Vermont Green Mountain Care Board (GMCB). All
+analyses, interpretations or conclusions based on these data are solely that of
+[the requestor]. VAHHS-NSO and GMCB disclaim responsibility for any such
+analyses, interpretations or conclusions. In addition, as the data have been
+edited and processed by VAHHS-NSO, GMCB assumes no responsibility for errors in
+the data due to coding or processing by hospitals, VAHHS-NSO or any other
+organization, including [the requestor]."
 
 ## Example: National Hospital Discharge Database (NHDS) {#nhdsex}
 
 The \pkg{nhds} package from [CRAN](https://cran.r-project.org/package=nhds)
 provides anonymous 2010 data from this US-based survey. This examples show
 extraction of a single comorbidity of interest, and showing prevalence varying
-with age.
+with age. There are about 130,000 adults in this database, not huge by some standards, but big enough for other algorithms to take minutes, whereas \pkg{icd} takes less than a second, which can be seen from the benchmarks in Section \ref{results}.
 
 ```{r nhdsexample}
 # start with all the adults
@@ -1298,8 +1349,7 @@ synthetic data shares some characteristics of real data: firstly, the more
 patients there are, the more coverage there is of the entire code space of the
 ICD scheme; secondly, there are both valid and invalid ICD codes; thirdly, each
 patient is assigned twenty codes. From the author's experience, the mean number
-of codes per patient is around five to ten, so twenty per patient represents a
-mild stress-test of the algorithms.
+of codes per patient is around five to ten; twenty per patient results in more work at each level: more code searches must be done, which emphasises the core problem solved by each algorithm.
 
 Figure \ref{fig:versus} shows time to compute comorbidites for increasing
 numbers of rows of data, showing \pkg{icd} is dramatically faster than the
@@ -1672,9 +1722,12 @@ task; and the use of sparse matrix multiplication to compute comorbidities.
 This solution offers an efficient and elegant method that reduces time and
 memory complexity. The benchmarks show that this technique scales to the
 biggest health care data sets, and answers the goal of making this possible
-with modest computing power in a reproducible workflow.
+with modest computing power in a reproducible work-flow.
 
-\section\*{Acknowledgments}
+
+```{=latex}
+\section*{Acknowledgments}
+```
 
 I am deeply grateful to Steve Frank and Mohamed Rehman for their support.
 Thanks to my talented colleagues at the Children's Hospital of Philadelphia:
