@@ -96,8 +96,12 @@ pkgdown:
 # # or, to juggle pkgbuild::build trashing inst/doc..., using .install_extras
 # options(tinytex.verbose = TRUE)
 # rmarkdown::render("vignettes/efficiency-prebuilt.Rmd", output_dir = "vignettes")
+# use render with clean = FALSE to examine intermediates, but _do_ clean
+# when changing the source Rmd, to avoid latex and Rmd cache confusion.
 # to manually go from generated tex to pdf, for debugging, try something like:
-# tinytex::latexmk("efficiency-prebuilt.tex", "pdflatex", "bibtex", engine_args=c("-file-line-error", "-halt-on-error", "-interaction", "errorstopmode"))
+# tinytex::latexmk("efficiency-prebuilt.tex", "pdflatex", "bibtex", 
+#   engine_args=c("-file-line-error", "-halt-on-error",
+#   "-interaction", "errorstopmode"))
 # Note that rstudio will delete this after kniting into vignettes/
 # Consider vim :SyntasticCheck markdown/mdl
 # This could be useful to generate html version without confusing errors
@@ -117,7 +121,7 @@ fig.height = fig.width / ((1 + sqrt(5)) / 2)
 bitmap_dpi = 600
 knitr::opts_chunk$set(fig.width = fig.width)
 knitr::opts_chunk$set(fig.height = fig.height)
-knitr::opts_chunk$set(cache = TRUE)
+knitr::opts_chunk$set(cache = FALSE) # slower but okay, and error-prone to cache
 #knitr::opts_knit$set(concordance = TRUE) # does not work with Rmd -> tex -> pdf
 options(tinytex.verbose = TRUE)
 
