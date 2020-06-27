@@ -45,25 +45,22 @@ abstract: 'Medical research often describes the existing diseases
 keywords:
   formatted: [medical informatics, administrative data, matrix algebra,
     "\\proglang{R}", "\\proglang{C++}", ICD, mapping]
-  plain:     [biomedical informatics, administrative data, matrix algebra, R, C++, ICD, mapping]
+  plain: [biomedical informatics, administrative data, matrix algebra, R, "C++", ICD, mapping]
 preamble: >
   \pdftrailerid{}
-  \pdfsuppressptexinfo-1
-  \pdfinfoomitdate1
-  \usepackage{amsmath}
+  \pdfsuppressptexinfo15
   \usepackage{longtable}
-  \usepackage{booktabs}
-  \usepackage{thumbpdf}
+  \usepackage{amsmath}
   \raggedbottom
   \shortcites{
     quan_coding_2005,quan_updating_2011,
     Pope_RiskadjustmentMedicare_2004,
     Lee_Predictingmortalitypatients_2003,
-    frank_risk_adjusted_2014,
-    elixhauser_comorbidity_1998}%
-  \author{Jack O. Wasey\\\\Children's Hospital\\of Philadelphia \And
+    Frank_RiskadjustedClinicalOutcomes_2014,
+    elixhauser_comorbidity_1998}
+  \author{Jack O. Wasey\\\\Childrens Hospital\\of Philadelphia \And
   Steven M. Frank\\Johns Hopkins Medical\\Institutions \And
-  Mohamed A. Rehman\\Johns Hopkins All\\Children's Hospital}
+  Mohamed A. Rehman\\Johns Hopkins All\\Childrens Hospital}
 documentclass: jss
 biblio-style: jss
 output:
@@ -79,26 +76,36 @@ editor_options:
 pkgdown:
   as_is: true
   extension: pdf
-# graphicx, color, hyperref, ae, fancyverb and natbib are included by jss.cls
+---
+```{r setup, echo=FALSE, message=FALSE, warning=FALSE, cache=FALSE}
+# TODO: fix childrens to have apostrophe
 # https://www.jstatsoft.org/pages/view/authors
 # https://www.jstatsoft.org/pages/view/style
+# graphicx, color, hyperref, ae, fancyverb and natbib are included by jss.cls
+# fontenc also appears in latex log.
+# amsmath is eventually included, but for boldsymbol to work, I need in preamble here.
+# rmarkdown latex style, which jss_article inherits.
 # generate replication code (done in Makefile for JSS submission, also manually
 # for vignette index)
 # knitr::purl("efficiency-prebuilt.Rmd")
 # build vignette for package (not done by CRAN, devotols, etc), to avoid a
-# pandoc 2.2 dependency which r-hub, CRAN etc did not have April 2019.
+# pandoc 2.2 dependency which r-hub, CRAN etc did not have April 2019. Also
+# avoids need for a ton of dependencies on CI platforms, and potentially out of
+# whole package DESCRIPTION.
 # rmarkdown::render("vignettes/efficiency-prebuilt.Rmd")
 # # or, to juggle pkgbuild::build trashing inst/doc..., using .install_extras
+# options(tinytex.verbose = TRUE)
 # rmarkdown::render("vignettes/efficiency-prebuilt.Rmd", output_dir = "vignettes")
+# to manually go from generated tex to pdf, for debugging, try something like:
+# tinytex::latexmk("efficiency-prebuilt.tex", "pdflatex", "bibtex", engine_args=c("-file-line-error", "-halt-on-error", "-interaction", "errorstopmode"))
 # Note that rstudio will delete this after kniting into vignettes/
 # Consider vim :SyntasticCheck markdown/mdl
-#
+# This could be useful to generate html version without confusing errors
+# between formats: https://bookdown.org/yihui/rmarkdown-cookbook/latex-html.html
 # The resuling PDF is included by vignettes/efficiency.Rnw, which
 # encapsulates the output of this document %\ %VignetteIndexEntry{icd:
 # Efficient Computation of Comorbidities from ICD Codes Using Sparse Matrix
 # Multiplication in R}
----
-```{r setup, echo=FALSE, message=FALSE, warning=FALSE, cache=FALSE}
 library("nhds")
 library("icd")
 requireNamespace("knitr")
@@ -112,6 +119,7 @@ knitr::opts_chunk$set(fig.width = fig.width)
 knitr::opts_chunk$set(fig.height = fig.height)
 knitr::opts_chunk$set(cache = TRUE)
 #knitr::opts_knit$set(concordance = TRUE) # does not work with Rmd -> tex -> pdf
+options(tinytex.verbose = TRUE)
 
 kable_caption_bottom <- function(x) {
   y <- unlist(strsplit(as.character(x), '\\n'))
@@ -158,17 +166,17 @@ in Figure \\ref{fig:versus}.")
 # Introduction
 
 ICD diagnostic codes are used to define tens of thousands of diseases.
-Originally from the World Health Organization (WHO; Organisation mondiale de la
-santé, OMS), their purpose was to allow epidemiologists to study global health
-[@WHO_InternationalClassificationDiseases_2018]. In the USA the
-WHO ICD codes have been extended for administrative purposes by the government
-Centers for Medicare and Medicaid Services (CMS), notably for billing
+Originally from the World Health Organization (WHO, or Organisation mondiale de
+la santé, OMS), their purpose was to allow epidemiologists to study global
+health [@WHO_InternationalClassificationDiseases_2018]. In the USA the WHO ICD
+codes have been extended for administrative purposes by the government Centers
+for Medicare and Medicaid Services (CMS), notably for billing
 [@CMS_CentersMedicareMedicaid_2018]. All over the world, ICD codes are the
 primary method by which diseases are recorded, often using national variants.
 This makes ICD codes important in many kinds of medical research, e.g., for
 defining national health metrics [@Lee_Predictingmortalitypatients_2003], and
 in many of clinical studies, especially those in which groups of patients are
-compared [e.g., @frank_risk_adjusted_2014]. \pkg{icd} was made to meet the need
+compared [e.g., @Frank_RiskadjustedClinicalOutcomes_2014]. \pkg{icd} was made to meet the need
 for ICD code interpretation in \proglang{R}, and, in particular, it is designed
 to compute comorbidities quickly, enabling a reproducible workflow when used
 with big or small data.
@@ -190,8 +198,8 @@ For example, a diabetic patient presents to hospital with a stroke: diabetes is
 the comorbidity and stroke is the presenting complaint. During or after an
 hospital admission, medical coders review the records and assign specific ICD
 (and other) codes. In this example, the patient might get the ICD-10 code E11.2
-meaning 'Type 2 diabetes mellitus with renal complications,' and I63.0 meaning
-'Cerebral infarction due to thrombosis of precerebral arteries.' In this case,
+meaning 'Type 2 diabetes mellitus with renal complications', and I63.0 meaning
+'Cerebral infarction due to thrombosis of precerebral arteries'. In this case,
 the comorbidities might be regarded as: 'Diabetes' and 'Renal'. The term
 comorbidity generally refers to classes of diseases, not specific diagnoses,
 and that is how the term is used in the rest of this paper.
@@ -260,7 +268,7 @@ my_kable(termdf, col.names = c("Term", "Description"),
 
 Almost every report of a medical investigation includes a table showing the
 characteristics of the groups comprising a study population. (For example, see
-Table 2 in @frank_risk_adjusted_2014.) One purpose of this table is to show any
+Table 2 in @Frank_RiskadjustedClinicalOutcomes_2014.) One purpose of this table is to show any
 differences between the groups under investigation. Things like age and weight
 can be compared numerically, whereas the tens of thousands of distinct
 diagnostic codes may only be compared by grouping into comorbidities. It is of
@@ -400,7 +408,9 @@ numbers and letters after the decimal divider. ICD-10-CM also adds a letter in
 the third position for some codes. Both ICD-9 and ICD-10 codes can be presented
 with or without a decimal divider, thus there is potential ambiguity between
 ICD-9 codes without separators (e.g., 0100 and 100 are different). There is
-also overlap between ICD-9 and ICD-10 for some codes
+also overlap between ICD-9 and ICD-10 for some codes.  The \pkg{icd} function
+\code{explain_code} is used. More detail on this can be found in Section
+\ref{otherfuncs}.
 
 ```{r exampleambiguity}
 explain_code(as.icd9("V10"))
@@ -409,12 +419,12 @@ explain_code("0100")
 explain_code("100")
 ```
 
-### Breakdown of an ICD-10 code
+### Structure of an ICD code
 
 The following is a breakdown of an ICD-10-CM code, chosen to illustrate the
 hierarchical nature of the codes, and difference between WHO ICD-10 and
-ICD-10-CM\@. The following two codes are shared by the WHO definitions and
-ICD-10-CM\@.[^libraryicd]
+ICD-10-CM\\\@. The following two codes are shared by the WHO and
+ICD-10-CM definitions.
 
 ```{r exampleicdcodewho}
 explain_code(c("S62", "S62.6"))
@@ -427,11 +437,8 @@ explain_code(c("S62.60", "S62.607", "S62.607S"))
 ```
 
 These codes are all contained in the sub-chapter, "Injuries To The Wrist, Hand
-And Fingers," (S60--S69) and the chapter "Injury, poisoning and certain other
-consequences of external causes." (S00--T88).
-
-[^libraryicd]: Here the \pkg{icd} function \code{explain_code} is used. More detail
-on this can be found in Section \ref{other-functions}.
+And Fingers", (S60--S69) and the chapter "Injury, poisoning and certain other
+consequences of external causes" (S00--T88).
 
 ### Quirks of ICD codes {#icdquirks}
 
@@ -508,7 +515,7 @@ or rarely used for diagnostic coding. Therefore, there are few or no exact
 matches between candidate ICD codes and the codes or ranges in the
 comorbidities, so some kind of string matching must be done, or a determination
 of whether a code falls in a specified range. This is dealt with in detail in
-Section \ref{derivation-of-the-comorbidity-maps}.
+Section \ref{derivmaps}.
 
 @. Big data
 
@@ -534,7 +541,9 @@ expressed in pseudocode as nested loops:
           search the lists of codes for that comorbidity
           if a matching diagnostic code is found, then
             record that comorbidity for the current patient-visit
-\end{Code}\label{pseudocode}
+\end{Code}
+% endCode macro has to finish with a new line, not even an empty latex comment.
+\label{pseudocode}
 ```
 
 For large $n$, this is an $\mathcal{O}(n)$ computation, where $n$ is the number
@@ -639,7 +648,7 @@ decimal divider.
 
 The algorithm comprises several steps in order that an efficient matrix
 operation will work. The steps are summarized in Figure \ref{algorecap}, and
-and detailed below, followed by a [worked example](#workedex).
+and detailed below, followed by a worked example in Section \ref{workedex}.
 
 ```{=latex}
 \begin{figure}[ht]
@@ -683,7 +692,7 @@ careful pre-processing, and some post-processing to correctly label the output
 matrix. A data frame or a matrix is returned, optionally re-ordering the output
 to match the user's order of patient-visits.
 
-### Step 1 {#algostep1} Pre-processing user data
+### Step 1: Pre-processing user data {#algostep1}
 
 \pkg{icd} takes care of accepting a range of possible input data structures.
 The user may provide input data as follows:
@@ -804,9 +813,9 @@ CHF <- c(
 )
 ```
 
-<!-- wrap up this section -->
+<!-- TODO: wrap up this section -->
 
-### Step 2 Reduce to matrix multiplication {#algostep2}
+### Step 2: Reduce to matrix multiplication {#algostep2}
 
 a. \label{itm:intersect} Compute the intersection of ICD codes from the patient
 data and the comorbidity map of interest: $\mathcal{O}(\log{}n)$ for time with
@@ -1035,7 +1044,7 @@ c_{m,1} & c_{m,2} & \cdots & c_{m,q}
 \end{pmatrix}$$\label{eq:C}
 ```
 
-### Step 4: Transform back to user-requested structure
+### Step 4: Transform back to user-requested structure {#algostep4}
 
 The matrix product may need post-processing to return data structures expected
 by the user. By default a logical matrix is returned, but many users prefer
@@ -1417,7 +1426,7 @@ xmin = 10
 
 # Implementation Details
 
-## Derivation of the comorbidity maps
+## Derivation of the comorbidity maps {#derivmaps}
 
 It is important to have a reproducible audit trail for fundamental work, so
 \pkg{icd} contains code which parses \proglang{SAS} source code in order to
@@ -1507,7 +1516,7 @@ head("243" %i9da% "244.2")
 Note that 244 is too broad to fit the original Elixhauser description, because
 it implies all its children, which would go beyond 244.2.
 
-## Other functions
+## Other functions {#otherfuncs}
 
 ### Risk scores
 
