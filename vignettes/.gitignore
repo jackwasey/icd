@@ -23,4 +23,5 @@ test*.Rmd
 test2
 efficiency*_files/*
 country-lang-vers*_files/*
-
+figure/
+efficiency-prebuilt
