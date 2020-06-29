@@ -1,93 +1,121 @@
+#!/usr/bin/env make
+# make --warn-undefined-variables --debug=b --print-data-base
+
+# configurable:
+NAME = icd-JSS3447-replication
+DOCKER_TAG = icdjss3447repl
+RES_DIR = results
+RMD = efficiency-prebuilt
+UPSFX = _UPDATED
+README_NAME = README-replication
+DEPS_LIB = deplib
+DEPS_DONE = .depsdone.txt
+ARTICLE_FILENAME_BASE = Efficient_calculation_of_comorbidities_from_medical_codes
+
+# derived:
+ICD_VER := $(shell sed -n '/^Version: /s/Version: //p' ../../DESCRIPTION)
+ICD_SRC_FILES := $(wildcard ../../R/*.R) \
+	$(wildcard ../../src/*.h) \
+	$(wildcard ../../src/*.cpp) \
+	$(wildcard ../../src/*.c) \
+	$(wildcard ../../src/Makevars*) \
+	../../configure.ac \
+	../../vignettes/*.Rmd \
+	../../vignettes/*.Rnw \
+	../../vignettes/*.bib \
+	../../DESCRIPTION
+
+ARTICLE_FILENAME = $(ARTICLE_FILENAME_BASE)$(UPSFX)
+REPL_R = $(ARTICLE_FILENAME).R
+ARTICLE_PDF = $(ARTICLE_FILENAME).pdf
+SUB_TGZ = $(ARTICLE_FILENAME).tar.gz
+ICD_SRC_TGZ = icd_$(ICD_VER).tar.gz
+REPL_TGZ = $(ARTICLE_FILENAME)_code.tar.gz
+
+# R
 R_HOME := "$(shell R RHOME)"
+R = $(R_HOME)/bin/R
+RSCRIPT = $(R_HOME)/bin/Rscript
+ifndef OS
+	OS = ""
+endif
 ifeq ($(OS),Windows_NT)
 	R := $(shell echo '$(R_HOME)\\bin\\R')
 	RSCRIPT := $(shell echo '$(R_HOME)\\bin\\Rscript')
-else
-	R := $(shell echo '$(R_HOME)/bin/R')
-	RSCRIPT := $(shell echo '$(R_HOME)/bin/Rscript')
-endif
-HOST := $(shell hostname)
-RES3 := dput-latest-n-3.R
-RES4 := dput-latest-n-4.R
-RES5 := dput-latest-n-5.R
-RES6 := dput-latest-n-6.R
-RES7 := dput-latest-n-7.R
-RES8 := dput-latest-n-8.R
-NAME := icd-JSS3447-replication
-DTAG := icdjss3447repl
-RMD := efficiency-prebuilt
-ARTICLE := Efficient_calculation_of_comorbidities_from_medical_codes
-UPDATED := $(ARTICLE)_UPDATED
-ARTICLEPDF := $(UPDATED).pdf
-README := README-replication
-SUB := JSS3447_updated_article_and_replication.tar.gz
-ICD_VER := $(shell sed -n '/^Version: /s/Version: //p' ../../DESCRIPTION)
-ICD_SRC_PKG := icd_$(ICD_VER).tar.gz
+endif 
 
 # a quick run of the quickest part of the benchmarking, to show it works
 default: result3
 
-# make the replications materials for JSS submission, without running heavy benchmarks, but run small benchmark to make finally sure it works...
-replicationmaterials replmat repmat submission: $(SUB) bench3
+# make the replications materials for JSS submission, without running heavy
+# benchmarks, and run small benchmark to make finally sure it works.
 
-$(SUB): $(NAME).tar.gz purl readme $(ARTICLEPDF) $(ICD_SRC_PKG)
+replication_materials replmat repmat submission: $(SUB_TGZ) bench3
+
+submission $(SUB_TGZ): $(ICD_SRC_TGZ) purl readme $(ARTICLE_PDF) bench3
+	# $(RSCRIPT) bench-versus.R 3
+	COPYFILE_DISABLE=1 tar -cvzf "$(SUB_TGZ)" \
+					 medicalrisk_1.2.tar.gz \
+					 comorbidity_0.1.1.tar.gz \
+					 "$(ICD_SRC_TGZ)" \
+					 "$(ARTICLE_PDF)"
+
+$(ARTICLE_PDF):
+	$(RSCRIPT) -e 'rmarkdown::render("../../vignettes/$(RMD).Rmd", output_dir = getwd(), output_file = "$(ARTICLE_PDF)")'
+
+# ../../vignettes/$(RMD).Rmd: ;
+
+purl: $(REPL_R)
+
+$(REPL_R): ../../vignettes/$(RMD).Rmd
+	$(RSCRIPT) -e 'knitr::purl("../../vignettes/$(RMD).Rmd", output = "$(REPL_R)")'
+
+$(README_NAME).html $(README_NAME).pdf $(README_NAME).md: $(README_NAME).Rmd
+	$(RSCRIPT) -e 'rmarkdown::render("$(README_NAME).Rmd", output_format = "all")'
+
+readme: $(README_NAME).html
+
+deps: .depsdone.txt
+.depsdone.txt:
+	-mkdir "$(DEPS_LIB)"
+	$(RSCRIPT) install-dependencies.R "$(DEPS_LIB)"
+
+RES3 = dput-latest-n-3.R
+RES4 = dput-latest-n-4.R
+RES5 = dput-latest-n-5.R
+RES6 = dput-latest-n-6.R
+RES7 = dput-latest-n-7.R
+RES8 = dput-latest-n-8.R
+RES9 = dput-latest-n-9.R
+
+$(RES3): deps
 	$(RSCRIPT) bench-versus.R 3
-	COPYFILE_DISABLE=1 tar -cvzf "$(SUB)" \
-	$(NAME).tar.gz \
-	medicalrisk_1.2.tar.gz \
-	comorbidity_0.1.1.tar.gz \
-	$(ICD_SRC_PKG) \
-	$(ARTICLEPDF)
 
-$(ARTICLEPDF):
-	$(RSCRIPT) -e 'rmarkdown::render("../../vignettes/$(RMD).Rmd", output_dir = getwd(), output_file = "$(ARTICLEPDF)")'
-
-../../vignettes/$(RMD).Rmd: ;
-
-$(ARTICLE).R: ../../vignettes/$(RMD).Rmd
-	$(RSCRIPT) -e 'knitr::purl("../../vignettes/$(RMD).Rmd", output = "$(ARTICLE).R")'
-
-$(README).html:
-	$(RSCRIPT) -e 'rmarkdown::render("$(README).Rmd")'
-
-readme: $(README).html
-
-purl: $(ARTICLE).R
-
-deps: .deps
-
-.deps:
-	$(RSCRIPT) install-dependencies.R
-
-$(RES3): .deps
-	$(RSCRIPT) bench-versus.R 3
-
-$(RES4): .deps
+$(RES4): deps
 	$(RSCRIPT) bench-versus.R 4
 
-$(RES5): .deps
+$(RES5): deps
 	$(RSCRIPT) bench-versus.R 5
 
-$(RES6): .deps
+$(RES6): deps
 	$(RSCRIPT) bench-versus.R 6
 
-$(RES7): .deps
+$(RES7): deps
 	$(RSCRIPT) bench-versus.R 7
 
-$(RES8): .deps
+$(RES8): deps
 	$(RSCRIPT) bench-versus.R 8
 
+$(RES9): deps
+	$(RSCRIPT) bench-versus.R 9
+
 bench3: $(RES3) bench-versus.R
-
 bench4: $(RES4) bench-versus.R
-
 bench5: $(RES5) bench-versus.R
-
 bench6: $(RES6) bench-versus.R
-
 bench7: $(RES7) bench-versus.R
-
 bench8: $(RES8) bench-versus.R
+bench9: $(RES9) bench-versus.R
 
 result3: $(RES3)
 	Rscript -e 'dget("$(RES3)")'
@@ -107,57 +135,79 @@ result7: $(RES7)
 result8: $(RES8)
 	Rscript -e 'dget("$(RES8)")'
 
-# tar the replication code
+result9: $(RES9)
+	Rscript -e 'dget("$(RES9)")'
+
+# tar just the replication code
 # COPYFILE_DISABLE=1 to avoid MacOS adding ._ files to tarball
-$(NAME).tar.gz: purl readme
+$(REPL_TGZ): purl readme
 	$(eval ICDTMP := $(shell mktemp -d))
 	@mkdir "$(ICDTMP)/$(NAME)"
 	cp * $(ICDTMP)/$(NAME); \
-	olddir="$$PWD"; \
-	cd $(ICDTMP); \
-	COPYFILE_DISABLE=1 tar -cvzf $(NAME).tar.gz \
-	  --exclude=".*" \
-	  --exclude="*.tex" \
-	  --exclude=$(NAME).tar.gz \
-	  --exclude=$(SUB) \
-	  --exclude=icd_3.\*tar.gz \
-	  --exclude="*pdf" \
-	  --exclude="dput*.R" \
-	  --exclude="$(README).Rmd" \
-	  --exclude=result\*.rds $(NAME); \
-	cd "$$olddir"; \
-	cp $(ICDTMP)/$(NAME).tar.gz "$$olddir"; \
-	rm -rf "$(ICDTMP)"
+		olddir="$$PWD"; \
+		cd $(ICDTMP); \
+		COPYFILE_DISABLE=1 tar -cvzf $(NAME).tar.gz \
+		--exclude=".*" \
+		--exclude="*.tex" \
+		--exclude=$(NAME).tar.gz \
+		--exclude=$(SUB_TGZ) \
+		--exclude=icd_3.\*tar.gz \
+		--exclude="*pdf" \
+		--exclude="dput*.R" \
+		--exclude="$(RES_DIR)/dput*.R" \
+		--exclude="$(README).Rmd" \
+		--exclude=result\*.rds $(NAME); \
+		cd "$$olddir"; \
+		cp $(ICDTMP)/$(NAME).tar.gz "$$olddir"; \
+		rm -rf "$(ICDTMP)"
 
-$(ICD_SRC_PKG): ../../DESCRIPTION
-	R CMD build --compact-vignettes=gs+qpdf ../..
+# R CMD build always makes a tar.gz file, even on windows
+build_pkg: $(ICD_SRC_TGZ)
+$(ICD_SRC_TGZ): $(ICD_SRC_FILES)
+	R CMD build --md5 --log --resave-data=xz --compact-vignettes=gs+qpdf ../..
+
+install_icd_in_temp_lib_dbg: $(ICD_SRC_TGZ)
+	$(R) CMD INSTALL \
+		--preclean \
+		--debug \
+		--library=deplib/ \
+		--use-vanilla \
+		--no-clean-on-error \
+		$(ICD_SRC_TGZ)
+
+install_icd_in_temp_lib: $(ICD_SRC_TGZ)
+	$(R) CMD INSTALL --clean --library=deplib/ $(ICD_SRC_TGZ)
 
 clean:
-	rm -f $(ARTICLE).R
-	rm -rf $(UPDATED)_files/
-	rm -f $(UPDATED).*
-	rm -f $(README).html
-	rm -f .deps
-	rm -f $(NAME).tar.gz icd_*.tar.gz JSS*.tar.gz
+	rm -f $(REPL_R)
+	rm -f icd-.*build.log
+	rm -rf $(ARTICLE_FILENAME)_files/
+	rm -f $(ARTICLE_FILENAME).*
+	rm -f $(README).html $(README).md $(README).pdf
+	rm -f $(NAME).tar.gz icd_*.tar.gz $(NAME)-JSS*.tar.gz
 
 cleanbench:
-	rm -f bench-versus-result* bench-versus-dput* \
-	  dput-latest*.R dput-dated*.R result*.rds
+	rm -f bench-versus-result* \
+		bench-versus-dput* \
+		dput-latest*.R \
+		dput-dated*.R \
+		result*.rds \
+		results/dput-latest*.R \
+		results/dput-dated*.R \
+		results/result*.rds
+
+cleandep cleandeps:
+	rm -f $(DEPS_DONE)
+	rm -rf $(DEPS_LIB)
+
+destroy: cleandep cleanbench clean
 
 dockerbuild: Dockerfile install-dependencies.R bench-versus.R Makefile
-	docker build -t $(DTAG) .
+	docker build -t $(DOCKER_TAG) .
 
 docker: dockerbuild
-	docker run --rm -ti $(DTAG)
+	docker run --rm -ti $(DOCKER_TAG)
 
-Makefile: ;
-
-Dockerfile: ;
-
-../../DESCRIPTION: ;
-
-.benchall: bench3 bench4 bench5 bench6 bench7 bench8
-
-.resultall: result3 result4 result5 result6 result7 result8
-
-.PHONY: default deps all purl readme docker dockerbuid clean cleanbench submission replmat
+.benchall: bench3 bench4 bench5 bench6 bench7 bench8 bench9
+.resultall: result3 result4 result5 result6 result7 result8 result9
+.PHONY: default deps all purl readme docker dockerbuild clean cleanbench cleandeps destroy submission replmat

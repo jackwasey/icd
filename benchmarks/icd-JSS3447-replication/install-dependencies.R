@@ -1,84 +1,117 @@
-install_jss3447_deps <- function() {
-  old_repos <- options("repos")
-  on.exit(options(old_repos), add = TRUE)
-  # don't assume anything, and I do not wish to prompt user, e.g. if repos = "@CRAN@"
-  repos <- old_repos["repos"]
+#' Carefully and non-intrusively install dependencies for benchmarking
+#'
+#' Installs dependencies needed for benchmarking in a temporary library, not
+#' assuming anything, including whether or not a CRAN mirror has been selected.
+#' This should allow benchmarking in a docker container, an old Windows machine,
+#' vanilla R session, or user account without administrative privileges on a
+#' server.
+#' @keywords internal
+#' @noRd
+install_jss3447_deps <- function(lib.loc) {
+  repos <- getOption("repos")
   repo_ok <- TRUE
-  if (any(repos == "@CRAN@")) {
+  # I do not wish to prompt user, e.g. if repos = "@CRAN@"
+  if (!any(repos == "@CRAN@")) {
+    message("@CRAN@ found in repos: will use cloud.r-project.org temporarily")
     repo_ok <- FALSE
   }
 
-  tryCatch(readLines(url(repos)),
-    error = function(e) repo_ok <<- FALSE,
+  for (r in repos) {
+    repo_con <- url(r)
+    tryCatch({
+      readLines(repo_con)
+      if (isOpen(repo_con)) close(repo_con)
+    },
+    error = function(e) {
+      warning("repo: ",
+              r,
+              " is not accessible. Will try later with cloud.r-project.org")
+      repo_ok <<- FALSE
+    },
     warning = function(e) {}
-  )
-  if (is.null(repos$repos) ||
-    length(repos$repos) == 1 ||
-    !repo_ok
-  ) {
-    repos <- c(
-      CRAN = "https://cloud.r-project.org/",
-      CRAN_http = "http://cloud.r-project.org/"
     )
-    options("repos" = repos)
+    close(repo_con)
   }
+  if (!repo_ok ||
+      is.null(repos) ||
+      length(repos) == 0L
+  )
+    repos <- c(CRAN = "https://cloud.r-project.org/",
+               CRAN_http = "http://cloud.r-project.org/")
+
   for (p in c(
-    #    "utf8", # what for?
     "bench",
     # "backports",
-    "checkmate", # imported by comorbidity
+    "checkmate",
+    # imported by comorbidity
     # "magrittr", # no need?
-    "parallel", # used by 'comorbidity' for maximum speed
-    "plyr", "reshape2", "hash", # imported by 'medicalrisk'
-    # "profmem", # do someday
+    "parallel",
+    # used by 'comorbidity' for maximum speed
+    "plyr",
+    "reshape2",
+    "hash",
+    # imported by 'medicalrisk'
+    # "profmem", # bench package does this when capabilities("profmem") is TRUE
     "Rcpp",
     "RcppEigen",
     #    "comorbidity", # CRAN version has incompatible updates
     #    "medicalrisk", # CRAN version from 2016 unchanged at time of submission
     NULL
   )) {
-    if (!require(p,
+    suppressWarnings({
+      have_p <- find.package(p, lib.loc = lib.loc, quiet = TRUE)
+    })
+    if (length(have_p) == 0L) {
+      install.packages(p,
+                       character.only = TRUE,
+                       repos = repos,
+                       lib = lib.loc)
+    }
+    suppressPackageStartupMessages(library(
+      p,
       character.only = TRUE,
       quietly = TRUE,
-      warn.conflicts = FALSE
-    )) {
-      install.packages(p, character.only = TRUE, repos = repos)
-    }
-    library(p,
-      character.only = TRUE,
-      quietly = TRUE, warn.conflicts = FALSE
-    )
+      warn.conflicts = FALSE,
+      lib.loc = lib.loc
+    ))
   }
-  message("Installing medicalrisk from tar.gz")
-  install.packages("medicalrisk_1.2.tar.gz", repos = NULL)
-  message("Installing comorbidity from tar.gz")
-  install.packages("comorbidity_0.1.1.tar.gz", repos = NULL)
-  # This relies on icd not already being loaded, or it will pass with any version
-  if (!requireNamespace("icd",
+  message("Installing medicalrisk from tar.gz to ", lib.loc)
+  have_medicalrisk <- identical(find.package("medicalrisk", lib.loc = lib.loc, quiet = TRUE), character())
+  if (!have_medicalrisk) install.packages("medicalrisk_1.2.tar.gz", repos = NULL, lib = lib.loc)
+  message("Installing comorbidity from tar.gz to ", lib.loc)
+  have_comorbidity <- identical(find.package("comorbidity", lib.loc = lib.loc, quiet = TRUE), character())
+  if (!have_comorbidity) install.packages("comorbidity_0.1.1.tar.gz",
+                   repos = NULL,
+                   lib = lib.loc)
+  # This relies on 'icd' not already being loaded, or it will pass with any version
+  if (!requireNamespace(
+    "icd",
     quietly = TRUE,
-    versionCheck = list(
-      version = "3.2.2",
-      op = ">="
-    )
+    lib.loc = lib.loc,
+    versionCheck = list(version = "4.0.8",
+                        op = ">=")
   )) {
     message("icd of sufficient recency not yet installed, so installing from local source package")
     if ("icd" %in% available.packages()["Package"]) {
-      stop("WIP - build a slim - no documentation source package")
+      stop("WIP - build a slim - no documentation source package?")
       install.packages("icd", quiet = TRUE, repos = repos)
     } else {
-      message("icd does not seem to be available in current repos. Installing from source")
-      icd_home_path <- normalizePath("../..")
-      Sys.setenv("ICD_HOME" = icd_home_path)
-      system2("bash", "../../tools/install-quick.sh") # , env = c(ICD_HOME = icd_home_path))
+      message("icd does not seem to be available in current repos. Installing from this source")
+      Sys.setenv("ICD_HOME" = normalizePath("../.."))
+      # TODO: use or rely on Makefile to do this better
+      system2("bash", "../../tools/install-quick.sh")
     }
   }
   library("icd", quietly = TRUE)
   # re-create the .deps file so Makefile knows that we are done
-  if (file.exists(".deps")) {
-    unlink(".deps", force = TRUE, recursive = FALSE, expand = FALSE)
+  if (file.exists(".depsdone.txt")) {
+    unlink(".depsdone.txt",
+           force = TRUE,
+           recursive = FALSE,
+           expand = FALSE)
   }
-  file.create(".deps", showWarnings = FALSE)
+  file.create(".depsdone.txt", showWarnings = FALSE)
   invisible(NULL)
 }
 
-install_jss3447_deps()
+install_jss3447_deps("deplib")
