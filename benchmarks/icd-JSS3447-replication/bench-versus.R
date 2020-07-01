@@ -1,3 +1,5 @@
+#!/usr/bin/env Rscript
+
 if (!file.exists("install-dependencies.R")) {
   message("not running in the benchmark replication directory")
   if (file.exists(file.path(
@@ -11,53 +13,71 @@ if (!file.exists("install-dependencies.R")) {
     stop("cannot find benchmark replication directory")
   }
 }
-source("install-dependencies.R")
+do_install_deps <- function() {
+  if (file.exists("install-dependencies.R")) {
+    source("install-dependencies.R")
+    return(invisible())
+  }
+  message("not running in the benchmark replication directory")
+  try_path <- file.path("benchmarks", "icd-JSS3447-replication", "install-dependencies.R")
+  if (file.exists(try_path)) {
+    message("setting directory to: ", try_path)
+    setwd(try_path)
+  } else {
+    stop(
+      "cannot find benchmark replication directory. ",
+      "Start in unpacked 'icd' directory, e.g., from git clone; ",
+      "or unpack the replication materials tar.gz and cd to the unpacked directory."
+    )
+  }
+  source("install-dependencies.R")
+  install_jss3447_deps()
+}
+
 suppressPackageStartupMessages({
   library(icd, warn.conflicts = TRUE, quietly = TRUE)
   library(medicalrisk, warn.conflicts = TRUE, quietly = TRUE)
   library(comorbidity, warn.conflicts = TRUE, quietly = TRUE)
 })
 
-# the following control default behavior
-# n is total number of rows of data
-# dz_per_pt is number of disease codes per patient
-# total number of patients is n / dz_per_pt
-#
-# N.b., changing these numbers will interfere with Makefile knowing what to do.
-n_order_default <- 3L
 n_order_big_default <- 6L # cut-off for only doing one iteration
-n_order_prl_cmb <- 5L # best cut-off found for using 'parallel = TRUE' for 'comorbidity' package call
 n_order_max_non_icd <- 7L # only 'icd' completes 10^8 or more iterations in a reasonable time.
-dz_per_pt <- 20L
 icd_ver <- "9"
+n_order_default <- 3L # default use 10^n_oder_default rows of data.
+n_order_big <- 6L # cut-off for only doing one iteration
+n_order_prl_cmb <- 5L # best cut-off found for using 'parallel = TRUE' for 'comorbidity' package call
+dz_per_pt_default <- 20L # number of disease codes per patient
 
 have_colours <- function() {
-  if (requireNamespace("crayon", quietly = TRUE)) return(crayon::has_color())
-  if (getOption("crayon.enabled", default = FALSE)) return(TRUE)
-  if ("COLORTERM" %in% names(Sys.getenv())) return(TRUE)
-  if (Sys.getenv("TERM") == "dumb") return(FALSE)
+  if (requireNamespace("crayon", quietly = TRUE)) {
+    return(crayon::has_color())
+  }
+  if (getOption("crayon.enabled", default = FALSE)) {
+    return(TRUE)
+  }
+  if ("COLORTERM" %in% names(Sys.getenv())) {
+    return(TRUE)
+  }
+  if (Sys.getenv("TERM") == "dumb") {
+    return(FALSE)
+  }
   grepl("^screen|^xterm|^vt100|color|ansi|cygwin|linux", Sys.getenv("TERM"),
-        ignore.case = TRUE, perl = TRUE)
-
+    ignore.case = TRUE, perl = TRUE
+  )
 }
 
 bold_green <- "\\033[1m\033[32mJACK\033[39m\033[22m"
 if (requireNamespace("crayon", quietly = TRUE)) {
   green <- crayon::green
   bold <- crayon::bold
-} else if (have_colours())
-sprintf("\b\n", bold("Setting the following defaults"))
-cat(paste(bold(names(n)), bold(green(n)), collapse="\n"))
-
-#n_order <- n_order_default
-#n_order_big <- n_order_big_default # cut-off for only doing one iteration
-
-if (icd_ver == "9") {
-  icd_code_src <- icd::icd9cm_hierarchy$code
+} else if (have_colours()) {
+  sprintf("\b\n", bold("Setting the following defaults"))
 }
-if (icd_ver == "10") {
-  icd_code_src <- icd::icd10cm2019$code
-}
+cat(paste(bold(names(n)), bold(green(n)), collapse = "\n"))
+
+# n_order <- n_order_default
+# n_order_big <- n_order_big_default # cut-off for only doing one iteration
+
 empty_res <- data.frame(
   datarows = integer(),
   icd = numeric(),
@@ -93,9 +113,19 @@ if (n_order_default >= n_order_big) {
   )
 }
 
-get_pts <- function(n = 3L, dz_per_pt = 20) {
+get_pts <- function(n_order = n_order_default,
+                    n = 10^n_order,
+                    dz_per_pt = dz_per_pt_default,
+                    icd_ver = icd_ver_default) {
+  if (icd_ver == "9") {
+    icd_code_src <- icd::icd9cm_hierarchy$code
+  }
+  if (icd_ver == "10") {
+    icd_code_src <- icd::icd10cm2019$code
+  }
   set.seed(1441)
   diags <- sample(icd_code_src, size = n, replace = TRUE)
+
   data.frame(
     visit_id = as.character(floor(seq_len(n) / dz_per_pt)),
     code = diags,
@@ -114,19 +144,27 @@ bench_press_small <- function(n_order = n_order_default) {
   bench::press(n = ns, {
     pts <- get_pts(n, dz_per_pt = dz_per_pt)
     pts_mr <- medicalrisk_fix(pts)
+    cmb_prl <- n >= 10^n_order_prl_cmb
     # the output is saved to result, and is potentially gigantic, so use local
     bench::mark(
-      icd = local(comorbid_charlson(pts)),
-      comorbidity = local(comorbidity(
-        x = pts, id = "visit_id", code = "code", score = "charlson_icd9",
-        parallel = n >= 10L^n_order_prl_cmb
-      )),
-      medicalrisk = local(generate_comorbidity_df(
-        pts_mr,
-        icd9mapfn = icd9cm_charlson_quan
-      )),
       filter_gc = TRUE,
-      check = FALSE
+      check = FALSE,
+      icd::comorbid_charlson(
+        x = pts,
+        icd_name = "code",
+        visit_name = "visit_id"
+      ),
+      comorbidity::comorbidity(
+        x = pts,
+        id = "visit_id",
+        code = "code",
+        score = "charlson_icd9",
+        parallel = cmb_prl
+      ),
+      medicalrisk::generate_comorbidity_df(
+        pts_mr,
+        icd9mapfn = medicalrisk::icd9cm_charlson_quan
+      )
     )
   })
 }
@@ -156,11 +194,11 @@ time_big <- function(n_order = n_order_default, n_order_big = n_order_big_defaul
   message("Running with bigger data")
   for (nit in seq_along(n)) {
     message(n[nit])
-    pts <- get_pts(n[nit], dz_per_pt = dz_per_pt)
+    pts <- get_pts(n = n[nit])
     pts_mr <- medicalrisk_fix(pts)
     message("Warming up with single runs...")
     message("First warm-up will get the dat hot,
-          no matter which package first.")
+                no matter which package first.")
     warmup <- system.time(icd::comorbid_charlson(pts))["elapsed"]
     message("icd took ", warmup, " seconds.")
     warmup <- system.time(comorbidity::comorbidity(
@@ -224,6 +262,7 @@ get_bench_filename <- function(prefix, suffix, use_date = FALSE,
     ),
     ".", suffix
   )
+  dir.create(results_dir, showWarnings = FALSE)
   file.path(results_dir, fn)
 }
 
@@ -236,12 +275,13 @@ get_bench_short_filename <- function(prefix, suffix,
     ),
     ".", suffix
   )
+  dir.create(results_dir, showWarnings = FALSE)
   file.path(results_dir, fn)
 }
 
-# combine small and big benchmark results, and deal with tibble/bench S3 problems
+# combine small and big benchmark results, and deal with
+# tibble/bench S3 problems
 bench_versus <- function(n_order = n_order_default) {
-
   # now add the timings for the very long-running computations (which bench only does
   # once anyway, and which are dominated by the computations themselves)
   rbind(
@@ -251,13 +291,25 @@ bench_versus <- function(n_order = n_order_default) {
   )
 }
 
-res <- bench_versus()
+if (trimws(tolower(Sys.getenv("ICD_BENCH_ON_SOURCE") %in% c("", "no", "false", "f", "no", "n", "0")))) {
+  if (!(trimws(tolower(Sys.getenv("ICD_VERBOSE") %in% c("", "no", "false", "f", "no", "n", "0"))))) {
+    message("ICD_BENCH_ON_SOURCE environment variable is not set, so not running any benchmarks")
+  }
+} else {
+  # TODO: if we are triggered by environment variable, then use environment
+  # variables, if set, to parameterize the benchmarking.
 
-# work around an older R version abbreviating dput output in some R versions
-old_opt_dml <- options(deparse.max.lines = 0)
-# keep file name the same so Makefile will keep track, i.e. not dated, but
-# unique for machine and benchmark
-dput(res, get_bench_short_filename("dput-latest", "R"))
-# and a dated version
-dput(res, get_bench_filename("dput-dated", "R", use_date = TRUE))
-options(old_opt_dml)
+  bench_dput(res <- bench_versus())
+}
+
+bench_dput <- function(res) {
+  # work around an older R version abbreviating dput output in some R versions
+  old_opt_dml <- options(deparse.max.lines = 0)
+  on.exit(options(old_opt_dml), add = TRUE)
+  # keep file name the same so Makefile will keep track, i.e. not dated, but
+  # unique for machine and benchmark
+  dput(res, get_bench_short_filename("dput-latest", "R"))
+  # and a dated version
+  dput(res, get_bench_filename("dput-dated", "R", use_date = TRUE))
+  invisible(res)
+}

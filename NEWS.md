@@ -2,21 +2,31 @@
 
 ## Version 4.0.9.1
 
-* updates to 'efficiency' vignette, benchmarking, replication materials. JSS submission, otherwise same as 4.0.9
+* updates to 'efficiency' vignette, benchmarking, replication materials. JSS
+  submission, otherwise same as 4.0.9
 * bug-fix version for the latest CRAN release 4.0.9
 * JSON handling bug for WHO downloads introduced by a code merge error
+* Re-worked replication materials for JSS
 
 ## Version 4.0.9
 
-* happy to add Alessandro Gasparini as collaborator, as we move comorbidity API from icd to the comorbidity package in subsequent releases, and separate out the fast comorbidity calculation engine into a new, tighter package. icd will continue to provide icd conversion, validation, translation, mapping, etc., and keep backward compatibility for a year during this migration.
-* also adding the tireless @patrickmd as a contributor, with his significant pull requests, testing and patience.
+* happy to add Alessandro Gasparini as collaborator, as we move comorbidity API
+  from icd to the comorbidity package in subsequent releases, and separate out
+  the fast comorbidity calculation engine into a new, tighter package. icd will
+  continue to provide icd conversion, validation, translation, mapping, etc., and
+  keep backward compatibility for a year during this migration.
+* also adding the tireless @patrickmd as a contributor, with his significant
+  pull requests, testing and patience.
 * likewise for
 * fixed CRAN submission broken links
 * Updated French ICD code URL
-* dropped r-lib/rappdirs in favor of copy of backports::R_app_dirs
+* dropped r-lib/rappdirs in favor of copy of `backports::R_app_dirs`
 * dropped extraneous files from source tarball sent to CRAN
-* clean-up prebuilt pdf paths, both keeping package smaller, and fixing broken links, as noted by CRAN but missed by R CMD check somehow.
-* anticipate next version including work from the NIH hackathon for general equivalence mapping of ICD-9-CM to ICD-10-CM codes, thanks to those women, and also the contributions from @dapritchard @dprtichlibre
+* clean-up prebuilt pdf paths, both keeping package smaller, and fixing broken
+  links, as noted by CRAN but missed by R CMD check somehow.
+* anticipate next version including work from the NIH hackathon for general
+  equivalence mapping of ICD-9-CM to ICD-10-CM codes, thanks to those women, and
+  also the contributions from @dapritchard @dprtichlibre
 
 ## Version 4.0.8
 

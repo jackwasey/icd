@@ -9,9 +9,12 @@ deplib/
 .deps
 *build.log
 *.tar.gz
+deplib
+results
 !comorbidity_0.1.1.tar.gz
 !medicalrisk_1.2.tar.gz
 !touch_0.1-4.tar.gz
+.icd.built
 
 # Created by https://www.toptal.com/developers/gitignore/api/latex
 # Edit at https://www.toptal.com/developers/gitignore?templates=latex

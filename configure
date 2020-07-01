@@ -590,8 +590,9 @@ ac_unique_file="src"
 ac_subst_vars='LTLIBOBJS
 LIBOBJS
 ICD_SHUTUP_FLAG
-ICD_KEEP_MAKEVARS
+ICD_OPTIM_FLAGS
 ICD_OPENMP_FLAG
+ICD_KEEP_MAKEVARS
 OPENMP_CXXFLAGS
 OBJEXT
 EXEEXT
@@ -646,6 +647,7 @@ enable_option_checking
 enable_icd_shutup
 enable_openmp
 enable_icd_strip
+enable_icd_optim
 '
       ac_precious_vars='build_alias
 host_alias
@@ -1281,6 +1283,8 @@ Optional Features:
   --enable-icd-shutup     Peaceful compilation
   --disable-openmp        do not use OpenMP
   --enable-icd-strip      Enable stripping of binary on Linux and MacOS
+  --enable-icd-optim      Optional addition of more optimized compiler flags.
+                          Not default due to CRAN rules, but recommended.
 
 Some influential environment variables:
   ICD_SHUTUP  [If ICD_SHUTUP is defined, it tells configure to try to silence
@@ -1826,17 +1830,17 @@ ac_config_files="$ac_config_files src/Makevars"
 #m4_ifdef([AC_DISABLE_OPTION_CHECKING], [], [])
 
 : ${R_HOME=$(R RHOME)}
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking R_HOME already set" >&5
-$as_echo_n "checking R_HOME already set... " >&6; }
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking R_HOME not empty" >&5
+$as_echo_n "checking R_HOME not empty... " >&6; }
 if  test -z "${R_HOME}" ; then :
 
-    { $as_echo "$as_me:${as_lineno-$LINENO}: result: No" >&5
+       { $as_echo "$as_me:${as_lineno-$LINENO}: result: No" >&5
 $as_echo "No" >&6; }
-    as_fn_error $? "Cannot proceed." "$LINENO" 5
+       as_fn_error $? "Cannot proceed." "$LINENO" 5
 
 else
 
-{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${R_HOME}" >&5
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: ${R_HOME}" >&5
 $as_echo "${R_HOME}" >&6; }
         R_BIN=${R_HOME}/bin/R
 
@@ -1852,7 +1856,7 @@ $as_echo_n "checking R CXX11... " >&6; }
 if test "${CXX11-unset}" = unset ; then :
 
        CXX11=`"${R_BIN}" CMD config CXX11`
-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: Setting ${CXX11}" >&5
+       { $as_echo "$as_me:${as_lineno-$LINENO}: result: Setting ${CXX11}" >&5
 $as_echo "Setting ${CXX11}" >&6; }
 
 else
@@ -1863,11 +1867,11 @@ fi
 
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking R CXX11STD" >&5
 $as_echo_n "checking R CXX11STD... " >&6; }
-if  test "${CXX11STD-unset}" = unset ; then :
+if test "${CXX11STD-unset}" = unset ; then :
 
        CXX11STD=`"${R_BIN}" CMD config CXX11STD`
        { $as_echo "$as_me:${as_lineno-$LINENO}: result: Setting R ${CXX11STD}" >&5
-$as_echo "Setting R ${CXX11STD}" >&6; };
+$as_echo "Setting R ${CXX11STD}" >&6; }
 
 else
   { $as_echo "$as_me:${as_lineno-$LINENO}: result: Using existing ${CXX11STD}" >&5
@@ -1877,10 +1881,10 @@ fi
 
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking R CXX11FLAGS" >&5
 $as_echo_n "checking R CXX11FLAGS... " >&6; };
-if test "${CXX11FLAGS-unset} = unset" ; then :
+if test "${CXX11FLAGS-unset}" = unset ; then :
 
        CXX11FLAGS=`"${R_BIN}" CMD config CXX11FLAGS`
-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: Setting R ${CXX11FLAGS}" >&5
+       { $as_echo "$as_me:${as_lineno-$LINENO}: result: Setting R ${CXX11FLAGS}" >&5
 $as_echo "Setting R ${CXX11FLAGS}" >&6; }
 
 else
@@ -1889,7 +1893,7 @@ $as_echo "Using existing ${CXX11FLAGS}" >&6; }
 
 fi
 
-# We enforce at least C++11 (as does R4.0.0 now)
+# We enforce at least C++11 (as does R4.0.0 now, but which R3.x need explicitly)
 CXX="${CXX11}"
 CXXFLAGS="${CXX11FLAGS}"
 CXXSTD="${CXX11STD}"
@@ -1898,7 +1902,9 @@ CFLAGS=`"${R_BIN}" CMD config CFLAGS`
 CPPFLAGS=`"${R_BIN}" CMD config CPPFLAGS`
 LIBS="${PKG_LIBS}"
 
-# try to shut up travis/r-hub builds with huge warning burden with default compiler settings (Eigen). Can't seem to do with MAKEFLAGS, or string of R CMD check --install-opts=.....
+# try to shut up travis/r-hub builds with huge warning burden with default
+# compiler settings (Eigen). Can't seem to do with MAKEFLAGS, or string of R CMD
+# check --install-opts=.....
 ICD_SHUTUP_FLAG=""
 
 
@@ -2506,9 +2512,148 @@ $as_echo "$as_me: R core OpenMP m4 macro check completed." >&6;}
 # since some systems have broken OMP libraries
 # we also check that the actual package will work
 ac_pkg_openmp=no
-#if test -n "${OPENMP_CFLAGS}"; then
-#  AC_MSG_RESULT([Do have OPENMP_CFLAGS from R_OPENMP])
-#fi
+if test "${OPENMP_CFLAGS+set}" = set; then :
+  { $as_echo "$as_me:${as_lineno-$LINENO}: OPENMP_CFLAGS from
+  OPENMP_CXXFLAGS=
+  # Check whether --enable-openmp was given.
+if test "${enable_openmp+set}" = set; then :
+  enableval=$enable_openmp;
+fi
+
+ # if test "$enable_openmp" != no; then
+    { $as_echo "$as_me:${as_lineno-$LINENO}: checking for $CXX option to support OpenMP" >&5
+$as_echo_n "checking for $CXX option to support OpenMP... " >&6; }
+if ${ac_cv_prog_cxx_openmp+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+  cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+#ifndef _OPENMP
+ choke me
+#endif
+#include <omp.h>
+int main () { return omp_get_num_threads (); }
+
+_ACEOF
+if ac_fn_cxx_try_link "$LINENO"; then :
+  ac_cv_prog_cxx_openmp='none needed'
+else
+  ac_cv_prog_cxx_openmp='unsupported'
+	  	  	  	  	            	  	            	  	  	  	                                	  	  	  	  	  	  	  	  for ac_option in -xopenmp -fopenmp -qopenmp \
+                           -openmp -mp -omp -qsmp=omp -homp \
+			   -fopenmp=libomp \
+                           -Popenmp --openmp; do
+	    ac_save_CXXFLAGS=$CXXFLAGS
+	    CXXFLAGS="$CXXFLAGS $ac_option"
+	    cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+#ifndef _OPENMP
+ choke me
+#endif
+#include <omp.h>
+int main () { return omp_get_num_threads (); }
+
+_ACEOF
+if ac_fn_cxx_try_link "$LINENO"; then :
+  ac_cv_prog_cxx_openmp=$ac_option
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+	    CXXFLAGS=$ac_save_CXXFLAGS
+	    if test "$ac_cv_prog_cxx_openmp" != unsupported; then
+	      break
+	    fi
+	  done
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+fi
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_prog_cxx_openmp" >&5
+$as_echo "$ac_cv_prog_cxx_openmp" >&6; }
+    case $ac_cv_prog_cxx_openmp in #(
+      "none needed" | unsupported)
+	;; #(
+      *)
+	OPENMP_CXXFLAGS=$ac_cv_prog_cxx_openmp ;;
+    esac
+#  fi
+
+ is: ${OPENMP_CFLAGS}" >&5
+$as_echo "$as_me: OPENMP_CFLAGS from
+  OPENMP_CXXFLAGS=
+  # Check whether --enable-openmp was given.
+if test "${enable_openmp+set}" = set; then :
+  enableval=$enable_openmp;
+fi
+
+ # if test "$enable_openmp" != no; then
+    { $as_echo "$as_me:${as_lineno-$LINENO}: checking for $CXX option to support OpenMP" >&5
+$as_echo_n "checking for $CXX option to support OpenMP... " >&6; }
+if ${ac_cv_prog_cxx_openmp+:} false; then :
+  $as_echo_n "(cached) " >&6
+else
+  cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+#ifndef _OPENMP
+ choke me
+#endif
+#include <omp.h>
+int main () { return omp_get_num_threads (); }
+
+_ACEOF
+if ac_fn_cxx_try_link "$LINENO"; then :
+  ac_cv_prog_cxx_openmp='none needed'
+else
+  ac_cv_prog_cxx_openmp='unsupported'
+	  	  	  	  	            	  	            	  	  	  	                                	  	  	  	  	  	  	  	  for ac_option in -xopenmp -fopenmp -qopenmp \
+                           -openmp -mp -omp -qsmp=omp -homp \
+			   -fopenmp=libomp \
+                           -Popenmp --openmp; do
+	    ac_save_CXXFLAGS=$CXXFLAGS
+	    CXXFLAGS="$CXXFLAGS $ac_option"
+	    cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+/* end confdefs.h.  */
+
+#ifndef _OPENMP
+ choke me
+#endif
+#include <omp.h>
+int main () { return omp_get_num_threads (); }
+
+_ACEOF
+if ac_fn_cxx_try_link "$LINENO"; then :
+  ac_cv_prog_cxx_openmp=$ac_option
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+	    CXXFLAGS=$ac_save_CXXFLAGS
+	    if test "$ac_cv_prog_cxx_openmp" != unsupported; then
+	      break
+	    fi
+	  done
+fi
+rm -f core conftest.err conftest.$ac_objext \
+    conftest$ac_exeext conftest.$ac_ext
+fi
+{ $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_prog_cxx_openmp" >&5
+$as_echo "$ac_cv_prog_cxx_openmp" >&6; }
+    case $ac_cv_prog_cxx_openmp in #(
+      "none needed" | unsupported)
+	;; #(
+      *)
+	OPENMP_CXXFLAGS=$ac_cv_prog_cxx_openmp ;;
+    esac
+#  fi
+
+ is: ${OPENMP_CFLAGS}" >&6;}
+else
+  { $as_echo "$as_me:${as_lineno-$LINENO}: OPENMP_CFLAGS is empty or unset" >&5
+$as_echo "$as_me: OPENMP_CFLAGS is empty or unset" >&6;}
+fi
+
 if test -n "${OPENMP_CXXFLAGS}"; then
     { $as_echo "$as_me:${as_lineno-$LINENO}: checking OpenMP available, but does it work in a package?" >&5
 $as_echo_n "checking OpenMP available, but does it work in a package?... " >&6; }
@@ -2523,7 +2668,7 @@ main ()
   return 0;
 }
 _ACEOF
-    PKG_CFLAGS="${OPENMP_CFLAGS}" PKG_LIBS="${OPENMP_CFLAGS}" "$R_BIN" CMD SHLIB conftest.c 1>&5 2>&5 && "${R_BIN}" --vanilla -q -e "dyn.load(paste('conftest',.Platform\$dynlib.ext,sep=''))" 1>&5 2>&5 && ac_pkg_openmp=yes;
+    PKG_CFLAGS="${OPENMP_CFLAGS}" PKG_LIBS="${OPENMP_CFLAGS}" "$R_BIN" CMD SHLIB conftest.c 1>&5 2>&5 && "${R_BIN}" --vanilla -q -e "dyn.load(paste0('conftest',.Platform\$dynlib.ext))" 1>&5 2>&5 && ac_pkg_openmp=yes;
     { $as_echo "$as_me:${as_lineno-$LINENO}: result: OpenMP available and working: ${ac_pkg_openmp}" >&5
 $as_echo "OpenMP available and working: ${ac_pkg_openmp}" >&6; };
 else
@@ -2534,11 +2679,10 @@ fi
 { $as_echo "$as_me:${as_lineno-$LINENO}: result: icd thinks openmp compilation is possible: ${ac_pkg_openmp}" >&5
 $as_echo "icd thinks openmp compilation is possible: ${ac_pkg_openmp}" >&6; }
 
-  ICD_OPENMP_FLAG=''
+ICD_OPENMP_FLAG=''
 if test ! "x${ac_pkg_openmp}" = xno; then :
    ICD_OPENMP_FLAG='$(SHLIB_OPENMP_CXXFLAGS)'
 fi
-
 
 DO_KEEP_MAKEVARS="${ICD_KEEP_MAKEVARS}"
 
@@ -2555,6 +2699,21 @@ if test "x$enable_icd_strip" != "xno"; then :
 else
   ICD_STRIP=''
 fi
+
+ICD_OPTIM_FLAGS=''
+
+# Check whether --enable-icd_optim was given.
+if test "${enable_icd_optim+set}" = set; then :
+  enableval=$enable_icd_optim;
+fi
+
+
+if test "x$enable_icd_optim" = "xyes" || test "${ICD_OPTIM+set}" = set ; then :
+  ICD_OPTIM_FLAGS="-march=native -O3 -fno-unroll-loops -g0 -fomit-frame-pointer"
+fi
+
+
+
 
 
 cat >confcache <<\_ACEOF

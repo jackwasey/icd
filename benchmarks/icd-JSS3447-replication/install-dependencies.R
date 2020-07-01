@@ -5,9 +5,16 @@
 #' This should allow benchmarking in a docker container, an old Windows machine,
 #' vanilla R session, or user account without administrative privileges on a
 #' server.
+#'
+#' source this file, since not in package \code{R/} then call the function.
+#'
+#' This needs testing on multiple platforms, with busy or stripped down R
+#' environments. Vanilla, no pre-loaded packages, repos option set or unset or wrong:
+#' I want the benchmarks to run really robustly, and without modifying the user's
+#' installed R libraries or environment, or session options.
 #' @keywords internal
 #' @noRd
-install_jss3447_deps <- function(lib.loc) {
+install_jss3447_deps <- function(lib.loc, depsdone_file = ".depsdone.txt") {
   repos <- getOption("repos")
   repo_ok <- TRUE
   # I do not wish to prompt user, e.g. if repos = "@CRAN@"
@@ -18,26 +25,32 @@ install_jss3447_deps <- function(lib.loc) {
 
   for (r in repos) {
     repo_con <- url(r)
-    tryCatch({
-      readLines(repo_con)
-      if (isOpen(repo_con)) close(repo_con)
-    },
-    error = function(e) {
-      warning("repo: ",
-              r,
-              " is not accessible. Will try later with cloud.r-project.org")
-      repo_ok <<- FALSE
-    },
-    warning = function(e) {}
+    tryCatch(
+      {
+        readLines(repo_con)
+        if (isOpen(repo_con)) close(repo_con)
+      },
+      error = function(e) {
+        warning(
+          "repo: ",
+          r,
+          " is not accessible. Will try later with cloud.r-project.org"
+        )
+        repo_ok <<- FALSE
+      },
+      warning = function(e) {}
     )
     close(repo_con)
   }
   if (!repo_ok ||
-      is.null(repos) ||
-      length(repos) == 0L
-  )
-    repos <- c(CRAN = "https://cloud.r-project.org/",
-               CRAN_http = "http://cloud.r-project.org/")
+    is.null(repos) ||
+    length(repos) == 0L
+  ) {
+    repos <- c(
+      CRAN = "https://cloud.r-project.org/",
+      CRAN_http = "http://cloud.r-project.org/"
+    )
+  }
 
   for (p in c(
     "bench",
@@ -63,9 +76,10 @@ install_jss3447_deps <- function(lib.loc) {
     })
     if (length(have_p) == 0L) {
       install.packages(p,
-                       character.only = TRUE,
-                       repos = repos,
-                       lib = lib.loc)
+        character.only = TRUE,
+        repos = repos,
+        lib = lib.loc
+      )
     }
     suppressPackageStartupMessages(library(
       p,
@@ -80,16 +94,21 @@ install_jss3447_deps <- function(lib.loc) {
   if (!have_medicalrisk) install.packages("medicalrisk_1.2.tar.gz", repos = NULL, lib = lib.loc)
   message("Installing comorbidity from tar.gz to ", lib.loc)
   have_comorbidity <- identical(find.package("comorbidity", lib.loc = lib.loc, quiet = TRUE), character())
-  if (!have_comorbidity) install.packages("comorbidity_0.1.1.tar.gz",
-                   repos = NULL,
-                   lib = lib.loc)
+  if (!have_comorbidity) {
+    install.packages("comorbidity_0.1.1.tar.gz",
+      repos = NULL,
+      lib = lib.loc
+    )
+  }
   # This relies on 'icd' not already being loaded, or it will pass with any version
   if (!requireNamespace(
     "icd",
     quietly = TRUE,
     lib.loc = lib.loc,
-    versionCheck = list(version = "4.0.8",
-                        op = ">=")
+    versionCheck = list(
+      version = "4.0.8",
+      op = ">="
+    )
   )) {
     message("icd of sufficient recency not yet installed, so installing from local source package")
     if ("icd" %in% available.packages()["Package"]) {
@@ -104,14 +123,17 @@ install_jss3447_deps <- function(lib.loc) {
   }
   library("icd", quietly = TRUE)
   # re-create the .deps file so Makefile knows that we are done
-  if (file.exists(".depsdone.txt")) {
-    unlink(".depsdone.txt",
-           force = TRUE,
-           recursive = FALSE,
-           expand = FALSE)
+  if (file.exists(depsdone_file)) {
+    if (file.size(depsdone_file) != 0L) {
+      warning("dependency empty file flag is not empty! Not deleting.")
+    } else {
+      unlink(depsdone_file,
+        force = TRUE,
+        recursive = FALSE,
+        expand = FALSE
+      )
+    }
   }
-  file.create(".depsdone.txt", showWarnings = FALSE)
+  file.create(depsdone_file, showWarnings = TRUE)
   invisible(NULL)
 }
-
-install_jss3447_deps("deplib")

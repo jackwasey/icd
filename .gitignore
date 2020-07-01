@@ -66,4 +66,3 @@ bench-refactor.html
 .travis.yml.*
 travis-notes.txt
 *-build.log
-results

@@ -1,4 +1,7 @@
+#!/usr/bin/env Makevars
 CXX_STD=CXX11
 PKG_CPPFLAGS=-DEIGEN_PERMANENTLY_DISABLE_STUPID_WARNINGS
 # no openmp, since thread model is different, and is likely to be much slower,
 # although perhaps Eigen is clever enough to account for this.
+
+# src/makevars.win{,64} have the empty makevars dump, so no ICD_STRIP here

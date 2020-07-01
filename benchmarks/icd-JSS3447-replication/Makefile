@@ -23,6 +23,9 @@ ICD_SRC_FILES := $(wildcard ../../R/*.R) \
 	../../vignettes/*.Rmd \
 	../../vignettes/*.Rnw \
 	../../vignettes/*.bib \
+	../../NEWS.md \
+	../../README.Rmd \
+	../../README.md \
 	../../DESCRIPTION
 
 ARTICLE_FILENAME = $(ARTICLE_FILENAME_BASE)$(UPSFX)
@@ -63,8 +66,6 @@ submission $(SUB_TGZ): $(ICD_SRC_TGZ) purl readme $(ARTICLE_PDF) bench3
 $(ARTICLE_PDF):
 	$(RSCRIPT) -e 'rmarkdown::render("../../vignettes/$(RMD).Rmd", output_dir = getwd(), output_file = "$(ARTICLE_PDF)")'
 
-# ../../vignettes/$(RMD).Rmd: ;
-
 purl: $(REPL_R)
 
 $(REPL_R): ../../vignettes/$(RMD).Rmd
@@ -75,9 +76,9 @@ $(README_NAME).html $(README_NAME).pdf $(README_NAME).md: $(README_NAME).Rmd
 
 readme: $(README_NAME).html
 
-deps: .depsdone.txt
-.depsdone.txt:
-	-mkdir "$(DEPS_LIB)"
+deps: $(DEPS_DONE)
+$(DEPS_DONE):
+	if ! [ -d "$(DEPS_LIB)" ]; then mkdir "$(DEPS_LIB)"; fi
 	$(RSCRIPT) install-dependencies.R "$(DEPS_LIB)"
 
 RES3 = dput-latest-n-3.R
