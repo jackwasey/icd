@@ -36,9 +36,9 @@ ICD_SRC_TGZ = icd_$(ICD_VER).tar.gz
 REPL_TGZ = $(ARTICLE_FILENAME)_code.tar.gz
 
 # R
-R_HOME := "$(shell R RHOME)"
-R = $(R_HOME)/bin/R
-RSCRIPT = $(R_HOME)/bin/Rscript
+R_HOME := $(shell R RHOME)
+R = "$(R_HOME)/bin/R"
+RSCRIPT = "$(R_HOME)/bin/Rscript"
 ifndef OS
 	OS = ""
 endif
@@ -78,6 +78,7 @@ readme: $(README_NAME).html
 
 deps: $(DEPS_DONE)
 $(DEPS_DONE):
+	# belt and braces - install dependencies function/script should check
 	if ! [ -d "$(DEPS_LIB)" ]; then mkdir "$(DEPS_LIB)"; fi
 	$(RSCRIPT) install-dependencies.R "$(DEPS_LIB)"
 
@@ -201,6 +202,12 @@ cleandep cleandeps:
 	rm -f $(DEPS_DONE)
 	rm -rf $(DEPS_LIB)
 
+
+
+style install_dependencies.R bench-versus.R find_comorbidity_cutoff.R:
+#style: install_dependencies.R bench-versus.R find_comorbidity_cutoff.R
+	$(RSCRIPT) -e 'styler::style_file(c("install-dependencies.R", "bench-versus.R", "find-comorbidity-cutoff.R"))'
+
 destroy: cleandep cleanbench clean
 
 dockerbuild: Dockerfile install-dependencies.R bench-versus.R Makefile
@@ -209,6 +216,7 @@ dockerbuild: Dockerfile install-dependencies.R bench-versus.R Makefile
 docker: dockerbuild
 	docker run --rm -ti $(DOCKER_TAG)
 
+# following are phony targets
 .benchall: bench3 bench4 bench5 bench6 bench7 bench8 bench9
 .resultall: result3 result4 result5 result6 result7 result8 result9
-.PHONY: default deps all purl readme docker dockerbuild clean cleanbench cleandeps destroy submission replmat
+.PHONY: default deps all purl readme docker dockerbuild clean cleanbench cleandeps destroy submission replmat style

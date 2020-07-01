@@ -137,3 +137,13 @@ install_jss3447_deps <- function(lib.loc, depsdone_file = ".depsdone.txt") {
   file.create(depsdone_file, showWarnings = TRUE)
   invisible(NULL)
 }
+
+if (trimws(tolower(Sys.getenv("ICD_INSTALL_BENCH_DEPS_ON_SOURCE"))) %in% c("", "no", "false", "f", "no", "n", "0")) {
+  if (!(trimws(tolower(Sys.getenv("ICD_VERBOSE"))) %in% c("", "no", "false", "f", "no", "n", "0"))) {
+    message("ICD_INSTALL_BENCH_DEPS_ON_SOURCEenvironment variable is not set, so not installing benchmarks dependencies. Use install_jss3447_deps() to do this.")
+  }
+} else {
+  # TODO: if we are triggered by environment variable, then use environment
+  # variables, if set, to parameterize the benchmarking.
+  install_jss3447_deps()
+}

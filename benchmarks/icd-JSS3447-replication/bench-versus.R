@@ -291,17 +291,6 @@ bench_versus <- function(n_order = n_order_default) {
   )
 }
 
-if (trimws(tolower(Sys.getenv("ICD_BENCH_ON_SOURCE") %in% c("", "no", "false", "f", "no", "n", "0")))) {
-  if (!(trimws(tolower(Sys.getenv("ICD_VERBOSE") %in% c("", "no", "false", "f", "no", "n", "0"))))) {
-    message("ICD_BENCH_ON_SOURCE environment variable is not set, so not running any benchmarks")
-  }
-} else {
-  # TODO: if we are triggered by environment variable, then use environment
-  # variables, if set, to parameterize the benchmarking.
-
-  bench_dput(res <- bench_versus())
-}
-
 bench_dput <- function(res) {
   # work around an older R version abbreviating dput output in some R versions
   old_opt_dml <- options(deparse.max.lines = 0)
@@ -312,4 +301,15 @@ bench_dput <- function(res) {
   # and a dated version
   dput(res, get_bench_filename("dput-dated", "R", use_date = TRUE))
   invisible(res)
+}
+
+if (trimws(tolower(Sys.getenv("ICD_BENCH_ON_SOURCE"))) %in% c("", "no", "false", "f", "no", "n", "0")) {
+  if (!(trimws(tolower(Sys.getenv("ICD_VERBOSE"))) %in% c("", "no", "false", "f", "no", "n", "0"))) {
+    message("ICD_BENCH_ON_SOURCE environment variable is not set, so not running any benchmarks")
+  }
+} else {
+  # TODO: if we are triggered by environment variable, then use environment
+  # variables, if set, to parameterize the benchmarking.
+
+  bench_dput(res <- bench_versus())
 }
