@@ -1,6 +1,8 @@
 #!/usr/bin/env make
 # make --warn-undefined-variables --debug=b --print-data-base
 
+# TODO: test on windows and other platforms with space in path name
+
 # configurable:
 NAME = icd-JSS3447-replication
 DOCKER_TAG = icdjss3447repl
@@ -8,7 +10,7 @@ RES_DIR = results
 RMD = efficiency-prebuilt
 UPSFX = _UPDATED
 README_NAME = README-replication
-DEPS_LIB = deplib
+DEPS_LIB = depslib
 DEPS_DONE = .depsdone.txt
 ARTICLE_FILENAME_BASE = Efficient_calculation_of_comorbidities_from_medical_codes
 
@@ -77,10 +79,15 @@ $(README_NAME).html $(README_NAME).pdf $(README_NAME).md: $(README_NAME).Rmd
 readme: $(README_NAME).html
 
 deps: $(DEPS_DONE)
+
+# belt and braces - install dependencies function/script should check
 $(DEPS_DONE):
-	# belt and braces - install dependencies function/script should check
-	if ! [ -d "$(DEPS_LIB)" ]; then mkdir "$(DEPS_LIB)"; fi
-	$(RSCRIPT) install-dependencies.R "$(DEPS_LIB)"
+	if ! test -d "$(DEPS_LIB)"; then \
+	echo "creating $(DEPS_LIB)"; \
+	mkdir "$(DEPS_LIB)"; \
+	fi
+	ICD_INSTALL_BENCH_DEPS_ON_SOURCE=yes ICD_BENCH_DEPS_LIB="$(DEPS_LIB)" $(RSCRIPT) install-dependencies.R ;
+	touch $(DEPS_DONE)
 
 RES3 = dput-latest-n-3.R
 RES4 = dput-latest-n-4.R
@@ -172,13 +179,13 @@ install_icd_in_temp_lib_dbg: $(ICD_SRC_TGZ)
 	$(R) CMD INSTALL \
 		--preclean \
 		--debug \
-		--library=deplib/ \
+		--library="$(DEPS_LIB) \
 		--use-vanilla \
 		--no-clean-on-error \
-		$(ICD_SRC_TGZ)
+		"$(ICD_SRC_TGZ)"
 
 install_icd_in_temp_lib: $(ICD_SRC_TGZ)
-	$(R) CMD INSTALL --clean --library=deplib/ $(ICD_SRC_TGZ)
+	$(R) CMD INSTALL --clean --library="$(DEPS_LIB)" "$(ICD_SRC_TGZ)"
 
 clean:
 	rm -f $(REPL_R)
@@ -198,19 +205,16 @@ cleanbench:
 		results/dput-dated*.R \
 		results/result*.rds
 
-cleandep cleandeps:
+cleandeps:
 	rm -f $(DEPS_DONE)
 	rm -rf $(DEPS_LIB)
 
+style install-dependencies.R bench-versus.R find-comorbidity-cutoff.R:
+	$(RSCRIPT) -e 'styler::style_file(c("install-dependencies.R", "bench-versus.R", "util-bench.R", "find-comorbidity-cutoff.R"))'
 
+destroy: cleandeps cleanbench clean
 
-style install_dependencies.R bench-versus.R find_comorbidity_cutoff.R:
-#style: install_dependencies.R bench-versus.R find_comorbidity_cutoff.R
-	$(RSCRIPT) -e 'styler::style_file(c("install-dependencies.R", "bench-versus.R", "find-comorbidity-cutoff.R"))'
-
-destroy: cleandep cleanbench clean
-
-dockerbuild: Dockerfile install-dependencies.R bench-versus.R Makefile
+dockerbuild: Dockerfile install-dependencies.R util-bench.R find-comorbidities-cutoff.R bench-versus.R Makefile
 	docker build -t $(DOCKER_TAG) .
 
 docker: dockerbuild

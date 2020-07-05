@@ -10,6 +10,7 @@ deplib/
 *build.log
 *.tar.gz
 deplib
+depslib
 results
 !comorbidity_0.1.1.tar.gz
 !medicalrisk_1.2.tar.gz

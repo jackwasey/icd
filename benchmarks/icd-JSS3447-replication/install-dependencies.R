@@ -14,7 +14,24 @@
 #' installed R libraries or environment, or session options.
 #' @keywords internal
 #' @noRd
-install_jss3447_deps <- function(lib.loc, depsdone_file = ".depsdone.txt") {
+install_jss3447_deps <- function(lib.loc,
+                                 depsdone_file = ".depsdone.txt",
+                                 req_min_icd_ver = "4.0.8") {
+  if (missing(lib.loc)) {
+    lib.loc <- Sys.getenv("ICD_BENCH_DEPS_LIB", unset = "depslib")
+  }
+  if (exists(envir = as.environment("package:base"), "dir.exists")) {
+    if (!dir.exists(lib.loc)) {
+      warning(
+        "install dependencies does not see a temporary R package library directory '",
+        normalizePath(lib.loc),
+        "'. It will be created."
+      )
+      dir.create(lib.loc)
+    }
+    # no base::dir.exists
+  }
+
   repos <- getOption("repos")
   repo_ok <- TRUE
   # I do not wish to prompt user, e.g. if repos = "@CRAN@"
@@ -25,48 +42,47 @@ install_jss3447_deps <- function(lib.loc, depsdone_file = ".depsdone.txt") {
 
   for (r in repos) {
     repo_con <- url(r)
-    tryCatch(
-      {
-        readLines(repo_con)
-        if (isOpen(repo_con)) close(repo_con)
-      },
-      error = function(e) {
-        warning(
-          "repo: ",
-          r,
-          " is not accessible. Will try later with cloud.r-project.org"
-        )
-        repo_ok <<- FALSE
-      },
-      warning = function(e) {}
-    )
+    tryCatch({
+      readLines(repo_con)
+      if (isOpen(repo_con))
+        close(repo_con)
+    },
+    error = function(e) {
+      warning("repo: ",
+              r,
+              " is not accessible. Will try later with cloud.r-project.org")
+      repo_ok <<- FALSE
+    },
+    warning = function(e) {
+
+    })
     close(repo_con)
   }
   if (!repo_ok ||
-    is.null(repos) ||
-    length(repos) == 0L
-  ) {
-    repos <- c(
-      CRAN = "https://cloud.r-project.org/",
-      CRAN_http = "http://cloud.r-project.org/"
-    )
+      is.null(repos) ||
+      length(repos) == 0L) {
+    repos <- c(CRAN = "https://cloud.r-project.org/",
+               CRAN_http = "http://cloud.r-project.org/")
   }
 
   for (p in c(
+    # icd itself:
+    "Rcpp",
+    "RcppEigen",
+    # icd benchmarking:
     "bench",
+    "profmem",
+    # bench package uses this when capabilities("profmem") is TRUE
     # "backports",
+    # imported by comorbidity:
     "checkmate",
-    # imported by comorbidity
     # "magrittr", # no need?
     "parallel",
-    # used by 'comorbidity' for maximum speed
+    # used by 'comorbidity' for speed with larger problems
+    # imported by 'medicalrisk'
     "plyr",
     "reshape2",
     "hash",
-    # imported by 'medicalrisk'
-    # "profmem", # bench package does this when capabilities("profmem") is TRUE
-    "Rcpp",
-    "RcppEigen",
     #    "comorbidity", # CRAN version has incompatible updates
     #    "medicalrisk", # CRAN version from 2016 unchanged at time of submission
     NULL
@@ -76,10 +92,9 @@ install_jss3447_deps <- function(lib.loc, depsdone_file = ".depsdone.txt") {
     })
     if (length(have_p) == 0L) {
       install.packages(p,
-        character.only = TRUE,
-        repos = repos,
-        lib = lib.loc
-      )
+                       character.only = TRUE,
+                       repos = repos,
+                       lib = lib.loc)
     }
     suppressPackageStartupMessages(library(
       p,
@@ -89,26 +104,67 @@ install_jss3447_deps <- function(lib.loc, depsdone_file = ".depsdone.txt") {
       lib.loc = lib.loc
     ))
   }
-  message("Installing medicalrisk from tar.gz to ", lib.loc)
-  have_medicalrisk <- identical(find.package("medicalrisk", lib.loc = lib.loc, quiet = TRUE), character())
-  if (!have_medicalrisk) install.packages("medicalrisk_1.2.tar.gz", repos = NULL, lib = lib.loc)
-  message("Installing comorbidity from tar.gz to ", lib.loc)
-  have_comorbidity <- identical(find.package("comorbidity", lib.loc = lib.loc, quiet = TRUE), character())
-  if (!have_comorbidity) {
-    install.packages("comorbidity_0.1.1.tar.gz",
+  # SOMEDAY: consider using packrat or similar to cache packages required to run
+  # these benchmarks, perhaps alongside using the existing R _tests_ framework,
+  # using the benchmarks directory as the tests directory when doing R CMD
+  # check.
+
+  # TODO: this should probably be somewhere else:
+    Sys.setenv("ICD_STRIP" = "1")
+  local_pkg_status <- list()
+  for (local_pkg in c("medicalrisk", "comorbidity")) {
+    message(
+      "Trying to install local source package '",
+      local_pkg,
+      "' into temporary library: '",
+      lib.loc,
+      "'."
+    )
+    lpp <- find.package(local_pkg,
+                        lib.loc = lib.loc,
+                        quiet = TRUE,
+                        verbose = FALSE)
+    lps <- !identical(lpp, character())
+    local_pkg_status[local_pkg] <- lps
+    if (lps) {
+      msg_verbose("'", local_pkg, "' is already in '", lib.loc, "'")
+      next
+    }
+    msg_verbose("installing '",
+                local_pkg,
+                "' because it is not found in '",
+                lib.loc,
+                "'")
+    candidate_pkgs <-
+      list.files(pattern = paste0(local_pkg, ".*\\.tar\\.gz"))
+    if (length(candidate_pkgs) == 0) {
+      stop("Local source package for '",
+           local_pkg,
+           "' not found in '",
+           lib.loc)
+    } else if (length(candidate_pkgs) > 1) {
+      stop("Multiple possible source packages for '",
+           local_pkg,
+           "' found in '",
+           lib.loc)
+    }
+    install.packages(
+      pkgs = candidate_pkgs[1],
+      type = "source",
+      INSTALL_opts = c("--no-test-load", "--configure-args=\"MAKEFLAGS=-O3\""),
+      verbose = FALSE,
       repos = NULL,
       lib = lib.loc
     )
   }
+
   # This relies on 'icd' not already being loaded, or it will pass with any version
   if (!requireNamespace(
     "icd",
     quietly = TRUE,
     lib.loc = lib.loc,
-    versionCheck = list(
-      version = "4.0.8",
-      op = ">="
-    )
+    versionCheck = list(version = req_min_icd_ver,
+                        op = ">=")
   )) {
     message("icd of sufficient recency not yet installed, so installing from local source package")
     if ("icd" %in% available.packages()["Package"]) {
@@ -127,7 +183,8 @@ install_jss3447_deps <- function(lib.loc, depsdone_file = ".depsdone.txt") {
     if (file.size(depsdone_file) != 0L) {
       warning("dependency empty file flag is not empty! Not deleting.")
     } else {
-      unlink(depsdone_file,
+      unlink(
+        depsdone_file,
         force = TRUE,
         recursive = FALSE,
         expand = FALSE
@@ -140,7 +197,9 @@ install_jss3447_deps <- function(lib.loc, depsdone_file = ".depsdone.txt") {
 
 if (trimws(tolower(Sys.getenv("ICD_INSTALL_BENCH_DEPS_ON_SOURCE"))) %in% c("", "no", "false", "f", "no", "n", "0")) {
   if (!(trimws(tolower(Sys.getenv("ICD_VERBOSE"))) %in% c("", "no", "false", "f", "no", "n", "0"))) {
-    message("ICD_INSTALL_BENCH_DEPS_ON_SOURCEenvironment variable is not set, so not installing benchmarks dependencies. Use install_jss3447_deps() to do this.")
+    message(
+      "ICD_INSTALL_BENCH_DEPS_ON_SOURCEenvironment variable is not set, so not installing benchmarks dependencies. Use install_jss3447_deps() to do this."
+    )
   }
 } else {
   # TODO: if we are triggered by environment variable, then use environment
