@@ -55,7 +55,7 @@ void printCornerSparse(PtsSparse x) {
 void buildVisitCodesSparseWide(
   const DataFrame &data,
   const std::string id_name,
-  const CV code_names,
+  const CV &code_names,
   const bool validate,
   Relevant &relevant,
   PtsSparse &visMat, // output
@@ -84,7 +84,7 @@ void buildVisitCodesSparseWide(
     if (Rf_isFactor(data_col)) {
       const IntegerVector &data_col_fc = (IntegerVector)data_col;
       DEBUG("codes are still in a factor...");
-      const CV code_levels = data_col_fc.attr("levels");
+      const CV &code_levels = data_col_fc.attr("levels");
       const IntegerVector codes_relevant =
         refactor(data_col_fc, relevant.str_codes, true, validate);
       assert(rows.size() == codes_relevant.size());
@@ -137,7 +137,7 @@ void buildVisitCodesSparseWide(
 LogicalMatrix comorbidMatMulWide(const DataFrame &data,
                                  const List &map,
                                  const std::string id_name,
-                                 const CV code_names,
+                                 const CV &code_names,
                                  const bool validate) {
   VecStr out_row_names;           // size is reserved in buildVisitCodesVec
   RObject visits = data[id_name]; // does this copy??? RObject instead?

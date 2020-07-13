@@ -162,7 +162,13 @@ bool icd10cmCompareQuirk(
   return true;
 }
 
-// [[Rcpp::export(icd10cm_compare_c)]]
+//' Compare ICD-10 codes stored as strings in C arrays
+//'
+//' TODO: can be slightly improved by accepting SEXP CHARSXP, since this has
+//' pre-calculated length stored.
+//' @keywords internal
+//' @noRd
+//[[Rcpp::export(icd10cm_compare_c)]]
 bool icd10cmCompareC(const char* xstr,
                      const char* ystr) {
   TRACE("icd10cmCompareC comparing " << xstr << " with " << ystr);

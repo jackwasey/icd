@@ -12,3 +12,5 @@ dput-dated*.R
 dput-latest*.R
 lib-bench
 result-*.rds
+.depsdone.txt
+deplib

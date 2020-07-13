@@ -1,3 +1,4 @@
+// not included, so no comorbidIcd10.h
 #include "icd_types.h"
 #include "local.h"
 #include <string> // for string
@@ -30,7 +31,7 @@ using namespace Rcpp;
 //' @keywords internal
 //' @noRd
 // [[Rcpp::export(simplify_map_lex)]]
-Rcpp::List simplifyMapLexicographic(const CV &pt_codes, const List map) {
+Rcpp::List simplifyMapLexicographic(const CV &pt_codes, const List &map) {
   std::string ptCode;
   size_t searchLen;
   size_t pos;

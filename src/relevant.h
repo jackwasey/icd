@@ -11,8 +11,8 @@ private:
   US r;
 
 public:
-  const List &src_map;
-  const CV str_codes;
+  const Rcpp::List &src_map;
+  const Rcpp::CharacterVector str_codes;
   std::unordered_map<std::string, int> rel_map;
   IHS hash;
   CV keys;
@@ -32,7 +32,7 @@ public:
   CV findRelevant(const SEXP &codes);
   // CV findRelevant(const DataFrame& data, CV code_fields);
   CV findRelevant(const List &data, const CV& code_names);
-  RelMap findRel(const CharacterVector x);
+  RelMap findRel(const CharacterVector& x);
 }; // Relevant
 
 #endif // RELEVANT_H_

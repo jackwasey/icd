@@ -379,15 +379,15 @@ short_to_parts <- function(x, mnr_empty = "") {
   UseMethod("short_to_parts")
 }
 
-#' @describeIn short_to_parts Convert short format ICD-9 codes to parts
-#' @export
-#' @keywords internal manip
-#' @noRd
-short_to_parts.icd9 <- function(x, mnr_empty = "") {
-  # Cannot specify default values in both header and C++ function body, so use a
-  # shim here.
-  icd9ShortToParts(x, mnrEmpty = mnr_empty)
-}
+# #' @describeIn short_to_parts Convert short format ICD-9 codes to parts
+# #' @export
+# #' @keywords internal manip
+# #' @noRd
+# short_to_parts.icd9 <- function(x, mnr_empty = "") {
+#   # Cannot specify default values in both header and C++ function body, so use a
+#   # shim here. Is this still required in C++17?
+#   icd9ShortToParts(x, mnrEmpty = mnr_empty)
+# }
 
 #' @describeIn short_to_parts Convert short format ICD-10 codes to parts
 #' @export
@@ -427,13 +427,13 @@ decimal_to_parts <- function(x, mnr_empty = "") {
   UseMethod("decimal_to_parts")
 }
 
-#' @describeIn decimal_to_parts Convert decimal ICD-9 code to parts
-#' @export
-#' @keywords internal manip
-#' @noRd
-decimal_to_parts.icd9 <- function(x, mnr_empty = "") {
-  icd9DecimalToParts(x, mnrEmpty = mnr_empty)
-}
+# #' @describeIn decimal_to_parts Convert decimal ICD-9 code to parts
+# #' @export
+# #' @keywords internal manip
+# #' @noRd
+# decimal_to_parts.icd9 <- function(x, mnr_empty = "") {
+#   icd9DecimalToParts(x, mnrEmpty = mnr_empty)
+# }
 
 #' @describeIn decimal_to_parts Convert decimal ICD code to parts, guessing
 #'   ICD version

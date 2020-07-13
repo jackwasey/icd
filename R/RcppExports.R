@@ -120,12 +120,12 @@ majMinToParts <- function(mjr, mnr) {
     .Call(`_icd_majMinToParts`, mjr, mnr)
 }
 
-icd9ShortToParts <- function(icd9Short, mnrEmpty) {
+short_to_parts.icd9 <- function(icd9Short, mnrEmpty = "") {
     .Call(`_icd_icd9ShortToParts`, icd9Short, mnrEmpty)
 }
 
-icd9DecimalToParts <- function(icd9Decimal, mnrEmpty) {
-    .Call(`_icd_icd9DecimalToParts`, icd9Decimal, mnrEmpty)
+decimal_to_parts.icd9 <- function(icd9Decimal, mnr_empty = "") {
+    .Call(`_icd_icd9DecimalToParts`, icd9Decimal, mnr_empty)
 }
 
 icd9_short_to_decimal_rcpp <- function(x) {
@@ -150,8 +150,8 @@ icd10_short_to_parts_rcpp <- function(x, mnrEmpty) {
     .Call(`_icd_icd10ShortToParts`, x, mnrEmpty)
 }
 
-icd10DecimalToParts <- function(x, mnrEmpty = "") {
-    .Call(`_icd_icd10DecimalToParts`, x, mnrEmpty)
+icd10DecimalToParts <- function(x, mnr_empty = "") {
+    .Call(`_icd_icd10DecimalToParts`, x, mnr_empty)
 }
 
 #' @title Convert integers to strings as quickly as possible
@@ -221,8 +221,11 @@ icd9_is_e_rcpp <- function(sv) {
 }
 
 #' Simpler add leading zeroes without converting to parts and back
-#' @keywords internal manip
-#' @noRd
+#'
+#' @details Returning a 'String' is (probably?) going to require that Rcpp use R's C
+#' interface to make a new \code{CHARSXP}, which involves enconding scanning, global
+#' charsxp lookup. However, if we are actually changing a string, we must do this
+#' if it is to be used back in R. ' @keywords internal manip ' @noRd
 icd9AddLeadingZeroesMajorSingle <- function(mjr) {
     .Call(`_icd_icd9AddLeadingZeroesMajorSingle`, mjr)
 }
@@ -345,6 +348,12 @@ icd9_order_rcpp <- function(x) {
     .Call(`_icd_icd9Order`, x)
 }
 
+#' Compare ICD-10 codes stored as strings in C arrays
+#'
+#' TODO: can be slightly improved by accepting SEXP CHARSXP, since this has
+#' pre-calculated length stored.
+#' @keywords internal
+#' @noRd
 icd10cm_compare_c <- function(xstr, ystr) {
     .Call(`_icd_icd10cmCompareC`, xstr, ystr)
 }

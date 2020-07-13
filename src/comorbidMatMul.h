@@ -36,7 +36,7 @@ using namespace std::chrono;
 void buildVisitCodesSparseWide(
   const DataFrame &data,
   const std::string id_name,
-  const CV code_names,
+  const CV &code_names,
   const bool validate,
   Relevant &relevant,
   // output
@@ -46,5 +46,5 @@ void buildVisitCodesSparseWide(
 LogicalMatrix comorbidMatMulWide(const DataFrame &data,
                                  const List &map,
                                  const std::string id_name,
-                                 const CV code_name,
+                                 const CV &code_name,
                                  const bool validate = false);

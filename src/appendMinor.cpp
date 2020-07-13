@@ -34,7 +34,7 @@ CV icd9MajMinToCode(const CV& mjr,
       continue;
     }
     const char *smj_c = mjrelem.get_cstring();
-    Str smj           = std::string(smj_c);
+    std::string smj           = std::string(smj_c);
     switch (strlen(smj_c)) {
     case 0:
       out_is_na[std::distance(mjr.cbegin(), j)] = 1;
@@ -93,6 +93,6 @@ CV icd9MajMinToShort(const CV& mjr, const CV& mnr) {
 }
 
 // [[Rcpp::export]]
-CV icd9MajMinToDecimal(const CV mjr, const CV mnr) {
+CV icd9MajMinToDecimal(const CV& mjr, const CV& mnr) {
   return icd9MajMinToCode(mjr, mnr, false);
 }

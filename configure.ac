@@ -21,6 +21,23 @@
 
 AC_PREREQ([2.62])
 AC_INIT(icd, [4.0.9.9000], [jack@jackwasey.com])
+
+dnl Note that runstatedir and localstate dir may differ on macos. /run should be default, but doesn't exist on default MacOS. Therefore, should use ./configure --localstatedir=/var and --runstatedir=/var/run, but ideally do that here, to avoid autoreconf changing 'configure' between linux and macupdates.
+
+dnl Autoconf 2.70 has runstatedir but is not yet released.
+m4_version_prereq([2.70], [], [dnl
+    AC_ARG_VAR(runstatedir, [$localstatedir/run for autoconf < 2.70])dnl
+    AC_SUBST(runstatedir)dnl
+])
+if test "x$runstatedir" = "x"; then
+    runstatedir="$localstatedir/run"
+fi
+
+# Expand runstatedir to remove ${localstatedir} from it
+if (echo ${runstatedir} | grep -q localstatedir); then
+    runstatedir="$(eval echo ${runstatedir})"
+fi
+
 AC_COPYRIGHT([Copyright (C) 2014 - 2020  Jack O. Wasey])
 AC_CONFIG_SRCDIR([src])
 AC_CONFIG_FILES([src/Makevars])

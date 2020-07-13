@@ -9,8 +9,7 @@
 #include <unordered_map>
 #include <unordered_set>
 #include <vector>
-typedef std::string Str;
-typedef std::vector<Str> VecStr;
+typedef std::vector<std::string> VecStr;
 typedef std::vector<int> VecInt;
 typedef std::vector<bool> VecBool; // naughty, but good compromise
 typedef std::vector<char> VecChar;

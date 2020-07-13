@@ -4,7 +4,7 @@
 #include "icd_types.h"
 #include "range-const.h"
 
-CV icd9ExpandMinor(const Str& mnr,
+CV icd9ExpandMinor(const std::string& mnr,
                    bool isE = false);
 CV icd9ChildrenShortUndefined(const CV& icd9Short);
 CV icd9ChildrenShortDefined(const CV& icd9Short,

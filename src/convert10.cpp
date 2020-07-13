@@ -43,7 +43,7 @@ List icd10ShortToParts(const CV &x, const String mnrEmpty) {
 }
 
 // [[Rcpp::export]]
-List icd10DecimalToParts(const CV x, const String mnrEmpty = "") {
+List icd10DecimalToParts(const CV x, const String mnr_empty = "") {
   CV mjrs;
   CV mnrs;
   R_xlen_t ilen = x.length();
@@ -58,7 +58,7 @@ List icd10DecimalToParts(const CV x, const String mnrEmpty = "") {
       mnrs.push_back(NA_STRING);
       continue;
     }
-    std::string thiscode = as<std::string>(*it);
+    std::string thiscode = Rcpp::as<std::string>(*it);
     thiscode = strimCpp(thiscode); // Updates 'thisccode' by reference, no copy
     std::size_t pos = thiscode.find(".");
     // substring parts
@@ -69,7 +69,7 @@ List icd10DecimalToParts(const CV x, const String mnrEmpty = "") {
       mnrout = thiscode.substr(pos + 1);
     } else {
       mjrin  = thiscode;
-      mnrout = mnrEmpty;
+      mnrout = mnr_empty;
     }
     mjrs.push_back(mjrin);
     mnrs.push_back(mnrout);

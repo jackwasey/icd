@@ -6,7 +6,7 @@ CV icd9MajMinToCode(const CV& mjr,
                     const CV& mnr,
                     const bool isShort);
 CV icd9MajMinToShort(const CV& mjr, const CV& mnr);
-CV icd9MajMinToDecimal(const CV mjr, const CV mnr);
+CV icd9MajMinToDecimal(const CV& mjr, const CV& mnr);
 void icd9AppendMinors(VecStr &m, const VecStr &mnr, bool isShort);
 
 inline void icd9AppendMinorsShort(std::vector<std::string>& m,

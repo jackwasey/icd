@@ -13,7 +13,7 @@
 using namespace Rcpp;
 
 // const std::vector<std::string> allMinorsStd{
-CV allMinors = {"",   "0",  "1",  "2",  "3",  "4",  "5",  "6",  "7",  "8",
+Rcpp::CharacterVector allMinors = {"",   "0",  "1",  "2",  "3",  "4",  "5",  "6",  "7",  "8",
                 "9",  "00", "01", "02", "03", "04", "05", "06", "07", "08",
                 "09", "10", "11", "12", "13", "14", "15", "16", "17", "18",
                 "19", "20", "21", "22", "23", "24", "25", "26", "27", "28",
@@ -27,7 +27,7 @@ CV allMinors = {"",   "0",  "1",  "2",  "3",  "4",  "5",  "6",  "7",  "8",
                 "99"};
 
 // [[Rcpp::export(icd9_expand_minor_rcpp)]]
-CV icd9ExpandMinor(const Str &mnr, bool isE) {
+Rcpp::CharacterVector icd9ExpandMinor(const std::string &mnr, bool isE) {
   if (!isE) {
     switch (mnr.size()) {
     case 0:
@@ -79,16 +79,16 @@ CV icd9ExpandMinor(const Str &mnr, bool isE) {
   return (NA_STRING); // should never get here
 }
 
-std::set<Str> icd9ChildrenShortWorker(const CV& icd9Short) {
-  std::set<Str> out;
+std::set<std::string> icd9ChildrenShortWorker(const CV& icd9Short) {
+  std::set<std::string> out;
   List parts = icd9ShortToParts(icd9Short, "");
   CV mjr = parts[0];
   CV mnr = parts[1];
   CV::iterator itmjr = mjr.begin();
   CV::iterator itmnr = mnr.begin();
   for (; itmjr != mjr.end(); ++itmjr, ++itmnr) {
-    Str thismjr = as<Str>(*itmjr);
-    Str thismnr = as<Str>(*itmnr);
+    std::string thismjr = as<std::string>(*itmjr);
+    std::string thismnr = as<std::string>(*itmnr);
     const CV newminors =
       icd9ExpandMinor(thismnr, icd9IsASingleE(thismjr.c_str()));
     VecStr newshort = as<VecStr>(icd9MajMinToShort(thismjr, newminors));
@@ -104,7 +104,7 @@ CV icd9ChildrenShortUndefined(const CV& icd9Short) {
     qout.attr("icd_short_diag") = true;
     return qout;
   }
-  std::set<Str> out = icd9ChildrenShortWorker(icd9Short);
+  std::set<std::string> out = icd9ChildrenShortWorker(icd9Short);
   CV rcppOut = wrap(out);
   rcppOut.attr("icd_short_diag") = true;
   return rcppOut;
@@ -118,9 +118,9 @@ CV icd9ChildrenShortDefined(const CV& icd9Short,
     qout.attr("icd_short_diag") = true;
     return qout;
   }
-  std::set<Str> out = icd9ChildrenShortWorker(icd9Short);
-  std::set<Str> out_real;
-  const std::set<Str> reals(icd9cmReal.begin(), icd9cmReal.end());
+  std::set<std::string> out = icd9ChildrenShortWorker(icd9Short);
+  std::set<std::string> out_real;
+  const std::set<std::string> reals(icd9cmReal.begin(), icd9cmReal.end());
   std::set_intersection(out.begin(),
                         out.end(),
                         reals.begin(),
@@ -149,8 +149,8 @@ icd_set icd9ChildrenShortUnorderedWorker(const CV& icd9Short) {
   CV::iterator itmjr = mjr.begin();
   CV::iterator itmnr = mnr.begin();
   for (; itmjr != mjr.end(); ++itmjr, ++itmnr) {
-    Str thismjr = as<Str>(*itmjr);
-    Str thismnr = as<Str>(*itmnr);
+    std::string thismjr = as<std::string>(*itmjr);
+    std::string thismnr = as<std::string>(*itmnr);
     const CV newminors =
       icd9ExpandMinor(thismnr, icd9IsASingleE(thismjr.c_str()));
     VecStr newshort = as<VecStr>(icd9MajMinToShort(thismjr, newminors));

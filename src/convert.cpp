@@ -1,3 +1,4 @@
+#include <Rcpp.h>
 #include "convert.h"
 #include "icd_types.h"
 extern "C" {
@@ -9,23 +10,27 @@ extern "C" {
 #include "util.h"        // for strimCpp, trimLeftCpp
 #include <string>        // for string
 
-using namespace Rcpp;
+using Rcpp::StringVector;
+using Rcpp::IntegerVector;
+typedef Rcpp::CharacterVector CV;
+//typedef Rcpp::internal::NamedPlaceHolder _;
+static Rcpp::internal::NamedPlaceHolder _;
 
 // [[Rcpp::export]]
-CV icd9PartsToShort(const List &parts) {
+CV icd9PartsToShort(const Rcpp::List &parts) {
   CV res = icd9MajMinToCode(parts["mjr"], parts["mnr"], true);
   return res;
 }
 
 // [[Rcpp::export]]
-CV icd9PartsToDecimal(const List &parts) {
+CV icd9PartsToDecimal(const Rcpp::List &parts) {
   CV res = icd9MajMinToCode(parts["mjr"], parts["mnr"], false);
   return res;
 }
 
 // [[Rcpp::export]]
-List majMinToParts(const CV &mjr, const CV &mnr) {
-  List returned_frame = List::create(_["mjr"] = mjr, _["mnr"] = mnr);
+Rcpp::List majMinToParts(const CV &mjr, const CV &mnr) {
+  Rcpp::List returned_frame = Rcpp::List::create(_["mjr"] = mjr, _["mnr"] = mnr);
 
   StringVector sample_row          = returned_frame(0);
   IntegerVector row_names          = seq_along(sample_row);
@@ -37,12 +42,12 @@ List majMinToParts(const CV &mjr, const CV &mnr) {
   return returned_frame;
 }
 
-// [[Rcpp::export]]
-List icd9ShortToParts(const CV &icd9Short, String mnrEmpty) {
+// [[Rcpp::export(short_to_parts.icd9)]]
+Rcpp::List icd9ShortToParts(const CV &icd9Short, Rcpp::String mnrEmpty = "") {
   CV mjr(icd9Short.size());
   CV mnr(icd9Short.size());
   for (int i = 0; i < icd9Short.size(); ++i) {
-    String thisShort = icd9Short[i];
+    Rcpp::String thisShort = icd9Short[i];
     // .is_na() is private?
     if (is_true(all(is_na(CV::create(thisShort))))) {
       mnr[i] = NA_STRING; // I think set_na() might be an alternative.
@@ -90,19 +95,19 @@ List icd9ShortToParts(const CV &icd9Short, String mnrEmpty) {
   return majMinToParts(icd9AddLeadingZeroesMajor(mjr), mnr);
 }
 
-// [[Rcpp::export]]
-List icd9DecimalToParts(const CV &icd9Decimal, const String mnrEmpty) {
+// [[Rcpp::export(decimal_to_parts.icd9)]]
+Rcpp::List icd9DecimalToParts(const CV &icd9Decimal, const Rcpp::String mnr_empty = "") {
   CV mjrs;
   CV mnrs;
   int ilen = icd9Decimal.length();
 
   if (ilen == 0) {
-    return List::create(_["mjr"] = CV::create(), _["mnr"] = CV::create());
+    return Rcpp::List::create(_["mjr"] = CV::create(), _["mnr"] = CV::create());
   }
 
   for (CV::const_iterator it = icd9Decimal.begin(); it != icd9Decimal.end();
        ++it) {
-    String strna = *it;
+    Rcpp::String strna = *it;
     if (is_true(all(is_na(CV::create(strna)))) || strna == "") {
       mjrs.push_back(NA_STRING);
       mnrs.push_back(NA_STRING);
@@ -111,24 +116,24 @@ List icd9DecimalToParts(const CV &icd9Decimal, const String mnrEmpty) {
     // SOMEDAY, a faster way might be to use String's function
     // get_cstring, and recode the trim functions to take const char *. This
     // would avoid the type change AND may trim faster.
-    std::string thiscode = as<std::string>(*it);
+    std::string thiscode = Rcpp::as<std::string>(*it);
     thiscode =
       strimCpp(thiscode); // This updates 'thisccode' by reference, no copy
     std::size_t pos = thiscode.find(".");
     // substring parts
     std::string mjrin;
-    String mnrout;
+    Rcpp::String mnrout;
     if (pos != std::string::npos) {
       mjrin  = thiscode.substr(0, pos);
       mnrout = thiscode.substr(pos + 1);
     } else {
       mjrin  = thiscode;
-      mnrout = mnrEmpty;
+      mnrout = mnr_empty;
     }
     mjrs.push_back(icd9AddLeadingZeroesMajorSingle(mjrin));
     mnrs.push_back(mnrout);
   }
-  return List::create(_["mjr"] = mjrs, _["mnr"] = mnrs);
+  return Rcpp::List::create(_["mjr"] = mjrs, _["mnr"] = mnrs);
 }
 
 // [[Rcpp::export(name = "icd9_short_to_decimal_rcpp")]]
@@ -142,7 +147,9 @@ CV icd9DecimalToShort(const CV &x) {
   size_t ilen = x.length();
   if (ilen == 0) return out;
   for (size_t i = 0; i != ilen; ++i) {
-    String strna = x[i]; // need to copy here? does it copy?
+    Rcpp::String strna = x[i]; // need to copy here? does it copy?
+    // TODO: quicker way to find NA? can we not just check length=-1 in CHARSXP?
+    // Does Rcpp already do this?
     if (is_true(all(is_na(CV::create(strna)))) || strna == "") continue;
     const char *thiscode_cstr = strna.get_cstring();
     std::string thiscode(thiscode_cstr);
@@ -165,7 +172,7 @@ CV icd9DecimalToShort(const CV &x) {
       // otherwise leave the code alone
       out[i] = thiscode;
     } else {
-      out[i] = String(icd9AddLeadingZeroesMajorSingleStd(thiscode));
+      out[i] = Rcpp::String(icd9AddLeadingZeroesMajorSingleStd(thiscode));
     }
   }
   return out;
@@ -186,9 +193,9 @@ CV icd9GetMajor(const CV &x, const bool short_code) {
 
     // I don't think i need to PROTECT here, because I immediately return the
     // result via Rcpp
-    SEXP mjrs = icd9ShortToParts(x, "")[0]; // actually wants to be a List
-    return as<CV>(mjrs);
+    SEXP mjrs = icd9ShortToParts(x, "")[0]; // actually wants to be a Rcpp::List
+    return Rcpp::as<CV>(mjrs);
   }
   SEXP mjrs = icd9DecimalToParts(x, "")[0];
-  return as<CV>(mjrs);
+  return Rcpp::as<CV>(mjrs);
 }
