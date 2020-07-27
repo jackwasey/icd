@@ -2,6 +2,7 @@
 // Generator token: 10BE3573-1514-4C36-9D1C-5A225CD40393
 
 #include "icd_types.h"
+#include <RcppEigen.h>
 #include <Rcpp.h>
 
 using namespace Rcpp;
@@ -495,26 +496,26 @@ BEGIN_RCPP
 END_RCPP
 }
 // factorNoSort
-IntegerVector factorNoSort(const CharacterVector& x, const CharacterVector& levels, const bool na_rm);
+Rcpp::IntegerVector factorNoSort(const Rcpp::CharacterVector& x, const Rcpp::CharacterVector& levels, const bool na_rm);
 RcppExport SEXP _icd_factorNoSort(SEXP xSEXP, SEXP levelsSEXP, SEXP na_rmSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const CharacterVector& >::type x(xSEXP);
-    Rcpp::traits::input_parameter< const CharacterVector& >::type levels(levelsSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::CharacterVector& >::type x(xSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::CharacterVector& >::type levels(levelsSEXP);
     Rcpp::traits::input_parameter< const bool >::type na_rm(na_rmSEXP);
     rcpp_result_gen = Rcpp::wrap(factorNoSort(x, levels, na_rm));
     return rcpp_result_gen;
 END_RCPP
 }
 // refactor
-IntegerVector refactor(const IntegerVector& x, const CV& new_levels, const bool exclude_na, const bool validate);
+Rcpp::IntegerVector refactor(const Rcpp::IntegerVector& x, const Rcpp::CharacterVector& new_levels, const bool exclude_na, const bool validate);
 RcppExport SEXP _icd_refactor(SEXP xSEXP, SEXP new_levelsSEXP, SEXP exclude_naSEXP, SEXP validateSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const IntegerVector& >::type x(xSEXP);
-    Rcpp::traits::input_parameter< const CV& >::type new_levels(new_levelsSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::IntegerVector& >::type x(xSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::CharacterVector& >::type new_levels(new_levelsSEXP);
     Rcpp::traits::input_parameter< const bool >::type exclude_na(exclude_naSEXP);
     Rcpp::traits::input_parameter< const bool >::type validate(validateSEXP);
     rcpp_result_gen = Rcpp::wrap(refactor(x, new_levels, exclude_na, validate));
@@ -522,25 +523,25 @@ BEGIN_RCPP
 END_RCPP
 }
 // refactor_narm
-IntegerVector refactor_narm(const IntegerVector& x, const CV& new_levels, const bool validate);
+Rcpp::IntegerVector refactor_narm(const Rcpp::IntegerVector& x, const Rcpp::CharacterVector& new_levels, const bool validate);
 RcppExport SEXP _icd_refactor_narm(SEXP xSEXP, SEXP new_levelsSEXP, SEXP validateSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const IntegerVector& >::type x(xSEXP);
-    Rcpp::traits::input_parameter< const CV& >::type new_levels(new_levelsSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::IntegerVector& >::type x(xSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::CharacterVector& >::type new_levels(new_levelsSEXP);
     Rcpp::traits::input_parameter< const bool >::type validate(validateSEXP);
     rcpp_result_gen = Rcpp::wrap(refactor_narm(x, new_levels, validate));
     return rcpp_result_gen;
 END_RCPP
 }
 // factorIsValid
-bool factorIsValid(const IntegerVector& f);
+bool factorIsValid(const Rcpp::IntegerVector& f);
 RcppExport SEXP _icd_factorIsValid(SEXP fSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const IntegerVector& >::type f(fSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::IntegerVector& >::type f(fSEXP);
     rcpp_result_gen = Rcpp::wrap(factorIsValid(f));
     return rcpp_result_gen;
 END_RCPP

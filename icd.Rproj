@@ -16,10 +16,10 @@ AutoAppendNewline: Yes
 StripTrailingWhitespace: Yes
 
 BuildType: Package
+PackageUseDevtools: Yes
 PackageInstallArgs: --preclean --strip --strip-lib --no-clean-on-error --data-compress=none
 PackageBuildArgs: --compact-vignettes=gs+qpdf
 PackageBuildBinaryArgs: --preclean --strip --strip-lib --no-clean-on-error --data-compress=none
 PackageRoxygenize: rd,namespace
 
 QuitChildProcessesOnExit: Yes
-DisableExecuteRprofile: Yes

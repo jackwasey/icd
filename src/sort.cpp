@@ -1,6 +1,7 @@
 #include <Rcpp.h>
 #include "sort.h"
-using namespace Rcpp;
+using Rcpp::CharacterVector;
+using Rcpp::LogicalVector;
 
 IntegerVector orderWorker(
     const CharacterVector& x,
@@ -103,16 +104,19 @@ bool icd10cmCompareQuirk(
     const char *beforeBeforeQuirk,
     const char *afterAfterQuirk,
     bool& res) {
+  // This function performs a binary comparison of the characters. For a
+  // function that takes into account locale-specific rules, see strcoll.
+  // http://www.cplusplus.com/reference/cstring/strcoll/
   bool mx = (xstr == quirk || strncmp(xstr, quirk, 3) == 0);
   bool my = (ystr == quirk || strncmp(ystr, quirk, 3) == 0);
   if (!mx && !my) {
     TRACE("icd10cmCompareQuirk !mx and !my");
-    res = false;
+    //res = false;
     return false;
   }
   if (xstr == ystr) {
     TRACE("icd10cmCompareQuirk xstr == ystr");
-    res = false;
+    //res = false;
     return true;
   }
   if (mx) {
@@ -120,7 +124,7 @@ bool icd10cmCompareQuirk(
     if (my) {
       TRACE(quirk << " also matched y for same quirk");
       res = strcmp(xstr, ystr) < 0;
-      return true;
+      return res;
     }
     TRACE(quirk << " didn't match y");
     TRACE(quirk << " after x match falling through.\nx = " << xstr
@@ -220,7 +224,6 @@ bool icd10cmCompareC(const char* xstr,
   return strcmp(xstr, ystr) < 0;
 }
 
-
 // [[Rcpp::export(icd10cm_compare_rcpp)]]
 bool icd10cmCompare(const String& x, const String& y) {
   // only return TRUE if x definitely comes before y (i.e. not equal and less)
@@ -234,12 +237,10 @@ bool icd10cmCompare(const String& x, const String& y) {
     // y is NOT NA, so x must go after, and is not equal
     return false;
   }
+  // TODO: see if const char * pointers are identical, to avoid even looking at
+  // the memory.
   return icd10cmCompareC(x.get_cstring(), y.get_cstring());
 }
-
-
-
-
 
 // [[Rcpp::export(icd10cm_compare_vector_rcpp)]]
 LogicalVector icd10cmCompareVector(const StringVector& x,

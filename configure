@@ -625,6 +625,7 @@ infodir
 docdir
 oldincludedir
 includedir
+runstatedir
 localstatedir
 sharedstatedir
 sysconfdir
@@ -649,6 +650,7 @@ ac_user_opts='
 enable_option_checking
 enable_icd_shutup
 enable_openmp
+enable_icd_keep_makevars
 enable_icd_strip
 enable_icd_optim
 '
@@ -703,6 +705,7 @@ datadir='${datarootdir}'
 sysconfdir='${prefix}/etc'
 sharedstatedir='${prefix}/com'
 localstatedir='${prefix}/var'
+runstatedir='${localstatedir}/run'
 includedir='${prefix}/include'
 oldincludedir='/usr/include'
 docdir='${datarootdir}/doc/${PACKAGE_TARNAME}'
@@ -955,6 +958,15 @@ do
   | -silent | --silent | --silen | --sile | --sil)
     silent=yes ;;
 
+  -runstatedir | --runstatedir | --runstatedi | --runstated \
+  | --runstate | --runstat | --runsta | --runst | --runs \
+  | --run | --ru | --r)
+    ac_prev=runstatedir ;;
+  -runstatedir=* | --runstatedir=* | --runstatedi=* | --runstated=* \
+  | --runstate=* | --runstat=* | --runsta=* | --runst=* | --runs=* \
+  | --run=* | --ru=* | --r=*)
+    runstatedir=$ac_optarg ;;
+
   -sbindir | --sbindir | --sbindi | --sbind | --sbin | --sbi | --sb)
     ac_prev=sbindir ;;
   -sbindir=* | --sbindir=* | --sbindi=* | --sbind=* | --sbin=* \
@@ -1092,7 +1104,7 @@ fi
 for ac_var in	exec_prefix prefix bindir sbindir libexecdir datarootdir \
 		datadir sysconfdir sharedstatedir localstatedir includedir \
 		oldincludedir docdir infodir htmldir dvidir pdfdir psdir \
-		libdir localedir mandir
+		libdir localedir mandir runstatedir
 do
   eval ac_val=\$$ac_var
   # Remove trailing slashes.
@@ -1245,6 +1257,7 @@ Fine tuning of the installation directories:
   --sysconfdir=DIR        read-only single-machine data [PREFIX/etc]
   --sharedstatedir=DIR    modifiable architecture-independent data [PREFIX/com]
   --localstatedir=DIR     modifiable single-machine data [PREFIX/var]
+  --runstatedir=DIR       modifiable per-process data [LOCALSTATEDIR/run]
   --libdir=DIR            object code libraries [EPREFIX/lib]
   --includedir=DIR        C header files [PREFIX/include]
   --oldincludedir=DIR     C header files for non-gcc [/usr/include]
@@ -1276,6 +1289,8 @@ Optional Features:
   --enable-FEATURE[=ARG]  include FEATURE [ARG=yes]
   --enable-icd-shutup     Peaceful compilation
   --disable-openmp        do not use OpenMP
+  --enable-keep-makevars  Enable copying the user Makevars into the binary for
+                          debugging. Disabled by default.
   --enable-icd-strip      Enable stripping of binary on Linux and MacOS
   --enable-icd-optim      Optional addition of more optimized compiler flags.
                           Not default due to CRAN rules, but recommended.
@@ -1914,15 +1929,15 @@ ac_config_files="$ac_config_files src/Makevars"
 $as_echo_n "checking R_HOME not empty... " >&6; }
 if  test -z "${R_HOME}" ; then :
 
-	   { $as_echo "$as_me:${as_lineno-$LINENO}: result: No" >&5
+       { $as_echo "$as_me:${as_lineno-$LINENO}: result: No" >&5
 $as_echo "No" >&6; }
-	   as_fn_error $? "Cannot proceed." "$LINENO" 5
+       as_fn_error $? "Cannot proceed." "$LINENO" 5
 
 else
 
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${R_HOME}" >&5
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: ${R_HOME}" >&5
 $as_echo "${R_HOME}" >&6; }
-		R_BIN=${R_HOME}/bin/R
+        R_BIN=${R_HOME}/bin/R
 
 
 fi
@@ -1935,8 +1950,8 @@ fi
 $as_echo_n "checking R CXX11... " >&6; }
 if test "${CXX11-unset}" = unset ; then :
 
-	   CXX11=`"${R_BIN}" CMD config CXX11`
-	   { $as_echo "$as_me:${as_lineno-$LINENO}: result: Setting ${CXX11}" >&5
+       CXX11=`"${R_BIN}" CMD config CXX11`
+       { $as_echo "$as_me:${as_lineno-$LINENO}: result: Setting ${CXX11}" >&5
 $as_echo "Setting ${CXX11}" >&6; }
 
 else
@@ -1949,8 +1964,8 @@ fi
 $as_echo_n "checking R CXX11STD... " >&6; }
 if test "${CXX11STD-unset}" = unset ; then :
 
-	   CXX11STD=`"${R_BIN}" CMD config CXX11STD`
-	   { $as_echo "$as_me:${as_lineno-$LINENO}: result: Setting R ${CXX11STD}" >&5
+       CXX11STD=`"${R_BIN}" CMD config CXX11STD`
+       { $as_echo "$as_me:${as_lineno-$LINENO}: result: Setting R ${CXX11STD}" >&5
 $as_echo "Setting R ${CXX11STD}" >&6; }
 
 else
@@ -1963,8 +1978,8 @@ fi
 $as_echo_n "checking R CXX11FLAGS... " >&6; };
 if test "${CXX11FLAGS-unset}" = unset ; then :
 
-	   CXX11FLAGS=`"${R_BIN}" CMD config CXX11FLAGS`
-	   { $as_echo "$as_me:${as_lineno-$LINENO}: result: Setting R ${CXX11FLAGS}" >&5
+       CXX11FLAGS=`"${R_BIN}" CMD config CXX11FLAGS`
+       { $as_echo "$as_me:${as_lineno-$LINENO}: result: Setting R ${CXX11FLAGS}" >&5
 $as_echo "Setting R ${CXX11FLAGS}" >&6; }
 
 else
@@ -3219,23 +3234,24 @@ icd_pkg_openmp_works=no
 $as_echo "$as_me: Examining what R set for OPENMP_CFLAGS" >&6;}
 
 if  test "x${OPENMP_CFLAGS}" != "x"; then :
-   { $as_echo "$as_me:${as_lineno-$LINENO}: OPENMP_CFLAGS from R_OPENMP is: $(OPENMP_CFLAGS)" >&5
-$as_echo "$as_me: OPENMP_CFLAGS from R_OPENMP is: $(OPENMP_CFLAGS)" >&6;}
+   { $as_echo "$as_me:${as_lineno-$LINENO}: OPENMP_CFLAGS from R_OPENMP is: ${OPENMP_CFLAGS}" >&5
+$as_echo "$as_me: OPENMP_CFLAGS from R_OPENMP is: ${OPENMP_CFLAGS}" >&6;}
 else
    { $as_echo "$as_me:${as_lineno-$LINENO}: OPENMP_CFLAGS is empty or unset" >&5
 $as_echo "$as_me: OPENMP_CFLAGS is empty or unset" >&6;}
 fi
 
-#AC_MSG_NOTICE([Examining what R set for OPENMP_CFLAGS done])
+{ $as_echo "$as_me:${as_lineno-$LINENO}: Examining what R set for OPENMP_CFLAGS done" >&5
+$as_echo "$as_me: Examining what R set for OPENMP_CFLAGS done" >&6;}
 
 if test "x${OPENMP_CXXFLAGS}" != "x" ; then :
 
-	   { $as_echo "$as_me:${as_lineno-$LINENO}: checking OpenMP available, but does it work in a package?" >&5
+       { $as_echo "$as_me:${as_lineno-$LINENO}: checking OpenMP available, but does it work in a package?" >&5
 $as_echo_n "checking OpenMP available, but does it work in a package?... " >&6; }
-	   cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+       cat confdefs.h - <<_ACEOF >conftest.$ac_ext
 /* end confdefs.h.  */
 
-						 #include <omp.h>
+                         #include <omp.h>
 
 int
 main ()
@@ -3246,20 +3262,20 @@ main ()
 }
 
 _ACEOF
-	   { $as_echo "$as_me:${as_lineno-$LINENO}: Can at least include the omp.h header and get thread count" >&5
+       { $as_echo "$as_me:${as_lineno-$LINENO}: Can at least include the omp.h header and get thread count" >&5
 $as_echo "$as_me: Can at least include the omp.h header and get thread count" >&6;}
-	   PKG_CFLAGS="${OPENMP_CFLAGS}" \
-		   PKG_LIBS="${OPENMP_CFLAGS}" \
-		   "$R_BIN" CMD SHLIB conftest.c 1>&5 2>&5 && \
-		   "${R_BIN}" --vanilla -q -e "dyn.load(paste0('conftest',.Platform\$dynlib.ext))" 1>&5 2>&5 && \
-		   icd_pkg_openmp_works=yes;
+       PKG_CFLAGS="${OPENMP_CFLAGS}" \
+           PKG_LIBS="${OPENMP_CFLAGS}" \
+           "$R_BIN" CMD SHLIB conftest.c 1>&5 2>&5 && \
+           "${R_BIN}" --vanilla -q -e "dyn.load(paste0('conftest',.Platform\$dynlib.ext))" 1>&5 2>&5 && \
+           icd_pkg_openmp_works=yes;
 
-	   { $as_echo "$as_me:${as_lineno-$LINENO}: result: OpenMP available and working with R toolchain" >&5
+       { $as_echo "$as_me:${as_lineno-$LINENO}: result: OpenMP available and working with R toolchain" >&5
 $as_echo "OpenMP available and working with R toolchain" >&6; }
 
 else
 
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: R did not think OpenMP is available" >&5
+        { $as_echo "$as_me:${as_lineno-$LINENO}: result: R did not think OpenMP is available" >&5
 $as_echo "R did not think OpenMP is available" >&6; };
 
 
@@ -3274,6 +3290,11 @@ if test ! "x${icd_pkg_openmp_works}" = xno; then :
 fi
 
 DO_KEEP_MAKEVARS="${ICD_KEEP_MAKEVARS}"
+# Check whether --enable-icd_keep_makevars was given.
+if test "${enable_icd_keep_makevars+set}" = set; then :
+  enableval=$enable_icd_keep_makevars;
+fi
+
 
 #Always write the stub as default to not include Makevars content
 echo "unsigned char Makevars[] = { 0x00 };" > src/makevars.h
@@ -3297,8 +3318,8 @@ if test "${enable_icd_optim+set}" = set; then :
 fi
 
 
-if test "x$enable_icd_optim" = "xyes" || test "${ICD_OPTIM+set}" = set ; then :
-  ICD_OPTIM_FLAGS="-march=native -O3 -fno-unroll-loops -g0 -fomit-frame-pointer"
+if  test "x$enable_icd_optim" = "xyes" || test "${ICD_OPTIM+set}" = set ; then :
+   ICD_OPTIM_FLAGS="-march=native -O3 -fno-unroll-loops -g0 -fomit-frame-pointer"
 fi
 
 

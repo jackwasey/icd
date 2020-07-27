@@ -1,4 +1,16 @@
 #!/bin/sh
 
-rm -f config.* src/Makevars src/makevars.h makevars.h
+rm -f config.log config.status aclocal.m4 \
+    src/Makevars src/makevars.h makevars.h \
+    src/*.o src/*.a src/*.d src/*.dll src/*.dylib \
+    vignettes/*.aux \
+    vignettes/*.log \
+    vignettes/*.out \
+    vignettes/*.tex \
+    vignettes/*.bbl \
+    vignettes/*.blg \
+    vignettes/*.toc \
+    vignettes/*.knit.md \
+    vignettes/*.utf8.md \
 
+rm -rf autom4te.cache 

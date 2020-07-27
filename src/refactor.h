@@ -1,6 +1,8 @@
 #ifndef REFACTOR_H_
 #define REFACTOR_H_
 
+#include <Rcpp.h>
+
 Rcpp::IntegerVector factorNoSort(const Rcpp::CharacterVector &x,
                            const Rcpp::CharacterVector &levels,
                            const bool na_rm);

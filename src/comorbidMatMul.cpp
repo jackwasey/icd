@@ -11,15 +11,6 @@
 #include <unordered_set>
 #include <vector>
 
-/*
- MAKEFLAGS=-j16 R -e 'devtools::load_all(); icd9_comorbid_ahrq(ahrq_test_dat)'
- MAKEFLAGS=-j16 R -e 'devtools::load_all(); test(reporter="Location")'
- MAKEFLAGS=-j16 R -e 'devtools::load_all(); mydf <- data.frame(visit_id = c("a",
- "a"), "dx1" = c("441", "41293"), "dx2" = c(NA, "1001"), stringsAsFactors =
- TRUE); comorbidMatMulWide(mydf, icd9_map_charlson, "visit_id", c("dx1",
- "dx2"))'
- */
-
 using namespace Rcpp;
 
 // # nocov start
