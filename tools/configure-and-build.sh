@@ -17,7 +17,7 @@ CXX_STD=CXX17
 
 #PKG_CXXFLAGS="-w $(Rscript -e 'Rcpp:::CxxFlags()') -I ${ICD_HOME}/inst/include -I ${ICD_HOME}/inst/include/eigen-submodule"
 PKG_CXXFLAGS="${warn_flags[*]} $(Rscript -e 'Rcpp:::CxxFlags()' | sed 's/-I/-isystem/') $(Rscript -e 'RcppEigen:::CxxFlags()' | sed 's/-I/-isystem/')"
-PKG_CXX11FLAGS="${PKG_CXXFLAGS}"
+#PKG_CXX11FLAGS="${PKG_CXXFLAGS}"
 PKG_CFLAGS="${warn_flags[*]}"
 # CXX="ccache g++"
 # CC="ccache gcc"
