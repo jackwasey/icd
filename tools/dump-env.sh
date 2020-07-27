@@ -31,10 +31,10 @@ echo "R RHOME gives '${RH}'" >&2
 
 #find "${HOME}/.R" -print -exec cat '{}' \;
 for f in {"${RHE}","${HOME}"}/{,./,.R/}{,check-,build-}{ldpaths,Makeconf,Makevars,Renviron,Rprofile}{.site,}; do
-    if [[ -f "$f" ]]; then
-        cat "$f"
+    if [[ -f "${f}" ]]; then
+        cat "${f}"
     else
-        echo "$f does not exist"
+        echo "${f} does not exist"
     fi
 done
 
@@ -53,12 +53,12 @@ pths=("${HOME}/R/Library"
 )
 for lib in "${pths[@]}"; do
     {
-        ! [[ -d "$lib" ]] && 
-            echo "R library path: $lib NOT present" &&
+        ! [[ -d "${lib}" ]] && 
+            echo "R library path: {lib} NOT present" &&
             continue;
 
-        echo "R library path: $lib is present";
-        ls -ld "$lib";
+        echo "R library path: {lib} is present";
+        ls -ld "{lib}";
     }
 done
 
