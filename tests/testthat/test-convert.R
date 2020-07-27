@@ -247,7 +247,7 @@ test_that("icd9 short to major part, E codes", {
 })
 
 test_that("short to decimal before and after expansion of ICD-9 codes same", {
-  icd9List <- icd9_map_ahrq
+  icd9List <- icd::icd9_map_ahrq
   for (i in names(icd9List)) {
     expect_equal_no_icd(
       decimal_to_short.icd9(short_to_decimal.icd9(icd9List[[i]])),

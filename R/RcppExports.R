@@ -7,6 +7,7 @@
 #' @template isShort
 #' @return Character vector
 #' @keywords internal manip
+#' @noRd
 icd9MajMinToCode <- function(mjr, mnr, isShort) {
     .Call(`_icd_icd9MajMinToCode`, mjr, mnr, isShort)
 }
@@ -120,10 +121,18 @@ majMinToParts <- function(mjr, mnr) {
     .Call(`_icd_majMinToParts`, mjr, mnr)
 }
 
+#' @describeIn short_to_parts Convert short format ICD-9 codes to parts
+#' @export
+#' @keywords internal manip
+#' @noRd
 short_to_parts.icd9 <- function(icd9Short, mnrEmpty = "") {
     .Call(`_icd_icd9ShortToParts`, icd9Short, mnrEmpty)
 }
 
+#' @describeIn decimal_to_parts Convert decimal ICD-9 code to parts
+#' @export
+#' @keywords internal manip
+#' @noRd
 decimal_to_parts.icd9 <- function(icd9Decimal, mnr_empty = "") {
     .Call(`_icd_icd9DecimalToParts`, icd9Decimal, mnr_empty)
 }
@@ -225,7 +234,9 @@ icd9_is_e_rcpp <- function(sv) {
 #' @details Returning a 'String' is (probably?) going to require that Rcpp use R's C
 #' interface to make a new \code{CHARSXP}, which involves enconding scanning, global
 #' charsxp lookup. However, if we are actually changing a string, we must do this
-#' if it is to be used back in R. ' @keywords internal manip ' @noRd
+#' if it is to be used back in R.
+#' @keywords internal manip
+#' @noRd
 icd9AddLeadingZeroesMajorSingle <- function(mjr) {
     .Call(`_icd_icd9AddLeadingZeroesMajorSingle`, mjr)
 }

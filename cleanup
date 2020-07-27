@@ -13,6 +13,7 @@ rm -f config.log config.status aclocal.m4 \
     vignettes/*.knit.md \
     vignettes/*.utf8.md \
     icd_*.tar.gz \
-    icd-0*.log
+    icd-0*.log 
 
-rm -rf autom4te.cache 
+rm -rf autom4te.cache \
+    icd.Rcheck

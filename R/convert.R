@@ -404,7 +404,7 @@ short_to_parts.character <- function(x, mnr_empty = "") {
   # No default values in header plus C++ function body, so shim here.
   switch(
     guess_version(x, short_code = TRUE),
-    "icd9" = icd9ShortToParts(x, mnrEmpty = mnr_empty),
+    "icd9" = short_to_parts.icd9(x, mnrEmpty = mnr_empty),
     "icd10" = short_to_parts.icd10(x, mnr_empty = mnr_empty),
     stop("Unknown ICD version guessed from input")
   )
@@ -433,7 +433,7 @@ decimal_to_parts <- function(x, mnr_empty = "") {
 decimal_to_parts.character <- function(x, mnr_empty = "") {
   switch(
     guess_version(x, short_code = FALSE),
-    "icd9" = icd9DecimalToParts(x, mnr_empty),
+    "icd9" = decimal_to_parts.icd9(x, mnr_empty = mnr_empty),
     "icd10" = decimal_to_parts.icd10(x, mnr_empty = mnr_empty),
     stop("Unknown ICD version guessed from input")
   )
@@ -446,5 +446,5 @@ decimal_to_parts.character <- function(x, mnr_empty = "") {
 #' @keywords internal manip
 #' @noRd
 decimal_to_parts.icd10 <- function(x, mnr_empty = "") {
-  icd10DecimalToParts(x, mnrEmpty = mnr_empty)
+  icd10DecimalToParts(x, mnr_empty = mnr_empty)
 }

@@ -2,18 +2,19 @@
 // Generator token: 10BE3573-1514-4C36-9D1C-5A225CD40393
 
 #include "icd_types.h"
+#include <RcppEigen.h>
 #include <Rcpp.h>
 
 using namespace Rcpp;
 
 // icd9MajMinToCode
-CV icd9MajMinToCode(const CV& mjr, const CV& mnr, const bool isShort);
+CV icd9MajMinToCode(const CV mjr, const CV mnr, const bool isShort);
 RcppExport SEXP _icd_icd9MajMinToCode(SEXP mjrSEXP, SEXP mnrSEXP, SEXP isShortSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const CV& >::type mjr(mjrSEXP);
-    Rcpp::traits::input_parameter< const CV& >::type mnr(mnrSEXP);
+    Rcpp::traits::input_parameter< const CV >::type mjr(mjrSEXP);
+    Rcpp::traits::input_parameter< const CV >::type mnr(mnrSEXP);
     Rcpp::traits::input_parameter< const bool >::type isShort(isShortSEXP);
     rcpp_result_gen = Rcpp::wrap(icd9MajMinToCode(mjr, mnr, isShort));
     return rcpp_result_gen;

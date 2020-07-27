@@ -2,7 +2,7 @@
 #include "convert.h"
 #include "icd_types.h"
 extern "C" {
-#include <cstddef> // for size_t
+#include <cstddef> // for size_t??? TODO: really?
 }
 #include "appendMinor.h" // for icd9MajMinToCode
 #include "is.h"          // for icd9IsASingleE, icd9IsAS...
@@ -42,6 +42,10 @@ Rcpp::List majMinToParts(const CV &mjr, const CV &mnr) {
   return returned_frame;
 }
 
+//' @describeIn short_to_parts Convert short format ICD-9 codes to parts
+//' @export
+//' @keywords internal manip
+//' @noRd
 // [[Rcpp::export(short_to_parts.icd9)]]
 Rcpp::List icd9ShortToParts(const CV &icd9Short, Rcpp::String mnrEmpty = "") {
   CV mjr(icd9Short.size());
@@ -95,6 +99,10 @@ Rcpp::List icd9ShortToParts(const CV &icd9Short, Rcpp::String mnrEmpty = "") {
   return majMinToParts(icd9AddLeadingZeroesMajor(mjr), mnr);
 }
 
+//' @describeIn decimal_to_parts Convert decimal ICD-9 code to parts
+//' @export
+//' @keywords internal manip
+//' @noRd
 // [[Rcpp::export(decimal_to_parts.icd9)]]
 Rcpp::List icd9DecimalToParts(const CV &icd9Decimal, const Rcpp::String mnr_empty = "") {
   CV mjrs;

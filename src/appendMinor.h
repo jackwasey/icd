@@ -2,8 +2,8 @@
 #define APPENDMINOR_H_
 
 #include "icd_types.h"
-CV icd9MajMinToCode(const CV& mjr,
-                    const CV& mnr,
+CV icd9MajMinToCode(const CV mjr,
+                    const CV mnr,
                     const bool isShort);
 CV icd9MajMinToShort(const CV& mjr, const CV& mnr);
 CV icd9MajMinToDecimal(const CV& mjr, const CV& mnr);

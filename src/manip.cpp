@@ -9,7 +9,9 @@ using namespace Rcpp;
 //' @details Returning a 'String' is (probably?) going to require that Rcpp use R's C
 //' interface to make a new \code{CHARSXP}, which involves enconding scanning, global
 //' charsxp lookup. However, if we are actually changing a string, we must do this
-//' if it is to be used back in R. ' @keywords internal manip ' @noRd
+//' if it is to be used back in R.
+//' @keywords internal manip
+//' @noRd
 //[[Rcpp::export]]
 String icd9AddLeadingZeroesMajorSingle(String mjr) {
   if (mjr == NA_STRING) return (NA_STRING);

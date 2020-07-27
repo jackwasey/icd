@@ -14,9 +14,10 @@ using namespace Rcpp;
 //' @template isShort
 //' @return Character vector
 //' @keywords internal manip
+//' @noRd
 // [[Rcpp::export]]
-CV icd9MajMinToCode(const CV& mjr,
-                    const CV& mnr,
+CV icd9MajMinToCode(const CV mjr,
+                    const CV mnr,
                     const bool isShort) {
 #ifdef ICD_DEBUG_TRACE
   Rcout << "icd9MajMinToCode: mjr.size() = " << mjr.size()
