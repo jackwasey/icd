@@ -94,6 +94,8 @@ std::vector<std::string> qaa = {"C44", "D37", "M10", "Z37", "C76", "C76"};
 // ICD-10 //
 ////////////
 
+// This returns a value and sets a (possibly different) result in a given
+// reference, enabling recursion.
 bool icd10cmCompareQuirk(
     const char* xstr,
     const char* ystr,
@@ -208,7 +210,7 @@ bool icd10cmCompareC(const char* xstr,
     xstr << " and " << ystr << ". Comparing quirky codes...");
   // in flat file, C4A is between 43 and 44. Definitive reference I am using is
   // the flat file with all the codes from CMS.
-  bool qres;
+  bool qres = true; // default to something to avoid undefined behavior.
   for (std::vector<std::string>::size_type j = 0; j != qa.size(); ++j) {
     TRACE("icd10cmCompareC Working on quirk: " << qx[j]);
     if (icd10cmCompareQuirk(xstr,
@@ -242,10 +244,6 @@ bool icd10cmCompare(const String& x, const String& y) {
   }
   return icd10cmCompareC(x.get_cstring(), y.get_cstring());
 }
-
-
-
-
 
 // [[Rcpp::export(icd10cm_compare_vector_rcpp)]]
 LogicalVector icd10cmCompareVector(const StringVector& x,
