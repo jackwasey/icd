@@ -1,3 +1,4 @@
+#ifdef ICD_CATCH
 #include "appendMinor.h"
 #include "convert.h"
 #include "convert10.h"
@@ -8,7 +9,6 @@
 #include "refactor.h"
 #include "util.h"
 
-#ifdef ICD_CATCH
 #include <testthat.h>
 using namespace Rcpp;
 context("internal 'is' functions") {

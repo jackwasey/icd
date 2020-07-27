@@ -1,3 +1,4 @@
+#ifdef ICD_CATCH
 #include "appendMinor.h"
 #include "comorbidMatMul.h"
 #include "convert.h"
@@ -15,7 +16,6 @@
  * "devtools::load_all();devtools::test(filter='cpp',reporter='Location')"
  */
 
-#ifdef ICD_CATCH
 #include <testthat.h>
 using namespace Rcpp;
 context("matmul cpp") {
@@ -125,4 +125,4 @@ context("matmul cpp") {
     expect_true(got != r12.rel.end());
   }
 }
-#endif
+#endif // ICD_CATCH

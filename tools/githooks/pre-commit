@@ -32,7 +32,7 @@ fi
 git diff --cached --name-only |
     grep -q 'DESCRIPTION' &&
     [[ DESCRIPTION -nt codemeta.json ]] && {
-    Rscript -e 'codemetar::write_codemeta()'
+    Rscript -e 'codemetar::write_codemeta(verbose = FALSE, use_filesize = FALSE)'
     git add codemeta.json
     # git commit --amend -m"$(git log --format=%B -n1)" -m"Updated codemeta.json automatically."
     ok=1
