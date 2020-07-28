@@ -47,7 +47,11 @@ Rcpp::List majMinToParts(const CV &mjr, const CV &mnr) {
 //' @keywords internal manip
 //' @noRd
 // [[Rcpp::export(short_to_parts.icd9)]]
-Rcpp::List icd9ShortToParts(const CV &icd9Short, Rcpp::String mnrEmpty = "") {
+Rcpp::List icd9ShortToParts(const CV& x, Rcpp::String mnr_empty = "") {
+  // compiler should disappear these declarations to make naming consistent on
+  // the R side
+  const CV& icd9Short = x;
+  const Rcpp::String mnrEmpty = mnr_empty;
   CV mjr(icd9Short.size());
   CV mnr(icd9Short.size());
   for (int i = 0; i < icd9Short.size(); ++i) {

@@ -40,7 +40,7 @@ icd9_drop_leading_zeroes <- function(x, short_code = guess_short(x)) {
   stopifnot(is.null(short_code) ||
     (is.logical(short_code) && length(short_code) == 1L))
   if (short_code) {
-    parts <- short_to_parts.icd9(icd9Short = x, mnrEmpty = "")
+    parts <- short_to_parts.icd9(x = x, mnr_empty = "")
     # very important: only drop the zero in V codes if the minor part is empty.
     are_empty <- parts[["mnr"]] == ""
     x[are_empty] <- icd9_drop_leading_zeroes_major(parts[are_empty, "mjr"])
