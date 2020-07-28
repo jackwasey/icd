@@ -6,26 +6,26 @@
 
 CV icd9ExpandMinor(const std::string& mnr,
                    bool isE = false);
-CV icd9ChildrenShortUndefined(const CV& icd9Short);
-CV icd9ChildrenShortDefined(const CV& icd9Short,
-                            const VecStr& icd9cmReal);
-CV icd9ChildrenShort(const CV& icd9Short,
-                     const VecStr& icd9cmReal,
-                     bool onlyReal = true);
-CV icd9ChildrenShortUnorderedUndefined(const CV& icd9Short);
-CV icd9ChildrenShortUnorderedDefined(const CV& icd9Short,
-                                     const VecStr& icd9cmReal);
-CV icd9ChildrenShortUnordered(const CV& icd9Short,
-                              const VecStr& icd9cmReal,
-                              bool onlyReal = true);
-CV icd9ChildrenDecimal(const CV& icd9Decimal,
-                       const VecStr& icd9cmReal,
-                       bool onlyReal = true);
-CV icd9ChildrenDecimalUnordered(const CV& icd9Decimal,
-                                const VecStr& icd9cmReal,
-                                bool onlyReal);
+CV icd9ChildrenShortUndefined(const CV& x);
+CV icd9ChildrenShortDefined(const CV& x,
+                            const VecStr& is_defined);
+CV icd9ChildrenShort(const CV& x,
+                     const VecStr& is_defined,
+                     bool leaf = true);
+CV icd9ChildrenShortUnorderedUndefined(const CV& x);
+CV icd9ChildrenShortUnorderedDefined(const CV& x,
+                                     const VecStr& is_defined);
+CV icd9ChildrenShortUnordered(const CV& x,
+                              const VecStr& is_defined,
+                              bool leaf = true);
+CV icd9ChildrenDecimal(const CV& x,
+                       const VecStr& is_defined,
+                       bool leaf = true);
+CV icd9ChildrenDecimalUnordered(const CV& x,
+                                const VecStr& is_defined,
+                                bool leaf);
 CV icd9Children(const CV& icd9,
                 bool isShort,
-                const VecStr& icd9cmReal,
-                bool onlyReal = true);
+                const VecStr& is_defined,
+                bool leaf = true);
 #endif /* RANGES_H_ */

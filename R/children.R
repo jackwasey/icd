@@ -68,8 +68,8 @@ children.icd9cm <- function(x,
     if (short_code) {
       if (defined) {
         icd9_children_short_unordered_defined_rcpp(
-          icd9Short = toupper(x),
-          icd9cmReal = icd9cm_hierarchy$code
+          x = toupper(x),
+          defined = icd9cm_hierarchy$code
         )
       } else {
         icd9_children_short_unordered_undefined_rcpp(toupper(x))
@@ -77,9 +77,9 @@ children.icd9cm <- function(x,
     } else {
       # TODO: unordered variant
       icd9_children_decimal_rcpp(
-        icd9Decimal = toupper(x),
-        icd9cmReal = icd9cm_hierarchy$code,
-        onlyReal = defined
+        x = toupper(x),
+        defined = icd9cm_hierarchy$code,
+        leaf = defined
       )
     }
   # ICD-9 and ICD-9-CM sort the same, I think.

@@ -125,8 +125,8 @@ majMinToParts <- function(mjr, mnr) {
 #' @export
 #' @keywords internal manip
 #' @noRd
-short_to_parts.icd9 <- function(icd9Short, mnrEmpty = "") {
-    .Call(`_icd_icd9ShortToParts`, icd9Short, mnrEmpty)
+short_to_parts.icd9 <- function(x, mnr_empty = "") {
+    .Call(`_icd_icd9ShortToParts`, x, mnr_empty)
 }
 
 #' @describeIn decimal_to_parts Convert decimal ICD-9 code to parts
@@ -266,48 +266,48 @@ icd9_expand_minor_rcpp <- function(mnr, isE) {
     .Call(`_icd_icd9ExpandMinor`, mnr, isE)
 }
 
-icd9_children_short_undefined_rcpp <- function(icd9Short) {
-    .Call(`_icd_icd9ChildrenShortUndefined`, icd9Short)
+icd9_children_short_undefined_rcpp <- function(x) {
+    .Call(`_icd_icd9ChildrenShortUndefined`, x)
 }
 
-icd9_children_short_defined_rcpp <- function(icd9Short, icd9cmReal) {
-    .Call(`_icd_icd9ChildrenShortDefined`, icd9Short, icd9cmReal)
+icd9_children_short_defined_rcpp <- function(x, defined) {
+    .Call(`_icd_icd9ChildrenShortDefined`, x, defined)
 }
 
-icd9_children_short_rcpp <- function(icd9Short, icd9cmReal, onlyReal) {
-    .Call(`_icd_icd9ChildrenShort`, icd9Short, icd9cmReal, onlyReal)
+icd9_children_short_rcpp <- function(x, defined, leaf) {
+    .Call(`_icd_icd9ChildrenShort`, x, defined, leaf)
 }
 
-icd9_children_short_unordered_undefined_rcpp <- function(icd9Short) {
-    .Call(`_icd_icd9ChildrenShortUnorderedUndefined`, icd9Short)
+icd9_children_short_unordered_undefined_rcpp <- function(x) {
+    .Call(`_icd_icd9ChildrenShortUnorderedUndefined`, x)
 }
 
-icd9_children_short_unordered_defined_rcpp <- function(icd9Short, icd9cmReal) {
-    .Call(`_icd_icd9ChildrenShortUnorderedDefined`, icd9Short, icd9cmReal)
+icd9_children_short_unordered_defined_rcpp <- function(x, defined) {
+    .Call(`_icd_icd9ChildrenShortUnorderedDefined`, x, defined)
 }
 
-icd9_children_short_unordered_rcpp <- function(icd9Short, icd9cmReal, onlyReal) {
-    .Call(`_icd_icd9ChildrenShortUnordered`, icd9Short, icd9cmReal, onlyReal)
+icd9_children_short_unordered_rcpp <- function(x, defined, leaf) {
+    .Call(`_icd_icd9ChildrenShortUnordered`, x, defined, leaf)
 }
 
-icd9_children_decimal_rcpp <- function(icd9Decimal, icd9cmReal, onlyReal) {
-    .Call(`_icd_icd9ChildrenDecimal`, icd9Decimal, icd9cmReal, onlyReal)
+icd9_children_decimal_rcpp <- function(x, defined, leaf) {
+    .Call(`_icd_icd9ChildrenDecimal`, x, defined, leaf)
 }
 
-icd9_children_decimal_unordered_rcpp <- function(icd9Decimal, icd9cmReal, onlyReal) {
-    .Call(`_icd_icd9ChildrenDecimalUnordered`, icd9Decimal, icd9cmReal, onlyReal)
+icd9_children_decimal_unordered_rcpp <- function(x, defined, leaf) {
+    .Call(`_icd_icd9ChildrenDecimalUnordered`, x, defined, leaf)
 }
 
-icd9_children_decimal_unordered_undefined_rcpp <- function(icd9Decimal) {
-    .Call(`_icd_icd9ChildrenDecimalUnorderedUndefined`, icd9Decimal)
+icd9_children_decimal_unordered_undefined_rcpp <- function(x) {
+    .Call(`_icd_icd9ChildrenDecimalUnorderedUndefined`, x)
 }
 
-icd9_children_decimal_unordered_defined_rcpp <- function(icd9Decimal, icd9cmReal) {
-    .Call(`_icd_icd9ChildrenDecimalUnorderedDefined`, icd9Decimal, icd9cmReal)
+icd9_children_decimal_unordered_defined_rcpp <- function(x, defined) {
+    .Call(`_icd_icd9ChildrenDecimalUnorderedDefined`, x, defined)
 }
 
-icd9_children_rcpp <- function(icd9, isShort, icd9cmReal, onlyReal) {
-    .Call(`_icd_icd9Children`, icd9, isShort, icd9cmReal, onlyReal)
+icd9_children_rcpp <- function(icd9, short_code, defined, leaf) {
+    .Call(`_icd_icd9Children`, icd9, short_code, defined, leaf)
 }
 
 #' @title Factor without sorting \CRANpkg{Rcpp} implementation
