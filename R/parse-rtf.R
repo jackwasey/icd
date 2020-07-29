@@ -95,10 +95,10 @@
   ]
   rownames(out_df) <- NULL
   if (anyNA(out_df$code) || anyNA(out_df$three_digit)) {
-    if (FALSE) print(out_df[which(with(out_df, is.na(code) | is.na(three_digit))), ])
-    if (FALSE) print(summary(is.na(out_df)))
+    warning(out_df[which(with(out_df, is.na(code) | is.na(three_digit))), ])
+    warning(summary(is.na(out_df)))
   }
-  out_df$three_digit <- factor_sorted_levels(as.icd9cm(out_df$three_digit))
+  out_df$three_digit <- factor_sorted_levels(as.icd9cm(out_df$three_digit), exclude = NA)
   invisible(out_df)
 }
 
