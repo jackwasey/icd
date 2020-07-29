@@ -112,112 +112,49 @@
     {
       "@type": "SoftwareApplication",
       "identifier": "httr",
-      "name": "httr",
-      "provider": {
-        "@id": "https://cran.r-project.org",
-        "@type": "Organization",
-        "name": "Comprehensive R Archive Network (CRAN)",
-        "url": "https://cran.r-project.org"
-      },
-      "sameAs": "https://CRAN.R-project.org/package=httr"
+      "name": "httr"
     },
     {
       "@type": "SoftwareApplication",
       "identifier": "jsonlite",
-      "name": "jsonlite",
-      "provider": {
-        "@id": "https://cran.r-project.org",
-        "@type": "Organization",
-        "name": "Comprehensive R Archive Network (CRAN)",
-        "url": "https://cran.r-project.org"
-      },
-      "sameAs": "https://CRAN.R-project.org/package=jsonlite"
+      "name": "jsonlite"
     },
     {
       "@type": "SoftwareApplication",
       "identifier": "knitr",
-      "name": "knitr",
-      "provider": {
-        "@id": "https://cran.r-project.org",
-        "@type": "Organization",
-        "name": "Comprehensive R Archive Network (CRAN)",
-        "url": "https://cran.r-project.org"
-      },
-      "sameAs": "https://CRAN.R-project.org/package=knitr"
+      "name": "knitr"
     },
     {
       "@type": "SoftwareApplication",
       "identifier": "magrittr",
-      "name": "magrittr",
-      "provider": {
-        "@id": "https://cran.r-project.org",
-        "@type": "Organization",
-        "name": "Comprehensive R Archive Network (CRAN)",
-        "url": "https://cran.r-project.org"
-      },
-      "sameAs": "https://CRAN.R-project.org/package=magrittr"
+      "name": "magrittr"
     },
     {
       "@type": "SoftwareApplication",
       "identifier": "nhds",
-      "name": "nhds",
-      "provider": {
-        "@id": "https://cran.r-project.org",
-        "@type": "Organization",
-        "name": "Comprehensive R Archive Network (CRAN)",
-        "url": "https://cran.r-project.org"
-      },
-      "sameAs": "https://CRAN.R-project.org/package=nhds"
+      "name": "nhds"
     },
     {
       "@type": "SoftwareApplication",
       "identifier": "readxl",
-      "name": "readxl",
-      "provider": {
-        "@id": "https://cran.r-project.org",
-        "@type": "Organization",
-        "name": "Comprehensive R Archive Network (CRAN)",
-        "url": "https://cran.r-project.org"
-      },
-      "sameAs": "https://CRAN.R-project.org/package=readxl"
+      "name": "readxl"
     },
     {
       "@type": "SoftwareApplication",
       "identifier": "rmarkdown",
       "name": "rmarkdown",
-      "version": ">= 1.11",
-      "provider": {
-        "@id": "https://cran.r-project.org",
-        "@type": "Organization",
-        "name": "Comprehensive R Archive Network (CRAN)",
-        "url": "https://cran.r-project.org"
-      },
-      "sameAs": "https://CRAN.R-project.org/package=rmarkdown"
+      "version": ">= 1.11"
     },
     {
       "@type": "SoftwareApplication",
       "identifier": "RODBC",
-      "name": "RODBC",
-      "provider": {
-        "@id": "https://cran.r-project.org",
-        "@type": "Organization",
-        "name": "Comprehensive R Archive Network (CRAN)",
-        "url": "https://cran.r-project.org"
-      },
-      "sameAs": "https://CRAN.R-project.org/package=RODBC"
+      "name": "RODBC"
     },
     {
       "@type": "SoftwareApplication",
       "identifier": "roxygen2",
       "name": "roxygen2",
-      "version": ">= 5.0.0",
-      "provider": {
-        "@id": "https://cran.r-project.org",
-        "@type": "Organization",
-        "name": "Comprehensive R Archive Network (CRAN)",
-        "url": "https://cran.r-project.org"
-      },
-      "sameAs": "https://CRAN.R-project.org/package=roxygen2"
+      "version": ">= 5.0.0"
     },
     {
       "@type": "SoftwareApplication",
@@ -228,14 +165,7 @@
       "@type": "SoftwareApplication",
       "identifier": "testthat",
       "name": "testthat",
-      "version": ">= 0.11.1",
-      "provider": {
-        "@id": "https://cran.r-project.org",
-        "@type": "Organization",
-        "name": "Comprehensive R Archive Network (CRAN)",
-        "url": "https://cran.r-project.org"
-      },
-      "sameAs": "https://CRAN.R-project.org/package=testthat"
+      "version": ">= 0.11.1"
     },
     {
       "@type": "SoftwareApplication",
@@ -245,14 +175,7 @@
     {
       "@type": "SoftwareApplication",
       "identifier": "xml2",
-      "name": "xml2",
-      "provider": {
-        "@id": "https://cran.r-project.org",
-        "@type": "Organization",
-        "name": "Comprehensive R Archive Network (CRAN)",
-        "url": "https://cran.r-project.org"
-      },
-      "sameAs": "https://CRAN.R-project.org/package=xml2"
+      "name": "xml2"
     }
   ],
   "softwareRequirements": [
@@ -271,22 +194,15 @@
       "@type": "SoftwareApplication",
       "identifier": "Rcpp",
       "name": "Rcpp",
-      "version": ">= 0.12.3",
-      "provider": {
-        "@id": "https://cran.r-project.org",
-        "@type": "Organization",
-        "name": "Comprehensive R Archive Network (CRAN)",
-        "url": "https://cran.r-project.org"
-      },
-      "sameAs": "https://CRAN.R-project.org/package=Rcpp"
+      "version": ">= 0.12.3"
     }
   ],
   "releaseNotes": "https://github.com/jackwasey/icd/blob/master/NEWS.md",
   "contIntegration": ["https://travis-ci.org/jackwasey/icd", "https://ci.appveyor.com/project/jackwasey/icd/branch/master", "https://codecov.io/github/jackwasey/icd?branch=master"],
   "developmentStatus": ["https://www.tidyverse.org/lifecycle/#stable", "https://www.repostatus.org/#active"],
-  "relatedLink": ["https://jackwasey.github.io/icd/", "https://CRAN.R-project.org/package=icd"],
+  "relatedLink": "https://jackwasey.github.io/icd/",
   "readme": "https://github.com/jackwasey/icd/blob/master/README.md",
-  "fileSize": "96066.305KB",
+  "fileSize": "96067.65KB",
   "keywords": [
     "comorbidities",
     "icd",
