@@ -70,7 +70,9 @@
       )
     }
   } # end 400+
-  json_data <- httr::content(http_response, simplifyDataFrame=TRUE)
+  # encoding not specified by WHO resource (as of 2020-06-06).  Be explicit
+  # about assumption.
+  json_data <- httr::content(http_response, type = "text", encoding = "UTF-8")
   jsonlite::fromJSON(json_data)
 }
 
