@@ -32,7 +32,7 @@ fi
 git diff --cached --name-only |
     grep -q 'DESCRIPTION' &&
     [[ DESCRIPTION -nt codemeta.json ]] && {
-    Rscript -e 'codemetar::write_codemeta()'
+    Rscript -e 'codemetar::write_codemeta(verbose = FALSE, use_filesize = FALSE)'
     git add codemeta.json
     # git commit --amend -m"$(git log --format=%B -n1)" -m"Updated codemeta.json automatically."
     ok=1
@@ -75,7 +75,7 @@ fi
 
 # make sure we usr /usr/bin/env bash for scripts
 find "${IH?}" \
-    \( -type d \( -name '.*' -o -name 'dep*lib' \) \) -prune -o \
+    -type d -name '.*' -prune -o \
     ! -name "pre-commit" \
     -type f \
     -exec grep -q '#!/bin/bash' '{}' \; \
@@ -88,7 +88,7 @@ find "${IH?}" \
 done
 
 # check bash scripts
-find "${IH?}" \( -type d \( -name '.*' -o -name "dep*lib" \) \) -prune -o -type f -exec grep -q '#!/usr/bin/env bash' '{}' \; -print |
+find "${IH?}" -type d -name '.*' -prune -o -type f -exec grep -q '#!/usr/bin/env bash' '{}' \; -print |
     while read -r scbash
     do {
         shellcheck -x "${scbash}"
@@ -106,5 +106,7 @@ if (( wcres != 0 )); then
     ok=1
 fi
 
-(( ok != 0 )) && echo "githooks/pre-commit failed" >&1 && exit ${ok}
-exit 0
+(( ok != 0 )) &&
+    echo "githooks/pre-commit failed" >&1
+
+exit $((ok))
