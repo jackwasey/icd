@@ -57,10 +57,10 @@
     return(NULL)
   }
   .msg("Getting WHO data with JSON: ", json_url)
-  http_response <- httr::RETRY("GET", json_url, pause_min = 3, pause_base = 2, pause_cap = 59)
+  http_response <- httr::RETRY("GET", json_url, pause_min = 3, pause_base = 1, pause_cap = 59)
   if (hs <- http_response$status_code >= 400) {
     .msg("trying once more")
-    http_response <- httr::RETRY("GET", json_url)
+    http_response <- httr::RETRY("GET", json_url, pause_min = 7, pause_base = 3, pause_cap = 119)
     if (hs <- http_response$status_code >= 400) {
       stop(
         "Unable to fetch resource: ", json_url,

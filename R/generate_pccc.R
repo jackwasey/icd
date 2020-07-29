@@ -198,6 +198,7 @@ icd9_generate_map_pccc_pcs <- function(save_pkg_data = TRUE) {
     congeni_genetic = c(),
     malignancy = c("0010", "9925"),
     neonatal = c(),
+    #no lint start
     tech_dep = c(
       "0221", "0222", "0231", "0232", "0233", "0234", "0235", "0239", "0241", "0242", "0293", "0371",
       "0372", "0379", "0393", "0397", "0492", "0050", "0051", "0053", "0054", "0055", "0057", "1751", "1752",
@@ -212,6 +213,7 @@ icd9_generate_map_pccc_pcs <- function(save_pkg_data = TRUE) {
       "8107", "8108", "8109", "8130", "8131", "8132", "8133", "8134", "8135", "8136", "8137", "8138", "8139",
       "8451"
     ),
+    #no lint stop
     transplant = c(
       "3751", "3350", "3351", "3352", "336", "5561",
       "5569", "4697", "5051", "5059", "5280", "5282",
@@ -397,6 +399,7 @@ icd10_generate_map_pccc_dx <- function(save_pkg_data) {
 #' @keywords internal
 #' @noRd
 icd10_generate_map_pccc_pcs <- function(save_pkg_data = TRUE) {
+  #no lint start
   icd10_map_pccc_orig_pc <- list(
     neuromusc = c(
       "0016070", "0016071", "0016072", "0016073", "0016074", "0016075", "0016076", "0016077",
@@ -616,6 +619,7 @@ icd10_generate_map_pccc_pcs <- function(save_pkg_data = TRUE) {
       "30263G0", "30263G1", "30263X0", "30263X1", "30263Y0", "30263Y1"
     )
   )
+  #no lint stop
   icd10_map_pccc_pcs <- as.comorbidity_map(icd10_map_pccc_orig_pc)
   if (save_pkg_data) {
     .save_in_data_dir(icd10_map_pccc_pcs)

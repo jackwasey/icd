@@ -125,7 +125,7 @@ test_that("condense big lists of comorbidities", {
 })
 
 test_that("Charlson Deyo doesn't double count disease with two severities", {
-  expect_false(any(icd9_map_quan_deyo[["LiverMild"]] %in% icd9_map_quan_deyo[["LiverSevere"]]))
+  expect_false(any(icd9_map_quan_deyo[["LiverMild"]] %in% icd9_map_quan_deyo[["LiverSevere"]])) # no lint
   expect_false(any(icd9_map_quan_deyo$Cancer %in% icd9_map_quan_deyo$Mets))
   expect_false(any(icd9_map_quan_deyo$DM %in% icd9_map_quan_deyo$DMcx))
 })
