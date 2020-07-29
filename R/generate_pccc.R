@@ -213,7 +213,6 @@ icd9_generate_map_pccc_pcs <- function(save_pkg_data = TRUE) {
       "8107", "8108", "8109", "8130", "8131", "8132", "8133", "8134", "8135", "8136", "8137", "8138", "8139",
       "8451"
     ),
-    #no lint stop
     transplant = c(
       "3751", "3350", "3351", "3352", "336", "5561",
       "5569", "4697", "5051", "5059", "5280", "5282",
@@ -619,7 +618,7 @@ icd10_generate_map_pccc_pcs <- function(save_pkg_data = TRUE) {
       "30263G0", "30263G1", "30263X0", "30263X1", "30263Y0", "30263Y1"
     )
   )
-  #no lint stop
+  #no lint end
   icd10_map_pccc_pcs <- as.comorbidity_map(icd10_map_pccc_orig_pc)
   if (save_pkg_data) {
     .save_in_data_dir(icd10_map_pccc_pcs)

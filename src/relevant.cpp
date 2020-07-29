@@ -11,6 +11,8 @@
 
 using namespace Rcpp;
 
+typedef std::pair<std::string, int> RelPair;
+
 void Relevant::buildCodeSetCV(const CV &codes) {
   // over-reserve (and maybe expand), target is unique number
   allCodesSet.reserve(allCodesSet.size() + codes.size());

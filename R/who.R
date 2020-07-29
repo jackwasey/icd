@@ -1,4 +1,5 @@
-# TODO: only download (and cache) WHO data as needed, rather than forcing user to wait minutes to download everything on first use.
+# TODO: only download (and cache) WHO data as needed, rather than forcing user
+# to wait minutes to download everything on first use.
 
 #' Functions to get the WHO ICD-10 English 2016 and French 2008 data
 #' @param resource Fragment of URL with specific ICD-10 resource requested
@@ -57,10 +58,14 @@
     return(NULL)
   }
   .msg("Getting WHO data with JSON: ", json_url)
-  http_response <- httr::RETRY("GET", json_url, pause_min = 3, pause_base = 1, pause_cap = 59)
+  http_response <- httr::RETRY("GET", json_url,
+    pause_min = 3, pause_base = 1, pause_cap = 59
+  )
   if (hs <- http_response$status_code >= 400) {
     .msg("trying once more")
-    http_response <- httr::RETRY("GET", json_url, pause_min = 7, pause_base = 3, pause_cap = 119)
+    http_response <- httr::RETRY("GET", json_url,
+      pause_min = 7, pause_base = 3, pause_cap = 119
+    )
     if (hs <- http_response$status_code >= 400) {
       stop(
         "Unable to fetch resource: ", json_url,

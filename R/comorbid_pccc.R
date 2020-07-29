@@ -3,12 +3,13 @@ globalVariables(c(
   "icd9_map_pccc_pcs", "icd10_map_pccc_pcs"
 ))
 
-#' @describeIn comorbid Calculate pediatric complex chronic conditions (PCCC) comorbidities
+#' @describeIn comorbid Calculate pediatric complex chronic conditions (PCCC)
+#'   comorbidities
 #'
-#' Unlike with ICD-9 and ICD-10 diagnostic codes, 'icd' doesn't
-#' currently have a method for guessing which fields are procedure
-#' codes, so \code{icd_name} must be specified for the \code{_pcs}
-#' functions.
+#' @section Procedure codes: Unlike with ICD-9 and ICD-10 diagnostic codes,
+#'   'icd' doesn't currently have a method for guessing which fields are
+#'   procedure codes, so \code{icd_name} must be specified for the \code{_pcs}
+#'   functions.
 #' @examples
 #' # not pediatric data, but let's look for this example
 #' head(icd9_comorbid_pccc_dx(vermont_dx))

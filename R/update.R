@@ -73,7 +73,7 @@
   # we can either use the is_defined functions on these lists, or just grep the
   # canonical list directly to get the numeric, V and E codes.
   codes <- icd9cm_hierarchy[["code"]]
-  icd9_short_n_defined <- vec_to_lookup_pair(grep("^[^VE]+", codes, perl = TRUE, value = TRUE))
+  icd9_short_n_defined <- vec_to_lookup_pair(grep("^[^VE]+", codes, perl = TRUE, value = TRUE)) # no lint
   icd9_short_v_defined <- vec_to_lookup_pair(grep("^V", codes, perl = TRUE, value = TRUE))
   icd9_short_e_defined <- vec_to_lookup_pair(grep("^E", codes, perl = TRUE, value = TRUE))
   # also consider doing this in the ranging functions, even though slower, so
