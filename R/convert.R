@@ -404,7 +404,7 @@ short_to_parts.character <- function(x, mnr_empty = "") {
   # No default values in header plus C++ function body, so shim here.
   switch(
     guess_version(x, short_code = TRUE),
-    "icd9" = short_to_parts.icd9(x, mnrEmpty = mnr_empty),
+    "icd9" = short_to_parts.icd9(x, mnr_empty = mnr_empty),
     "icd10" = short_to_parts.icd10(x, mnr_empty = mnr_empty),
     stop("Unknown ICD version guessed from input")
   )
