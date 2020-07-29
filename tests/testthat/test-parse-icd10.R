@@ -37,7 +37,7 @@ test_that("icd10 flat file details are okay", {
         "sub_chapter",
         "chapter"
       )) {
-        expect_true(is.factor(res[[n]]))
+        expect_true(is.factor(res[[n]]), info = paste("version is:", v, "column is:", n))
         expect_identical(res, get_icd10cm_version(v))
       }
     }) # outer test_that
