@@ -1,6 +1,8 @@
 context("RTF ICD-9")
 
 skip_slow("RTF parsing for ICD-9-CM")
+skip_on_cran()
+skip_on_ci()
 
 j <- expect_icd9_sub_chap_equal
 test_that("some known sub vs chap confusion", {

@@ -71,7 +71,7 @@ NULL
 
 # only get options we know about, to avoid typo giving a NULL
 .get_opt <- function(x, default = NULL) {
-  o <- as.character(substitute(x))
+  o <- as.character(substitute(x, env = environment()))
   stopifnot(x %in% .opt_names)
   getOption(.opt_full_name(o), default = default)
 }
@@ -182,7 +182,7 @@ NULL
     },
     "message" = message(msg)
   )
-  invisible()
+  invisible(NULL)
 }
 
 .env_var_is_false <- function(x) {
