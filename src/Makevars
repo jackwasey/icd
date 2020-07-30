@@ -1,0 +1,18 @@
+#!/usr/bin/env make
+
+# From Writing R Extensions: "As from version 3.6.2, R selects a default C++
+# compiler with options that conform as far as possible to C++11. Packages
+# which do not specify ‘R (>= 3.6.2)’ in their DESCRIPTION files need to
+# explicitly require C++11, hence the rest of this section."
+
+CXX_STD = CXX11
+
+PKG_CPPFLAGS = -DEIGEN_PERMANENTLY_DISABLE_STUPID_WARNINGS
+PKG_CXXFLAGS = $(SHLIB_OPENMP_CXXFLAGS)
+PKG_LIBS = $(SHLIB_OPENMP_CXXFLAGS)
+
+#-DICD_DEBUG
+#-DICD_TIME
+#-DRCPP_DEBUG_LEVEL=1
+#-DRCPP_DEBUG_MODULE_LEVEL=1
+
