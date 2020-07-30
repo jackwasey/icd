@@ -1,5 +1,6 @@
-library(profr)
-library(microbenchmark)
+library(icd)
+requireNamespace("profr")
+requireNamespace("microbenchmark")
 
 # the slow code we are trying to speed up is:
 # icd9cm_generate_chapters_hierarchy()
@@ -11,24 +12,24 @@ j <- icd:::icd9cm_generate_chapters_hierarchy()
 Rprof(NULL)
 summaryRprof("/tmp/gh.txt", lines = "show")
 
-test_codes <- icd9cm_hierarchy[icd9cm_hierarchy$billable, "code"]
+test_codes <- icd::icd9cm_hierarchy[icd::icd9cm_hierarchy$billable, "code"]
 
-prf <- profr(
-  icd9_get_chapters(x = test_codes[1:1000], short_code = TRUE),
+prf <- profr::profr(
+  icd::icd9_get_chapters(x = test_codes[1:1000], short_code = TRUE),
   interval = 0.001
 )
 print(prf)
 
 # same with Rprof
 Rprof(filename = "/tmp/gc.txt", interval = 0.001, line.profiling = TRUE)
-icd9_get_chapters(x = test_codes, short_code = TRUE)
+icd::icd9_get_chapters(x = test_codes, short_code = TRUE)
 Rprof(NULL)
 summaryRprof("/tmp/gc.txt", lines = "show")
 
 
 # actually %i9mj% is the slowest part
 
-microbenchmark("100" %i9mj% "100",
+microbenchmark::microbenchmark("100" %i9mj% "100",
   "100" %i9mj% "110",
   "100" %i9mj% "999",
   icd:::expand_range_major.icd9("100", "999", defined = TRUE),
@@ -50,7 +51,7 @@ microbenchmark("100" %i9mj% "100",
 #  }) #, interval = 0.01, quiet = TRUE)
 
 Rprof(filename = "/tmp/mj.txt", interval = 0.001, line.profiling = TRUE)
-microbenchmark(
+microbenchmark::microbenchmark(
   icd:::expand_range_major.icd9("100", "999", defined = TRUE),
   times = 100
 )

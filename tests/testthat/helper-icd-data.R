@@ -64,7 +64,7 @@ skip_on_no_rtf <- function(test_year) {
   }
 }
 
-skip_flat_icd9_avail <- function(ver, year) {
+skip_flat_icd9_avail <- function(ver = NULL, year = NULL) {
   skip_no_icd_data_cache()
   if (missing(ver)) {
     if (missing(year)) stop("specify ver or year")
@@ -80,7 +80,7 @@ skip_flat_icd9_avail <- function(ver, year) {
     dat <- .get_fetcher_fun(paste0("icd9cm", year, "_leaf"))()
     if (is.null(dat)) testthat::skip(msg)
   })
-  invisible()
+  invisible(NULL)
 }
 
 skip_flat_icd9_all_avail <- function() {
@@ -96,7 +96,7 @@ skip_icd10cm_flat_avail <- function(year, dx = TRUE) {
     testthat::skip(msg)
   }
   .msg(paste("Not", msg))
-  invisible()
+  invisible(NULL)
 }
 
 skip_icd10cm_xml_avail <- function() {

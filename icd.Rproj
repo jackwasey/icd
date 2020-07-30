@@ -16,7 +16,7 @@ AutoAppendNewline: Yes
 StripTrailingWhitespace: Yes
 
 BuildType: Package
-PackageInstallArgs: --with-keep.source --install-tests --configure-args=--disable-icd-strip
+PackageInstallArgs: --with-keep.source --install-tests
 PackageBuildArgs: --compact-vignettes=gs+qpdf
 PackageBuildBinaryArgs: --preclean --example --install-tests --no-clean-on-error --with-keep.source --data-compress=none
 PackageRoxygenize: rd,namespace

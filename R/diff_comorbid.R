@@ -66,8 +66,8 @@ diff_comorbid.list <- function(x, y, all_names = NULL, x_names = NULL,
 
   common.names <- intersect(x_names, y_names)
 
-  x.title <- deparse(substitute(x))
-  y.title <- deparse(substitute(y))
+  x.title <- deparse(substitute(x, env = environment()))
+  y.title <- deparse(substitute(y, env = environment()))
 
   out <- list()
 

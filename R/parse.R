@@ -12,7 +12,7 @@
       FUN.VALUE = logical(nrow(x))
     )
   )) {
-    return(invisible())
+    return(invisible(NULL))
   }
   print(colSums(vapply(x, is.na, logical(nrow(x)))))
   print(x[which(is.na(x$major)), ])

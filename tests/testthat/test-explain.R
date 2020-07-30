@@ -71,7 +71,7 @@ test_that("explain S3 dispatch", {
       b = "Rheumatic fever without mention of heart involvement"
     )
   )
-  expect_warning(res <- explain_code(c(a = "not", b = "icd9code"), short_code = TRUE))
+  res <- expect_warning(explain_code(c(a = "not", b = "icd9code"), short_code = TRUE))
   expect_equal(res, character())
   expect_warning(
     res <- explain_code(list(a = icd9("not"), b = icd9("icd9code")),

@@ -34,7 +34,7 @@
                               compress = "gzip",
                               envir = parent.frame()) {
   if (!is.character(var_name)) {
-    var_name <- as.character(substitute(var_name))
+    var_name <- as.character(substitute(var_name, env = environment()))
   }
   message("Asked to save ", var_name, " to PACKAGE data dir")
   stopifnot(is.character(var_name))
@@ -98,7 +98,7 @@
                            x = NULL,
                            envir = parent.frame()) {
   if (!is.character(var_name)) {
-    var_name <- as.character(substitute(var_name))
+    var_name <- as.character(substitute(var_name, env = environment()))
   }
   stopifnot(is.character(var_name))
   if (is.null(x)) {

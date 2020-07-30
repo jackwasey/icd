@@ -106,7 +106,7 @@
 #' @noRd
 get_icd_data <- function(data_name, alt = NULL) {
   if (!is.character(data_name)) {
-    data_name <- deparse(substitute(data_name))
+    data_name <- deparse(substitute(data_name, env = environment()))
   }
   ns <- asNamespace("icd")
   if (exists(data_name, ns)) {

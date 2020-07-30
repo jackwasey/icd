@@ -34,7 +34,7 @@ testthat_split <- function(base_name = "testthat",
   }
   ok <- file.rename(testthat_active_path(), testthat_disabled_path())
   stopifnot(ok)
-  invisible()
+  invisible(NULL)
 }
 
 testthat_restore <- function(base_name = "testthat") {
@@ -43,7 +43,7 @@ testthat_restore <- function(base_name = "testthat") {
   ok <- all(file.remove(list.files("tests", pattern = paste0(prefix),
                                    full.names = TRUE)))
   stopifnot(ok)
-  invisible()
+  invisible(NULL)
 }
 
 with_split_tests <- function(code, ...,

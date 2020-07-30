@@ -21,12 +21,12 @@ filter_valid <- function(x, icd_name = get_icd_name(x),
   if (icd_ver == "icd9") {
     icd9_filter_valid(
       x = x, icd_name = icd_name,
-      short_code = short_code, invert = invert, ...
+      short_code = short_code, invert = invert
     )
   } else if (icd_ver == "icd10") {
     icd10_filter_valid(
       x = x, icd_name = icd_name,
-      short_code = short_code, invert = invert, ...
+      short_code = short_code, invert = invert
     )
   } else {
     stop("could not identify ICD code type")

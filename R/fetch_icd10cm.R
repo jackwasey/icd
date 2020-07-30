@@ -41,7 +41,7 @@
       )
     }
   }
-  invisible()
+  invisible(NULL)
 }
 
 #' Downlaod a specific ICD-10-CM version

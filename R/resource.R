@@ -108,7 +108,7 @@
   if (!.exists_in_cache(var_name = var_name)) {
     msg <- paste("Unable to get cached data for:", sQuote(var_name))
     .absent_action_switch(msg, must_work = must_work)
-    return(invisible())
+    return(invisible(NULL))
   }
   fp <- .rds_path(var_name)
   .msg("Checking if we have file path for get")
@@ -425,7 +425,7 @@ get_icd_data_dir <- function(must_work = TRUE) {
         unlink(get_icd_data_dir(), recursive = TRUE)
       }
     }
-    return(invisible())
+    return(invisible(NULL))
   }
   if (memoise) {
     message("deleting memoise directory")

@@ -6,7 +6,7 @@ test_that("github issue #44 from wmurphyrd", {
     icd9 = c("441", "412.93", "042", "250.0", "250.0", "250.0"),
     stringsAsFactors = TRUE
   )
-  expect_warning(res <- charlson(mydf, return_df = TRUE), NA)
+  res <- expect_warning(charlson(mydf, return_df = TRUE), regexp = NA)
   expect_equal(res$Charlson, c(2, 2, 6, 1))
 })
 

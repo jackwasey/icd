@@ -34,12 +34,11 @@ test_that("condense an ICD-9 code set to minimal group", {
     sort(c("98799", "988", "98900", "98901"))
   )
   # non-real end of real range
-  expect_warning(res <- condense("988" %i9sa% "98899", defined = TRUE))
+  res <- expect_warning(condense("988" %i9sa% "98899", defined = TRUE), regexp = NULL)
   expect_equal(res, "988")
-  expect_warning(res <- condense("9879" %i9sa% "9891", defined = TRUE))
+  res <- expect_warning(condense("9879" %i9sa% "9891", defined = TRUE), regexp = NULL)
   expect_equal(res, c("9879", "988", "9890", "9891"))
 })
-
 
 test_that("condense ranges which do consense", {
   expect_equal(

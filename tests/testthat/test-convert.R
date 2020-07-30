@@ -175,7 +175,7 @@ test_that("icd10 short to decimal", {
 })
 
 test_that("#97 is fixed", {
-  expect_warning(res <- short_to_decimal(icd10_map_elix$CHF), NA)
+  res <- expect_warning(short_to_decimal(icd10_map_elix$CHF), NA)
   expect_true("P29.0" %in% res)
   expect_false("I43." %in% res)
 })
