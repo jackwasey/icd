@@ -31,11 +31,13 @@ bool guessShortPlusFactorCpp(SEXP x_, int n = 1000L) {
     // compiler warning.
     stop("only NA_logical_ , character vectors and factors are accepted");
   }
-  default: { stop("Character vectors and factors are accepted"); }
+  default: {
+    stop("Character vectors and factors are accepted");
+  }
   }
   n = std::min((int)x.length(), n);
-  const char *b;
-  const char *ob;
+  const char* b;
+  const char* ob;
   String bs;
   for (R_xlen_t i = 0; i != n; ++i) {
     bs = x[i];

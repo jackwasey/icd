@@ -29,7 +29,7 @@ os:
   - linux
   - osx
 
-# default 2020-04-01 is xenial, not bionic
+# default 2020-07-30 is xenial, not yet bionic, let alone focal.
 dist:
   - xenial
   - bionic

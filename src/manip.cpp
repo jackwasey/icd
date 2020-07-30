@@ -67,7 +67,7 @@ String icd9AddLeadingZeroesMajorSingle(String mjr) {
 
 // [[Rcpp::export]]
 std::string icd9AddLeadingZeroesMajorSingleStd(std::string m) {
-  const char *cs                   = m.c_str();
+  const char* cs                   = m.c_str();
   const std::string::size_type len = m.length();
   if (!icd9IsASingleVE(cs)) {
     switch (len) {
@@ -107,9 +107,7 @@ std::string icd9AddLeadingZeroesMajorSingleStd(std::string m) {
 }
 
 // [[Rcpp::export(icd9_add_leading_zeroes_major)]]
-CV icd9AddLeadingZeroesMajor(CV mjr) {
-  return sapply(mjr, icd9AddLeadingZeroesMajorSingle);
-}
+CV icd9AddLeadingZeroesMajor(CV mjr) { return sapply(mjr, icd9AddLeadingZeroesMajorSingle); }
 
 //' @title Add leading zeroes to incomplete ICD-9 codes
 //' @description Non-decimal ICD-9 codes with length<5 are often ambiguous. E.g.

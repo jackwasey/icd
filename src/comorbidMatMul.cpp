@@ -53,13 +53,13 @@ void printCornerSparse(PtsSparse x) {
 // # nocov end
 
 void buildVisitCodesSparseWide(
-  const DataFrame &data,
+  const DataFrame& data,
   const std::string id_name,
-  const CV &code_names,
+  const CV& code_names,
   const bool validate,
-  Relevant &relevant,
-  PtsSparse &visMat, // output
-  VecStr &visitIds   // output: can get this from sparse matrix at end? Needed?
+  Relevant& relevant,
+  PtsSparse& visMat, // output
+  VecStr& visitIds   // output: can get this from sparse matrix at end? Needed?
 ) {
   DEBUG_VEC(relevant.keys);
   const RObject visits = data[id_name];
@@ -80,22 +80,21 @@ void buildVisitCodesSparseWide(
   }
   for (int j = 0; j != code_names.size(); ++j) {
     String data_col_name = code_names[j];
-    const SEXP &data_col = data[data_col_name];
+    const SEXP& data_col = data[data_col_name];
     if (Rf_isFactor(data_col)) {
-      const IntegerVector &data_col_fc = (IntegerVector)data_col;
+      const IntegerVector& data_col_fc = (IntegerVector)data_col;
       DEBUG("codes are still in a factor...");
-      const CV &code_levels = data_col_fc.attr("levels");
+      const CV& code_levels = data_col_fc.attr("levels");
       const IntegerVector codes_relevant =
         refactor(data_col_fc, relevant.str_codes, true, validate);
       assert(rows.size() == codes_relevant.size());
       for (R_xlen_t i = 0; i != rows.size(); ++i) {
         DEBUG("add triplet at R idx:" << rows[i] << ", " << codes_relevant[i]);
         if (IntegerVector::is_na(codes_relevant[i])) continue;
-        visTriplets.push_back(
-          Triplet(rows[i] - 1, codes_relevant[i] - 1, true));
+        visTriplets.push_back(Triplet(rows[i] - 1, codes_relevant[i] - 1, true));
       } // end i loop through rows
     } else {
-      const CV &data_col_cv = (CV)data_col;
+      const CV& data_col_cv = (CV)data_col;
       DEBUG_VEC(data_col_cv);
       for (R_xlen_t i = 0; i != rows.size(); ++i) {
         const auto found = relevant.rel_map.find(((String)data_col_cv[i]).get_cstring());
@@ -106,7 +105,7 @@ void buildVisitCodesSparseWide(
     }   // factor vs character for this code column
   }     // end j loop through data columns
   visMat.resize(visitIds.size(), relevant.str_codes.size()); // unique ids
-  visMat.reserve(vlen * ncol);                        // upper bound
+  visMat.reserve(vlen * ncol);                               // upper bound
   visMat.setFromTriplets(visTriplets.begin(), visTriplets.end());
   visMat.conservativeResize(visitIds.size(), relevant.str_codes.size());
 }
@@ -134,25 +133,20 @@ void buildVisitCodesSparseWide(
 //' @keywords internal array algebra
 //' @noRd
 // [[Rcpp::export(comorbid_mat_mul_wide_rcpp)]]
-LogicalMatrix comorbidMatMulWide(const DataFrame &data,
-                                 const List &map,
+LogicalMatrix comorbidMatMulWide(const DataFrame& data,
+                                 const List& map,
                                  const std::string id_name,
-                                 const CV &code_names,
+                                 const CV& code_names,
                                  const bool validate) {
   VecStr out_row_names;           // size is reserved in buildVisitCodesVec
   RObject visits = data[id_name]; // does this copy??? RObject instead?
   Relevant r(map, data, code_names);
   MapPlus m(map, r);
   PtsSparse visMat; // reservation and sizing done within next function
-  buildVisitCodesSparseWide(data,
-                            id_name,
-                            code_names,
-                            validate,
-                            r,
-                            visMat,
-                            out_row_names);
+  buildVisitCodesSparseWide(data, id_name, code_names, validate, r, visMat, out_row_names);
   if (visMat.cols() != m.rows()) stop("matrix multiplication won't work");
-  // consider using R's C interface for creating logical SEXP, then use Eigen::Map to use that memory to avoid a potentially big copy.
+  // consider using R's C interface for creating logical SEXP, then use
+  // Eigen::Map to use that memory to avoid a potentially big copy.
   /*
    * Something like:
    *
@@ -160,8 +154,9 @@ LogicalMatrix comorbidMatMulWide(const DataFrame &data,
    * result_ptr = LOGICAL(result_sexp);
    *   const auto map_rows = visMat.rows();
    *   const auto map_cols = m.cols();
-   *   Eigen::Map<Eigen::Matrix<int, Eigen::Dynamic, Eigen::Dynamic> > result_mem_mapped;
-  */
+   *   Eigen::Map<Eigen::Matrix<int, Eigen::Dynamic, Eigen::Dynamic> >
+   * result_mem_mapped;
+   */
   Eigen::MatrixXi result = visMat * m.mat; // col major result
   DEBUG("Result rows: " << result.rows() << ", cols: " << result.cols());
   PRINTCORNERMAP(result);
@@ -177,7 +172,7 @@ LogicalMatrix comorbidMatMulWide(const DataFrame &data,
 #ifdef ICD_TIME
   // all these timings are very small compared to the setup time
   high_resolution_clock::time_point t0 = high_resolution_clock::now();
-#endif // ICD_TIME
+#endif                        // ICD_TIME
   auto resok = result.eval(); // does start to take longer than wrap with big n
 #ifdef ICD_TIME
   high_resolution_clock::time_point t1 = high_resolution_clock::now();
@@ -189,13 +184,16 @@ LogicalMatrix comorbidMatMulWide(const DataFrame &data,
   // bulk memcopy the data into it directly. I do not think there is a way to
   // share the memory with R. Possibly set up the SEXP memory, then perhaps I
   // can tell Eigen to use it?
-  IntegerMatrix mat_out_int     = wrap(result); // not much slower than eval. big memcopy - does it incidentally do any casting?
+  IntegerMatrix mat_out_int = wrap(result); // not much slower than eval. big memcopy - does it
+                                            // incidentally do any casting?
 #ifdef ICD_TIME
   high_resolution_clock::time_point t2 = high_resolution_clock::now();
 #endif // ICD_TIME
-  //LogicalMatrix mat_out_bool    = wrap(mat_out_int); // slowest of all
-  // INTSXP is same data structure in R as LGLSXP, so need to do anything... but Rcpp thinks so.
-  // Rcpp does this to an integer vector in r_coerce.h: int r_coerce<INTSXP,LGLSXP>(int from){ return ( from == NA_INTEGER ) ? NA_LOGICAL : (from!=0)
+  // LogicalMatrix mat_out_bool    = wrap(mat_out_int); // slowest of all
+  // INTSXP is same data structure in R as LGLSXP, so need to do anything... but
+  // Rcpp thinks so. Rcpp does this to an integer vector in r_coerce.h: int
+  // r_coerce<INTSXP,LGLSXP>(int from){ return ( from == NA_INTEGER ) ?
+  // NA_LOGICAL : (from!=0)
   LogicalMatrix mat_out_bool = (LogicalMatrix)mat_out_int;
 #ifdef ICD_TIME
   high_resolution_clock::time_point t3 = high_resolution_clock::now();

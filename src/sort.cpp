@@ -1,30 +1,24 @@
-#include <Rcpp.h>
 #include "sort.h"
+#include "local.h" // TRACE, etc.
+#include <Rcpp.h>
 using namespace Rcpp;
 
-IntegerVector orderWorker(
-    const CharacterVector& x,
-    std::function <bool (String, String)> f
-) {
-  IntegerVector index =  Rcpp::no_init_vector(x.size());
+Rcpp::IntegerVector orderWorker(const Rcpp::CharacterVector& x,
+                                std::function<bool(Rcpp::String, Rcpp::String)> f) {
+  IntegerVector index = Rcpp::no_init_vector(x.size());
   // R indexed
   std::iota(index.begin(), index.end(), 1);
   // stable sort give the same indices for identical values, although these may
   // not be what R would give.
-  std::stable_sort(
-    index.begin(),
-    index.end(),
-    [&](R_xlen_t a,
-        R_xlen_t b) {
-      return f(x[a - 1], x[b - 1]);
-    }
-  );
+  std::stable_sort(index.begin(), index.end(), [&](R_xlen_t a, R_xlen_t b) {
+    return f(x[a - 1], x[b - 1]);
+  });
   return index;
 }
 
 LogicalVector compareVectorWorker(const StringVector& x,
                                   const StringVector& y,
-                                  std::function <bool (String, String)> f) {
+                                  std::function<bool(String, String)> f) {
   if (x.size() != y.size()) stop("Both x and y must be same length");
   if (x.size() == 0) return LogicalVector(0);
   LogicalVector out(x.size());
@@ -33,7 +27,7 @@ LogicalVector compareVectorWorker(const StringVector& x,
   for (; xit != x.cend(); ++xit, ++yit) {
     const String& xx = *xit;
     const String& yy = *yit;
-    auto n = std::distance(x.cbegin(), xit);
+    auto n           = std::distance(x.cbegin(), xit);
     if (xx == NA_STRING || yy == NA_STRING)
       out(n) = NA_LOGICAL;
     else
@@ -52,8 +46,8 @@ bool icd9Compare(String a, String b) {
     // NA < NA is false and NA < any code is false
     return false;
   }
-  const char *acs = a.get_cstring();
-  const char *bcs = b.get_cstring();
+  const char* acs = a.get_cstring();
+  const char* bcs = b.get_cstring();
   // most common is numeric, so deal with that first:
   if (*acs < 'A') return strcmp(acs, bcs) < 0;
   // if the second char is now  a number, then we can immediately return false
@@ -66,28 +60,27 @@ bool icd9Compare(String a, String b) {
 }
 
 // [[Rcpp::export(icd9_compare_vector_rcpp)]]
-LogicalVector icd9CompareVector(const StringVector& x,
-                                const StringVector& y) {
+LogicalVector icd9CompareVector(const StringVector& x, const StringVector& y) {
   return compareVectorWorker(x, y, icd9Compare);
 }
 
 // [[Rcpp::export(icd9_sort_rcpp)]]
-CharacterVector icd9Sort(const CharacterVector &x) {
+CharacterVector icd9Sort(const CharacterVector& x) {
   CharacterVector y = clone(x);
   std::sort(y.begin(), y.end(), icd9Compare);
   return y;
 }
 
 // [[Rcpp::export(icd9_order_rcpp)]]
-IntegerVector icd9Order(const CharacterVector& x) {
-  return orderWorker(x, icd9Compare);
-}
+IntegerVector icd9Order(const CharacterVector& x) { return orderWorker(x, icd9Compare); }
 
-//std::vector<char> qfirst = {'C', 'D', 'M', 'Z'};
-std::vector<std::string> qx  = {"C4A", "D3A", "M1A", "Z3A", "C7A", "C7B"};
-std::vector<std::string> qb  = {"C4399999", "D3699999", "M0999999", "Z3699999", "C7599999", "C7A99999"};
-std::vector<std::string> qa  = {"C44", "D37", "M10", "Z37", "C7B", "C76"};
-std::vector<std::string> qbb = {"C4399999", "D3699999", "M0999999", "Z3699999", "C7599999", "C7599999"};
+// std::vector<char> qfirst = {'C', 'D', 'M', 'Z'};
+std::vector<std::string> qx = {"C4A", "D3A", "M1A", "Z3A", "C7A", "C7B"};
+std::vector<std::string> qb =
+  {"C4399999", "D3699999", "M0999999", "Z3699999", "C7599999", "C7A99999"};
+std::vector<std::string> qa = {"C44", "D37", "M10", "Z37", "C7B", "C76"};
+std::vector<std::string> qbb =
+  {"C4399999", "D3699999", "M0999999", "Z3699999", "C7599999", "C7599999"};
 std::vector<std::string> qaa = {"C44", "D37", "M10", "Z37", "C76", "C76"};
 
 ////////////
@@ -96,15 +89,14 @@ std::vector<std::string> qaa = {"C44", "D37", "M10", "Z37", "C76", "C76"};
 
 // This returns a value and sets a (possibly different) result in a given
 // reference, enabling recursion.
-bool icd10cmCompareQuirk(
-    const char* xstr,
-    const char* ystr,
-    const char *quirk,
-    const char *beforeQuirk,
-    const char *afterQuirk,
-    const char *beforeBeforeQuirk,
-    const char *afterAfterQuirk,
-    bool& res) {
+bool icd10cmCompareQuirk(const char* xstr,
+                         const char* ystr,
+                         const char* quirk,
+                         const char* beforeQuirk,
+                         const char* afterQuirk,
+                         const char* beforeBeforeQuirk,
+                         const char* afterAfterQuirk,
+                         bool& res) {
   bool mx = (xstr == quirk || strncmp(xstr, quirk, 3) == 0);
   bool my = (ystr == quirk || strncmp(ystr, quirk, 3) == 0);
   if (!mx && !my) {
@@ -126,8 +118,7 @@ bool icd10cmCompareQuirk(
     }
     TRACE(quirk << " didn't match y");
     TRACE(quirk << " after x match falling through.\nx = " << xstr
-                << "\nbeforeQuirk = " << beforeQuirk
-                << "\nafterQuirk = " << afterQuirk
+                << "\nbeforeQuirk = " << beforeQuirk << "\nafterQuirk = " << afterQuirk
                 << "\nbeforeBeforeQuirk = " << beforeBeforeQuirk
                 << "\nafterAfterQuirk = " << afterAfterQuirk);
     if (strcmp(beforeQuirk, beforeBeforeQuirk)) {
@@ -146,8 +137,7 @@ bool icd10cmCompareQuirk(
     res = strcmp(beforeQuirk, ystr) < 0;
     return true;
   }
-  TRACE(quirk << " falling through. x = " << xstr
-                   << ", afterQuirk = " << afterQuirk);
+  TRACE(quirk << " falling through. x = " << xstr << ", afterQuirk = " << afterQuirk);
   if (strcmp(afterQuirk, afterAfterQuirk)) {
     bool res_nested2;
     return icd10cmCompareQuirk(xstr,
@@ -171,8 +161,7 @@ bool icd10cmCompareQuirk(
 //' @keywords internal
 //' @noRd
 //[[Rcpp::export(icd10cm_compare_c)]]
-bool icd10cmCompareC(const char* xstr,
-                     const char* ystr) {
+bool icd10cmCompareC(const char* xstr, const char* ystr) { // NOLINT
   TRACE("icd10cmCompareC comparing " << xstr << " with " << ystr);
   const int i = strncmp(xstr, ystr, 1);
   TRACE("icd10cmCompareC first char: " << xstr << " vs " << ystr << " = " << i);
@@ -190,24 +179,17 @@ bool icd10cmCompareC(const char* xstr,
   // we know the first char is different. If one isn't in the quirk list, we can
   // return immediately
   const char x1 = *xstr;
-  if (x1 != 'C' && x1 != 'D' && x1 != 'M' && x1 != 'Z') {
-    return strcmp(xstr, ystr) < 0;
-  }
+  if (x1 != 'C' && x1 != 'D' && x1 != 'M' && x1 != 'Z') { return strcmp(xstr, ystr) < 0; }
   const char y1 = *ystr;
-  if (y1 != 'C' && y1 != 'D' && y1 != 'M' && y1 != 'Z') {
-    return strcmp(xstr, ystr) < 0;
-  }
+  if (y1 != 'C' && y1 != 'D' && y1 != 'M' && y1 != 'Z') { return strcmp(xstr, ystr) < 0; }
   // the quirks are all A or B in third position
-  if (strlen(xstr) >= 3 &&
-      strlen(ystr) >= 3 &&
-      isdigit(xstr[2]) &&
-      isdigit(ystr[2])) {
-    TRACE("third character is digit, so cannot be quirk for xstr = " <<
-      xstr << " and ystr = " << ystr);
+  if (strlen(xstr) >= 3 && strlen(ystr) >= 3 && isdigit(xstr[2]) && isdigit(ystr[2])) {
+    TRACE("third character is digit, so cannot be quirk for xstr = " << xstr
+                                                                     << " and ystr = " << ystr);
     return strcmp(xstr, ystr) < 0;
   }
-  TRACE("icd10cmCompareC found that first char equal for " <<
-    xstr << " and " << ystr << ". Comparing quirky codes...");
+  TRACE("icd10cmCompareC found that first char equal for " << xstr << " and " << ystr
+                                                           << ". Comparing quirky codes...");
   // in flat file, C4A is between 43 and 44. Definitive reference I am using is
   // the flat file with all the codes from CMS.
   bool qres = true; // default to something to avoid undefined behavior.
@@ -220,14 +202,12 @@ bool icd10cmCompareC(const char* xstr,
                             qa[j].c_str(),
                             qbb[j].c_str(),
                             qaa[j].c_str(),
-                            qres)
-    )
+                            qres))
       return qres;
   }
   TRACE("icd10cmCompareC falling back to strcmp");
   return strcmp(xstr, ystr) < 0;
 }
-
 
 // [[Rcpp::export(icd10cm_compare_rcpp)]]
 bool icd10cmCompare(const String& x, const String& y) {
@@ -246,13 +226,12 @@ bool icd10cmCompare(const String& x, const String& y) {
 }
 
 // [[Rcpp::export(icd10cm_compare_vector_rcpp)]]
-LogicalVector icd10cmCompareVector(const StringVector& x,
-                                   const StringVector& y) {
+LogicalVector icd10cmCompareVector(const StringVector& x, const StringVector& y) {
   return compareVectorWorker(x, y, icd10cmCompare);
 }
 
 // [[Rcpp::export(icd10cm_sort_rcpp)]]
-CharacterVector icd10cmSort(const CharacterVector &x) {
+CharacterVector icd10cmSort(const CharacterVector& x) {
   auto y = clone(x);
   std::sort(y.begin(), y.end(), icd10cmCompare);
   return y;
@@ -269,6 +248,4 @@ CharacterVector icd10cmSort(const CharacterVector &x) {
 //' @keywords internal
 //' @noRd
 // [[Rcpp::export(icd10cm_order_rcpp)]]
-IntegerVector icd10cmOrder(const CharacterVector& x) {
-  return orderWorker(x, icd10cmCompare);
-}
+IntegerVector icd10cmOrder(const CharacterVector& x) { return orderWorker(x, icd10cmCompare); }

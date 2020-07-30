@@ -13,7 +13,7 @@ using namespace Rcpp;
 
 typedef std::pair<std::string, int> RelPair;
 
-void Relevant::buildCodeSetCV(const CV &codes) {
+void Relevant::buildCodeSetCV(const CV& codes) {
   // over-reserve (and maybe expand), target is unique number
   allCodesSet.reserve(allCodesSet.size() + codes.size());
   DEBUG_VEC(codes);
@@ -22,18 +22,18 @@ void Relevant::buildCodeSetCV(const CV &codes) {
   }
 }
 
-void Relevant::buildCodeSetInt(const IntegerVector &codes) {
+void Relevant::buildCodeSetInt(const IntegerVector& codes) {
   // over-reserve (and maybe expand), target is unique number
   allCodesSet.reserve(allCodesSet.size() + codes.size());
   DEBUG_VEC(codes);
   for (R_xlen_t i = 0; i != codes.size(); ++i) {
-    const auto &ci = codes[i];
-    const auto &cs = std::to_string(ci);
+    const auto& ci = codes[i];
+    const auto& cs = std::to_string(ci);
     if (!IntegerVector::is_na(ci)) { allCodesSet.insert(cs); }
   }
 }
 
-void Relevant::buildCodeSet(const SEXP &codes) {
+void Relevant::buildCodeSet(const SEXP& codes) {
   switch (TYPEOF(codes)) {
   case INTSXP: {
     if (!Rf_isFactor(codes)) {
@@ -53,7 +53,9 @@ void Relevant::buildCodeSet(const SEXP &codes) {
     for (SEXP listItem : (List)codes) { buildCodeSet(listItem); }
     break;
   }
-  default: { stop("Invalid type of codes to build set in Relevant"); }
+  default: {
+    stop("Invalid type of codes to build set in Relevant");
+  }
   }
 }
 
@@ -73,7 +75,7 @@ CV Relevant::findRelevant() {
 // # nocov start
 
 // setup find based on a data frame, list or vector
-CV Relevant::findRelevant(const SEXP &codes) {
+CV Relevant::findRelevant(const SEXP& codes) {
   buildCodeSet(codes);
   findRelevant();
   return wrap(r); // or keep as STL container, or even both?
@@ -82,23 +84,23 @@ CV Relevant::findRelevant(const SEXP &codes) {
 // # nocov end
 
 // setup find based on some columns in a data frame
-CV Relevant::findRelevant(const List &data, const CV &code_fields) {
+CV Relevant::findRelevant(const List& data, const CV& code_fields) {
   IntegerVector cols = match(code_fields, (CV)data.names());
   if (cols.size() == 0) return (CV::create());
   if (any(is_na(cols))) stop("Relevant: column names not found in data frame");
-//auto len = ((VectorBase)data[1]).size();
+  // auto len = ((VectorBase)data[1]).size();
   // r.reserve(); // Very rough heuristic
   for (auto col : cols) { buildCodeSet(data[col - 1]); }
   findRelevant();
   return wrap(r); // or keep as STL container?
 }
 
-RelMap Relevant::findRel(const Rcpp::CharacterVector &x) {
+RelMap Relevant::findRel(const Rcpp::CharacterVector& x) {
   RelMap out;
   DEBUG("building um using:");
   DEBUG_VEC(x);
   for (CV::const_iterator rit = x.cbegin(); rit != x.cend(); ++rit) {
-    const char *code = *rit;
+    const char* code = *rit;
     DEBUG(std::distance(x.cbegin(), rit));
     DEBUG(code);
     out.insert(RelPair(code, std::distance(x.cbegin(), rit)));

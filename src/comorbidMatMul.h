@@ -26,25 +26,24 @@ void printCornerSparse(PtsSparse x);
 // # nocov end
 
 #ifdef ICD_TIME
-#include <iostream>
-#include <ctime>
-#include <ratio>
 #include <chrono>
+#include <ctime>
+#include <iostream>
+#include <ratio>
 using namespace std::chrono;
 #endif // ICD_TIME
 
-void buildVisitCodesSparseWide(
-  const DataFrame &data,
-  const std::string id_name,
-  const CV &code_names,
-  const bool validate,
-  Relevant &relevant,
-  // output
-  PtsSparse &visMat,
-  // output: can get this from sparse matrix at end? Needed?
-  VecStr &visitIds);
-LogicalMatrix comorbidMatMulWide(const DataFrame &data,
-                                 const List &map,
+void buildVisitCodesSparseWide(const DataFrame& data,
+                               const std::string id_name,
+                               const CV& code_names,
+                               const bool validate,
+                               Relevant& relevant,
+                               // output
+                               PtsSparse& visMat,
+                               // output: can get this from sparse matrix at end? Needed?
+                               VecStr& visitIds);
+LogicalMatrix comorbidMatMulWide(const DataFrame& data,
+                                 const List& map,
                                  const std::string id_name,
-                                 const CV &code_name,
+                                 const CV& code_name,
                                  const bool validate = false);

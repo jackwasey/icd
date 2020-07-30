@@ -3,6 +3,6 @@
 
 #include <Rinternals.h>
 
-SEXP getRListOrDfElement(SEXP list, const char *str);
+SEXP getRListOrDfElement(SEXP list, const char* str);
 
 #endif /* CUTIL_H_ */

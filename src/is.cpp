@@ -17,7 +17,7 @@
 //' @keywords internal
 //' @noRd
 // [[Rcpp::export]]
-std::vector<bool> icd9_is_n_rcpp(const VecStr &sv) {
+std::vector<bool> icd9_is_n_rcpp(const VecStr& sv) {
   const int len = sv.size();
   std::vector<bool> out(len);
   for (int i = 0; i < len; ++i) { out[i] = !icd9IsASingleVE(sv[i].c_str()); }
@@ -28,7 +28,7 @@ std::vector<bool> icd9_is_n_rcpp(const VecStr &sv) {
 //' @keywords internal
 //' @noRd
 // [[Rcpp::export]]
-std::vector<bool> icd9_is_v_rcpp(const VecStr &sv) {
+std::vector<bool> icd9_is_v_rcpp(const VecStr& sv) {
   const int len = sv.size();
   std::vector<bool> out(len);
   for (int i = 0; i < len; ++i) { out[i] = icd9IsASingleV(sv[i].c_str()); }
@@ -39,7 +39,7 @@ std::vector<bool> icd9_is_v_rcpp(const VecStr &sv) {
 //' @keywords internal
 //' @noRd
 // [[Rcpp::export]]
-std::vector<bool> icd9_is_e_rcpp(const VecStr &sv) {
+std::vector<bool> icd9_is_e_rcpp(const VecStr& sv) {
   const int len = sv.size();
   std::vector<bool> out(len);
   for (int i = 0; i < len; ++i) { out[i] = icd9IsASingleE(sv[i].c_str()); }

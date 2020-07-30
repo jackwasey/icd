@@ -274,8 +274,7 @@ context("refactor") {
     f2.attr("class")  = "factor";
     res               = refactor(f, new_levels, false);
     expect_true(is_true(all(f2 == res)));
-    bool levels_equal =
-      is_true(all(((CV)f2.attr("levels")) == ((CV)res.attr("levels"))));
+    bool levels_equal = is_true(all(((CV)f2.attr("levels")) == ((CV)res.attr("levels"))));
     expect_true(levels_equal);
   }
   test_that("factor complex re-order") {
@@ -288,8 +287,7 @@ context("refactor") {
     f2.attr("class")  = "factor";
     res               = refactor(f, new_levels, false);
     expect_true(is_true(all(f2 == res)));
-    bool levels_equal =
-      is_true(all(((CV)f2.attr("levels")) == ((CV)res.attr("levels"))));
+    bool levels_equal = is_true(all(((CV)f2.attr("levels")) == ((CV)res.attr("levels"))));
     expect_true(levels_equal);
   }
   test_that("factor complex re-order w extra") {
@@ -302,8 +300,7 @@ context("refactor") {
     f2.attr("class")  = "factor";
     res               = refactor(f, new_levels, false);
     expect_true(is_true(all(f2 == res)));
-    bool levels_equal =
-      is_true(all(((CV)f2.attr("levels")) == ((CV)res.attr("levels"))));
+    bool levels_equal = is_true(all(((CV)f2.attr("levels")) == ((CV)res.attr("levels"))));
     expect_true(levels_equal);
   }
   test_that("factor complex re-order w extra and missing") {
@@ -314,7 +311,7 @@ context("refactor") {
     new_levels        = CV::create("c", "b", "e");
     f2.attr("levels") = new_levels;
     f2.attr("class")  = "factor";
-    res = refactor(f, new_levels, false); // keep NA values (but not in levels)
+    res               = refactor(f, new_levels, false); // keep NA values (but not in levels)
     DEBUG_VEC(res);
     expect_true(res.size() == 3);
     expect_true(res[0] == f2[0]);

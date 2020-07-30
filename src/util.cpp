@@ -47,14 +47,12 @@ VecStr trimCpp(VecStr sv) {
 // use for testing
 bool strVecEqual(CharacterVector x, CharacterVector y) {
   if (x.size() != y.size()) {
-    Rcpp::Rcout << "Lengths differ: " << x.size() << ", " << y.size()
-                << std::endl;
+    Rcpp::Rcout << "Lengths differ: " << x.size() << ", " << y.size() << std::endl;
     return false;
   }
   for (auto i = 0; i != x.size(); ++i) {
     if (x[i] != y[i]) {
-      Rcpp::Rcout << "Element " << i << " differs: " << x[i] << " != " << y[i]
-                  << std::endl;
+      Rcpp::Rcout << "Element " << i << " differs: " << x[i] << " != " << y[i] << std::endl;
       return false;
     }
   }
@@ -62,8 +60,7 @@ bool strVecEqual(CharacterVector x, CharacterVector y) {
 }
 
 template <int RTYPE>
-IntegerVector matchFastTemplate(const Vector<RTYPE> &x,
-                                const Vector<RTYPE> &table) {
+IntegerVector matchFastTemplate(const Vector<RTYPE>& x, const Vector<RTYPE>& table) {
   return (match(x, table));
 }
 
@@ -84,8 +81,7 @@ SEXP matchFast(SEXP x, SEXP table) {
 }
 
 template <int RTYPE>
-LogicalVector inFastTemplate(const Vector<RTYPE> &x,
-                             const Vector<RTYPE> &table) {
+LogicalVector inFastTemplate(const Vector<RTYPE>& x, const Vector<RTYPE>& table) {
   return (!is_na(match(x, table)));
 }
 
@@ -128,7 +124,7 @@ void build_info() {
   Rcpp::Rcout << "__STDC_VERSION__ is: " << __STDC_VERSION__ << std::endl;
 #endif
 #ifdef __GLIBCXX__
-  Rcpp::Rcout << "libstdc++ from GCC"  << std::endl;
+  Rcpp::Rcout << "libstdc++ from GCC" << std::endl;
 #endif
 
 #ifdef _LIBCPP_VERSION
