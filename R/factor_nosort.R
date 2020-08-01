@@ -34,15 +34,16 @@
 #'   alphanumeric sorting will likely be completely wrong.
 #' @keywords internal
 #' @noRd
-factor_nosort <- function(x, levels) {
+factor_nosort <- function(x, levels, exclude = NA) {
   if (missing(levels)) {
     if (is.factor(x)) {
       return(x)
     } else {
       levels <- unique.default(x)
+      levels <- levels[!(levels %in% exclude)]
     }
   }
-  suppressWarnings(f <- match(x, levels))
+  f <- suppressWarnings(match(x, levels))
   levels(f) <- as.character(levels)
   class(f) <- "factor"
   f
@@ -128,7 +129,7 @@ refactor <- function(x,
 #' @noRd
 factor_sorted_levels <- function(x, levels = unique(sort(x)), ...) {
   cl <- class(x)
-  # unique drops the class, sort uses it and keeps it.
+  # `unique` drops the class, `sort` uses it and keeps it.
   out <- factor(x = x, levels = levels, ...)
   class(out) <- if ("factor" %in% cl) {
     cl

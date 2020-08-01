@@ -71,7 +71,7 @@ test_that("explain S3 dispatch", {
       b = "Rheumatic fever without mention of heart involvement"
     )
   )
-  expect_warning(res <- explain_code(c(a = "not", b = "icd9code"), short_code = TRUE))
+  res <- expect_warning(explain_code(c(a = "not", b = "icd9code"), short_code = TRUE))
   expect_equal(res, character())
   expect_warning(
     res <- explain_code(list(a = icd9("not"), b = icd9("icd9code")),
@@ -221,17 +221,14 @@ for (i in list("icd9_chapters", "icd9_sub_chapters", "icd9_majors")) {
     expect_false(anyNA(names(il)))
   })
 }
-test_that(
-  "parse icd9_majors vs other CDC source of the leaf definitions.",
-  {
-    # get all the majors from the other list, to compare
-    compare_majors <- unique(get_major.icd9(icd9cm_hierarchy[["code"]],
-      short_code = TRUE
-    ))
-    expect_true(all(compare_majors %in% icd9_majors))
-    expect_true(all(icd9_majors %in% compare_majors))
-  }
-)
+test_that("icd9_majors vs other CDC leaf definitions.", {
+  # get all the majors from the other list, to compare
+  compare_majors <- unique(get_major.icd9(icd9cm_hierarchy[["code"]],
+    short_code = TRUE
+  ))
+  expect_true(all(compare_majors %in% icd9_majors))
+  expect_true(all(icd9_majors %in% compare_majors))
+})
 test_that("unsorted hierarchy tests", {
   expect_equal(
     tolower(icd9cm_hierarchy[icd9cm_hierarchy$code == "00321", "long_desc"]),

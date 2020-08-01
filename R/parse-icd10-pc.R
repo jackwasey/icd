@@ -5,7 +5,7 @@
     names(.icd10cm_sources),
     .icd10cm_parse_cms_pcs_year
   )
-  invisible()
+  invisible(NULL)
 }
 
 .icd10cm_parse_cms_pcs_year <- function(year,

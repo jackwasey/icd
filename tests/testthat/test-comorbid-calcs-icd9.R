@@ -418,7 +418,12 @@ test_that("Charlson/Deyo comorbidities for a single patient, one icd9", {
 })
 
 test_that("no error for deyo single pt w two identical (major) icd9 codes", {
-  expect_error(icd9_comorbid_quan_deyo(one_pt_two_icd9, short_code = FALSE, return_df = TRUE), NA)
+  expect_error(
+    icd9_comorbid_quan_deyo(
+      one_pt_two_icd9,
+      short_code = FALSE, return_df = TRUE
+    ), NA
+  )
 })
 
 test_that("no error for deyo single pt w two different decimal icd9 codes", {

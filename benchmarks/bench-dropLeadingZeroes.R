@@ -1,7 +1,7 @@
-library(microbenchmark)
 library(icd)
+requireNamespace("microbenchmark")
 x <- icd:::generate_random_decimal_icd9(1e6)
-microbenchmark(
+microbenchmark::microbenchmark(
   stringr::str_replace(
     icd:::as_char_no_warn(x),
     "[[:space:]]*([EeVv]?)(0*)([\\.[:digit:]]*)[[:space:]]*",

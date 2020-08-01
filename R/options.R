@@ -71,7 +71,7 @@ NULL
 
 # only get options we know about, to avoid typo giving a NULL
 .get_opt <- function(x, default = NULL) {
-  o <- as.character(substitute(x))
+  o <- as.character(substitute(x, env = environment()))
   stopifnot(x %in% .opt_names)
   getOption(.opt_full_name(o), default = default)
 }
@@ -182,7 +182,7 @@ NULL
     },
     "message" = message(msg)
   )
-  invisible()
+  invisible(NULL)
 }
 
 .env_var_is_false <- function(x) {
@@ -242,7 +242,7 @@ with_absent_action <- function(absent_action = c(
 #' \dontrun{
 #' set_icd_data_dir()
 #' # or choose another directory:
-#' # set_icd_data_dir("/var/cache/icd")
+#' # set_icd_data_dir("/var/cache/icd.data")
 #' # If you choose a custom directory, you may wish to add this command to your .Rprofile .
 #' # then you may use:
 #' # download_all_icd_data()

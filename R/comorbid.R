@@ -59,7 +59,8 @@ poa_choices <- c("yes", "no", "notYes", "notNo")
 #' @template hierarchy
 #' @template return_df
 #' @template return_binary
-#' @param ... Arguments passed through to \code{comorbid}, and ultimately \code{\link{categorize_simple}}, e.g. \code{restore_id_order}.
+#' @param ... Arguments passed through to \code{comorbid}, and ultimately
+#' \code{\link{categorize_simple}}, e.g. \code{restore_id_order}.
 #' @param categorize_fun Internal. Function used for the categorization problem.
 #' @param comorbid_fun Internal. Function used inside categorization.
 #' @details The order of visits may change depending on the original sequence,

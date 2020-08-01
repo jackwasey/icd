@@ -68,8 +68,9 @@ children.icd9cm <- function(x,
     if (short_code) {
       if (defined) {
         icd9_children_short_unordered_defined_rcpp(
-          icd9Short = toupper(x),
-          icd9cmReal = icd9cm_hierarchy$code
+          x = toupper(x),
+          defined = icd9cm_hierarchy$code
+          # TODO: directly get billable/leaf status here, instead of calculating again later.
         )
       } else {
         icd9_children_short_unordered_undefined_rcpp(toupper(x))

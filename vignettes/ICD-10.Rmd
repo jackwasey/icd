@@ -46,19 +46,7 @@ knitr::opts_chunk$set(
 
 # Introduction
 
-The [icd R package](https://cran.r-project.org/package=icd) for R includes
-ICD-10-CM definitions, sample ICD-10-CM data, and [very fast](efficiency.pdf)
-[comorbidity calculations](introduction.html) from ICD-10 diagnostic and
-procedure codes (and ICD-9, or other schemes) to the standard comorbidities
-defined in the literature following Charlson [@charlson_new_1987], Quan, Deyo
-[@quan_coding_2005], Elixhauser [@elixhauser_comorbidity_1998], [pediatric
-complex chronic conditions](PCCC.html) [@Feudtner_Pediatriccomplexchronic_2014]
-and the US AHRQ
-[@AgencyforHealthcareResearchandQuality_Elixhausercomorbiditysoftware_2018].
-There are also 2018 ICD-10-CM procedure codes, and a mapping to categorize
-these. The sample data are from the [US Transuranium and Uranium
-Registries](https://ustur.wsu.edu/about-us/) where deidentified diagnoses are
-given for a few hundred pathology cases relating to uranium exposure.
+The [icd package](https://cran.r-project.org/package=icd) for R includes ICD-10-CM definitions, sample ICD-10-CM data, and [very fast](efficiency.pdf) [comorbidity calculations](introduction.html) from ICD-10 diagnostic and procedure codes (and ICD-9, or other schemes) to the standard comorbidities defined in the literature following Charlson [@charlson_new_1987], Quan, Deyo [@quan_coding_2005], Elixhauser [@elixhauser_comorbidity_1998], [pediatric complex chronic conditions](PCCC.html) [@Feudtner_Pediatriccomplexchronic_2014] and the US AHRQ [@AgencyforHealthcareResearchandQuality_Elixhausercomorbiditysoftware_2018]. There are also 2018 ICD-10-CM procedure codes, and a mapping to categorize these. The sample data are from the [US Transuranium and Uranium Registries](https://ustur.wsu.edu/about-us/) where deidentified diagnoses are given for a few hundred pathology cases relating to uranium exposure.
 
 The sample data is in the 'long' format, i.e., multiple rows per case.
 
@@ -72,9 +60,7 @@ Pick a code, and see what it means.
 explain_code("R55")
 ```
 
-`icd` can work with 'long' or 'wide' format data without modification. If the
-source database is not normalized, i.e., has multiple diagnostic code columns,
-`icd` can detect and efficiently work on all the columns at once.
+`icd` can work with 'long' or 'wide' format data without modification. If the source database is not normalized, i.e., has multiple diagnostic code columns, `icd` can detect and efficiently work on all the columns at once.
 
 ```{r uranium-wide}
 head(uranium_pathology)
@@ -90,7 +76,7 @@ quan_comorbidities[1:6, c(1, 3:10)]
 
 ## Tidy results
 
-The `tidyverse` is oriented around [tidy](https://tidyr.tidyverse.org/articles/tidy-data.html) data. `icd` by default returns matrices for comorbidity calculations, since all the data is logical, and this is most efficient for memory and subsequent manipulation. However, setting `return_df = TRUE` in calls to any of the comorbidity functions will return a 'tidy' data frame with an 'id' column and a column for each of the comorbdities.
+The 'tidyverse' is oriented around [tidy](https://tidyr.tidyverse.org/articles/tidy-data.html) data. `icd` by default returns matrices for comorbidity calculations, since all the data is logical, and this is most efficient for memory and subsequent manipulation. However, setting `return_df = TRUE` in calls to any of the comorbidity functions will return a 'tidy' data frame with an 'id' column and a column for each of the comorbdities.
 
 ```{r tidy}
 comorbid_charlson(uranium_pathology, return_df = TRUE)[1:5, 1:5]
@@ -98,20 +84,9 @@ comorbid_charlson(uranium_pathology, return_df = TRUE)[1:5, 1:5]
 
 ## Working with big data
 
-`icd` is carefully optimized to give accurate results as quickly as possible,
-and [shines](efficiency.pdf) with huge data sets. For users working with
-millions of rows of data and higher orders of magnitude, some options can
-improve throughput.
+`icd` is carefully optimized to give accurate results as quickly as possible, and [shines](efficiency.pdf) with huge data sets. For users working with millions of rows of data and higher orders of magnitude, some options can improve throughput.
 
-In this example, we also return 'binary' numeric flags instead of a matrix of
-logical values. For very large data sets, matrices are faster both for `icd`
-and subsequent manipulation and analysis. Here we also show that we can request
-the 'id' field is return in the order the data was presented. Note that setting
-`restore_id_order` to `FALSE` does not sort: it simply returns the data as soon
-as it was calculated, and since parallel threads complete at different times,
-it is quicker, although not deterministic. Again, this is really for huge data
-sets, where the additional sorting and re-ordering may be very time consuming.
-Most users will not need to worry about this.
+In this example, we also return 'binary' numeric flags instead of a matrix of logical values. For very large data sets, matrices are faster both for `icd` and subsequent manipulation and analysis. Here we also show that we can request the 'id' field is return in the order the data was presented. Note that setting `restore_id_order` to `FALSE` does not sort: it simply returns the data as soon as it was calculated, and since parallel threads complete at different times, it is quicker, although not deterministic. Again, this is really for huge data sets, where the additional sorting and re-ordering may be very time consuming. Most users will not need to worry about this.
 
 ```{r big}
 # shuffle the rows:
@@ -128,15 +103,7 @@ quan_comorbidities <- comorbid(u,
 quan_comorbidities[1:6, c(1, 3:9)]
 ```
 
-The ICD-10-CM mappings are recorded a bit differently from the ICD-9-CM
-mappings in this package. The ICD-9 mappings included all possible permutations
-of child codes. Since ICD-10 codes contain letters, and are seven characters
-long, this became impractical. Therefore, the current mappings include only
-codes for the most recent update of ICD-10-CM. The code which assigns
-comorbidities for ICD-10 therefore doesn't rely on all the possible codes being
-listed in the mappings, so it will (more slowly) search for each possible
-parent of the given code, up to the three digit 'major' (e.g. if Cholera was in
-the comorbidity mapping, then `A0034212647` would eventually match `A00`)
+The ICD-10-CM mappings are recorded a bit differently from the ICD-9-CM mappings in this package. The ICD-9 mappings included all possible permutations of child codes. Since ICD-10 codes contain letters, and are seven characters long, this became impractical. Therefore, the current mappings include only codes for the most recent update of ICD-10-CM. The code which assigns comorbidities for ICD-10 therefore doesn't rely on all the possible codes being listed in the mappings, so it will (more slowly) search for each possible parent of the given code, up to the three digit 'major' (e.g. if Cholera was in the comorbidity mapping, then `A0034212647` would eventually match `A00`)
 
 ```{r cholera}
 # create trivial comorbidity map:
@@ -148,9 +115,7 @@ patients <- data.frame(
 comorbid(patients, map = cholera_typhoid_map)
 ```
 
-Here are the codes for hypertension with complications from Quan et al. Note
-that the vector has class `icd10` and has the attribute `icd_short_diag`
-indicating there are no decimal point delimiters in the codes.
+Here are the codes for hypertension with complications from Quan et al. Note that the vector has class `icd10` and has the attribute `icd_short_diag` indicating there are no decimal point delimiters in the codes.
 
 ```{r htncx}
 icd10_map_quan_elix$HTNcx
@@ -158,9 +123,7 @@ icd10_map_quan_elix$HTNcx
 
 # Procedure codes
 
-The AHRQ publishes an annually updated categorization of ICD-10-CM procedure
-codes into four classes, representing diagnostic and therapeutic procedures,
-each being either minor or major.
+The AHRQ publishes an annually updated categorization of ICD-10-CM procedure codes into four classes, representing diagnostic and therapeutic procedures, each being either minor or major.
 
 ```{r setuppcs, echo = FALSE}
 n <- 10
@@ -180,8 +143,7 @@ print(res)
 colSums(res)
 ```
 
-For more information on working with ICD-10 codes, see the introduction
-vignette, and function examples. E.g.:
+For more information on working with ICD-10 codes, see the introduction vignette, and function examples. E.g.:
 
 ```
 ?comorbid

@@ -146,6 +146,9 @@ context("RTF tests")
 
 test_year <- "2014"
 skip_slow()
+skip_on_cran()
+skip_on_ci()
+
 # if we are in offline mode, and the data is not available, we can't proceed.
 # test whether the RTF is available offline. N.b. we skip in a 'context' so all
 # subsequent tests are skipped.
@@ -158,7 +161,7 @@ if (rtf_year_ok(test_year)) {
   )
   rtf <- .rtf_parse_lines(
     rtf_lines = readLines(f_info_short$file_path, warn = FALSE),
-    year = "2014"
+    year = test_year
   )
   nrtf <- names(rtf)
   test_that("all parsed codes are valid decimals", {
@@ -216,10 +219,10 @@ if (rtf_year_ok(test_year)) {
   })
 
   test_that("all leaf codes from TXT are in flat file extract", {
-    skip_flat_icd9_avail(year = "2014")
+    skip_flat_icd9_avail(year = test_year)
     skip_if_not_installed("icd", "4.0")
     v32 <- .parse_icd9cm_leaf_year(
-      year = "2014",
+      year = test_year,
     )
     leaves <- icd::short_to_decimal(v32$code)
     expect_true(all(leaves %in% nrtf))

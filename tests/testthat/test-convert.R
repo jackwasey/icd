@@ -175,7 +175,7 @@ test_that("icd10 short to decimal", {
 })
 
 test_that("#97 is fixed", {
-  expect_warning(res <- short_to_decimal(icd10_map_elix$CHF), NA)
+  res <- expect_warning(short_to_decimal(icd10_map_elix$CHF), NA)
   expect_true("P29.0" %in% res)
   expect_false("I43." %in% res)
 })
@@ -247,7 +247,7 @@ test_that("icd9 short to major part, E codes", {
 })
 
 test_that("short to decimal before and after expansion of ICD-9 codes same", {
-  icd9List <- icd9_map_ahrq
+  icd9List <- icd::icd9_map_ahrq
   for (i in names(icd9List)) {
     expect_equal_no_icd(
       decimal_to_short.icd9(short_to_decimal.icd9(icd9List[[i]])),

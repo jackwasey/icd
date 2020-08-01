@@ -143,7 +143,8 @@ icd9_condense_short <- function(x,
   }
   # any major codes are automatically in output (not condensing higher than
   # three digit code) and all their children can be removed from the work list
-  out <- majors <- i9w[are_major <- is_major.icd9(i9w)]
+  are_major <- is_major.icd9(i9w)
+  out <- majors <- i9w[are_major]
   i9w <- i9w[!are_major]
   i9w <- i9w[i9w %nin% children.icd9(majors,
     short_code = TRUE,

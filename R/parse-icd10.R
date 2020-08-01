@@ -39,7 +39,6 @@
   stopifnot(is.numeric(year) || is.character(year))
   year <- as.character(year)
   stopifnot(as.character(year) %in% names(.icd10cm_sources))
-  #
   f_info <- .dl_icd10cm_year(year = year, dx = dx)
   if (is.null(f_info)) {
     .absent_action_switch(
@@ -73,9 +72,9 @@
         icd::as.icd10cm_pc(dat[["code"]])
       }
     )
-  dat[["three_digit"]] <- factor(get_major(dat[["code"]]))
+  dat[["three_digit"]] <- factor_nosort(get_major(dat[["code"]]))
   # here we must re-factor so we don't have un-used levels in major
-  dat[["major"]] <- factor(
+  dat[["major"]] <- factor_nosort(
     merge(
       x = dat["three_digit"],
       y = dat[c("code", "short_desc")],

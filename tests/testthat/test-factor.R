@@ -20,12 +20,19 @@ test_that("factors are same when levels given or not", {
 })
 test_that("factors are same when levels given or not", {
   for (v in list(v1, v2, NA)) {
-    f4 <- factor(v, exclude = "")
-    f5 <- factor_nosort(v)
+    f4a <- factor(v, exclude = "")
+    f4b <- factor(v, exclude = NA)
+    f4c <- factor(v)
+    f5a <- factor_nosort(v, exclude = "")
+    f5b <- factor_nosort(v, exclude = NA)
+    f5c <- factor_nosort(v)
     f6 <- factor_nosort_rcpp(v)
     msg <- paste("v=c(\"", paste(v, collapse = "\", \""), "\")", sep = "")
-    expect_identical(f5, f4, info = msg)
-    expect_identical(f6, f4, info = msg)
+    expect_identical(f5a, f4a, info = msg)
+    expect_identical(f6, f4a, info = msg)
+    expect_identical(f5b, f4b, info = msg)
+    expect_identical(f5c, f4c, info = msg)
+    expect_identical(f6, f4a, info = msg)
   }
 })
 test_that("factors are same when levels given or not", {

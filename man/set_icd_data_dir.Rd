@@ -36,7 +36,7 @@ check it exists and is writable.
 \dontrun{
 set_icd_data_dir()
 # or choose another directory:
-# set_icd_data_dir("/var/cache/icd")
+# set_icd_data_dir("/var/cache/icd.data")
 # If you choose a custom directory, you may wish to add this command to your .Rprofile .
 # then you may use:
 # download_all_icd_data()

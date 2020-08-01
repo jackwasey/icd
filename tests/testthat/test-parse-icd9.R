@@ -1,6 +1,8 @@
 context("RTF ICD-9")
 
 skip_slow("RTF parsing for ICD-9-CM")
+skip_on_cran()
+skip_on_ci()
 
 j <- expect_icd9_sub_chap_equal
 test_that("some known sub vs chap confusion", {
@@ -185,6 +187,7 @@ test_that("explain icd9GetChapters simple input", {
   expect_equal(chaps3, chaps7)
   expect_equal(chaps3, chaps8)
   chap9 <- .icd9_get_chapters(NA, short_code = FALSE)
+  # (note the following fails if a factor has `NA` levels, just R3.4+?) There was a change. see `?factor`
   expect_true(all(is.na(chap9)))
 })
 

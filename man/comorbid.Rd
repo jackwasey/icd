@@ -233,7 +233,8 @@ other tools, e.g. \code{apply(x, 2, as.integer)}}
 
 \item{categorize_fun}{Internal. Function used for the categorization problem.}
 
-\item{...}{Arguments passed through to \code{comorbid}, and ultimately \code{\link{categorize_simple}}, e.g. \code{restore_id_order}.}
+\item{...}{Arguments passed through to \code{comorbid}, and ultimately
+\code{\link{categorize_simple}}, e.g. \code{restore_id_order}.}
 
 \item{icd10_comorbid_fun}{Internal function Default will be fast and
 accurate. A function which calculates comorbidities for ICD-10 codes, in
@@ -341,12 +342,8 @@ use ICD-9 or ICD-10 codes
 according to Quan/Deyo ICD categories. Synonymous with
 \code{link{comorbid_quan_deyo}} in this release.
 
-\item \code{comorbid_pccc_dx}: Calculate pediatric complex chronic conditions (PCCC) comorbidities
-
-Unlike with ICD-9 and ICD-10 diagnostic codes, 'icd' doesn't
-currently have a method for guessing which fields are procedure
-codes, so \code{icd_name} must be specified for the \code{_pcs}
-functions.
+\item \code{comorbid_pccc_dx}: Calculate pediatric complex chronic conditions (PCCC)
+comorbidities
 
 \item \code{comorbid_pccc_pcs}: Calculate the PCCC comorbidities based
 on procedure codes,
@@ -363,6 +360,13 @@ procedure codes
 \item \code{icd10_comorbid_pccc_pcs}: Calculate PCCC comorbidities from ICD-10
 procedure codes
 }}
+
+\section{Procedure codes}{
+ Unlike with ICD-9 and ICD-10 diagnostic codes,
+  'icd' doesn't currently have a method for guessing which fields are
+  procedure codes, so \code{icd_name} must be specified for the \code{_pcs}
+  functions.
+}
 
 \examples{
 library(icd)

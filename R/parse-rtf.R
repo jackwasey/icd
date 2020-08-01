@@ -95,10 +95,10 @@
   ]
   rownames(out_df) <- NULL
   if (anyNA(out_df$code) || anyNA(out_df$three_digit)) {
-    print(out_df[which(with(out_df, is.na(code) | is.na(three_digit))), ])
-    print(summary(is.na(out_df)))
+    warning(out_df[which(with(out_df, is.na(code) | is.na(three_digit))), ])
+    warning(summary(is.na(out_df)))
   }
-  out_df$three_digit <- factor_sorted_levels(as.icd9cm(out_df$three_digit))
+  out_df$three_digit <- factor_sorted_levels(as.icd9cm(out_df$three_digit), exclude = NA)
   invisible(out_df)
 }
 
@@ -432,7 +432,7 @@
   }
   if (.verbose()) {
     message("lookup_fourth has length: ", length(lookup_fourth), ", head: ")
-    print(lookup_fourth[1:5])
+    if (FALSE) print(lookup_fourth[1:5]) # help debugging parsing only
   }
   lookup_fourth
 }
@@ -458,7 +458,7 @@
   }
   if (.verbose()) {
     message("fourth output lines: length = ", length(out_fourth), ", head: ")
-    print(out_fourth[1:5])
+    if (FALSE) print(out_fourth[1:5])
   }
   rm(out_env)
   out_fourth
@@ -539,7 +539,7 @@
   out_fifth <- out_fifth[1:n - 1]
   if (.verbose()) {
     message("fifth output lines: length = ", length(out_fifth), ", head: ")
-    print(out_fifth[1:5])
+    if (FALSE) print(out_fifth[1:5])
   }
   out_fifth
 }

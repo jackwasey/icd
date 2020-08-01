@@ -410,7 +410,7 @@ capitalize_first <- function(x) {
     return()
   }
   message(...)
-  invisible()
+  invisible(NULL)
 }
 
 .msg <- function(...) {

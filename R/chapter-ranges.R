@@ -46,6 +46,7 @@
       chap <- chapters[[nm]]
       .trc("icd10 chap lookup: ", paste(chap, collapse = ", "))
       data.frame(
+        stringsAsFactors = TRUE,
         expand_range_major.icd10cm(
           as.icd10cm(unname(chap["start"])),
           as.icd10cm(unname(chap["end"])),
