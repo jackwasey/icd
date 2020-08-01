@@ -11,18 +11,19 @@ using namespace Rcpp;
 //' Convert \code{mjr} and \code{mnr} vectors to single code
 //' @template mjr
 //' @template mnr
-//' @template isShort
+//' @template short_code
 //' @return Character vector
 //' @keywords internal manip
+//' @noRd
 // [[Rcpp::export]]
-CV icd9MajMinToCode(const CV& mjr, const CV& mnr, const bool isShort) {
+CV icd9MajMinToCode(const CV& mjr, const CV& mnr, const bool short_code) {
 #ifdef ICD_DEBUG_TRACE
   Rcout << "icd9MajMinToCode: mjr.size() = " << mjr.size() << " and mnr.size() = " << mnr.size()
         << "\n";
 #endif
   if (mjr.size() != mnr.size()) stop("major and minor lengths differ");
   std::vector<std::string> out(mjr.size());
-  std::vector<char> out_is_na(mjr.size()); // boolean in char
+  std::vector<char> out_is_na(mjr.size()); // Boolean in char
   CV::const_iterator j = mjr.cbegin();
   CV::const_iterator n = mnr.cbegin();
   for (; j != mjr.cend() && n != mnr.cend(); ++j, ++n) {
@@ -32,7 +33,7 @@ CV icd9MajMinToCode(const CV& mjr, const CV& mnr, const bool isShort) {
       continue;
     }
     const char* smj_c = mjrelem.get_cstring();
-    Str smj           = std::string(smj_c);
+    std::string smj   = std::string(smj_c);
     switch (strlen(smj_c)) {
     case 0:
       out_is_na[std::distance(mjr.cbegin(), j)] = 1;
@@ -50,7 +51,7 @@ CV icd9MajMinToCode(const CV& mjr, const CV& mnr, const bool isShort) {
     }
     String mnrelem = *n;
     if (CV::is_na(*n)) { mnrelem = ""; }
-    if (!isShort && mnrelem != "") { smj.append("."); }
+    if (!short_code && mnrelem != "") { smj.append("."); }
     smj.append(mnrelem);
     out[std::distance(mjr.cbegin(), j)] = smj;
   }
@@ -88,4 +89,4 @@ CV icd9MajMinToShort(const CV& mjr, const CV& mnr) {
 }
 
 // [[Rcpp::export]]
-CV icd9MajMinToDecimal(const CV mjr, const CV mnr) { return icd9MajMinToCode(mjr, mnr, false); }
+CV icd9MajMinToDecimal(const CV& mjr, const CV& mnr) { return icd9MajMinToCode(mjr, mnr, false); }

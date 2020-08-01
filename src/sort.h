@@ -1,8 +1,7 @@
 #ifndef SORT_H_
 #define SORT_H_
 
-#include "icd_types.h"
-#include "local.h"
+#include <Rcpp.h>
 #include <algorithm> // std::sort
 #include <functional>
 #include <string.h>
@@ -17,7 +16,7 @@ bool icd9CompareStd(std::string a, std::string b);
 CharacterVector icd9Sort(const Rcpp::CharacterVector& x);
 
 // or IntegerVector?
-std::vector<std::size_t> icd9OrderStd(const VecStr& x);
+std::vector<std::size_t> icd9OrderStd(const std::vector<std::string>& x);
 
 bool icd10cmCompareQuirk(const char* x,
                          const char* y,
@@ -28,9 +27,9 @@ bool icd10cmCompareQuirk(const char* x,
                          const char* afterAfterQuirk,
                          bool& res);
 // inline in cpp: bool icd10cmCompare(const String& x, const String& y);
-CharacterVector icd10cmSort(const Rcpp::CharacterVector& x);
-// disable until std and rcpp implemented fully VecStr icd10cmSortStd(const std::vector<std::string>
-// &x);
+Rcpp::CharacterVector icd10cmSort(const Rcpp::CharacterVector& x);
+// disable until std and rcpp implemented fully VecStr icd10cmSortStd(const
+// std::vector<std::string> &x);
 // Rcpp::IntegerVector icd10cmOrder(const Rcpp::CharacterVector &x);
 // std::vector<std::size_t> icd10cmOrderStd(const std::vector<std::string> &x);
 #endif /* SORT_H_ */

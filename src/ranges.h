@@ -1,17 +1,16 @@
 #ifndef RANGES_H_
 #define RANGES_H_
 
-#include "icd_types.h"
 #include "range-const.h"
 
-CV icd9ExpandMinor(const Str& mnr, bool isE = false);
-CV icd9ChildrenShortUndefined(const CV& icd9Short);
-CV icd9ChildrenShortDefined(const CV& icd9Short, const VecStr& icd9cmReal);
-CV icd9ChildrenShort(const CV& icd9Short, const VecStr& icd9cmReal, bool onlyReal = true);
-CV icd9ChildrenShortUnorderedUndefined(const CV& icd9Short);
-CV icd9ChildrenShortUnorderedDefined(const CV& icd9Short, const VecStr& icd9cmReal);
-CV icd9ChildrenShortUnordered(const CV& icd9Short, const VecStr& icd9cmReal, bool onlyReal = true);
-CV icd9ChildrenDecimal(const CV& icd9Decimal, const VecStr& icd9cmReal, bool onlyReal = true);
-CV icd9ChildrenDecimalUnordered(const CV& icd9Decimal, const VecStr& icd9cmReal, bool onlyReal);
-CV icd9Children(const CV& icd9, bool isShort, const VecStr& icd9cmReal, bool onlyReal = true);
+Rcpp::CharacterVector icd9ExpandMinor(const std::string& mnr, bool isE = false);
+Rcpp::CharacterVector icd9ChildrenShortUndefined(const Rcpp::CharacterVector& x);
+Rcpp::CharacterVector icd9ChildrenShortDefined(const Rcpp::CharacterVector& x, const std::vector<std::string>& defined);
+Rcpp::CharacterVector icd9ChildrenShort(const Rcpp::CharacterVector& x, const std::vector<std::string>& defined, bool leaf = true);
+Rcpp::CharacterVector icd9ChildrenShortUnorderedUndefined(const Rcpp::CharacterVector& x);
+Rcpp::CharacterVector icd9ChildrenShortUnorderedDefined(const Rcpp::CharacterVector& x, const std::vector<std::string>& defined);
+Rcpp::CharacterVector icd9ChildrenShortUnordered(const Rcpp::CharacterVector& x, const std::vector<std::string>& defined, bool leaf = true);
+Rcpp::CharacterVector icd9ChildrenDecimal(const Rcpp::CharacterVector& x, const std::vector<std::string>& defined, bool leaf = true);
+Rcpp::CharacterVector icd9ChildrenDecimalUnordered(const Rcpp::CharacterVector& x, const std::vector<std::string>& defined, bool leaf);
+Rcpp::CharacterVector icd9Children(const Rcpp::CharacterVector& icd9, bool isShort, const std::vector<std::string>& defined, bool leaf = true);
 #endif /* RANGES_H_ */

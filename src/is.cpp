@@ -3,21 +3,6 @@
 #include <string>
 #include <vector>
 
-bool icd9IsASingleV(const char* s) {
-  while (*s == ' ') ++s;
-  return *s == 'V' || *s == 'v';
-}
-
-bool icd9IsASingleE(const char* s) {
-  while (*s == ' ') ++s;
-  return *s == 'E' || *s == 'e';
-}
-
-bool icd9IsASingleVE(const char* s) {
-  while (*s == ' ') ++s;
-  return *s == 'V' || *s == 'E' || *s == 'v' || *s == 'e';
-}
-
 //' Do elements of vector begin with V, E (or any other character)?
 //'
 //' Currently returns a vector of \code{bool} which is not thread safe, or

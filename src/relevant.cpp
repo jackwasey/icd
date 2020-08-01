@@ -11,6 +11,8 @@
 
 using namespace Rcpp;
 
+typedef std::pair<std::string, int> RelPair;
+
 void Relevant::buildCodeSetCV(const CV& codes) {
   // over-reserve (and maybe expand), target is unique number
   allCodesSet.reserve(allCodesSet.size() + codes.size());
@@ -93,7 +95,7 @@ CV Relevant::findRelevant(const List& data, const CV& code_fields) {
   return wrap(r); // or keep as STL container?
 }
 
-RelMap Relevant::findRel(const CharacterVector x) {
+RelMap Relevant::findRel(const Rcpp::CharacterVector& x) {
   RelMap out;
   DEBUG("building um using:");
   DEBUG_VEC(x);

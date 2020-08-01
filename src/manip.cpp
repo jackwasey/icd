@@ -1,19 +1,29 @@
 #include "manip.h"
 #include "convert.h"
 #include "is.h"
-#include <string.h> // for strlen
 
 using namespace Rcpp;
 
 //' Simpler add leading zeroes without converting to parts and back
+//'
+//' @details Returning a 'String' is (probably?) going to require that Rcpp use R's C
+//' interface to make a new \code{CHARSXP}, which involves enconding scanning, global
+//' charsxp lookup. However, if we are actually changing a string, we must do this
+//' if it is to be used back in R.
 //' @keywords internal manip
 //' @noRd
-// [[Rcpp::export]]
+//[[Rcpp::export]]
 String icd9AddLeadingZeroesMajorSingle(String mjr) {
   if (mjr == NA_STRING) return (NA_STRING);
+  // TODO: really copy to a new string? Rcpp can append to strings directly, no?
+  // Changing a string without memcpy is not allowed, and dangerous without care
+  // in a regular const char*[] for R-based CHARSXP anyway. the 'length' or
+  // 'truelength' data bytes in a CHARSXP: used for the string, or always 1? (or
+  // -1 for NA_STRING)
   std::string m(mjr);
-  if (!icd9IsASingleVE(mjr.get_cstring())) {
-    switch (strlen(mjr.get_cstring())) {
+  const char* mstr = mjr.get_cstring();
+  if (!icd9IsASingleVE(mstr)) {
+    switch (LENGTH(mjr.get_sexp())) {
     case 0:
       return (NA_STRING);
     case 1:
@@ -24,7 +34,7 @@ String icd9AddLeadingZeroesMajorSingle(String mjr) {
       return (m);
     }
   } else {
-    switch (strlen(mjr.get_cstring())) {
+    switch (LENGTH(mjr.get_sexp())) {
     case 1:
       return (NA_STRING);
     case 2:
@@ -118,7 +128,7 @@ CV icd9AddLeadingZeroes(CV x, bool short_code) {
     parts["mjr"] = icd9AddLeadingZeroesMajor(parts["mjr"]);
     return icd9PartsToShort(parts);
   } else {
-    List parts   = icd9DecimalToParts(x);
+    List parts   = icd9DecimalToParts(x, "");
     parts["mjr"] = icd9AddLeadingZeroesMajor(parts["mjr"]);
     return icd9PartsToDecimal(parts);
   }

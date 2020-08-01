@@ -1,9 +1,10 @@
 #include "sort.h"
+#include "local.h" // TRACE, etc.
 #include <Rcpp.h>
-using Rcpp::CharacterVector;
-using Rcpp::LogicalVector;
+using namespace Rcpp;
 
-IntegerVector orderWorker(const CharacterVector& x, std::function<bool(String, String)> f) {
+Rcpp::IntegerVector orderWorker(const Rcpp::CharacterVector& x,
+                                std::function<bool(Rcpp::String, Rcpp::String)> f) {
   IntegerVector index = Rcpp::no_init_vector(x.size());
   // R indexed
   std::iota(index.begin(), index.end(), 1);
@@ -86,6 +87,8 @@ std::vector<std::string> qaa = {"C44", "D37", "M10", "Z37", "C76", "C76"};
 // ICD-10 //
 ////////////
 
+// This returns a value and sets a (possibly different) result in a given
+// reference, enabling recursion.
 bool icd10cmCompareQuirk(const char* xstr,
                          const char* ystr,
                          const char* quirk,
@@ -94,19 +97,16 @@ bool icd10cmCompareQuirk(const char* xstr,
                          const char* beforeBeforeQuirk,
                          const char* afterAfterQuirk,
                          bool& res) {
-  // This function performs a binary comparison of the characters. For a
-  // function that takes into account locale-specific rules, see strcoll.
-  // http://www.cplusplus.com/reference/cstring/strcoll/
   bool mx = (xstr == quirk || strncmp(xstr, quirk, 3) == 0);
   bool my = (ystr == quirk || strncmp(ystr, quirk, 3) == 0);
   if (!mx && !my) {
     TRACE("icd10cmCompareQuirk !mx and !my");
-    // res = false;
+    res = false;
     return false;
   }
   if (xstr == ystr) {
     TRACE("icd10cmCompareQuirk xstr == ystr");
-    // res = false;
+    res = false;
     return true;
   }
   if (mx) {
@@ -114,7 +114,7 @@ bool icd10cmCompareQuirk(const char* xstr,
     if (my) {
       TRACE(quirk << " also matched y for same quirk");
       res = strcmp(xstr, ystr) < 0;
-      return res;
+      return true;
     }
     TRACE(quirk << " didn't match y");
     TRACE(quirk << " after x match falling through.\nx = " << xstr
@@ -154,8 +154,14 @@ bool icd10cmCompareQuirk(const char* xstr,
   return true;
 }
 
-// [[Rcpp::export(icd10cm_compare_c)]]
-bool icd10cmCompareC(const char* xstr, const char* ystr) {
+//' Compare ICD-10 codes stored as strings in C arrays
+//'
+//' TODO: can be slightly improved by accepting SEXP CHARSXP, since this has
+//' pre-calculated length stored.
+//' @keywords internal
+//' @noRd
+//[[Rcpp::export(icd10cm_compare_c)]]
+bool icd10cmCompareC(const char* xstr, const char* ystr) { // NOLINT
   TRACE("icd10cmCompareC comparing " << xstr << " with " << ystr);
   const int i = strncmp(xstr, ystr, 1);
   TRACE("icd10cmCompareC first char: " << xstr << " vs " << ystr << " = " << i);
@@ -186,7 +192,7 @@ bool icd10cmCompareC(const char* xstr, const char* ystr) {
                                                            << ". Comparing quirky codes...");
   // in flat file, C4A is between 43 and 44. Definitive reference I am using is
   // the flat file with all the codes from CMS.
-  bool qres;
+  bool qres = true; // default to something to avoid undefined behavior.
   for (std::vector<std::string>::size_type j = 0; j != qa.size(); ++j) {
     TRACE("icd10cmCompareC Working on quirk: " << qx[j]);
     if (icd10cmCompareQuirk(xstr,
@@ -216,8 +222,6 @@ bool icd10cmCompare(const String& x, const String& y) {
     // y is NOT NA, so x must go after, and is not equal
     return false;
   }
-  // TODO: see if const char * pointers are identical, to avoid even looking at
-  // the memory.
   return icd10cmCompareC(x.get_cstring(), y.get_cstring());
 }
 
