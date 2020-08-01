@@ -1,6 +1,9 @@
 #!/bin/sh
 
-# rm -f src/Makevars src/makevars.h
+# if/when move away from configure script, don't delete the
+# legitimate files
+test -f configure && rm -f src/Makevars src/makevars.h
+
 rm -f config.log config.status aclocal.m4 \
     src/*.o src/*.a src/*.d src/*.dll src/*.dylib \
     vignettes/*.aux \
@@ -13,7 +16,7 @@ rm -f config.log config.status aclocal.m4 \
     vignettes/*.knit.md \
     vignettes/*.utf8.md \
     icd_*.tar.gz \
-    icd-0*.log 
+    icd-0*.log
 
 rm -rf autom4te.cache \
     icd.Rcheck

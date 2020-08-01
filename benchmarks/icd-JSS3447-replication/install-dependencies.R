@@ -14,10 +14,25 @@
 #' installed R libraries or environment, or session options.
 #' @keywords internal
 #' @noRd
-install_jss3447_deps <- function(lib.loc,
-                                 depsdone_file = ".depsdone.txt",
+install_jss3447_deps <- function(lib.loc = NULL,
+                                 depsdone_file = ".depsdone.dummy",
                                  req_min_icd_ver = "4.0.8") {
-  if (missing(lib.loc)) {
+
+  is_verbose <- function() {
+    !(trimws(tolower(Sys.getenv("ICD_VERBOSE"))) %in%
+        c("", "no", "false", "f", "no", "n", "0")
+    )
+  }
+
+  msg_verbose <- function(..., type = c("message", "warning", "print", "cat")) {
+    msg_fun_name <- match.arg(type)
+    msg_fun <- match.fun(msg_fun_name)
+    if (is_verbose()) {
+      msg_fun(...)
+    }
+  }
+
+  if (missing(lib.loc) || is.null(lib.loc)) {
     lib.loc <- Sys.getenv("ICD_BENCH_DEPS_LIB", unset = "depslib")
   }
   if (exists(envir = as.environment("package:base"), "dir.exists")) {
