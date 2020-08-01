@@ -4,33 +4,37 @@ author:
     affiliation: "Children's Hospital of Philadelphia"
     email: \email{waseyj@chop.edu}
     url: http://www.chop.edu/doctors/wasey-jack
-    address: >
+    address: >-
       3401 Civic Center Blvd.
       Philadelphia, PA 19104, USA
   - name: Steven M. Frank
     affiliation: Johns Hopkins Medical Institutions
     email: \email{sfrank3@jhmi.edu}
     url: https://www.hopkinsmedicine.org/profiles/results/directory/profile/1819685/steven-frank
-    address: >
+    address: >-
       1800 Orleans St.
       Baltimore, MD 21287, USA
   - name: Mohamed A. Rehman
     affiliation: "Johns Hopkins All Children's Hospital"
     email: \email{rehman@jhmi.edu}
     url: http://www.jhmi.edu
-    address: >
+    address: >-
       501 6th Ave S.
       St Petersburg, FL 33701, USA
 title:
-  plain: "icd: Efficient Computation of Comorbidities from ICD Codes Using
-          Sparse Matrix Multiplication in R"
-  formatted: >
+  plain: >-
+    icd: Efficient Computation of Comorbidities from ICD Codes Using Sparse
+    Matrix Multiplication in R
+  formatted: >-
     \pkg{icd}: Efficient Computation of Comorbidities
     from ICD Codes Using Sparse Matrix Multiplication in \proglang{R}
-  short: '\pkg{icd}: Efficient calculation of comorbidities from ICD codes'
-pagetitle: '\pkg{icd}: Efficient Computation of Comorbidities from ICD Codes Using
-            Sparse Matrix Multiplication in R'
-abstract: 'Medical research often describes the existing diseases
+  short: >-
+    \pkg{icd}: Efficient calculation of comorbidities from ICD codes
+pagetitle: >-
+  \pkg{icd}: Efficient Computation of Comorbidities from ICD Codes Using Sparse
+  Matrix Multiplication in R
+abstract: >-
+  Medical research often describes the existing diseases
   (comorbidities) in its study populations, and retrospective research may rely
   on this information for risk adjustment. Sets of International Classification
   of Diseases (ICD) codes are often used for high-level classification of
@@ -41,12 +45,15 @@ abstract: 'Medical research often describes the existing diseases
   uses an efficient, fast and scalable algorithm to apply these mappings to
   patient data. This enables reproducible workflows with hundreds of millions
   of patient records as are increasingly seen in large national and
-  international databases.'
+  international databases.
 keywords:
-  formatted: [medical informatics, administrative data, matrix algebra,
-    "\\proglang{R}", "\\proglang{C++}", ICD, mapping]
-  plain: [biomedical informatics, administrative data, matrix algebra, R, "C++", ICD, mapping]
-preamble: '\pdftrailerid{}
+  formatted: [biomedical informatics, administrative data, matrix algebra,
+    "\\proglang{R}", "\\proglang{C++}", ICD, mapping, reproducible research]
+  plain: >-
+    [biomedical informatics, administrative data, matrix algebra, R, "C++",
+    ICD, mapping, reproducible research]
+preamble: >-
+  \pdftrailerid{}
   \pdfsuppressptexinfo15
   \usepackage{longtable}
   \usepackage{booktabs}
@@ -54,26 +61,28 @@ preamble: '\pdftrailerid{}
   \usepackage{amsmath}
   \raggedbottom
   \shortcites{
-    quan_coding_2005,quan_updating_2011,
-    Pope_RiskadjustmentMedicare_2004,
-    Lee_Predictingmortalitypatients_2003,
-    Frank_RiskadjustedClinicalOutcomes_2014,
-    tsugawa_comparison_2016,
-    Odisho_ClassicRiskAdjustment_2018a,
-    Bishop-Fitzpatrick_UsingMachineLearning_2018,
-    Kiyota_RiskOutcomesAortic_2017,
-    Lane_IdentificationManagementSepsis_2018,
-    Lane_ClassificationPredictionMortality_2019,
-    hand_validation_2016,
-    Mundell_PredictorsReceivingProsthesis_2016,
-    elixhauser_comorbidity_1998}
-  \author{Jack O. Wasey\\Children''s Hospital\\of Philadelphia \And
+  quan_coding_2005,quan_updating_2011,
+  Pope_RiskadjustmentMedicare_2004,
+  Lee_Predictingmortalitypatients_2003,
+  Frank_RiskadjustedClinicalOutcomes_2014,
+  tsugawa_comparison_2016,
+  Odisho_ClassicRiskAdjustment_2018a,
+  Bishop-Fitzpatrick_UsingMachineLearning_2018,
+  Kiyota_RiskOutcomesAortic_2017,
+  Lane_IdentificationManagementSepsis_2018,
+  Lane_ClassificationPredictionMortality_2019,
+  hand_validation_2016,
+  Mundell_PredictorsReceivingProsthesis_2016,
+  elixhauser_comorbidity_1998}
+  \author{Jack O. Wasey\\Children's Hospital\\of Philadelphia \And
   Steven M. Frank\\Johns Hopkins Medical\\Institutions \And
-  Mohamed A. Rehman\\Johns Hopkins All\\Children''s Hospital}'
+  Mohamed A. Rehman\\Johns Hopkins All\\Children's Hospital}
 documentclass: jss
 biblio-style: jss
 output:
   rticles::jss_article:
+    keep_md: true
+    keep_tex: true
     pandoc:
       args: --verbose
 bibliography:
@@ -85,8 +94,10 @@ editor_options:
 pkgdown:
   as_is: true
   extension: pdf
+# consider using ymlthis for fixing the YAML:
+# y <- yml_load(readLines("vignettes/efficiency-prebuilt.Rmd", n = 94))
 ---
-```{r setup, echo=FALSE, message=FALSE, warning=FALSE, cache=FALSE}
+```{r setup, include=FALSE, cache=FALSE}
 # TODO: fix childrens to have apostrophe
 # https://www.jstatsoft.org/pages/view/authors
 # https://www.jstatsoft.org/pages/view/style
@@ -101,7 +112,7 @@ pkgdown:
 # pandoc 2.2 dependency which r-hub, CRAN etc did not have April 2019. Also
 # avoids need for a ton of dependencies on CI platforms, and potentially out of
 # whole package DESCRIPTION.
-# rmarkdown::render("vignettes/efficiency-prebuilt.Rmd")
+# rmarkdown::render("vignettes/efficiency-prebuilt.Rmd", clean = FALSE)
 # # or, to juggle pkgbuild::build trashing inst/doc..., using .install_extras
 # options(tinytex.verbose = TRUE)
 # rmarkdown::render("vignettes/efficiency-prebuilt.Rmd", output_dir = "vignettes")
@@ -112,7 +123,7 @@ pkgdown:
 #   engine_args=c("-file-line-error", "-halt-on-error",
 #   "-interaction", "errorstopmode"))
 # Note that rstudio will delete this after kniting into vignettes/
-# Consider vim :SyntasticCheck markdown/mdl
+# Consider vim :SyntasticCheck markdown/mdl or ALE
 # This could be useful to generate html version without confusing errors
 # between formats: https://bookdown.org/yihui/rmarkdown-cookbook/latex-html.html
 # The resuling PDF is included by vignettes/efficiency.Rnw, which
@@ -433,6 +444,7 @@ transparent offline usage thereafter. Users are asked for their permission
 before internet access or cache files are created.
 
 ```{=latex}
+% trying to get the 'e' acute to work
 \begin{CodeChunk}
 \begin{CodeInput}
 explain_code(as.icd10who("R11"), lang = "fr")
@@ -440,7 +452,17 @@ explain_code(as.icd10who("R11"), lang = "fr")
 \begin{CodeOutput}
 [1] "Nausées et vomissements"
 \end{CodeOutput}
-\end{CodeChunk}
+\end{CodeChunk}'
+```
+
+```{r frenchexampleotherway, results="asis", echo=FALSE, include=FALSE}
+who_fr_ex <- '
+explain_code(as.icd10who("R11"), lang = "fr")
+\\end{CodeInput}
+\\begin{CodeOutput}
+[1] "Nausées et vomissements"
+\\end{CodeOutput}
+\\end{CodeChunk}'
 ```
 
 <!--

@@ -14,13 +14,14 @@ BinPackArguments: false
 BinPackParameters: false
 BreakBeforeBinaryOperators: None
 BreakBeforeBraces: Attach
-ColumnLimit: 80
+ColumnLimit: 100
 CommentPragmas: ^'
 ContinuationIndentWidth: 2
 IndentWidth: 2
 PenaltyBreakBeforeFirstCallParameter: 100000
+# if pointer alignment is Right, then Rcpp (has been) confused by const char *x
+PointerAlignment: Left
 ReflowComments: true
 Standard: Cpp11
 TabWidth: 2
 UseTab: false
-
