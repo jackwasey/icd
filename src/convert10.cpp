@@ -13,7 +13,7 @@ extern "C" {
 using namespace Rcpp;
 
 // [[Rcpp::export(icd10_short_to_parts_rcpp)]]
-List icd10ShortToParts(const CV &x, const String mnrEmpty) {
+List icd10ShortToParts(const CV& x, const String mnrEmpty) {
   R_xlen_t i10sz = x.size();
   CV mjr(i10sz);
   CV mnr(i10sz);
@@ -26,7 +26,7 @@ List icd10ShortToParts(const CV &x, const String mnrEmpty) {
       continue;
     }
     std::string s(thisShort.get_cstring()); // maybe faster to use as?
-    s  = strimCpp(s); // in place or rewrite? do this at all?
+    s  = strimCpp(s);                       // in place or rewrite? do this at all?
     sz = s.size();
     if (sz <= 3 && sz > 0) {
       mjr[i] = s.substr(0, sz);
@@ -47,9 +47,7 @@ List icd10DecimalToParts(const CV x, const String mnrEmpty = "") {
   CV mjrs;
   CV mnrs;
   R_xlen_t ilen = x.length();
-  if (ilen == 0) {
-    return List::create(_["mjr"] = CV::create(), _["mnr"] = CV::create());
-  }
+  if (ilen == 0) { return List::create(_["mjr"] = CV::create(), _["mnr"] = CV::create()); }
 
   for (CV::const_iterator it = x.begin(); it != x.end(); ++it) {
     String strna = *it;
@@ -59,8 +57,8 @@ List icd10DecimalToParts(const CV x, const String mnrEmpty = "") {
       continue;
     }
     std::string thiscode = as<std::string>(*it);
-    thiscode = strimCpp(thiscode); // Updates 'thisccode' by reference, no copy
-    std::size_t pos = thiscode.find(".");
+    thiscode             = strimCpp(thiscode); // Updates 'thisccode' by reference, no copy
+    std::size_t pos      = thiscode.find(".");
     // substring parts
     std::string mjrin;
     String mnrout;

@@ -69,7 +69,8 @@ Now we run the function `diff_comorbid` and input the ICD-9 mappings from Elixha
 
 ```{r comparison}
 comp <- diff_comorbid(icd9_map_ahrq, icd9_map_elix,
-                      show = TRUE, explain = TRUE)
+  show = TRUE, explain = TRUE
+)
 ```
 
 The comparison summary provides the size of the asymmetric difference between mapping schemes for each shared comorbidity, along with a list of a few code descriptions in that difference. This summary doesn't provide a very detailed look at the similarities between comorbidity mappings. We can get a more detailed look at a particular comorbidity by specifying it.

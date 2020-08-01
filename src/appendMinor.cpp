@@ -15,12 +15,10 @@ using namespace Rcpp;
 //' @return Character vector
 //' @keywords internal manip
 // [[Rcpp::export]]
-CV icd9MajMinToCode(const CV& mjr,
-                    const CV& mnr,
-                    const bool isShort) {
+CV icd9MajMinToCode(const CV& mjr, const CV& mnr, const bool isShort) {
 #ifdef ICD_DEBUG_TRACE
-  Rcout << "icd9MajMinToCode: mjr.size() = " << mjr.size()
-        << " and mnr.size() = " << mnr.size() << "\n";
+  Rcout << "icd9MajMinToCode: mjr.size() = " << mjr.size() << " and mnr.size() = " << mnr.size()
+        << "\n";
 #endif
   if (mjr.size() != mnr.size()) stop("major and minor lengths differ");
   std::vector<std::string> out(mjr.size());
@@ -33,7 +31,7 @@ CV icd9MajMinToCode(const CV& mjr,
       out_is_na[std::distance(mjr.cbegin(), j)] = 1;
       continue;
     }
-    const char *smj_c = mjrelem.get_cstring();
+    const char* smj_c = mjrelem.get_cstring();
     Str smj           = std::string(smj_c);
     switch (strlen(smj_c)) {
     case 0:
@@ -60,9 +58,7 @@ CV icd9MajMinToCode(const CV& mjr,
 #ifdef ICD_DEBUG_TRACE
   Rcout << "NA loop size: " << out_is_na.size() << "\n";
 #endif
-  for (auto i = out_is_na.cbegin();
-       i != out_is_na.cend();
-       ++i) {
+  for (auto i = out_is_na.cbegin(); i != out_is_na.cend(); ++i) {
 #ifdef ICD_DEBUG_TRACE
     Rcout << "NA loop: " << std::distance(out_is_na.cbegin(), i) << "\n";
 #endif
@@ -75,11 +71,10 @@ CV icd9MajMinToCode(const CV& mjr,
 // [[Rcpp::export]]
 CV icd9MajMinToShort(const CV& mjr, const CV& mnr) {
 #ifdef ICD_DEBUG_TRACE
-  Rcout << "icd9MajMinToShort: mjr.size() = " << mjr.size()
-        << " and mnr.size() = " << mnr.size() << "\n";
+  Rcout << "icd9MajMinToShort: mjr.size() = " << mjr.size() << " and mnr.size() = " << mnr.size()
+        << "\n";
 #endif
-  if ((mjr.size() != 1 && mjr.size() != mnr.size()) ||
-      (mjr.size() == 1 && mnr.size() == 0)) {
+  if ((mjr.size() != 1 && mjr.size() != mnr.size()) || (mjr.size() == 1 && mnr.size() == 0)) {
     stop("Length of mjrs and mnrs must be equal, unless major length is one.");
   }
   if (mjr.size() == 1) {
@@ -93,6 +88,4 @@ CV icd9MajMinToShort(const CV& mjr, const CV& mnr) {
 }
 
 // [[Rcpp::export]]
-CV icd9MajMinToDecimal(const CV mjr, const CV mnr) {
-  return icd9MajMinToCode(mjr, mnr, false);
-}
+CV icd9MajMinToDecimal(const CV mjr, const CV mnr) { return icd9MajMinToCode(mjr, mnr, false); }

@@ -3,9 +3,9 @@
 
 #include "icd_types.h"
 
-void setDecimalDiag(Rcpp::RObject &x, bool value);
-void setDecimalDiag(CV &x, bool);
-void setShortDiag(Rcpp::RObject &x, bool value);
-void setShortDiag(CV &x, bool);
+void setDecimalDiag(Rcpp::RObject& x, bool value);
+void setDecimalDiag(CV& x, bool);
+void setShortDiag(Rcpp::RObject& x, bool value);
+void setShortDiag(CV& x, bool);
 
 #endif /* ATTR_H_ */

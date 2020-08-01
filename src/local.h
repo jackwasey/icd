@@ -72,7 +72,7 @@ extern "C" {
 
 #if (defined ICD_DEBUG || defined ICD_DEBUG_SETUP)
 #include <iostream>
-template <typename C> inline void printIt(const C &c, int n = 10) {
+template <typename C> inline void printIt(const C& c, int n = 10) {
   std::ostringstream o;
   for (int i = 0; i != std::min(n, (int)c.size()); ++i) o << c[i] << " ";
   o << std::endl;
@@ -81,8 +81,7 @@ template <typename C> inline void printIt(const C &c, int n = 10) {
   Rcpp::Rcout.flush();
 }
 
-template <typename C>
-inline void printIt(const Rcpp::Nullable<C> &c, int n = 10) {
+template <typename C> inline void printIt(const Rcpp::Nullable<C>& c, int n = 10) {
   if (c.isNull()) {
     Rcpp::Rcout << "NULL" << std::endl;
     return;
@@ -90,13 +89,12 @@ inline void printIt(const Rcpp::Nullable<C> &c, int n = 10) {
   printIt((C)c, n);
 }
 
-template <typename F, typename S>
-inline void printUm(std::unordered_map<F, S> um) {
+template <typename F, typename S> inline void printUm(std::unordered_map<F, S> um) {
   std::vector<F> keys;
   keys.reserve(um.size());
   std::vector<S> vals;
   vals.reserve(um.size());
-  for (const auto &kv : um) {
+  for (const auto& kv : um) {
     keys.push_back(kv.first);
     vals.push_back(kv.second);
   }

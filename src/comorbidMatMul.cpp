@@ -44,13 +44,13 @@ void printCornerSparse(PtsSparse x) {
 // # nocov end
 
 void buildVisitCodesSparseWide(
-  const DataFrame &data,
+  const DataFrame& data,
   const std::string id_name,
   const CV code_names,
   const bool validate,
-  Relevant &rh,
-  PtsSparse &visMat, // output
-  VecStr &visitIds   // output: can get this from sparse matrix at end? Needed?
+  Relevant& rh,
+  PtsSparse& visMat, // output
+  VecStr& visitIds   // output: can get this from sparse matrix at end? Needed?
 ) {
   DEBUG_VEC(rh.keys);
   const RObject visits = data[id_name];
@@ -71,31 +71,29 @@ void buildVisitCodesSparseWide(
   }
   for (int j = 0; j != code_names.size(); ++j) {
     String data_col_name = code_names[j];
-    const SEXP &data_col = data[data_col_name];
+    const SEXP& data_col = data[data_col_name];
     if (Rf_isFactor(data_col)) {
-      const IntegerVector &data_col_fc = (IntegerVector)data_col;
+      const IntegerVector& data_col_fc = (IntegerVector)data_col;
       DEBUG("codes are still in a factor...");
-      const CV code_levels = data_col_fc.attr("levels");
-      const IntegerVector codes_relevant =
-        refactor(data_col_fc, rh.relevant, true, validate);
+      const CV code_levels               = data_col_fc.attr("levels");
+      const IntegerVector codes_relevant = refactor(data_col_fc, rh.relevant, true, validate);
       assert(rows.size() == codes_relevant.size());
       for (R_xlen_t i = 0; i != rows.size(); ++i) {
         DEBUG("add triplet at R idx:" << rows[i] << ", " << codes_relevant[i]);
         if (IntegerVector::is_na(codes_relevant[i])) continue;
-        visTriplets.push_back(
-          Triplet(rows[i] - 1, codes_relevant[i] - 1, true));
+        visTriplets.push_back(Triplet(rows[i] - 1, codes_relevant[i] - 1, true));
       } // end i loop through rows
     } else {
-      const CV &data_col_cv = (CV)data_col;
+      const CV& data_col_cv = (CV)data_col;
       DEBUG_VEC(data_col_cv);
       for (R_xlen_t i = 0; i != rows.size(); ++i) {
         const auto found = rh.rel.find(((String)data_col_cv[i]).get_cstring());
         if (found == rh.rel.cend()) continue;
         DEBUG("adding triplet at R idx:" << rows[i] << ", " << found->second);
         visTriplets.push_back(Triplet(rows[i] - 1, found->second, true));
-      } // end i loop through rows
-    }   // factor vs character for this code column
-  }     // end j loop through data columns
+      }                                               // end i loop through rows
+    }                                                 // factor vs character for this code column
+  }                                                   // end j loop through data columns
   visMat.resize(visitIds.size(), rh.relevant.size()); // unique ids
   visMat.reserve(vlen * ncol);                        // upper bound
   visMat.setFromTriplets(visTriplets.begin(), visTriplets.end());
@@ -125,8 +123,8 @@ void buildVisitCodesSparseWide(
 //' @keywords internal array algebra
 //' @noRd
 // [[Rcpp::export(comorbid_mat_mul_wide_rcpp)]]
-LogicalMatrix comorbidMatMulWide(const DataFrame &data,
-                                 const List &map,
+LogicalMatrix comorbidMatMulWide(const DataFrame& data,
+                                 const List& map,
                                  const std::string id_name,
                                  const CV code_names,
                                  const bool validate) {
@@ -135,13 +133,7 @@ LogicalMatrix comorbidMatMulWide(const DataFrame &data,
   Relevant r(map, data, code_names);
   MapPlus m(map, r);
   PtsSparse visMat; // reservation and sizing done within next function
-  buildVisitCodesSparseWide(data,
-                            id_name,
-                            code_names,
-                            validate,
-                            r,
-                            visMat,
-                            out_row_names);
+  buildVisitCodesSparseWide(data, id_name, code_names, validate, r, visMat, out_row_names);
   if (visMat.cols() != m.rows()) stop("matrix multiplication won't work");
   DenseMap result = visMat * m.mat; // col major result
   DEBUG("Result rows: " << result.rows() << ", cols: " << result.cols());

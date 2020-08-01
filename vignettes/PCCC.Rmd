@@ -38,8 +38,8 @@ dat <- data.frame(
 if (icd:::.exists_in_cache("icd10cm2019_pc")) {
   i <- get_icd10cm2019_pc()$code
   dat <- cbind(dat,
-               icd_pcs1 = sample(i, n, replace = TRUE),
-               icd_pcs2 = sample(i, n, replace = TRUE)
+    icd_pcs1 = sample(i, n, replace = TRUE),
+    icd_pcs2 = sample(i, n, replace = TRUE)
   )
 }
 ```
@@ -64,7 +64,7 @@ The data is in 'wide' format. `icd` no longer needs the data to be in 'long' for
 pccc_dx <- comorbid_pccc_dx(dat)
 if (icd:::.exists_in_cache("icd10cm2019_pc")) {
   pccc_pcs <- icd10_comorbid_pccc_pcs(dat,
-                                      icd_name = c("icd_pcs1", "icd_pcs2")
+    icd_name = c("icd_pcs1", "icd_pcs2")
   )
   res <- pccc_dx | pccc_pcs
 } else {
@@ -91,7 +91,7 @@ colSums(res)
 ```
 
 ```{r par, include = FALSE}
-#graphics::par(mar = c(12, 4, 4, 2) + 0.1) # bottom, left, top, right
+# graphics::par(mar = c(12, 4, 4, 2) + 0.1) # bottom, left, top, right
 ```
 
 ```{r pcccbarplot, echo=FALSE}

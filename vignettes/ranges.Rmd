@@ -38,8 +38,8 @@ suppressWarnings({
     library("icd")
     library("magrittr")
     library("utils")
-    })
   })
+})
 
 knitr::opts_chunk$set(
   collapse = TRUE,
@@ -58,8 +58,10 @@ Using icd, we can use this shortcut to expand decimal ICD-9 codes to all possibl
 ```{r arrythmiaexpand, eval = FALSE}
 "746.3" %i9da% "746.6"
 # equivalent to:
-identical("746.3" %i9da% "746.6",
-  icd:::expand_range("746.3", "746.6", defined = FALSE))
+identical(
+  "746.3" %i9da% "746.6",
+  icd:::expand_range("746.3", "746.6", defined = FALSE)
+)
 ```
 
 This includes all possible codes, not just the ones that have been explicitly defined: this is important in correctly assigning new or slightly incorrect ICD codes in the right comorbidity). In contrast, the same expression using just defined codes gives:
@@ -99,8 +101,11 @@ icd:::expand_range("4820", "4823") # default, equivalent to %i9s%
 icd:::expand_range("4820", "4823", defined = FALSE)
 # see the first few differences (which are by definition not 'real' codes):
 head(
-  setdiff(icd:::expand_range("4820", "4823", defined = FALSE),
-          icd:::expand_range("4820", "4823")))
+  setdiff(
+    icd:::expand_range("4820", "4823", defined = FALSE),
+    icd:::expand_range("4820", "4823")
+  )
+)
 ```
 
 ## Finding codes in hierarchy

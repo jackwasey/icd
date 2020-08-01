@@ -32,9 +32,11 @@ The method returns a table with each ICD-9 code and its corresponding CC. The th
 ICD also provides a method for mapping specific ICD codes to HCCs. The method `comorbid_hcc` takes as input a list of ICD-9 or ICD-10 codes and outputs a mapping of those codes to their corresponding CCs. For this example, we have an arbitrary table of five ICD-9 codes along with their corresponding patient identifiers and dates of visit.
 
 ```{r pts}
-pts <- data.frame(patient_id = c("1", "2", "3", "4", "4"),
-                  icd_code = c("20084", "1742", "30410", "41514", "95893"),
-                  date = as.Date(c("2011-01-01", "2011-01-02", "2011-01-03", "2011-01-04", "2011-01-04")))
+pts <- data.frame(
+  patient_id = c("1", "2", "3", "4", "4"),
+  icd_code = c("20084", "1742", "30410", "41514", "95893"),
+  date = as.Date(c("2011-01-01", "2011-01-02", "2011-01-03", "2011-01-04", "2011-01-04"))
+)
 
 pts
 ```

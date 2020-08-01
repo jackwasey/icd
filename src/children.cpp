@@ -1,18 +1,14 @@
-#include "local.h" // for CV, VecStr
-#include <iterator>    // for advance
+#include "local.h"  // for CV, VecStr
+#include <iterator> // for advance
 #include <vector>
 using namespace Rcpp;
 
 // [[Rcpp::export(icd10_children_defined_rcpp)]]
-CV icd10ChildrenDefined(
-    const CV &x,
-    const List& lookup,
-    const IntegerVector& nc,
-    const bool warn = true
-) {
-  if (!lookup.containsElementNamed("code")) {
-    stop("lookup does not have a code column");
-  }
+CV icd10ChildrenDefined(const CV& x,
+                        const List& lookup,
+                        const IntegerVector& nc,
+                        const bool warn = true) {
+  if (!lookup.containsElementNamed("code")) { stop("lookup does not have a code column"); }
   const CV& allCodes = lookup["code"];
   if (nc.size() != allCodes.size()) {
     DEBUG_VEC(nc);

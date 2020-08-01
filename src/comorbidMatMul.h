@@ -25,18 +25,17 @@ void printCornerSparse(PtsSparse x);
 #endif
 // # nocov end
 
-void buildVisitCodesSparseWide(
-  const DataFrame &data,
-  const std::string id_name,
-  const CV code_names,
-  const bool validate,
-  Relevant &rh,
-  // output
-  PtsSparse &visMat,
-  // output: can get this from sparse matrix at end? Needed?
-  VecStr &visitIds);
-LogicalMatrix comorbidMatMulWide(const DataFrame &data,
-                                 const List &map,
+void buildVisitCodesSparseWide(const DataFrame& data,
+                               const std::string id_name,
+                               const CV code_names,
+                               const bool validate,
+                               Relevant& rh,
+                               // output
+                               PtsSparse& visMat,
+                               // output: can get this from sparse matrix at end? Needed?
+                               VecStr& visitIds);
+LogicalMatrix comorbidMatMulWide(const DataFrame& data,
+                                 const List& map,
                                  const std::string id_name,
                                  const CV code_name,
                                  const bool validate = false);

@@ -39,10 +39,12 @@ knitr::opts_chunk$set(
 )
 patient_data <- data.frame(
   visit_id = c(1000, 1000, 1000, 1000, 1001, 1001, 1002, 1000),
-  icd9 = as.icd9cm(c("40201", "2258", "7208", "25001",
-                     "34400", "4011", "4011", NA)),
+  icd9 = as.icd9cm(c(
+    "40201", "2258", "7208", "25001",
+    "34400", "4011", "4011", NA
+  )),
   stringsAsFactors = FALSE
-  )
+)
 ```
 
 # icd
@@ -122,12 +124,18 @@ Y <- nhds$adm_type == "emergency"
 tab_dat <- vapply(
   unname(unlist(icd_names_charlson)),
   function(x) {
-    c(sprintf("%i (%.2f%%)", 
-              sum(nhds[Y, x]), 
-              100 * mean(nhds[Y, x])),
-      sprintf("%i (%.2f%%)",
-              sum(nhds[!Y, x]),
-              100 * mean(nhds[!Y, x])))
+    c(
+      sprintf(
+        "%i (%.2f%%)",
+        sum(nhds[Y, x]),
+        100 * mean(nhds[Y, x])
+      ),
+      sprintf(
+        "%i (%.2f%%)",
+        sum(nhds[!Y, x]),
+        100 * mean(nhds[!Y, x])
+      )
+    )
   },
   character(2)
 )

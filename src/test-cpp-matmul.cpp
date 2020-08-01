@@ -28,34 +28,30 @@ context("matmul cpp") {
   CharacterVector v2;
   v2.push_back("V12");
   v2.push_back("V13");
-  List map     = List::create(_["X"] = v1, _["Y"] = v2);
-  List map_v1  = List::create(_["V"] = v1, _["W"] = v1);
-  List map_v12 = List::create(_["A"] = CharacterVector::create("V10", "V20"),
+  List map       = List::create(_["X"] = v1, _["Y"] = v2);
+  List map_v1    = List::create(_["V"] = v1, _["W"] = v1);
+  List map_v12   = List::create(_["A"] = CharacterVector::create("V10", "V20"),
                               _["B"] = CharacterVector::create("V12", "V40"));
-  DataFrame df1 =
-    DataFrame::create(_["id"]  = CharacterVector::create("1001", "1002"),
-                      _["dx0"] = v1,
-                      _["dx1"] = v2,
-                      _["stringsAsFactors"] = false);
-  DataFrame df2 =
-    DataFrame::create(_["id"]  = CharacterVector::create("1001", "1002"),
-                      _["dx0"] = v1,
-                      _["dx1"] = v2,
-                      _["dx2"] = CharacterVector::create(NA_STRING, NA_STRING),
-                      _["dx2"] = CharacterVector::create(NA_STRING, "100"),
-                      _["stringsAsFactors"] = false);
-  DataFrame dff1 =
-    DataFrame::create(_["id"]  = CharacterVector::create("1001", "1002"),
-                      _["dx0"] = v1,
-                      _["dx1"] = v2,
-                      _["stringsAsFactors"] = true);
-  DataFrame dff2 =
-    DataFrame::create(_["id"]  = CharacterVector::create("1001", "1002"),
-                      _["dx0"] = v1,
-                      _["dx1"] = v2,
-                      _["dx2"] = CharacterVector::create(NA_STRING, NA_STRING),
-                      _["dx2"] = CharacterVector::create(NA_STRING, "100"),
-                      _["stringsAsFactors"] = true);
+  DataFrame df1  = DataFrame::create(_["id"]               = CharacterVector::create("1001", "1002"),
+                                    _["dx0"]              = v1,
+                                    _["dx1"]              = v2,
+                                    _["stringsAsFactors"] = false);
+  DataFrame df2  = DataFrame::create(_["id"]  = CharacterVector::create("1001", "1002"),
+                                    _["dx0"] = v1,
+                                    _["dx1"] = v2,
+                                    _["dx2"] = CharacterVector::create(NA_STRING, NA_STRING),
+                                    _["dx2"] = CharacterVector::create(NA_STRING, "100"),
+                                    _["stringsAsFactors"] = false);
+  DataFrame dff1 = DataFrame::create(_["id"]  = CharacterVector::create("1001", "1002"),
+                                     _["dx0"] = v1,
+                                     _["dx1"] = v2,
+                                     _["stringsAsFactors"] = true);
+  DataFrame dff2 = DataFrame::create(_["id"]  = CharacterVector::create("1001", "1002"),
+                                     _["dx0"] = v1,
+                                     _["dx1"] = v2,
+                                     _["dx2"] = CharacterVector::create(NA_STRING, NA_STRING),
+                                     _["dx2"] = CharacterVector::create(NA_STRING, "100"),
+                                     _["stringsAsFactors"] = true);
   test_that("make a relevant object with character vectors") {
     Relevant r1(map, v1);
     expect_true(r1.relevant.size() == v1.size());

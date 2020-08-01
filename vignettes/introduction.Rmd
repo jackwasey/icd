@@ -40,8 +40,8 @@ suppressWarnings({
     library("icd")
     library("magrittr")
     library("utils")
-    })
   })
+})
 
 knitr::opts_chunk$set(
   collapse = TRUE,
@@ -56,7 +56,7 @@ patients_icd9 <- data.frame(
   icd9 = as.icd9(c("40201", "2258", "7208", "25001", "34400", "4011", "4011")),
   poa = c("Y", NA, "N", "Y", "X", "Y", "E"),
   stringsAsFactors = FALSE
-  )
+)
 ```
 
 # Quick Start
@@ -66,11 +66,13 @@ library(icd)
 head(uranium_pathology, 10)
 head(comorbid_charlson(uranium_pathology))
 comorbid_charlson(uranium_pathology,
-                  return_df = TRUE,
-                  return_binary = TRUE)[1:5, 1:5]
+  return_df = TRUE,
+  return_binary = TRUE
+)[1:5, 1:5]
 hist(charlson(uranium_pathology),
-     main = "Uranium data",
-     xlab = "Charlson Score")
+  main = "Uranium data",
+  xlab = "Charlson Score"
+)
 ```
 
 # Introduction
@@ -108,27 +110,30 @@ Things work beautifully using [magrittr](https://cran.r-project.org/package=magr
 ```{r getcomorbidities2}
 # find Elixhauser comorbidities which were present-on-arrival
 patients_icd9 %>%
-  filter_poa %>%
-  comorbid_elix
+  filter_poa() %>%
+  comorbid_elix()
 
 # same as above, then summarize:
 patients_icd9 %>%
-  filter_poa %>%
-  comorbid_elix %>%
-  colSums
+  filter_poa() %>%
+  comorbid_elix() %>%
+  colSums()
 
 # Take Vermont discharge data (wide to long conversion no longer needed)
 # find comorbidities, convert TRUE to 1 and show first few
 vermont_cmb <- vermont_dx %>%
-  icd9_comorbid_quan_elix %>%
+  icd9_comorbid_quan_elix() %>%
   apply(2, as.integer) # convert logical to integer
 
 head(vermont_cmb)
 barplot(colSums(vermont_cmb[, 1:5]),
-        main = "Incidence of five Elixhauser comorbidities in Vermont data")
+  main = "Incidence of five Elixhauser comorbidities in Vermont data"
+)
 # Use built-in summary plot, this time for AHRQ comorbidities
-plot_comorbid(vermont_dx, comorbid_fun = comorbid_ahrq,
-        main = "Incidence of all AHRQ Comorbidities in Vermont data")
+plot_comorbid(vermont_dx,
+  comorbid_fun = comorbid_ahrq,
+  main = "Incidence of all AHRQ Comorbidities in Vermont data"
+)
 ```
 
 The above can also be written in classic R with many parentheses:
@@ -155,7 +160,9 @@ codes <- c("A10.01", "L40.50", "Z77.098")
 # set class to be icd10cm (and implicitly icd10)
 as.icd10cm(codes)
 # indicate decimal code and icd10 (not necessarily icd10cm)
-codes %>% as.decimal_diag %>% as.icd10
+codes %>%
+  as.decimal_diag() %>%
+  as.icd10()
 ```
 
 Doing this avoids mistakes in guessing type. For example code `V10` is valid in both ICD-9 and ICD-10.
@@ -201,18 +208,24 @@ explain_code("0019") # 'short' format code inferred
 # we can be explicit about short vs decimal
 explain_code("434.00", short_code = FALSE)
 explain_code(c("43410", "43491"), short_code = TRUE)
-#explain top level code with children
-"391" %>% explain_code # single three-digit code
-"391" %>% children # let's see the child codes
-"391" %>% children %>% explain_code # children condensed to parent code
-"391" %>% children %>% explain_code(condense = FALSE) # prevent condense
+# explain top level code with children
+"391" %>% explain_code() # single three-digit code
+"391" %>% children() # let's see the child codes
+"391" %>%
+  children() %>%
+  explain_code() # children condensed to parent code
+"391" %>%
+  children() %>%
+  explain_code(condense = FALSE) # prevent condense
 ```
 
 Arbitrary named list(s) of codes:
 
 ```{r explainarbitrary}
-explain_code(list(somecodes = as.icd9(c("001", "391")),
-                 morecodes = as.icd9cm(c("001.1", "001.9"))))
+explain_code(list(
+  somecodes = as.icd9(c("001", "391")),
+  morecodes = as.icd9cm(c("001.1", "001.9"))
+))
 ```
 
 `001` (Cholera) isn't itself a diagnostic code, i.e. leaf node in the hierarchy, but `390` (Rheumatic fever without heart involvement) is. Both are explained correctly:
@@ -260,13 +273,13 @@ poa_choices
 Filter for present-on-arrival being "Y"
 
 ```{r simplepoa}
-patients_icd9 %>% filter_poa_yes
+patients_icd9 %>% filter_poa_yes()
 ```
 
 Show that *yes* is not equal to *not no* (e.g. due to NA in `poa` field)
 
 ```{r notnopoa}
-patients_icd9 %>% filter_poa_not_no
+patients_icd9 %>% filter_poa_not_no()
 ```
 
 ## Comorbidities
@@ -315,8 +328,8 @@ Take my patients, find the ones where there definitely or maybe was a diagnosis 
 
 ```{r chainpoatocomorbid}
 patients_icd9 %>%
-  filter_poa_not_no %>%
-  icd9_comorbid_ahrq %>%
+  filter_poa_not_no() %>%
+  icd9_comorbid_ahrq() %>%
   extract(1:9)
 ```
 
@@ -326,7 +339,8 @@ We will find the differences between some categories of the original Elixhauser 
 
 ```{r elixvsquanelix}
 difference <- diff_comorbid(icd9_map_elix, icd9_map_quan_elix,
-                            all_names = c("CHF", "PHTN", "HTN", "Valvular"))
+  all_names = c("CHF", "PHTN", "HTN", "Valvular")
+)
 # reuslts also returned as data
 str(difference)
 ```
@@ -334,7 +348,9 @@ str(difference)
 Which pulmonary hypertension codes are only in Quan's version?
 
 ```{r quanonlyphtn}
-difference$PHTN$only.y %>% get_defined %>% explain_code
+difference$PHTN$only.y %>%
+  get_defined() %>%
+  explain_code()
 ```
 
 (Passing through `get_defined` stops `explain_code` complaining that some of the input codes don't exist. This is because the comorbidity mappings have every possible numerical ICD-9 code, not just the official ones. Could also use `warn = FALSE` option in `explain_code`)
@@ -343,16 +359,21 @@ difference$PHTN$only.y %>% get_defined %>% explain_code
 
 ```{r cardiacgrep}
 icd9cm_hierarchy[
-  grepl(pattern = "(heart)|(cardiac)",
-        x = c(icd9cm_hierarchy$long_desc, icd9cm_hierarchy$short_desc),
-        ignore.case = TRUE),
-  "code"] %>% unique -> cardiac
+  grepl(
+    pattern = "(heart)|(cardiac)",
+    x = c(icd9cm_hierarchy$long_desc, icd9cm_hierarchy$short_desc),
+    ignore.case = TRUE
+  ),
+  "code"
+] %>% unique() -> cardiac
 ```
 
 then explain the list, just showing the first ten:
 
 ```{r cardiac Chain Explain Example}
-as.icd9(cardiac) %>% explain_code(warn = FALSE) %>% head(10)
+as.icd9(cardiac) %>%
+  explain_code(warn = FALSE) %>%
+  head(10)
 ```
 
 ### Find comorbidities for a large number of patients
@@ -364,7 +385,7 @@ I understand that comorbidity assignment using SAS is a lengthy business. Let's 
 many_patients <- icd:::generate_random_pts(1e7)
 system.time(
   comorbid_ahrq(many_patients)
-  )[["elapsed"]]
+)[["elapsed"]]
 ```
 
 This takes about five seconds on a 2016 8-core workstation. More detailed benchmarks can be seen comparing icd to other packages in the vignette article in this package.

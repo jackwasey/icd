@@ -36,8 +36,8 @@ suppressWarnings({
     requireNamespace("knitr")
     library("icd")
     library("magrittr")
-    })
   })
+})
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"

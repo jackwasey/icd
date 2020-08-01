@@ -30,7 +30,7 @@ using namespace Rcpp;
 //' @keywords internal
 //' @noRd
 // [[Rcpp::export(simplify_map_lex)]]
-Rcpp::List simplifyMapLexicographic(const CV &pt_codes, const List map) {
+Rcpp::List simplifyMapLexicographic(const CV& pt_codes, const List map) {
   std::string ptCode;
   size_t searchLen;
   size_t pos;
@@ -48,7 +48,7 @@ Rcpp::List simplifyMapLexicographic(const CV &pt_codes, const List map) {
     TRACE("code len >=3 chars");
     for (R_xlen_t j = 0; j < map.size(); ++j) {
       TRACE("cmb, j = " << j);
-      const CV &cmbCodes = map[j];
+      const CV& cmbCodes = map[j];
       for (R_xlen_t k = 0; k != cmbCodes.length(); ++k) {
         cmb_len = cmbCodes[k].size();
         // if map code is longer than the patient's code, it'll never match
@@ -85,9 +85,9 @@ Rcpp::List simplifyMapLexicographic(const CV &pt_codes, const List map) {
     DEBUG("finished a comorbidity");
   } // each row of input data
   List newMap = List::create();
-  for (const auto &cmbSet : newMapStd) {
+  for (const auto& cmbSet : newMapStd) {
     CV cmbOut;
-    for (const auto &cmbCode : cmbSet) { cmbOut.push_back(cmbCode); }
+    for (const auto& cmbCode : cmbSet) { cmbOut.push_back(cmbCode); }
     cmbOut.attr("class") = ((CV)map[0]).attr("class");
     newMap.push_back(cmbOut);
   }
