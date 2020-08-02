@@ -4,11 +4,12 @@
 #' Convert \code{mjr} and \code{mnr} vectors to single code
 #' @template mjr
 #' @template mnr
-#' @template isShort
+#' @template short_code
 #' @return Character vector
 #' @keywords internal manip
-icd9MajMinToCode <- function(mjr, mnr, isShort) {
-    .Call(`_icd_icd9MajMinToCode`, mjr, mnr, isShort)
+#' @noRd
+icd9MajMinToCode <- function(mjr, mnr, short_code) {
+    .Call(`_icd_icd9MajMinToCode`, mjr, mnr, short_code)
 }
 
 icd9MajMinToShort <- function(mjr, mnr) {
@@ -120,12 +121,20 @@ majMinToParts <- function(mjr, mnr) {
     .Call(`_icd_majMinToParts`, mjr, mnr)
 }
 
-icd9ShortToParts <- function(icd9Short, mnrEmpty) {
-    .Call(`_icd_icd9ShortToParts`, icd9Short, mnrEmpty)
+#' @describeIn short_to_parts Convert short format ICD-9 codes to parts
+#' @export
+#' @keywords internal manip
+#' @noRd
+short_to_parts.icd9 <- function(x, mnr_empty = "") {
+    .Call(`_icd_icd9ShortToParts`, x, mnr_empty)
 }
 
-icd9DecimalToParts <- function(icd9Decimal, mnrEmpty) {
-    .Call(`_icd_icd9DecimalToParts`, icd9Decimal, mnrEmpty)
+#' @describeIn decimal_to_parts Convert decimal ICD-9 code to parts
+#' @export
+#' @keywords internal manip
+#' @noRd
+decimal_to_parts.icd9 <- function(icd9Decimal, mnr_empty = "") {
+    .Call(`_icd_icd9DecimalToParts`, icd9Decimal, mnr_empty)
 }
 
 icd9_short_to_decimal_rcpp <- function(x) {
@@ -146,12 +155,12 @@ get_major.icd9 <- function(x, short_code) {
     .Call(`_icd_icd9GetMajor`, x, short_code)
 }
 
-icd10_short_to_parts_rcpp <- function(x, mnrEmpty) {
-    .Call(`_icd_icd10ShortToParts`, x, mnrEmpty)
+icd10_short_to_parts_rcpp <- function(x, mnr_empty) {
+    .Call(`_icd_icd10ShortToParts`, x, mnr_empty)
 }
 
-icd10DecimalToParts <- function(x, mnrEmpty = "") {
-    .Call(`_icd_icd10DecimalToParts`, x, mnrEmpty)
+icd10DecimalToParts <- function(x, mnr_empty = "") {
+    .Call(`_icd_icd10DecimalToParts`, x, mnr_empty)
 }
 
 #' @title Convert integers to strings as quickly as possible
@@ -221,6 +230,11 @@ icd9_is_e_rcpp <- function(sv) {
 }
 
 #' Simpler add leading zeroes without converting to parts and back
+#'
+#' @details Returning a 'String' is (probably?) going to require that Rcpp use R's C
+#' interface to make a new \code{CHARSXP}, which involves enconding scanning, global
+#' charsxp lookup. However, if we are actually changing a string, we must do this
+#' if it is to be used back in R.
 #' @keywords internal manip
 #' @noRd
 icd9AddLeadingZeroesMajorSingle <- function(mjr) {
@@ -252,48 +266,48 @@ icd9_expand_minor_rcpp <- function(mnr, isE) {
     .Call(`_icd_icd9ExpandMinor`, mnr, isE)
 }
 
-icd9_children_short_undefined_rcpp <- function(icd9Short) {
-    .Call(`_icd_icd9ChildrenShortUndefined`, icd9Short)
+icd9_children_short_undefined_rcpp <- function(x) {
+    .Call(`_icd_icd9ChildrenShortUndefined`, x)
 }
 
-icd9_children_short_defined_rcpp <- function(icd9Short, icd9cmReal) {
-    .Call(`_icd_icd9ChildrenShortDefined`, icd9Short, icd9cmReal)
+icd9_children_short_defined_rcpp <- function(x, defined) {
+    .Call(`_icd_icd9ChildrenShortDefined`, x, defined)
 }
 
-icd9_children_short_rcpp <- function(icd9Short, icd9cmReal, onlyReal) {
-    .Call(`_icd_icd9ChildrenShort`, icd9Short, icd9cmReal, onlyReal)
+icd9_children_short_rcpp <- function(x, defined, leaf) {
+    .Call(`_icd_icd9ChildrenShort`, x, defined, leaf)
 }
 
-icd9_children_short_unordered_undefined_rcpp <- function(icd9Short) {
-    .Call(`_icd_icd9ChildrenShortUnorderedUndefined`, icd9Short)
+icd9_children_short_unordered_undefined_rcpp <- function(x) {
+    .Call(`_icd_icd9ChildrenShortUnorderedUndefined`, x)
 }
 
-icd9_children_short_unordered_defined_rcpp <- function(icd9Short, icd9cmReal) {
-    .Call(`_icd_icd9ChildrenShortUnorderedDefined`, icd9Short, icd9cmReal)
+icd9_children_short_unordered_defined_rcpp <- function(x, defined) {
+    .Call(`_icd_icd9ChildrenShortUnorderedDefined`, x, defined)
 }
 
-icd9_children_short_unordered_rcpp <- function(icd9Short, icd9cmReal, onlyReal) {
-    .Call(`_icd_icd9ChildrenShortUnordered`, icd9Short, icd9cmReal, onlyReal)
+icd9_children_short_unordered_rcpp <- function(x, defined, leaf) {
+    .Call(`_icd_icd9ChildrenShortUnordered`, x, defined, leaf)
 }
 
-icd9_children_decimal_rcpp <- function(icd9Decimal, icd9cmReal, onlyReal) {
-    .Call(`_icd_icd9ChildrenDecimal`, icd9Decimal, icd9cmReal, onlyReal)
+icd9_children_decimal_rcpp <- function(x, defined, leaf) {
+    .Call(`_icd_icd9ChildrenDecimal`, x, defined, leaf)
 }
 
-icd9_children_decimal_unordered_rcpp <- function(icd9Decimal, icd9cmReal, onlyReal) {
-    .Call(`_icd_icd9ChildrenDecimalUnordered`, icd9Decimal, icd9cmReal, onlyReal)
+icd9_children_decimal_unordered_rcpp <- function(x, defined, leaf) {
+    .Call(`_icd_icd9ChildrenDecimalUnordered`, x, defined, leaf)
 }
 
-icd9_children_decimal_unordered_undefined_rcpp <- function(icd9Decimal) {
-    .Call(`_icd_icd9ChildrenDecimalUnorderedUndefined`, icd9Decimal)
+icd9_children_decimal_unordered_undefined_rcpp <- function(x) {
+    .Call(`_icd_icd9ChildrenDecimalUnorderedUndefined`, x)
 }
 
-icd9_children_decimal_unordered_defined_rcpp <- function(icd9Decimal, icd9cmReal) {
-    .Call(`_icd_icd9ChildrenDecimalUnorderedDefined`, icd9Decimal, icd9cmReal)
+icd9_children_decimal_unordered_defined_rcpp <- function(x, defined) {
+    .Call(`_icd_icd9ChildrenDecimalUnorderedDefined`, x, defined)
 }
 
-icd9_children_rcpp <- function(icd9, isShort, icd9cmReal, onlyReal) {
-    .Call(`_icd_icd9Children`, icd9, isShort, icd9cmReal, onlyReal)
+icd9_children_rcpp <- function(icd9, short_code, defined, leaf) {
+    .Call(`_icd_icd9Children`, icd9, short_code, defined, leaf)
 }
 
 #' @title Factor without sorting \CRANpkg{Rcpp} implementation
@@ -345,6 +359,12 @@ icd9_order_rcpp <- function(x) {
     .Call(`_icd_icd9Order`, x)
 }
 
+#' Compare ICD-10 codes stored as strings in C arrays
+#'
+#' TODO: can be slightly improved by accepting SEXP CHARSXP, since this has
+#' pre-calculated length stored.
+#' @keywords internal
+#' @noRd
 icd10cm_compare_c <- function(xstr, ystr) {
     .Call(`_icd_icd10cmCompareC`, xstr, ystr)
 }

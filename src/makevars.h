@@ -1,1 +1,1 @@
-unsigned char Makevars[] = {0x00};
+unsigned char Makevars[] = { 0x00 };

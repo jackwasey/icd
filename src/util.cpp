@@ -130,6 +130,4 @@ void build_info() {
 #ifdef _LIBCPP_VERSION
   Rcpp::Rcout << "libc++ from LLVM/clang)" << std::endl;
 #endif
-#include "makevars.h"
-  Rcpp::Rcout << Makevars << std::endl;
 }

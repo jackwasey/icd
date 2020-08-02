@@ -15,6 +15,8 @@ typedef std::unordered_map<std::string, int> RelMap;
 
 typedef std::unordered_set<std::string> US;
 typedef Rcpp::CharacterVector CV;
+typedef std::string Str;
+typedef std::vector<std::string> VecStr;
 
 typedef Eigen::Triplet<int> Triplet;
 typedef Eigen::SparseMatrix<int, Eigen::RowMajor> PtsSparse;

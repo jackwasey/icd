@@ -1,3 +1,5 @@
+# !diagnostics suppress=icd9cm_heirarchy,get_icd10who2008fr,get_icd10who2016
+
 #' Get children of ICD codes
 #'
 #' Expand ICD codes to all possible sub-codes, optionally limiting to those
@@ -78,9 +80,9 @@ children.icd9cm <- function(x,
     } else {
       # TODO: unordered variant
       icd9_children_decimal_rcpp(
-        icd9Decimal = toupper(x),
-        icd9cmReal = icd9cm_hierarchy$code,
-        onlyReal = defined
+        x = toupper(x),
+        defined = icd9cm_hierarchy$code,
+        leaf = defined
       )
     }
   # ICD-9 and ICD-9-CM sort the same, I think.
