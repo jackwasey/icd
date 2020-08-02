@@ -1,313 +1,165 @@
-*.pdf
-*.md
-*.tex
-*_files/
-*.html
-deplib/
-.depsdone.txt
-.deps
-.deps
-*build.log
-*.tar.gz
-deplib
-depslib
-results
 !comorbidity_0.1.1.tar.gz
 !medicalrisk_1.2.tar.gz
 !touch_0.1-4.tar.gz
-.icd.built
-
-# Created by https://www.toptal.com/developers/gitignore/api/latex
-# Edit at https://www.toptal.com/developers/gitignore?templates=latex
-
-### LaTeX ###
-## Core latex/pdflatex auxiliary files:
-*.aux
-*.lof
-*.log
-*.lot
-*.fls
-*.out
-*.toc
-*.fmt
-*.fot
-*.cb
-*.cb2
-.*.lb
-
-## Intermediate documents:
-*.dvi
-*.xdv
+!Efficient_*.R
+*-blx.aux
+*-blx.bib
+*-concordance.tex
 *-converted-to.*
-# these rules might exclude image files for figures etc.
-# *.ps
-# *.eps
-# *.pdf
-
-## Generated if empty string is given at "Please type another file name for output:"
-.pdf
-
-## Bibliography auxiliary files (bibtex/biblatex/biber):
+*-gnuplottex-*
+*-tags.tex
+*-tikzDictionary
+*.4ct
+*.4tc
+*.?end
+*.[1-9]
+*.[1-9]R
+*.[1-9][0-9]
+*.[1-9][0-9]R
+*.[1-9][0-9][0-9]
+*.[1-9][0-9][0-9]R
+*.acn
+*.acr
+*.alg
+*.aux
+*.auxlock
+*.backup
+*.bak
 *.bbl
 *.bcf
 *.blg
-*-blx.aux
-*-blx.bib
-*.run.xml
-
-## Build tool auxiliary files:
-*.fdb_latexmk
-*.synctex
-*.synctex(busy)
-*.synctex.gz
-*.synctex.gz(busy)
-*.pdfsync
-
-## Build tool directories for auxiliary files
-# latexrun
-latex.out/
-
-## Auxiliary and intermediate files from other packages:
-# algorithms
-*.alg
-*.loa
-
-# achemso
-acs-*.bib
-
-# amsthm
-*.thm
-
-# beamer
-*.nav
-*.pre
-*.snm
-*.vrb
-
-# changes
-*.soc
-
-# comment
-*.cut
-
-# cprotect
+*.brf
+*.cb
+*.cb2
 *.cpt
-
-# elsarticle (documentclass of Elsevier journals)
-*.spl
-
-# endnotes
-*.ent
-
-# fixme
-*.lox
-
-# feynmf/feynmp
-*.mf
-*.mp
-*.t[1-9]
-*.t[1-9][0-9]
-*.tfm
-
-#(r)(e)ledmac/(r)(e)ledpar
-*.end
-*.?end
-*.[1-9]
-*.[1-9][0-9]
-*.[1-9][0-9][0-9]
-*.[1-9]R
-*.[1-9][0-9]R
-*.[1-9][0-9][0-9]R
+*.cut
+*.dpth
+*.dvi
+*.el
 *.eledsec[1-9]
 *.eledsec[1-9]R
 *.eledsec[1-9][0-9]
 *.eledsec[1-9][0-9]R
 *.eledsec[1-9][0-9][0-9]
 *.eledsec[1-9][0-9][0-9]R
-
-# glossaries
-*.acn
-*.acr
+*.end
+*.ent
+*.fdb_latexmk
+*.fff
+*.fls
+*.fmt
+*.fot
+*.gaux
 *.glg
 *.glo
 *.gls
 *.glsdefs
-*.lzo
-*.lzs
-
-# uncomment this for glossaries-extra (will ignore makeindex's style files!)
-# *.ist
-
-# gnuplottex
-*-gnuplottex-*
-
-# gregoriotex
-*.gaux
+*.glstex
 *.gtex
-
-# htlatex
-*.4ct
-*.4tc
+*.hst
+*.html
 *.idv
-*.lg
-*.trc
-*.xref
-
-# hyperref
-*.brf
-
-# knitr
-*-concordance.tex
-# TODO Comment the next line if you want to keep your tikz graphics files
-*.tikz
-*-tikzDictionary
-
-# listings
-*.lol
-
-# luatexja-ruby
-*.ltjruby
-
-# makeidx
 *.idx
 *.ilg
 *.ind
-
-# minitoc
+*.lg
+*.listing
+*.loa
+*.lod
+*.loe
+*.lof
+*.log
+*.lol
+*.lot
+*.lox
+*.lpz
+*.ltjruby
+*.lyx~
+*.lzo
+*.lzs
 *.maf
+*.md
+*.md5
+*.mf
 *.mlf
 *.mlt
+*.mp
 *.mtc[0-9]*
-*.slf[0-9]*
-*.slt[0-9]*
-*.stc[0-9]*
-
-# minted
-_minted*
-*.pyg
-
-# morewrites
 *.mw
-
-# nomencl
+*.nav
 *.nlg
 *.nlo
 *.nls
-
-# pax
+*.out
 *.pax
-
-# pdfpcnotes
+*.pdf
 *.pdfpc
-
-# sagetex
-*.sagetex.sage
+*.pdfsync
+*.pre
+*.pyg
+*.pytxcode
+*.run.xml
 *.sagetex.py
+*.sagetex.sage
 *.sagetex.scmd
-
-# scrwfile
-*.wrt
-
-# sympy
+*.sav
+*.slf[0-9]*
+*.slt[0-9]*
+*.snm
+*.soc
 *.sout
+*.spl
+*.sta
+*.stc[0-9]*
 *.sympy
-sympy-plots-for-*.tex/
-
-# pdfcomment
+*.synctex
+*.synctex(busy)
+*.synctex.gz
+*.synctex.gz(busy)
+*.t[1-9]
+*.t[1-9][0-9]
+*.tar.gz
+*.tdo
+*.tex
+*.tfm
+*.thm
+*.tikz
+*.toc
+*.tps
+*.trc
+*.ttt
 *.upa
 *.upb
-
-# pythontex
-*.pytxcode
-pythontex-files-*/
-
-# tcolorbox
-*.listing
-
-# thmtools
-*.loe
-
-# TikZ & PGF
-*.dpth
-*.md5
-*.auxlock
-
-# todonotes
-*.tdo
-
-# vhistory
-*.hst
 *.ver
-
-# easy-todo
-*.lod
-
-# xcolor
+*.vrb
+*.vtc
+*.wrt
 *.xcp
-
-# xmpincl
-*.xmpi
-
-# xindy
+*.xdv
 *.xdy
-
-# xypic precompiled matrices and outlines
+*.xmpi
+*.xref
 *.xyc
 *.xyd
-
-# endfloat
-*.ttt
-*.fff
-
-# Latexian
-TSWLatexianTemp*
-
-## Editors:
-# WinEdt
-*.bak
-*.sav
-
-# Texpad
-.texpadtmp
-
-# LyX
-*.lyx~
-
-# Kile
-*.backup
-
-# gummi
-.*.swp
-
-# KBibTeX
+*.zip
+*_files/
+*build.log
 *~[0-9]*
-
-# TeXnicCenter
-*.tps
-
-# auto folder when using emacs and auctex
+.*.dummy
+.*.lb
+.*.swp
 ./auto/*
-*.el
-
-# expex forward references with \gathertags
-*-tags.tex
-
-# standalone packages
-*.sta
-
-# Makeindex log files
-*.lpz
-
-# REVTeX puts footnotes in the bibliography by default, unless the nofootinbib
-# option is specified. Footnotes are the stored in a file with suffix Notes.bib.
-# Uncomment the next line to have this generated file ignored.
-#*Notes.bib
-
-### LaTeX Patch ###
-# LIPIcs / OASIcs
-*.vtc
-
-# glossaries
-*.glstex
-
-# End of https://www.toptal.com/developers/gitignore/api/latex
+.deps
+.depsdone.*
+.icd.built
+.pdf
+.texpadtmp
+TSWLatexianTemp*
+_minted*
+acs-*.bib
+deplib
+depslib
+latex.out/
+pythontex-files-*/
+results
+sympy-plots-for-*.tex/
