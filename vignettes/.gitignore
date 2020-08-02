@@ -1,3 +1,5 @@
+!country-lang-vers-prebuilt.pdf
+!efficiency-prebuilt.pdf
 *.R
 *.aux
 *.bbl
@@ -10,17 +12,14 @@
 *.log
 *.out
 *.pdf
-!efficiency-prebuilt.pdf
-!country-lang-vers-prebuilt.pdf
 *.synctex.gz
 *.tex
 *.utf8.md
 *_files/
 *cache*
 .build.timestamp
+country-lang-vers*_files/*
+efficiency*_files/*
 icd.bib
 test*.Rmd
 test2
-efficiency*_files/*
-country-lang-vers*_files/*
-
