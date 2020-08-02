@@ -13,7 +13,7 @@ extern "C" {
 using namespace Rcpp;
 
 // [[Rcpp::export(icd10_short_to_parts_rcpp)]]
-List icd10ShortToParts(const CV& x, const String mnrEmpty) {
+List icd10ShortToParts(const CV& x, const String mnr_empty) {
   R_xlen_t i10sz = x.size();
   CV mjr(i10sz);
   CV mnr(i10sz);
@@ -25,12 +25,13 @@ List icd10ShortToParts(const CV& x, const String mnrEmpty) {
       mnr[i] = NA_STRING;
       continue;
     }
-    std::string s(thisShort.get_cstring()); // maybe faster to use as?
-    s  = strimCpp(s);                       // in place or rewrite? do this at all?
+    // TODO: just use CHARSXP (for xlength), then advance pointer for testing the remainder.
+    std::string s(thisShort.get_cstring());
+    s  = strimCpp(s); // in place or rewrite? do this at all?
     sz = s.size();
     if (sz <= 3 && sz > 0) {
       mjr[i] = s.substr(0, sz);
-      mnr[mnrEmpty];
+      mnr[i] = mnr_empty;
     } else if (sz > 3) {
       mjr[i] = s.substr(0, 3);
       mnr[i] = s.substr(3, sz - 3);
@@ -50,7 +51,7 @@ List icd10DecimalToParts(const CV x, const String mnr_empty = "") {
   if (ilen == 0) { return List::create(_["mjr"] = CV::create(), _["mnr"] = CV::create()); }
 
   for (CV::const_iterator it = x.begin(); it != x.end(); ++it) {
-    String strna = *it;
+    String strna = *it; // TODO: just get CHARSXP and compare to NA_STRING
     if (is_true(all(is_na(CV::create(strna)))) || strna == "") {
       mjrs.push_back(NA_STRING);
       mnrs.push_back(NA_STRING);

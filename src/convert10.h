@@ -1,9 +1,9 @@
 #ifndef CONVERT10_H_
 #define CONVERT10_H_
 
-#include "icd_types.h"
-using namespace Rcpp;
-List icd10ShortToParts(const CV& x, const String mnrEmpty = "");
-List icd10DecimalToParts(const CV& x, const String mnrEmpty = "");
+#include <Rcpp.h>
+typedef Rcpp::CharacterVector CV using namespace Rcpp;
+Rcpp::List icd10ShortToParts(const CV& x, const Rcpp::String mnr_empty = "");
+Rcpp::List icd10DecimalToParts(const CV& x, const Rcpp::String mnr_empty = "");
 
 #endif /* CONVERT10_H_ */

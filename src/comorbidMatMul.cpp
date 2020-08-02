@@ -1,5 +1,4 @@
 // [[Rcpp::depends(RcppEigen)]]
-#include <Rcpp.h> // also includes Rinternals.h
 #include "comorbidMatMul.h"
 #include "fastIntToString.h"
 #include "icd_types.h"
@@ -7,6 +6,7 @@
 #include "mapplus.h"
 #include "refactor.h"
 #include "relevant.h"
+#include <Rcpp.h> // also includes Rinternals.h
 #include <cstring>
 #include <string>
 #include <unordered_set>

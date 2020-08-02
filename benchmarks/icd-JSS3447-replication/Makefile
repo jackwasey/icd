@@ -11,7 +11,7 @@ RMD = efficiency-prebuilt
 UPSFX = _UPDATED
 README_NAME = README-replication
 DEPS_LIB = depslib
-DEPS_DONE = .depsdone.txt
+DEPS_DONE = .depsdone.dummy
 ARTICLE_FILENAME_BASE = Efficient_calculation_of_comorbidities_from_medical_codes
 
 # derived:
@@ -49,7 +49,7 @@ ifeq ($(OS),Windows_NT)
 	RSCRIPT := $(shell echo '$(R_HOME)\\bin\\Rscript')
 endif 
 
-# a quick run of the quickest part of the benchmarking, to show it works
+.PHONY: default ## a quick run of the quickest part of the benchmarking, to show it works
 default: result3
 
 # make the replications materials for JSS submission, without running heavy
@@ -68,16 +68,14 @@ submission $(SUB_TGZ): $(ICD_SRC_TGZ) purl readme $(ARTICLE_PDF) bench3
 $(ARTICLE_PDF):
 	$(RSCRIPT) -e 'rmarkdown::render("../../vignettes/$(RMD).Rmd", output_dir = getwd(), output_file = "$(ARTICLE_PDF)")'
 
-purl: $(REPL_R)
 
-$(REPL_R): ../../vignettes/$(RMD).Rmd
+$(REPL_R) purl: ../../vignettes/$(RMD).Rmd
 	$(RSCRIPT) -e 'knitr::purl("../../vignettes/$(RMD).Rmd", output = "$(REPL_R)")'
 
-$(README_NAME).html $(README_NAME).pdf $(README_NAME).md: $(README_NAME).Rmd
+readme $(README_NAME).html $(README_NAME).pdf $(README_NAME).md: $(README_NAME).Rmd
 	$(RSCRIPT) -e 'rmarkdown::render("$(README_NAME).Rmd", output_format = "all")'
 
-readme: $(README_NAME).html
-
+.PHONY: deps
 deps: $(DEPS_DONE)
 
 # belt and braces - install dependencies function/script should check
@@ -179,7 +177,7 @@ install_icd_in_temp_lib_dbg: $(ICD_SRC_TGZ)
 	$(R) CMD INSTALL \
 		--preclean \
 		--debug \
-		--library="$(DEPS_LIB) \
+		--library="$(DEPS_LIB)" \
 		--use-vanilla \
 		--no-clean-on-error \
 		"$(ICD_SRC_TGZ)"
@@ -187,31 +185,30 @@ install_icd_in_temp_lib_dbg: $(ICD_SRC_TGZ)
 install_icd_in_temp_lib: $(ICD_SRC_TGZ)
 	$(R) CMD INSTALL --clean --library="$(DEPS_LIB)" "$(ICD_SRC_TGZ)"
 
+.PHONY: clean
 clean:
-	rm -f $(REPL_R)
-	rm -f icd-.*build.log
+	rm -f $(REPL_R) $(ARTICLE_FILENAME).* icd-.*build.log
 	rm -rf $(ARTICLE_FILENAME)_files/
-	rm -f $(ARTICLE_FILENAME).*
 	rm -f $(README).html $(README).md $(README).pdf
 	rm -f $(NAME).tar.gz icd_*.tar.gz $(NAME)-JSS*.tar.gz
 
+.PHONY: cleanbench
 cleanbench:
-	rm -f bench-versus-result* \
-		bench-versus-dput* \
-		dput-latest*.R \
-		dput-dated*.R \
+	rm -f bench-versus-result* bench-versus-dput* \
+		dput-latest*.R dput-dated*.R \
 		result*.rds \
-		results/dput-latest*.R \
-		results/dput-dated*.R \
+		results/dput-latest*.R results/dput-dated*.R \
 		results/result*.rds
 
+.PHONY: cleandeps
 cleandeps:
 	rm -f $(DEPS_DONE)
 	rm -rf $(DEPS_LIB)
 
-style install-dependencies.R bench-versus.R find-comorbidity-cutoff.R:
+style: install-dependencies.R bench-versus.R find-comorbidity-cutoff.R
 	$(RSCRIPT) -e 'styler::style_file(c("install-dependencies.R", "bench-versus.R", "util-bench.R", "find-comorbidity-cutoff.R"))'
 
+.PHONY: destroy
 destroy: cleandeps cleanbench clean
 
 dockerbuild: Dockerfile install-dependencies.R util-bench.R find-comorbidities-cutoff.R bench-versus.R Makefile
@@ -223,4 +220,10 @@ docker: dockerbuild
 # following are phony targets
 .benchall: bench3 bench4 bench5 bench6 bench7 bench8 bench9
 .resultall: result3 result4 result5 result6 result7 result8 result9
-.PHONY: default deps all purl readme docker dockerbuild clean cleanbench cleandeps destroy submission replmat style
+
+.PHONY: all
+all: result3
+
+.PHONY: test
+test: $(ICD_SRC_TGZ)
+	$(R) CMD check --no-build-vignettes $(ICD_SRC_TGZ)
