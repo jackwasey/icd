@@ -65,7 +65,11 @@ grep -E -r -i -q "Copyright.*(${re_older_yrs%?}).*Wasey" . || ok=1
 # check package version correct everywhere, with non_GNU sed
 desc_ver="$(sed -n '/^Version/,/Version/s/Version: \([[:digit:].]\{3,\}\)/\1/p' DESCRIPTION)"
 news_ver="$(sed -n '/^## Version/ {s/## Version \([[:digit:].]\{3,\}\)[[:space:]]*$/\1/;p;q}' NEWS.md)"
-conf_ver="$(sed -n '/AC_INIT/,/AC_INIT/s/[[:space:]]*AC_INIT.*\[\([[:digit:].]\{3,\}\)\].*/\1/p' configure.ac)"
+if [[ -f configure.ac ]]; then
+    conf_ver="$(sed -n '/AC_INIT/,/AC_INIT/s/[[:space:]]*AC_INIT.*\[\([[:digit:].]\{3,\}\)\].*/\1/p' configure.ac)"
+else
+    conf_ver="${news_ver}"
+fi
 
 if [[ "${desc_ver}" == "${news_ver}" ]] && [[ "${desc_ver}" == "${conf_ver}" ]]; then
     :

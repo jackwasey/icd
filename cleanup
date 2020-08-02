@@ -1,7 +1,7 @@
 #!/bin/sh
 
+# rm -f src/Makevars src/makevars.h
 rm -f config.log config.status aclocal.m4 \
-    src/Makevars src/makevars.h makevars.h \
     src/*.o src/*.a src/*.d src/*.dll src/*.dylib \
     vignettes/*.aux \
     vignettes/*.log \
@@ -13,6 +13,7 @@ rm -f config.log config.status aclocal.m4 \
     vignettes/*.knit.md \
     vignettes/*.utf8.md \
     icd_*.tar.gz \
-    icd-0*.log
+    icd-0*.log 
 
-rm -rf autom4te.cache 
+rm -rf autom4te.cache \
+    icd.Rcheck

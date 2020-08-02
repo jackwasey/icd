@@ -1,14 +1,16 @@
 **/*.un~
-*.orig
+*.bak
 *.bak
 *.dll
 *.gcno
 *.md
 *.o
+*.orig
 *.so
 *.swp
 *.tex
 *.xcworkspace
+*build.log
 .DS_Store
 .RData
 .Rhistory
@@ -18,8 +20,10 @@
 .checkpoint
 .cproject
 .externalToolBuilders
+.gdb_history
 .project
 .settings
+.travis.yml.*
 Meta
 README.html
 Rplot.png
@@ -27,7 +31,6 @@ Rprof.out
 aclocal.m4
 autom4te.cache
 autoscan.log
-bench-versus-result*.rds
 callgrind.*
 ccache.log
 confdefs.h
@@ -61,8 +64,4 @@ test-all-disabled.R
 tests/testthat-split-*.R
 tests/testthat/Rplots.pdf
 testthat-disabled.R
-bench-refactor.html
-.gdb_history
-.travis.yml.*
 travis-notes.txt
-*-build.log

@@ -23,7 +23,7 @@ String icd9AddLeadingZeroesMajorSingle(String mjr) {
   std::string m(mjr);
   const char* mstr = mjr.get_cstring();
   if (!icd9IsASingleVE(mstr)) {
-    switch (LENGTH(mjr.get_sexp())) {
+    switch (XLENGTH(mjr.get_sexp())) {
     case 0:
       return (NA_STRING);
     case 1:
@@ -34,7 +34,7 @@ String icd9AddLeadingZeroesMajorSingle(String mjr) {
       return (m);
     }
   } else {
-    switch (LENGTH(mjr.get_sexp())) {
+    switch (XLENGTH(mjr.get_sexp())) {
     case 1:
       return (NA_STRING);
     case 2:
