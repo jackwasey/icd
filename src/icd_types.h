@@ -2,8 +2,9 @@
 #define ICD_TYPES_H_
 
 // also add LinkingTo element in DESCRIPTION to enable
-#include <Eigen/Sparse>
+#include <Rcpp.h>
 #include <RcppEigen.h>
+#include <Eigen/Sparse>
 
 #include <string>
 #include <unordered_map>
@@ -18,9 +19,8 @@ typedef Rcpp::CharacterVector CV;
 typedef std::string Str;
 typedef std::vector<std::string> VecStr;
 
-typedef Eigen::Triplet<int> Triplet;
+typedef Eigen::Triplet<int, R_xlen_t> Triplet;
 typedef Eigen::SparseMatrix<int, Eigen::RowMajor> PtsSparse;
 typedef Eigen::MatrixXi DenseMap;
-typedef Rcpp::sugar::IndexHash<STRSXP> IHS;
 
 #endif /* ICD_TYPES_H_ */

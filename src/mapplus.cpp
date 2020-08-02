@@ -8,8 +8,8 @@
 #include <cstring>
 #include <string>
 
+typedef Rcpp::sugar::IndexHash<STRSXP> IHS;
 using namespace Rcpp;
-
 // MapPlus constructor - a reduced comobidity map for one computation
 MapPlus::MapPlus(const List& mapList, const Relevant& relevant) {
   // take a map of character vectors and reduce it to only relevant

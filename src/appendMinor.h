@@ -3,7 +3,7 @@
 
 #include <Rcpp.h>
 typedef Rcpp::CharacterVector CV;
-CV icd9MajMinToCode(const CV& mjr, const CV& mnr, const bool short_code);
+CV icd9MajMinToCode(const CV mjr, const CV mnr, const bool short_code);
 CV icd9MajMinToShort(const CV& mjr, const CV& mnr);
 CV icd9MajMinToDecimal(const CV& mjr, const CV& mnr);
 

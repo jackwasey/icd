@@ -5,7 +5,8 @@
 #include <string.h>  // for strlen
 #include <string>    // for basic_string, operator!=
 #include <vector>    // for vector, vector<>::iterator
-
+#include <Rcpp.h>
+typedef Rcpp::CharacterVector CV;
 using namespace Rcpp;
 
 //' Convert \code{mjr} and \code{mnr} vectors to single code
@@ -16,7 +17,7 @@ using namespace Rcpp;
 //' @keywords internal manip
 //' @noRd
 // [[Rcpp::export]]
-CV icd9MajMinToCode(const CV& mjr, const CV& mnr, const bool short_code) {
+CV icd9MajMinToCode(const CV mjr, const CV mnr, const bool short_code) {
 #ifdef ICD_DEBUG_TRACE
   Rcout << "icd9MajMinToCode: mjr.size() = " << mjr.size() << " and mnr.size() = " << mnr.size()
         << "\n";

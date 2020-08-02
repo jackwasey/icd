@@ -8,13 +8,13 @@
 using namespace Rcpp;
 
 // icd9MajMinToCode
-CV icd9MajMinToCode(const CV& mjr, const CV& mnr, const bool short_code);
+CV icd9MajMinToCode(const CV mjr, const CV mnr, const bool short_code);
 RcppExport SEXP _icd_icd9MajMinToCode(SEXP mjrSEXP, SEXP mnrSEXP, SEXP short_codeSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const CV& >::type mjr(mjrSEXP);
-    Rcpp::traits::input_parameter< const CV& >::type mnr(mnrSEXP);
+    Rcpp::traits::input_parameter< const CV >::type mjr(mjrSEXP);
+    Rcpp::traits::input_parameter< const CV >::type mnr(mnrSEXP);
     Rcpp::traits::input_parameter< const bool >::type short_code(short_codeSEXP);
     rcpp_result_gen = Rcpp::wrap(icd9MajMinToCode(mjr, mnr, short_code));
     return rcpp_result_gen;

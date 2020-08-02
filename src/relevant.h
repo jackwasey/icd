@@ -1,5 +1,7 @@
 #include "icd_types.h"
 #include "local.h"
+
+typedef Rcpp::sugar::IndexHash<STRSXP> IHS;
 using namespace Rcpp;
 
 #ifndef RELEVANT_H_
