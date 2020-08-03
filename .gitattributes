@@ -11,8 +11,8 @@ tools/* text=lf
 # need to run:
 # git config --local include.path ../.gitconfig
 # for local PNG/PDF friendly diffing to work
-#*.png diff=png
-#*.pdf diff=pdf
+*.png diff=png
+*.pdf diff=pdf
 
 ## after my bug report, I think Rcpp is now more deterministic
 ## git config diff.nodiff.command /usr/bin/true or /bin/true
@@ -21,5 +21,7 @@ tools/* text=lf
 ## git config then has 'merge.theirs.driver true'
 # *RcppExports* merge=theirs
 # *.Rd merge=theirs
+
+icd.Rproj filter=rprojcruft
 
 /NEWS.md merge=union

@@ -6,3 +6,5 @@
 [diff "nodiff"]
     command = /bin/true
 
+[filter "rprojcruft"]
+	clean = sed -e '/^Package/d'
