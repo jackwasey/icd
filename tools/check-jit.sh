@@ -9,13 +9,11 @@ function finish {
     echo "Finished with $tmpd"
 }
 trap finish EXIT
-#rsync -r --exclude=".git" "${ICD_HOME:-$HOME/rprojects/icd}" "$tmpd"
 cd "$tmpd"
 # build with standard release options, i.e. compacting vignettes.
 "${whereami}"/build-full.sh
 # for all environment variable options see here:
 # https://cran.r-project.org/doc/manuals/r-release/R-ints.html#Tools
-#R_MAKEVARS_USER="$HOME/.R/Makevars.clang" \
 MAKEFLAGS=-j$(getconf _NPROCESSORS_ONLN) \
     _R_CHECK_ALL_NON_ISO_C_=TRUE \
     _R_CHECK_ALWAYS_LOG_VIGNETTE_OUTPUT_=TRUE \

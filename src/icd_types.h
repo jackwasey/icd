@@ -3,6 +3,11 @@
 
 // also add LinkingTo element in DESCRIPTION to enable
 #include <Rcpp.h>
+#ifndef EIGEN_PERMANENTLY_DISABLE_STUPID_WARNINGS
+// before including Eigen
+#define EIGEN_PERMANENTLY_DISABLE_STUPID_WARNINGS
+#endif
+#include <Eigen/Eigen>
 #include <RcppEigen.h>
 #include <Eigen/Sparse>
 

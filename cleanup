@@ -5,7 +5,7 @@
 test -f configure && rm -f src/Makevars src/makevars.h
 
 rm -f config.log config.status aclocal.m4 \
-    src/*.o src/*.a src/*.d src/*.dll src/*.dylib \
+    src/*.o src/*.a src/*.d \
     vignettes/*.aux \
     vignettes/*.log \
     vignettes/*.out \

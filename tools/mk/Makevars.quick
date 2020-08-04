@@ -1,0 +1,6 @@
+CFLAGS = -O0 -w
+CXXFLAGS = -O0 -w
+CXX11FLAGS = -O0 -w
+CC := ccache clang
+CXX := ccache clang++
+CXX11 := ccache clang++ -std=c++11

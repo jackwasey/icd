@@ -6,14 +6,13 @@
 #include <functional>
 #include <string.h>
 #include <utility> // std::pair
-using namespace Rcpp;
 
 typedef std::pair<std::string, std::size_t> pas_std;
-typedef std::pair<String, R_xlen_t> pas_rcpp;
+typedef std::pair<Rcpp::String, R_xlen_t> pas_rcpp;
 bool icd9Compare(Rcpp::String a, Rcpp::String b);
 bool icd9CompareStd(std::string a, std::string b);
 
-CharacterVector icd9Sort(const Rcpp::CharacterVector& x);
+Rcpp::CharacterVector icd9Sort(const Rcpp::CharacterVector& x);
 
 // or IntegerVector?
 std::vector<std::size_t> icd9OrderStd(const std::vector<std::string>& x);

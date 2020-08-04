@@ -14,9 +14,8 @@ cd "$tmpd"
 "${ICD_HOME}"/tools/build-full.sh
 # for all environment variable options see here:
 # https://cran.r-project.org/doc/manuals/r-release/R-ints.html#Tools
-# R_MAKEVARS_USER="$HOME/.R/Makevars.mac.quick" \
 
-# using --as-cran, I think, over-rides any user environment for check
+# not using --as-cran, I think, over-rides any user environment for check
 tarball="$(ls -t "$tmpd"/icd*.tar.gz | head -1)"
 R_CHECK_ENVIRON="${ICD_HOME}/env/full" \
     R CMD check "${tarball}"

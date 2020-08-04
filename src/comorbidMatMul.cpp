@@ -76,7 +76,9 @@ void buildVisitCodesSparseWide(
     if (Rf_isFactor(data_col)) {
       const IntegerVector& data_col_fc = (IntegerVector)data_col;
       DEBUG("codes are still in a factor...");
+#ifdef ICD_DEAD
       const CV& code_levels = data_col_fc.attr("levels");
+#endif
       const IntegerVector codes_relevant =
         refactor(data_col_fc, relevant.str_codes, true, validate);
       assert(rows.size() == codes_relevant.size());

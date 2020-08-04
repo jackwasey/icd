@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-#R_MAKEVARS_USER=${ICD_HOME}/tools/Makevars.quick - this then ignores ~/.R/Makevars.*
+#R_MAKEVARS_USER=${ICD_HOME}/tools/mk/Makevars.quick # then ignores ~/.R/Makevars.* unless this is then included
 #shellcheck disable=SC2034
 ICD_TEST_SLOW=FALSE
 ICD_OFFLINE=TRUE
