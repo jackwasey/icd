@@ -98,7 +98,8 @@ random_string <- function(n, max_chars = 4) {
   apply(v, 1, paste0, collapse = "")
 }
 
-#' allow \pkg{microbenchmark} to compare multiple results
+#' Allow \CRANpkg{microbenchmark} to compare multiple results
+#'
 #' @param x list of values to compare for identity, e.g. results from evaluated
 #'   expression in \code{microbenchmark::microbenchmark}
 #' @keywords internal

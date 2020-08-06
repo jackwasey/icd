@@ -220,6 +220,15 @@
   invisible(icd9cm_billable27[reorder, ])
 }
 
+#' Return a function which returns specific ICD data
+#'
+#' This is a good use of functional programming, although more hidden for people
+#' exploring \CRANpkg{icd} code. The alternative would be pre-generating
+#' (voluminous) extra code. Adding an additional year of ICD-10-CM data, for
+#' example, becomes as simple as adding the appropriate URLs and file names to
+#' the list structure \code{icd:::.icd10cm_sources}, found in
+#' \code{R/icd-cm-sources.R}.
+#' @keywords internal
 .make_icd9cm_parse_leaf_fun <- function(year) {
   # Must force, so that the values to the arguments are not promises which are
   # later evaluated in a different environment.

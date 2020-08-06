@@ -1,7 +1,7 @@
 #' Assign all the data in the package to the calling environment
 #'
-#' Used by \pkg{icd} to load all the data into its environment. This should not
-#' be needed by users.
+#' Used by \CRANpkg{icd} to load all the data into its environment. This should
+#' not be needed by users.
 #' @examples
 #' \dontrun{
 #' icd:::assign_icd_data()

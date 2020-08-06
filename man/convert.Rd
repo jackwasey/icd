@@ -4,10 +4,10 @@
 \alias{convert}
 \title{Convert ICD data between formats and structures.}
 \description{
-ICD codes are represented in \emph{short} and \emph{decimal} forms. The
-short form has up to 5 digits, or V or E followed by up to four digits. The
-decimal form has a decimal point to delimit the top-level (henceforth
-\emph{major}) category, and the \emph{minor} part containing the subsidiary
+ICD codes are represented in \emph{short} and \emph{decimal} forms. The short
+form has up to 5 digits, or V or E followed by up to four digits. The decimal
+form has a decimal point to delimit the top-level (henceforth \emph{major})
+category, and the \emph{minor} part containing the subsidiary
 classifications.
 }
 \details{
@@ -15,7 +15,7 @@ For conversions of ICD-9 or ICD-10 codes between the \emph{short} and
 \emph{decimal} forms, use \code{\link{short_to_decimal}} and
 \code{\link{decimal_to_short}}.
 
-\pkg{icd} does not covert ICD-9 to ICD-10 codes yet.
+\CRANpkg{icd} does not covert ICD-9 to ICD-10 codes yet.
 }
 \seealso{
 Other ICD data conversion: 

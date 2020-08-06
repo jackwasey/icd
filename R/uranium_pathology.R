@@ -4,7 +4,7 @@
 #' provided in the public domain. It requires the file to be downloaded from
 #' source, or already stored in the raw data directory, and it appears that the
 #' function \code{odbcConnectAccess2007} is only available in the Windows build
-#' of \pkg{RODBC}.
+#' of \CRANpkg{RODBC}.
 #' @template parse-template
 #' @source \url{https://ustur.wsu.edu/about-us/}
 #' @examples

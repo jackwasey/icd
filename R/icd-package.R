@@ -57,8 +57,8 @@
 #'   \code{\link{is_defined}} checks whether ICD-9 codes correspond to defined
 #'   diagnoses or diagnostic groups in the hierarchy of ICD codes.
 #'   \code{\link{is_leaf}} (and for the US, \code{\link{is_billable}}) determine
-#'   whether given codes are leaves in the hierarchy, or not. \pkg{icd} may need
-#'   to download data due to package size or copyright restrictions on
+#'   whether given codes are leaves in the hierarchy, or not. \CRANpkg{icd} may
+#'   need to download data due to package size or copyright restrictions on
 #'   redistributing data, and needs a cache directory and your permission to do
 #'   this. Use \code{\link{set_icd_data_dir}} to do this, e.g.,
 #'   \code{set_icd_data_dir()} for a default location in a suitable place for
@@ -92,8 +92,8 @@
 #'   etc.) sorts in hierarchical, then numerical order, so '100.0' comes before
 #'   '100.00', for example.
 #'
-#'   The comorbidity functions in \pkg{icd} accept 'wide' or 'long' format data,
-#'   but you may wish to use \code{\link{wide_to_long}} and
+#'   The comorbidity functions in \CRANpkg{icd} accept 'wide' or 'long' format
+#'   data, but you may wish to use \code{\link{wide_to_long}} and
 #'   \code{\link{long_to_wide}}, which convert between these two most common
 #'   data structures containing patient disease data. This is more sophisticated
 #'   and tailored to the problem than base reshaping or packages like

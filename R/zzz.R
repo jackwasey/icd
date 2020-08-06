@@ -8,7 +8,7 @@
 
 .onLoad <- function(libname, pkgname) {
   if (.icd_data_dir_okay() && is.null(.get_opt("offline"))) {
-    .set_opt(offline = FALSE)
+    .opt("offline", FALSE)
   }
   if (is.null(.get_opt("who_url"))) {
     .set_opt(who_url = "https://icd.who.int/browse10")
@@ -97,5 +97,9 @@ utils::globalVariables(c(
   "icd10cm2019",
   "icd9cm_hierarchy"
 ))
+
+.dev_mode <- function() {
+
+}
 
 # nocov end

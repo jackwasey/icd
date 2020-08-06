@@ -1,7 +1,7 @@
 #' Get the raw data directory
 #'
 #' Following Hadley Wickham recommendations in R Packages, this should be in
-#' \code{inst/extdata}. \pkg{devtools} overrides \code{system.file}.
+#' \code{inst/extdata}. \CRANpkg{devtools} overrides \code{system.file}.
 #' @keywords internal
 #' @noRd
 .get_raw_data_path <- function(file_name) {

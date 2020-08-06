@@ -1,9 +1,9 @@
 #' Fast Factor Generation
 #'
 #' This function generates factors more quickly, without leveraging
-#' \pkg{fastmatch}. The speed increase with \pkg{fastmatch} for ICD-9 codes
-#' was about 33% reduction for 10 million codes. SOMEDAY could be faster still
-#' using \pkg{Rcpp}, and a hashed matching algorithm.
+#' \CRANpkg{fastmatch}. The speed increase with \CRANpkg{fastmatch} for ICD-9
+#' codes was about 33% reduction for 10 million codes. SOMEDAY could be faster
+#' still using \CRANpkg{Rcpp}, and a hashed matching algorithm.
 #'
 #' \code{NaN}s are converted to \code{NA} when used on numeric values. Extracted
 #' from https://github.com/kevinushey/Kmisc.git

@@ -76,6 +76,49 @@ NULL
   getOption(.opt_full_name(o), default = default)
 }
 
+#' get or set a \CRANpkg{icd} option
+#'
+#' Priority: value specified as argument; R option; system environment variable
+#' @keywords internal
+#' @noRd
+.opt <- function(opt_name,
+                 value = NULL,
+                 target = c("opt", "env", "all"),
+                 default = NULL) {
+  target <- match.arg(target, several.ok = TRUE)
+  if ("all" %in% target) target <- c("opt", "env")
+  opt_name <- sub("icd[_.]", "", opt_name, ignore.case = TRUE)
+  env_name <- paste0("ICD_", toupper(opt_name))
+  opt_name <- paste0("icd.", tolower(opt_name))
+  opt_val <- getOption(opt_name, default = default)
+  opt_set <- !identical(opt_val, default)
+  env_val <- Sys.getenv(env_name, unset = NA)
+  env_set <- !is.na(env_val)
+  arg_set <- !is.null(value)
+  if (is.null(value)) {
+    if (arg_set) {
+      return(value)
+    }
+    if (opt_set) {
+      return(opt_val)
+    }
+    if (env_set) {
+      return(env_val)
+    }
+    return(default)
+  }
+  if ("opt" %in% target) {
+    opt_list <- list()
+    opt_list[1] <- value
+    names(opt_list) <- opt_name
+    do.call("options", opt_list)
+  }
+  if ("env" %in% target) {
+    Sys.setenv(env_name = value)
+  }
+  invisible(value)
+}
+
 .verbose <- function(x) {
   if (missing(x)) {
     v <- .get_opt("verbose")
@@ -185,9 +228,9 @@ NULL
   invisible(NULL)
 }
 
-.env_var_is_false <- function(x) {
-  ev <- Sys.getenv(x, unset = "")
-  tolower(ev) %in% c(
+
+.is_false_ish <- function(x) {
+  tolower(x) %in% c(
     "n",
     "no",
     "false",
@@ -195,14 +238,22 @@ NULL
   )
 }
 
-.env_var_is_true <- function(x) {
-  ev <- Sys.getenv(x, unset = "")
-  tolower(ev) %in% c(
+
+.is_true_ish <- function(x) {
+  tolower(x) %in% c(
     "y",
     "yes",
     "true",
     "1"
   )
+}
+
+.env_var_is_false <- function(x) {
+  .is_false_ish(Sys.getenv(x, unset = ""))
+}
+
+.env_var_is_true <- function(x) {
+  .is_true_ish(Sys.getenv(x, unset = ""))
 }
 
 with_offline <- function(offline, code) {

@@ -182,7 +182,7 @@ and a column of ICD codes. The \code{data.frame} may be in \sQuote{long} or
 and \code{\link{uranium_pathology}} data.}
 
 \item{map}{A named list of the comorbidities with each list item containing a
-vector of decimal ICD-9 codes. \pkg{icd} includes a number of these, e.g.,
+vector of decimal ICD-9 codes. \CRANpkg{icd} includes a number of these, e.g.,
 \code{\link{icd9_map_elix}}. Alternatively, this can be omitted if the
 convenience functions, such as \code{icd10_comorbid_charlson} are used
 directly. \code{map} should be in the form of a list, with the names of the
