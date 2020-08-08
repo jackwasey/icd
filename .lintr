@@ -1,3 +1,3 @@
-linters: with_defaults(object_name_linter = NULL, object_usage_linter = NULL, line_length_linter(90), object_length_linter(length = 36L), undesirable_function_linter("sapply"), trailing_whitespace_linter = NULL)
+linters: with_defaults(object_name_linter = NULL, object_usage_linter = NULL, cyclocomp_linter = NULL, line_length_linter(90), object_length_linter(length = 36L), undesirable_function_linter("sapply"), trailing_whitespace_linter = NULL, todo_comment_linter, extraction_operator_linter, T_and_F_symbol_linter, unneeded_concatenation_linter, undesirable_operator_linter, absolute_path_linter, implicit_integer_linter, semicolon_terminator_linter, undesirable_function_linter, nonportable_path_linter)
 exclusions: c(list("R/z-deprecated.R", "R/RcppExports.R", "R/benchmark.R"), list.files(path = "inst/doc", recursive = TRUE, full.names = TRUE))
 cache: TRUE

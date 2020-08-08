@@ -72,7 +72,8 @@ children.icd9cm <- function(x,
         icd9_children_short_unordered_defined_rcpp(
           x = toupper(x),
           defined = icd9cm_hierarchy$code
-          # TODO: directly get billable/leaf status here, instead of calculating again later.
+          # TODO: directly get billable/leaf status here, instead of calculating
+          # again later.
         )
       } else {
         icd9_children_short_unordered_undefined_rcpp(toupper(x))

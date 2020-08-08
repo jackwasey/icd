@@ -228,7 +228,6 @@ NULL
   invisible(NULL)
 }
 
-
 .is_false_ish <- function(x) {
   tolower(x) %in% c(
     "n",
@@ -237,7 +236,6 @@ NULL
     "0"
   )
 }
-
 
 .is_true_ish <- function(x) {
   tolower(x) %in% c(

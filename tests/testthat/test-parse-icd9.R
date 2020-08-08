@@ -187,7 +187,8 @@ test_that("explain icd9GetChapters simple input", {
   expect_equal(chaps3, chaps7)
   expect_equal(chaps3, chaps8)
   chap9 <- .icd9_get_chapters(NA, short_code = FALSE)
-  # (note the following fails if a factor has `NA` levels, just R3.4+?) There was a change. see `?factor`
+  # (note the following fails if a factor has `NA` levels, just R3.4+?) There
+  # was a change. see `?factor`
   expect_true(all(is.na(chap9)))
 })
 
