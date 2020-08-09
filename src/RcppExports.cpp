@@ -10,8 +10,6 @@ using namespace Rcpp;
 // icd9MajMinToCode
 Rcpp::CharacterVector icd9MajMinToCode(Rcpp::CharacterVector mjr, Rcpp::CharacterVector mnr, const bool short_code);
 RcppExport SEXP _icd_icd9MajMinToCode(SEXP mjrSEXP, SEXP mnrSEXP, SEXP short_codeSEXP) {
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wcast-function-type"
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -21,13 +19,10 @@ BEGIN_RCPP
     rcpp_result_gen = Rcpp::wrap(icd9MajMinToCode(mjr, mnr, short_code));
     return rcpp_result_gen;
 END_RCPP
-#pragma GCC diagnostic pop
 }
 // icd9MajMinToShort
 Rcpp::CharacterVector icd9MajMinToShort(Rcpp::CharacterVector mjr, Rcpp::CharacterVector mnr);
 RcppExport SEXP _icd_icd9MajMinToShort(SEXP mjrSEXP, SEXP mnrSEXP) {
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wcast-function-type"
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -36,13 +31,10 @@ BEGIN_RCPP
     rcpp_result_gen = Rcpp::wrap(icd9MajMinToShort(mjr, mnr));
     return rcpp_result_gen;
 END_RCPP
-#pragma GCC diagnostic pop
 }
 // icd9MajMinToDecimal
 Rcpp::CharacterVector icd9MajMinToDecimal(Rcpp::CharacterVector mjr, Rcpp::CharacterVector mnr);
 RcppExport SEXP _icd_icd9MajMinToDecimal(SEXP mjrSEXP, SEXP mnrSEXP) {
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wcast-function-type"
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -51,13 +43,10 @@ BEGIN_RCPP
     rcpp_result_gen = Rcpp::wrap(icd9MajMinToDecimal(mjr, mnr));
     return rcpp_result_gen;
 END_RCPP
-#pragma GCC diagnostic pop
 }
 // setDecimalDiag
 void setDecimalDiag(Rcpp::RObject& x, bool value);
 RcppExport SEXP _icd_setDecimalDiag(SEXP xSEXP, SEXP valueSEXP) {
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wcast-function-type"
 BEGIN_RCPP
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< Rcpp::RObject& >::type x(xSEXP);
@@ -65,13 +54,10 @@ BEGIN_RCPP
     setDecimalDiag(x, value);
     return R_NilValue;
 END_RCPP
-#pragma GCC diagnostic pop
 }
 // setShortDiag
 void setShortDiag(Rcpp::RObject& x, bool value);
 RcppExport SEXP _icd_setShortDiag(SEXP xSEXP, SEXP valueSEXP) {
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wcast-function-type"
 BEGIN_RCPP
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< Rcpp::RObject& >::type x(xSEXP);
@@ -79,26 +65,20 @@ BEGIN_RCPP
     setShortDiag(x, value);
     return R_NilValue;
 END_RCPP
-#pragma GCC diagnostic pop
 }
 // categorize_rcpp
 List categorize_rcpp();
 RcppExport SEXP _icd_categorize_rcpp() {
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wcast-function-type"
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     rcpp_result_gen = Rcpp::wrap(categorize_rcpp());
     return rcpp_result_gen;
 END_RCPP
-#pragma GCC diagnostic pop
 }
 // icd10ChildrenDefined
 CharacterVector icd10ChildrenDefined(const CharacterVector& x, const List& lookup, const IntegerVector& nc, const bool warn);
 RcppExport SEXP _icd_icd10ChildrenDefined(SEXP xSEXP, SEXP lookupSEXP, SEXP ncSEXP, SEXP warnSEXP) {
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wcast-function-type"
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -109,13 +89,10 @@ BEGIN_RCPP
     rcpp_result_gen = Rcpp::wrap(icd10ChildrenDefined(x, lookup, nc, warn));
     return rcpp_result_gen;
 END_RCPP
-#pragma GCC diagnostic pop
 }
 // simplifyMapLexicographic
 Rcpp::List simplifyMapLexicographic(const CV& pt_codes, const List& map);
 RcppExport SEXP _icd_simplifyMapLexicographic(SEXP pt_codesSEXP, SEXP mapSEXP) {
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wcast-function-type"
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -124,13 +101,10 @@ BEGIN_RCPP
     rcpp_result_gen = Rcpp::wrap(simplifyMapLexicographic(pt_codes, map));
     return rcpp_result_gen;
 END_RCPP
-#pragma GCC diagnostic pop
 }
 // comorbidMatMulWide
 LogicalMatrix comorbidMatMulWide(const DataFrame& data, const List& map, const std::string id_name, const CV& code_names, const bool validate);
 RcppExport SEXP _icd_comorbidMatMulWide(SEXP dataSEXP, SEXP mapSEXP, SEXP id_nameSEXP, SEXP code_namesSEXP, SEXP validateSEXP) {
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wcast-function-type"
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -142,13 +116,10 @@ BEGIN_RCPP
     rcpp_result_gen = Rcpp::wrap(comorbidMatMulWide(data, map, id_name, code_names, validate));
     return rcpp_result_gen;
 END_RCPP
-#pragma GCC diagnostic pop
 }
 // icd9PartsToShort
 CV icd9PartsToShort(const Rcpp::List& parts);
 RcppExport SEXP _icd_icd9PartsToShort(SEXP partsSEXP) {
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wcast-function-type"
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -156,13 +127,10 @@ BEGIN_RCPP
     rcpp_result_gen = Rcpp::wrap(icd9PartsToShort(parts));
     return rcpp_result_gen;
 END_RCPP
-#pragma GCC diagnostic pop
 }
 // icd9PartsToDecimal
 CV icd9PartsToDecimal(const Rcpp::List& parts);
 RcppExport SEXP _icd_icd9PartsToDecimal(SEXP partsSEXP) {
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wcast-function-type"
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -170,13 +138,10 @@ BEGIN_RCPP
     rcpp_result_gen = Rcpp::wrap(icd9PartsToDecimal(parts));
     return rcpp_result_gen;
 END_RCPP
-#pragma GCC diagnostic pop
 }
 // majMinToParts
 Rcpp::List majMinToParts(const CV& mjr, const CV& mnr);
 RcppExport SEXP _icd_majMinToParts(SEXP mjrSEXP, SEXP mnrSEXP) {
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wcast-function-type"
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -185,13 +150,10 @@ BEGIN_RCPP
     rcpp_result_gen = Rcpp::wrap(majMinToParts(mjr, mnr));
     return rcpp_result_gen;
 END_RCPP
-#pragma GCC diagnostic pop
 }
 // icd9ShortToParts
 Rcpp::List icd9ShortToParts(const CV& x, Rcpp::String mnr_empty);
 RcppExport SEXP _icd_icd9ShortToParts(SEXP xSEXP, SEXP mnr_emptySEXP) {
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wcast-function-type"
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -200,13 +162,10 @@ BEGIN_RCPP
     rcpp_result_gen = Rcpp::wrap(icd9ShortToParts(x, mnr_empty));
     return rcpp_result_gen;
 END_RCPP
-#pragma GCC diagnostic pop
 }
 // icd9DecimalToParts
 Rcpp::List icd9DecimalToParts(const CV& icd9Decimal, const Rcpp::String mnr_empty);
 RcppExport SEXP _icd_icd9DecimalToParts(SEXP icd9DecimalSEXP, SEXP mnr_emptySEXP) {
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wcast-function-type"
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -215,13 +174,10 @@ BEGIN_RCPP
     rcpp_result_gen = Rcpp::wrap(icd9DecimalToParts(icd9Decimal, mnr_empty));
     return rcpp_result_gen;
 END_RCPP
-#pragma GCC diagnostic pop
 }
 // icd9ShortToDecimal
 CV icd9ShortToDecimal(const CV& x);
 RcppExport SEXP _icd_icd9ShortToDecimal(SEXP xSEXP) {
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wcast-function-type"
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -229,13 +185,10 @@ BEGIN_RCPP
     rcpp_result_gen = Rcpp::wrap(icd9ShortToDecimal(x));
     return rcpp_result_gen;
 END_RCPP
-#pragma GCC diagnostic pop
 }
 // icd9DecimalToShort
 CV icd9DecimalToShort(const CV& x);
 RcppExport SEXP _icd_icd9DecimalToShort(SEXP xSEXP) {
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wcast-function-type"
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -243,13 +196,10 @@ BEGIN_RCPP
     rcpp_result_gen = Rcpp::wrap(icd9DecimalToShort(x));
     return rcpp_result_gen;
 END_RCPP
-#pragma GCC diagnostic pop
 }
 // icd9GetMajor
 CV icd9GetMajor(const CV& x, const bool short_code);
 RcppExport SEXP _icd_icd9GetMajor(SEXP xSEXP, SEXP short_codeSEXP) {
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wcast-function-type"
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -258,13 +208,10 @@ BEGIN_RCPP
     rcpp_result_gen = Rcpp::wrap(icd9GetMajor(x, short_code));
     return rcpp_result_gen;
 END_RCPP
-#pragma GCC diagnostic pop
 }
 // icd10ShortToParts
 List icd10ShortToParts(const CV& x, const String mnr_empty);
 RcppExport SEXP _icd_icd10ShortToParts(SEXP xSEXP, SEXP mnr_emptySEXP) {
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wcast-function-type"
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -273,13 +220,10 @@ BEGIN_RCPP
     rcpp_result_gen = Rcpp::wrap(icd10ShortToParts(x, mnr_empty));
     return rcpp_result_gen;
 END_RCPP
-#pragma GCC diagnostic pop
 }
 // icd10DecimalToParts
 List icd10DecimalToParts(const CV x, const String mnr_empty);
 RcppExport SEXP _icd_icd10DecimalToParts(SEXP xSEXP, SEXP mnr_emptySEXP) {
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wcast-function-type"
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -288,13 +232,10 @@ BEGIN_RCPP
     rcpp_result_gen = Rcpp::wrap(icd10DecimalToParts(x, mnr_empty));
     return rcpp_result_gen;
 END_RCPP
-#pragma GCC diagnostic pop
 }
 // fastIntToStringRcpp
 CharacterVector fastIntToStringRcpp(IntegerVector x);
 RcppExport SEXP _icd_fastIntToStringRcpp(SEXP xSEXP) {
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wcast-function-type"
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -302,13 +243,10 @@ BEGIN_RCPP
     rcpp_result_gen = Rcpp::wrap(fastIntToStringRcpp(x));
     return rcpp_result_gen;
 END_RCPP
-#pragma GCC diagnostic pop
 }
 // guessShortPlusFactorCpp
 bool guessShortPlusFactorCpp(SEXP x_, int n);
 RcppExport SEXP _icd_guessShortPlusFactorCpp(SEXP x_SEXP, SEXP nSEXP) {
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wcast-function-type"
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -317,13 +255,10 @@ BEGIN_RCPP
     rcpp_result_gen = Rcpp::wrap(guessShortPlusFactorCpp(x_, n));
     return rcpp_result_gen;
 END_RCPP
-#pragma GCC diagnostic pop
 }
 // guessShortCompleteCpp
 bool guessShortCompleteCpp(SEXP x_, SEXP short_code, int n, SEXP icd_name);
 RcppExport SEXP _icd_guessShortCompleteCpp(SEXP x_SEXP, SEXP short_codeSEXP, SEXP nSEXP, SEXP icd_nameSEXP) {
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wcast-function-type"
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -334,13 +269,10 @@ BEGIN_RCPP
     rcpp_result_gen = Rcpp::wrap(guessShortCompleteCpp(x_, short_code, n, icd_name));
     return rcpp_result_gen;
 END_RCPP
-#pragma GCC diagnostic pop
 }
 // icd9_is_n_rcpp
 std::vector<bool> icd9_is_n_rcpp(const VecStr& sv);
 RcppExport SEXP _icd_icd9_is_n_rcpp(SEXP svSEXP) {
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wcast-function-type"
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -348,13 +280,10 @@ BEGIN_RCPP
     rcpp_result_gen = Rcpp::wrap(icd9_is_n_rcpp(sv));
     return rcpp_result_gen;
 END_RCPP
-#pragma GCC diagnostic pop
 }
 // icd9_is_v_rcpp
 std::vector<bool> icd9_is_v_rcpp(const VecStr& sv);
 RcppExport SEXP _icd_icd9_is_v_rcpp(SEXP svSEXP) {
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wcast-function-type"
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -362,13 +291,10 @@ BEGIN_RCPP
     rcpp_result_gen = Rcpp::wrap(icd9_is_v_rcpp(sv));
     return rcpp_result_gen;
 END_RCPP
-#pragma GCC diagnostic pop
 }
 // icd9_is_e_rcpp
 std::vector<bool> icd9_is_e_rcpp(const VecStr& sv);
 RcppExport SEXP _icd_icd9_is_e_rcpp(SEXP svSEXP) {
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wcast-function-type"
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -376,13 +302,10 @@ BEGIN_RCPP
     rcpp_result_gen = Rcpp::wrap(icd9_is_e_rcpp(sv));
     return rcpp_result_gen;
 END_RCPP
-#pragma GCC diagnostic pop
 }
 // icd9AddLeadingZeroesMajorSingle
 String icd9AddLeadingZeroesMajorSingle(String mjr);
 RcppExport SEXP _icd_icd9AddLeadingZeroesMajorSingle(SEXP mjrSEXP) {
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wcast-function-type"
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -390,13 +313,10 @@ BEGIN_RCPP
     rcpp_result_gen = Rcpp::wrap(icd9AddLeadingZeroesMajorSingle(mjr));
     return rcpp_result_gen;
 END_RCPP
-#pragma GCC diagnostic pop
 }
 // icd9AddLeadingZeroesMajorSingleStd
 std::string icd9AddLeadingZeroesMajorSingleStd(std::string m);
 RcppExport SEXP _icd_icd9AddLeadingZeroesMajorSingleStd(SEXP mSEXP) {
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wcast-function-type"
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -404,13 +324,10 @@ BEGIN_RCPP
     rcpp_result_gen = Rcpp::wrap(icd9AddLeadingZeroesMajorSingleStd(m));
     return rcpp_result_gen;
 END_RCPP
-#pragma GCC diagnostic pop
 }
 // icd9AddLeadingZeroesMajor
 CV icd9AddLeadingZeroesMajor(CV mjr);
 RcppExport SEXP _icd_icd9AddLeadingZeroesMajor(SEXP mjrSEXP) {
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wcast-function-type"
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -418,13 +335,10 @@ BEGIN_RCPP
     rcpp_result_gen = Rcpp::wrap(icd9AddLeadingZeroesMajor(mjr));
     return rcpp_result_gen;
 END_RCPP
-#pragma GCC diagnostic pop
 }
 // icd9AddLeadingZeroes
 CV icd9AddLeadingZeroes(CV x, bool short_code);
 RcppExport SEXP _icd_icd9AddLeadingZeroes(SEXP xSEXP, SEXP short_codeSEXP) {
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wcast-function-type"
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -433,13 +347,10 @@ BEGIN_RCPP
     rcpp_result_gen = Rcpp::wrap(icd9AddLeadingZeroes(x, short_code));
     return rcpp_result_gen;
 END_RCPP
-#pragma GCC diagnostic pop
 }
 // icd9ExpandMinor
 Rcpp::CharacterVector icd9ExpandMinor(const std::string& mnr, bool isE);
 RcppExport SEXP _icd_icd9ExpandMinor(SEXP mnrSEXP, SEXP isESEXP) {
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wcast-function-type"
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -448,13 +359,10 @@ BEGIN_RCPP
     rcpp_result_gen = Rcpp::wrap(icd9ExpandMinor(mnr, isE));
     return rcpp_result_gen;
 END_RCPP
-#pragma GCC diagnostic pop
 }
 // icd9ChildrenShortUndefined
 CV icd9ChildrenShortUndefined(const CV& x);
 RcppExport SEXP _icd_icd9ChildrenShortUndefined(SEXP xSEXP) {
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wcast-function-type"
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -462,13 +370,10 @@ BEGIN_RCPP
     rcpp_result_gen = Rcpp::wrap(icd9ChildrenShortUndefined(x));
     return rcpp_result_gen;
 END_RCPP
-#pragma GCC diagnostic pop
 }
 // icd9ChildrenShortDefined
 CV icd9ChildrenShortDefined(const CV& x, const VecStr& defined);
 RcppExport SEXP _icd_icd9ChildrenShortDefined(SEXP xSEXP, SEXP definedSEXP) {
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wcast-function-type"
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -477,13 +382,10 @@ BEGIN_RCPP
     rcpp_result_gen = Rcpp::wrap(icd9ChildrenShortDefined(x, defined));
     return rcpp_result_gen;
 END_RCPP
-#pragma GCC diagnostic pop
 }
 // icd9ChildrenShort
 CV icd9ChildrenShort(const CV& x, const VecStr& defined, bool leaf);
 RcppExport SEXP _icd_icd9ChildrenShort(SEXP xSEXP, SEXP definedSEXP, SEXP leafSEXP) {
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wcast-function-type"
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -493,13 +395,10 @@ BEGIN_RCPP
     rcpp_result_gen = Rcpp::wrap(icd9ChildrenShort(x, defined, leaf));
     return rcpp_result_gen;
 END_RCPP
-#pragma GCC diagnostic pop
 }
 // icd9ChildrenShortUnorderedUndefined
 CV icd9ChildrenShortUnorderedUndefined(const CV& x);
 RcppExport SEXP _icd_icd9ChildrenShortUnorderedUndefined(SEXP xSEXP) {
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wcast-function-type"
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -507,13 +406,10 @@ BEGIN_RCPP
     rcpp_result_gen = Rcpp::wrap(icd9ChildrenShortUnorderedUndefined(x));
     return rcpp_result_gen;
 END_RCPP
-#pragma GCC diagnostic pop
 }
 // icd9ChildrenShortUnorderedDefined
 CV icd9ChildrenShortUnorderedDefined(const CV& x, const VecStr& defined);
 RcppExport SEXP _icd_icd9ChildrenShortUnorderedDefined(SEXP xSEXP, SEXP definedSEXP) {
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wcast-function-type"
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -522,13 +418,10 @@ BEGIN_RCPP
     rcpp_result_gen = Rcpp::wrap(icd9ChildrenShortUnorderedDefined(x, defined));
     return rcpp_result_gen;
 END_RCPP
-#pragma GCC diagnostic pop
 }
 // icd9ChildrenShortUnordered
 CV icd9ChildrenShortUnordered(const CV& x, const VecStr& defined, bool leaf);
 RcppExport SEXP _icd_icd9ChildrenShortUnordered(SEXP xSEXP, SEXP definedSEXP, SEXP leafSEXP) {
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wcast-function-type"
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -538,13 +431,10 @@ BEGIN_RCPP
     rcpp_result_gen = Rcpp::wrap(icd9ChildrenShortUnordered(x, defined, leaf));
     return rcpp_result_gen;
 END_RCPP
-#pragma GCC diagnostic pop
 }
 // icd9ChildrenDecimal
 CV icd9ChildrenDecimal(const CV& x, const VecStr& defined, bool leaf);
 RcppExport SEXP _icd_icd9ChildrenDecimal(SEXP xSEXP, SEXP definedSEXP, SEXP leafSEXP) {
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wcast-function-type"
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -554,13 +444,10 @@ BEGIN_RCPP
     rcpp_result_gen = Rcpp::wrap(icd9ChildrenDecimal(x, defined, leaf));
     return rcpp_result_gen;
 END_RCPP
-#pragma GCC diagnostic pop
 }
 // icd9ChildrenDecimalUnordered
 CV icd9ChildrenDecimalUnordered(const CV& x, const VecStr& defined, bool leaf);
 RcppExport SEXP _icd_icd9ChildrenDecimalUnordered(SEXP xSEXP, SEXP definedSEXP, SEXP leafSEXP) {
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wcast-function-type"
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -570,13 +457,10 @@ BEGIN_RCPP
     rcpp_result_gen = Rcpp::wrap(icd9ChildrenDecimalUnordered(x, defined, leaf));
     return rcpp_result_gen;
 END_RCPP
-#pragma GCC diagnostic pop
 }
 // icd9ChildrenDecimalUnorderedUndefined
 CV icd9ChildrenDecimalUnorderedUndefined(const CV& x);
 RcppExport SEXP _icd_icd9ChildrenDecimalUnorderedUndefined(SEXP xSEXP) {
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wcast-function-type"
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -584,13 +468,10 @@ BEGIN_RCPP
     rcpp_result_gen = Rcpp::wrap(icd9ChildrenDecimalUnorderedUndefined(x));
     return rcpp_result_gen;
 END_RCPP
-#pragma GCC diagnostic pop
 }
 // icd9ChildrenDecimalUnorderedDefined
 CV icd9ChildrenDecimalUnorderedDefined(const CV& x, const VecStr& defined);
 RcppExport SEXP _icd_icd9ChildrenDecimalUnorderedDefined(SEXP xSEXP, SEXP definedSEXP) {
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wcast-function-type"
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -599,13 +480,10 @@ BEGIN_RCPP
     rcpp_result_gen = Rcpp::wrap(icd9ChildrenDecimalUnorderedDefined(x, defined));
     return rcpp_result_gen;
 END_RCPP
-#pragma GCC diagnostic pop
 }
 // icd9Children
 CV icd9Children(const CV& icd9, bool short_code, const VecStr& defined, bool leaf);
 RcppExport SEXP _icd_icd9Children(SEXP icd9SEXP, SEXP short_codeSEXP, SEXP definedSEXP, SEXP leafSEXP) {
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wcast-function-type"
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -616,13 +494,10 @@ BEGIN_RCPP
     rcpp_result_gen = Rcpp::wrap(icd9Children(icd9, short_code, defined, leaf));
     return rcpp_result_gen;
 END_RCPP
-#pragma GCC diagnostic pop
 }
 // factorNoSort
 Rcpp::IntegerVector factorNoSort(const Rcpp::CharacterVector& x, const Rcpp::CharacterVector& levels, const bool na_rm);
 RcppExport SEXP _icd_factorNoSort(SEXP xSEXP, SEXP levelsSEXP, SEXP na_rmSEXP) {
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wcast-function-type"
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -632,13 +507,10 @@ BEGIN_RCPP
     rcpp_result_gen = Rcpp::wrap(factorNoSort(x, levels, na_rm));
     return rcpp_result_gen;
 END_RCPP
-#pragma GCC diagnostic pop
 }
 // refactor
 Rcpp::IntegerVector refactor(const Rcpp::IntegerVector& x, const Rcpp::CharacterVector& new_levels, const bool exclude_na, const bool validate);
 RcppExport SEXP _icd_refactor(SEXP xSEXP, SEXP new_levelsSEXP, SEXP exclude_naSEXP, SEXP validateSEXP) {
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wcast-function-type"
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -649,13 +521,10 @@ BEGIN_RCPP
     rcpp_result_gen = Rcpp::wrap(refactor(x, new_levels, exclude_na, validate));
     return rcpp_result_gen;
 END_RCPP
-#pragma GCC diagnostic pop
 }
 // refactor_narm
 Rcpp::IntegerVector refactor_narm(const Rcpp::IntegerVector& x, const Rcpp::CharacterVector& new_levels, const bool validate);
 RcppExport SEXP _icd_refactor_narm(SEXP xSEXP, SEXP new_levelsSEXP, SEXP validateSEXP) {
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wcast-function-type"
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -665,13 +534,10 @@ BEGIN_RCPP
     rcpp_result_gen = Rcpp::wrap(refactor_narm(x, new_levels, validate));
     return rcpp_result_gen;
 END_RCPP
-#pragma GCC diagnostic pop
 }
 // factorIsValid
 bool factorIsValid(const Rcpp::IntegerVector& f);
 RcppExport SEXP _icd_factorIsValid(SEXP fSEXP) {
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wcast-function-type"
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -679,13 +545,10 @@ BEGIN_RCPP
     rcpp_result_gen = Rcpp::wrap(factorIsValid(f));
     return rcpp_result_gen;
 END_RCPP
-#pragma GCC diagnostic pop
 }
 // icd9Compare
 bool icd9Compare(String a, String b);
 RcppExport SEXP _icd_icd9Compare(SEXP aSEXP, SEXP bSEXP) {
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wcast-function-type"
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -694,13 +557,10 @@ BEGIN_RCPP
     rcpp_result_gen = Rcpp::wrap(icd9Compare(a, b));
     return rcpp_result_gen;
 END_RCPP
-#pragma GCC diagnostic pop
 }
 // icd9CompareVector
 LogicalVector icd9CompareVector(const StringVector& x, const StringVector& y);
 RcppExport SEXP _icd_icd9CompareVector(SEXP xSEXP, SEXP ySEXP) {
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wcast-function-type"
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -709,13 +569,10 @@ BEGIN_RCPP
     rcpp_result_gen = Rcpp::wrap(icd9CompareVector(x, y));
     return rcpp_result_gen;
 END_RCPP
-#pragma GCC diagnostic pop
 }
 // icd9Sort
 CharacterVector icd9Sort(const CharacterVector& x);
 RcppExport SEXP _icd_icd9Sort(SEXP xSEXP) {
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wcast-function-type"
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -723,13 +580,10 @@ BEGIN_RCPP
     rcpp_result_gen = Rcpp::wrap(icd9Sort(x));
     return rcpp_result_gen;
 END_RCPP
-#pragma GCC diagnostic pop
 }
 // icd9Order
 IntegerVector icd9Order(const CharacterVector& x);
 RcppExport SEXP _icd_icd9Order(SEXP xSEXP) {
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wcast-function-type"
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -737,13 +591,10 @@ BEGIN_RCPP
     rcpp_result_gen = Rcpp::wrap(icd9Order(x));
     return rcpp_result_gen;
 END_RCPP
-#pragma GCC diagnostic pop
 }
 // icd10cmCompareC
 bool icd10cmCompareC(const char* xstr, const char* ystr);
 RcppExport SEXP _icd_icd10cmCompareC(SEXP xstrSEXP, SEXP ystrSEXP) {
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wcast-function-type"
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -752,13 +603,10 @@ BEGIN_RCPP
     rcpp_result_gen = Rcpp::wrap(icd10cmCompareC(xstr, ystr));
     return rcpp_result_gen;
 END_RCPP
-#pragma GCC diagnostic pop
 }
 // icd10cmCompare
 bool icd10cmCompare(const String& x, const String& y);
 RcppExport SEXP _icd_icd10cmCompare(SEXP xSEXP, SEXP ySEXP) {
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wcast-function-type"
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -767,13 +615,10 @@ BEGIN_RCPP
     rcpp_result_gen = Rcpp::wrap(icd10cmCompare(x, y));
     return rcpp_result_gen;
 END_RCPP
-#pragma GCC diagnostic pop
 }
 // icd10cmCompareVector
 LogicalVector icd10cmCompareVector(const StringVector& x, const StringVector& y);
 RcppExport SEXP _icd_icd10cmCompareVector(SEXP xSEXP, SEXP ySEXP) {
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wcast-function-type"
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -782,13 +627,10 @@ BEGIN_RCPP
     rcpp_result_gen = Rcpp::wrap(icd10cmCompareVector(x, y));
     return rcpp_result_gen;
 END_RCPP
-#pragma GCC diagnostic pop
 }
 // icd10cmSort
 CharacterVector icd10cmSort(const CharacterVector& x);
 RcppExport SEXP _icd_icd10cmSort(SEXP xSEXP) {
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wcast-function-type"
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -796,13 +638,10 @@ BEGIN_RCPP
     rcpp_result_gen = Rcpp::wrap(icd10cmSort(x));
     return rcpp_result_gen;
 END_RCPP
-#pragma GCC diagnostic pop
 }
 // icd10cmOrder
 IntegerVector icd10cmOrder(const CharacterVector& x);
 RcppExport SEXP _icd_icd10cmOrder(SEXP xSEXP) {
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wcast-function-type"
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -810,13 +649,10 @@ BEGIN_RCPP
     rcpp_result_gen = Rcpp::wrap(icd10cmOrder(x));
     return rcpp_result_gen;
 END_RCPP
-#pragma GCC diagnostic pop
 }
 // trimLeftCpp
 std::string trimLeftCpp(std::string s);
 RcppExport SEXP _icd_trimLeftCpp(SEXP sSEXP) {
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wcast-function-type"
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -824,13 +660,10 @@ BEGIN_RCPP
     rcpp_result_gen = Rcpp::wrap(trimLeftCpp(s));
     return rcpp_result_gen;
 END_RCPP
-#pragma GCC diagnostic pop
 }
 // strimCpp
 std::string strimCpp(std::string s);
 RcppExport SEXP _icd_strimCpp(SEXP sSEXP) {
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wcast-function-type"
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -838,13 +671,10 @@ BEGIN_RCPP
     rcpp_result_gen = Rcpp::wrap(strimCpp(s));
     return rcpp_result_gen;
 END_RCPP
-#pragma GCC diagnostic pop
 }
 // trimCpp
 VecStr trimCpp(VecStr sv);
 RcppExport SEXP _icd_trimCpp(SEXP svSEXP) {
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wcast-function-type"
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -852,13 +682,10 @@ BEGIN_RCPP
     rcpp_result_gen = Rcpp::wrap(trimCpp(sv));
     return rcpp_result_gen;
 END_RCPP
-#pragma GCC diagnostic pop
 }
 // matchFast
 SEXP matchFast(SEXP x, SEXP table);
 RcppExport SEXP _icd_matchFast(SEXP xSEXP, SEXP tableSEXP) {
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wcast-function-type"
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -867,13 +694,10 @@ BEGIN_RCPP
     rcpp_result_gen = Rcpp::wrap(matchFast(x, table));
     return rcpp_result_gen;
 END_RCPP
-#pragma GCC diagnostic pop
 }
 // inFast
 SEXP inFast(SEXP x, SEXP table);
 RcppExport SEXP _icd_inFast(SEXP xSEXP, SEXP tableSEXP) {
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wcast-function-type"
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -882,23 +706,17 @@ BEGIN_RCPP
     rcpp_result_gen = Rcpp::wrap(inFast(x, table));
     return rcpp_result_gen;
 END_RCPP
-#pragma GCC diagnostic pop
 }
 // build_info
 void build_info();
 RcppExport SEXP _icd_build_info() {
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wcast-function-type"
 BEGIN_RCPP
     Rcpp::RNGScope rcpp_rngScope_gen;
     build_info();
     return R_NilValue;
 END_RCPP
-#pragma GCC diagnostic pop
 }
 
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wcast-function-type"
 static const R_CallMethodDef CallEntries[] = {
     {"_icd_icd9MajMinToCode", (DL_FUNC) &_icd_icd9MajMinToCode, 3},
     {"_icd_icd9MajMinToShort", (DL_FUNC) &_icd_icd9MajMinToShort, 2},
@@ -963,7 +781,6 @@ static const R_CallMethodDef CallEntries[] = {
     {NULL, NULL, 0}
 };
 
-#pragma GCC diagnostic pop
 RcppExport void R_init_icd(DllInfo *dll) {
     R_registerRoutines(dll, NULL, CallEntries, NULL, NULL);
     R_useDynamicSymbols(dll, FALSE);

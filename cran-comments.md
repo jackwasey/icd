@@ -5,7 +5,7 @@ Re-submission, with corrected links in documentation, and package sized reduced 
   * Ubuntu 20.04 R 4.0.2, clang 10, gcc 10
   * Travis CI: MacOS, Ubuntu 16.04, 18.04 (Travis) R-devel, R-release, gcc, clang
   * Windows Server 2012 R2 x64 (Appveyor), R devel 32 and 64 bit
-  * MacOS Mojave 10.14, R 4.0.2, brew clang 9
+  * MacOS Mojave 10.14, R 4.0.2, brew clang 9, 10
   * r-hub
 
 # R CMD check results

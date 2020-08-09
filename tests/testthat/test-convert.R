@@ -411,11 +411,11 @@ test_that("maj min to short for multiple majors", {
 
 test_that("icd9 parts to short: don't allow cycling.", {
   expect_error(icd9MajMinToShort(c("123", "34", "56"), c("1", "20")),
-    regexp = "length"
+    regexp = "Length"
   )
   # causes hang only when compiled with MinGW GCC 4.9 in Rtools 3.2 on 64 bit
   expect_error(icd9MajMinToShort(c("123", "34"), c("1", "20", "45")),
-    regexp = "length"
+    regexp = "Length"
   )
 })
 

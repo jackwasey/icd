@@ -227,6 +227,7 @@ explain_code.icd10fr <- function(x, ...) {
 
 #' @describeIn explain_code ICD-10-BE explanation, initial implementation,
 #'   subject to change
+#' @encoding UTF-8
 #' @examples
 #' \dontrun{
 #' # Belgian ICD-10 has three languages available
