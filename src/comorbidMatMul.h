@@ -25,14 +25,6 @@ void printCornerSparse(PtsSparse x);
 #endif
 // # nocov end
 
-#ifdef ICD_TIME
-#include <chrono>
-#include <ctime>
-#include <iostream>
-#include <ratio>
-using namespace std::chrono;
-#endif // ICD_TIME
-
 void buildVisitCodesSparseWide(const DataFrame& data,
                                const std::string id_name,
                                const CV& code_names,

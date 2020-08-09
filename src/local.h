@@ -9,8 +9,9 @@
 // Useful standard and GNU extensions to C++11 and onward attributes
 //
 // C++ standard: https://en.cppreference.com/w/cpp/language/attributes
-// clang exts: http://clang.llvm.org/docs/LanguageExtensions.html#non-standard-c-11-attributes
-// gcc exts:
+// clang exts:
+// http://clang.llvm.org/docs/LanguageExtensions.html#non-standard-c-11-attributes gcc
+// exts:
 //
 // Check has attribute available during compilatino:
 // https://gcc.gnu.org/onlinedocs/cpp/_005f_005fhas_005fattribute.html
@@ -21,16 +22,22 @@
 // #  endif
 // #endif
 
-// #define ICD_DEBUG
-// #define ICD_DEBUG_TRACE
+// Most time is spent by far in preparing data for entry into matrix
+// multiplication function. Laptop, ten million patients, <0.2 seconds for
+// multiple, cast, pass result back.
+
+// #define ICD_TIME
+
+#define ICD_DEBUG
+#define ICD_DEBUG_TRACE
 // #define ICD_DEBUG_UTIL
 // #define ICD_DEBUG_SETUP
 // #define ICD_DEBUG_SETUP_SLOW
 // #define ICD_DEBUG_SETUP_TRACE
 
 #if !defined(NDEBUG)
-// good for testing, but aborts all the time
-//#define ICD_DEBUG
+// good for testing, but abort aborts the entire R session
+// #define ICD_DEBUG
 #endif /* NDEBUG */
 
 #if defined(ICD_DEBUG) || defined(ICD_DEBUG_TRACE) || defined(ICD_DEBUG_UTIL) || \
@@ -54,7 +61,7 @@ template <typename C> inline void printIt(const C& c, int n = 10) {
 
 template <typename C> inline void printIt(const Rcpp::Nullable<C>& c, int n = 10) {
   if (c.isNull()) {
-    so << "NULL" << std::endl;
+    so << "NULL" << std::endl << std::flush;
     return;
   }
   printIt((C)c, n);
@@ -73,19 +80,21 @@ template <typename F, typename S> inline void printUm(std::unordered_map<F, S> u
   printIt(keys);
   so << "Unordered map values:" << std::endl;
   printIt(vals);
+  so << std::flush;
 }
 
 #define DEBUG(x) \
-  do { Rcpp::Rcout << x << std::endl; } while (0)
+  do { Rcpp::Rcout << x << std::endl << std::flush; } while (0)
 #define DEBUG_VEC(x)                         \
   do {                                       \
     Rcpp::Rcout << #x << ": " << std::flush; \
     printIt(x);                              \
+    Rcpp::Rcout << std::flush;               \
   } while (0)
-#define DEBUG_VEC_SIZE(x)                    \
-  do {                                       \
-    Rcpp::Rcout << #x << ": " << std::flush; \
-    Rcpp::Rcout << x.size() << std::endl;    \
+#define DEBUG_VEC_SIZE(x)                               \
+  do {                                                  \
+    Rcpp::Rcout << #x << ": " << std::flush;            \
+    Rcpp::Rcout << x.size() << std::endl << std::flush; \
   } while (0)
 
 #else
@@ -112,5 +121,28 @@ template <typename F, typename S> inline void printUm(std::unordered_map<F, S> u
 #define DEBUG_UTIL_VEC(x) ((void)0)
 #define TRACE_UTIL(x) ((void)0)
 #endif /* util */
+
+#ifdef ICD_TIME
+#include <chrono>
+#include <ctime>
+#include <iostream>
+#include <ratio>
+using std::chrono::duration;
+using std::chrono::duration_cast;
+using std::chrono::high_resolution_clock;
+typedef high_resolution_clock::time_point HrcTp;
+typedef duration<double, std::ratio<1>> dur_dbl;
+// https://gcc.gnu.org/onlinedocs/gcc-8.4.0/cpp/Concatenation.html#Concatenation
+#define ICD_TIME_BEGIN(x) const HrcTp hrcTpB##x = high_resolution_clock::now();
+#define ICD_TIME_END(x)                                                                     \
+  const HrcTp hrcTpE##x = high_resolution_clock::now();                                     \
+  Rcpp::Rcout << "ICD_TIME " << #x << ": "                                                  \
+              << duration_cast<dur_dbl>(hrcTpB##x - hrcTpE##x).count() << " s" << std::endl \
+              << std::flush;
+
+#else
+#define ICD_TIME_BEGIN(x) ((void)0);
+#define ICD_TIME_END(x) ((void)0);
+#endif /* ICD_TIME */
 
 #endif /* LOCAL_H_ */

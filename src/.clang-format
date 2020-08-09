@@ -1,4 +1,5 @@
 #BasedOnStyle: LLVM
+## See https://clang.llvm.org/docs/ClangFormatStyleOptions.html
 AlignAfterOpenBracket: Align
 AlignConsecutiveAssignments: true
 AlignEscapedNewlines: Left
@@ -17,6 +18,7 @@ BreakBeforeBraces: Attach
 ColumnLimit: 100
 CommentPragmas: ^'
 ContinuationIndentWidth: 2
+#IndentPPDirectives: AfterHash
 IndentWidth: 2
 PenaltyBreakBeforeFirstCallParameter: 100000
 # if pointer alignment is Right, then Rcpp (has been) confused by const char *x

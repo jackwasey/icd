@@ -151,7 +151,9 @@ LogicalMatrix comorbidMatMulWide(const DataFrame& data,
    *   Eigen::Map<Eigen::Matrix<int, Eigen::Dynamic, Eigen::Dynamic> >
    * result_mem_mapped;
    */
+  ICD_TIME_BEGIN(matmul);
   Eigen::MatrixXi result = visMat * m.mat; // col major result
+  ICD_TIME_END(matmul);
   DEBUG("Result rows: " << result.rows() << ", cols: " << result.cols());
   PRINTCORNERMAP(result);
   // I think the Rcpp Eigen code calls eval() if needed. Do I need to? If it
@@ -163,44 +165,33 @@ LogicalMatrix comorbidMatMulWide(const DataFrame& data,
   // for possibly faster way to access R vector data more quickly.
   //
 
-#ifdef ICD_TIME
   // all these timings are very small compared to the setup time
-  high_resolution_clock::time_point t0 = high_resolution_clock::now();
-#endif                        // ICD_TIME
-  auto resok = result.eval(); // does start to take longer than wrap with big n
-#ifdef ICD_TIME
-  high_resolution_clock::time_point t1 = high_resolution_clock::now();
-#endif // ICD_TIME
-  // works: but additive time: LogicalMatrix mat_out_bool     = wrap(result); //
-  // not much slower than eval. big memcopy
+  // .eval() does start to take longer than wrap doing it, with big n
+  ICD_TIME_BEGIN(eval);
+  auto resok = result.eval();
+  ICD_TIME_END(eval);
+  // The following works: but additive time: `LogicalMatrix mat_out_bool = wrap(result);`
+  // not much slower than eval. big memcopy involved.
   //
   // Better still, I can create an SEXP of the correct size, and (hopefully)
   // bulk memcopy the data into it directly. I do not think there is a way to
   // share the memory with R. Possibly set up the SEXP memory, then perhaps I
   // can tell Eigen to use it?
-  IntegerMatrix mat_out_int = wrap(result); // not much slower than eval. big memcopy - does it
-                                            // incidentally do any casting?
-#ifdef ICD_TIME
-  high_resolution_clock::time_point t2 = high_resolution_clock::now();
-#endif // ICD_TIME
+  ICD_TIME_BEGIN(wrap_to_int);
+  // not much slower than eval. big memcopy - does it
+  // incidentally do any casting? Eigen probably faster as
+  // it can combine sub-operations with the mat mul.
+  IntegerMatrix mat_out_int = wrap(result);
+  ICD_TIME_END(wrap_to_int);
   // LogicalMatrix mat_out_bool    = wrap(mat_out_int); // slowest of all
   // INTSXP is same data structure in R as LGLSXP, so need to do anything... but
   // Rcpp thinks so. Rcpp does this to an integer vector in r_coerce.h: int
   // r_coerce<INTSXP,LGLSXP>(int from){ return ( from == NA_INTEGER ) ?
   // NA_LOGICAL : (from!=0)
+  ICD_TIME_BEGIN(to_bool);
   LogicalMatrix mat_out_bool = (LogicalMatrix)mat_out_int;
-#ifdef ICD_TIME
-  high_resolution_clock::time_point t3 = high_resolution_clock::now();
-#endif // ICD_TIME
+  ICD_TIME_END(to_bool);
 
-#ifdef ICD_TIME
-  Rcout << "eval: " << duration_cast<duration<double>>(t1 - t0).count() << " seconds.";
-  Rcout << std::endl;
-  Rcout << "wrap: " << duration_cast<duration<double>>(t2 - t1).count() << " seconds.";
-  Rcout << std::endl;
-  Rcout << "bool: " << duration_cast<duration<double>>(t3 - t2).count() << " seconds.";
-  Rcout << std::endl;
-#endif // ICD_TIME
   List dimnames                 = List::create(out_row_names, map.names());
   mat_out_bool.attr("dimnames") = dimnames;
   return mat_out_bool;

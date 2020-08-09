@@ -25,7 +25,8 @@ List icd10ShortToParts(const CV& x, const String mnr_empty) {
       mnr[i] = NA_STRING;
       continue;
     }
-    // TODO: just use CHARSXP (for xlength), then advance pointer for testing the remainder.
+    // TODO: just use CHARSXP (for xlength), then advance pointer for testing the
+    // remainder.
     std::string s(thisShort.get_cstring());
     s  = strimCpp(s); // in place or rewrite? do this at all?
     sz = s.size();
