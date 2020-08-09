@@ -17,11 +17,11 @@ using namespace Rcpp;
 //' # if pryr is installed, use address and refs to see what is going on
 //' @keywords internal attribute
 // [[Rcpp::export(attr_decimal_diag)]]
-void setDecimalDiag(RObject& x, bool value = true) { x.attr("icd_short_diag") = !value; }
+void setDecimalDiag(Rcpp::RObject& x, bool value = true) { x.attr("icd_short_diag") = !value; }
 
 //' Set short diagnosis flag in C++
 //' @param x Any R object
 //' @param value \code{TRUE} or \code{FALSE}
 //' @keywords internal attribute
 // [[Rcpp::export(attr_short_diag)]]
-void setShortDiag(RObject& x, bool value = true) { x.attr("icd_short_diag") = value; }
+void setShortDiag(Rcpp::RObject& x, bool value = true) { x.attr("icd_short_diag") = value; }

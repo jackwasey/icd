@@ -8,13 +8,13 @@
 using namespace Rcpp;
 
 // icd9MajMinToCode
-CV icd9MajMinToCode(const CV mjr, const CV mnr, const bool short_code);
+Rcpp::CharacterVector icd9MajMinToCode(const Rcpp::CharacterVector& mjr, const Rcpp::CharacterVector& mnr, const bool short_code);
 RcppExport SEXP _icd_icd9MajMinToCode(SEXP mjrSEXP, SEXP mnrSEXP, SEXP short_codeSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const CV >::type mjr(mjrSEXP);
-    Rcpp::traits::input_parameter< const CV >::type mnr(mnrSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::CharacterVector& >::type mjr(mjrSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::CharacterVector& >::type mnr(mnrSEXP);
     Rcpp::traits::input_parameter< const bool >::type short_code(short_codeSEXP);
     rcpp_result_gen = Rcpp::wrap(icd9MajMinToCode(mjr, mnr, short_code));
     return rcpp_result_gen;
@@ -45,22 +45,22 @@ BEGIN_RCPP
 END_RCPP
 }
 // setDecimalDiag
-void setDecimalDiag(RObject& x, bool value);
+void setDecimalDiag(Rcpp::RObject& x, bool value);
 RcppExport SEXP _icd_setDecimalDiag(SEXP xSEXP, SEXP valueSEXP) {
 BEGIN_RCPP
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< RObject& >::type x(xSEXP);
+    Rcpp::traits::input_parameter< Rcpp::RObject& >::type x(xSEXP);
     Rcpp::traits::input_parameter< bool >::type value(valueSEXP);
     setDecimalDiag(x, value);
     return R_NilValue;
 END_RCPP
 }
 // setShortDiag
-void setShortDiag(RObject& x, bool value);
+void setShortDiag(Rcpp::RObject& x, bool value);
 RcppExport SEXP _icd_setShortDiag(SEXP xSEXP, SEXP valueSEXP) {
 BEGIN_RCPP
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< RObject& >::type x(xSEXP);
+    Rcpp::traits::input_parameter< Rcpp::RObject& >::type x(xSEXP);
     Rcpp::traits::input_parameter< bool >::type value(valueSEXP);
     setShortDiag(x, value);
     return R_NilValue;

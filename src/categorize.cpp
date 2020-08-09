@@ -17,7 +17,7 @@ using namespace Rcpp;
 // [[Rcpp::export]]
 List categorize_rcpp() {
   Rcerr << "Not implemented in pure C++ yet";
-  return List::create();
+  return Rcpp::List();
 }
 
 // # nocov end

@@ -2,9 +2,13 @@
 #define APPENDMINOR_H_
 
 #include <Rcpp.h>
-typedef Rcpp::CharacterVector CV;
-CV icd9MajMinToCode(const CV mjr, const CV mnr, const bool short_code);
-CV icd9MajMinToShort(const CV& mjr, const CV& mnr);
-CV icd9MajMinToDecimal(const CV& mjr, const CV& mnr);
+
+Rcpp::CharacterVector icd9MajMinToCode(const Rcpp::CharacterVector& mjr,
+                                       const Rcpp::CharacterVector& mnr,
+                                       const bool short_code);
+Rcpp::CharacterVector icd9MajMinToShort(const Rcpp::CharacterVector& mjr,
+                                        const Rcpp::CharacterVector& mnr);
+Rcpp::CharacterVector icd9MajMinToDecimal(const Rcpp::CharacterVector& mjr,
+                                          const Rcpp::CharacterVector& mnr);
 
 #endif /* APPENDMINOR_H_ */

@@ -13,7 +13,7 @@ using namespace Rcpp;
 
 typedef std::pair<std::string, int> RelPair;
 
-void Relevant::buildCodeSetCV(const CV& codes) {
+void Relevant::buildCodeSetCV(const Rcpp::CharacterVector& codes) {
   // over-reserve (and maybe expand), target is unique number
   allCodesSet.reserve(allCodesSet.size() + codes.size());
   DEBUG_VEC(codes);
