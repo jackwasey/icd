@@ -32,7 +32,7 @@ suppressPackageStartupMessages({
   library(icd, warn.conflicts = FALSE)
   library(magrittr, warn.conflicts = FALSE)
 })
-knitr::opts_chunk$set(
+knitr::opts_chunk$set( # no lint
   collapse = TRUE,
   comment = "#>",
   fig.path = "man/figures/README-"

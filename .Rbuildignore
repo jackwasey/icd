@@ -1,3 +1,4 @@
+^R\/devel\.R$
 ^(src\/)?.*\.log$
 ^(vignettes\/)?\.build\.timestamp$
 ^.*\.Rprof.*$

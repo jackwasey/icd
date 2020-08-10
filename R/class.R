@@ -40,7 +40,7 @@ icd_data_classes <- c(
   "icd_long_data",
   "icd_wide_data"
 )
-icd_other_classes <- c("comorbidity_map")
+icd_other_classes <- "comorbidity_map"
 icd_all_classes <- c(
   icd_version_classes,
   icd_data_classes,

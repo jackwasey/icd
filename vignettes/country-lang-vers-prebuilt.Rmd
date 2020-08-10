@@ -20,7 +20,7 @@ Function and variable names are likely to change in the future. The current vers
 # rmarkdown::render("vignettes/country-lang-vers-prebuilt.Rmd")
 #  then compact or R CMD build --compact-vignettes
 
-knitr::opts_chunk$set(
+knitr::opts_chunk$set( # no lint
   collapse = TRUE,
   comment = "#>"
 )

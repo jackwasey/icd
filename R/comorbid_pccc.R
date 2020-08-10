@@ -70,7 +70,7 @@ comorbid_pccc_pcs <-
     threshold <- 0.7
     if (sum(nines_tens) / n > threshold) {
       is_icd9 <- FALSE
-    } else if (sum(nines_tens) / n > (1 - threshold)) {
+    } else if (sum(nines_tens) / n > (1.0 - threshold)) {
       warning(
         "many invalid ICD-9 procedure codes, but not enough to ",
         "determine that all the codes were ICD-10 codes. Please",

@@ -47,7 +47,7 @@ categorize_simple <- function(x,
                               ...) {
   assert_data_frame(x, min.cols = 2, col.names = "unique")
   class(x) <- "data.frame"
-  assert_list(map, min.len = 1, names = "unique")
+  assert_list(map, min.len = 1L, names = "unique")
   stopifnot(is.null(id_name) ||
     (is.character(id_name) && length(id_name) == 1L))
   stopifnot(is.character(code_name))
@@ -76,12 +76,12 @@ categorize_simple <- function(x,
         "character" = character(0)
       )
     } else {
-      row_names <- character(0)
+      row_names <- character(0L)
     }
     df_empty_out <- cbind(row_names, as.data.frame(empty_mat_out),
       stringsAsFactors = id_was_factor
     )
-    names(df_empty_out)[1] <- id_name
+    names(df_empty_out)[1L] <- id_name
     rownames(df_empty_out) <- NULL
     return(df_empty_out)
   }

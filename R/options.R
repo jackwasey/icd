@@ -1,17 +1,34 @@
 # for enum-like behavior
 .opt_names <- c(
   absent_action = "absent_action",
-  verbose = "verbose",
   cache = "cache",
+  devel = "devel",
   icd10cm_active_year = "icd10cm_active_year",
+  interact = "interact",
   offline = "offline",
   test_slow = "test_slow",
-  interact = "interact",
+  verbose = "verbose",
   who_url = "who_url"
 )
 
-.opt_full_name <- function(opt_name) {
-  paste0("icd.", opt_name)
+.base_opt_name <- function(x) {
+  tolower(sub("(ICD_)|icd\\.", "", x))
+}
+
+.opt_name_from_any <- function(x) {
+  .opt_full_name(.base_opt_name(x))
+}
+
+.env_name_from_any <- function(x) {
+  .env_full_name(.base_opt_name(x))
+}
+
+.env_full_name <- function(x) {
+  paste0("ICD_", toupper(x))
+}
+
+.opt_full_name <- function(x) {
+  paste0("icd.", tolower(x))
 }
 
 .show_options <- function() {
@@ -133,7 +150,7 @@ NULL
     if (is.numeric(x)) x <- as.integer(x)
     .set_opt("verbose" = x)
   } else {
-    ev <- .env_var_is_true("ICD_VERBOSE")
+    ev <- env_var_is_true("ICD_VERBOSE")
     .set_opt("verbose" = ev)
     if (ev) message("Reset verbose option to ICD_VERBOSE")
   }
@@ -141,12 +158,13 @@ NULL
   invisible(.get_opt("verbose"))
 }
 
+# TODO: simplify all this with env_opt_is_true, opt_env_is_false etc.
 .interact <- function(x) {
   if (missing(x)) {
     if (is.na(.get_opt("interact", default = NA)) &&
       !is.na(Sys.getenv("ICD_INTERACT", unset = NA))) {
       .msg("Setting interactivity with env var")
-      .set_opt("interact" = .env_var_is_true("ICD_INTERACT"))
+      .set_opt("interact" = env_var_is_true("ICD_INTERACT"))
     }
     opt <- .get_opt("interact", default = NA)
     if (is.na(opt)) {
@@ -246,12 +264,104 @@ NULL
   )
 }
 
-.env_var_is_false <- function(x) {
-  .is_false_ish(Sys.getenv(x, unset = ""))
+#' Does a character environment variable have logical value?
+#'
+#' If unset, then it is not false, so returns FALSE.
+#' @examples
+#' # exists, usually unset or "1"
+#' icd:::env_var_is_true("RSTUDIO")
+#' icd:::env_var_is_false("RSTUDIO")
+#' !icd:::env_var_is_true("RSTUDIO")
+#' !icd:::env_var_is_false("RSTUDIO")
+#' # exists, but not true or false:
+#' icd:::env_var_is_true("R_HOME")
+#' icd:::env_var_is_false("R_HOME")
+#' !icd:::env_var_is_true("R_HOME")
+#' !icd:::env_var_is_false("R_HOME")
+#' # try an option, fall back on an environment variable
+#' !icd:::opt_env_is_false("R_HOME")
+#' icd:::env_opt_is_true("doesn't exist")
+#' getOption("verbose",
+#'   default = env_var_is_true("CLICOLOR_FORCE")
+#' )
+#' getOption("verbose",
+#'   default = env_var_is_true("ENV_VAR_DOES_NOT_EXIST")
+#' )
+#' @keywords internal
+env_var_is_false <- function(x, unset = FALSE) {
+  v <- Sys.getenv(x, unset = NA_character_)
+  if (is.na(v)) {
+    unset
+  } else {
+    .is_false_ish(v)
+  }
 }
 
-.env_var_is_true <- function(x) {
-  .is_true_ish(Sys.getenv(x, unset = ""))
+#' @describeIn env_var_is_false Whether an environment variable has true-like
+#'   value
+#' @keywords internal
+env_var_is_true <- function(x, unset = FALSE) {
+  v <- Sys.getenv(x, unset = NA_character_)
+  if (is.na(v)) {
+    unset
+  } else {
+    .is_true_ish(v)
+  }
+}
+#' @describeIn env_var_is_false Try \R option first for falsity, then
+#'   environment variable, before returning the \code{unset} value
+#' @keywords internal
+opt_env_is_false <- function(x, unset = FALSE) {
+  opt_name <- .opt_name_from_any(x)
+  env_name <- .env_name_from_any(x)
+  o <- getOption(opt_name, default = NA)
+  if (!is.na(o)) {
+    identical(o, FALSE)
+  } else {
+    env_var_is_false(env_name)
+  }
+}
+
+#' @describeIn env_var_is_false Try \R option first for truth, then environment
+#'   variable, before returning the \code{unset} value.
+#' @keywords internal
+opt_env_is_true <- function(x, unset = FALSE) {
+  opt_name <- .opt_name_from_any(x)
+  env_name <- .env_name_from_any(x)
+  o <- getOption(opt_name, default = NA)
+  if (!is.na(o)) {
+    identical(o, TRUE)
+  } else {
+    env_var_is_true(env_name)
+  }
+}
+
+#' @describeIn env_var_is_false Try environment variable then \R option,
+#'   before returning the \code{unset} value.
+#' @keywords internal
+env_opt_is_false <- function(x, unset = FALSE) {
+  opt_name <- .opt_name_from_any(x)
+  env_name <- .env_name_from_any(x)
+  e_set <- !is.na(Sys.getenv(env_name, NA))
+  if (e_set) {
+    env_var_is_false(env_name)
+  } else {
+    opt_env_is_false(opt_name)
+  }
+}
+
+#' @describeIn env_var_is_false Try environment variable then \R option,
+#'   before returning the \code{unset} value.
+#' @keywords internal
+env_opt_is_true <- function(x, unset = FALSE) {
+  opt_name <- .opt_name_from_any(x)
+  env_name <- .env_name_from_any(x)
+  e_set <- !is.na(Sys.getenv(env_name, NA))
+  if (e_set) {
+    env_var_is_true(env_name)
+  } else {
+    opt_env_is_true(opt_name)
+  }
 }
 
 with_offline <- function(offline, code) {

@@ -71,7 +71,7 @@ children.icd9cm <- function(x,
       if (defined) {
         icd9_children_short_unordered_defined_rcpp(
           x = toupper(x),
-          defined = icd9cm_hierarchy$code
+          defined = icd9cm_hierarchy[["code"]]
           # TODO: directly get billable/leaf status here, instead of calculating
           # again later.
         )
@@ -82,7 +82,7 @@ children.icd9cm <- function(x,
       # TODO: unordered variant
       icd9_children_decimal_rcpp(
         x = toupper(x),
-        defined = icd9cm_hierarchy$code,
+        defined = icd9cm_hierarchy[["code"]],
         leaf = defined
       )
     }

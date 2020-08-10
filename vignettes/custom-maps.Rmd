@@ -11,7 +11,7 @@ vignette: >
 ---
 
 ```{r setup, include = FALSE}
-knitr::opts_chunk$set(
+knitr::opts_chunk$set( # no lint
   collapse = TRUE,
   comment = "#>"
 )
@@ -108,16 +108,16 @@ icd::comorbid(one_pt, map = my_map)
     xlab = "Custom disease ranges",
     axes = FALSE
   )
-  axis(1,
-    at = seq(0, 1, length.out = length(my_map)),
+  axis(1L,
+    at = seq(0L, 1L, length.out = length(my_map)),
     labels = names(my_map),
-    lwd = 0
+    lwd = 0L
   )
-  axis(2,
-    at = seq(0, 1, length.out = nrow(dif_pt)),
+  axis(2L,
+    at = seq(0L, 1L, length.out = nrow(dif_pt)),
     labels = dif_pt$id,
-    lwd = 0,
-    las = 2
+    lwd = 0L,
+    las = 2L
   )
 }
 ```

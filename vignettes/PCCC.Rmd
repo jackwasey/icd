@@ -13,7 +13,7 @@ vignette: >
 bibliography: icdpkg.bib
 ---
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(
+knitr::opts_chunk$set( # no lint
   collapse = TRUE,
   comment = "#>",
   out.width = "100%",

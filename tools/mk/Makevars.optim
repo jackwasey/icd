@@ -1,0 +1,10 @@
+CCACHE_CPP2 = yes
+
+common_flags += -O3 -fno-unroll-loops -g0 -fomit-frame-pointer -w
+
+CFLAGS = $(common_flags)
+CXXFLAGS = $(common_flags)
+CXX11FLAGS = $(common_flags)
+CC := ccache clang
+CXX := ccache clang++
+CXX11 := ccache clang++ -std=c++11

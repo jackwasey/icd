@@ -10,7 +10,7 @@ output:
   pdf_document: default
 ---
 ```{r include = FALSE}
-knitr::opts_chunk$set(
+knitr::opts_chunk$set( # no lint
   eval = FALSE,
   collapse = TRUE,
   comment = "#>"
