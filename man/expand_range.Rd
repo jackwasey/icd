@@ -45,12 +45,12 @@ becomes \code{010}, not \code{0010} or \code{00010}.}
 code provided is in short (\code{TRUE}) or decimal (\code{FALSE}) form.
 Where reasonable, this is guessed from the input data.}
 
-\item{defined}{single logical value, if \code{TRUE}, will limit the search
-to those codes which appear in the master list, not just syntactically
-valid codes. Since nearly valid, out-dated or new codes may be missed, not
+\item{defined}{single logical value, if \code{TRUE}, will limit the search to
+those codes which appear in the official list, not just syntactically valid
+codes. Since nearly valid, out-dated or new codes may be missed, not
 limiting to officially defined values will be useful. Ultimately, there
-will need to be annual (and all-time) master lists of codes and the ability
-to test against a given master list given the year of the ICD-9 coding.}
+will need to be annual (and all-time) official lists of codes and the
+ability to test against a list for the year of the ICD-9 coding.}
 
 \item{ex_ambig_start}{single logical value, if \code{TRUE} the range returned
 will not include codes which are explicitly listed in the range, but would

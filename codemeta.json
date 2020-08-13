@@ -16,7 +16,7 @@
     "name": "R",
     "url": "https://r-project.org"
   },
-  "runtimePlatform": "R version 4.0.0 (2020-04-24)",
+  "runtimePlatform": "R version 4.0.2 (2020-06-22)",
   "provider": {
     "@id": "https://cran.r-project.org",
     "@type": "Organization",
@@ -280,11 +280,11 @@
     }
   ],
   "releaseNotes": "https://github.com/jackwasey/icd/blob/master/NEWS.md",
-  "contIntegration": ["https://travis-ci.org/jackwasey/icd", "https://ci.appveyor.com/project/jackwasey/icd/branch/master", "https://codecov.io/github/jackwasey/icd?branch=master"],
+  "contIntegration": ["https://travis-ci.org/jackwasey/icd", "https://ci.appveyor.com/project/jackwasey/icd/branch/main", "https://codecov.io/github/jackwasey/icd?branch=main"],
   "developmentStatus": ["https://www.tidyverse.org/lifecycle/#stable", "https://www.repostatus.org/#active"],
-  "relatedLink": "https://jackwasey.github.io/icd/",
-  "readme": "https://github.com/jackwasey/icd/blob/master/README.md",
-  "fileSize": "47528.784KB",
+  "relatedLink": ["https://jackwasey.github.io/icd/", "https://CRAN.R-project.org/package=icd"],
+  "readme": "https://github.com/jackwasey/icd/blob/main/README.md",
+  "fileSize": "63851.077KB",
   "keywords": [
     "comorbidities",
     "icd",

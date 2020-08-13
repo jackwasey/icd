@@ -115,7 +115,7 @@ expand_range.icd10cm <- function(start,
   end_kids <- children_defined.icd10cm(end, short_code = TRUE)
   new_end <- end_kids[length(end_kids)]
 
-  # find the start and end code positions in the master list
+  # find the start and end code positions in the official list
   i <- get_icd10cm_active()
   pos <- match(
     c(start, new_end),

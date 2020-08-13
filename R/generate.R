@@ -1,6 +1,6 @@
 #' Generate random ICD-9 codes
 #'
-#' Uses leaf/billable ICD-10-CM codes from current master list
+#' Uses leaf/billable ICD-10-CM codes from most recent edition
 #' @param n number to select, passed to \code{sample}
 #' @template short_code
 #' @keywords internal debugging datagen

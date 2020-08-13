@@ -13,7 +13,6 @@ using namespace Rcpp;
 //' @template mapping
 //' @template visit_name
 //' @template icd_name
-//' @seealso \url{https://github.com/s-u/fastmatch/blob/master/src/fastmatch.c}
 //' @examples
 //' # one exact match, next cmb parent code, next cmb child code
 //' icd10 <- as.icd10(c("I0981", "A520", "I26019"))
