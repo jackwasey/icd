@@ -1,1 +1,2 @@
-cp src/makevars.h.win src/makevars.h
+#!/bin/sh
+cp src/config.h.win src/config.h

@@ -1,5 +1,8 @@
 // [[Rcpp::plugins(cpp11)]]
-// [[Rcpp//plugins(openmp)]]
+
+// [[Rcpp//plugins(openmp)]] // disabled - it should be
+// done in configure script, or possibly here if configure script can be
+// eliminated.
 
 #ifndef LOCAL_H_
 #define LOCAL_H_
@@ -137,7 +140,7 @@ typedef duration<double, std::ratio<1>> dur_dbl;
 #define ICD_TIME_END(x)                                                                     \
   const HrcTp hrcTpE##x = high_resolution_clock::now();                                     \
   Rcpp::Rcout << "ICD_TIME " << #x << ": "                                                  \
-              << duration_cast<dur_dbl>(hrcTpB##x - hrcTpE##x).count() << " s" << std::endl \
+              << duration_cast<dur_dbl>(hrcTpE##x - hrcTpB##x).count() << " s" << std::endl \
               << std::flush;
 
 #else

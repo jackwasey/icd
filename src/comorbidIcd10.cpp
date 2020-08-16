@@ -32,19 +32,21 @@ using namespace Rcpp;
 //' @noRd
 // [[Rcpp::export(simplify_map_lex)]]
 Rcpp::List simplifyMapLexicographic(const CV& pt_codes, const List& map) {
-  std::string ptCode;
+  SEXP ptCodeSexp; // CHARSXP, to avoid having to calculate length of each code
+  const char* ptCodeChar;
   size_t searchLen;
   size_t pos;
-  size_t cmb_len;
+  R_xlen_t cmb_len;
   // hmm, would be nice to only scan the pt_codes once, but I don't want to
   // write my own hash map code....
   CV icd_codes = unique(pt_codes);
   DEBUG_VEC(icd_codes);
   std::vector<std::unordered_set<std::string>> newMapStd(map.length());
   for (R_xlen_t i = 0; i != icd_codes.size(); ++i) {
-    ptCode = icd_codes[i];
+    ptCodeSexp = icd_codes[i];
+    ptCodeChar = CHAR(ptCodeSexp);
     TRACE("i = " << i << ", and ptCode = " << ptCode);
-    size_t codeLen = ptCode.length();
+    int codeLen = LENGTH(ptCodeSexp);
     if (codeLen < 3) continue; // cannot be a valid ICD-10 code
     TRACE("code len >=3 chars");
     for (R_xlen_t j = 0; j < map.size(); ++j) {
@@ -55,21 +57,21 @@ Rcpp::List simplifyMapLexicographic(const CV& pt_codes, const List& map) {
         // if map code is longer than the patient's code, it should never match
         if (cmb_len > codeLen) continue;
         // we always have at least 3 characters, so spare looping inside strcmp
-        if (cmbCodes[k][0] != ptCode[0] || cmbCodes[k][1] != ptCode[1] ||
-            cmbCodes[k][2] != ptCode[2])
+        if (cmbCodes[k][0] != ptCodeChar[0] || cmbCodes[k][1] != ptCodeChar[1] ||
+            cmbCodes[k][2] != ptCodeChar[2])
           goto no_match;
-        searchLen = std::min(cmb_len, codeLen);
+        searchLen = std::min(cmb_len, (R_xlen_t)codeLen);
         pos       = 3;
         // this could be a series of subtractions, in multiple bytes at a time,
         // or simply write it out manually here up to, say, ten, then loop any
         // more (for non-ICD or very unusual future ICD codes). Jump table?
         while (pos != searchLen) {
-          if (cmbCodes[k][pos] != ptCode[pos]) { goto no_match; }
+          if (cmbCodes[k][pos] != ptCodeChar[pos]) { goto no_match; }
           ++pos;
         }
         // push the patient's ICD code, not the original comorbidity ICD code
         // onto the new map.
-        newMapStd[j].insert(ptCode);
+        newMapStd[j].insert(ptCodeChar);
         TRACE("Going to next comorbidity");
         goto next_comorbidity;
       no_match:;

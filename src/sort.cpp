@@ -1,9 +1,10 @@
 #include "sort.h"
 #include "local.h" // TRACE, etc.
 #include <Rcpp.h>
+#include <string.h> // strcmp
 using namespace Rcpp;
 
-Rcpp::IntegerVector orderWorker(const Rcpp::CharacterVector& x,
+Rcpp::IntegerVector orderWorker(const Rcpp::CharacterVector x,
                                 std::function<bool(Rcpp::String, Rcpp::String)> f) {
   IntegerVector index = Rcpp::no_init_vector(x.size());
   // R indexed

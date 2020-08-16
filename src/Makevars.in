@@ -12,14 +12,9 @@ PKG_CFLAGS = @ICD_SHUTUP_FLAG@
 PKG_CXXFLAGS = -DEIGEN_PERMANENTLY_DISABLE_STUPID_WARNINGS \
 			   @ICD_SHUTUP_FLAG@ \
 			   @ICD_OPENMP_FLAG@
-			   #-DICD_TIME \
+
+			   # -DICD_TIME \
 			   #-DRCPP_DEBUG_LEVEL=1 \
 			   #-DRCPP_DEBUG_MODULE_LEVEL=1 \
 
 PKG_LIBS = @ICD_OPENMP_FLAG@
-
-# by default, strip binary. This both saves space on user side, and has
-# possible performance benefits if whole binary can be cached more easily on
-# older machines.
-
-@ICD_STRIP@

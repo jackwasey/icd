@@ -61,14 +61,18 @@ void buildVisitCodesSparseWide(
   visTriplets.reserve(vlen * ncol); // upper bound
   IntegerVector rows = no_init(vlen * ncol);
   if (!Rf_isFactor(visits)) {
+    ICD_TIME_BEGIN(notfactor);
     DEBUG(TYPEOF(visits));
     CV v     = (CV)visits; // assume character for now
     CV uv    = unique(v);
     visitIds = as<VecStr>(uv);
     rows     = match(v, uv);
+    ICD_TIME_END(notfactor);
   } else {
+    ICD_TIME_BEGIN(factoralready);
     rows     = visits; // can do this without copy using unique_ptr?
     visitIds = as<VecStr>(rows.attr("levels"));
+    ICD_TIME_END(factoralready);
   }
   for (int j = 0; j != code_names.size(); ++j) {
     String data_col_name = code_names[j];
@@ -91,7 +95,7 @@ void buildVisitCodesSparseWide(
       const CV& data_col_cv = (CV)data_col;
       DEBUG_VEC(data_col_cv);
       for (R_xlen_t i = 0; i != rows.size(); ++i) {
-        const auto found = relevant.rel_map.find(((String)data_col_cv[i]).get_cstring());
+        const auto found = relevant.rel_map.find(((String)data_col_cv[i]));
         if (found == relevant.rel_map.cend()) continue;
         DEBUG("adding triplet at R idx:" << rows[i] << ", " << found->second);
         visTriplets.push_back(Triplet(rows[i] - 1, found->second, true));
@@ -132,15 +136,27 @@ LogicalMatrix comorbidMatMulWide(const DataFrame& data,
                                  const std::string id_name,
                                  const CV& code_names,
                                  const bool validate) {
-  VecStr out_row_names;           // size is reserved in buildVisitCodesVec
+  VecStr out_row_names; // size is reserved in buildVisitCodesVec
+  ICD_TIME_BEGIN(comorbidMatMul1);
   RObject visits = data[id_name]; // does this copy??? RObject instead?
+  ICD_TIME_END(comorbidMatMul1);
+
+  ICD_TIME_BEGIN(comorbidMatMulRel);
   Relevant r(map, data, code_names);
+  ICD_TIME_END(comorbidMatMulRel);
+
+  ICD_TIME_BEGIN(comorbidMatMulMP);
   MapPlus m(map, r);
+  ICD_TIME_END(comorbidMatMulMP);
+
   PtsSparse visMat; // reservation and sizing done within next function
+  ICD_TIME_BEGIN(comorbidMatMulToBuildSparse);
   buildVisitCodesSparseWide(data, id_name, code_names, validate, r, visMat, out_row_names);
+  ICD_TIME_END(comorbidMatMulToBuildSparse);
   if (visMat.cols() != m.rows()) stop("matrix multiplication won't work");
   // consider using R's C interface for creating logical SEXP, then use
-  // Eigen::Map to use that memory to avoid a potentially big copy.
+  // Eigen::Map to use that memory to avoid a potentially big copy. Not
+  // bottleneck. The bottleneck is probably R garbage collecting.
   /*
    * Something like:
    *

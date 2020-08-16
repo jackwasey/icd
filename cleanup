@@ -2,7 +2,7 @@
 
 # if/when move away from configure script, don't delete the
 # legitimate files
-test -f configure && rm -f src/Makevars src/makevars.h
+test -f configure && rm -f src/Makevars
 
 rm -f config.log config.status aclocal.m4 \
     src/*.o src/*.a src/*.d \

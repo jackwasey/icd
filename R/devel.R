@@ -3,7 +3,7 @@
 # Various functions for development purposes only, not to be included in the R
 # package. Source or (temporarily) include in package
 
-if (isTRUE(getOption("icd.devel"))) {
+load_dev_pkgs <- function() {
   suppressWarnings(suppressPackageStartupMessages({
     library(devtools)
     library(pkgbuild)
@@ -12,6 +12,36 @@ if (isTRUE(getOption("icd.devel"))) {
     library(magrittr)
     library(lintr)
   }))
+}
+
+if (isTRUE(getOption("icd.devel"))) {
+  load_dev_pkgs()
+}
+
+toolchain <- function() {
+  mf <- Sys.getenv("MAKEFLAGS", unset = NA)
+  if (is.na(mf)) {
+    message("MAKEFLAGS is unset")
+  } else {
+    message("MAKEFLAGS is set:")
+    print(mf)
+  }
+  Sys.setenv(MAKEFLAGS = paste0("-j", parallel::detectCores()))
+  makevars_path <- file.path("~", ".R", "Makevars")
+  mkln <- Sys.readlink(makevars_path)
+  if (!is.na(mkln)) {
+    message("~/.R/Makevars is linked to:")
+    print(mkln)
+  } else if (file.exists(makevars_path)) {
+    message("~/.R/Makevars is present")
+  }
+  rum <- Sys.getenv("R_USER_MAKEVARS", unset = NA)
+  if (is.na(rum)) {
+    message("R_USER_MAKEVARS is not set")
+  } else {
+    message("R_USER_MAKEVARS is set to:")
+    print(rum)
+  }
 }
 
 sitrep <- function() {
@@ -124,25 +154,27 @@ icd_devel <- function(devel_mode = NULL) {
   invisible(devel_mode)
 }
 
-
 if (isTRUE(getOption("icd.devel"))) {
-  message("sourcing extra-tests")
+  .m("sourcing extra-tests")
   source(file.path(ihd(quiet = FALSE), "tools", "extra-tests.R"))
-  T <- F <- stop("don't use T or F")
 
-  d <- e <- f <- g <- l <- NA
+  b <- d <- e <- f <- g <- l <- s <- NA
+  class(b) <- "b"
   class(d) <- "d"
   class(e) <- "e"
   class(f) <- "f"
   class(g) <- "g"
   class(l) <- "l"
-
+  class(s) <- "s"
+  print.b <- function(...) toolchain()
   print.d <- function(...) icd_devel(TRUE)
 
   print.e <- function(...) icd_devel(FALSE)
 
   print.f <- function(...) {
     system2(ihf("tools", "format.sh"), args = ihd())
+  }
+  print.s <- function(...) {
     styler::style_pkg(filetype = c("R", "Rprofile", "Rmd", "Rnw"))
   }
 

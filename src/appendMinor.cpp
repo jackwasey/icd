@@ -5,7 +5,6 @@
 #include <Rcpp.h>
 #include <algorithm> // for fill
 #include <iterator>  // for distance
-#include <string.h>  // for strlen
 #include <string>    // for basic_string, operator!=
 #include <vector>
 using Rcpp::String;
@@ -23,7 +22,7 @@ using Rcpp::wrap;
 Rcpp::CharacterVector
 icd9MajMinToCode(Rcpp::CharacterVector mjr, Rcpp::CharacterVector mnr, const bool short_code) {
   TRACE("icd9MajMinToCode: mjr.size() = " << mjr.size() << " and mnr.size() = " << mnr.size());
-  if (mjr.size() != mnr.size()) Rcpp::stop("major and minor lengths differ");
+  if (mjr.size() != mnr.size()) Rcpp::stop("major and minor vector lengths differ");
   std::vector<std::string> out(mjr.size());
   std::vector<char> out_is_na(mjr.size()); // Boolean in char
   Rcpp::CharacterVector::const_iterator j = mjr.cbegin();
@@ -41,8 +40,9 @@ icd9MajMinToCode(Rcpp::CharacterVector mjr, Rcpp::CharacterVector mnr, const boo
     // TODO: possibly better to use Rcpp String here, which I think caches the
     // length look-up, but not sure whether it can do so across entry to C/C++
     // code.
-    const char* smj_c = mjrelem.get_cstring();
-    switch (smj.size()) {
+    const SEXP smj_sexp = mjrelem.get_sexp(); // CHARSXP
+    const char* smj_c   = CHAR(smj_sexp);
+    switch (LENGTH(smj_sexp)) { // LENGTH of CHARSXP is nchar
     case 0:
       out_is_na[std::distance(mjr.cbegin(), j)] = 1;
       continue;
@@ -63,7 +63,7 @@ icd9MajMinToCode(Rcpp::CharacterVector mjr, Rcpp::CharacterVector mnr, const boo
     smj.append(mnrelem);
     out[std::distance(mjr.cbegin(), j)] = smj;
   }
-  Rcpp::CharacterVector r_out = wrap(out);
+  Rcpp::CharacterVector r_out = Rcpp::wrap(out);
 #ifdef ICD_DEBUG_TRACE
   Rcpp::Rcout << "NA loop size: " << out_is_na.size() << "\n";
 #endif
