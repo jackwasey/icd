@@ -37,63 +37,69 @@ AC_CONFIG_MACRO_DIR([inst/m4])
 
 : ${R_HOME:=`R RHOME`}
 AC_MSG_CHECKING([R_HOME is still not empty])
-AS_IF([ test -z "${R_HOME}" ], 
+AS_IF([ test -d "${R_HOME}" ], 
 	  [
-	   AC_MSG_RESULT([No])
-	   AC_MSG_ERROR([Cannot proceed.])
+	   AC_MSG_RESULT([${R_HOME}])
 	   ], 
 	   [
-		AC_MSG_RESULT([${R_HOME}])
-		R_BIN=[${R_HOME}/bin/R]
+		AC_MSG_RESULT([No])
+		AC_MSG_ERROR([Cannot proceed.])
 		]
 	   )
+
+: ${R_BIN:=${R_HOME}/bin/R}
+: ${R_CXX:=`"${R_BIN}" CMD config CXX`}
+: ${R_CXXFLAGS:=`"${R_BIN}" CMD config CXXFLAGS`}
+: ${R_CXX11:=`"${R_BIN}" CMD config CXX11`}
+: ${R_CXX11FLAGS:=`"${R_BIN}" CMD config CXX11FLAGS`}
+: ${R_CXX14:=`"${R_BIN}" CMD config CXX14`}
+: ${R_CXX14FLAGS:=`"${R_BIN}" CMD config CXX14FLAGS`}
+: ${R_CXX17:=`"${R_BIN}" CMD config CXX16`}
+: ${R_CXX17FLAGS:=`"${R_BIN}" CMD config CXX17FLAGS`}
+: ${R_CXX20:=`"${R_BIN}" CMD config CXX20`}
+: ${R_CXX20FLAGS:=`"${R_BIN}" CMD config CXX20FLAGS`}
+: ${R_CFLAGS:=`"${R_BIN}" CMD config CFLAGS`}
+: ${R_CPPFLAGS:=`"${R_BIN}" CMD config CPPFLAGS`}
+
+if ! "${R_BIN}" CMD config CXX11STD 2>/dev/null >/dev/null; then AC_MSG_ERROR([icd requires a compiler with at least C++11 support]); fi
+if "${R_BIN}" CMD config CXX14STD 2>/dev/null >/dev/null; then HAVE_CXX14=1; fi
+if "${R_BIN}" CMD config CXX17STD 2>/dev/null >/dev/null; then HAVE_CXX17=1; fi
+if "${R_BIN}" CMD config CXX20STD 2>/dev/null >/dev/null; then HAVE_CXX20=1; fi
+
+AC_MSG_CHECKING([C++ standard]);
+if test "x$CXXSTD" = "x"; then 
+	if test "x$HAVE_CXX14" != "x"; then CXXSTD='CXX14'; CXX="${R_CXX14}"; fi
+	if test "x$HAVE_CXX17" != "x"; then CXXSTD='CXX17'; CXX="${R_CXX17}";fi
+	if test "x$HAVE_CXX20" != "x"; then CXXSTD='CXX20'; CXX="${R_CXX20}";fi
+	AC_MSG_RESULT([latest R toolchain CXXSTD available is ${CXXSTD}]);
+else
+	AC_MSG_RESULT([user set CXXSTD to ${CXXSTD}]);
+fi
 
 # Get R's C++11 preferred compiler, flags, std, and use these for C++, and C++11
 # but if --configure-vars is set, we want to let this override R's choice, e.g.
 # so r-hub can be instructed to skip massive Eigen warning spam!
 
-AC_MSG_CHECKING([R CXX11])
-dnl TODO: if user prefers globally using C++14, C++17, or C++20, then respect
-dnl this, since 'icd' should compile fine. All this basically enforces C++11,
-dnl whereas we can use C++11 or greater.
-AS_IF([test "${CXX11-unset}" = unset ],
-	  [
-	   CXX11=`"${R_BIN}" CMD config CXX11`
-	   AC_MSG_RESULT([Setting ${CXX11}])
-	   ], 
-	   [AC_MSG_RESULT([Using pre-set ${CXX11} instead of R CMD config CXX11])]
-	   )
-
-AC_MSG_CHECKING([R CXX11STD])
-AS_IF([test "${CXX11STD-unset}" = unset ], 
-	  [
-	   CXX11STD=`"${R_BIN}" CMD config CXX11STD`
-	   AC_MSG_RESULT([Setting R ${CXX11STD}])
-	   ], 
-	   [AC_MSG_RESULT([Using existing ${CXX11STD} instead of R CMD config CXXSTD])]
-	   )
-
-AC_MSG_CHECKING([R CXX11FLAGS]);
-AS_IF([test "${CXX11FLAGS-unset}" = unset ],
-	  [
-	   CXX11FLAGS=`"${R_BIN}" CMD config CXX11FLAGS`
-	   AC_MSG_RESULT([Setting R ${CXX11FLAGS}])
-	   ],
-	   [AC_MSG_RESULT([Using existing ${CXX11FLAGS} instead of R CMD config CXXFLAGS])]
-	   )
+dnl AC_MSG_CHECKING([R CFLAGS]);
+dnl AS_IF([test "${CFLAGS-unset}" = unset ], [AC_MSG_RESULT([${R_CFLAGS}])])
+dnl AS_IF([test "${CXX11FLAGS-unset}" = unset ], [AC_MSG_RESULT([Will use from R: ${R_CXX11FLAGS}])], [AC_MSG_RESULT([already set to: ${CXX11FLAGS}])])
+dnl AS_IF([test "${PKG_CXXFLAGS-unset}" = unset ], [AC_MSG_RESULT([PKG_CXXFLAGS not being used.])], [AC_MSG_RESULT([${PKGCXXFLAGS])])
 
 # We enforce at least C++11 (as does R4.0.0 now, but which R3.x need explicitly)
-CXX="${CXX11}"
-AS_VAR_APPEND([CXXFLAGS], [`Rscript -e 'Rcpp:::CxxFlags()'`])
-AS_VAR_APPEND([CXXFLAGS], [`Rscript -e 'RcppEigen:::CxxFlags()'`])
-CXXSTD="${CXX11STD}"
-dnl maybe necessary:
-dnl AS_VAR_COPY([CXX11FLAGS], [CXXFLAGS])
-AC_MSG_NOTICE([CXXFLAGS is ${CXXFLAGS}])
-AC_MSG_NOTICE([CXX11FLAGS is ${CXX11FLAGS}])
+RCPP_CXXFLAGS=[`Rscript -e 'Rcpp:::CxxFlags()'`]
+RCPPEIGEN_CXXFLAGS=[`Rscript -e 'RcppEigen:::CxxFlags()'`]
+AC_MSG_NOTICE([Got Rcpp and RcppEigen C++ flags])
+dnl TODO: consider -I to -isystem switch, at least for debug
+EIGEN_QUIET_FLAGS=[-DEIGEN_PERMANENTLY_DISABLE_STUPID_WARNINGS]
 
-CFLAGS=`"${R_BIN}" CMD config CFLAGS`
-CPPFLAGS=`"${R_BIN}" CMD config CPPFLAGS`
+
+CFLAGS="${R_CFLAGS} ${CFLAGS} ${PKG_CFLAGS}"
+CPPFLAGS="${R_CPPFLAGS} ${CPPFLAGS} ${PKG_CPPFLAGS}"
+CXXFLAGS="${R_CXXFLAGS} ${RCPP_CXXFLAGS} ${RCPPEIGEN_CXXFLAGS} ${CXXFLAGS} ${PKG_CXXFLAGS}"
+CXX11FLAGS="${R_CXX11FLAGS} ${RCPP_CXXFLAGS} ${RCPPEIGEN_CXXFLAGS} ${CXX11FLAGS} ${PKG_CXX11FLAGS}" 
+AC_MSG_NOTICE([Final CXXFLAGS is ${CXXFLAGS}])
+AC_MSG_NOTICE([Final CXX11FLAGS is ${CXX11FLAGS}])
+
 LIBS="${PKG_LIBS}"
 
 # try to shut up travis/r-hub builds with huge warning burden with default
@@ -115,6 +121,8 @@ AS_IF([test "x$enable_icd_shutup" = "xyes" || test "${ICD_SHUTUP+set}" = set ], 
 AC_LANG([C++])
 # https://www.gnu.org/software/autoconf/manual/autoconf-2.67/html_node/Generic-Compiler-Characteristics.html
 
+AC_ARG_VAR([ICD_DEBUG], [enable icd debugging for compilation])
+: ${ICD_DEBUG+-DICD_DEBUG}
 dnl AS_VAR_APPEND([CPPFLAGS], [" -DICD_DEBUG "]) # may be useful. PREPEND? m4_append
 dnl May be useful: AC_C_BIGENDIAN for bit processing if needed
 
@@ -185,10 +193,15 @@ AC_ARG_ENABLE([icd_optim], [AS_HELP_STRING([--enable-icd-optim], [Optional addit
 AS_IF([ test "x$enable_icd_optim" = "xyes" || test "${ICD_OPTIM+set}" = set ],
 	  [ ICD_OPTIM_FLAGS="-march=native -O3 -g0 -fomit-frame-pointer" ])
 
-#AC_CHECK_HEADERS([Rcpp.h])
-#AC_CHECK_HEADERS([RcppEigen.h])
-#AC_CHECK_HEADERS([Eigen/Eigen])
-#AC_CHECK_HEADERS([Eigen/Sparse])
+# --icd-optim-info will show a little information on steps performed in optimizing the problem to be solved.
+
+AC_ARG_VAR([ICD_OPTIM_INFO], [occasional info when comorbidity problem optimization was possible (default is no)])
+: ${ICD_OPTIM_INFO=-DICD_OPTIM_INFO}
+
+AC_CHECK_HEADERS([Rcpp.h])
+AC_CHECK_HEADERS([RcppEigen.h])
+AC_CHECK_HEADERS([Eigen/Eigen])
+AC_CHECK_HEADERS([Eigen/Sparse])
 #AC_CHECK_HEADERS([testthat.h])
 AC_CHECK_HEADERS([functional])
 AC_CHECK_HEADERS([unordered_map])
@@ -197,7 +210,11 @@ AC_CHECK_HEADERS([chrono])
 AC_CHECK_HEADERS([ratio])
 AC_CHECK_HEADERS([ctime])
 
+AC_SUBST(CFLAGS)
+AC_SUBST(CXXFLAGS)
+AC_SUBST(CXXSTD)
 AC_SUBST(ICD_OPENMP_FLAG)
 AC_SUBST([ICD_OPTIM_FLAGS])
+AC_SUBST([ICD_OPTIM_INFO_FLAG])
 AC_SUBST(ICD_SHUTUP_FLAG)
 AC_OUTPUT

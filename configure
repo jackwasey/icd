@@ -627,11 +627,15 @@ ac_includes_default="\
 ac_subst_vars='LTLIBOBJS
 LIBOBJS
 ICD_SHUTUP_FLAG
+ICD_OPTIM_INFO_FLAG
 ICD_OPTIM_FLAGS
 ICD_OPENMP_FLAG
+CXXSTD
+CFLAGS
 EGREP
 GREP
 CXXCPP
+ICD_OPTIM_INFO
 OPENMP_CXXFLAGS
 OBJEXT
 EXEEXT
@@ -640,6 +644,7 @@ CPPFLAGS
 LDFLAGS
 CXXFLAGS
 CXX
+ICD_DEBUG
 ICD_SHUTUP
 target_alias
 host_alias
@@ -690,12 +695,14 @@ enable_icd_optim
 host_alias
 target_alias
 ICD_SHUTUP
+ICD_DEBUG
 CXX
 CXXFLAGS
 LDFLAGS
 LIBS
 CPPFLAGS
 CCC
+ICD_OPTIM_INFO
 CXXCPP'
 
 
@@ -1318,6 +1325,7 @@ Some influential environment variables:
               platforms, making actual warnings impossible to uncover.
               Alternatively, use --enable-icd-shutup in configure, which will
               override ICD_SHUTUP, if it is set.]
+  ICD_DEBUG   enable icd debugging for compilation
   CXX         C++ compiler command
   CXXFLAGS    C++ compiler flags
   LDFLAGS     linker flags, e.g. -L<lib dir> if you have libraries in a
@@ -1325,6 +1333,9 @@ Some influential environment variables:
   LIBS        libraries to pass to the linker, e.g. -l<library>
   CPPFLAGS    (Objective) C/C++ preprocessor flags, e.g. -I<include dir> if
               you have headers in a nonstandard directory <include dir>
+  ICD_OPTIM_INFO
+              occasional info when comorbidity problem optimization was
+              possible (default is no)
   CXXCPP      C++ preprocessor
 
 Use these variables to override the choices made by `configure' or to help
@@ -2061,79 +2072,74 @@ ac_config_headers="$ac_config_headers src/config.h"
 : ${R_HOME:=`R RHOME`}
 { $as_echo "$as_me:${as_lineno-$LINENO}: checking R_HOME is still not empty" >&5
 $as_echo_n "checking R_HOME is still not empty... " >&6; }
-if  test -z "${R_HOME}" ; then :
+if  test -d "${R_HOME}" ; then :
 
-	   { $as_echo "$as_me:${as_lineno-$LINENO}: result: No" >&5
-$as_echo "No" >&6; }
-	   as_fn_error $? "Cannot proceed." "$LINENO" 5
+	   { $as_echo "$as_me:${as_lineno-$LINENO}: result: ${R_HOME}" >&5
+$as_echo "${R_HOME}" >&6; }
 
 else
 
-		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: ${R_HOME}" >&5
-$as_echo "${R_HOME}" >&6; }
-		R_BIN=${R_HOME}/bin/R
+		{ $as_echo "$as_me:${as_lineno-$LINENO}: result: No" >&5
+$as_echo "No" >&6; }
+		as_fn_error $? "Cannot proceed." "$LINENO" 5
 
 
+fi
+
+: ${R_BIN:=${R_HOME}/bin/R}
+: ${R_CXX:=`"${R_BIN}" CMD config CXX`}
+: ${R_CXXFLAGS:=`"${R_BIN}" CMD config CXXFLAGS`}
+: ${R_CXX11:=`"${R_BIN}" CMD config CXX11`}
+: ${R_CXX11FLAGS:=`"${R_BIN}" CMD config CXX11FLAGS`}
+: ${R_CXX14:=`"${R_BIN}" CMD config CXX14`}
+: ${R_CXX14FLAGS:=`"${R_BIN}" CMD config CXX14FLAGS`}
+: ${R_CXX17:=`"${R_BIN}" CMD config CXX16`}
+: ${R_CXX17FLAGS:=`"${R_BIN}" CMD config CXX17FLAGS`}
+: ${R_CXX20:=`"${R_BIN}" CMD config CXX20`}
+: ${R_CXX20FLAGS:=`"${R_BIN}" CMD config CXX20FLAGS`}
+: ${R_CFLAGS:=`"${R_BIN}" CMD config CFLAGS`}
+: ${R_CPPFLAGS:=`"${R_BIN}" CMD config CPPFLAGS`}
+
+if ! "${R_BIN}" CMD config CXX11STD 2>/dev/null >/dev/null; then as_fn_error $? "icd requires a compiler with at least C++11 support" "$LINENO" 5; fi
+if "${R_BIN}" CMD config CXX14STD 2>/dev/null >/dev/null; then HAVE_CXX14=1; fi
+if "${R_BIN}" CMD config CXX17STD 2>/dev/null >/dev/null; then HAVE_CXX17=1; fi
+if "${R_BIN}" CMD config CXX20STD 2>/dev/null >/dev/null; then HAVE_CXX20=1; fi
+
+{ $as_echo "$as_me:${as_lineno-$LINENO}: checking C++ standard" >&5
+$as_echo_n "checking C++ standard... " >&6; };
+if test "x$CXXSTD" = "x"; then
+	if test "x$HAVE_CXX14" != "x"; then CXXSTD='CXX14'; CXX="${R_CXX14}"; fi
+	if test "x$HAVE_CXX17" != "x"; then CXXSTD='CXX17'; CXX="${R_CXX17}";fi
+	if test "x$HAVE_CXX20" != "x"; then CXXSTD='CXX20'; CXX="${R_CXX20}";fi
+	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: latest R toolchain CXXSTD available is ${CXXSTD}" >&5
+$as_echo "latest R toolchain CXXSTD available is ${CXXSTD}" >&6; };
+else
+	{ $as_echo "$as_me:${as_lineno-$LINENO}: result: user set CXXSTD to ${CXXSTD}" >&5
+$as_echo "user set CXXSTD to ${CXXSTD}" >&6; };
 fi
 
 # Get R's C++11 preferred compiler, flags, std, and use these for C++, and C++11
 # but if --configure-vars is set, we want to let this override R's choice, e.g.
 # so r-hub can be instructed to skip massive Eigen warning spam!
 
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking R CXX11" >&5
-$as_echo_n "checking R CXX11... " >&6; }
-if test "${CXX11-unset}" = unset ; then :
-
-	   CXX11=`"${R_BIN}" CMD config CXX11`
-	   { $as_echo "$as_me:${as_lineno-$LINENO}: result: Setting ${CXX11}" >&5
-$as_echo "Setting ${CXX11}" >&6; }
-
-else
-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: Using pre-set ${CXX11} instead of R CMD config CXX11" >&5
-$as_echo "Using pre-set ${CXX11} instead of R CMD config CXX11" >&6; }
-
-fi
-
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking R CXX11STD" >&5
-$as_echo_n "checking R CXX11STD... " >&6; }
-if test "${CXX11STD-unset}" = unset ; then :
-
-	   CXX11STD=`"${R_BIN}" CMD config CXX11STD`
-	   { $as_echo "$as_me:${as_lineno-$LINENO}: result: Setting R ${CXX11STD}" >&5
-$as_echo "Setting R ${CXX11STD}" >&6; }
-
-else
-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: Using existing ${CXX11STD} instead of R CMD config CXXSTD" >&5
-$as_echo "Using existing ${CXX11STD} instead of R CMD config CXXSTD" >&6; }
-
-fi
-
-{ $as_echo "$as_me:${as_lineno-$LINENO}: checking R CXX11FLAGS" >&5
-$as_echo_n "checking R CXX11FLAGS... " >&6; };
-if test "${CXX11FLAGS-unset}" = unset ; then :
-
-	   CXX11FLAGS=`"${R_BIN}" CMD config CXX11FLAGS`
-	   { $as_echo "$as_me:${as_lineno-$LINENO}: result: Setting R ${CXX11FLAGS}" >&5
-$as_echo "Setting R ${CXX11FLAGS}" >&6; }
-
-else
-  { $as_echo "$as_me:${as_lineno-$LINENO}: result: Using existing ${CXX11FLAGS} instead of R CMD config CXXFLAGS" >&5
-$as_echo "Using existing ${CXX11FLAGS} instead of R CMD config CXXFLAGS" >&6; }
-
-fi
 
 # We enforce at least C++11 (as does R4.0.0 now, but which R3.x need explicitly)
-CXX="${CXX11}"
-as_fn_append CXXFLAGS `Rscript -e 'Rcpp:::CxxFlags()'`
-as_fn_append CXXFLAGS `Rscript -e 'RcppEigen:::CxxFlags()'`
-CXXSTD="${CXX11STD}"
-{ $as_echo "$as_me:${as_lineno-$LINENO}: CXXFLAGS is ${CXXFLAGS}" >&5
-$as_echo "$as_me: CXXFLAGS is ${CXXFLAGS}" >&6;}
-{ $as_echo "$as_me:${as_lineno-$LINENO}: CXX11FLAGS is ${CXX11FLAGS}" >&5
-$as_echo "$as_me: CXX11FLAGS is ${CXX11FLAGS}" >&6;}
+RCPP_CXXFLAGS=`Rscript -e 'Rcpp:::CxxFlags()'`
+RCPPEIGEN_CXXFLAGS=`Rscript -e 'RcppEigen:::CxxFlags()'`
+{ $as_echo "$as_me:${as_lineno-$LINENO}: Got Rcpp and RcppEigen C++ flags" >&5
+$as_echo "$as_me: Got Rcpp and RcppEigen C++ flags" >&6;}
+EIGEN_QUIET_FLAGS=-DEIGEN_PERMANENTLY_DISABLE_STUPID_WARNINGS
 
-CFLAGS=`"${R_BIN}" CMD config CFLAGS`
-CPPFLAGS=`"${R_BIN}" CMD config CPPFLAGS`
+
+CFLAGS="${R_CFLAGS} ${CFLAGS} ${PKG_CFLAGS}"
+CPPFLAGS="${R_CPPFLAGS} ${CPPFLAGS} ${PKG_CPPFLAGS}"
+CXXFLAGS="${R_CXXFLAGS} ${RCPP_CXXFLAGS} ${RCPPEIGEN_CXXFLAGS} ${CXXFLAGS} ${PKG_CXXFLAGS}"
+CXX11FLAGS="${R_CXX11FLAGS} ${RCPP_CXXFLAGS} ${RCPPEIGEN_CXXFLAGS} ${CXX11FLAGS} ${PKG_CXX11FLAGS}"
+{ $as_echo "$as_me:${as_lineno-$LINENO}: Final CXXFLAGS is ${CXXFLAGS}" >&5
+$as_echo "$as_me: Final CXXFLAGS is ${CXXFLAGS}" >&6;}
+{ $as_echo "$as_me:${as_lineno-$LINENO}: Final CXX11FLAGS is ${CXX11FLAGS}" >&5
+$as_echo "$as_me: Final CXX11FLAGS is ${CXX11FLAGS}" >&6;}
+
 LIBS="${PKG_LIBS}"
 
 # try to shut up travis/r-hub builds with huge warning burden with default
@@ -2165,6 +2171,8 @@ ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
 
 # https://www.gnu.org/software/autoconf/manual/autoconf-2.67/html_node/Generic-Compiler-Characteristics.html
 
+
+: ${ICD_DEBUG+-DICD_DEBUG}
 
 # I would like to use smaller unit for storing matrix product, ideall bool, but
 # unsigned char is something. Some things can be assumed by R's C version
@@ -2830,11 +2838,11 @@ if  test "x$enable_icd_optim" = "xyes" || test "${ICD_OPTIM+set}" = set ; then :
    ICD_OPTIM_FLAGS="-march=native -O3 -g0 -fomit-frame-pointer"
 fi
 
-#AC_CHECK_HEADERS([Rcpp.h])
-#AC_CHECK_HEADERS([RcppEigen.h])
-#AC_CHECK_HEADERS([Eigen/Eigen])
-#AC_CHECK_HEADERS([Eigen/Sparse])
-#AC_CHECK_HEADERS([testthat.h])
+# --icd-optim-info will show a little information on steps performed in optimizing the problem to be solved.
+
+
+: ${ICD_OPTIM_INFO=-DICD_OPTIM_INFO}
+
 ac_ext=cpp
 ac_cpp='$CXXCPP $CPPFLAGS'
 ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
@@ -3228,6 +3236,55 @@ fi
 done
 
 
+for ac_header in Rcpp.h
+do :
+  ac_fn_cxx_check_header_mongrel "$LINENO" "Rcpp.h" "ac_cv_header_Rcpp_h" "$ac_includes_default"
+if test "x$ac_cv_header_Rcpp_h" = xyes; then :
+  cat >>confdefs.h <<_ACEOF
+#define HAVE_RCPP_H 1
+_ACEOF
+
+fi
+
+done
+
+for ac_header in RcppEigen.h
+do :
+  ac_fn_cxx_check_header_mongrel "$LINENO" "RcppEigen.h" "ac_cv_header_RcppEigen_h" "$ac_includes_default"
+if test "x$ac_cv_header_RcppEigen_h" = xyes; then :
+  cat >>confdefs.h <<_ACEOF
+#define HAVE_RCPPEIGEN_H 1
+_ACEOF
+
+fi
+
+done
+
+for ac_header in Eigen/Eigen
+do :
+  ac_fn_cxx_check_header_mongrel "$LINENO" "Eigen/Eigen" "ac_cv_header_Eigen_Eigen" "$ac_includes_default"
+if test "x$ac_cv_header_Eigen_Eigen" = xyes; then :
+  cat >>confdefs.h <<_ACEOF
+#define HAVE_EIGEN_EIGEN 1
+_ACEOF
+
+fi
+
+done
+
+for ac_header in Eigen/Sparse
+do :
+  ac_fn_cxx_check_header_mongrel "$LINENO" "Eigen/Sparse" "ac_cv_header_Eigen_Sparse" "$ac_includes_default"
+if test "x$ac_cv_header_Eigen_Sparse" = xyes; then :
+  cat >>confdefs.h <<_ACEOF
+#define HAVE_EIGEN_SPARSE 1
+_ACEOF
+
+fi
+
+done
+
+#AC_CHECK_HEADERS([testthat.h])
 for ac_header in functional
 do :
   ac_fn_cxx_check_header_mongrel "$LINENO" "functional" "ac_cv_header_functional" "$ac_includes_default"
@@ -3299,6 +3356,10 @@ _ACEOF
 fi
 
 done
+
+
+
+
 
 
 

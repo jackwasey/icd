@@ -42,7 +42,8 @@ icd9MajMinToCode(Rcpp::CharacterVector mjr, Rcpp::CharacterVector mnr, const boo
     // code.
     const SEXP smj_sexp = mjrelem.get_sexp(); // CHARSXP
     const char* smj_c   = CHAR(smj_sexp);
-    switch (LENGTH(smj_sexp)) { // LENGTH of CHARSXP is nchar
+    TRACE("TYPEOF smj_sexp: " << Rf_type2char(TYPEOF(smj_sexp)));
+    switch (XLENGTH(smj_sexp)) { // X?LENGTH of CHARSXP is nchar without calc
     case 0:
       out_is_na[std::distance(mjr.cbegin(), j)] = 1;
       continue;

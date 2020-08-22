@@ -6,6 +6,12 @@
 /* Define to 1 if you have the <ctime> header file. */
 #undef HAVE_CTIME
 
+/* Define to 1 if you have the <Eigen/Eigen> header file. */
+#undef HAVE_EIGEN_EIGEN
+
+/* Define to 1 if you have the <Eigen/Sparse> header file. */
+#undef HAVE_EIGEN_SPARSE
+
 /* Define to 1 if you have the <functional> header file. */
 #undef HAVE_FUNCTIONAL
 
@@ -17,6 +23,12 @@
 
 /* Define to 1 if you have the <ratio> header file. */
 #undef HAVE_RATIO
+
+/* Define to 1 if you have the <RcppEigen.h> header file. */
+#undef HAVE_RCPPEIGEN_H
+
+/* Define to 1 if you have the <Rcpp.h> header file. */
+#undef HAVE_RCPP_H
 
 /* Define to 1 if you have the <stdint.h> header file. */
 #undef HAVE_STDINT_H

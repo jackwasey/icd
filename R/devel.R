@@ -67,7 +67,7 @@ sitrep <- function() {
 }
 
 ihd <- function(quiet = TRUE) {
-  .m <- function(...) if (!quiet) message(...)
+  if (!exists(".m")) .m <- function(...) message(...)
   ih <- Sys.getenv("IH", unset = NA)
   icd_home <- Sys.getenv("ICD_HOME", unset = NA)
   rs <- if (requireNamespace("rstudioapi", quietly = TRUE) &&
@@ -155,7 +155,7 @@ icd_devel <- function(devel_mode = NULL) {
 }
 
 if (isTRUE(getOption("icd.devel"))) {
-  .m("sourcing extra-tests")
+  message("sourcing extra-tests")
   source(file.path(ihd(quiet = FALSE), "tools", "extra-tests.R"))
 
   b <- d <- e <- f <- g <- l <- s <- NA
