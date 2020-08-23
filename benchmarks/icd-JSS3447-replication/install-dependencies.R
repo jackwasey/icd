@@ -17,10 +17,9 @@
 install_jss3447_deps <- function(lib.loc = NULL,
                                  depsdone_file = ".depsdone.dummy",
                                  req_min_icd_ver = "4.0.8") {
-
   is_verbose <- function() {
     !(trimws(tolower(Sys.getenv("ICD_VERBOSE"))) %in%
-        c("", "no", "false", "f", "no", "n", "0")
+      c("", "no", "false", "f", "no", "n", "0")
     )
   }
 
@@ -57,27 +56,34 @@ install_jss3447_deps <- function(lib.loc = NULL,
 
   for (r in repos) {
     repo_con <- url(r)
-    tryCatch({
-      readLines(repo_con)
-      if (isOpen(repo_con))
-        close(repo_con)
-    },
-    error = function(e) {
-      warning("repo: ",
-              r,
-              " is not accessible. Will try later with cloud.r-project.org")
-      repo_ok <<- FALSE
-    },
-    warning = function(e) {
+    tryCatch(
+      {
+        readLines(repo_con)
+        if (isOpen(repo_con)) {
+          close(repo_con)
+        }
+      },
+      error = function(e) {
+        warning(
+          "repo: ",
+          r,
+          " is not accessible. Will try later with cloud.r-project.org"
+        )
+        repo_ok <<- FALSE
+      },
+      warning = function(e) {
 
-    })
+      }
+    )
     close(repo_con)
   }
   if (!repo_ok ||
-      is.null(repos) ||
-      length(repos) == 0L) {
-    repos <- c(CRAN = "https://cloud.r-project.org/",
-               CRAN_http = "http://cloud.r-project.org/")
+    is.null(repos) ||
+    length(repos) == 0L) {
+    repos <- c(
+      CRAN = "https://cloud.r-project.org/",
+      CRAN_http = "http://cloud.r-project.org/"
+    )
   }
 
   for (p in c(
@@ -107,9 +113,10 @@ install_jss3447_deps <- function(lib.loc = NULL,
     })
     if (length(have_p) == 0L) {
       install.packages(p,
-                       character.only = TRUE,
-                       repos = repos,
-                       lib = lib.loc)
+        character.only = TRUE,
+        repos = repos,
+        lib = lib.loc
+      )
     }
     suppressPackageStartupMessages(library(
       p,
@@ -125,7 +132,7 @@ install_jss3447_deps <- function(lib.loc = NULL,
   # check.
 
   # TODO: this should probably be somewhere else:
-    Sys.setenv("ICD_STRIP" = "1")
+  Sys.setenv("ICD_STRIP" = "1")
   local_pkg_status <- list()
   for (local_pkg in c("medicalrisk", "comorbidity")) {
     message(
@@ -136,32 +143,39 @@ install_jss3447_deps <- function(lib.loc = NULL,
       "'."
     )
     lpp <- find.package(local_pkg,
-                        lib.loc = lib.loc,
-                        quiet = TRUE,
-                        verbose = FALSE)
+      lib.loc = lib.loc,
+      quiet = TRUE,
+      verbose = FALSE
+    )
     lps <- !identical(lpp, character())
     local_pkg_status[local_pkg] <- lps
     if (lps) {
       msg_verbose("'", local_pkg, "' is already in '", lib.loc, "'")
       next
     }
-    msg_verbose("installing '",
-                local_pkg,
-                "' because it is not found in '",
-                lib.loc,
-                "'")
+    msg_verbose(
+      "installing '",
+      local_pkg,
+      "' because it is not found in '",
+      lib.loc,
+      "'"
+    )
     candidate_pkgs <-
       list.files(pattern = paste0(local_pkg, ".*\\.tar\\.gz"))
     if (length(candidate_pkgs) == 0) {
-      stop("Local source package for '",
-           local_pkg,
-           "' not found in '",
-           lib.loc)
+      stop(
+        "Local source package for '",
+        local_pkg,
+        "' not found in '",
+        lib.loc
+      )
     } else if (length(candidate_pkgs) > 1) {
-      stop("Multiple possible source packages for '",
-           local_pkg,
-           "' found in '",
-           lib.loc)
+      stop(
+        "Multiple possible source packages for '",
+        local_pkg,
+        "' found in '",
+        lib.loc
+      )
     }
     install.packages(
       pkgs = candidate_pkgs[1],
@@ -178,8 +192,10 @@ install_jss3447_deps <- function(lib.loc = NULL,
     "icd",
     quietly = TRUE,
     lib.loc = lib.loc,
-    versionCheck = list(version = req_min_icd_ver,
-                        op = ">=")
+    versionCheck = list(
+      version = req_min_icd_ver,
+      op = ">="
+    )
   )) {
     message("icd of sufficient recency not yet installed, so installing from local source package")
     if ("icd" %in% available.packages()["Package"]) {

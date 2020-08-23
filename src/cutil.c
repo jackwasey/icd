@@ -17,3 +17,38 @@ SEXP getRListOrDfElement(SEXP list_or_df, const char* element_name) {
   UNPROTECT(2);
   return element;
 }
+
+// similar to the R source function in main/coerce.c, but without any checks.
+SEXP factorAsChar(SEXP x) {
+  if (!Rf_isFactor(x)) Rf_error("icd C function factorAsChar called with non-factor");
+  SEXP out;
+  R_xlen_t i;
+  R_xlen_t n = Rf_xlength(x);
+  SEXP lvls  = getAttrib(x, R_LevelsSymbol);
+  PROTECT(out = allocVector(STRSXP, n));
+  for (i = 0; i < n; i++) {
+    int v = INTEGER_ELT(x, i);
+    if (v == NA_INTEGER)
+      SET_STRING_ELT(out, i, NA_STRING);
+    else
+      SET_STRING_ELT(out, i, STRING_ELT(lvls, v - 1));
+  }
+  UNPROTECT(1); // out
+  return out;
+}
+
+// unsafe if there might be NA values
+SEXP factorAsCharNoNa(SEXP x) {
+  if (!Rf_isFactor(x)) Rf_error("factorAsCharNoNa called with non-factor");
+  SEXP out;
+  R_xlen_t i;
+  R_xlen_t n = Rf_xlength(x);
+  SEXP lvls  = getAttrib(x, R_LevelsSymbol);
+  PROTECT(out = allocVector(STRSXP, n));
+  for (i = 0; i != n; ++i) {
+    int v = INTEGER_ELT(x, i);
+    SET_STRING_ELT(out, i, STRING_ELT(lvls, v - 1));
+  }
+  UNPROTECT(1); // out
+  return out;
+}

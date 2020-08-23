@@ -138,8 +138,8 @@ CV icd9ChildrenShort(const CV& x, const VecStr& defined, bool leaf) {
     return icd9ChildrenShortUndefined(icd9Short);
 }
 
-US icd9ChildrenShortUnorderedWorker(const CV& icd9Short) {
-  US out;
+IcdSet icd9ChildrenShortUnorderedWorker(const CV& icd9Short) {
+  IcdSet out;
   List parts         = icd9ShortToParts(icd9Short, "");
   CV mjr             = parts[0];
   CV mnr             = parts[1];
@@ -163,7 +163,7 @@ CV icd9ChildrenShortUnorderedUndefined(const CV& x) {
     qout.attr("icd_short_diag") = true;
     return qout;
   }
-  US out                         = icd9ChildrenShortUnorderedWorker(icd9Short);
+  IcdSet out                         = icd9ChildrenShortUnorderedWorker(icd9Short);
   CV rcppOut                     = wrap(out);
   rcppOut.attr("icd_short_diag") = true;
   return rcppOut;
@@ -177,10 +177,10 @@ CV icd9ChildrenShortUnorderedDefined(const CV& x, const VecStr& defined) {
     qout.attr("icd_short_diag") = true;
     return qout;
   }
-  US out = icd9ChildrenShortUnorderedWorker(icd9Short);
-  US out_real;
-  US reals(defined.begin(), defined.end());
-  for (US::iterator j = out.begin(); j != out.end(); ++j) {
+  IcdSet out = icd9ChildrenShortUnorderedWorker(icd9Short);
+  IcdSet out_real;
+  IcdSet reals(defined.begin(), defined.end());
+  for (IcdSet::iterator j = out.begin(); j != out.end(); ++j) {
     if (reals.find(*j) != reals.end()) out_real.insert(*j);
   }
   CV rcppOut                     = wrap(out_real);

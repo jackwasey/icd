@@ -7,8 +7,8 @@ library(magrittr)
 requireNamespace(c("igraph"), character.only = TRUE)
 requireNamespace(c("miniCRAN"), character.only = TRUE)
 
-#cran_icd_gr <- miniCRAN::makeDepGraph("icd", suggests = TRUE)
-#miniCRAN:::plot.pkgDepGraph(cran_icd_dgr)
+# cran_icd_gr <- miniCRAN::makeDepGraph("icd", suggests = TRUE)
+# miniCRAN:::plot.pkgDepGraph(cran_icd_dgr)
 
 # taken from DESCRIPTION initially
 bse_deps <- c("methods", "utils", "stats", "graphics")

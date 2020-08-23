@@ -8,9 +8,6 @@ typedef Rcpp::sugar::IndexHash<STRSXP> IHS;
 typedef Rcpp::CharacterVector CV;
 typedef std::pair<std::string, int> RelPair;
 
-// probably have to use R to get platform specific pointer underlying type
-typedef uintptr_t US_T;
-
 // typedef Rcpp::List List;
 using Rcpp::IntegerVector;
 using Rcpp::List;
@@ -18,9 +15,10 @@ using Rcpp::List;
 class Relevant {
 private:
 #ifndef PTR_SET
-  // TODO: this assumes R global cache has unique C string pointers.
-  // big plus is that NA_STRING already has integer value, so does not need an
-  // if statement in the hottest loop.
+  // TODO: assumes R global cache has unique C string pointers/CHARSXP pointers.
+  // I cannot see why not after careful reading of R internals and Writing R
+  // Extensions. big plus is that NA_STRING already has integer value, so does
+  // not need an if statement in the hottest loop.
   std::unordered_set<US_T> allCodesSet;
   std::unordered_set<US_T> r;
 #else
@@ -48,7 +46,7 @@ public:
   Rcpp::CharacterVector findRelevant(const SEXP& codes);
   // CV findRelevant(const DataFrame& data, CV code_fields);
   Rcpp::CharacterVector findRelevant(const Rcpp::List& data, const CV& code_names);
-  RelMap findRel(const Rcpp::CharacterVector& x);
+  IcdRelMap findRel(const Rcpp::CharacterVector& x);
 }; // Relevant
 
 #endif // RELEVANT_H_

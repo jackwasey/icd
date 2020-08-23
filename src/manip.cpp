@@ -1,6 +1,7 @@
 #include "manip.h"
 #include "convert.h"
 #include "is.h"
+#include "local.h"
 
 using namespace Rcpp;
 
@@ -13,54 +14,52 @@ using namespace Rcpp;
 //' @keywords internal manip
 //' @noRd
 //[[Rcpp::export]]
-String icd9AddLeadingZeroesMajorSingle(String mjr) {
+Rcpp::String icd9AddLeadingZeroesMajorSingle(Rcpp::String mjr) {
   if (mjr == NA_STRING) return (NA_STRING);
-  // TODO: really copy to a new string? Rcpp can append to strings directly, no?
-  // Changing a string without memcpy is not allowed, and dangerous without care
-  // in a regular const char*[] for R-based CHARSXP anyway. the 'length' or
+  // TODO: really copy to a new string? Maybe Rcpp API can do this now without
+  // additional copy.
+  //
+  // In a regular const char*[] for R-based CHARSXP anyway. the 'length' or
   // 'truelength' data bytes in a CHARSXP: used for the string, or always 1? (or
   // -1 for NA_STRING)
-  std::string m(mjr);
+  // std::string m(mjr);
+  R_xlen_t nc      = XLENGTH(mjr.get_sexp());
   const char* mstr = mjr.get_cstring();
-  if (!icd9IsASingleVE(mstr)) {
-    switch (XLENGTH(mjr.get_sexp())) {
-    case 0:
-      return (NA_STRING);
+  if (icd_likely(!icd9IsASingleVE(mstr))) {
+    if (icd_likely(nc == 3)) return mjr;
+    std::string out = std::string();
+    switch (nc) {
     case 1:
-      return ("00" + m);
+      out = "00";
+      break;
     case 2:
-      return ("0" + m);
+      out = "0";
+      break;
     case 3:
-      return (m);
-    }
-  } else {
-    switch (XLENGTH(mjr.get_sexp())) {
-    case 1:
-      return (NA_STRING);
-    case 2:
-      if (icd9IsASingleV(m.c_str())) {
-        m.insert(1, "0");
-        return (m);
-      } else {
-        m.insert(1, "00");
-        return (m);
-      }
-    case 3:
-      if (icd9IsASingleV(m.c_str())) {
-        return (m);
-      } else {
-        m.insert(1, "0");
-        return (m);
-      }
-    case 4:
-      if (icd9IsASingleE(m.c_str())) return (m);
-      // # nocov start
-      // avoid fallthrough warning
-      stop("Major length invalid");
+      break;
     default:
-      stop("Major length invalid");
-      // # nocov end
+      return NA_STRING;
     }
+    return (out + mstr);
+  } // V or E
+  if (icd9IsASingleV(mjr.get_cstring())) {
+    if (icd_likely(nc == 3)) return mjr;
+    if (nc == 2) {
+      std::string out(mjr);
+      out.insert(1, "0");
+      return out;
+    }
+    return NA_STRING;
+  } // else  E...
+  if (icd_likely(nc == 4)) return mjr;
+  std::string out(mjr);
+  switch (nc) {
+  case 3: // e.g. E01 -> E001
+    out.insert(1, "0");
+    return (out);
+  case 2: // e.g. E9 -> E009
+    out.insert(1, "00");
+    return (out);
   }
   return NA_STRING;
 }

@@ -7,13 +7,11 @@ as_char_no_warn <- function(x) {
   if (is.character(x)) {
     return(x)
   }
-  old <- options(warn = -1L)
-  on.exit(options(old), add = TRUE)
   if (is.integer(x)) {
     return(fastIntToStringRcpp(x))
   }
   if (is.factor(x)) {
     return(levels(x)[x])
   }
-  as.character(x)
+  suppressWarnings(as.character(x))
 }

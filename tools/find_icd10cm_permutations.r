@@ -1,5 +1,5 @@
-#now some development code to see what permutations there are of ICD-10 codes
-#based on the 2016 CM set.
+# now some development code to see what permutations there are of ICD-10 codes
+# based on the 2016 CM set.
 
 i10 <- icd::icd10cm2019$code
 i10tail <- tail(i10)

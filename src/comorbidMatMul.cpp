@@ -37,17 +37,17 @@ void printCornerSparse(PtsSparse x) {
   DEBUG("converting visMat to dense for debugging only:");
   Eigen::MatrixXi dense = Eigen::MatrixXi(x);
   if (x.rows() >= 4 && x.cols() >= 4)
-    Rcout << dense.block<4, 4>(0, 0) << std::endl;
+    Rcpp::Rcout << dense.block<4, 4>(0, 0) << std::endl;
   else
-    Rcout << dense << std::endl;
+    Rcpp::Rcout << dense << std::endl;
 }
 #endif
 // # nocov end
 
 void buildVisitCodesSparseWide(
   const DataFrame& data,
-  const std::string id_name,
-  const CV& code_names,
+  const std::string& id_name,
+  const Rcpp::CharacterVector& code_names,
   const bool validate,
   Relevant& relevant,
   PtsSparse& visMat, // output

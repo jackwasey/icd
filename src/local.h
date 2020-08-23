@@ -1,12 +1,13 @@
-// [[Rcpp::plugins(cpp11)]]
-
-// [[Rcpp//plugins(openmp)]] // disabled - it should be
-// done in configure script, or possibly here if configure script can be
-// eliminated.
-
 #ifndef LOCAL_H_
 #define LOCAL_H_
 #include <Rcpp.h>
+
+#if defined(__has_builtin)
+#if __has_builtin(__builtin_expect)
+#define icd_likely(x) __builtin_expect(!!(x), 1)
+#define icd_unlikely(x) __builtin_expect(!!(x), 0)
+#endif
+#endif
 
 //
 // Useful standard and GNU extensions to C++11 and onward attributes
@@ -53,9 +54,9 @@
 #include <unordered_map>
 static Rcpp::Rostream<true> so;
 
-template <typename C> inline void printIt(const C& c, int n = 10) {
+template <typename C> inline void printIt(const C& c, uint8_t n = 10) {
   std::ostringstream o;
-  for (int i = 0; i != std::min(n, (int)c.size()); ++i) o << c[i] << " ";
+  for (int i = 0; i != std::min(n, (uint8_t)c.size()); ++i) o << c[i] << " ";
   o << std::endl;
   o << "Length: " << c.size() << std::endl;
   so << o.str();

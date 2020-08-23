@@ -139,8 +139,8 @@ CV Relevant::findRelevant(const List& data, const CV& code_fields) {
   return wrap(r); // or keep as STL container?
 }
 
-RelMap Relevant::findRel(const Rcpp::CharacterVector& x) {
-  RelMap out;
+IcdRelMap Relevant::findRel(const Rcpp::CharacterVector& x) {
+  IcdRelMap out;
   DEBUG("building um using:");
   DEBUG_VEC(x);
   for (CV::const_iterator rit = x.cbegin(); rit != x.cend(); ++rit) {

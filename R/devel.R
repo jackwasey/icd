@@ -14,19 +14,14 @@ load_dev_pkgs <- function() {
   }))
 }
 
-if (isTRUE(getOption("icd.devel"))) {
-  load_dev_pkgs()
-}
-
 toolchain <- function() {
   mf <- Sys.getenv("MAKEFLAGS", unset = NA)
   if (is.na(mf)) {
-    message("MAKEFLAGS is unset")
-  } else {
-    message("MAKEFLAGS is set:")
-    print(mf)
+    message("MAKEFLAGS is unset. Setting...")
+    Sys.setenv(MAKEFLAGS = paste0("-j", parallel::detectCores()))
   }
-  Sys.setenv(MAKEFLAGS = paste0("-j", parallel::detectCores()))
+  message("MAKEFLAGS is now set:")
+  print(Sys.getenv("MAKEFLAGS", unset = NA))
   makevars_path <- file.path("~", ".R", "Makevars")
   mkln <- Sys.readlink(makevars_path)
   if (!is.na(mkln)) {
@@ -48,20 +43,26 @@ sitrep <- function() {
   if ("package:icd" %in% search()) {
     message("icd loaded and attached")
   } else {
-    if (("icd" %in% rownames(installed.packages()))) {
-      message("icd installed...")
+    if (!("icd" %in% rownames(installed.packages()))) {
+      warning("icd not installed (but may nevertheless be loaded via devtools)")
     } else {
-      warning("icd not installed (but may be loaded via devtools")
+      message(
+        "icd version installed is: ", installed.packages()["icd", "Version"],
+        " in library path ", installed.packages()["icd", "LibPath"]
+      )
     }
-    if ("icd" %in% base::loadedNamespaces()) message("icd loaded but not attached")
+    if ("icd" %in% base::loadedNamespaces()) {
+      message("icd loaded but not attached")
+    } else {
+      message("icd is installed, but not loaded.")
+    }
   }
-  icd:::.show_options()
-  message(
-    "icd version installed is: ", installed.packages()["icd", "Version"],
-    " in library path ", installed.packages()["icd", "LibPath"]
-  )
-  message("icd options are:")
-  icd:::.show_options()
+  if (getAnywhere(".show_options")) {
+    message("icd options are:")
+    icd:::.show_options()
+  } else {
+    warning("cannot find icd:::.show_options")
+  }
   message("R_MAKEVARS_USER='", Sys.getenv("R_MAKEVARS_USER", ""), "'")
   system2("ls", c("-l", "~/.R/Makevars*"))
 }
@@ -79,8 +80,9 @@ ihd <- function(quiet = TRUE) {
   .m("IH from env is ", ih)
   .m("ICD_HOME from env is ", icd_home)
   .m("R working dir is ", getwd())
+  .m("package devel dir is ", devtools::wd())
   .m("RStudio active project dir is ", rs)
-  .m("PWD is ", Sys.getenv("PWD", NA))
+  .m("PWD is ", Sys.getenv("PWD", "Not set: probably using RStudio."))
   if (!is.na(ih)) {
     return(ih)
   }
@@ -112,6 +114,51 @@ ih <- function() {
 
 ihf <- function(..., quiet = TRUE) {
   file.path(ihd(), ...)
+}
+
+
+#' Experimental C function (via C) to get a character vector from a factor. Not
+#' faster than base R for long string vectors, slower for short ones.
+#'
+#' In case of \code{factorAsCharNoNA}, do this with minimal safeguards.
+#'
+#' For short factors, it is slower than base R, but with necessary overhead for
+#' \code{::}. \code{.Call} is still slightly slower, though.
+#' @examples
+#' \dontrun{
+#' icd_ns <- loadNamespace("icd")
+#' fac <- get("factor_as_char_no_na", envir = icd_ns)
+#' f <- uranium_pathology[["icd10"]]
+#' g <- as.factor(icd:::generate_random_short_ahrq_icd9(1E8))
+#' stopifnot(identical(icd:::factor_as_char(f), as.character(f)))
+#' stopifnot(identical(icd:::factor_as_char(g), as.character(g)))
+#' if (suppressPackageStartupMessages(requireNamespace("bench", quietly = TRUE))) {
+#'   bench::mark(
+#'     icd:::factor_as_char(f),
+#'     fac(f),
+#'     .Call("factorAsCharNoNa", f, PACKAGE = "icd"),
+#'     as.character(f)
+#'   )
+#' }
+#' bench::mark(
+#'   icd:::factor_as_char(g),
+#'   fac(g),
+#'   .Call("factorAsCharNoNa", g, PACKAGE = "icd"),
+#'   as.character(g)
+#' )
+#' }
+#'
+#' @keywords internal
+#' @noRd
+factor_as_char <- function(x) {
+  .Call("factorAsChar", x, PACKAGE = "icd")
+}
+
+#' @describeIn factor_as_char Factor as character vector, assuming no NA values
+#' @keywords internal
+#' @noRd
+factor_as_char_no_na <- function(x) {
+  .Call("factorAsCharNoNa", x, PACKAGE = "icd")
 }
 
 #' Get or set development mode
@@ -154,8 +201,11 @@ icd_devel <- function(devel_mode = NULL) {
   invisible(devel_mode)
 }
 
+
 if (isTRUE(getOption("icd.devel"))) {
-  message("sourcing extra-tests")
+  message("attaching dev packages")
+  load_dev_pkgs()
+  message("sourcing extra test functions")
   source(file.path(ihd(quiet = FALSE), "tools", "extra-tests.R"))
 
   b <- d <- e <- f <- g <- l <- s <- NA
@@ -168,14 +218,17 @@ if (isTRUE(getOption("icd.devel"))) {
   class(s) <- "s"
   print.b <- function(...) toolchain()
   print.d <- function(...) icd_devel(TRUE)
-
   print.e <- function(...) icd_devel(FALSE)
-
   print.f <- function(...) {
     system2(ihf("tools", "format.sh"), args = ihd())
   }
   print.s <- function(...) {
     styler::style_pkg(filetype = c("R", "Rprofile", "Rmd", "Rnw"))
+    owd <- devtools::wd()
+    on.exit(setwd(owd), add = TRUE)
+    styler::style_dir("tools", filetype = c("R", "r", "Rmd", "rmd"))
+    styler::style_dir("benchmarks", filetype = c("R", "r", "Rmd", "rmd"))
+    styler::style_dir("benchmarks/icd-JSS3447-replication", filetype = c("R", "r", "Rmd", "rmd"))
   }
 
   print.g <- function(...) {

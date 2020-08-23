@@ -34,8 +34,9 @@ requireNamespace("tidyr", quietly = TRUE)
 library(icd)
 
 # include generation functions for reproducibility
-generate_random_short_icd9 <- function(n = 50000)
+generate_random_short_icd9 <- function(n = 50000) {
   as.character(floor(stats::runif(min = 1, max = 99999, n = n)))
+}
 generate_pts <- function(num_patients, dz_per_patient = 20,
                          n = num_patients, np = dz_per_patient,
                          fun = generate_random_short_icd9) {

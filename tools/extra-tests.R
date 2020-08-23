@@ -3,8 +3,10 @@
 lint_extra <- function(path = getwd()) {
   requireNamespace("lintr")
   not_pkg_root <- function(p) !file.exists(file.path(p, "DESCRIPTION"))
-  ex <- c(list("R/z-deprecated.R", "R/RcppExports.R", "R/benchmark.R"),
-          list.files(path = "inst/doc", recursive = TRUE, full.names = TRUE))
+  ex <- c(
+    list("R/z-deprecated.R", "R/RcppExports.R", "R/benchmark.R"),
+    list.files(path = "inst/doc", recursive = TRUE, full.names = TRUE)
+  )
   more_linters <- lintr::with_defaults(
     object_name_linter = NULL, object_usage_linter =
       NULL, cyclocomp_linter = NULL, line_length_linter(90),

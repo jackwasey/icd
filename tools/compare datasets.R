@@ -2,7 +2,7 @@
 library(icd)
 library(crayon)
 if (!exists("e", mode = "environment") ||
-    length(ls(envir = e)) == 0) {
+  length(ls(envir = e)) == 0) {
   d2_dir <- "/tmp/d3"
   e <- new.env()
   nms <- lapply(list.files(d2_dir, full.names = TRUE), load, envir = e)

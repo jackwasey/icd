@@ -304,12 +304,12 @@ BEGIN_RCPP
 END_RCPP
 }
 // icd9AddLeadingZeroesMajorSingle
-String icd9AddLeadingZeroesMajorSingle(String mjr);
+Rcpp::String icd9AddLeadingZeroesMajorSingle(Rcpp::String mjr);
 RcppExport SEXP _icd_icd9AddLeadingZeroesMajorSingle(SEXP mjrSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< String >::type mjr(mjrSEXP);
+    Rcpp::traits::input_parameter< Rcpp::String >::type mjr(mjrSEXP);
     rcpp_result_gen = Rcpp::wrap(icd9AddLeadingZeroesMajorSingle(mjr));
     return rcpp_result_gen;
 END_RCPP
@@ -717,6 +717,9 @@ BEGIN_RCPP
 END_RCPP
 }
 
+RcppExport SEXP factorAsChar(SEXP);
+RcppExport SEXP factorAsCharNoNa(SEXP);
+
 static const R_CallMethodDef CallEntries[] = {
     {"_icd_icd9MajMinToCode", (DL_FUNC) &_icd_icd9MajMinToCode, 3},
     {"_icd_icd9MajMinToShort", (DL_FUNC) &_icd_icd9MajMinToShort, 2},
@@ -778,6 +781,8 @@ static const R_CallMethodDef CallEntries[] = {
     {"_icd_matchFast", (DL_FUNC) &_icd_matchFast, 2},
     {"_icd_inFast", (DL_FUNC) &_icd_inFast, 2},
     {"_icd_build_info", (DL_FUNC) &_icd_build_info, 0},
+    {"factorAsChar",     (DL_FUNC) &factorAsChar,     1},
+    {"factorAsCharNoNa", (DL_FUNC) &factorAsCharNoNa, 1},
     {NULL, NULL, 0}
 };
 
