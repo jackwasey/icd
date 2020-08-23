@@ -163,7 +163,7 @@ CV icd9ChildrenShortUnorderedUndefined(const CV& x) {
     qout.attr("icd_short_diag") = true;
     return qout;
   }
-  IcdSet out                         = icd9ChildrenShortUnorderedWorker(icd9Short);
+  IcdSet out                     = icd9ChildrenShortUnorderedWorker(icd9Short);
   CV rcppOut                     = wrap(out);
   rcppOut.attr("icd_short_diag") = true;
   return rcppOut;

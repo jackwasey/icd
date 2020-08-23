@@ -31,7 +31,7 @@
 // multiple, cast, pass result back.
 
 // #define ICD_TIME
-
+// #define ICD_OPTIM_INFO
 // #define ICD_DEBUG
 // #define ICD_DEBUG_TRACE
 // #define ICD_DEBUG_UTIL
@@ -148,5 +148,11 @@ typedef duration<double, std::ratio<1>> dur_dbl;
 #define ICD_TIME_BEGIN(x) ((void)0);
 #define ICD_TIME_END(x) ((void)0);
 #endif /* ICD_TIME */
+
+#ifdef ICD_OPTIM_INFO
+#define OPTIM_INFO(x) DEBUG(x)
+#else
+#define OPTIM_INFO(x) ((void)0);
+#endif
 
 #endif /* LOCAL_H_ */

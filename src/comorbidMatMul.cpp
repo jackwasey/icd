@@ -61,6 +61,7 @@ void buildVisitCodesSparseWide(
   visTriplets.reserve(vlen * ncol); // upper bound
   IntegerVector rows = no_init(vlen * ncol);
   if (!Rf_isFactor(visits)) {
+    OPTIM_INFO("buildVisitCodesSparseWide visits NOT a factor");
     ICD_TIME_BEGIN(notfactor);
     DEBUG(TYPEOF(visits));
     CV v     = (CV)visits; // assume character for now
@@ -69,6 +70,7 @@ void buildVisitCodesSparseWide(
     rows     = match(v, uv);
     ICD_TIME_END(notfactor);
   } else {
+    OPTIM_INFO("visits IS a factor already, with " << Rf_nlevels(visits) << " levels.");
     ICD_TIME_BEGIN(factoralready);
     rows     = visits; // can do this without copy using unique_ptr?
     visitIds = as<VecStr>(rows.attr("levels"));
@@ -79,10 +81,7 @@ void buildVisitCodesSparseWide(
     const SEXP& data_col = data[data_col_name];
     if (Rf_isFactor(data_col)) {
       const IntegerVector& data_col_fc = (IntegerVector)data_col;
-      DEBUG("codes are still in a factor...");
-#ifdef ICD_DEAD
-      const CV& code_levels = data_col_fc.attr("levels");
-#endif
+      OPTIM_INFO("codes are still in a factor...");
       const IntegerVector codes_relevant =
         refactor(data_col_fc, relevant.str_codes, true, validate);
       assert(rows.size() == codes_relevant.size());

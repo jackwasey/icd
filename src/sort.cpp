@@ -40,23 +40,33 @@ LogicalVector compareVectorWorker(const StringVector& x,
 // [[Rcpp::export(icd9_compare_rcpp)]]
 bool icd9Compare(String a, String b) {
   if (b == NA_STRING && a != NA_STRING) {
-    // even if x is also NA, we still return true
+    // even if x is also NA, we still return true (a is 'greater than' b)
     return true;
   }
   if (a == NA_STRING) {
-    // NA < NA is false and NA < any code is false
+    // NA < NA is false and NA < any code is false, i.e., a is not greater than b
     return false;
   }
   const char* acs = a.get_cstring();
   const char* bcs = b.get_cstring();
   // most common is numeric, so deal with that first:
-  if (*acs < 'A') return strcmp(acs, bcs) < 0;
+  if (*acs < 'A') {
+    /* if all numeric, can we not just chomp a big integer comparison in one go? depends on
+     * endianness of platform? */
+
+    /* careful: CHARSXP in R are unique (Unless not in global cache?) Also, this is probably not a
+     * common branch, so maybe best to just leave this alone. */
+    if (a.get_sexp() == b.get_sexp())
+      return false; // just compare pointers. if same, then a is not greater than b
+
+    return strcmp(acs, bcs) < 0;
+  }
   // if the second char is now  a number, then we can immediately return false
   if (*bcs < 'A') return false;
   // V vs E as first or both characters is next
   if (*acs == 'V' && *bcs == 'E') return true;
   if (*acs == 'E' && *bcs == 'V') return false;
-  // now cover both V codes or both E codes
+  // now cover both V codes, or both E codes
   return strcmp(acs, bcs) < 0;
 }
 
