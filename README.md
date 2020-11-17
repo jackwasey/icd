@@ -181,7 +181,7 @@ knitr::kable(t(tab_dat), col.names = c("Emergency", "Not emergency"))
 ```
 
 |                                             | Emergency      | Not emergency |
-| ------------------------------------------- | :------------- | :------------ |
+| :------------------------------------------ | :------------- | :------------ |
 | Myocardial Infarction                       | 2707 (3.69%)   | 1077 (1.38%)  |
 | Congestive Heart Failure                    | 12339 (16.84%) | 5628 (7.19%)  |
 | Periphral Vascular Disease                  | 3798 (5.18%)   | 3042 (3.89%)  |

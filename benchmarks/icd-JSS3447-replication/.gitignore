@@ -4,6 +4,7 @@ Efficient_calculation_of_comorbidities_from_medical_codes.R
 *.tex
 *_files/
 .deps
+depslib/
 .icd.built
 README-replication.html
 bench-versus-dput*.R

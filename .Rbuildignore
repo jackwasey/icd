@@ -66,5 +66,6 @@ _pkgdown\.yml$
 ^tools$
 ^.*\.tex$
 ^vignettes\/efficiency-prebuilt\.(Rmd|tex)$
+^vignettes\/efficiency-prebuilt_cache$
 ^vignettes\/country-lang-vers-prebuilt\.(Rmd|tex)$
 ^vignettes\/jss\..*$
