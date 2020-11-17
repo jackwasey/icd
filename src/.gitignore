@@ -8,5 +8,6 @@
 *.so
 .cproject
 .settings/
+config.h
 Makevars
 prof
