@@ -16,7 +16,8 @@
 ^\.DS_Store$
 ^\.Rproj\.user$
 ^\.covrignore$
-^\.git/.*
+^\.git$
+^\.git.*$
 ^\.lintr$
 ^\.settings$
 ^\.travis\..*$
