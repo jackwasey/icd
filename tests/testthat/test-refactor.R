@@ -118,7 +118,7 @@ test_that("new factor has empty levels when necessary", {
   )
   expect_equal(
     refactor(f, levels = NA, na.rm = FALSE, exclude_na = TRUE),
-    factor(NA, levels = NULL)
+    factor(NA)
   )
   expect_equal(
     refactor(f, levels = NA, na.rm = FALSE, exclude_na = FALSE),
