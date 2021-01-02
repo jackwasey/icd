@@ -1,7 +1,7 @@
 #ifndef ATTR_H_
 #define ATTR_H_
 
-#include "icd_types.h"
+#include "icd_types.hpp"
 
 void setDecimalDiag(Rcpp::RObject &x, bool value);
 void setDecimalDiag(CV &x, bool);

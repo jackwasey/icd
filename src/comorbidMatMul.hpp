@@ -1,9 +1,9 @@
 // [[Rcpp::depends(RcppEigen)]]
-#include "icd_types.h"
-#include "local.h"
-#include "mapplus.h"
-#include "refactor.h"
-#include "relevant.h"
+#include "icd_types.hpp"
+#include "local.hpp"
+#include "mapplus.hpp"
+#include "refactor.hpp"
+#include "relevant.hpp"
 
 using namespace Rcpp;
 

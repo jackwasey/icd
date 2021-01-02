@@ -1,8 +1,8 @@
 #ifndef RANGES_H_
 #define RANGES_H_
 
-#include "icd_types.h"
-#include "range-const.h"
+#include "icd_types.hpp"
+#include "range-const.hpp"
 
 CV icd9ExpandMinor(const Str& mnr,
                    bool isE = false);

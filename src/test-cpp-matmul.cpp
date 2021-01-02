@@ -1,15 +1,15 @@
 #ifdef ICD_CATCH
-#include "appendMinor.h"
-#include "comorbidMatMul.h"
-#include "convert.h"
-#include "icd_types.h"
-#include "is.h"
-#include "local.h"
-#include "manip.h"
-#include "mapplus.h"
-#include "refactor.h"
-#include "relevant.h"
-#include "util.h"
+#include "appendMinor.hpp"
+#include "comorbidMatMul.hpp"
+#include "convert.hpp"
+#include "icd_types.hpp"
+#include "is.hpp"
+#include "local.hpp"
+#include "manip.hpp"
+#include "mapplus.hpp"
+#include "refactor.hpp"
+#include "relevant.hpp"
+#include "util.hpp"
 
 /*
  * Rscript -e

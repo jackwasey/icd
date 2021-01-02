@@ -1,13 +1,13 @@
-#include "convert10.h"
-#include "convert.h"
-#include "icd_types.h"
+#include "convert10.hpp"
+#include "convert.hpp"
+#include "icd_types.hpp"
 extern "C" {
 #include <cstddef> // for size_t
 }
-#include "appendMinor.h" // for icd9MajMinToCode
-#include "is.h"          // for icd9IsASingleE, icd9IsAS...
-#include "manip.h"       // for icd9AddLeadingZeroesMajor
-#include "util.h"        // for strimCpp, trimLeftCpp
+#include "appendMinor.hpp" // for icd9MajMinToCode
+#include "is.hpp"          // for icd9IsASingleE, icd9IsAS...
+#include "manip.hpp"       // for icd9AddLeadingZeroesMajor
+#include "util.hpp"        // for strimCpp, trimLeftCpp
 #include <string>        // for string
 
 using namespace Rcpp;

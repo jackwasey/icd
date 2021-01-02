@@ -1,6 +1,6 @@
 #ifndef IS_H_
 #define IS_H_
-#include "icd_types.h" // for VecStr
+#include "icd_types.hpp" // for VecStr
 
 bool icd9IsASingleV(const char *s);
 bool icd9IsASingleE(const char *s);

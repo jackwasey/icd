@@ -1,5 +1,5 @@
-#include "icd_types.h"
-#include "is.h"      // for icd9IsASingleVE
+#include "icd_types.hpp"
+#include "is.hpp"      // for icd9IsASingleVE
 #include <algorithm> // for fill
 #include <iterator>  // for distance
 #include <string.h>  // for strlen

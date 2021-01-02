@@ -1,7 +1,7 @@
 #ifndef REFACTOR_H_
 #define REFACTOR_H_
 
-#include "local.h"
+#include "local.hpp"
 
 using namespace Rcpp;
 IntegerVector factorNoSort(const CharacterVector &x,

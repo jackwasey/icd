@@ -1,8 +1,8 @@
-#include "relevant.h"
-#include "fastIntToString.h"
-#include "icd_types.h"
-#include "local.h"
-#include "refactor.h"
+#include "relevant.hpp"
+#include "fastIntToString.hpp"
+#include "icd_types.hpp"
+#include "local.hpp"
+#include "refactor.hpp"
 #include <algorithm> // for binary_search, copy
 #include <cstring>
 #include <string>

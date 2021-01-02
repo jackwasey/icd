@@ -1,8 +1,8 @@
 #ifndef SORT_H_
 #define SORT_H_
 
-#include "icd_types.h"
-#include "local.h"
+#include "icd_types.hpp"
+#include "local.hpp"
 #include <string.h>
 #include <utility> // std::pair
 #include <algorithm> // std::sort

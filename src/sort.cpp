@@ -1,5 +1,5 @@
 #include <Rcpp.h>
-#include "sort.h"
+#include "sort.hpp"
 using namespace Rcpp;
 
 IntegerVector orderWorker(
