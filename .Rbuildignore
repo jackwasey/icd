@@ -55,7 +55,7 @@ _pkgdown\.yml$
 ^src\/.*\.o$
 ^src\/.*_cache.*
 ^src\/.*include-dependencies(\.d)?$
-^src\/.clang-format$
+^src\/.clang-(format|tidy)$
 ^src\/\.aspell$
 ^src\/\.cproject$
 ^src\/\.externalToolBuilders$
