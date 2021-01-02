@@ -15,7 +15,7 @@ void Relevant::buildCodeSetCV(const CV &codes) {
   // over-reserve (and maybe expand), target is unique number
   allCodesSet.reserve(allCodesSet.size() + codes.size());
   DEBUG_VEC(codes);
-  for (String c : codes) {
+  for (const String& c : codes) {
     if (c != NA_STRING) { allCodesSet.insert(c.get_cstring()); }
   }
 }
@@ -57,8 +57,8 @@ void Relevant::buildCodeSet(const SEXP &codes) {
 
 // do the finding
 CV Relevant::findRelevant() {
-  for (CV cmb : src_map) {
-    for (String cmbCode : cmb) {
+  for (const CV& cmb : src_map) {
+    for (const String& cmbCode : cmb) {
       if (allCodesSet.find(cmbCode.get_cstring()) != allCodesSet.end()) {
         TRACE("Pushing back" << cmbCode.get_cstring());
         r.insert(((String)cmbCode).get_cstring());
@@ -91,7 +91,7 @@ CV Relevant::findRelevant(const List &data, const CV& code_fields) {
   return wrap(r); // or keep as STL container?
 }
 
-RelMap Relevant::findRel(const CharacterVector x) {
+RelMap Relevant::findRel(const CharacterVector& x) {
   RelMap out;
   DEBUG("building um using:");
   DEBUG_VEC(x);

@@ -54,8 +54,8 @@ void printCornerSparse(PtsSparse x) {
 
 void buildVisitCodesSparseWide(
   const DataFrame &data,
-  const std::string id_name,
-  const CV code_names,
+  const std::string& id_name,
+  const CV& code_names,
   const bool validate,
   Relevant &rh,
   PtsSparse &visMat, // output
@@ -136,8 +136,8 @@ void buildVisitCodesSparseWide(
 // [[Rcpp::export(comorbid_mat_mul_wide_rcpp)]]
 LogicalMatrix comorbidMatMulWide(const DataFrame &data,
                                  const List &map,
-                                 const std::string id_name,
-                                 const CV code_names,
+                                 const std::string& id_name,
+                                 const CV& code_names,
                                  const bool validate) {
   VecStr out_row_names;           // size is reserved in buildVisitCodesVec
   RObject visits = data[id_name]; // does this copy??? RObject instead?

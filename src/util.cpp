@@ -8,6 +8,7 @@
 #include <stdlib.h>
 #include <string.h> // for strcmp
 #include <string>
+#include <utility>
 #include <vector>
 
 using namespace Rcpp;
@@ -35,7 +36,7 @@ std::string strimCpp(std::string s) {
   // according to
   // http://stackoverflow.com/questions/10789740/passing-stdstring-by-value-or-reference
   // C++11 will avoid copy even without using reference argument.
-  return trimLeftCpp(trimRightCpp(s));
+  return trimLeftCpp(trimRightCpp(std::move(s)));
 }
 
 // [[Rcpp::export]]

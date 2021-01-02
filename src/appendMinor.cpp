@@ -93,6 +93,6 @@ CV icd9MajMinToShort(const CV& mjr, const CV& mnr) {
 }
 
 // [[Rcpp::export]]
-CV icd9MajMinToDecimal(const CV mjr, const CV mnr) {
+CV icd9MajMinToDecimal(const CV& mjr, const CV& mnr) {
   return icd9MajMinToCode(mjr, mnr, false);
 }

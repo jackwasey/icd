@@ -38,7 +38,7 @@ List majMinToParts(const CV &mjr, const CV &mnr) {
 }
 
 // [[Rcpp::export]]
-List icd9ShortToParts(const CV &icd9Short, String mnrEmpty) {
+List icd9ShortToParts(const CV &icd9Short, const String& mnrEmpty) {
   CV mjr(icd9Short.size());
   CV mnr(icd9Short.size());
   for (int i = 0; i < icd9Short.size(); ++i) {
@@ -91,7 +91,7 @@ List icd9ShortToParts(const CV &icd9Short, String mnrEmpty) {
 }
 
 // [[Rcpp::export]]
-List icd9DecimalToParts(const CV &icd9Decimal, const String mnrEmpty) {
+List icd9DecimalToParts(const CV &icd9Decimal, const String& mnrEmpty) {
   CV mjrs;
   CV mnrs;
   int ilen = icd9Decimal.length();
@@ -114,7 +114,7 @@ List icd9DecimalToParts(const CV &icd9Decimal, const String mnrEmpty) {
     std::string thiscode = as<std::string>(*it);
     thiscode =
       strimCpp(thiscode); // This updates 'thisccode' by reference, no copy
-    std::size_t pos = thiscode.find(".");
+    std::size_t pos = thiscode.find('.');
     // substring parts
     std::string mjrin;
     String mnrout;
@@ -147,7 +147,7 @@ CV icd9DecimalToShort(const CV &x) {
     const char *thiscode_cstr = strna.get_cstring();
     std::string thiscode(thiscode_cstr);
     thiscode        = trimLeftCpp(thiscode);
-    std::size_t pos = thiscode.find_first_of(".");
+    std::size_t pos = thiscode.find_first_of('.');
     if (pos != std::string::npos) {
       // now we assume that the mjr is snug against the left side, so we can add
       // zero padding
