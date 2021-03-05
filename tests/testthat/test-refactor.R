@@ -120,9 +120,9 @@ test_that("new factor has empty levels when necessary", {
     refactor(f, levels = NA, na.rm = FALSE, exclude_na = TRUE),
     factor(NA)
   )
-  expect_equal(
+  expect_equivalent(
     refactor(f, levels = NA, na.rm = FALSE, exclude_na = FALSE),
-    factor(NA, exclude = NULL)
+    factor(NA, levels = NA_character_, exclude = NA_integer_)
   )
   for (narm in c(TRUE, FALSE)) {
     expect_error(info = paste("narm = ", narm), refactor(NA, NA, na.rm = narm))

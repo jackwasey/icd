@@ -1909,7 +1909,7 @@ fi
 
 
 if test "x$enable_icd_shutup" = "xyes" || test "${ICD_SHUTUP+set}" = set ; then :
-  ICD_SHUTUP_FLAG="-w"
+  ICD_SHUTUP_FLAG="-w -DEIGEN_PERMANENTLY_DISABLE_STUPID_WARNINGS"
 fi
 
 # AC_LANG changes what R_OPENMP and rest of script does. See https://www.gnu.org/software/autoconf/manual/autoconf-2.63/html_node/Language-Choice.html . Affected by CXXFLAGS etc, so these should be set first if needed.

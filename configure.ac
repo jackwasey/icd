@@ -33,11 +33,11 @@ AC_CONFIG_MACRO_DIR([inst/m4])
 
 : ${R_HOME=$(R RHOME)}
 AC_MSG_CHECKING([R_HOME already set])
-AS_IF([ test -z "${R_HOME}" ], 
+AS_IF([ test -z "${R_HOME}" ],
       [
        AC_MSG_RESULT([No])
-       AC_MSG_ERROR([Cannot proceed.]) 
-       ], 
+       AC_MSG_ERROR([Cannot proceed.])
+       ],
        [
         AC_MSG_RESULT([${R_HOME}])
         R_BIN=[${R_HOME}/bin/R]
@@ -53,16 +53,16 @@ AS_IF([test "${CXX11-unset}" = unset ],
       [
        CXX11=`"${R_BIN}" CMD config CXX11`
        AC_MSG_RESULT([Setting ${CXX11}])
-       ], 
+       ],
        [AC_MSG_RESULT([Using pre-set ${CXX11}])]
        )
 
 AC_MSG_CHECKING([R CXX11STD])
-AS_IF([ test "${CXX11STD-unset}" = unset ], 
+AS_IF([ test "${CXX11STD-unset}" = unset ],
       [
        CXX11STD=`"${R_BIN}" CMD config CXX11STD`
        AC_MSG_RESULT([Setting R ${CXX11STD}]);
-       ], 
+       ],
        [AC_MSG_RESULT([Using existing ${CXX11STD}])]
        )
 
@@ -86,12 +86,12 @@ LIBS="${PKG_LIBS}"
 
 # try to shut up travis/r-hub builds with huge warning burden with default compiler settings (Eigen). Can't seem to do with MAKEFLAGS, or string of R CMD check --install-opts=.....
 ICD_SHUTUP_FLAG=""
-AC_ARG_VAR([ICD_SHUTUP], 
+AC_ARG_VAR([ICD_SHUTUP],
            [[If ICD_SHUTUP is defined, it tells configure to try to silence all compiler warnings. Alternatively, use --enable-icd-shutup in configure, which will override ICD_SHUTUP, if it is set.]])
 
 AC_ARG_ENABLE([icd_shutup], AS_HELP_STRING([--enable-icd-shutup], [Peaceful compilation]))
 
-AS_IF([test "x$enable_icd_shutup" = "xyes" || test "${ICD_SHUTUP+set}" = set ], [ICD_SHUTUP_FLAG="-w"])
+AS_IF([test "x$enable_icd_shutup" = "xyes" || test "${ICD_SHUTUP+set}" = set ], [ICD_SHUTUP_FLAG="-w -DEIGEN_PERMANENTLY_DISABLE_STUPID_WARNINGS"])
 
 # AC_LANG changes what R_OPENMP and rest of script does. See https://www.gnu.org/software/autoconf/manual/autoconf-2.63/html_node/Language-Choice.html . Affected by CXXFLAGS etc, so these should be set first if needed.
 AC_LANG([C++])
@@ -124,7 +124,7 @@ AS_IF([test ! "x${ac_pkg_openmp}" = xno], [ ICD_OPENMP_FLAG='$(SHLIB_OPENMP_CXXF
 AC_SUBST(ICD_OPENMP_FLAG)
 
 DO_KEEP_MAKEVARS="${ICD_KEEP_MAKEVARS}"
-AC_ARG_VAR([ICD_KEEP_MAKEVARS], 
+AC_ARG_VAR([ICD_KEEP_MAKEVARS],
            [If defined, the makefile contents will be included in the built binary, to help with debugging])
 #Always write the stub as default to not include Makevars content
 echo "unsigned char Makevars[[]] = { 0x00 };" > src/makevars.h

@@ -1,10 +1,4 @@
-HeaderFilterRegex:  '.*'
-## list out the problematic ones for system headers
-#Checks: 'modernize-*,openmp-*,performance-*,readability-*,bugprone-*,clang-diagnostic-*,clang-analyzer-*,-clang-analyzer-unix.Malloc,-clang-analyzer-optin.portability.UnixAPI'
-#Checks: 'modernize-*,openmp-*,performance-*,readability-*,bugprone-*,clang-diagnostic-*,clang-analyzer-*'
-#Checks: '-*,openmp-*'
-Checks: '-*,performance-*'
-#Checks: 'readability-*'
-#Checks: 'bugprone-*'
-#Checks: 'clang-diagnostic-*'
-#Checks: 'clang-analyzer-*'
+UseColor:	true
+HeaderFilterRegex:	'.*'
+Checks:	'misc-*,clang-diagnostic-*,clang-analyzer-*,modernize-*,openmp-*,performance-*,readability-*,bugprone-*,-readability-identifier-naming'
+FormatStyle:	file

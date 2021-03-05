@@ -168,10 +168,21 @@ icd_conflicts.icd10fr <- function(x, do_stop = FALSE) {
 #' @keywords internal
 #' @noRd
 icd_classes_conflict <- function(x) {
-  is.icd9(x) && is.icd10(x) ||
-    is.icd9cm(x) && is.icd9cm_pc(x) ||
-    is.icd10cm(x) && is.icd10cm_pc(x) ||
-    is.icd_long_data(x) && is.icd_wide_data(x)
+  if (is.icd9(x) && is.icd10(x)) {
+    return(TRUE)
+  }
+
+  if (is.icd9cm(x) && is.icd9cm_pc(x)
+  ) {
+    return(TRUE)
+  }
+  if (is.icd10cm(x) && is.icd10cm_pc(x)) {
+    return(TRUE)
+  }
+  if (is.icd_long_data(x) && is.icd_wide_data(x)) {
+    return(TRUE)
+  }
+  return(FALSE)
 }
 
 #' Prefer an order of classes

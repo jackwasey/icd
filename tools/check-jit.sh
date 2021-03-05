@@ -2,17 +2,15 @@
 #shellcheck disable=SC2012
 set -eu
 IFS=$'\n\t'
-whereami="$(dirname "${BASH_SOURCE[0]}")"
 tmpd=$(mktemp -d /tmp/icdcheckcranplusjit.XXXXXXXXXXX)
 function finish {
-    #	  rm -rf "$tmpd"
-    echo "Finished with $tmpd"
+    echo "Finished with ${tmpd}"
 }
 trap finish EXIT
 #rsync -r --exclude=".git" "${ICD_HOME:-$HOME/rprojects/icd}" "$tmpd"
 cd "$tmpd"
 # build with standard release options, i.e. compacting vignettes.
-"${whereami}"/build-full.sh
+"${ICD_HOME?}"/tools/build-full.sh
 # for all environment variable options see here:
 # https://cran.r-project.org/doc/manuals/r-release/R-ints.html#Tools
 #R_MAKEVARS_USER="$HOME/.R/Makevars.clang" \

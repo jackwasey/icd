@@ -12,8 +12,10 @@ extern "C" {
 
 using namespace Rcpp;
 
-// [[Rcpp::export(icd10_short_to_parts_rcpp)]]
-List icd10ShortToParts(const CV &x, const String& mnrEmpty) {
+// //Rcpp::export(icd10_short_to_parts_rcpp)]]
+
+// [[Rcpp::export]]
+Rcpp::List icd10ShortToParts(const Rcpp::CharacterVector & x, const Rcpp::String & mnrEmpty) {
   R_xlen_t i10sz = x.size();
   CV mjr(i10sz);
   CV mnr(i10sz);
@@ -43,7 +45,7 @@ List icd10ShortToParts(const CV &x, const String& mnrEmpty) {
 }
 
 // [[Rcpp::export]]
-List icd10DecimalToParts(const CV& x, const String& mnrEmpty = "") {
+List icd10DecimalToParts(const CV & x, const String & mnrEmpty) {
   CV mjrs;
   CV mnrs;
   R_xlen_t ilen = x.length();

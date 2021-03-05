@@ -7,6 +7,11 @@
 
 using namespace Rcpp;
 
+#ifdef RCPP_USE_GLOBAL_ROSTREAM
+Rcpp::Rostream<true>&  Rcpp::Rcout = Rcpp::Rcpp_cout_get();
+Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
+#endif
+
 // icd9MajMinToCode
 CV icd9MajMinToCode(const CV& mjr, const CV& mnr, const bool isShort);
 RcppExport SEXP _icd_icd9MajMinToCode(SEXP mjrSEXP, SEXP mnrSEXP, SEXP isShortSEXP) {
@@ -33,13 +38,13 @@ BEGIN_RCPP
 END_RCPP
 }
 // icd9MajMinToDecimal
-CV icd9MajMinToDecimal(const CV mjr, const CV mnr);
+CV icd9MajMinToDecimal(const CV& mjr, const CV& mnr);
 RcppExport SEXP _icd_icd9MajMinToDecimal(SEXP mjrSEXP, SEXP mnrSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const CV >::type mjr(mjrSEXP);
-    Rcpp::traits::input_parameter< const CV >::type mnr(mnrSEXP);
+    Rcpp::traits::input_parameter< const CV& >::type mjr(mjrSEXP);
+    Rcpp::traits::input_parameter< const CV& >::type mnr(mnrSEXP);
     rcpp_result_gen = Rcpp::wrap(icd9MajMinToDecimal(mjr, mnr));
     return rcpp_result_gen;
 END_RCPP
@@ -91,27 +96,27 @@ BEGIN_RCPP
 END_RCPP
 }
 // simplifyMapLexicographic
-Rcpp::List simplifyMapLexicographic(const CV& pt_codes, const List map);
+Rcpp::List simplifyMapLexicographic(const CV& pt_codes, const List& map);
 RcppExport SEXP _icd_simplifyMapLexicographic(SEXP pt_codesSEXP, SEXP mapSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< const CV& >::type pt_codes(pt_codesSEXP);
-    Rcpp::traits::input_parameter< const List >::type map(mapSEXP);
+    Rcpp::traits::input_parameter< const List& >::type map(mapSEXP);
     rcpp_result_gen = Rcpp::wrap(simplifyMapLexicographic(pt_codes, map));
     return rcpp_result_gen;
 END_RCPP
 }
 // comorbidMatMulWide
-LogicalMatrix comorbidMatMulWide(const DataFrame& data, const List& map, const std::string id_name, const CV code_names, const bool validate);
+LogicalMatrix comorbidMatMulWide(const DataFrame& data, const List& map, const std::string& id_name, const CV& code_names, const bool validate);
 RcppExport SEXP _icd_comorbidMatMulWide(SEXP dataSEXP, SEXP mapSEXP, SEXP id_nameSEXP, SEXP code_namesSEXP, SEXP validateSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< const DataFrame& >::type data(dataSEXP);
     Rcpp::traits::input_parameter< const List& >::type map(mapSEXP);
-    Rcpp::traits::input_parameter< const std::string >::type id_name(id_nameSEXP);
-    Rcpp::traits::input_parameter< const CV >::type code_names(code_namesSEXP);
+    Rcpp::traits::input_parameter< const std::string& >::type id_name(id_nameSEXP);
+    Rcpp::traits::input_parameter< const CV& >::type code_names(code_namesSEXP);
     Rcpp::traits::input_parameter< const bool >::type validate(validateSEXP);
     rcpp_result_gen = Rcpp::wrap(comorbidMatMulWide(data, map, id_name, code_names, validate));
     return rcpp_result_gen;
@@ -152,25 +157,25 @@ BEGIN_RCPP
 END_RCPP
 }
 // icd9ShortToParts
-List icd9ShortToParts(const CV& icd9Short, String mnrEmpty);
+List icd9ShortToParts(const CV& icd9Short, const String& mnrEmpty);
 RcppExport SEXP _icd_icd9ShortToParts(SEXP icd9ShortSEXP, SEXP mnrEmptySEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< const CV& >::type icd9Short(icd9ShortSEXP);
-    Rcpp::traits::input_parameter< String >::type mnrEmpty(mnrEmptySEXP);
+    Rcpp::traits::input_parameter< const String& >::type mnrEmpty(mnrEmptySEXP);
     rcpp_result_gen = Rcpp::wrap(icd9ShortToParts(icd9Short, mnrEmpty));
     return rcpp_result_gen;
 END_RCPP
 }
 // icd9DecimalToParts
-List icd9DecimalToParts(const CV& icd9Decimal, const String mnrEmpty);
+List icd9DecimalToParts(const CV& icd9Decimal, const String& mnrEmpty);
 RcppExport SEXP _icd_icd9DecimalToParts(SEXP icd9DecimalSEXP, SEXP mnrEmptySEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< const CV& >::type icd9Decimal(icd9DecimalSEXP);
-    Rcpp::traits::input_parameter< const String >::type mnrEmpty(mnrEmptySEXP);
+    Rcpp::traits::input_parameter< const String& >::type mnrEmpty(mnrEmptySEXP);
     rcpp_result_gen = Rcpp::wrap(icd9DecimalToParts(icd9Decimal, mnrEmpty));
     return rcpp_result_gen;
 END_RCPP
@@ -210,25 +215,25 @@ BEGIN_RCPP
 END_RCPP
 }
 // icd10ShortToParts
-List icd10ShortToParts(const CV& x, const String mnrEmpty);
+Rcpp::List icd10ShortToParts(const Rcpp::CharacterVector& x, const Rcpp::String& mnrEmpty);
 RcppExport SEXP _icd_icd10ShortToParts(SEXP xSEXP, SEXP mnrEmptySEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const CV& >::type x(xSEXP);
-    Rcpp::traits::input_parameter< const String >::type mnrEmpty(mnrEmptySEXP);
+    Rcpp::traits::input_parameter< const Rcpp::CharacterVector& >::type x(xSEXP);
+    Rcpp::traits::input_parameter< const Rcpp::String& >::type mnrEmpty(mnrEmptySEXP);
     rcpp_result_gen = Rcpp::wrap(icd10ShortToParts(x, mnrEmpty));
     return rcpp_result_gen;
 END_RCPP
 }
 // icd10DecimalToParts
-List icd10DecimalToParts(const CV x, const String mnrEmpty);
+List icd10DecimalToParts(const CV& x, const String& mnrEmpty);
 RcppExport SEXP _icd_icd10DecimalToParts(SEXP xSEXP, SEXP mnrEmptySEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< const CV >::type x(xSEXP);
-    Rcpp::traits::input_parameter< const String >::type mnrEmpty(mnrEmptySEXP);
+    Rcpp::traits::input_parameter< const CV& >::type x(xSEXP);
+    Rcpp::traits::input_parameter< const String& >::type mnrEmpty(mnrEmptySEXP);
     rcpp_result_gen = Rcpp::wrap(icd10DecimalToParts(x, mnrEmpty));
     return rcpp_result_gen;
 END_RCPP
@@ -304,12 +309,12 @@ BEGIN_RCPP
 END_RCPP
 }
 // icd9AddLeadingZeroesMajorSingle
-String icd9AddLeadingZeroesMajorSingle(String mjr);
+String icd9AddLeadingZeroesMajorSingle(const String& mjr);
 RcppExport SEXP _icd_icd9AddLeadingZeroesMajorSingle(SEXP mjrSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< String >::type mjr(mjrSEXP);
+    Rcpp::traits::input_parameter< const String& >::type mjr(mjrSEXP);
     rcpp_result_gen = Rcpp::wrap(icd9AddLeadingZeroesMajorSingle(mjr));
     return rcpp_result_gen;
 END_RCPP
@@ -326,23 +331,23 @@ BEGIN_RCPP
 END_RCPP
 }
 // icd9AddLeadingZeroesMajor
-CV icd9AddLeadingZeroesMajor(CV mjr);
+CV icd9AddLeadingZeroesMajor(const CV& mjr);
 RcppExport SEXP _icd_icd9AddLeadingZeroesMajor(SEXP mjrSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< CV >::type mjr(mjrSEXP);
+    Rcpp::traits::input_parameter< const CV& >::type mjr(mjrSEXP);
     rcpp_result_gen = Rcpp::wrap(icd9AddLeadingZeroesMajor(mjr));
     return rcpp_result_gen;
 END_RCPP
 }
 // icd9AddLeadingZeroes
-CV icd9AddLeadingZeroes(CV x, bool short_code);
+CV icd9AddLeadingZeroes(const CV& x, bool short_code);
 RcppExport SEXP _icd_icd9AddLeadingZeroes(SEXP xSEXP, SEXP short_codeSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< CV >::type x(xSEXP);
+    Rcpp::traits::input_parameter< const CV& >::type x(xSEXP);
     Rcpp::traits::input_parameter< bool >::type short_code(short_codeSEXP);
     rcpp_result_gen = Rcpp::wrap(icd9AddLeadingZeroes(x, short_code));
     return rcpp_result_gen;
@@ -547,13 +552,13 @@ BEGIN_RCPP
 END_RCPP
 }
 // icd9Compare
-bool icd9Compare(String a, String b);
+bool icd9Compare(const String& a, const String& b);
 RcppExport SEXP _icd_icd9Compare(SEXP aSEXP, SEXP bSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< String >::type a(aSEXP);
-    Rcpp::traits::input_parameter< String >::type b(bSEXP);
+    Rcpp::traits::input_parameter< const String& >::type a(aSEXP);
+    Rcpp::traits::input_parameter< const String& >::type b(bSEXP);
     rcpp_result_gen = Rcpp::wrap(icd9Compare(a, b));
     return rcpp_result_gen;
 END_RCPP

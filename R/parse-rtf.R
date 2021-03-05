@@ -39,6 +39,8 @@
 #' @noRd
 .parse_icd9cm_rtf_year <- function(year = "2014",
                                    save_pkg_majors = FALSE) {
+  code <- NULL
+  three_digit <- NULL
   year <- as.character(year)
   stopifnot(year %in% .icd9cm_sources$f_year)
   f_info_rtf <- .dl_icd9cm_rtf_year(year)
