@@ -8,7 +8,7 @@ test_that("No ranges or NA in code section of WHO data", {
     if (!.exists_in_cache(nm)) {
       skip(paste(nm, "not available for testing."))
     }
-    i <- get_icd_data(nm)
+    i <- .get_anywhere(nm)
     # structure tests
     expect_true(is.data.frame(i), info = nm)
     expect_false(any(grepl("-", i$code)), info = nm)

@@ -2,6 +2,7 @@
 !medicalrisk_1.2.tar.gz
 !touch_0.1-4.tar.gz
 !Efficient_*.R
+Efficient_calculation_of_comorbidities_from_medical_codes.R
 *-blx.aux
 *-blx.bib
 *-concordance.tex
@@ -150,9 +151,16 @@
 .*.swp
 ./auto/*
 .deps
+depslib/
 .depsdone.*
 .icd.built
-.pdf
+README-replication.html
+bench-versus-dput*.R
+bench-versus-result*.rds
+dput-dated*.R
+dput-latest*.R
+lib-bench
+result-*.rds
 .texpadtmp
 TSWLatexianTemp*
 _minted*

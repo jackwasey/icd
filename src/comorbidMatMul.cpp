@@ -1,11 +1,11 @@
 // [[Rcpp::depends(RcppEigen)]]
-#include "comorbidMatMul.h"
-#include "fastIntToString.h"
-#include "icd_types.h"
-#include "local.h"
-#include "mapplus.h"
-#include "refactor.h"
-#include "relevant.h"
+#include "comorbidMatMul.hpp"
+#include "fastIntToString.hpp"
+#include "icd_types.hpp"
+#include "local.hpp"
+#include "mapplus.hpp"
+#include "refactor.hpp"
+#include "relevant.hpp"
 #include <cstring>
 #include <string>
 #include <unordered_set>
@@ -54,8 +54,8 @@ void printCornerSparse(PtsSparse x) {
 
 void buildVisitCodesSparseWide(
   const DataFrame &data,
-  const std::string id_name,
-  const CV code_names,
+  const std::string& id_name,
+  const CV& code_names,
   const bool validate,
   Relevant &rh,
   PtsSparse &visMat, // output
@@ -136,8 +136,8 @@ void buildVisitCodesSparseWide(
 // [[Rcpp::export(comorbid_mat_mul_wide_rcpp)]]
 LogicalMatrix comorbidMatMulWide(const DataFrame &data,
                                  const List &map,
-                                 const std::string id_name,
-                                 const CV code_names,
+                                 const std::string& id_name,
+                                 const CV& code_names,
                                  const bool validate) {
   VecStr out_row_names;           // size is reserved in buildVisitCodesVec
   RObject visits = data[id_name]; // does this copy??? RObject instead?

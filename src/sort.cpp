@@ -1,5 +1,5 @@
 #include <Rcpp.h>
-#include "sort.h"
+#include "sort.hpp"
 using namespace Rcpp;
 
 IntegerVector orderWorker(
@@ -24,7 +24,7 @@ IntegerVector orderWorker(
 
 LogicalVector compareVectorWorker(const StringVector& x,
                                   const StringVector& y,
-                                  std::function <bool (String, String)> f) {
+                                  const std::function <bool (String, String)>& f) {
   if (x.size() != y.size()) stop("Both x and y must be same length");
   if (x.size() == 0) return LogicalVector(0);
   LogicalVector out(x.size());
@@ -43,7 +43,7 @@ LogicalVector compareVectorWorker(const StringVector& x,
 }
 
 // [[Rcpp::export(icd9_compare_rcpp)]]
-bool icd9Compare(String a, String b) {
+bool icd9Compare(const String& a, const String& b) {
   if (b == NA_STRING && a != NA_STRING) {
     // even if x is also NA, we still return true
     return true;

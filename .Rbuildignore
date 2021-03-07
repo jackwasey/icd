@@ -16,7 +16,8 @@
 ^\.DS_Store$
 ^\.Rproj\.user$
 ^\.covrignore$
-^\.git/.*
+^\.git$
+^\.git.*$
 ^\.lintr$
 ^\.settings$
 ^\.travis\..*$
@@ -48,12 +49,13 @@
 ^.*country-lang-vers.*\.utf8\..*$
 ^lib-bench$
 ^man-roxygen$
+_pkgdown\.yml$
 ^revdep$
 ^src\/.*\.gc(da|h|no|ov)$
 ^src\/.*\.o$
 ^src\/.*_cache.*
 ^src\/.*include-dependencies(\.d)?$
-^src\/.clang-format$
+^src\/.clang-(format|tidy)$
 ^src\/\.aspell$
 ^src\/\.cproject$
 ^src\/\.externalToolBuilders$
@@ -65,5 +67,6 @@
 ^tools$
 ^.*\.tex$
 ^vignettes\/efficiency-prebuilt\.(Rmd|tex)$
+^vignettes\/efficiency-prebuilt_cache$
 ^vignettes\/country-lang-vers-prebuilt\.(Rmd|tex)$
 ^vignettes\/jss\..*$

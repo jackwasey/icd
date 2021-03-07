@@ -1,0 +1,4 @@
+UseColor:	true
+HeaderFilterRegex:	'.*'
+Checks:	'misc-*,clang-diagnostic-*,clang-analyzer-*,modernize-*,openmp-*,performance-*,readability-*,bugprone-*,-readability-identifier-naming'
+FormatStyle:	file

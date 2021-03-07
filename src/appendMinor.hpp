@@ -1,7 +1,7 @@
 #ifndef APPENDMINOR_H_
 #define APPENDMINOR_H_
 
-#include "icd_types.h"
+#include "icd_types.hpp"
 CV icd9MajMinToCode(const CV& mjr,
                     const CV& mnr,
                     const bool isShort);

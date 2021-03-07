@@ -10,7 +10,7 @@ if (!exists("e", mode = "environment") ||
 }
 for (n in nms) {
   message(blue("Working on "), yellow(n))
-  xo <- get(x = n, envir = as.environment("package:icd.data"))
+  xo <- get(x = n, envir = as.environment("package:icd"))
   xe <- get(x = n, envir = e)
   if (identical(xo, xe)) {
     message(green("Identical"))

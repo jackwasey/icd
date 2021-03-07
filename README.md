@@ -16,35 +16,38 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with icd. If not, see <http:#www.gnu.org/licenses/>.
 -->
+
 <!-- README.md is generated from README.Rmd. Please edit that file and render with rmarkdown::render("README.Rmd")
 -->
 
-icd
-===
+# icd
 
 <!-- badges: start -->
 
-[![CRAN](https://www.r-pkg.org/badges/version/icd "CRAN")](https://cran.r-project.org/package=icd)
+[![CRAN](https://www.r-pkg.org/badges/version/icd
+"CRAN")](https://cran.r-project.org/package=icd)
 [![lifecycle](https://img.shields.io/badge/lifecycle-stable-blue.svg)](https://www.tidyverse.org/lifecycle/#stable)
 [![Project Status: Active – The project has reached a stable, usable
 state and is being actively
 developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
-[![Travis](https://travis-ci.org/jackwasey/icd.svg?branch=main "Travis Build Status")](https://travis-ci.org/jackwasey/icd)
-[![Appveyor](https://ci.appveyor.com/api/projects/status/9ncfgxht3n5i8t60/branch/main?svg=true "Appveyor Build Status")](https://ci.appveyor.com/project/jackwasey/icd/branch/main)
-[![codecov.io](https://codecov.io/github/jackwasey/icd/coverage.svg?branch=main "Code Coverage")](https://codecov.io/github/jackwasey/icd?branch=main)
+[![Travis](https://travis-ci.org/jackwasey/icd.svg?branch=main
+"Travis Build Status")](https://travis-ci.org/jackwasey/icd)
+[![Appveyor](https://ci.appveyor.com/api/projects/status/9ncfgxht3n5i8t60/branch/main?svg=true
+"Appveyor Build Status")](https://ci.appveyor.com/project/jackwasey/icd/branch/main)
+[![codecov.io](https://codecov.io/github/jackwasey/icd/coverage.svg?branch=main
+"Code Coverage")](https://codecov.io/github/jackwasey/icd?branch=main)
 [![CII Best
 Practices](https://bestpractices.coreinfrastructure.org/projects/2092/badge)](https://bestpractices.coreinfrastructure.org/projects/2092)
 [![Dependencies](https://tinyverse.netlify.com/badge/icd)](https://cran.r-project.org/package=icd)
 [![CRAN RStudio mirror downloads last calendar
-month](https://cranlogs.r-pkg.org/badges/icd "RStudio Mirror Downloads")](https://cran.r-project.org/package=icd)
+month](https://cranlogs.r-pkg.org/badges/icd
+"RStudio Mirror Downloads")](https://cran.r-project.org/package=icd)
 <!-- badges: end -->
 <!-- [![CRAN RStudio mirror downloads last week](https://cranlogs.r-pkg.org/badges/last-week/icd "RStudio Mirror Downloads Last Week")](https://cran.r-project.org/package=icd) -->
 
-Fast comorbidities from ICD-9 and ICD-10 codes, decoding, manipulation and validation
-=====================================================================================
+# Fast comorbidities from ICD-9 and ICD-10 codes, decoding, manipulation and validation
 
-Introduction
-------------
+## Introduction
 
 Calculate comorbidities, medical risk scores, and work very quickly and
 precisely with ICD-9 and ICD-10 codes. This package enables a work flow
@@ -61,84 +64,84 @@ are supported, most of which are downloaded on demand.
 health, epidemiology, clinical research, nutrition, journalism, health
 administration, insurance, and more. I’m grateful for contact from
 people in these fields for their feedback and code contributions, and
-I’m pleased to say that `icd` has been used in works like the [Pulitzer
-finalist](http://www.pulitzer.org/finalists/staff-propublica) work on
-[maternal death](http://www.pulitzer.org/finalists/staff-propublica) by
+I’m pleased to say that `icd` has been used in works like the
+[Pulitzer finalist](http://www.pulitzer.org/finalists/staff-propublica)
+work on [maternal
+death](http://www.pulitzer.org/finalists/staff-propublica) by
 [ProPublica](https://www.propublica.org).
 
-Features
---------
+## Features
 
--   find comorbidities of patients based on ICD-9 or ICD-10 codes,
+  - find comorbidities of patients based on ICD-9 or ICD-10 codes,
     e.g. Cancer, Heart Disease
-    -   several standard mappings of ICD codes to comorbidities are
+      - several standard mappings of ICD codes to comorbidities are
         included (Quan, Deyo, Elixhauser, AHRQ, PCCC)
-    -   *very fast* assignment of ICD codes to comorbidities (using
+      - *very fast* assignment of ICD codes to comorbidities (using
         novel matrix multiplication algorithm and C++ internally – see
         ‘efficiency’ vignette for details)
--   use your existing wide or long data format, icd can guess which
+  - use your existing wide or long data format, icd can guess which
     columns are ICD-9 or ICD-10 codes.
--   explain and summarize groups of ICD codes in natural language, using
+  - explain and summarize groups of ICD codes in natural language, using
     ICD editions from the WHO, USA, France and Belgium. Many different
     annual editions of these data are available, and these may be
     downloaded automatically when used, or in bulk with
     `download_all_icd_data()`.
--   Charlson and Van Walraven score calculations
--   Hierarchical Condition Codes (HCC) from CMS
--   Clinical Classifications Software (CCS) comorbidities from AHRQ
--   Pediatric Complex Chronic Condition comorbidities
--   AHRQ ICD-10 procedure code classification
--   correct conversion between different representations of ICD codes,
+  - Charlson and Van Walraven score calculations
+  - Hierarchical Condition Codes (HCC) from CMS
+  - Clinical Classifications Software (CCS) comorbidities from AHRQ
+  - Pediatric Complex Chronic Condition comorbidities
+  - AHRQ ICD-10 procedure code classification
+  - correct conversion between different representations of ICD codes,
     with and without a decimal points, leading and trailing characters
     (this is not trivial for ICD-9-CM). ICD-9 to ICD-10 cross-walk is
     not yet implemented
--   comprehensive test suite to increase confidence in accurate
+  - comprehensive test suite to increase confidence in accurate
     processing of ICD codes
 
-Examples
---------
+## Examples
 
 See also the vignettes and examples embedded in the help for each
 function for more. Here’s a taste:
 
-    # install.packages("icd")
-    library(icd)
+``` r
+# install.packages("icd")
+library(icd)
 
-    # Typical diagnostic code data, with many-to-many relationship
-    patient_data
-    #>   visit_id  icd9
-    #> 1     1000 40201
-    #> 2     1000  2258
-    #> 3     1000  7208
-    #> 4     1000 25001
-    #> 5     1001 34400
-    #> 6     1001  4011
-    #> 7     1002  4011
-    #> 8     1000  <NA>
+# Typical diagnostic code data, with many-to-many relationship
+patient_data
+#>   visit_id  icd9
+#> 1     1000 40201
+#> 2     1000  2258
+#> 3     1000  7208
+#> 4     1000 25001
+#> 5     1001 34400
+#> 6     1001  4011
+#> 7     1002  4011
+#> 8     1000  <NA>
 
-    # get comorbidities using Quan's application of Deyo's Charlson comorbidity groups
-    comorbid_charlson(patient_data)
-    #>         MI   CHF   PVD Stroke Dementia Pulmonary Rheumatic   PUD LiverMild    DM  DMcx Paralysis Renal Cancer
-    #> 1000 FALSE  TRUE FALSE  FALSE    FALSE     FALSE     FALSE FALSE     FALSE  TRUE FALSE     FALSE FALSE  FALSE
-    #> 1001 FALSE FALSE FALSE  FALSE    FALSE     FALSE     FALSE FALSE     FALSE FALSE FALSE      TRUE FALSE  FALSE
-    #> 1002 FALSE FALSE FALSE  FALSE    FALSE     FALSE     FALSE FALSE     FALSE FALSE FALSE     FALSE FALSE  FALSE
-    #>      LiverSevere  Mets   HIV
-    #> 1000       FALSE FALSE FALSE
-    #> 1001       FALSE FALSE FALSE
-    #> 1002       FALSE FALSE FALSE
+# get comorbidities using Quan's application of Deyo's Charlson comorbidity groups
+comorbid_charlson(patient_data)
+#>         MI   CHF   PVD Stroke Dementia Pulmonary Rheumatic   PUD LiverMild
+#> 1000 FALSE  TRUE FALSE  FALSE    FALSE     FALSE     FALSE FALSE     FALSE
+#> 1001 FALSE FALSE FALSE  FALSE    FALSE     FALSE     FALSE FALSE     FALSE
+#> 1002 FALSE FALSE FALSE  FALSE    FALSE     FALSE     FALSE FALSE     FALSE
+#>         DM  DMcx Paralysis Renal Cancer LiverSevere  Mets   HIV
+#> 1000  TRUE FALSE     FALSE FALSE  FALSE       FALSE FALSE FALSE
+#> 1001 FALSE FALSE      TRUE FALSE  FALSE       FALSE FALSE FALSE
+#> 1002 FALSE FALSE     FALSE FALSE  FALSE       FALSE FALSE FALSE
 
-    # or go straight to the Charlson scores:
-    charlson(patient_data)
-    #> 1000 1001 1002 
-    #>    2    2    0
+# or go straight to the Charlson scores:
+charlson(patient_data)
+#> 1000 1001 1002 
+#>    2    2    0
 
-    # plot summary of Uranium Cancer Registry sample data using AHRQ comorbidities
-    plot_comorbid(uranium_pathology)
+# plot summary of Uranium Cancer Registry sample data using AHRQ comorbidities
+plot_comorbid(uranium_pathology)
+```
 
 ![](man/figures/README-example-1.png)<!-- -->
 
-Comorbidities example: make “Table 1” summary data
---------------------------------------------------
+## Comorbidities example: make “Table 1” summary data
 
 A common requirement for medical research involving patients is
 determining new or existing comorbidities. This is often reported in
@@ -156,27 +159,29 @@ ICD codes into your Table 1.
 NHDS 2010 comorbidities to demonstrate Table One creation. Presented as
 counts (percentage prevalence in group).
 
-    nhds <- nhds::nhds2010
-    # get the comorbidities using the Quan-Deyo version of the Charlson categories
-    cmb <- icd::comorbid_quan_deyo(nhds, abbrev_names = FALSE)
-    nhds <- cbind(nhds, cmb, stringsAsFactors = FALSE)
-    Y <- nhds$adm_type == "emergency"
-    tab_dat <- vapply(
-      unname(unlist(icd_names_charlson)),
-      function(x) {
-        c(sprintf("%i (%.2f%%)", 
-                  sum(nhds[Y, x]), 
-                  100 * mean(nhds[Y, x])),
-          sprintf("%i (%.2f%%)",
-                  sum(nhds[!Y, x]),
-                  100 * mean(nhds[!Y, x])))
-      },
-      character(2)
-    )
-    knitr::kable(t(tab_dat), col.names = c("Emergency", "Not emergency"))
+``` r
+nhds <- nhds::nhds2010
+# get the comorbidities using the Quan-Deyo version of the Charlson categories
+cmb <- icd::comorbid_quan_deyo(nhds, abbrev_names = FALSE)
+nhds <- cbind(nhds, cmb, stringsAsFactors = FALSE)
+Y <- nhds$adm_type == "emergency"
+tab_dat <- vapply(
+  unname(unlist(icd_names_charlson)),
+  function(x) {
+    c(sprintf("%i (%.2f%%)", 
+              sum(nhds[Y, x]), 
+              100 * mean(nhds[Y, x])),
+      sprintf("%i (%.2f%%)",
+              sum(nhds[!Y, x]),
+              100 * mean(nhds[!Y, x])))
+  },
+  character(2)
+)
+knitr::kable(t(tab_dat), col.names = c("Emergency", "Not emergency"))
+```
 
 |                                             | Emergency      | Not emergency |
-|:--------------------------------------------|:---------------|:--------------|
+| :------------------------------------------ | :------------- | :------------ |
 | Myocardial Infarction                       | 2707 (3.69%)   | 1077 (1.38%)  |
 | Congestive Heart Failure                    | 12339 (16.84%) | 5628 (7.19%)  |
 | Periphral Vascular Disease                  | 3798 (5.18%)   | 3042 (3.89%)  |
@@ -195,24 +200,23 @@ counts (percentage prevalence in group).
 | Metastatic Carcinoma                        | 2100 (2.87%)   | 1663 (2.12%)  |
 | HIV/AIDS                                    | 0 (0.00%)      | 0 (0.00%)     |
 
-How to get help
----------------
+## How to get help
 
 Look at the help files for details and examples of almost every function
 in this package. There are several vignettes showing the main features
 (See list with `vignette(package = "icd")`):
 
--   Introduction `vignette("introduction", package = "icd")`
--   Charlson scores `vignette("charlson-scores", package = "icd")`
--   Examples using ICD-10 codes `vignette("ICD-10", package = "icd")`
--   CMS Hierarchical Condition Codes (HCC)
-    `vignette("CMS-HCC", package = "icd")`
--   Pediatric Complex Chronic Conditions (PCCC)
-    `vignette("PCCC", package = "icd")`
--   Working with ICD code ranges `vignette("ranges", package = "icd")`
--   Comparing comorbidity maps
-    `vignette("compare-maps", package = "icd")`
--   Paper detailing efficient matrix method of comorbidities
+  - Introduction `vignette("introduction", package = "icd")`
+  - Charlson scores `vignette("charlson-scores", package = "icd")`
+  - Examples using ICD-10 codes `vignette("ICD-10", package = "icd")`
+  - CMS Hierarchical Condition Codes (HCC) `vignette("CMS-HCC", package
+    = "icd")`
+  - Pediatric Complex Chronic Conditions (PCCC) `vignette("PCCC",
+    package = "icd")`
+  - Working with ICD code ranges `vignette("ranges", package = "icd")`
+  - Comparing comorbidity maps `vignette("compare-maps", package =
+    "icd")`
+  - Paper detailing efficient matrix method of comorbidities
     `vignette("efficiency", package = "icd")`
 
 Many users have emailed me directly for help, and I’ll do what I can,
@@ -222,13 +226,14 @@ Advanced users may look at the [source
 code](https://github.com/jackwasey/icd), particularly the extensive test
 suite which exercises all the key functions.
 
-    ?comorbid
-    ?comorbid_hcc
-    ?explain_code
-    ?is_valid
+``` r
+?comorbid
+?comorbid_hcc
+?explain_code
+?is_valid
+```
 
-ICD-9 codes
------------
+## ICD-9 codes
 
 ICD-9 codes are still in heavy use around the world, particularly in the
 USA where the ICD-9-CM (Clinical Modification) was in widespread use
@@ -252,8 +257,7 @@ decimal and non-decimal format codes in different places. This package
 primarily deals with ICD-9-CM (Clinical Modification) codes, but should
 be applicable or easily extendable to the original WHO ICD-9 system.
 
-ICD-10 codes
-------------
+## ICD-10 codes
 
 ICD-10 has a somewhat simpler format, with consistent use of a letter,
 then two alphanumeric characters. However, especially for ICD-10-CM,

@@ -1,7 +1,7 @@
 #ifndef RANGE_CONST_H_
 #define RANGE_CONST_H_
 
-#include "icd_types.h"
+#include "icd_types.hpp"
 
 // this is simplest just to hard-code
 const CV vbase =

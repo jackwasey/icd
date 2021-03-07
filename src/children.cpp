@@ -1,4 +1,4 @@
-#include "local.h" // for CV, VecStr
+#include "local.hpp" // for CV, VecStr
 #include <iterator>    // for advance
 #include <vector>
 using namespace Rcpp;

@@ -24,7 +24,7 @@ print.comorbidity_map <- function(x,
   assert_int(n_comorbidities)
   assert_int(n_codes)
   get_n_or_len <- function(x, n) {
-    x[1:ifelse(length(x) < n, length(x), n)]
+    x[seq_len(ifelse(length(x) < n, length(x), n))]
   }
   message(
     "Showing first ",

@@ -1,6 +1,6 @@
-#include "manip.h"
-#include "convert.h"
-#include "is.h"
+#include "manip.hpp"
+#include "convert.hpp"
+#include "is.hpp"
 #include <string.h> // for strlen
 
 using namespace Rcpp;
@@ -9,7 +9,7 @@ using namespace Rcpp;
 //' @keywords internal manip
 //' @noRd
 // [[Rcpp::export]]
-String icd9AddLeadingZeroesMajorSingle(String mjr) {
+String icd9AddLeadingZeroesMajorSingle(const String& mjr) {
   if (mjr == NA_STRING) return (NA_STRING);
   std::string m(mjr);
   if (!icd9IsASingleVE(mjr.get_cstring())) {
@@ -97,7 +97,7 @@ std::string icd9AddLeadingZeroesMajorSingleStd(std::string m) {
 }
 
 // [[Rcpp::export(icd9_add_leading_zeroes_major)]]
-CV icd9AddLeadingZeroesMajor(CV mjr) {
+CV icd9AddLeadingZeroesMajor(const CV& mjr) {
   return sapply(mjr, icd9AddLeadingZeroesMajorSingle);
 }
 
@@ -111,7 +111,7 @@ CV icd9AddLeadingZeroesMajor(CV mjr) {
 //' @keywords internal manip
 //' @noRd
 // [[Rcpp::export(icd9_add_leading_zeroes_rcpp)]]
-CV icd9AddLeadingZeroes(CV x, bool short_code) {
+CV icd9AddLeadingZeroes(const CV& x, bool short_code) {
   if (short_code) {
     // a shortcut for when short codes is just to add the appropriate leading
     // zeros when the total length is <3. Even then decimal may be quicker by

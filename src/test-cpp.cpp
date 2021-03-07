@@ -1,14 +1,14 @@
-#include "appendMinor.h"
-#include "convert.h"
-#include "convert10.h"
-#include "icd_types.h"
-#include "is.h"
-#include "local.h"
-#include "manip.h"
-#include "refactor.h"
-#include "util.h"
-
 #ifdef ICD_CATCH
+#include "appendMinor.hpp"
+#include "convert.hpp"
+#include "convert10.hpp"
+#include "icd_types.hpp"
+#include "is.hpp"
+#include "local.hpp"
+#include "manip.hpp"
+#include "refactor.hpp"
+#include "util.hpp"
+
 #include <testthat.h>
 using namespace Rcpp;
 context("internal 'is' functions") {

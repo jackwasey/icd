@@ -1,9 +1,9 @@
-#include "ranges.h"
-#include "appendMinor.h" // for icd9MajMinToShort, icd9Ma...
-#include "convert.h"     // for icd9DecimalToShort, icd9S...
-#include "icd_types.h"   // for CV, VecStr, Str
-#include "is.h"          // for icd9IsASingleE
-#include "local.h"       // for icd_set
+#include "ranges.hpp"
+#include "appendMinor.hpp" // for icd9MajMinToShort, icd9Ma...
+#include "convert.hpp"     // for icd9DecimalToShort, icd9S...
+#include "icd_types.hpp"   // for CV, VecStr, Str
+#include "is.hpp"          // for icd9IsASingleE
+#include "local.hpp"       // for icd_set
 #include <algorithm>     // for set_intersection
 #include <iterator>      // for insert_iterator, inserter
 #include <set>           // for _Rb_tree_const_iterator, set

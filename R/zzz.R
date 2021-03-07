@@ -46,7 +46,7 @@
         " package is deprecated from ",
         sQuote("icd"), " version 4.0. ",
         "The content from ", sQuote("icd.data"),
-        " is now available via ", sQuote("icd"), "."
+        " is all available via ", sQuote("icd"), "."
       )
     }
   }
@@ -58,6 +58,9 @@
 
 release_questions <- function() {
   c(
+    # first:
+    "ensure all packages are either at most recent CRAN versions, not bleeding edge, not old",
+    "tinytex::tlmgr_update()",
     "run release_sanity_checks() in tools/extra-tests.R",
     # data
     "clean data then download and update everything on all platforms",
@@ -65,7 +68,7 @@ release_questions <- function() {
     "manual render prebuilt efficiency & country-lang-vers vignettes, check correct in the tarball",
     "Do all examples look okay (not just run without errors)?",
     "Consider markdownlint mdl https://github.com/markdownlint/markdownlint",
-    "tools/publish.sh and note check for broken links",
+    "tools/publish.sh and note check for broken links, e.g. `linklint -host jackwasey.github.io/icd`",
     # code quality:
     "tools/test-plus.sh",
     "Use clang scan-build, with latest version of clang (clang-tools in apt)",
@@ -75,6 +78,8 @@ release_questions <- function() {
     "Download and set data dir in vanilla bash and R, Windows, Mac and Linux without library(icd) using icd::download_all_icd_data()",
     # final manual check:
     "Have all unnecessary files been ignored in built source tarball?",
+    # release
+    "consider git-release",
     # post-release
     "Have all the fixed github issues been closed",
     "update version number to devel",

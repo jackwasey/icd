@@ -1,8 +1,8 @@
 #ifndef SORT_H_
 #define SORT_H_
 
-#include "icd_types.h"
-#include "local.h"
+#include "icd_types.hpp"
+#include "local.hpp"
 #include <string.h>
 #include <utility> // std::pair
 #include <algorithm> // std::sort
@@ -11,7 +11,7 @@ using namespace Rcpp;
 
 typedef std::pair<std::string, std::size_t> pas_std;
 typedef std::pair<String, R_xlen_t> pas_rcpp;
-bool icd9Compare(Rcpp::String a, Rcpp::String b);
+bool icd9Compare(const Rcpp::String& a, const Rcpp::String& b);
 bool icd9CompareStd(std::string a, std::string b);
 
 CharacterVector icd9Sort(const Rcpp::CharacterVector &x);

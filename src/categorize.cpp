@@ -1,5 +1,5 @@
-#include "local.h"
-#include "util.h"
+#include "local.hpp"
+#include "util.hpp"
 #include <algorithm> // for copy, sort, transform
 #include <iterator>  // for back_insert_iterator
 #include <math.h>    // for floor

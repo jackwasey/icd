@@ -1,5 +1,5 @@
-#include "local.h"
-#include "relevant.h"
+#include "local.hpp"
+#include "relevant.hpp"
 using namespace Rcpp;
 
 #ifndef MAPPLUS_H_

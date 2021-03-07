@@ -4,7 +4,7 @@
 #' and forms the core of the package, along with the C++ matrix code. This is
 #' pure data manipulation and generalizable beyond medical data.
 #'
-#' The roadmap for \CRANpkg{icd} includes the optimized categorization component
+#' The goals for \CRANpkg{icd} include the optimized categorization component
 #' being packaged independently, and the comorbidity package taking on the
 #' front-end for doing ICD-code-based comorbidities. This is in discussion.
 #' @param x Data frame containing a column for an 'id' and a column for a code,

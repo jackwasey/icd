@@ -1,21 +1,21 @@
-#include "appendMinor.h"
-#include "comorbidMatMul.h"
-#include "convert.h"
-#include "icd_types.h"
-#include "is.h"
-#include "local.h"
-#include "manip.h"
-#include "mapplus.h"
-#include "refactor.h"
-#include "relevant.h"
-#include "util.h"
+#ifdef ICD_CATCH
+#include "appendMinor.hpp"
+#include "comorbidMatMul.hpp"
+#include "convert.hpp"
+#include "icd_types.hpp"
+#include "is.hpp"
+#include "local.hpp"
+#include "manip.hpp"
+#include "mapplus.hpp"
+#include "refactor.hpp"
+#include "relevant.hpp"
+#include "util.hpp"
 
 /*
  * Rscript -e
  * "devtools::load_all();devtools::test(filter='cpp',reporter='Location')"
  */
 
-#ifdef ICD_CATCH
 #include <testthat.h>
 using namespace Rcpp;
 context("matmul cpp") {
@@ -125,4 +125,4 @@ context("matmul cpp") {
     expect_true(got != r12.rel.end());
   }
 }
-#endif
+#endif // ICD_CATCH

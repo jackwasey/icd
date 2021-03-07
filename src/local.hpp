@@ -7,7 +7,7 @@
 
 #ifndef LOCAL_H_
 #define LOCAL_H_
-#include "icd_types.h"
+#include "icd_types.hpp"
 #include <set>
 #include <unordered_map>
 #include <unordered_set>

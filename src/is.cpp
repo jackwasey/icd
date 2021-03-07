@@ -1,5 +1,5 @@
-#include "is.h"
-#include "icd_types.h"
+#include "is.hpp"
+#include "icd_types.hpp"
 #include <string>
 #include <vector>
 

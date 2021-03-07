@@ -91,33 +91,6 @@
   x
 }
 
-#' Internal use only: get data from the icd.data package, without relying on it
-#' being attached
-#'
-#' Some data is hidden in active bindings, so it may be downloaded on demand,
-#' and some is lazy-loaded. This will work for regular package members, active
-#' bindings, and lazy data, whether or not the package is attached or loaded.
-#'
-#' This is really just needed for the transition from icd 3.3 to icd 4.0, and
-#' icd.data > 1.0
-#' @param alt If the data cannot be found, this value is returned. Default is
-#'   \code{NULL}.
-#' @keywords internal
-#' @noRd
-get_icd_data <- function(data_name, alt = NULL) {
-  if (!is.character(data_name)) {
-    data_name <- deparse(substitute(data_name))
-  }
-  ns <- asNamespace("icd")
-  if (exists(data_name, ns)) {
-    return(get(data_name, ns))
-  }
-  if (.exists_in_cache(data_name)) {
-    return(.get_from_cache(data_name))
-  }
-  alt
-}
-
 .exists_in_ns <- function(name) {
   all(vapply(name, .exists_in_ns_single, logical(1), USE.NAMES = FALSE))
 }

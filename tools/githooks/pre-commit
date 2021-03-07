@@ -7,16 +7,32 @@ declare -i wcres=0
 
 MSG="use 'git commit --no-verify' to override this check"
 
-toplevel="$(git rev-parse --show-toplevel)"
-if ! "${toplevel}/tools/travis-yaml-check.sh"; then
+IH="$(git rev-parse --show-toplevel)"
+if ! "${IH:-.}/tools/travis-yaml-check.sh"; then
     echo ".travis.yml is invalid."
     echo "${MSG}"
     ok=1
 fi
 
-git diff --cached --name-only | grep -q 'DESCRIPTION' &&
+# update DESCRIPTION automatically, before codemetar update
+desc_tmp="/tmp/DESCRIPTION-$(date "$@" +"%Y%m%d_%H%M%S")"
+cp DESCRIPTION "${desc_tmp}"
+Rscript -e "devnull <- desc::desc_normalize('${desc_tmp}');"
+cmp DESCRIPTION "${desc_tmp}"
+declare -i desc_cmp
+desc_cmp=$?
+if (( desc_cmp == 1 )); then 
+    mv "${desc_tmp}" DESCRIPTION
+    ok=1
+elif (( desc_cmp == 2 )); then
+    echo "comparison error when checking DESCRIPTION normalization" >&2;
+    exit 1;
+fi
+
+git diff --cached --name-only |
+    grep -q 'DESCRIPTION' &&
     [[ DESCRIPTION -nt codemeta.json ]] && {
-    Rscript -e 'codemetar::write_codemeta()'
+    Rscript -e 'codemetar::write_codemeta(verbose = FALSE, use_filesize = FALSE)'
     git add codemeta.json
     # git commit --amend -m"$(git log --format=%B -n1)" -m"Updated codemeta.json automatically."
     ok=1
@@ -48,17 +64,17 @@ grep -E -r -i -q "Copyright.*(${re_older_yrs%?}).*Wasey" . || ok=1
 
 # check package version correct everywhere, with non_GNU sed
 desc_ver="$(sed -n '/^Version/,/Version/s/Version: \([[:digit:].]\{3,\}\)/\1/p' DESCRIPTION)"
-news_ver="$(sed '1s/# Version \([[:digit:].]\{3,\}\)[[:space:]]*$/\1/;q' NEWS.md)"
+news_ver="$(sed -n '/^## Version/ {s/## Version \([[:digit:].]\{3,\}\)[[:space:]]*$/\1/;p;q}' NEWS.md)"
 conf_ver="$(sed -n '/AC_INIT/,/AC_INIT/s/[[:space:]]*AC_INIT.*\[\([[:digit:].]\{3,\}\)\].*/\1/p' configure.ac)"
 
 if [[ "${desc_ver}" == "${news_ver}" ]] && [[ "${desc_ver}" == "${conf_ver}" ]]; then
     :
 else
-    { echo "version mismatch: DESCRIPTION=${desc_ver}, NEWS.md${news_ver}, configure.ac${conf_ver}" >&2; ok=1; }
+    { echo "version mismatch: DESCRIPTION=${desc_ver}, NEWS.md=${news_ver}, configure.ac=${conf_ver}" >&2; ok=1; }
 fi
 
 # make sure we usr /usr/bin/env bash for scripts
-find "${ICD_HOME}" \
+find "${IH?}" \
     -type d -name '.*' -prune -o \
     ! -name "pre-commit" \
     -type f \
@@ -72,18 +88,13 @@ find "${ICD_HOME}" \
 done
 
 # check bash scripts
-find "${ICD_HOME}" -type d -name '.*' -prune -o -type f -exec grep -q '#!/usr/bin/env bash' '{}' \; -print |
+find "${IH?}" -type d -name '.*' -prune -o -type f -exec grep -q '#!/usr/bin/env bash' '{}' \; -print |
     while read -r scbash
     do {
-        shellcheck "${scbash}"
+        shellcheck -x "${scbash}"
         ok=1;
     }
 done
-
-Rscript -e '
-devnull <- desc::desc_reformat_fields();
-devnull <- desc::desc_reorder_fields();
-'
 
 wcres=$(git diff --name-only |
     grep -c -e "README.md" -e "codemeta.json"
@@ -95,5 +106,7 @@ if (( wcres != 0 )); then
     ok=1
 fi
 
-(( ok != 0 )) && echo "githooks/pre-commit failed" >&1 && exit ${ok}
-exit 0
+(( ok != 0 )) &&
+    echo "githooks/pre-commit failed" >&1
+
+exit $((ok))

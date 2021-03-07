@@ -1,5 +1,5 @@
-#include "icd_types.h"
-#include "is.h"      // for icd9IsASingleVE
+#include "icd_types.hpp"
+#include "is.hpp"      // for icd9IsASingleVE
 #include <algorithm> // for fill
 #include <iterator>  // for distance
 #include <string.h>  // for strlen
@@ -93,6 +93,6 @@ CV icd9MajMinToShort(const CV& mjr, const CV& mnr) {
 }
 
 // [[Rcpp::export]]
-CV icd9MajMinToDecimal(const CV mjr, const CV mnr) {
+CV icd9MajMinToDecimal(const CV& mjr, const CV& mnr) {
   return icd9MajMinToCode(mjr, mnr, false);
 }

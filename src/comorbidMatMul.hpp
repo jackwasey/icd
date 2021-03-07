@@ -1,9 +1,9 @@
 // [[Rcpp::depends(RcppEigen)]]
-#include "icd_types.h"
-#include "local.h"
-#include "mapplus.h"
-#include "refactor.h"
-#include "relevant.h"
+#include "icd_types.hpp"
+#include "local.hpp"
+#include "mapplus.hpp"
+#include "refactor.hpp"
+#include "relevant.hpp"
 
 using namespace Rcpp;
 
@@ -27,8 +27,8 @@ void printCornerSparse(PtsSparse x);
 
 void buildVisitCodesSparseWide(
   const DataFrame &data,
-  const std::string id_name,
-  const CV code_names,
+  const std::string& id_name,
+  const CV& code_names,
   const bool validate,
   Relevant &rh,
   // output
@@ -37,6 +37,6 @@ void buildVisitCodesSparseWide(
   VecStr &visitIds);
 LogicalMatrix comorbidMatMulWide(const DataFrame &data,
                                  const List &map,
-                                 const std::string id_name,
-                                 const CV code_name,
+                                 const std::string& id_name,
+                                 const CV& code_name,
                                  const bool validate = false);

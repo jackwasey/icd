@@ -1,10 +1,10 @@
-#include "mapplus.h"
-#include "comorbidMatMul.h"
-#include "fastIntToString.h"
-#include "icd_types.h"
-#include "local.h"
-#include "refactor.h"
-#include "relevant.h"
+#include "mapplus.hpp"
+#include "comorbidMatMul.hpp"
+#include "fastIntToString.hpp"
+#include "icd_types.hpp"
+#include "local.hpp"
+#include "refactor.hpp"
+#include "relevant.hpp"
 #include <cstring>
 #include <string>
 

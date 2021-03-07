@@ -44,7 +44,6 @@ preamble: |
   \raggedbottom
   \shortcites{quan_coding_2005,quan_updating_2011, Pope_RiskadjustmentMedicare_2004,Lee_Predictingmortalitypatients_2003,frank_risk-adjusted_2014,elixhauser_comorbidity_1998}
   \author{Jack O. Wasey\\Children's Hospital\\of Philadelphia \And Steven M. Frank\\Johns Hopkins Medical\\Institutions \And Mohamed A. Rehman\\Johns Hopkins All\\Children's Hospital}
-# graphicx, color, hyperref, ae, fancyverb and natbib are included by jss.cls
 biblio-style: jss
 documentclass: jss
 output: 
@@ -56,11 +55,11 @@ bibliography:
   - icdjss.bib
 vignette: >
   % The resuling PDF is included by vignettes/efficiency-vignette.Rnw which contains the Vignette info
-  %\ %VignetteIndexEntry{icd: Efficient Computation of Comorbidities from ICD Codes Using Sparse Matrix Multiplication in R}
   %\ %VignetteDepends{rticles}
-  %\ %VignetteEngine{knitr::rmarkdown}
   %\ %VignetteEncoding{UTF-8}
   %\ %VignetteKeyword{comorbidity, comorbidities, biomedical informatics, administrative data, matrix algebra, ICD-9, ICD-10, ICD-9-CM, ICD-10-CM, mapping, algorithm}
+  %\ %VignetteIndexEntry{icd: Efficient Computation of Comorbidities from ICD Codes Using Sparse Matrix Multiplication in R}
+  %\ %VignetteEngine{knitr::rmarkdown}
 editor_options:
   chunk_output_type: inline
 pkgdown:

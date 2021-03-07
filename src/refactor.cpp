@@ -1,5 +1,5 @@
-#include "refactor.h"
-#include "local.h"
+#include "refactor.hpp"
+#include "local.hpp"
 
 using namespace Rcpp;
 
