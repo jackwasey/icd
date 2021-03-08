@@ -59,20 +59,48 @@ for (n in rownames(rhub_env)) {
 sanitize <- FALSE
 if (sanitize) {
   rhub::check_with_sanitizers(
-    env_vars = c(MAKEFLAGS = "CXX11FLAGS+=-w CXXFLAGS+=-w")
+    env_vars = c(
+      MAKEFLAGS = "CXX11FLAGS+=-w CXXFLAGS+=-w",
+      GNUMAKEFLAGS = "CXX11FLAGS+=-w CXXFLAGS+=-w"
+    )
   )
-  rhub::check_on_windows(env_vars = rhe)
+  # rhub::check_on_windows(env_vars = rhe)
 }
 
 rhub_res <- list()
 plats <- c(
-  "macos-highsierra-release-cran",
-  "linux-x86_64-rocker-gcc-san",
-  "fedora-clang-devel",
+  # "macos-highsierra-release-cran",
+  # "linux-x86_64-rocker-gcc-san",
+  # "fedora-clang-devel",
   "debian-gcc-patched",
-  "windows-x86_64-patched",
-  "ubuntu-gcc-devel",
-  "solaris-x86-patched"
+  # "windows-x86_64-patched",
+  # "ubuntu-gcc-devel",
+  # "solaris-x86-patched",
+  NULL
 )
 
-rhub_res <- rhub::check(env_vars = rhe, platform = plats)
+makeflags <- c("CXXFLAGS"="-w",
+            "CXX11FLAGS"="-w",
+            "CFLAGS"="-w")
+.makeflags <- paste(names(makeflags), makeflags, sep='=', collapse="\\ ")
+configure_args <- c("--enable-icd-shutup")
+configure_vars <- c(MAKEFLAGS = .makeflags,
+                    "_R_CHECK_DEPENDS_ONLY_"="true")
+install_args <- c("--no-docs",
+                  .configure_args,
+                  .configure_vars)
+check_args <- c(
+  "--ignore-vignettes",
+  "--no-manual",
+  "--no-codoc",
+  "--no-vignettes",
+  "--no-build-vignettes",
+  "--install-args='--no-build-vignettes --configure-args=\"--enable-icd-shutup\" --configure-vars=\"MAKEFLAGS=\\\"CXXFLAGS=-w CXX11FLAGS=-w _R_CHECK_DEPENDS_ONLY_=TRUE\\\"\"'")
+
+rhub_res <- rhub::check(
+  check_args = .checks_args,
+    NULL
+  ),
+  env_vars = rhe,
+  platform = plats
+)
