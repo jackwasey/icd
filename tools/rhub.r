@@ -1,4 +1,8 @@
 #!/usr/bin/env Rscript
+
+verbose <- TRUE
+if (!exists("dry_run")) dry_run <- TRUE
+
 # tools::compactPDF(gs_quality = "ebook")
 # install arg --compact-docs to avoid rhub warning? somehow make part of usual build process? esp for pre-built vignettes
 
@@ -79,28 +83,57 @@ plats <- c(
   NULL
 )
 
-makeflags <- c("CXXFLAGS"="-w",
-            "CXX11FLAGS"="-w",
-            "CFLAGS"="-w")
-.makeflags <- paste(names(makeflags), makeflags, sep='=', collapse="\\ ")
+makeflags <- c(
+  "CXXFLAGS" = "-w",
+  "CXX11FLAGS" = "-w",
+  "CXX14FLAGS" = "-w",
+  "CXX17FLAGS" = "-w",
+  "CXX20FLAGS" = "-w",
+  "CFLAGS" = "-w"
+)
+.makeflags <- paste(names(makeflags), makeflags, sep = "=", collapse = "\\ ")
+
 configure_args <- c("--enable-icd-shutup")
-configure_vars <- c(MAKEFLAGS = .makeflags,
-                    "_R_CHECK_DEPENDS_ONLY_"="true")
-install_args <- c("--no-docs",
-                  .configure_args,
-                  .configure_vars)
+.configure_args <- configure_args
+configure_vars <- c(
+  MAKEFLAGS = .makeflags,
+  "_R_CHECK_DEPENDS_ONLY_" = "true"
+)
+.configure_vars <- paste(names(configure_vars), configure_vars, sep = "=", collapse = "\\ ")
+install_args <- c(
+  "--no-docs",
+  paste0("--configure-args=", configure_args),
+  paste0("--configure-vars=", .configure_vars)
+)
+.install_args <- paste(names(install_args), install_args, sep = "=", collapse = "\\ ")
 check_args <- c(
+  paste0("--install-args=", "'", .install_args, "'"),
   "--ignore-vignettes",
   "--no-manual",
   "--no-codoc",
   "--no-vignettes",
-  "--no-build-vignettes",
-  "--install-args='--no-build-vignettes --configure-args=\"--enable-icd-shutup\" --configure-vars=\"MAKEFLAGS=\\\"CXXFLAGS=-w CXX11FLAGS=-w _R_CHECK_DEPENDS_ONLY_=TRUE\\\"\"'")
-
-rhub_res <- rhub::check(
-  check_args = .checks_args,
-    NULL
-  ),
-  env_vars = rhe,
-  platform = plats
+  "--no-build-vignettes"
 )
+
+.check_args <- paste(names(check_args), check_args, sep = "=", collapse = "\\ ")
+
+# "--install-args='--no-build-vignettes --configure-args=\"--enable-icd-shutup\" --configure-vars=\"MAKEFLAGS=\\\"CXXFLAGS=-w CXX11FLAGS=-w _R_CHECK_DEPENDS_ONLY_=TRUE\\\"\"'")
+
+if (verbose) {
+  symbol_names <- c(".makeflags", ".configure_args", ".configure_vars", ".install_args", ".check_args")
+  for (s in symbol_names) {
+    message(s)
+    message("print")
+    print(get(s))
+    message("cat")
+    cat(get(s))
+    cat("\n\n")
+  }
+}
+if (!dry_run) {
+  rhub_res <- rhub::check(
+    check_args = .check_args,
+    env_vars = rhe,
+    platform = plats
+  )
+}

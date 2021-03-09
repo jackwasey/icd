@@ -1,12 +1,17 @@
 #!/usr/bin/env bash
 #shellcheck disable=SC2034
-#
-#
-#
+
+## R internals: "The following environment variables can be used to customize
+## the operation of check: a convenient place to set these is the check envir-
+## onment file (default, ~/.R/check.Renviron)." Unclear how r-hub deals with
+## environment variables, especially those overriding build processes before
+## check.
+
 #MAKEFLAGS="CXXFLAGS=-Wno-unused-parameter\\ -Wno-unused-variable\\ -Wno-ignored-attributes\\ -Wno-cast-function-type\\ -Wno-unknown-warning-option\\ -Wno-unknown-pragma"
-_R_CHECK_ASCII_DATA_=FALSE
-_R_CHECK_DOC_SIZES2_=FALSE
-_R_CHECK_DOC_SIZES_=FALSE
+_R_CHECK_ASCII_DATA_="FALSE"
+_R_CHECK_DOC_SIZES2_="FALSE"
+_R_CHECK_DOC_SIZES_="FALSE"
 GNUMAKEFLAGS="CXXFLAGS=-w CXX11FLAGS=-w"
 MAKEFLAGS="CXXFLAGS=-w CXX11FLAGS=-w"
-_R_CHECK_DEPENDS_ONLY_=TRUE
+_R_CHECK_DEPENDS_ONLY_="TRUE"
+_R_CHECK_COMPILATION_FLAGS_="FALSE"
