@@ -1,17 +1,17 @@
 #!/usr/bin/env bash
-set -eu
-IFS=$'\n\t'
-# shellcheck disable=SC1090
-source "${ICD_HOME:-$HOME/icd}/tools/build-quick.sh"
+"${ICD_HOME?}/tools/build-quick.sh"
 
 (
-[[ -f "$HOME/.R/Makevars.quick" ]] && export R_MAKEVARS_USER="$HOME/.R/Makevars.quick"
-MAKEFLAGS=-j$(getconf _NPROCESSORS_ONLN) 
+MAKEFLAGS=-j$(getconf _NPROCESSORS_ONLN)
 export MAKEFLAGS
 R CMD INSTALL --debug \
     --data-compress=none \
-    --configure-args="CXX11FLAGS=-O0" \
+    --configure-vars="CXX20FLAGS=-O0 CXX17FLAGS=-O0 CXX14FLAGS=-O0 CXX11FLAGS=-O0 CXXFLAGS=-O0 CFLAGS=-O0" \
     --install-tests \
+    --no-clean-on-error \
+    --no-docs \
+    --no-html \
+    --no-test-load \
     --no-staged-install \
     icd*.tar.gz
 

@@ -1,3 +1,3 @@
-CXX_STD=CXX14
+CXX_STD=CXX11
 # no openmp, since thread model is different, and is likely to be much slower,
 # although perhaps Eigen is clever enough to account for this.

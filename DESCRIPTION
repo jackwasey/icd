@@ -1,7 +1,7 @@
 Package: icd
 Title: Comorbidity Calculations and Tools for ICD-9 and ICD-10
     Codes
-Version: 4.0.9.9000
+Version: 4.0.9.9001
 Authors@R:
     c(person(given = "Jack O.",
              family = "Wasey",

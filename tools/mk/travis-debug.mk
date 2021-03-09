@@ -1,6 +1,9 @@
 #!/usr/bin/env make
-icd_debug_flags := -O0 -g3
-@echo adding $(icd_debug_flags) to C, Fortran and C++ flags
+## N.b. += requires GNU make.
+# this is mainly for the enormously verbose RcppEigen warnings, which come with any compilation which does LinkingTo RcppEigen, not the package installation itself.
+
+icd_debug_flags := -O0 -g3 -Wall -Wextra -pedantic
+
 CXXFLAGS += $(icd_debug_flags)
 CXX11FLAGS += $(icd_debug_flags)
 CXX14FLAGS += $(icd_debug_flags)
