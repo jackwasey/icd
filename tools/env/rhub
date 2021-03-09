@@ -4,9 +4,14 @@
 #
 #
 #MAKEFLAGS="CXXFLAGS=-Wno-unused-parameter\\ -Wno-unused-variable\\ -Wno-ignored-attributes\\ -Wno-cast-function-type\\ -Wno-unknown-warning-option\\ -Wno-unknown-pragma"
-_R_CHECK_ASCII_DATA_=FALSE
-_R_CHECK_DOC_SIZES2_=FALSE
-_R_CHECK_DOC_SIZES_=FALSE
+_R_CHECK_ASCII_DATA_="FALSE"
+_R_CHECK_DOC_SIZES2_="FALSE"
+_R_CHECK_DOC_SIZES_="FALSE"
+
 _R_CHECK_CRAN_INCOMING_=FALSE
 _R_CHECK_CRAN_INCOMING_REMOTE_=FALSE
+
 MAKEFLAGS="CXXFLAGS=-w CXX11FLAGS=-w CFLAGS=-w"
+
+_R_CHECK_DEPENDS_ONLY_="TRUE"
+_R_CHECK_COMPILATION_FLAGS_="FALSE"
