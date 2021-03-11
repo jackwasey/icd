@@ -17,7 +17,7 @@
 
 # to regenerate quickly and test:
 # # e..g. export ICD_HOME=~/icd
-# autoreconf -fv && "${ICD_HOME:-.}/configure" --enable-icd-strip --enable-icd-shutup && cat "${ICD_HOME:-.}/src/Makevars" && grep -v -q '@' "${ICD_HOME:-.}/src/Makevars" || echo "MISSING REPLACEMENT"
+# autoreconf -fv && "${ICD_HOME:-.}/configure" --enable-icd-shutup && cat "${ICD_HOME:-.}/src/Makevars" && grep -v -q '@' "${ICD_HOME:-.}/src/Makevars" || echo "MISSING REPLACEMENT"
 
 AC_PREREQ([2.62])
 AC_INIT(icd, [4.0.9.9000], [jack@jackwasey.com])
@@ -52,7 +52,7 @@ AC_MSG_CHECKING([R CXX11])
 AS_IF([test "${CXX11-unset}" = unset ],
       [
        CXX11=`"${R_BIN}" CMD config CXX11`
-       AC_MSG_RESULT([Setting ${CXX11}])
+       AC_MSG_RESULT([Setting R's ${CXX11}])
        ],
        [AC_MSG_RESULT([Using pre-set ${CXX11}])]
        )
@@ -61,7 +61,7 @@ AC_MSG_CHECKING([R CXX11STD])
 AS_IF([ test "${CXX11STD-unset}" = unset ],
       [
        CXX11STD=`"${R_BIN}" CMD config CXX11STD`
-       AC_MSG_RESULT([Setting R ${CXX11STD}]);
+       AC_MSG_RESULT([Setting R's ${CXX11STD}]);
        ],
        [AC_MSG_RESULT([Using existing ${CXX11STD}])]
        )
@@ -70,7 +70,7 @@ AC_MSG_CHECKING([R CXX11FLAGS]);
 AS_IF([test "${CXX11FLAGS-unset} = unset" ],
       [
        CXX11FLAGS=`"${R_BIN}" CMD config CXX11FLAGS`
-       AC_MSG_RESULT([Setting R ${CXX11FLAGS}])
+       AC_MSG_RESULT([Setting R's ${CXX11FLAGS}])
        ],
        [AC_MSG_RESULT([Using existing ${CXX11FLAGS}])]
        )
@@ -80,9 +80,9 @@ CXX="${CXX11}"
 CXXFLAGS="${CXX11FLAGS}"
 CXXSTD="${CXX11STD}"
 
-CFLAGS=`"${R_BIN}" CMD config CFLAGS`
-CPPFLAGS=`"${R_BIN}" CMD config CPPFLAGS`
-LIBS="${PKG_LIBS}"
+#CFLAGS=`"${R_BIN}" CMD config CFLAGS`
+#CPPFLAGS=`"${R_BIN}" CMD config CPPFLAGS`
+#LIBS="${PKG_LIBS}"
 
 # try to shut up travis/r-hub builds with huge warning burden with default compiler settings (Eigen). Can't seem to do with MAKEFLAGS, or string of R CMD check --install-opts=.....
 ICD_SHUTUP_FLAG=""
@@ -91,7 +91,7 @@ AC_ARG_VAR([ICD_SHUTUP],
 
 AC_ARG_ENABLE([icd_shutup], AS_HELP_STRING([--enable-icd-shutup], [Peaceful compilation]))
 
-AS_IF([test "x$enable_icd_shutup" = "xyes" || test "${ICD_SHUTUP+set}" = set ], [ICD_SHUTUP_FLAG="-w -DEIGEN_PERMANENTLY_DISABLE_STUPID_WARNINGS"])
+AS_IF([test "x$enable_icd_shutup" = "xyes" || test "${ICD_SHUTUP+set}" = set ], [ICD_SHUTUP_FLAG="-Wno-unknown-pragmas -Wno-ignored-attributes -Wno-unknown-warning -Wno-unknown-warning-option -Wno-cast-function-type -DEIGEN_PERMANENTLY_DISABLE_STUPID_WARNINGS"])
 
 # AC_LANG changes what R_OPENMP and rest of script does. See https://www.gnu.org/software/autoconf/manual/autoconf-2.63/html_node/Language-Choice.html . Affected by CXXFLAGS etc, so these should be set first if needed.
 AC_LANG([C++])
@@ -129,8 +129,5 @@ AC_ARG_VAR([ICD_KEEP_MAKEVARS],
 #Always write the stub as default to not include Makevars content
 echo "unsigned char Makevars[[]] = { 0x00 };" > src/makevars.h
 
-AC_ARG_ENABLE([icd_strip], AS_HELP_STRING([--enable-icd-strip], [Enable stripping of binary on Linux and MacOS]))
-AS_IF([test "x$enable_icd_strip" != "xno"], [ICD_STRIP=[tools/mk/strip.mk]], [ICD_STRIP=''])
-AC_SUBST_FILE([ICD_STRIP])
 AC_SUBST(ICD_SHUTUP_FLAG)
 AC_OUTPUT

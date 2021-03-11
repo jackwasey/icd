@@ -1,5 +1,5 @@
+#!/usr/bin/env make
 # @configure_input@
 CXX_STD=CXX11
 PKG_CXXFLAGS=@ICD_SHUTUP_FLAG@ @ICD_OPENMP_FLAG@
 PKG_LIBS=@ICD_OPENMP_FLAG@
-@ICD_STRIP@

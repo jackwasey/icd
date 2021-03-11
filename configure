@@ -620,7 +620,6 @@ infodir
 docdir
 oldincludedir
 includedir
-runstatedir
 localstatedir
 sharedstatedir
 sysconfdir
@@ -640,12 +639,11 @@ PACKAGE_TARNAME
 PACKAGE_NAME
 PATH_SEPARATOR
 SHELL'
-ac_subst_files='ICD_STRIP'
+ac_subst_files=''
 ac_user_opts='
 enable_option_checking
 enable_icd_shutup
 enable_openmp
-enable_icd_strip
 '
       ac_precious_vars='build_alias
 host_alias
@@ -696,7 +694,6 @@ datadir='${datarootdir}'
 sysconfdir='${prefix}/etc'
 sharedstatedir='${prefix}/com'
 localstatedir='${prefix}/var'
-runstatedir='${localstatedir}/run'
 includedir='${prefix}/include'
 oldincludedir='/usr/include'
 docdir='${datarootdir}/doc/${PACKAGE_TARNAME}'
@@ -949,15 +946,6 @@ do
   | -silent | --silent | --silen | --sile | --sil)
     silent=yes ;;
 
-  -runstatedir | --runstatedir | --runstatedi | --runstated \
-  | --runstate | --runstat | --runsta | --runst | --runs \
-  | --run | --ru | --r)
-    ac_prev=runstatedir ;;
-  -runstatedir=* | --runstatedir=* | --runstatedi=* | --runstated=* \
-  | --runstate=* | --runstat=* | --runsta=* | --runst=* | --runs=* \
-  | --run=* | --ru=* | --r=*)
-    runstatedir=$ac_optarg ;;
-
   -sbindir | --sbindir | --sbindi | --sbind | --sbin | --sbi | --sb)
     ac_prev=sbindir ;;
   -sbindir=* | --sbindir=* | --sbindi=* | --sbind=* | --sbin=* \
@@ -1095,7 +1083,7 @@ fi
 for ac_var in	exec_prefix prefix bindir sbindir libexecdir datarootdir \
 		datadir sysconfdir sharedstatedir localstatedir includedir \
 		oldincludedir docdir infodir htmldir dvidir pdfdir psdir \
-		libdir localedir mandir runstatedir
+		libdir localedir mandir
 do
   eval ac_val=\$$ac_var
   # Remove trailing slashes.
@@ -1248,7 +1236,6 @@ Fine tuning of the installation directories:
   --sysconfdir=DIR        read-only single-machine data [PREFIX/etc]
   --sharedstatedir=DIR    modifiable architecture-independent data [PREFIX/com]
   --localstatedir=DIR     modifiable single-machine data [PREFIX/var]
-  --runstatedir=DIR       modifiable per-process data [LOCALSTATEDIR/run]
   --libdir=DIR            object code libraries [EPREFIX/lib]
   --includedir=DIR        C header files [PREFIX/include]
   --oldincludedir=DIR     C header files for non-gcc [/usr/include]
@@ -1280,7 +1267,6 @@ Optional Features:
   --enable-FEATURE[=ARG]  include FEATURE [ARG=yes]
   --enable-icd-shutup     Peaceful compilation
   --disable-openmp        do not use OpenMP
-  --enable-icd-strip      Enable stripping of binary on Linux and MacOS
 
 Some influential environment variables:
   ICD_SHUTUP  [If ICD_SHUTUP is defined, it tells configure to try to silence
@@ -1852,8 +1838,8 @@ $as_echo_n "checking R CXX11... " >&6; }
 if test "${CXX11-unset}" = unset ; then :
 
        CXX11=`"${R_BIN}" CMD config CXX11`
-       { $as_echo "$as_me:${as_lineno-$LINENO}: result: Setting ${CXX11}" >&5
-$as_echo "Setting ${CXX11}" >&6; }
+       { $as_echo "$as_me:${as_lineno-$LINENO}: result: Setting R's ${CXX11}" >&5
+$as_echo "Setting R's ${CXX11}" >&6; }
 
 else
   { $as_echo "$as_me:${as_lineno-$LINENO}: result: Using pre-set ${CXX11}" >&5
@@ -1866,8 +1852,8 @@ $as_echo_n "checking R CXX11STD... " >&6; }
 if  test "${CXX11STD-unset}" = unset ; then :
 
        CXX11STD=`"${R_BIN}" CMD config CXX11STD`
-       { $as_echo "$as_me:${as_lineno-$LINENO}: result: Setting R ${CXX11STD}" >&5
-$as_echo "Setting R ${CXX11STD}" >&6; };
+       { $as_echo "$as_me:${as_lineno-$LINENO}: result: Setting R's ${CXX11STD}" >&5
+$as_echo "Setting R's ${CXX11STD}" >&6; };
 
 else
   { $as_echo "$as_me:${as_lineno-$LINENO}: result: Using existing ${CXX11STD}" >&5
@@ -1880,8 +1866,8 @@ $as_echo_n "checking R CXX11FLAGS... " >&6; };
 if test "${CXX11FLAGS-unset} = unset" ; then :
 
        CXX11FLAGS=`"${R_BIN}" CMD config CXX11FLAGS`
-       { $as_echo "$as_me:${as_lineno-$LINENO}: result: Setting R ${CXX11FLAGS}" >&5
-$as_echo "Setting R ${CXX11FLAGS}" >&6; }
+       { $as_echo "$as_me:${as_lineno-$LINENO}: result: Setting R's ${CXX11FLAGS}" >&5
+$as_echo "Setting R's ${CXX11FLAGS}" >&6; }
 
 else
   { $as_echo "$as_me:${as_lineno-$LINENO}: result: Using existing ${CXX11FLAGS}" >&5
@@ -1894,9 +1880,9 @@ CXX="${CXX11}"
 CXXFLAGS="${CXX11FLAGS}"
 CXXSTD="${CXX11STD}"
 
-CFLAGS=`"${R_BIN}" CMD config CFLAGS`
-CPPFLAGS=`"${R_BIN}" CMD config CPPFLAGS`
-LIBS="${PKG_LIBS}"
+#CFLAGS=`"${R_BIN}" CMD config CFLAGS`
+#CPPFLAGS=`"${R_BIN}" CMD config CPPFLAGS`
+#LIBS="${PKG_LIBS}"
 
 # try to shut up travis/r-hub builds with huge warning burden with default compiler settings (Eigen). Can't seem to do with MAKEFLAGS, or string of R CMD check --install-opts=.....
 ICD_SHUTUP_FLAG=""
@@ -1909,7 +1895,7 @@ fi
 
 
 if test "x$enable_icd_shutup" = "xyes" || test "${ICD_SHUTUP+set}" = set ; then :
-  ICD_SHUTUP_FLAG="-w -DEIGEN_PERMANENTLY_DISABLE_STUPID_WARNINGS"
+  ICD_SHUTUP_FLAG="-Wno-unknown-pragmas -Wno-ignored-attributes -Wno-unknown-warning -Wno-unknown-warning-option -Wno-cast-function-type -DEIGEN_PERMANENTLY_DISABLE_STUPID_WARNINGS"
 fi
 
 # AC_LANG changes what R_OPENMP and rest of script does. See https://www.gnu.org/software/autoconf/manual/autoconf-2.63/html_node/Language-Choice.html . Affected by CXXFLAGS etc, so these should be set first if needed.
@@ -2544,17 +2530,6 @@ DO_KEEP_MAKEVARS="${ICD_KEEP_MAKEVARS}"
 
 #Always write the stub as default to not include Makevars content
 echo "unsigned char Makevars[] = { 0x00 };" > src/makevars.h
-
-# Check whether --enable-icd_strip was given.
-if test "${enable_icd_strip+set}" = set; then :
-  enableval=$enable_icd_strip;
-fi
-
-if test "x$enable_icd_strip" != "xno"; then :
-  ICD_STRIP=tools/mk/strip.mk
-else
-  ICD_STRIP=''
-fi
 
 
 cat >confcache <<\_ACEOF
@@ -3309,24 +3284,7 @@ ac_tmp=$tmp
 # This happens for instance with `./config.status config.h'.
 if test -n "$CONFIG_FILES"; then
 
-if $AWK 'BEGIN { getline <"/dev/null" }' </dev/null 2>/dev/null; then
-  ac_cs_awk_getline=:
-  ac_cs_awk_pipe_init=
-  ac_cs_awk_read_file='
-      while ((getline aline < (F[key])) > 0)
-	print(aline)
-      close(F[key])'
-  ac_cs_awk_pipe_fini=
-else
-  ac_cs_awk_getline=false
-  ac_cs_awk_pipe_init="print \"cat <<'|#_!!_#|' &&\""
-  ac_cs_awk_read_file='
-      print "|#_!!_#|"
-      print "cat " F[key] " &&"
-      '$ac_cs_awk_pipe_init
-  # The final `:' finishes the AND list.
-  ac_cs_awk_pipe_fini='END { print "|#_!!_#|"; print ":" }'
-fi
+
 ac_cr=`echo X | tr X '\015'`
 # On cygwin, bash can eat \r inside `` if the user requested igncr.
 # But we know of no other shell where ac_cr would be empty at this
@@ -3344,17 +3302,6 @@ fi
 echo 'BEGIN {' >"$ac_tmp/subs1.awk" &&
 _ACEOF
 
-# Create commands to substitute file output variables.
-{
-  echo "cat >>$CONFIG_STATUS <<_ACEOF || ac_write_fail=1" &&
-  echo 'cat >>"\$ac_tmp/subs1.awk" <<\\_ACAWK &&' &&
-  echo "$ac_subst_files" | sed 's/.*/F["&"]="$&"/' &&
-  echo "_ACAWK" &&
-  echo "_ACEOF"
-} >conf$$files.sh &&
-. ./conf$$files.sh ||
-  as_fn_error $? "could not make $CONFIG_STATUS" "$LINENO" 5
-rm -f conf$$files.sh
 
 {
   echo "cat >conf$$subs.awk <<_ACEOF" &&
@@ -3431,7 +3378,7 @@ _ACAWK
 cat >>"\$ac_tmp/subs1.awk" <<_ACAWK &&
   for (key in S) S_is_set[key] = 1
   FS = ""
-  \$ac_cs_awk_pipe_init
+
 }
 {
   line = $ 0
@@ -3449,16 +3396,10 @@ cat >>"\$ac_tmp/subs1.awk" <<_ACAWK &&
     } else
       len += 1 + keylen
   }
-  if (nfields == 3 && !substed) {
-    key = field[2]
-    if (F[key] != "" && line ~ /^[	 ]*@.*@[	 ]*$/) {
-      \$ac_cs_awk_read_file
-      next
-    }
-  }
+
   print line
 }
-\$ac_cs_awk_pipe_fini
+
 _ACAWK
 _ACEOF
 cat >>$CONFIG_STATUS <<\_ACEOF || ac_write_fail=1
@@ -3686,12 +3627,7 @@ s&@abs_builddir@&$ac_abs_builddir&;t t
 s&@abs_top_builddir@&$ac_abs_top_builddir&;t t
 $ac_datarootdir_hack
 "
-eval sed \"\$ac_sed_extra\" "$ac_file_inputs" |
-if $ac_cs_awk_getline; then
-  $AWK -f "$ac_tmp/subs.awk"
-else
-  $AWK -f "$ac_tmp/subs.awk" | $SHELL
-fi \
+eval sed \"\$ac_sed_extra\" "$ac_file_inputs" | $AWK -f "$ac_tmp/subs.awk" \
   >$ac_tmp/out || as_fn_error $? "could not create $ac_file" "$LINENO" 5
 
 test -z "$ac_datarootdir_hack$ac_datarootdir_seen" &&

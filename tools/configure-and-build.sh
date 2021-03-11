@@ -7,19 +7,16 @@ declare R_HOME
 [ "x${R_HOME-}" = x ] && R_HOME="$(R RHOME)"
 
 
-CXX_STD=CXX17
+CXX_STD=CXX11
 
-PKG_CXXFLAGS="-w $(Rscript -e 'Rcpp:::CxxFlags()') $(Rscript -e 'RcppEigen:::CxxFlags()')"
+PKG_CXXFLAGS="$(Rscript -e 'Rcpp:::CxxFlags()') $(Rscript -e 'RcppEigen:::CxxFlags()')"
 PKG_CFLAGS="-w"
-# CXX="ccache g++"
-# CC="ccache gcc"
 CXX=$("${R_HOME}/bin/R" CMD config CXX)
 CC=$("${R_HOME}/bin/R" CMD config CC)
-#MAKEFLAGS=-j8
 export PKG_CXXFLAGS PKG_CFLAGS CC CXX CXX_STD
 export PATH="/usr/bin/ccache:${PATH}"
 
 cd "${ICD_HOME?}"
 autoreconf
-./configure --enable-icd-makevars --enable-icd-shutup  --enable-icd-strip
+./configure
 R CMD SHLIB --preclean --output=/tmp/icd.shlib src/*.cpp src/*.c
