@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
-set +e 
-set -x
+set +e
+#set -x
 # dump all possibly relevant environment, to help Travis debugging in particular.
 #exec >&2
 
@@ -10,15 +10,15 @@ pwd
 printenv | sort
 ## macos, homebrew
 if command -v brew >/dev/null; then
-    brew list
-    brew doctor
-    brew environment
+  brew list
+  brew doctor
+  brew environment
 fi
 ## debian/ubuntu
 if command -v dpkg >/dev/null; then
-    dpkg -l | grep -e r-cran -e r-base
-    dpkg -L r-cran-rcpp | sed 's/Rcpp\/.*$/Rcpp/' | sort -u || true
-    dpkg -L r-cran-rcppeigen | sed 's/RcppEigen\/.*$/RcppEigen/' | sort -u || true
+  dpkg -l | grep -e r-cran -e r-base
+  dpkg -L r-cran-rcpp | sed 's/Rcpp\/.*$/Rcpp/' | sort -u || true
+  dpkg -L r-cran-rcppeigen | sed 's/RcppEigen\/.*$/RcppEigen/' | sort -u || true
 fi
 
 command -v R
@@ -31,11 +31,11 @@ echo "R RHOME gives '${RH}'" >&2
 
 #find "${HOME}/.R" -print -exec cat '{}' \;
 for f in {"${RHE}","${HOME}"}/{,./,.R/}{,check-,build-}{ldpaths,Makeconf,Makevars,Renviron,Rprofile}{.site,}; do
-    if [[ -f "$f" ]]; then
-        cat "$f"
-    else
-        echo "$f does not exist"
-    fi
+  if [[ -f $f ]]; then
+    echo "FOUND: $f"
+    cat "$f"
+    echo
+  fi
 done
 
 R CMD config --all
@@ -46,20 +46,14 @@ ls -R ~/.R
 
 ## libraries
 declare -a pths
-pths=("${HOME}/R/Library" 
-"${HOME}"/R-bin/lib/R/library 
-"${RH}"/{site-,}library 
-/usr/{local/,}lib/R/{site-,}library 
+pths=("${HOME}/R/Library"
+  "${HOME}"/R-bin/lib/R/library
+  "${RH}"/{site-,}library
+  /usr/{local/,}lib/R/{site-,}library
 )
 for lib in "${pths[@]}"; do
-    {
-        ! [[ -d "$lib" ]] && 
-            echo "R library path: $lib NOT present" &&
-            continue;
-
-        echo "R library path: $lib is present";
-        ls -ld "$lib";
-    }
+  echo "R library path: $lib is present"
+  ls -ld "$lib"
 done
 
 R --no-save <<_EOF
