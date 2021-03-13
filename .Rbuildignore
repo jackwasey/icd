@@ -67,6 +67,7 @@ _pkgdown\.yml$
 ^src\/icd.*\.so$
 ^src\/test-cpp.*$
 ^src\/test-runner.*$
+^tests\/testthat\/test-build-sysdata\.R$
 ^tools$
 ^.*\.tex$
 ^vignettes\/efficiency-prebuilt\.(Rmd|tex)$
