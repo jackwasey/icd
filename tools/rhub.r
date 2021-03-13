@@ -1,6 +1,6 @@
 #!/usr/bin/env Rscript
 
-do_local <- TRUE
+if (!exists("do_local")) do_local <- TRUE
 if (!exists("do_remote")) do_remote <- FALSE
 if (!exists("dry_run")) dry_run <- TRUE
 if (!exists("sanitize")) sanitize <- FALSE

@@ -50,6 +50,9 @@
 ^lib-bench$
 ^man-roxygen$
 _pkgdown\.yml$
+^R/update\.R$
+^R/uranium_pathology\.R$
+^R/parse-icd10cm-xml\.R$
 ^revdep$
 ^src\/.*\.gc(da|h|no|ov)$
 ^src\/.*\.o$

@@ -1,5 +1,8 @@
 {
-  "@context": ["https://doi.org/10.5063/schema/codemeta-2.0", "http://schema.org"],
+  "@context": [
+    "https://doi.org/10.5063/schema/codemeta-2.0",
+    "http://schema.org"
+  ],
   "@type": "SoftwareSourceCode",
   "identifier": "icd",
   "description": "Calculate comorbidities, medical risk scores, and\n    work very quickly and precisely with ICD-9 and ICD-10 codes. This\n    package enables a work flow from raw tables of ICD codes in hospital\n    databases to comorbidities. ICD-9 and ICD-10 comorbidity mappings from\n    Quan (Deyo and Elixhauser versions), Elixhauser and AHRQ included.\n    Common ambiguities and code formats are handled. Comorbidity\n    computation includes Hierarchical Condition Codes, and an\n    implementation of AHRQ Clinical Classifications. Risk scores include\n    those of Charlson and van Walraven.  US Clinical Modification, Word\n    Health Organization, Belgian and French ICD-10 codes are supported,\n    most of which are downloaded on demand.",
@@ -187,18 +190,6 @@
     },
     {
       "@type": "SoftwareApplication",
-      "identifier": "RODBC",
-      "name": "RODBC",
-      "provider": {
-        "@id": "https://cran.r-project.org",
-        "@type": "Organization",
-        "name": "Comprehensive R Archive Network (CRAN)",
-        "url": "https://cran.r-project.org"
-      },
-      "sameAs": "https://CRAN.R-project.org/package=RODBC"
-    },
-    {
-      "@type": "SoftwareApplication",
       "identifier": "roxygen2",
       "name": "roxygen2",
       "version": ">= 5.0.0",
@@ -232,18 +223,6 @@
       "@type": "SoftwareApplication",
       "identifier": "utils",
       "name": "utils"
-    },
-    {
-      "@type": "SoftwareApplication",
-      "identifier": "xml2",
-      "name": "xml2",
-      "provider": {
-        "@id": "https://cran.r-project.org",
-        "@type": "Organization",
-        "name": "Comprehensive R Archive Network (CRAN)",
-        "url": "https://cran.r-project.org"
-      },
-      "sameAs": "https://CRAN.R-project.org/package=xml2"
     }
   ],
   "softwareRequirements": [
@@ -275,8 +254,18 @@
   "relatedLink": "https://jackwasey.github.io/icd/",
   "releaseNotes": "https://github.com/jackwasey/icd/blob/master/NEWS.md",
   "readme": "https://github.com/jackwasey/icd/blob/main/README.md",
-  "fileSize": "31374.535KB",
+  "fileSize": "33807.729KB",
   "contIntegration": ["https://travis-ci.org/jackwasey/icd", "https://ci.appveyor.com/project/jackwasey/icd/branch/main", "https://codecov.io/github/jackwasey/icd?branch=main"],
   "developmentStatus": ["https://www.tidyverse.org/lifecycle/#stable", "https://www.repostatus.org/#active"],
-  "keywords": ["comorbidities", "icd", "icd-10", "icd-9", "comorbidity", "cran", "icd-codes", "charlson-comorbidity-index", "charlson"]
+  "keywords": [
+    "comorbidities",
+    "icd",
+    "icd-10",
+    "icd-9",
+    "comorbidity",
+    "cran",
+    "icd-codes",
+    "charlson-comorbidity-index",
+    "charlson"
+  ]
 }

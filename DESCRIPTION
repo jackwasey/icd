@@ -74,12 +74,10 @@ Suggests:
     nhds,
     readxl,
     rmarkdown (>= 1.11),
-    RODBC,
     roxygen2 (>= 5.0.0),
     stats,
     testthat (>= 0.11.1),
-    utils,
-    xml2
+    utils
 LinkingTo:
     Rcpp (>= 0.12.3),
     RcppEigen

@@ -22,8 +22,10 @@ test_that("sample data frames have correct class", {
 })
 
 test_that("uranium data looks okay", {
-  # generating uranium data depends on RODBC and an access database source file,
-  # so don't do this.
+  # generating uranium data depends on RODBC (needing system header for
+  # source build, and which over-complicates CI builds) and an access database
+  # source file, which will now be available via git repository only, not in
+  # CRAN package.
   expect_equal(dim(uranium_pathology), c(2376, 2))
   expect_true(icd::is.decimal_diag(uranium_pathology$icd10))
   expect_true(icd::is.icd10(uranium_pathology$icd10))

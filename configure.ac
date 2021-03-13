@@ -80,9 +80,9 @@ CXX="${CXX11}"
 CXXFLAGS="${CXX11FLAGS}"
 CXXSTD="${CXX11STD}"
 
-#CFLAGS=`"${R_BIN}" CMD config CFLAGS`
-#CPPFLAGS=`"${R_BIN}" CMD config CPPFLAGS`
-#LIBS="${PKG_LIBS}"
+CFLAGS=`"${R_BIN}" CMD config CFLAGS`
+CPPFLAGS=`"${R_BIN}" CMD config CPPFLAGS`
+LIBS="${PKG_LIBS}"
 
 # try to shut up travis/r-hub builds with huge warning burden with default compiler settings (Eigen). Can't seem to do with MAKEFLAGS, or string of R CMD check --install-opts=.....
 ICD_SHUTUP_FLAG=""
@@ -91,7 +91,7 @@ AC_ARG_VAR([ICD_SHUTUP],
 
 AC_ARG_ENABLE([icd_shutup], AS_HELP_STRING([--enable-icd-shutup], [Peaceful compilation]))
 
-AS_IF([test "x$enable_icd_shutup" = "xyes" || test "${ICD_SHUTUP+set}" = set ], [ICD_SHUTUP_FLAG="-Wno-unknown-pragmas -Wno-ignored-attributes -Wno-unknown-warning -Wno-unknown-warning-option -Wno-cast-function-type -DEIGEN_PERMANENTLY_DISABLE_STUPID_WARNINGS"])
+AS_IF([test "x$enable_icd_shutup" = "xyes" || test "${ICD_SHUTUP+set}" = set ], [[ICD_SHUTUP_FLAG="-Wno-unknown-pragmas -Wno-ignored-attributes -Wno-unknown-warnings -Wno-unknown-warning-options -DEIGEN_PERMANENTLY_DISABLE_STUPID_WARNINGS"]])
 
 # AC_LANG changes what R_OPENMP and rest of script does. See https://www.gnu.org/software/autoconf/manual/autoconf-2.63/html_node/Language-Choice.html . Affected by CXXFLAGS etc, so these should be set first if needed.
 AC_LANG([C++])

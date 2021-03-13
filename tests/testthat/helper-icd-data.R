@@ -100,6 +100,7 @@ skip_icd10cm_flat_avail <- function(year, dx = TRUE) {
 }
 
 skip_icd10cm_xml_avail <- function() {
+  skip_if_not(exists(".dl_icd10cm_xml", envir = asNamespace("icd"), inherits = FALSE))
   skip_no_icd_data_cache()
   skip_no_icd_data_raw(
     .dl_icd10cm_xml,
