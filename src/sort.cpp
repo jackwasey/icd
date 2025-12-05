@@ -74,7 +74,12 @@ LogicalVector icd9CompareVector(const StringVector& x,
 // [[Rcpp::export(icd9_sort_rcpp)]]
 CharacterVector icd9Sort(const CharacterVector &x) {
   CharacterVector y = clone(x);
-  std::sort(y.begin(), y.end(), icd9Compare);
+  // Convert to std::vector to avoid proxy iterator issues with modern C++ compilers
+  std::vector<String> temp(y.begin(), y.end());
+  std::sort(temp.begin(), temp.end(), icd9Compare);
+  for (R_xlen_t i = 0; i < y.size(); ++i) {
+    y[i] = temp[i];
+  }
   return y;
 }
 
@@ -250,7 +255,12 @@ LogicalVector icd10cmCompareVector(const StringVector& x,
 // [[Rcpp::export(icd10cm_sort_rcpp)]]
 CharacterVector icd10cmSort(const CharacterVector &x) {
   auto y = clone(x);
-  std::sort(y.begin(), y.end(), icd10cmCompare);
+  // Convert to std::vector to avoid proxy iterator issues with modern C++ compilers
+  std::vector<String> temp(y.begin(), y.end());
+  std::sort(temp.begin(), temp.end(), icd10cmCompare);
+  for (R_xlen_t i = 0; i < y.size(); ++i) {
+    y[i] = temp[i];
+  }
   return y;
 }
 
