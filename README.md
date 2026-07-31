@@ -54,7 +54,7 @@ versions), Elixhauser and AHRQ included. Common ambiguities and code
 formats are handled. Comorbidity computation includes Hierarchical
 Condition Codes, and an implementation of AHRQ Clinical Classifications.
 Risk scores include those of Charlson and van Walraven. US Clinical
-Modification, Word Health Organization, Belgian and French ICD-10 codes
+Modification, Word Health Organization, and French ICD-10 codes
 are supported, most of which are downloaded on demand.
 
 `icd` is used by many researchers around the world who work in public
@@ -79,7 +79,7 @@ death](http://www.pulitzer.org/finalists/staff-propublica) by
   - use your existing wide or long data format, icd can guess which
     columns are ICD-9 or ICD-10 codes.
   - explain and summarize groups of ICD codes in natural language, using
-    ICD editions from the WHO, USA, France and Belgium. Many different
+    ICD editions from the WHO, USA, and France. Many different
     annual editions of these data are available, and these may be
     downloaded automatically when used, or in bulk with
     `download_all_icd_data()`.

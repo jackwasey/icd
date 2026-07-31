@@ -67,9 +67,9 @@
 #'   will take a few minutes on a broadband connection.
 #'
 #'   Validation depends on the class of code, and is different if the code is
-#'   from France, Belgium, the USA, or the World Health Organization (WHO). Use
+#'   from France, the USA, or the World Health Organization (WHO). Use
 #'   the functions \code{\link{as.icd10who}}, \code{\link{as.icd10fr}},
-#'   \code{\link{as.icd10be}}, and \code{\link{as.icd10cm}} to set the class of
+#'   and \code{\link{as.icd10cm}} to set the class of
 #'   a set of ICD codes. This doesn't affect comorbidity calculations, but will
 #'   change the result of the above validation functions, and }
 #'
@@ -105,7 +105,7 @@
 #'
 #'   Use \code{\link{explain_code}} to convert a set of ICD codes into
 #'   human-readable descriptions. See above for discussion on WHO, French,
-#'   Belgian and US ICD code classes. This function can can also reduce the
+#'   and US ICD code classes. This function can can also reduce the
 #'   codes to their top-level groups if all the child members of a group are
 #'   present. \code{\link{diff_comorbid}} allows summary of the differences
 #'   between comorbidity mappings, e.g. between revisions by different authors.

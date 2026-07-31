@@ -7,7 +7,7 @@
 download_all_icd_data()
 }
 \description{
-It will download and parse WHO ICD-10, French, and Belgian codes and
+It will download and parse WHO ICD-10 and French codes and
 descriptions. It will also get years 2014--2025 for ICD-10-CM (diagnostic
 codes), and 2014--2019 procedure codes. 2026 diagnostic codes are included in
 the package data. The total amount of data is about

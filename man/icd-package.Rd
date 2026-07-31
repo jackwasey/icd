@@ -11,7 +11,7 @@
 \alias{package-icd10}
 \title{icd: Comorbidity Calculations and Tools for ICD-9 and ICD-10 Codes}
 \description{
-Calculate comorbidities, medical risk scores, and work very quickly and precisely with ICD-9 and ICD-10 codes. This package enables a work flow from raw tables of ICD codes in hospital databases to comorbidities. ICD-9 and ICD-10 comorbidity mappings from Quan (Deyo and Elixhauser versions), Elixhauser and AHRQ included. Common ambiguities and code formats are handled. Comorbidity computation includes Hierarchical Condition Codes, and an implementation of AHRQ Clinical Classifications. Risk scores include those of Charlson and van Walraven. US Clinical Modification, Word Health Organization, Belgian and French ICD-10 codes are supported, most of which are downloaded on demand.
+Calculate comorbidities, medical risk scores, and work very quickly and precisely with ICD-9 and ICD-10 codes. This package enables a work flow from raw tables of ICD codes in hospital databases to comorbidities. ICD-9 and ICD-10 comorbidity mappings from Quan (Deyo and Elixhauser versions), Elixhauser and AHRQ included. Common ambiguities and code formats are handled. Comorbidity computation includes Hierarchical Condition Codes, and an implementation of AHRQ Clinical Classifications. Risk scores include those of Charlson and van Walraven. US Clinical Modification, Word Health Organization, and French ICD-10 codes are supported, most of which are downloaded on demand.
 }
 \details{
 \describe{ \item{Comorbidities}{ \code{\link{comorbid}} determines
@@ -83,9 +83,9 @@ Calculate comorbidities, medical risk scores, and work very quickly and precisel
   will take a few minutes on a broadband connection.
 
   Validation depends on the class of code, and is different if the code is
-  from France, Belgium, the USA, or the World Health Organization (WHO). Use
+  from France, the USA, or the World Health Organization (WHO). Use
   the functions \code{\link{as.icd10who}}, \code{\link{as.icd10fr}},
-  \code{\link{as.icd10be}}, and \code{\link{as.icd10cm}} to set the class of
+  and \code{\link{as.icd10cm}} to set the class of
   a set of ICD codes. This doesn't affect comorbidity calculations, but will
   change the result of the above validation functions, and }
 
@@ -121,7 +121,7 @@ Calculate comorbidities, medical risk scores, and work very quickly and precisel
 
   Use \code{\link{explain_code}} to convert a set of ICD codes into
   human-readable descriptions. See above for discussion on WHO, French,
-  Belgian and US ICD code classes. This function can can also reduce the
+  and US ICD code classes. This function can can also reduce the
   codes to their top-level groups if all the child members of a group are
   present. \code{\link{diff_comorbid}} allows summary of the differences
   between comorbidity mappings, e.g. between revisions by different authors.
