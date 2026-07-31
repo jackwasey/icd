@@ -82,6 +82,62 @@
 
 .icd10cm_sources <- local({
   list(
+    "2026" = list(
+      base_url = "https://www.cms.gov/files/zip/",
+      dx_zip = "2026-code-descriptions-tabular-order.zip",
+      dx_xml_zip = "2026-code-tables-tabular-and-index.zip",
+      dx_xml = "icd10cm_tabular_2026.xml",
+      dx_leaf = "icd10cm_codes_2026.txt",
+      dx_hier = "icd10cm_order_2026.txt"
+    ),
+    "2025" = list(
+      base_url = "https://www.cms.gov/files/zip/",
+      dx_zip = "2025-code-descriptions-tabular-order.zip",
+      dx_xml_zip = "2025-code-tables-tabular-and-index.zip",
+      dx_xml = "icd10cm_tabular_2025.xml",
+      dx_leaf = "icd10cm_codes_2025.txt",
+      dx_hier = "icd10cm_order_2025.txt"
+    ),
+    "2024" = list(
+      base_url = "https://www.cms.gov/files/zip/",
+      dx_zip = "2024-code-descriptions-tabular-order-updated-02/01/2024.zip",
+      dx_xml_zip = "2024-code-tables-tabular-and-index-updated-02/01/2024.zip",
+      dx_xml = "icd10cm_tabular_2024.xml",
+      dx_leaf = "icd10cm_codes_2024.txt",
+      dx_hier = "icd10cm_order_2024.txt"
+    ),
+    "2023" = list(
+      base_url = "https://www.cms.gov/files/zip/",
+      dx_zip = "2023-code-descriptions-tabular-order-updated-01/11/2023.zip",
+      dx_xml_zip = "2023-code-tables-tabular-and-index-updated-01/11/2023.zip",
+      dx_xml = "icd10cm_tabular_2023.xml",
+      dx_leaf = "icd10cm_codes_2023.txt",
+      dx_hier = "icd10cm_order_2023.txt"
+    ),
+    "2022" = list(
+      base_url = "https://www.cms.gov/files/zip/",
+      dx_zip = "2022-code-descriptions-tabular-order-updated-02012022.zip",
+      dx_xml_zip = "2022-code-tables-tabular-and-index-updated-02012022.zip",
+      dx_xml = "icd10cm_tabular_2022.xml",
+      dx_leaf = "icd10cm_codes_2022.txt",
+      dx_hier = "icd10cm_order_2022.txt"
+    ),
+    "2021" = list(
+      base_url = "https://www.cms.gov/files/zip/",
+      dx_zip = "2021-code-descriptions-tabular-order-updated-12162020.zip",
+      dx_xml_zip = "2021-code-tables-tabular-and-index-updated-12162020.zip",
+      dx_xml = "icd10cm_tabular_2021.xml",
+      dx_leaf = "icd10cm_codes_2021.txt",
+      dx_hier = "icd10cm_order_2021.txt"
+    ),
+    "2020" = list(
+      base_url = "https://www.cms.gov/medicare/coding/icd10/downloads/",
+      dx_zip = "2020-icd-10-cm-codes.zip",
+      dx_xml_zip = "2020-icd-10-cm-code-tables.zip",
+      dx_xml = "icd10cm_tabular_2020.xml",
+      dx_leaf = "icd10cm_codes_2020.txt",
+      dx_hier = "icd10cm_order_2020.txt"
+    ),
     "2019" = list(
       base_url = "https://www.cms.gov/Medicare/Coding/ICD10/Downloads/",
       dx_zip = "2019-ICD-10-CM-Code-Descriptions.zip",
