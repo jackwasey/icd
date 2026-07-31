@@ -34,7 +34,7 @@ the mapping. More information on the ICD10 code set can be found at
 \code{\link{comorbid_ccs}} \code{\link{icd9_comorbid_ccs}}
   \code{\link{icd10_comorbid_ccs}}
 
-Other comorbidity maps: 
+Other comorbidity maps:
 \code{\link{icd10_map_ahrq_pcs}},
 \code{\link{icd9_map_ahrq}},
 \code{\link{icd9_map_elix}},
@@ -43,9 +43,9 @@ Other comorbidity maps:
 \code{\link{icd9_map_quan_deyo}},
 \code{\link{icd9_map_quan_elix}}
 
-Other comorbidities: 
-\code{\link{comorbid_hcc}()},
-\code{\link{comorbid}()},
+Other comorbidities:
+\code{\link[=comorbid]{comorbid()}},
+\code{\link[=comorbid_hcc]{comorbid_hcc()}},
 \code{\link{icd10_map_ahrq_pcs}},
 \code{\link{icd9_map_ahrq}},
 \code{\link{icd9_map_elix}},

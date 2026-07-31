@@ -52,12 +52,12 @@ of as the inverse operation to \code{children}.
 }
 \section{Methods (by class)}{
 \itemize{
-\item \code{character}: Condense a set of ICD codes, guessing ICD version
+\item \code{condense(character)}: Condense a set of ICD codes, guessing ICD version
 from input data
 
-\item \code{factor}: Condense a factor of ICD codes
-}}
+\item \code{condense(factor)}: Condense a factor of ICD codes
 
+}}
 \examples{
 kids <- children("V40")
 kids
@@ -79,9 +79,9 @@ condense(icd9_map_elix$CHF, warn = FALSE)
 explain_code(icd9_map_elix$CHF, condense = TRUE, warn = FALSE)
 }
 \seealso{
-Other ICD-9 ranges: 
-\code{\link{children}()},
-\code{\link{expand_range}()}
+Other ICD-9 ranges:
+\code{\link[=children]{children()}},
+\code{\link[=expand_range]{expand_range()}}
 }
 \concept{ICD-9 ranges}
 \keyword{internal}

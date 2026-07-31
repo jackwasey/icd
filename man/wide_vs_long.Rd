@@ -34,20 +34,20 @@ heuristics.
 }
 \section{Functions}{
 \itemize{
-\item \code{as.icd_long_data}: Set class on a matrix or data.frame to
+\item \code{as.icd_long_data()}: Set class on a matrix or data.frame to
 \code{icd_long_data}. To convert wide to long data, use
 \code{\link{wide_to_long}}.
 
-\item \code{as.icd_wide_data}: Construct a \code{data.frame}, adding the
+\item \code{as.icd_wide_data()}: Construct a \code{data.frame}, adding the
 \code{icd_long_data} class.
 
-\item \code{icd_long_data}: Construct a \code{data.frame}, adding the
+\item \code{icd_long_data()}: Construct a \code{data.frame}, adding the
 \code{icd_long_data} class.
 
-\item \code{icd_wide_data}: Construct a \code{data.frame}, adding the
+\item \code{icd_wide_data()}: Construct a \code{data.frame}, adding the
 \code{icd_wide_data} class.
-}}
 
+}}
 \section{Long and Wide Formats}{
  As is common with many data sets, key
   variables can be concentrated in one column or spread over several. Tools
@@ -87,16 +87,8 @@ class(vermont_dx)
 \seealso{
 \code{\link{long_to_wide}} and \code{\link{wide_to_long}}
 
-Other ICD data types: 
-\code{\link{as.comorbidity_map}()},
-\code{\link{set_icd_class}}
-
-Other ICD data types: 
-\code{\link{as.comorbidity_map}()},
-\code{\link{set_icd_class}}
-
-Other ICD data types: 
-\code{\link{as.comorbidity_map}()},
+Other ICD data types:
+\code{\link[=as.comorbidity_map]{as.comorbidity_map()}},
 \code{\link{set_icd_class}}
 }
 \concept{ICD data types}

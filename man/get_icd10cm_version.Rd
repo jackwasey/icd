@@ -21,10 +21,10 @@ set by \code{set_icd10cm_active_year()}
 }
 \section{Functions}{
 \itemize{
-\item \code{get_icd10cm_active}: Get the currently active version of
+\item \code{get_icd10cm_active()}: Get the currently active version of
 ICD-10-CM.
-}}
 
+}}
 \examples{
 \dontrun{
 get_icd10cm_version("2018")

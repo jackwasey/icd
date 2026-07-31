@@ -42,10 +42,10 @@ Basic ordered bar plot showing counts of each comorbidity
 }
 \section{Functions}{
 \itemize{
-\item \code{plot_comorbid_results}: Plot the results of a call to one of the
+\item \code{plot_comorbid_results()}: Plot the results of a call to one of the
 comorbidity settings.
-}}
 
+}}
 \examples{
 \dontrun{
 library(icd)
