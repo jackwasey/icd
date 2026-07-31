@@ -28,14 +28,14 @@ Returns subset of codes which are not in valid short_code or
 }
 \section{Methods (by class)}{
 \itemize{
-\item \code{default}: Default method when ICD version or short versus
+\item \code{get_invalid(default)}: Default method when ICD version or short versus
 decimal not known.
 
-\item \code{icd9}: Get invalid ICD-9 codes from vector of codes
+\item \code{get_invalid(icd9)}: Get invalid ICD-9 codes from vector of codes
 
-\item \code{icd10}: Get invalid ICD-10 codes from vector of codes
+\item \code{get_invalid(icd10)}: Get invalid ICD-10 codes from vector of codes
 
-\item \code{comorbidity_map}: Get invalid elements of a comorbidity map
+\item \code{get_invalid(comorbidity_map)}: Get invalid elements of a comorbidity map
+
 }}
-
 \keyword{internal}

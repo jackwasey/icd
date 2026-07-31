@@ -25,17 +25,17 @@
 exactly the same as using \code{x[n]} or \code{x[[n]]} but preserves the ICD
 classes in result
 }
-\section{Methods (by class)}{
+\section{Functions}{
 \itemize{
-\item \code{icd9}: Extract ICD-9 codes
+\item \code{[}: Extract ICD-9 codes
 
-\item \code{icd9}: Extract ICD-9 codes
+\item \code{[[}: Extract ICD-9 codes
 
-\item \code{icd10}: Extract ICD-10 codes
+\item \code{[}: Extract ICD-10 codes
 
-\item \code{icd10}: Extract ICD-10 codes
+\item \code{[[}: Extract ICD-10 codes
+
 }}
-
 \examples{
 x <- list(my_codes = as.icd9(c("V10.1", "441.1")))
 x[1]

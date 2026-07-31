@@ -96,23 +96,21 @@ If the input x is of mixed type it will choose to convert by
 }
 \section{Methods (by class)}{
 \itemize{
-\item \code{default}: explaining ICD codes from a character vector,
+\item \code{explain_table(default)}: explaining ICD codes from a character vector,
 guessing ICD version
 
-\item \code{icd9}: from vector of ICD-9 codes.
+\item \code{explain_table(icd9)}: from vector of ICD-9 codes.
 
-\item \code{icd10}: from vector of ICD-10 codes.
+\item \code{explain_table(icd10)}: from vector of ICD-10 codes.
 
-\item \code{icd9cm}: explain character vector of ICD-9-CM codes
+\item \code{explain_table(icd9cm)}: explain character vector of ICD-9-CM codes
 
-\item \code{icd10cm}: explain character vector of ICD1-10-CM codes
+\item \code{explain_table(icd10cm)}: explain character vector of ICD1-10-CM codes
 
-\item \code{icd10who}: explain character vector of ICD-10-WHO codes
+\item \code{explain_table(icd10who)}: explain character vector of ICD-10-WHO codes
+
 }}
-
 \author{
-Ed Lee
-
 Ed Lee
 }
 \keyword{internal}

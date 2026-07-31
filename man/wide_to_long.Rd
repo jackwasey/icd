@@ -85,12 +85,12 @@ widedf <- data.frame(
 wide_to_long(widedf)
 }
 \seealso{
-Other ICD data conversion: 
-\code{\link{comorbid_df_to_mat}()},
-\code{\link{comorbid_mat_to_df}()},
+Other ICD data conversion:
+\code{\link[=comorbid_df_to_mat]{comorbid_df_to_mat()}},
+\code{\link[=comorbid_mat_to_df]{comorbid_mat_to_df()}},
 \code{\link{convert}},
-\code{\link{decimal_to_short}()},
-\code{\link{long_to_wide}()},
-\code{\link{short_to_decimal}()}
+\code{\link[=decimal_to_short]{decimal_to_short()}},
+\code{\link[=long_to_wide]{long_to_wide()}},
+\code{\link[=short_to_decimal]{short_to_decimal()}}
 }
 \concept{ICD data conversion}

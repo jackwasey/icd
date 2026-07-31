@@ -42,23 +42,23 @@ set unless all codes were either Y or N.
 }
 \section{Functions}{
 \itemize{
-\item \code{filter_poa_yes}: Select rows where Present-on-Arrival flag is
+\item \code{filter_poa_yes()}: Select rows where Present-on-Arrival flag is
 explicitly 'Yes.'
 
-\item \code{filter_poa_no}: Select rows where Present-on-Arrival flag is
+\item \code{filter_poa_no()}: Select rows where Present-on-Arrival flag is
 explicitly 'No.'
 
-\item \code{filter_poa_not_no}: Select rows where Present-on-Arrival flag is
+\item \code{filter_poa_not_no()}: Select rows where Present-on-Arrival flag is
 anything but 'No.' This includes unknown, exempt, other codes, and of
 course all those marked 'Yes.'
 
-\item \code{filter_poa_not_yes}: Select rows where Present-on-Arrival flag is
+\item \code{filter_poa_not_yes()}: Select rows where Present-on-Arrival flag is
 anything but 'Yes.' This would group exempt, unknown and other codes under
 'Not POA' which is unlikely to be a good choice, since exempt codes, of
 which there are a quite large number, tend to describe chronic or
 out-of-hospital characteristics.
-}}
 
+}}
 \examples{
 \dontrun{
 library(icd)

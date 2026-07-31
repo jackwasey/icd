@@ -35,17 +35,17 @@ Using the equivalent \code{\link[=is_leaf]{is_leaf()}} is preferred.
 }
 \section{Methods (by class)}{
 \itemize{
-\item \code{icd9}: Prefer 'leaf' to 'billable' for generality.
+\item \code{is_billable(icd9)}: Prefer 'leaf' to 'billable' for generality.
 
-\item \code{icd9cm}: Prefer 'leaf' to 'billable' for generality.
+\item \code{is_billable(icd9cm)}: Prefer 'leaf' to 'billable' for generality.
 
-\item \code{icd10}: Prefer 'leaf' to 'billable' for generality.
+\item \code{is_billable(icd10)}: Prefer 'leaf' to 'billable' for generality.
 
-\item \code{icd10cm}: Prefer 'leaf' to 'billable' for generality.
+\item \code{is_billable(icd10cm)}: Prefer 'leaf' to 'billable' for generality.
 
-\item \code{default}: Prefer 'leaf' to 'billable' for generality.
+\item \code{is_billable(default)}: Prefer 'leaf' to 'billable' for generality.
+
 }}
-
 \seealso{
 \code{\link[=get_leaf]{get_leaf()}}
 }

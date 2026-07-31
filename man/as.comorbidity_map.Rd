@@ -14,7 +14,7 @@ character vectors.}
 Set the class of a named list to show it is a comorbidity map.
 }
 \seealso{
-Other ICD data types: 
+Other ICD data types:
 \code{\link{set_icd_class}},
 \code{\link{wide_vs_long}}
 }

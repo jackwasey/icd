@@ -62,22 +62,22 @@ codes which are \emph{defined} or \emph{billable} (leaf nodes).
 }
 \section{Methods (by class)}{
 \itemize{
-\item \code{character}: Get child codes, guessing ICD version and short
+\item \code{children(character)}: Get child codes, guessing ICD version and short
 versus decimal format
 
-\item \code{icd9cm}: Get children of ICD-9-CM codes
+\item \code{children(icd9cm)}: Get children of ICD-9-CM codes
 
-\item \code{icd9}: Get children of ICD-9 codes, based on the super-set
+\item \code{children(icd9)}: Get children of ICD-9 codes, based on the super-set
 ICD-9-CM at present
 
-\item \code{icd10}: Get children of ICD-10 codes (warns because this
+\item \code{children(icd10)}: Get children of ICD-10 codes (warns because this
 only applies to ICD-10-CM for now).
 
-\item \code{icd10cm}: Get children of ICD-10-CM codes
+\item \code{children(icd10cm)}: Get children of ICD-10-CM codes
 
-\item \code{icd10who}: Get children of ICD-10-CM codes
+\item \code{children(icd10who)}: Get children of ICD-10-CM codes
+
 }}
-
 \examples{
 # N.b. magrittr not required by icd
 library(magrittr, warn.conflicts = FALSE, quietly = TRUE)
@@ -97,9 +97,9 @@ children(short_code = FALSE, "100.00")
 children(short_code = FALSE, "2.34")
 }
 \seealso{
-Other ICD-9 ranges: 
-\code{\link{condense}()},
-\code{\link{expand_range}()}
+Other ICD-9 ranges:
+\code{\link[=condense]{condense()}},
+\code{\link[=expand_range]{expand_range()}}
 }
 \concept{ICD-9 ranges}
 \keyword{manip}

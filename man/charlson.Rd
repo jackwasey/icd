@@ -78,12 +78,12 @@ When used, hierarchy is applied per Quan, \dQuote{The following
 }
 \section{Methods (by class)}{
 \itemize{
-\item \code{data.frame}: Charlson scores from data frame of visits and ICD-9
+\item \code{charlson(data.frame)}: Charlson scores from data frame of visits and ICD-9
 codes. ICD-10 Charlson can be calculated simply by getting the Charlson
 (e.g. Quan Deyo) comorbidities, then calling
 \code{charlson_from_comorbid}.
-}}
 
+}}
 \examples{
 mydf <- data.frame(
   visit_name = c("a", "b", "c"),

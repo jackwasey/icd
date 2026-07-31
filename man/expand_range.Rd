@@ -78,12 +78,12 @@ When the class is not known, it must be guessed from the start and
 }
 \section{Methods (by class)}{
 \itemize{
-\item \code{character}: Expand a range of ICD-9 or ICD-10 codes when the
+\item \code{expand_range(character)}: Expand a range of ICD-9 or ICD-10 codes when the
 class is not known
 
-\item \code{icd9}: Expand a range of ICD-9 codes
-}}
+\item \code{expand_range(icd9)}: Expand a range of ICD-9 codes
 
+}}
 \examples{
 expand_range("428.0", "428.9")
 "4280" \%i9s\% "4289"
@@ -93,9 +93,9 @@ expand_range("428.0", "428.9")
 "V80" \%i9s\% "V810"
 }
 \seealso{
-Other ICD-9 ranges: 
-\code{\link{children}()},
-\code{\link{condense}()}
+Other ICD-9 ranges:
+\code{\link[=children]{children()}},
+\code{\link[=condense]{condense()}}
 }
 \concept{ICD-9 ranges}
 \keyword{internal}

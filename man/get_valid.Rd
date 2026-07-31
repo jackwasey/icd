@@ -32,17 +32,17 @@ Given vector of short_code or decimal ICD-9 codes, return (in the
 }
 \section{Methods (by class)}{
 \itemize{
-\item \code{character}: get valid ICD codes from character vector, guessing ICD
+\item \code{get_valid(character)}: get valid ICD codes from character vector, guessing ICD
 version
 
-\item \code{icd9}: Get valid ICD-9 codes
+\item \code{get_valid(icd9)}: Get valid ICD-9 codes
 
-\item \code{icd10}: Get valid ICD-10 codes, currently based on ICD-10-CM
+\item \code{get_valid(icd10)}: Get valid ICD-10 codes, currently based on ICD-10-CM
 structure, which is a super-set of WHO ICD-10
 
-\item \code{icd10cm}: Get valid ICD-10-CM codes
-}}
+\item \code{get_valid(icd10cm)}: Get valid ICD-10-CM codes
 
+}}
 \concept{ICD-9 validation}
 \keyword{internal}
 \keyword{manip}

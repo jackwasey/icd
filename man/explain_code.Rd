@@ -114,30 +114,30 @@ The conversion is based on the edition (ICD-9 or ICD-10), and class (e.g.,
 }
 \section{Methods (by class)}{
 \itemize{
-\item \code{default}: Explain ICD codes from a character vector, guessing
+\item \code{explain_code(default)}: Explain ICD codes from a character vector, guessing
 ICD version
 
-\item \code{list}: Explain all ICD-9 codes in a list of vectors
+\item \code{explain_code(list)}: Explain all ICD-9 codes in a list of vectors
 
-\item \code{icd9}: explain character vector of ICD-9 codes.
+\item \code{explain_code(icd9)}: explain character vector of ICD-9 codes.
 
-\item \code{icd9cm}: explain character vector of ICD-9-CM codes
+\item \code{explain_code(icd9cm)}: explain character vector of ICD-9-CM codes
 
-\item \code{icd10cm}: ICD-10-CM explanation, current a minimal
+\item \code{explain_code(icd10cm)}: ICD-10-CM explanation, current a minimal
 implementation
 
-\item \code{icd10who}: WHO ICD-10 explanation in French or English
+\item \code{explain_code(icd10who)}: WHO ICD-10 explanation in French or English
 
-\item \code{icd10fr}: ICD-10-FR explanation, initial implementation,
+\item \code{explain_code(icd10fr)}: ICD-10-FR explanation, initial implementation,
 subject to change
 
-\item \code{icd10be}: ICD-10-BE explanation, initial implementation,
+\item \code{explain_code(icd10be)}: ICD-10-BE explanation, initial implementation,
 subject to change
 
-\item \code{icd10}: ICD-10 explanation, falls back on ICD-10-CM until
+\item \code{explain_code(icd10)}: ICD-10 explanation, falls back on ICD-10-CM until
 ICD-10 WHO copyright workaround is available
-}}
 
+}}
 \examples{
 # by default, just show parent code and ignore children (428.0 not shown
 # because 428 is present):

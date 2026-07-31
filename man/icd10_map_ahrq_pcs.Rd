@@ -27,7 +27,7 @@ icd10_map_ahrq_pcs[["Minor Therapeutic"]][1:5]
   \code{\link{icd10_comorbid}}
   \url{https://www.hcup-us.ahrq.gov/toolssoftware/procedureicd10/procedure_icd10.jsp}
 
-Other comorbidity maps: 
+Other comorbidity maps:
 \code{\link{icd9_map_ahrq}},
 \code{\link{icd9_map_elix}},
 \code{\link{icd9_map_hcc}},
@@ -36,9 +36,9 @@ Other comorbidity maps:
 \code{\link{icd9_map_quan_elix}},
 \code{\link{icd9_map_single_ccs}}
 
-Other comorbidities: 
-\code{\link{comorbid_hcc}()},
-\code{\link{comorbid}()},
+Other comorbidities:
+\code{\link[=comorbid]{comorbid()}},
+\code{\link[=comorbid_hcc]{comorbid_hcc()}},
 \code{\link{icd9_map_ahrq}},
 \code{\link{icd9_map_elix}},
 \code{\link{icd9_map_hcc}},

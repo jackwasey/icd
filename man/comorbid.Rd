@@ -292,78 +292,78 @@ The order of visits may change depending on the original sequence,
 }
 \section{Functions}{
 \itemize{
-\item \code{icd10_comorbid}: ICD-10 comorbidities
+\item \code{icd10_comorbid()}: ICD-10 comorbidities
 
-\item \code{icd9_comorbid}: Get comorbidities from \code{data.frame} of ICD-9
+\item \code{icd9_comorbid()}: Get comorbidities from \code{data.frame} of ICD-9
 codes
 
-\item \code{icd9_comorbid_ahrq}: AHRQ comorbidities for ICD-9 codes
+\item \code{icd9_comorbid_ahrq()}: AHRQ comorbidities for ICD-9 codes
 
-\item \code{icd10_comorbid_ahrq}: AHRQ comorbidities for ICD-10 codes
+\item \code{icd10_comorbid_ahrq()}: AHRQ comorbidities for ICD-10 codes
 
-\item \code{icd9_comorbid_elix}: Elixhauser comorbidities for ICD-9 codes
+\item \code{icd9_comorbid_elix()}: Elixhauser comorbidities for ICD-9 codes
 
-\item \code{icd10_comorbid_elix}: Elixhauser comorbidities for ICD-10 codes
+\item \code{icd10_comorbid_elix()}: Elixhauser comorbidities for ICD-10 codes
 
-\item \code{icd9_comorbid_quan_elix}: Quan's Elixhauser comorbidities for ICD-9 codes
+\item \code{icd9_comorbid_quan_elix()}: Quan's Elixhauser comorbidities for ICD-9 codes
 
-\item \code{icd10_comorbid_quan_elix}: Quan's Elixhauser comorbidities for ICD-10 codes
+\item \code{icd10_comorbid_quan_elix()}: Quan's Elixhauser comorbidities for ICD-10 codes
 
-\item \code{icd9_comorbid_quan_deyo}: Quan's Deyo (Charlson) comorbidities for ICD-9 codes
+\item \code{icd9_comorbid_quan_deyo()}: Quan's Deyo (Charlson) comorbidities for ICD-9 codes
 
-\item \code{icd10_comorbid_quan_deyo}: Quan's Deyo (Charlson) comorbidities for ICD-10 codes
+\item \code{icd10_comorbid_quan_deyo()}: Quan's Deyo (Charlson) comorbidities for ICD-10 codes
 
-\item \code{icd9_comorbid_charlson}: Currently synonym for \code{icd9_comorbid_quan_deyo}
+\item \code{icd9_comorbid_charlson()}: Currently synonym for \code{icd9_comorbid_quan_deyo}
 
-\item \code{icd10_comorbid_charlson}: Currently synonym for \code{icd10_comorbid_quan_deyo}
+\item \code{icd10_comorbid_charlson()}: Currently synonym for \code{icd10_comorbid_quan_deyo}
 
-\item \code{comorbid_ccs}: Use AHRQ CCS for comorbidity classification
+\item \code{comorbid_ccs()}: Use AHRQ CCS for comorbidity classification
 
-\item \code{icd9_comorbid_ccs}: Compute AHRQ Clinical Classifications Software (CCS)
+\item \code{icd9_comorbid_ccs()}: Compute AHRQ Clinical Classifications Software (CCS)
 scores from ICD-9 codes
 
-\item \code{icd10_comorbid_ccs}: Compute AHRQ Clinical Classifications Software (CCS)
+\item \code{icd10_comorbid_ccs()}: Compute AHRQ Clinical Classifications Software (CCS)
 scores from ICD-10 codes
 
-\item \code{comorbid_ahrq}: AHRQ comorbidities, infers whether to use ICD-9 or
+\item \code{comorbid_ahrq()}: AHRQ comorbidities, infers whether to use ICD-9 or
 ICD-10 codes
 
-\item \code{comorbid_elix}: Elixhauser comorbidities, infers whether to use ICD-9 or
+\item \code{comorbid_elix()}: Elixhauser comorbidities, infers whether to use ICD-9 or
 ICD-10 codes
 
-\item \code{comorbid_quan_elix}: Quan's Elixhauser comorbidities, infers whether to use
+\item \code{comorbid_quan_elix()}: Quan's Elixhauser comorbidities, infers whether to use
 ICD-9 or ICD-10 codes
 
-\item \code{comorbid_quan_deyo}: Quan's Deyo (Charlson) comorbidities, infers whether to
+\item \code{comorbid_quan_deyo()}: Quan's Deyo (Charlson) comorbidities, infers whether to
 use ICD-9 or ICD-10 codes
 
-\item \code{comorbid_charlson}: Calculate comorbidities using Charlson categories
+\item \code{comorbid_charlson()}: Calculate comorbidities using Charlson categories
 according to Quan/Deyo ICD categories. Synonymous with
 \code{link{comorbid_quan_deyo}} in this release.
 
-\item \code{comorbid_pccc_dx}: Calculate pediatric complex chronic conditions (PCCC) comorbidities
+\item \code{comorbid_pccc_dx()}: Calculate pediatric complex chronic conditions (PCCC) comorbidities
 
 Unlike with ICD-9 and ICD-10 diagnostic codes, 'icd' doesn't
 currently have a method for guessing which fields are procedure
 codes, so \code{icd_name} must be specified for the \code{_pcs}
 functions.
 
-\item \code{comorbid_pccc_pcs}: Calculate the PCCC comorbidities based
+\item \code{comorbid_pccc_pcs()}: Calculate the PCCC comorbidities based
 on procedure codes,
 
-\item \code{icd9_comorbid_pccc_dx}: Calculate PCCC comorbidities from ICD-9
+\item \code{icd9_comorbid_pccc_dx()}: Calculate PCCC comorbidities from ICD-9
 diagnosis codes
 
-\item \code{icd10_comorbid_pccc_dx}: Calculate PCCC comorbidities from ICD-10
+\item \code{icd10_comorbid_pccc_dx()}: Calculate PCCC comorbidities from ICD-10
 diagnosis codes
 
-\item \code{icd9_comorbid_pccc_pcs}: Calculate PCCC comorbidities from ICD-9
+\item \code{icd9_comorbid_pccc_pcs()}: Calculate PCCC comorbidities from ICD-9
 procedure codes
 
-\item \code{icd10_comorbid_pccc_pcs}: Calculate PCCC comorbidities from ICD-10
+\item \code{icd10_comorbid_pccc_pcs()}: Calculate PCCC comorbidities from ICD-10
 procedure codes
+
 }}
-
 \examples{
 library(icd)
 vermont_dx[1:5, 1:10]
@@ -450,25 +450,11 @@ Consider using \code{\link{comorbid_ahrq}} instead of
   \code{\link{comorbid_elix}} for more recently updated mappings based on the
   Elixhauser scheme.
 
-Other comorbidity computations: 
-\code{\link{comorbid_hcc}()}
+Other comorbidity computations:
+\code{\link[=comorbid_hcc]{comorbid_hcc()}}
 
-Other comorbidities: 
-\code{\link{comorbid_hcc}()},
-\code{\link{icd10_map_ahrq_pcs}},
-\code{\link{icd9_map_ahrq}},
-\code{\link{icd9_map_elix}},
-\code{\link{icd9_map_hcc}},
-\code{\link{icd9_map_pccc}},
-\code{\link{icd9_map_quan_deyo}},
-\code{\link{icd9_map_quan_elix}},
-\code{\link{icd9_map_single_ccs}}
-
-Other comorbidity computations: 
-\code{\link{comorbid_hcc}()}
-
-Other comorbidities: 
-\code{\link{comorbid_hcc}()},
+Other comorbidities:
+\code{\link[=comorbid_hcc]{comorbid_hcc()}},
 \code{\link{icd10_map_ahrq_pcs}},
 \code{\link{icd9_map_ahrq}},
 \code{\link{icd9_map_elix}},

@@ -67,10 +67,10 @@ metastatic tumor
 }
 \section{Methods (by class)}{
 \itemize{
-\item \code{data.frame}: van Walraven scores from data frame of visits
+\item \code{van_walraven(data.frame)}: van Walraven scores from data frame of visits
 and ICD-9 codes
-}}
 
+}}
 \examples{
 mydf <- data.frame(
   visit_name = c("a", "b", "c"),

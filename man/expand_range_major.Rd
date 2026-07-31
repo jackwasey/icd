@@ -26,15 +26,15 @@ Primarily for internal use
 }
 \section{Methods (by class)}{
 \itemize{
-\item \code{default}: Expand range of top-level, 'major' codes
+\item \code{expand_range_major(default)}: Expand range of top-level, 'major' codes
 of unknown type
 
-\item \code{icd10cm}: Expand range of top-level ICD-10 codes
+\item \code{expand_range_major(icd10cm)}: Expand range of top-level ICD-10 codes
 
-\item \code{icd9}: Expand a range of ICD-9 major codes into
+\item \code{expand_range_major(icd9)}: Expand a range of ICD-9 major codes into
 major codes
-}}
 
+}}
 \examples{
 expand_range_major("100", "102")
 }

@@ -76,12 +76,12 @@ long_to_wide(longdf)
 long_to_wide(longdf, prefix = "ICD10_")
 }
 \seealso{
-Other ICD data conversion: 
-\code{\link{comorbid_df_to_mat}()},
-\code{\link{comorbid_mat_to_df}()},
+Other ICD data conversion:
+\code{\link[=comorbid_df_to_mat]{comorbid_df_to_mat()}},
+\code{\link[=comorbid_mat_to_df]{comorbid_mat_to_df()}},
 \code{\link{convert}},
-\code{\link{decimal_to_short}()},
-\code{\link{short_to_decimal}()},
-\code{\link{wide_to_long}()}
+\code{\link[=decimal_to_short]{decimal_to_short()}},
+\code{\link[=short_to_decimal]{short_to_decimal()}},
+\code{\link[=wide_to_long]{wide_to_long()}}
 }
 \concept{ICD data conversion}
