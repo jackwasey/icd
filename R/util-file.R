@@ -145,17 +145,25 @@
   }
   zipfile <- tempfile(fileext = ".zip")
   on.exit(unlink(zipfile), add = TRUE)
-  extra <- ifelse(insecure, "--insecure --silent", NULL)
+  extra <- ifelse(insecure, "--insecure --silent --fail", "--fail")
   if (.verbose() && !is.null(dl_msg)) message(dl_msg)
-  dl_code <- utils::download.file(
-    url = url,
-    destfile = zipfile,
-    quiet = !.verbose(),
-    method = "curl",
-    extra = extra,
-    ...
+  # newer R errors on a non-zero curl exit, older R returns the exit code
+  dl_code <- tryCatch(
+    utils::download.file(
+      url = url,
+      destfile = zipfile,
+      quiet = !.verbose(),
+      method = "curl",
+      extra = extra,
+      ...
+    ),
+    error = function(e) {
+      stop("Download failed: ", url, "\n", conditionMessage(e), call. = FALSE)
+    }
   )
-  stopifnot(dl_code == 0)
+  if (dl_code != 0) {
+    stop("Download failed (curl exit code ", dl_code, "): ", url, call. = FALSE)
+  }
   # I do want tempfile, so unzip makes the empty new directory
   zipdir <- tempfile()
   on.exit(unlink(zipdir), add = TRUE)
@@ -167,7 +175,7 @@
   if (length(file_paths) == 0) {
     stop("No files found in zip: ", zipfile)
   }
-  files <- list.files(zipdir)
+  files <- list.files(zipdir, recursive = TRUE)
   if (length(files) == 0) stop("No files in unzipped directory")
   if (missing(file_name)) {
     if (length(files) == 1) {
@@ -179,13 +187,18 @@
       )
     }
   } else {
-    if (!file_name %in% files) {
+    # the wanted file may be nested inside a subfolder in the zip (e.g. some
+    # CMS ICD-10-CM zips extract into a folder like "2020 Code
+    # Descriptions/"), so match on basename, not the full relative path.
+    matched <- files[basename(files) == file_name]
+    if (length(matched) == 0) {
       message("files")
       print(files)
       message("file_name")
       print(file_name)
       stop(paste(file_name, " not found in ", paste(files, collapse = ", ")))
     }
+    file_name <- matched[[1]]
   }
   ret <- file.copy(file.path(zipdir, file_name), save_path, overwrite = TRUE)
   unlink(zipdir, recursive = TRUE)

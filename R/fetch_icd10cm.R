@@ -118,7 +118,7 @@
 # run in zzz onload
 .make_icd10cm_parsers <- function(env = parent.frame(),
                                   verbose = FALSE) {
-  for (y in 2014:2019) {
+  for (y in 2014:2026) {
     for (dx in c(TRUE, FALSE)) {
       # could skip 2016 and 2019 here, but no harm done, and future proofs.
       parse_fun_name <- .get_parser_icd10cm_name(y, dx)
