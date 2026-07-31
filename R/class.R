@@ -13,8 +13,7 @@ icd9_classes <- c(icd9_sub_classes, "icd9")
 icd10_dx_sub_classes <- c(
   "icd10cm",
   "icd10who",
-  "icd10fr",
-  "icd10be"
+  "icd10fr"
 )
 icd10_pc_sub_classes <- "icd10cm_pc"
 icd10_sub_classes <- c(
@@ -372,8 +371,6 @@ icd10cm <- function(x) {
 #' @describeIn set_icd_class Use ICD-10-CM (USA) class for the given data
 #' @export
 as.icd10cm <- function(x, short_code = NULL) {
-  # TODO: as.icd10cm(as.icd10be("A00)) works, but gives both classes, which the
-  # print method fails on.
   stopifnot(is.atomic(x))
   if (inherits(x, "icd10cm")) {
     return(x)
@@ -497,41 +494,6 @@ icd10fr <- function(x) {
     class(x) <- c("icd10fr", cl)
   } else {
     class(x) <- c("icd10fr", "icd10", cl)
-  }
-  x
-}
-
-#' @describeIn set_icd_class Use ICD-10-BE (Belgium) class for the given data
-#' @export
-as.icd10be <- function(x, short_code = NULL) {
-  stopifnot(is.atomic(x))
-  if (inherits(x, "icd10be")) {
-    return(x)
-  }
-  icd10_pos <- match("icd10", class(x))
-  if (!is.na(icd10_pos)) {
-    class(x) <- append(class(x), "icd10be", after = icd10_pos - 1)
-  } else {
-    class(x) <- append(class(x), c("icd10be", "icd10"), after = 0)
-  }
-  if (!is.null(short_code)) {
-    attr(x, "icd_short_diag") <- short_code
-  }
-  icd_conflicts(x, do_stop = TRUE)
-  x
-}
-
-#' @noRd
-#' @keywords internal
-icd10be <- function(x) {
-  cl <- class(x)
-  if ("icd10be" %in% cl) {
-    return(x)
-  }
-  if ("icd10" %in% cl) {
-    class(x) <- c("icd10be", cl)
-  } else {
-    class(x) <- c("icd10be", "icd10", cl)
   }
   x
 }
@@ -876,10 +838,6 @@ is.icd10who <- function(x) inherits(x, "icd10who")
 #' @export
 is.icd10fr <- function(x) inherits(x, "icd10fr")
 
-#' @rdname is.icd9
-#' @export
-is.icd10be <- function(x) inherits(x, "icd10be")
-
 #' Test for class describing patient data
 #'
 #' This function does not examine the data itself; it just checks whether one of
@@ -947,8 +905,6 @@ print.icd10 <- function(x, verbose = FALSE, ...) {
     icd10cm_pc = "ICD-10-CM Procedure Codes",
     icd10who = "WHO ICD-10 (Diagnostic Codes)",
     icd10fr = "ICD-10-FR (French Diagnostic Codes)",
-    icd10be = "ICD-10-BE (Belgian Diagnostic Codes)",
-    icd10be_pc = "ICD-10-BE (Belgian Procedure Codes)",
     "ICD-10 Codes (Subtype not set)"
   )
   print_codes(x, sub_class, verbose = verbose, ...)

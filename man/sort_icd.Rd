@@ -4,11 +4,9 @@
 \alias{sort_icd}
 \alias{sort.icd10}
 \alias{sort.icd10cm}
-\alias{sort.icd10be}
 \alias{sort.icd9}
 \alias{order.icd9}
 \alias{order.icd10cm}
-\alias{order.icd10be}
 \title{Sort or order ICD-9 or ICD-10 codes according to published sequence}
 \usage{
 sort_icd(x, decreasing = FALSE, short_code = guess_short(x), ...)
@@ -17,15 +15,11 @@ sort_icd(x, decreasing = FALSE, short_code = guess_short(x), ...)
 
 \method{sort}{icd10cm}(x, decreasing = FALSE, ...)
 
-\method{sort}{icd10be}(x, decreasing = FALSE, ...)
-
 \method{sort}{icd9}(x, decreasing = FALSE, short_code = guess_short(x), ...)
 
 order.icd9(x, na.last = TRUE)
 
 order.icd10cm(x)
-
-order.icd10be(x)
 }
 \arguments{
 \item{x}{vector of ICD codes to sort or order}
@@ -65,7 +59,7 @@ Note that \code{\link[base]{sort}} is an S3 generic, whereas
   given.
 }
 
-\section{ICD-10-CM and ICD-10-BE}{
+\section{ICD-10-CM}{
  There are some codes which are sequenced
   out of lexicographic order, e.g., \code{C7A} and \code{C7B} are between
   \code{C80} and \code{C81}; \code{D3A} is between \code{D48} and \code{D49}.

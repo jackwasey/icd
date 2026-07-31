@@ -12,11 +12,6 @@
   "icd10who2008fr",
   # FR
   "icd10fr2019",
-  # BE
-  "icd10be2014",
-  "icd10be2014_pc",
-  "icd10be2017",
-  "icd10be2017_pc",
   # ICD-9-CM leaf descriptions
   paste0("icd9cm", 2005:2013, "_leaf"),
   # RTF parsing with majors "three-digit" codes and other non-leaf nodes

@@ -11,7 +11,7 @@ desc: >
     computation includes Hierarchical Condition Codes, and an
     implementation of AHRQ Clinical Classifications. Risk scores include
     those of Charlson and van Walraven.  US Clinical Modification, Word
-    Health Organization, Belgian and French ICD-10 codes are supported,
+    Health Organization, and French ICD-10 codes are supported,
     most of which are downloaded on demand.
 
 template:
@@ -95,7 +95,6 @@ reference:
   - '`is.icd10who`'
   - '`is.icd10cm`'
   - '`is.icd10fr`'
-  - '`is.icd10be`'
   - '`is.icd_long_data`'
   - '`icd9_chapters`'
   - '`icd9_sub_chapters`'
@@ -142,10 +141,6 @@ reference:
   desc: This is needed for explaining codes, and checking validity. The package includes data for the most recent ICD-9-CM and ICD-10-CM. Some editions, like WHO, cannot be distributed in the package due to copyright. Others are also available for download on demand, or in bulk using `download_all_icd_data()`.
   contents:
   - '`with_icd10cm_version`'
-  - '`get_icd10be2014`'
-  - '`get_icd10be2014_pc`'
-  - '`get_icd10be2017`'
-  - '`get_icd10be2017_pc`'
   - '`get_icd10cm2014`'
   - '`get_icd10cm2014_pc`'
   - '`get_icd10cm2015`'

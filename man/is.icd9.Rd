@@ -10,7 +10,6 @@
 \alias{is.icd10cm_pc}
 \alias{is.icd10who}
 \alias{is.icd10fr}
-\alias{is.icd10be}
 \alias{is.comorbidity_map}
 \title{Test presence of ICD classes}
 \usage{
@@ -31,8 +30,6 @@ is.icd10cm_pc(x)
 is.icd10who(x)
 
 is.icd10fr(x)
-
-is.icd10be(x)
 
 is.comorbidity_map(x)
 }
