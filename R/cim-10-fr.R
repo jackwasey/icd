@@ -8,7 +8,7 @@
       "https://www.atih.sante.fr",
       "plateformes-de-transmission-et-logiciels",
       "logiciels-espace-de-telechargement",
-      "telecharger/gratuit/13697/456"
+      "telecharger/gratuit/18384/456/NomenclatureCim10.zip"
     ),
     file_name = "LIBCIM10MULTI.TXT",
     dl_msg = "Working on ICD-10-FR (CIM-10-FR)",
