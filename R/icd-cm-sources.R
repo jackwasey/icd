@@ -1,7 +1,7 @@
 .icd9cm_sources <- local({
   cms_base <-
     "https://www.cms.gov/Medicare/Coding/ICD9ProviderDiagnosticCodes/Downloads/"
-  cdc_base <- "ftp://ftp.cdc.gov/pub/Health_Statistics/NCHS/Publications/"
+  cdc_base <- "https://ftp.cdc.gov/pub/Health_Statistics/NCHS/Publications/"
   data.frame(
     version = as.character(seq(32, 23)),
     f_year = c(as.character(seq(2014, 2005))),
