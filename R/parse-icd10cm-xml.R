@@ -1,11 +1,11 @@
-.dl_icd10cm_xml <- function(ver = "2019", ...) {
+.dl_icd10cm_xml <- function(ver = "2026", ...) {
   # http://www.cdc.gov/nchs/data/icd/icd10cm/2016/ICD10CM_FY2016_Full_XML.ZIP
   s <- .icd10cm_sources[[ver]]
   .unzip_to_data_raw(
     url = paste0(s$base_url, s$dx_xml_zip),
     file_name = s$dx_xml,
     save_name = .get_versioned_raw_file_name(s$dx_xml, ver),
-    dl_msg = "Downloading ICD-10-CM 2019 XML",
+    dl_msg = paste0("Downloading ICD-10-CM ", ver, " XML"),
     ...
   )
 }

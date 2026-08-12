@@ -8,6 +8,6 @@
 ICD-10-CM 2018
 }
 \seealso{
-\code{\link{icd10cm2019}}
+\code{\link{icd10cm2026}}
 }
 \keyword{datasets}

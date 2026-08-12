@@ -26,7 +26,7 @@ n <- 10000
 set.seed(1441)
 # load the dice with more PCCC diagnostic codes
 h <- c(
-  icd10cm2019$code,
+  get_icd10cm_active()$code,
   rep(unlist(unname(icd10_map_pccc_dx)), 10)
 )
 dat <- data.frame(

@@ -196,7 +196,11 @@ set_re_globals <- function(env = parent.frame()) {
   ),
   collapse = "|"
   )
-  re_icd10_major_bare <- "[[:alpha:]][[:digit:]][[:alnum:]]"
+  # letter+digit+alnum covers almost everything (e.g. "A00", and the older
+  # alpha-mixed exceptions like "C7A", "D3A"). FY2026 introduced "QA0", a
+  # letter+letter+digit major, so that pattern is accepted too.
+  re_icd10_major_bare <-
+    nce("[[:alpha:]][[:digit:]][[:alnum:]]|[[:alpha:]]{2}[[:digit:]]")
   # use slightly broader definition for generic:
   re_icd10_major <- .jws(re_icd10_major_bare)
   re_icd10_minor <- "[[:alnum:]]{0,4}"

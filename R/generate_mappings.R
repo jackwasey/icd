@@ -615,7 +615,7 @@ icd10_generate_map_quan_deyo <- function(save_pkg_data = TRUE) {
 
 .apply_over_icd10cm_vers <- function(raw) {
   out <- raw
-  for (yr in 2014:2019) {
+  for (yr in get_icd10cm_available(dx = TRUE, return_year = TRUE)) {
     .msg("Applying ICD-10-CM year: ", yr)
     with_icd10cm_version(
       as.character(yr),
