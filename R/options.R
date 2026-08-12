@@ -108,7 +108,8 @@ NULL
     opt <- .get_opt("interact", default = NA)
     if (is.na(opt)) {
       .msg("interact option not set, so falling back on interactive()")
-      .set_opt("interact" = interactive())
+      opt <- interactive()
+      .set_opt("interact" = opt)
     }
     stopifnot(is.logical(opt))
     return(opt)
