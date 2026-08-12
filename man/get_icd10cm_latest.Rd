@@ -21,6 +21,6 @@ This is an active binding, so is exported explicitly
 }
 \examples{
 a <- get_icd10cm_latest()
-identical(a, icd10cm2019)
+identical(a, icd10cm2026)
 }
 \keyword{datasets}

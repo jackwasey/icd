@@ -3,7 +3,7 @@
 
 .data_names_pkg <- c(
   "icd9cm2014_leaf",
-  "icd10cm2019" # included in package data, being the latest version
+  "icd10cm2026" # included in package data, being the latest version
 )
 
 .data_names_cache <- c(
@@ -24,11 +24,7 @@
   # ICD-10-CM PCS
   paste0("icd10cm", 2014:2019, "_pc"),
   # ICD-10-CM DX
-  "icd10cm2014",
-  "icd10cm2015",
-  "icd10cm2016",
-  "icd10cm2017",
-  "icd10cm2018"
+  paste0("icd10cm", 2014:2025)
 )
 
 .data_names <- c(

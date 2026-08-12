@@ -83,7 +83,7 @@
     }
     save(
       list = var_name,
-      envir = envir,
+      envir = environment(),
       file = out_file,
       compress = compress,
       version = 2

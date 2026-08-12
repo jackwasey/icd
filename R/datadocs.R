@@ -83,7 +83,7 @@ NULL
 #' Unlike \code{\link{get_icd9cm2014_leaf}} and friends, these data frames
 #' contain the full structure of the ICD-9-CM scheme up to the three-digit
 #' codes. Unlike the equivalent ICD-10-CM data frames (e.g.,
-#' \code{\link{icd10cm2019}}), they do not have columns indicating billable/leaf
+#' \code{\link{icd10cm2026}}), they do not have columns indicating billable/leaf
 #' status, or chapter designations.
 #'
 #' \code{icd9cm_hierarchy} is the deprecated name, which currently points to the
@@ -144,12 +144,12 @@ NULL
 #'   \url{https://www.cms.gov/Medicare/Coding/ICD10/Downloads/2014-Code-Tables-and-Index.zip}
 #'   \url{https://www.cms.gov/Medicare/Coding/ICD10/Downloads/2014-PCS-long-and-abbreviated-titles.zip}
 # nolint end
-#' @name icd10cm2019
+#' @name icd10cm2026
 NULL
 
 #' @name get_icd10cm2014
 #' @title ICD-10-CM 2014
-#' @seealso \code{\link{icd10cm2019}}
+#' @seealso \code{\link{icd10cm2026}}
 #' @docType data
 #' @keywords datasets
 #' @export
@@ -157,7 +157,7 @@ NULL
 
 #' @name get_icd10cm2015
 #' @title ICD-10-CM 2015
-#' @seealso \code{\link{icd10cm2019}}
+#' @seealso \code{\link{icd10cm2026}}
 #' @docType data
 #' @keywords datasets
 #' @export
@@ -165,7 +165,7 @@ NULL
 
 #' @name get_icd10cm2016
 #' @title ICD-10-CM 2016
-#' @seealso \code{\link{icd10cm2019}}
+#' @seealso \code{\link{icd10cm2026}}
 #' @docType data
 #' @keywords datasets
 #' @export
@@ -173,7 +173,7 @@ NULL
 
 #' @name get_icd10cm2017
 #' @title ICD-10-CM 2017
-#' @seealso \code{\link{icd10cm2019}}
+#' @seealso \code{\link{icd10cm2026}}
 #' @docType data
 #' @keywords datasets
 #' @export
@@ -181,7 +181,7 @@ NULL
 
 #' @name get_icd10cm2018
 #' @title ICD-10-CM 2018
-#' @seealso \code{\link{icd10cm2019}}
+#' @seealso \code{\link{icd10cm2026}}
 #' @docType data
 #' @keywords datasets
 #' @export
@@ -189,7 +189,63 @@ NULL
 
 #' @name get_icd10cm2019
 #' @title ICD-10-CM 2019
-#' @seealso \code{\link{icd10cm2019}}
+#' @seealso \code{\link{icd10cm2026}}
+#' @docType data
+#' @keywords datasets
+#' @export
+NULL
+
+#' @name get_icd10cm2020
+#' @title ICD-10-CM 2020
+#' @seealso \code{\link{icd10cm2026}}
+#' @docType data
+#' @keywords datasets
+#' @export
+NULL
+
+#' @name get_icd10cm2021
+#' @title ICD-10-CM 2021
+#' @seealso \code{\link{icd10cm2026}}
+#' @docType data
+#' @keywords datasets
+#' @export
+NULL
+
+#' @name get_icd10cm2022
+#' @title ICD-10-CM 2022
+#' @seealso \code{\link{icd10cm2026}}
+#' @docType data
+#' @keywords datasets
+#' @export
+NULL
+
+#' @name get_icd10cm2023
+#' @title ICD-10-CM 2023
+#' @seealso \code{\link{icd10cm2026}}
+#' @docType data
+#' @keywords datasets
+#' @export
+NULL
+
+#' @name get_icd10cm2024
+#' @title ICD-10-CM 2024
+#' @seealso \code{\link{icd10cm2026}}
+#' @docType data
+#' @keywords datasets
+#' @export
+NULL
+
+#' @name get_icd10cm2025
+#' @title ICD-10-CM 2025
+#' @seealso \code{\link{icd10cm2026}}
+#' @docType data
+#' @keywords datasets
+#' @export
+NULL
+
+#' @name get_icd10cm2026
+#' @title ICD-10-CM 2026
+#' @seealso \code{\link{icd10cm2026}}
 #' @docType data
 #' @keywords datasets
 #' @export

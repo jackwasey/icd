@@ -301,9 +301,9 @@ set_icd_data_dir <- function(path = NULL) {
 #' Download all the additional data at once
 #'
 #' It will download and parse WHO ICD-10, French, and Belgian codes and
-#' descriptions. It will also get years 2014, 2015, 2017, and 2018 for ICD-10-CM
-#' (diagnostic codes), and 2014--2019 procedure codes. 2016 and 2019 diagnostic
-#' codes are included in the package data. The total amount of data is about
+#' descriptions. It will also get years 2014--2025 for ICD-10-CM (diagnostic
+#' codes), and 2014--2019 procedure codes. 2026 diagnostic codes are included in
+#' the package data. The total amount of data is about
 #' 340Mb. It is not necessary to do call \code{download_all_icd_data} for normal
 #' use: you may simply call the functions like \code{get_icd10cm2014}, which
 #' will download data when needed.

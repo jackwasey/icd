@@ -74,13 +74,10 @@
     )
   dat[["three_digit"]] <- factor(get_major(dat[["code"]]))
   # here we must re-factor so we don't have un-used levels in major
+  # use match(), not merge(), which returns rows sorted by key rather than in
+  # the order of dat, misaligning the lookups once FY2026 added e.g. "QA0"
   dat[["major"]] <- factor(
-    merge(
-      x = dat["three_digit"],
-      y = dat[c("code", "short_desc")],
-      by.x = "three_digit", by.y = "code",
-      all.x = TRUE
-    )[["short_desc"]]
+    dat[["short_desc"]][match(dat[["three_digit"]], dat[["code"]])]
   )
   dat[["major"]] <- icd::as.short_diag(icd::as.icd10cm(dat[["major"]]))
   if (dx) {
@@ -94,22 +91,14 @@
         paste(mismatch_sub_chap, collapse = ", ")
       )
     }
-    dat[["sub_chapter"]] <-
-      merge(
-        x = dat["three_digit"],
-        y = sc_lookup,
-        by.x = "three_digit",
-        by.y = "sc_major",
-        all.x = TRUE
-      )[["sc_desc"]]
+    dat[["sub_chapter"]] <- factor_nosort(
+      sc_lookup[["sc_desc"]][match(dat[["three_digit"]], sc_lookup[["sc_major"]])]
+    )
     .msg("Generating chap lookup for year: ", year)
     chap_lookup <- .icd10_generate_chap_lookup()
-    dat[["chapter"]] <-
-      merge(
-        dat["three_digit"], chap_lookup,
-        by.x = "three_digit", by.y = "chap_major",
-        all.x = TRUE
-      )[["chap_desc"]]
+    dat[["chapter"]] <- factor_nosort(
+      chap_lookup[["chap_desc"]][match(dat[["three_digit"]], chap_lookup[["chap_major"]])]
+    )
   }
   class(dat$code) <- c("icd10cm", "icd10", "character")
   dat$three_digit <- factor_sorted_levels(as.icd10cm(dat$three_digit))
@@ -122,7 +111,7 @@
     var_name = .get_icd10cm_name(year = year, dx = dx),
     x = dat
   )
-  if (save_pkg_data && year == "2019") {
+  if (save_pkg_data && year == "2026") {
     if (.verbose()) {
       message("Saving in package data: ", .get_icd10cm_name(year, dx))
     }

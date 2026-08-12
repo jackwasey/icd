@@ -6,7 +6,7 @@
 #' @keywords internal debugging datagen
 #' @noRd
 generate_random_short_icd10cm_bill <- function(n = 10, short_code = TRUE) {
-  i <- icd10cm2019
+  i <- icd10cm2026
   x <- sample(
     unlist(
       i[i$billable == 1, "code"]
