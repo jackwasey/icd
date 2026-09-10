@@ -1,5 +1,14 @@
 # icd NEWS
 
+## Version 4.0.10
+
+* Bundled ICD-10-CM data now includes FY2020 through FY2026, with FY2026 as the new default dataset (was FY2019).
+* Dropped ICD-10-BE (Belgian) class support.
+* Fixed the French ICD-10-FR (CIM-10) download URL, which had gone stale, to a working ATIH link.
+* Switched legacy ICD-9-CM CDC downloads from FTP to HTTPS.
+* Restored compatibility with modern R and C++ toolchains: fixed compilation errors under clang 17 (#218), and resolved `R CMD check` failures on R 4.1+, including replacing the autoconf build with a static `Makevars` (#219).
+* Fixed the `icd.interact` setting returning `NA` on its first use in a session, plus other minor issues found while testing this release.
+
 ## Version 4.0.9.9000
 
 * bug-fix version for the latest CRAN release 4.0.9
