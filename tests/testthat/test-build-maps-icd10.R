@@ -29,8 +29,7 @@ test_that("the icd-10 elix comorbidity map is reproduced", {
 
 test_that("icd-10 ahrq map is reproduced", {
   skip_if_offline()
-  skip_on_appveyor()
-  skip_on_travis()
+  skip_on_ci()
   skip_on_cran()
   skip_no_icd_data_raw(
     icd10_fetch_ahrq_sas,

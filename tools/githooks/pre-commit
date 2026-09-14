@@ -8,11 +8,6 @@ declare -i wcres=0
 MSG="use 'git commit --no-verify' to override this check"
 
 IH="$(git rev-parse --show-toplevel)"
-if ! "${IH:-.}/tools/travis-yaml-check.sh"; then
-    echo ".travis.yml is invalid."
-    echo "${MSG}"
-    ok=1
-fi
 
 # update DESCRIPTION automatically, before codemetar update
 desc_tmp="/tmp/DESCRIPTION-$(date "$@" +"%Y%m%d_%H%M%S")"

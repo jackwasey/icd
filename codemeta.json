@@ -260,9 +260,9 @@
     },
     "SystemRequirements": null
   },
-  "fileSize": "21903.388KB",
+  "fileSize": "21902.975KB",
   "relatedLink": "https://jackwasey.github.io/icd/",
   "releaseNotes": "https://github.com/jackwasey/icd/blob/main/NEWS.md",
-  "contIntegration": ["https://travis-ci.org/jackwasey/icd", "https://ci.appveyor.com/project/jackwasey/icd/branch/main", "https://codecov.io/github/jackwasey/icd?branch=main"],
+  "contIntegration": ["https://github.com/jackwasey/icd/actions/workflows/R-CMD-check.yaml", "https://codecov.io/github/jackwasey/icd?branch=main"],
   "developmentStatus": ["https://www.tidyverse.org/lifecycle/#stable", "https://www.repostatus.org/#active"]
 }

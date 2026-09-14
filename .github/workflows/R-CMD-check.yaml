@@ -1,0 +1,61 @@
+# Replaces the retired Travis CI and AppVeyor configurations.
+# Based on the standard r-lib/actions check-standard workflow.
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+  workflow_dispatch:
+
+name: R-CMD-check
+
+permissions: read-all
+
+jobs:
+  R-CMD-check:
+    runs-on: ${{ matrix.config.os }}
+
+    name: ${{ matrix.config.os }} (${{ matrix.config.r }})
+
+    strategy:
+      fail-fast: false
+      matrix:
+        config:
+          - {os: macos-latest,   r: 'release'}
+          - {os: windows-latest, r: 'release'}
+          - {os: ubuntu-latest,  r: 'devel', http-user-agent: 'release'}
+          - {os: ubuntu-latest,  r: 'release'}
+          - {os: ubuntu-latest,  r: 'oldrel-1'}
+
+    env:
+      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+      R_KEEP_PKG_SOURCE: yes
+      # icd's tests/testthat.R sets icd.offline = TRUE unless NOT_CRAN is
+      # true. Leave it false so CI exercises the same offline path CRAN does,
+      # rather than downloading ICD data from CMS, CDC, WHO and others on
+      # every run.
+      NOT_CRAN: false
+
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: r-lib/actions/setup-pandoc@v2
+
+      # Two vignettes are LaTeX wrappers that \includepdf a prebuilt PDF, so
+      # building them needs pdfpages and pdflscape.
+      - uses: r-lib/actions/setup-tinytex@v2
+      - run: tlmgr install pdfpages pdflscape
+
+      - uses: r-lib/actions/setup-r@v2
+        with:
+          r-version: ${{ matrix.config.r }}
+          http-user-agent: ${{ matrix.config.http-user-agent }}
+
+      - uses: r-lib/actions/setup-r-dependencies@v2
+        with:
+          extra-packages: any::rcmdcheck
+          needs: check
+
+      - uses: r-lib/actions/check-r-package@v2
+        with:
+          upload-snapshots: true
+          build_args: 'c("--no-manual","--compact-vignettes=gs+qpdf")'

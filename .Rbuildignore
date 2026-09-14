@@ -8,7 +8,6 @@
 ^.*\.Rproj$
 ^.*\.xcworkspace$
 ^CONTRIBUTING\.md$
-^travis-notes\.txt$
 ^Meta$
 ^README-*\.png$
 ^README\.Rmd$
@@ -20,9 +19,7 @@
 ^\.git.*$
 ^\.lintr$
 ^\.settings$
-^\.travis\..*$
 ^_config\.yml$
-^appveyor\.yml$
 ^bench-versus-result.*rds$
 ^benchmarks
 ^codecov.yml$
