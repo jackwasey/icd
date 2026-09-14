@@ -617,8 +617,19 @@ get_invalid.comorbidity_map <- function(x, short_code = guess_short(x), ...) {
 #' or where the decimal would be.
 #' @keywords internal
 #' @noRd
-get_major <- function(x) {
+get_major <- function(x, ...) {
   UseMethod("get_major")
+}
+
+#' @describeIn get_major Get major part of an ICD-9 code, i.e., the first three
+#'   digits of a numeric or \code{V} code, or the first four digits of an
+#'   \code{E} code. Thin wrapper around the C++ implementation, defined here in
+#'   R so its signature matches the generic.
+#' @keywords internal
+#' @export
+#' @noRd
+get_major.icd9 <- function(x, short_code, ...) {
+  icd9_get_major_rcpp(x, short_code)
 }
 
 #' @describeIn get_major Get major part of an ICD-10 (of any kind) code
@@ -628,7 +639,7 @@ get_major <- function(x) {
 #' @keywords internal
 #' @export
 #' @noRd
-get_major.icd10 <- function(x) {
+get_major.icd10 <- function(x, ...) {
   substr(trimws(x), 1L, 3L)
 }
 
@@ -636,7 +647,7 @@ get_major.icd10 <- function(x) {
 #' @keywords internal
 #' @export
 #' @noRd
-get_major.icd10cm <- function(x) {
+get_major.icd10cm <- function(x, ...) {
   get_major.icd10(x)
 }
 
@@ -644,7 +655,7 @@ get_major.icd10cm <- function(x) {
 #' @keywords internal
 #' @export
 #' @noRd
-get_major.icd10fr <- function(x) {
+get_major.icd10fr <- function(x, ...) {
   get_major.icd10(x)
 }
 
@@ -652,7 +663,7 @@ get_major.icd10fr <- function(x) {
 #' @keywords internal
 #' @export
 #' @noRd
-get_major.icd10be <- function(x) {
+get_major.icd10be <- function(x, ...) {
   get_major.icd10(x)
 }
 
@@ -660,7 +671,7 @@ get_major.icd10be <- function(x) {
 #' @keywords internal
 #' @export
 #' @noRd
-get_major.icd10who <- function(x) {
+get_major.icd10who <- function(x, ...) {
   get_major.icd10(x)
 }
 
@@ -668,7 +679,7 @@ get_major.icd10who <- function(x) {
 #' @keywords internal
 #' @noRd
 #' @export
-get_major.icd10cm_pc <- function(x) {
+get_major.icd10cm_pc <- function(x, ...) {
   substr(trimws(x), 1L, 3L)
 }
 

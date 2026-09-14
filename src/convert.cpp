@@ -1,12 +1,12 @@
-#include "convert.hpp"
-#include "icd_types.hpp"
+#include "convert.h"
+#include "icd_types.h"
 extern "C" {
 #include <cstddef> // for size_t
 }
-#include "appendMinor.hpp" // for icd9MajMinToCode
-#include "is.hpp"          // for icd9IsASingleE, icd9IsAS...
-#include "manip.hpp"       // for icd9AddLeadingZeroesMajor
-#include "util.hpp"        // for strimCpp, trimLeftCpp
+#include "appendMinor.h" // for icd9MajMinToCode
+#include "is.h"          // for icd9IsASingleE, icd9IsAS...
+#include "manip.h"       // for icd9AddLeadingZeroesMajor
+#include "util.h"        // for strimCpp, trimLeftCpp
 #include <string>        // for string
 
 using namespace Rcpp;
@@ -171,13 +171,15 @@ CV icd9DecimalToShort(const CV &x) {
   return out;
 }
 
-//' @describeIn get_major Get major part of ICD-9 code, i.e., first three digits
-//'   of numeric or \code{V} code, or first four digits of an \code{E} code.
-//'   This is the part before the decimal, when a decimal point is used.
+//' @title Get the major part of an ICD-9 code
+//' @description Get major part of ICD-9 code, i.e., first three digits of a
+//'   numeric or \code{V} code, or first four digits of an \code{E} code. This
+//'   is the part before the decimal, when a decimal point is used. Wrapped by
+//'   the S3 method \code{get_major.icd9}, which is defined in R so that its
+//'   signature can match the \code{get_major} generic.
 //' @keywords internal manip
-//' @export
 //' @noRd
-//[[Rcpp::export(name="get_major.icd9")]]
+//[[Rcpp::export(name="icd9_get_major_rcpp")]]
 CV icd9GetMajor(const CV &x, const bool short_code) {
   if (short_code) {
     // am I casting (or just compiler/syntax checker hinting?) SEXP may be
