@@ -1,5 +1,5 @@
-#include "util.hpp"
-#include "local.hpp"
+#include "util.h"
+#include "local.h"
 #include <algorithm> // for copy, sort, transform
 #include <iterator>  // for back_insert_iterator
 #include <math.h>    // for floor
@@ -135,6 +135,4 @@ void build_info() {
 #ifdef _LIBCPP_VERSION
   Rcpp::Rcout << "libc++ from LLVM/clang)" << std::endl;
 #endif
-#include "makevars.hpp"
-  Rcpp::Rcout << Makevars << std::endl;
 }

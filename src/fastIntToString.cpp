@@ -1,4 +1,4 @@
-#include "icd_types.hpp"
+#include "icd_types.h"
 #include <stdio.h> // for sprintf, size_t
 #include <string>
 #include <vector>

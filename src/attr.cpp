@@ -1,5 +1,5 @@
-#include "attr.hpp"
-#include "icd_types.hpp"
+#include "attr.h"
+#include "icd_types.h"
 using namespace Rcpp;
 
 //' Set ICD short-form diagnosis code attribute

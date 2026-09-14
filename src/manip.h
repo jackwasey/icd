@@ -1,7 +1,7 @@
 #ifndef MANIP_H_
 #define MANIP_H_
 
-#include "icd_types.hpp"
+#include "icd_types.h"
 
 CV icd9AddLeadingZeroes(const CV& icd9, bool isShort);
 CV icd9AddLeadingZeroesShort(CV icd9Short);

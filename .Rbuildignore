@@ -22,15 +22,11 @@
 ^\.settings$
 ^\.travis\..*$
 ^_config\.yml$
-^aclocal\.m4$
 ^appveyor\.yml$
-^autom4te\.cache$
 ^bench-versus-result.*rds$
 ^benchmarks
 ^codecov.yml$
 ^codemeta\.json$
-^config\.log$
-^config\.status$
 ^cran-comments\.md$
 ^data-raw$
 ^doc$

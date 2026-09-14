@@ -1,8 +1,8 @@
 #ifndef UTIL_H_
 #define UTIL_H_
 
-#include "icd_types.hpp"
-#include "local.hpp"
+#include "icd_types.h"
+#include "local.h"
 #include <utility> // for pair
 
 std::string trimLeftCpp(std::string s);

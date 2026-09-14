@@ -1,7 +1,7 @@
 #ifndef CONVERT_H_
 #define CONVERT_H_
 
-#include "icd_types.hpp"
+#include "icd_types.h"
 using namespace Rcpp;
 
 // need default argument here for other functions to exploit,
