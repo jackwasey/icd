@@ -108,8 +108,6 @@ context("matmul cpp") {
 
   test_that("do a wide comorbid matrix multiplication") {
     comorbidMatMulWide(df1, map, "id", CharacterVector::create("dx0", "dx1"));
-    //  comorbidMatMulWide(dff1, map, "id", CharacterVector::create("dx0",
-    //  "dx1"));
   }
 
   test_that("TEMPORARY! use rel unordered map test lookup") {

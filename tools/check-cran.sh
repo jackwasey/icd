@@ -5,7 +5,6 @@ IFS=$'\n\t'
 ICD_HOME="${ICD_HOME:-${HOME}/icd}"
 tmpd=$(mktemp -d /tmp/icdcheckcran.XXXXXXXXXXX)
 function finish {
-    #	  rm -rf "$tmpd"
     echo "Finished with $tmpd" >&2
 }
 trap finish EXIT

@@ -30,7 +30,6 @@ public:
   void buildCodeSet(const SEXP &codes);
   CV findRelevant();
   CV findRelevant(const SEXP &codes);
-  // CV findRelevant(const DataFrame& data, CV code_fields);
   CV findRelevant(const List &data, const CV& code_names);
   RelMap findRel(const CharacterVector& x);
 }; // Relevant

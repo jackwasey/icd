@@ -58,7 +58,6 @@
   .msg("Got flat file for year: ", year)
   stopifnot(all(Encoding(x) == "unknown"))
   dat <- data.frame(
-    # id = substr(x, 1, 5),
     code = trimws(substr(x, 7, 13)),
     billable = trimws(substr(x, 14, 15)) == "1",
     short_desc = trimws(substr(x, 16, 76)),

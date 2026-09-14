@@ -27,9 +27,5 @@ bool icd10cmCompareQuirk(const char* x,
                          const char *beforeBeforeQuirk,
                          const char *afterAfterQuirk,
                          bool& res);
-// inline in cpp: bool icd10cmCompare(const String& x, const String& y);
 CharacterVector icd10cmSort(const Rcpp::CharacterVector &x);
-// disable until std and rcpp implemented fully VecStr icd10cmSortStd(const std::vector<std::string> &x);
-//Rcpp::IntegerVector icd10cmOrder(const Rcpp::CharacterVector &x);
-//std::vector<std::size_t> icd10cmOrderStd(const std::vector<std::string> &x);
 #endif /* SORT_H_ */

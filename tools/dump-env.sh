@@ -2,7 +2,6 @@
 set +e 
 set -x
 # dump all possibly relevant environment, to help Travis debugging in particular.
-#exec >&2
 
 # System
 uname -a
@@ -29,7 +28,6 @@ RHE="${RH}/etc"
 
 echo "R RHOME gives '${RH}'" >&2
 
-#find "${HOME}/.R" -print -exec cat '{}' \;
 for f in {"${RHE}","${HOME}"}/{,./,.R/}{,check-,build-}{ldpaths,Makeconf,Makevars,Renviron,Rprofile}{.site,}; do
     if [[ -f "$f" ]]; then
         cat "$f"

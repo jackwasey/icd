@@ -54,8 +54,7 @@
       paste0(cms_base, "cmsv29_master_descriptions.zip"),
       paste0(cms_base, "cmsv28_master_descriptions.zip"),
       paste0(cms_base, "FY2010Diagnosis-ProcedureCodesFullTitles.zip"),
-      # but this one is in a different format! only contains short descs:
-      # paste0(cms_base, "v27_icd9.zip",
+      # v27 is skipped: it's in a different format, containing only short descs.
       paste0(cms_base, "v26_icd9.zip"),
       paste0(cms_base, "v25_icd9.zip"),
       paste0(cms_base, "v24_icd9.zip"),

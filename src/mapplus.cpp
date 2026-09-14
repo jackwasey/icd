@@ -16,7 +16,6 @@ MapPlus::MapPlus(const List &mapList, const Relevant &r) {
   // codes using hashmap
   //
   // downside is that each list element has a copy of the same relevant levels.
-  // List remap(const List& map, IHS& relevantHash) {
   CharacterVector cmbs = mapList.names();
   for (R_xlen_t i = 0; i != mapList.size(); ++i) {
     String cmb_name = cmbs[i];

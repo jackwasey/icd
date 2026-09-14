@@ -4,7 +4,6 @@ mnrs <- as.character(sample(0:99, n, replace = TRUE))
 microbenchmark::microbenchmark(
   icd9MajMinToCode(mjrs, mnrs, TRUE),
   icd9MajMinToCodeStd(mjrs, mnrs, TRUE),
-  # icd9MajMinToCodePrePadded(mjrs, mnrs, TRUE), # removed from repo
   times = 10
 )
 

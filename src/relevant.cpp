@@ -84,8 +84,6 @@ CV Relevant::findRelevant(const List &data, const CV& code_fields) {
   IntegerVector cols = match(code_fields, (CV)data.names());
   if (cols.size() == 0) return (CV::create());
   if (any(is_na(cols))) stop("Relevant: column names not found in data frame");
-//auto len = ((VectorBase)data[1]).size();
-  // r.reserve(); // Very rough heuristic
   for (auto col : cols) { buildCodeSet(data[col - 1]); }
   findRelevant();
   return wrap(r); // or keep as STL container?

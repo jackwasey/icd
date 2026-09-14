@@ -1,9 +1,4 @@
 context("PCCC")
-# pccc_col_names <- c(
-#   "neuromusc", "cvd", "respiratory", "renal", "gi",
-#   "hemato_immu", "metabolic", "congeni_genetic",
-#   "malignancy", "neonatal", "tech_dep", "transplant"
-# )
 
 test_that("procedure codes work", {
   res9 <- comorbid_pccc_pcs(pccc_pts,
