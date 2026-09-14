@@ -160,7 +160,7 @@ children.icd10who <- function(x,
 #' (\dQuote{billable} code).
 #' @keywords internal
 #' @noRd
-children_defined <- function(x) {
+children_defined <- function(x, ...) {
   UseMethod("children_defined")
 }
 
@@ -175,7 +175,8 @@ children_defined <- function(x) {
 children_defined.icd10cm <- function(x,
                                      short_code = guess_short(x),
                                      warn = FALSE,
-                                     verbose = FALSE) {
+                                     verbose = FALSE,
+                                     ...) {
   stopifnot(is.factor(x) || is.character(unclass(x)))
   stopifnot(is.logical(short_code))
   stopifnot(is.logical(warn))
@@ -215,7 +216,8 @@ children_defined.icd10cm <- function(x,
 children_defined.icd10who <- function(x,
                                       short_code = guess_short(x),
                                       who_ver = "icd10who2016",
-                                      warn = FALSE) {
+                                      warn = FALSE,
+                                      ...) {
   stopifnot(is.factor(x) || is.character(unclass(x)))
   stopifnot(is.logical(short_code))
   stopifnot(is.logical(warn))

@@ -1,8 +1,8 @@
-#include "relevant.hpp"
-#include "fastIntToString.hpp"
-#include "icd_types.hpp"
-#include "local.hpp"
-#include "refactor.hpp"
+#include "relevant.h"
+#include "fastIntToString.h"
+#include "icd_types.h"
+#include "local.h"
+#include "refactor.h"
 #include <algorithm> // for binary_search, copy
 #include <cstring>
 #include <string>
@@ -15,7 +15,7 @@ void Relevant::buildCodeSetCV(const CV &codes) {
   // over-reserve (and maybe expand), target is unique number
   allCodesSet.reserve(allCodesSet.size() + codes.size());
   DEBUG_VEC(codes);
-  for (const String& c : codes) {
+  for (const String c : codes) {
     if (c != NA_STRING) { allCodesSet.insert(c.get_cstring()); }
   }
 }
@@ -57,8 +57,8 @@ void Relevant::buildCodeSet(const SEXP &codes) {
 
 // do the finding
 CV Relevant::findRelevant() {
-  for (const CV& cmb : src_map) {
-    for (const String& cmbCode : cmb) {
+  for (const CV cmb : src_map) {
+    for (const String cmbCode : cmb) {
       if (allCodesSet.find(cmbCode.get_cstring()) != allCodesSet.end()) {
         TRACE("Pushing back" << cmbCode.get_cstring());
         r.insert(((String)cmbCode).get_cstring());
@@ -84,8 +84,6 @@ CV Relevant::findRelevant(const List &data, const CV& code_fields) {
   IntegerVector cols = match(code_fields, (CV)data.names());
   if (cols.size() == 0) return (CV::create());
   if (any(is_na(cols))) stop("Relevant: column names not found in data frame");
-//auto len = ((VectorBase)data[1]).size();
-  // r.reserve(); // Very rough heuristic
   for (auto col : cols) { buildCodeSet(data[col - 1]); }
   findRelevant();
   return wrap(r); // or keep as STL container?

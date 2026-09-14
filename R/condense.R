@@ -158,10 +158,8 @@ icd9_condense_short <- function(x,
       short_code = TRUE, billable = FALSE
     )
     if (length(test_kids) > 0 && all(test_kids %in% c(fp, i9w))) {
-      # if ((length(test_kids) > 1) || (fp %in% i9w)) {
       fout <- c(fout, fp)
       i9w <- i9w[-which(i9w %in% test_kids)]
-      # }
     }
   }
   # 'out' now has original major codes, 'fout' has parent four digit codes. Now

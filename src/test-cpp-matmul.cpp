@@ -1,15 +1,15 @@
 #ifdef ICD_CATCH
-#include "appendMinor.hpp"
-#include "comorbidMatMul.hpp"
-#include "convert.hpp"
-#include "icd_types.hpp"
-#include "is.hpp"
-#include "local.hpp"
-#include "manip.hpp"
-#include "mapplus.hpp"
-#include "refactor.hpp"
-#include "relevant.hpp"
-#include "util.hpp"
+#include "appendMinor.h"
+#include "comorbidMatMul.h"
+#include "convert.h"
+#include "icd_types.h"
+#include "is.h"
+#include "local.h"
+#include "manip.h"
+#include "mapplus.h"
+#include "refactor.h"
+#include "relevant.h"
+#include "util.h"
 
 /*
  * Rscript -e
@@ -108,8 +108,6 @@ context("matmul cpp") {
 
   test_that("do a wide comorbid matrix multiplication") {
     comorbidMatMulWide(df1, map, "id", CharacterVector::create("dx0", "dx1"));
-    //  comorbidMatMulWide(dff1, map, "id", CharacterVector::create("dx0",
-    //  "dx1"));
   }
 
   test_that("TEMPORARY! use rel unordered map test lookup") {

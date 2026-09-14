@@ -206,15 +206,13 @@ long_to_wide <- function(x,
 #' # output data frame has a factor for the visit_name column
 #' stopifnot(identical(rownames(mat), as.character(df.out[["visit_id"]])))
 #' df.out[, 1:4]
-#' # when creating a data frame like this, stringsAsFactors uses
-#' # the system-wide option you may have set e.g. with
-#' # options("stringsAsFactors" = FALSE).
+#' # visit_id is a character column, not a factor, unless you ask otherwise
 #' is.factor(df.out[["visit_id"]])
 #' @family ICD data conversion
 #' @seealso \code{\link{comorbid_df_to_mat}}
 #' @export
 comorbid_mat_to_df <- function(x, visit_name = "visit_id",
-                               stringsAsFactors = getOption("stringsAsFactors")) { # nolint
+                               stringsAsFactors = FALSE) { # nolint
   assert_matrix(x,
     min.rows = 1, min.cols = 1,
     row.names = "named", col.names = "named"
@@ -251,7 +249,7 @@ comorbid_mat_to_df <- function(x, visit_name = "visit_id",
 #' @seealso \code{\link{comorbid_mat_to_df}}
 #' @export
 comorbid_df_to_mat <- function(x, visit_name = get_visit_name(x),
-                               stringsAsFactors = getOption("stringsAsFactors")) { # nolint
+                               stringsAsFactors = FALSE) { # nolint
   assert_data_frame(x, min.rows = 1, min.cols = 2, col.names = "named")
   assert_string(visit_name)
   assert_flag(stringsAsFactors) # nolint

@@ -1,5 +1,5 @@
-#include "icd_types.hpp"
-#include "local.hpp"
+#include "icd_types.h"
+#include "local.h"
 extern "C" {
 #include "cutil.h" // for getRListOrDfElement
 }

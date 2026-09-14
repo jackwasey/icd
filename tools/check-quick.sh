@@ -6,11 +6,9 @@ ICD_HOME="${ICD_HOME:-${HOME}/icd}"
 
 tmpd="$(mktemp -d "/tmp/${0##*/}.XXXXXXXXXXX")"
 function finish {
-    #	  rm -rf "$tmpd"
     echo "Finished with $tmpd"
 }
 trap finish EXIT
-#rsync -r --exclude=".git" "${ICD_HOME:-$HOME/rprojects/icd}" "$tmpd"
 cd "$tmpd"
 "${ICD_HOME}/tools/build-quick.sh"
 

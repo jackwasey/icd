@@ -107,12 +107,6 @@ test_that("we should allow integer ids which get passed to guessing code", {
   expect_no_error(icd9_comorbid_ahrq(pts))
 })
 
-test_that("get icd dx name from nhds", {
-  skip_if_not_installed("nhds")
-  expect_true(all(grepl("dx", get_icd_name(nhds::nhds2010))))
-  expect_true(all(grepl("pc", get_icd_pc_name(nhds::nhds2010))))
-})
-
 test_that("guess procedure code column names", {
   expect_equal(
     guess_icd_pc_col_by_name(

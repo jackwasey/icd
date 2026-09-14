@@ -1,6 +1,6 @@
-#include "manip.hpp"
-#include "convert.hpp"
-#include "is.hpp"
+#include "manip.h"
+#include "convert.h"
+#include "is.h"
 #include <string.h> // for strlen
 
 using namespace Rcpp;

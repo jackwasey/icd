@@ -28,7 +28,7 @@
 #'   data.frame if \code{return_df} is \code{TRUE}. If the input data frame
 #'   \code{x} has a factor for the \code{visit_name}, this is not changed, but a
 #'   non-factor \code{visit_name} may be converted or not converted according to
-#'   your system default or this setting.
+#'   this setting.
 #' @param ... further arguments to pass on to \code{icd9_comorbid_quan_deyo},
 #'   e.g. \code{name}
 #' @examples
@@ -46,7 +46,7 @@
 charlson <- function(x, visit_name = NULL,
                      scoring_system = c("original", "charlson", "quan"),
                      return_df = FALSE,
-                     stringsAsFactors = getOption("stringsAsFactors"), # nolint
+                     stringsAsFactors = FALSE, # nolint
                      ...) {
   UseMethod("charlson")
 }
@@ -60,7 +60,7 @@ charlson.data.frame <- function(x,
                                 visit_name = NULL,
                                 scoring_system = c("original", "charlson", "quan"),
                                 return_df = FALSE,
-                                stringsAsFactors = getOption("stringsAsFactors"), # nolint
+                                stringsAsFactors = FALSE, # nolint
                                 ...) {
   stopifnot(is.data.frame(x), ncol(x) >= 2, !is.null(colnames(x)))
   stopifnot(is.null(visit_name) ||
@@ -325,7 +325,7 @@ count_codes_wide <- function(x,
 van_walraven <- function(x,
                          visit_name = NULL,
                          return_df = FALSE,
-                         stringsAsFactors = getOption("stringsAsFactors"), # nolint
+                         stringsAsFactors = FALSE, # nolint
                          ...) {
   UseMethod("van_walraven")
 }
@@ -336,7 +336,7 @@ van_walraven <- function(x,
 van_walraven.data.frame <- function(x,
                                     visit_name = NULL,
                                     return_df = FALSE,
-                                    stringsAsFactors = getOption("stringsAsFactors"), # nolint
+                                    stringsAsFactors = FALSE, # nolint
                                     ...) {
   stopifnot(is.data.frame(x), ncol(x) >= 2, !is.null(colnames(x)))
   stopifnot(is.null(visit_name) ||

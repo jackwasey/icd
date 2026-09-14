@@ -1,0 +1,9 @@
+# icd uses Eigen (via RcppEigen) for the sparse-by-dense matrix product at the
+# heart of the comorbidity calculation. Eigen parallelises row-major sparse *
+# dense products with OpenMP, which measurably helps for wide comorbidity maps
+# such as CCS and HCC.
+#
+# R defines SHLIB_OPENMP_CXXFLAGS as empty on platforms without OpenMP support,
+# so no configure script is needed to detect it.
+PKG_CXXFLAGS = $(SHLIB_OPENMP_CXXFLAGS)
+PKG_LIBS = $(SHLIB_OPENMP_CXXFLAGS)

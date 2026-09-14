@@ -1,13 +1,13 @@
 #ifdef ICD_CATCH
-#include "appendMinor.hpp"
-#include "convert.hpp"
-#include "convert10.hpp"
-#include "icd_types.hpp"
-#include "is.hpp"
-#include "local.hpp"
-#include "manip.hpp"
-#include "refactor.hpp"
-#include "util.hpp"
+#include "appendMinor.h"
+#include "convert.h"
+#include "convert10.h"
+#include "icd_types.h"
+#include "is.h"
+#include "local.h"
+#include "manip.h"
+#include "refactor.h"
+#include "util.h"
 
 #include <testthat.h>
 using namespace Rcpp;
@@ -328,8 +328,8 @@ context("refactor") {
     std::string cl         = f2.attr("class");
     std::string factor_str = "factor";
     expect_true(cl == factor_str);
-    // expect_true(is_true(all(res == f2))); // doesn't work because NA = NA is
-    // NA, not true
+    // Note: all(res == f2) can't be used here because NA == NA is NA, not
+    // TRUE, so is_true(all(...)) would always be FALSE regardless of res.
   }
   test_that("dropping NAs makes vector shorter") {
     f                 = {1, 2};
@@ -351,8 +351,6 @@ context("ICD10 short to parts") {
   test_that("icd10 short to parts handles NA") {
     const CharacterVector x = CharacterVector::create(NA_STRING);
     DataFrame res           = icd10ShortToParts(x);
-    // expect_true(((CV)res[0])[0] == NA_STRING);
-    // expect_true(((CV)res[0])[1] == NA_STRING);
   }
   test_that("too short, but not empty") {
     const CharacterVector x = CharacterVector::create("V1", "B", "C10");

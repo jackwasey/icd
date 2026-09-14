@@ -1,5 +1,5 @@
 #include <Rcpp.h>
-#include "sort.hpp"
+#include "sort.h"
 using namespace Rcpp;
 
 IntegerVector orderWorker(
@@ -88,7 +88,6 @@ IntegerVector icd9Order(const CharacterVector& x) {
   return orderWorker(x, icd9Compare);
 }
 
-//std::vector<char> qfirst = {'C', 'D', 'M', 'Z'};
 std::vector<std::string> qx  = {"C4A", "D3A", "M1A", "Z3A", "C7A", "C7B"};
 std::vector<std::string> qb  = {"C4399999", "D3699999", "M0999999", "Z3699999", "C7599999", "C7A99999"};
 std::vector<std::string> qa  = {"C44", "D37", "M10", "Z37", "C7B", "C76"};

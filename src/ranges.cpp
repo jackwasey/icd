@@ -1,9 +1,9 @@
-#include "ranges.hpp"
-#include "appendMinor.hpp" // for icd9MajMinToShort, icd9Ma...
-#include "convert.hpp"     // for icd9DecimalToShort, icd9S...
-#include "icd_types.hpp"   // for CV, VecStr, Str
-#include "is.hpp"          // for icd9IsASingleE
-#include "local.hpp"       // for icd_set
+#include "ranges.h"
+#include "appendMinor.h" // for icd9MajMinToShort, icd9Ma...
+#include "convert.h"     // for icd9DecimalToShort, icd9S...
+#include "icd_types.h"   // for CV, VecStr, Str
+#include "is.h"          // for icd9IsASingleE
+#include "local.h"       // for icd_set
 #include <algorithm>     // for set_intersection
 #include <iterator>      // for insert_iterator, inserter
 #include <set>           // for _Rb_tree_const_iterator, set
@@ -12,7 +12,6 @@
 
 using namespace Rcpp;
 
-// const std::vector<std::string> allMinorsStd{
 CV allMinors = {"",   "0",  "1",  "2",  "3",  "4",  "5",  "6",  "7",  "8",
                 "9",  "00", "01", "02", "03", "04", "05", "06", "07", "08",
                 "09", "10", "11", "12", "13", "14", "15", "16", "17", "18",

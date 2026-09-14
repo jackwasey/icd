@@ -7,7 +7,6 @@ function finish {
     echo "Finished with ${tmpd}"
 }
 trap finish EXIT
-#rsync -r --exclude=".git" "${ICD_HOME:-$HOME/rprojects/icd}" "$tmpd"
 cd "$tmpd"
 # build with standard release options, i.e. compacting vignettes.
 "${ICD_HOME?}"/tools/build-full.sh

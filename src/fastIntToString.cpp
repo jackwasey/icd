@@ -1,5 +1,5 @@
-#include "icd_types.hpp"
-#include <stdio.h> // for sprintf, size_t
+#include "icd_types.h"
+#include <stdio.h> // for snprintf, size_t
 #include <string>
 #include <vector>
 
@@ -19,7 +19,7 @@ CharacterVector fastIntToStringRcpp(IntegerVector x) {
   CharacterVector out(len);
   char buffer[32];
   for (size_t i = 0; i != len; ++i) {
-    sprintf(buffer, "%u", x[i]);
+    snprintf(buffer, sizeof(buffer), "%u", x[i]);
     out[i] = buffer;
   }
   return out;

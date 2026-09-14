@@ -135,13 +135,15 @@ icd9_decimal_to_short_rcpp <- function(x) {
     .Call(`_icd_icd9DecimalToShort`, x)
 }
 
-#' @describeIn get_major Get major part of ICD-9 code, i.e., first three digits
-#'   of numeric or \code{V} code, or first four digits of an \code{E} code.
-#'   This is the part before the decimal, when a decimal point is used.
+#' @title Get the major part of an ICD-9 code
+#' @description Get major part of ICD-9 code, i.e., first three digits of a
+#'   numeric or \code{V} code, or first four digits of an \code{E} code. This
+#'   is the part before the decimal, when a decimal point is used. Wrapped by
+#'   the S3 method \code{get_major.icd9}, which is defined in R so that its
+#'   signature can match the \code{get_major} generic.
 #' @keywords internal manip
-#' @export
 #' @noRd
-get_major.icd9 <- function(x, short_code) {
+icd9_get_major_rcpp <- function(x, short_code) {
     .Call(`_icd_icd9GetMajor`, x, short_code)
 }
 

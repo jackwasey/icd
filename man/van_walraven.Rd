@@ -10,7 +10,7 @@ van_walraven(
   x,
   visit_name = NULL,
   return_df = FALSE,
-  stringsAsFactors = getOption("stringsAsFactors"),
+  stringsAsFactors = FALSE,
   ...
 )
 
@@ -18,7 +18,7 @@ van_walraven(
   x,
   visit_name = NULL,
   return_df = FALSE,
-  stringsAsFactors = getOption("stringsAsFactors"),
+  stringsAsFactors = FALSE,
   ...
 )
 
@@ -47,7 +47,7 @@ frame will be returned, with the first column named as in input data frame
 containing the Charlson Comorbidity Index.}
 
 \item{stringsAsFactors}{Single logical value, describing whether the resulting data frame should have strings, e.g.
-\code{visit_id} converted to factor. Default is to follow the current session option. This is identical to the
+\code{visit_id} converted to factor. Default is \code{FALSE}. This is identical to the
 argument used in, among other base functions \code{as.data.frame}.}
 
 \item{...}{arguments passed on to other functions}

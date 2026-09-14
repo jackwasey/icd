@@ -81,7 +81,6 @@ test_that("zero length ICD-10-CM children", {
   expect_empty_icd10cm_kids(c("", ""))
   expect_empty_icd10cm_kids(character(0), has_warning = FALSE)
   expect_warning(children(icd:::icd10cm(character(0)), defined = TRUE),
-    icd:::icd10cm(character(0)),
     regexp = NA
   )
 })

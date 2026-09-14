@@ -1,5 +1,5 @@
-#include "refactor.hpp"
-#include "local.hpp"
+#include "refactor.h"
+#include "local.h"
 
 using namespace Rcpp;
 
@@ -144,7 +144,6 @@ IntegerVector refactor_narm(const IntegerVector &x,
   DEBUG("new_levels size: " << new_levels.size());
   CV no_na_lx;
   CV no_na_new_levels;
-  // bool any_na_lx = false;
   LogicalVector is_na_new_levels = is_na(new_levels);
   LogicalVector is_na_old_levels = is_na(lx);
   DEBUG("Dropping NA in input factor levels");

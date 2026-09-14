@@ -44,11 +44,6 @@ microbenchmark("100" %i9mj% "100",
 # "100" %i9mj% "110"  8.851840  9.390647 11.51193  9.884331 10.92320 28.38282    50
 # "100" %i9mj% "999" 17.907386 19.016562 25.47287 21.088939 26.57372 78.33338    50
 
-# prf_i9mj <- profr("100" %i9mj% "110"))
-# prf_mj <- profr({
-# icd:::icd_expand_range_major.icd9("100", "110", defined = TRUE)
-#  }) #, interval = 0.01, quiet = TRUE)
-
 Rprof(filename = "/tmp/mj.txt", interval = 0.001, line.profiling = TRUE)
 microbenchmark(
   icd:::expand_range_major.icd9("100", "999", defined = TRUE),

@@ -30,10 +30,7 @@ along with icd. If not, see <http:#www.gnu.org/licenses/>.
 [![Project Status: Active – The project has reached a stable, usable
 state and is being actively
 developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
-[![Travis](https://travis-ci.org/jackwasey/icd.svg?branch=main
-"Travis Build Status")](https://travis-ci.org/jackwasey/icd)
-[![Appveyor](https://ci.appveyor.com/api/projects/status/9ncfgxht3n5i8t60/branch/main?svg=true
-"Appveyor Build Status")](https://ci.appveyor.com/project/jackwasey/icd/branch/main)
+[![R-CMD-check](https://github.com/jackwasey/icd/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/jackwasey/icd/actions/workflows/R-CMD-check.yaml)
 [![codecov.io](https://codecov.io/github/jackwasey/icd/coverage.svg?branch=main
 "Code Coverage")](https://codecov.io/github/jackwasey/icd?branch=main)
 [![CII Best

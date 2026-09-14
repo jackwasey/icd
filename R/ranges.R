@@ -501,6 +501,6 @@ expand_minor <- function(mnr, ...) {
 #' @export
 #' @keywords internal
 #' @noRd
-expand_minor.icd9 <- function(mnr, is_e = FALSE) {
+expand_minor.icd9 <- function(mnr, is_e = FALSE, ...) {
   icd9_expand_minor_rcpp(mnr, isE = is_e)
 }

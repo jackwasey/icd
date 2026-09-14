@@ -10,7 +10,7 @@ charlson(
   visit_name = NULL,
   scoring_system = c("original", "charlson", "quan"),
   return_df = FALSE,
-  stringsAsFactors = getOption("stringsAsFactors"),
+  stringsAsFactors = FALSE,
   ...
 )
 
@@ -19,7 +19,7 @@ charlson(
   visit_name = NULL,
   scoring_system = c("original", "charlson", "quan"),
   return_df = FALSE,
-  stringsAsFactors = getOption("stringsAsFactors"),
+  stringsAsFactors = FALSE,
   ...
 )
 }
@@ -53,7 +53,7 @@ containing the Charlson Comorbidity Index.}
 data.frame if \code{return_df} is \code{TRUE}. If the input data frame
 \code{x} has a factor for the \code{visit_name}, this is not changed, but a
 non-factor \code{visit_name} may be converted or not converted according to
-your system default or this setting.}
+this setting.}
 
 \item{...}{further arguments to pass on to \code{icd9_comorbid_quan_deyo},
 e.g. \code{name}}

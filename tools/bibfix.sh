@@ -26,5 +26,4 @@ do
   fi
 done
 
-#bibtool -s gplv3.bib other.bib icdjss.bib -- preserve.key.case=on > "$all"
 exit 0

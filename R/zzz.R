@@ -74,7 +74,7 @@ release_questions <- function() {
     "Use clang scan-build, with latest version of clang (clang-tools in apt)",
     # testing and compilation and different platforms:
     "Are there any skipped tests which should be run?",
-    "MacOS, Windows, Linux, r-hub, win-builder, travis, appveyor",
+    "MacOS, Windows, Linux, r-hub, win-builder, GitHub Actions",
     "Download and set data dir in vanilla bash and R, Windows, Mac and Linux without library(icd) using icd::download_all_icd_data()",
     # final manual check:
     "Have all unnecessary files been ignored in built source tarball?",
