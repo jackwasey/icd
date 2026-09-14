@@ -16,11 +16,7 @@
     "name": "R",
     "url": "https://r-project.org"
   },
-<<<<<<< HEAD
-  "runtimePlatform": "R version 4.0.2 (2020-06-22)",
-=======
   "runtimePlatform": "R version 4.0.3 (2020-10-10)",
->>>>>>> github/v4.0.9.9000
   "provider": {
     "@id": "https://cran.r-project.org",
     "@type": "Organization",
@@ -163,18 +159,6 @@
     },
     {
       "@type": "SoftwareApplication",
-      "identifier": "nhds",
-      "name": "nhds",
-      "provider": {
-        "@id": "https://cran.r-project.org",
-        "@type": "Organization",
-        "name": "Comprehensive R Archive Network (CRAN)",
-        "url": "https://cran.r-project.org"
-      },
-      "sameAs": "https://CRAN.R-project.org/package=nhds"
-    },
-    {
-      "@type": "SoftwareApplication",
       "identifier": "readxl",
       "name": "readxl",
       "provider": {
@@ -288,14 +272,8 @@
   "releaseNotes": "https://github.com/jackwasey/icd/blob/master/NEWS.md",
   "contIntegration": ["https://travis-ci.org/jackwasey/icd", "https://ci.appveyor.com/project/jackwasey/icd/branch/main", "https://codecov.io/github/jackwasey/icd?branch=main"],
   "developmentStatus": ["https://www.tidyverse.org/lifecycle/#stable", "https://www.repostatus.org/#active"],
-<<<<<<< HEAD
   "relatedLink": ["https://jackwasey.github.io/icd/", "https://CRAN.R-project.org/package=icd"],
   "readme": "https://github.com/jackwasey/icd/blob/main/README.md",
-  "fileSize": "63851.077KB",
-=======
-  "relatedLink": "https://jackwasey.github.io/icd/",
-  "readme": "https://github.com/jackwasey/icd/blob/main/README.md",
->>>>>>> github/v4.0.9.9000
   "keywords": [
     "comorbidities",
     "icd",
