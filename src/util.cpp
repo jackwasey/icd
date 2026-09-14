@@ -4,7 +4,6 @@
 #include <iterator>  // for back_insert_iterator
 #include <math.h>    // for floor
 #include <ostream>
-#include <stdio.h> // for sprintf
 #include <stdlib.h>
 #include <string.h> // for strcmp
 #include <string>
