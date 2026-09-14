@@ -332,17 +332,10 @@ test_that("van_walraven comorbidity index and score", {
   )
   expect_equivalent(
     van_walraven(mydf, visit_name = "id", icd_name = "value", return_df = TRUE),
-    if (getOption("stringsAsFactors")) {
-      data.frame(
-        id = factor(c("1", "2", "3")),
-        vanWalraven = c(10, 12, -2)
-      )
-    } else {
-      data.frame(
-        id = c("1", "2", "3"),
-        vanWalraven = c(10, 12, -2)
-      )
-    }
+    data.frame(
+      id = c("1", "2", "3"),
+      vanWalraven = c(10, 12, -2)
+    )
   )
   expect_equal(
     van_walraven(mydf, icd_name = "value"),

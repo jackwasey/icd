@@ -7,7 +7,7 @@
 comorbid_mat_to_df(
   x,
   visit_name = "visit_id",
-  stringsAsFactors = getOption("stringsAsFactors")
+  stringsAsFactors = FALSE
 )
 }
 \arguments{
@@ -18,7 +18,7 @@ data frame. Everywhere else, \code{visit_name} describes the input data,
 but here it is for output data.}
 
 \item{stringsAsFactors}{Single logical value, describing whether the resulting data frame should have strings, e.g.
-\code{visit_id} converted to factor. Default is to follow the current session option. This is identical to the
+\code{visit_id} converted to factor. Default is \code{FALSE}. This is identical to the
 argument used in, among other base functions \code{as.data.frame}.}
 }
 \description{
@@ -39,9 +39,7 @@ stopifnot(is.data.frame(df.out))
 # output data frame has a factor for the visit_name column
 stopifnot(identical(rownames(mat), as.character(df.out[["visit_id"]])))
 df.out[, 1:4]
-# when creating a data frame like this, stringsAsFactors uses
-# the system-wide option you may have set e.g. with
-# options("stringsAsFactors" = FALSE).
+# visit_id is a character column, not a factor, unless you ask otherwise
 is.factor(df.out[["visit_id"]])
 }
 \seealso{

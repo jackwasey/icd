@@ -7,7 +7,7 @@
 comorbid_df_to_mat(
   x,
   visit_name = get_visit_name(x),
-  stringsAsFactors = getOption("stringsAsFactors")
+  stringsAsFactors = FALSE
 )
 }
 \arguments{
@@ -27,7 +27,7 @@ match is rejected. If there are no successful guesses, and \code{visit_id}
 was not specified, then the first column of the data frame is used.}
 
 \item{stringsAsFactors}{Single logical value, describing whether the resulting data frame should have strings, e.g.
-\code{visit_id} converted to factor. Default is to follow the current session option. This is identical to the
+\code{visit_id} converted to factor. Default is \code{FALSE}. This is identical to the
 argument used in, among other base functions \code{as.data.frame}.}
 }
 \description{

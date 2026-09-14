@@ -71,7 +71,6 @@ Suggests:
     jsonlite,
     knitr,
     magrittr,
-    nhds,
     readxl,
     rmarkdown (>= 1.11),
     RODBC,
