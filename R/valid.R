@@ -196,7 +196,11 @@ set_re_globals <- function(env = parent.frame()) {
   ),
   collapse = "|"
   )
-  re_icd10_major_bare <- "[[:alpha:]][[:digit:]][[:alnum:]]"
+  # letter+digit+alnum covers almost everything (e.g. "A00", and the older
+  # alpha-mixed exceptions like "C7A", "D3A"). FY2026 introduced "QA0", a
+  # letter+letter+digit major, so that pattern is accepted too.
+  re_icd10_major_bare <-
+    nce("[[:alpha:]][[:digit:]][[:alnum:]]|[[:alpha:]]{2}[[:digit:]]")
   # use slightly broader definition for generic:
   re_icd10_major <- .jws(re_icd10_major_bare)
   re_icd10_minor <- "[[:alnum:]]{0,4}"
@@ -204,7 +208,7 @@ set_re_globals <- function(env = parent.frame()) {
   re_icd10_decimal <-
     wrap_decimal_re(re_icd10_major_bare, re_icd10_minor)
   re_icd10_any <- wrap_any_re(re_icd10_major_bare, re_icd10_minor)
-  # ICD-10-CM, ICD-10-BE
+  # ICD-10-CM
   re_icd10cm_major_bare <- re_icd10_major_bare
   re_icd10cm_major <- .jws(re_icd10cm_major_bare)
   re_icd10cm_minor <- re_icd10_minor
@@ -656,14 +660,6 @@ get_major.icd10cm <- function(x, ...) {
 #' @export
 #' @noRd
 get_major.icd10fr <- function(x, ...) {
-  get_major.icd10(x)
-}
-
-#' @describeIn get_major Get major part of a Belgian ICD-10-BE code
-#' @keywords internal
-#' @export
-#' @noRd
-get_major.icd10be <- function(x, ...) {
   get_major.icd10(x)
 }
 

@@ -34,13 +34,13 @@ Get billable ICD codes, implicitly, this refers to an ICD
 }
 \section{Methods (by class)}{
 \itemize{
-\item \code{default}: Get billable ICD codes, guessing whether ICD-9
+\item \code{get_leaf(default)}: Get billable ICD codes, guessing whether ICD-9
 or ICD-10, and code short vs decimal type.
 
-\item \code{icd9cm}: Get billable ICD-9-CM codes
+\item \code{get_leaf(icd9cm)}: Get billable ICD-9-CM codes
 
-\item \code{icd9}: Get billable ICD-9 codes, which is currently
+\item \code{get_leaf(icd9)}: Get billable ICD-9 codes, which is currently
 implemented assuming ICD-9-CM
-}}
 
+}}
 \keyword{internal}

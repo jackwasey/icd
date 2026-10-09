@@ -3,7 +3,7 @@
 
 .data_names_pkg <- c(
   "icd9cm2014_leaf",
-  "icd10cm2019" # included in package data, being the latest version
+  "icd10cm2026" # included in package data, being the latest version
 )
 
 .data_names_cache <- c(
@@ -12,11 +12,6 @@
   "icd10who2008fr",
   # FR
   "icd10fr2019",
-  # BE
-  "icd10be2014",
-  "icd10be2014_pc",
-  "icd10be2017",
-  "icd10be2017_pc",
   # ICD-9-CM leaf descriptions
   paste0("icd9cm", 2005:2013, "_leaf"),
   # RTF parsing with majors "three-digit" codes and other non-leaf nodes
@@ -24,11 +19,7 @@
   # ICD-10-CM PCS
   paste0("icd10cm", 2014:2019, "_pc"),
   # ICD-10-CM DX
-  "icd10cm2014",
-  "icd10cm2015",
-  "icd10cm2016",
-  "icd10cm2017",
-  "icd10cm2018"
+  paste0("icd10cm", 2014:2025)
 )
 
 .data_names <- c(

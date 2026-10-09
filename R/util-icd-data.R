@@ -54,7 +54,7 @@
   .chapter_to_desc_range(x, re_major = re_icd10_major_bare)
 }
 
-.get_chapter_ranges_from_flat <- function(flat_hier = icd10cm2019,
+.get_chapter_ranges_from_flat <- function(flat_hier = icd10cm2026,
                                           field = "chapter") {
   u <- if (is.factor(flat_hier[[field]])) {
     levels(flat_hier[[field]])

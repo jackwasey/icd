@@ -8,7 +8,7 @@
 #'   also \sQuote{V} codes precede \sQuote{E} codes. Numeric codes are first,
 #'   then \sQuote{V}, then \sQuote{E}. A factor is returned if a factor is
 #'   given.
-#' @section ICD-10-CM and ICD-10-BE: There are some codes which are sequenced
+#' @section ICD-10-CM: There are some codes which are sequenced
 #'   out of lexicographic order, e.g., \code{C7A} and \code{C7B} are between
 #'   \code{C80} and \code{C81}; \code{D3A} is between \code{D48} and \code{D49}.
 #' @details Note that \code{\link[base]{sort}} is an S3 generic, whereas
@@ -83,13 +83,6 @@ sort.icd10cm <- function(x,
 
 #' @rdname sort_icd
 #' @export
-sort.icd10be <- function(x,
-                         decreasing = FALSE,
-                         ...) {
-  sort.icd10cm(x, decreasing = decreasing, ...)
-}
-#' @rdname sort_icd
-#' @export
 sort.icd9 <- function(x,
                       decreasing = FALSE,
                       short_code = guess_short(x),
@@ -141,12 +134,6 @@ order.icd10cm <- function(x) {
   icd10cm_order_rcpp(x)
 }
 
-#' @rdname sort_icd
-#' @export
-order.icd10be <- function(x) {
-  order.icd10cm(x)
-}
-
 #' @keywords internal
 #' @noRd
 #' @export
@@ -172,27 +159,6 @@ Ops.icd9 <- function(e1, e2) {
 #' @noRd
 #' @export
 Ops.icd10cm <- function(e1, e2) {
-  switch(.Generic,
-    "<" = {
-      e1 != e2 & icd10cm_compare_vector_rcpp(e1, e2)
-    },
-    "<=" = {
-      e1 == e2 | icd10cm_compare_vector_rcpp(e1, e2)
-    },
-    ">" = {
-      e1 != e2 & !icd10cm_compare_vector_rcpp(e1, e2)
-    },
-    ">=" = {
-      !icd10cm_compare_vector_rcpp(e1, e2)
-    },
-    NextMethod()
-  )
-}
-
-#' @keywords internal
-#' @noRd
-#' @export
-Ops.icd10be <- function(e1, e2) {
   switch(.Generic,
     "<" = {
       e1 != e2 & icd10cm_compare_vector_rcpp(e1, e2)

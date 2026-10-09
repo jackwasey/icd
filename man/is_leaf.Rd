@@ -39,20 +39,20 @@ billable codes, or another edition if specified.
 }
 \section{Methods (by class)}{
 \itemize{
-\item \code{icd9}: Which of the given ICD-9 codes are leaf nodes in
+\item \code{is_leaf(icd9)}: Which of the given ICD-9 codes are leaf nodes in
 ICD-9-CM. Currently assumes ICD-9 codes are ICD-9-CM
 
-\item \code{icd10cm}: Which of the given ICD-10 codes are leaf nodes in
+\item \code{is_leaf(icd10cm)}: Which of the given ICD-10 codes are leaf nodes in
 ICD-10-CM. Currently assumes ICD-10 codes are ICD-10-CM
 
-\item \code{icd10}: Which of the given ICD-10 codes are leaf nodes in
+\item \code{is_leaf(icd10)}: Which of the given ICD-10 codes are leaf nodes in
 ICD-10-CM. Currently assumes ICD-10 codes are ICD-10-CM
 
-\item \code{icd9cm}: Which of the given ICD-9 codes are leaf nodes in
+\item \code{is_leaf(icd9cm)}: Which of the given ICD-9 codes are leaf nodes in
 ICD-9-CM
 
-\item \code{default}: Which of the given ICD codes are leaf nodes in
+\item \code{is_leaf(default)}: Which of the given ICD codes are leaf nodes in
 ICD version (9 vs 10) guessed from the codes themselves.
-}}
 
+}}
 \keyword{internal}

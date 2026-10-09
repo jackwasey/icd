@@ -2,25 +2,30 @@ context("icd10cm versions")
 
 test_that("active version set to latest version", {
   with_icd10cm_version(
-    ver = "2019",
+    ver = "2026",
     code = expect_identical(
       get_icd10cm_active(),
-      icd10cm2019
+      icd10cm2026
     )
   )
   # and the other way, because something funny is going on during testing only
   expect_identical(
     with_icd10cm_version(
-      ver = "2019",
+      ver = "2026",
       code = get_icd10cm_active()
     ),
-    icd10cm2019
+    icd10cm2026
   )
   # and for good measure
+  skip_missing_dat("icd10cm2026")
+  expect_identical(
+    get_icd10cm2026(),
+    icd10cm2026
+  )
   skip_missing_dat("icd10cm2019")
   expect_identical(
-    get_icd10cm2019(),
-    icd10cm2019
+    icd::get_icd10cm2019(),
+    icd:::.get_icd10cm2019(must_work = TRUE)
   )
   skip_missing_dat("icd10cm2017")
   expect_identical(

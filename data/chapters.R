@@ -40,10 +40,12 @@ icd10_chapters <- list(
   "Diseases of the genitourinary system" = c(start = "N00", end = "N99"),
   "Pregnancy, childbirth and the puerperium" = c(start = "O00", end = "O9A"),
   "Certain conditions originating in the perinatal period" = c(start = "P00", end = "P96"),
-  "Congenital malformations, deformations and chromosomal abnormalities" = c(start = "Q00", end = "Q99"),
+  "Congenital malformations, deformations, chromosomal abnormalities, and genetic disorders" =
+    c(start = "Q00", end = "QA0"),
   "Symptoms, signs and abnormal clinical and laboratory findings, not elsewhere classified" =
     c(start = "R00", end = "R99"),
   "Injury, poisoning and certain other consequences of external causes" = c(start = "S00", end = "T88"),
   "External causes of morbidity" = c(start = "V00", end = "Y99"),
-  "Factors influencing health status and contact with health services" = c(start = "Z00", end = "Z99")
+  "Factors influencing health status and contact with health services" = c(start = "Z00", end = "Z99"),
+  "Codes for special purposes" = c(start = "U00", end = "U85")
 )

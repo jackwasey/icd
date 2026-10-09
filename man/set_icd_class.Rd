@@ -10,7 +10,6 @@
 \alias{as.icd10cm_pc}
 \alias{as.icd10who}
 \alias{as.icd10fr}
-\alias{as.icd10be}
 \title{Construct ICD-9 and ICD-10 data types}
 \usage{
 as.icd9(x)
@@ -28,8 +27,6 @@ as.icd10cm_pc(x)
 as.icd10who(x, short_code = NULL)
 
 as.icd10fr(x, short_code = NULL)
-
-as.icd10be(x, short_code = NULL)
 }
 \arguments{
 \item{x}{object to set class \code{icd9}}
@@ -54,27 +51,25 @@ Some features make more sense as attributes. E.g. setting code type to
 }
 \section{Functions}{
 \itemize{
-\item \code{as.icd9}: Use generic ICD-9 class for this data. Ideally, use
+\item \code{as.icd9()}: Use generic ICD-9 class for this data. Ideally, use
 the more specific \code{icd9cm} or other sub-classes (when available).
 
-\item \code{as.icd9cm}: Use ICD-9-CM
+\item \code{as.icd9cm()}: Use ICD-9-CM
 
-\item \code{as.icd9cm_pc}: Indicate the data are ICD-9-CM procedure codes.
+\item \code{as.icd9cm_pc()}: Indicate the data are ICD-9-CM procedure codes.
 
-\item \code{as.icd10}: Use generic ICD-10 class for this data. If
+\item \code{as.icd10()}: Use generic ICD-10 class for this data. If
 possible, use the more specific \code{icd10who} or \code{icd10cm}.
 
-\item \code{as.icd10cm}: Use ICD-10-CM (USA) class for the given data
+\item \code{as.icd10cm()}: Use ICD-10-CM (USA) class for the given data
 
-\item \code{as.icd10cm_pc}: Indicate the data are ICD-10-CM procedure codes.
+\item \code{as.icd10cm_pc()}: Indicate the data are ICD-10-CM procedure codes.
 
-\item \code{as.icd10who}: Use WHO ICD-10 class for the given data
+\item \code{as.icd10who()}: Use WHO ICD-10 class for the given data
 
-\item \code{as.icd10fr}: Use ICD-10-FR (France) class for the given data
+\item \code{as.icd10fr()}: Use ICD-10-FR (France) class for the given data
 
-\item \code{as.icd10be}: Use ICD-10-BE (Belgium) class for the given data
 }}
-
 \examples{
 x <- as.icd10("A1009")
 attr(x, "icd_short_diag") <- TRUE
@@ -95,8 +90,8 @@ stopifnot(is.short_diag(j))
 stopifnot(is.icd10(j), is.icd10(j[2]), is.icd10(j[[2]]))
 }
 \seealso{
-Other ICD data types: 
-\code{\link{as.comorbidity_map}()},
+Other ICD data types:
+\code{\link[=as.comorbidity_map]{as.comorbidity_map()}},
 \code{\link{wide_vs_long}}
 }
 \concept{ICD data types}

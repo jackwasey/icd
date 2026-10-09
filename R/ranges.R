@@ -163,11 +163,21 @@ expand_range_major.default <- function(start, end, defined = TRUE) {
   lets <- LETTERS[which(LETTERS == ss):which(LETTERS == es)]
   o <- sort(
     as.icd10cm(
-      apply(
-        expand.grid(lets, 0:9, c(0:9, "A", "B")),
-        MARGIN = 1,
-        FUN = paste0,
-        collapse = ""
+      c(
+        apply(
+          expand.grid(lets, 0:9, c(0:9, "A", "B")),
+          MARGIN = 1,
+          FUN = paste0,
+          collapse = ""
+        ),
+        # FY2026 introduced a second major-code pattern, letter+letter+digit
+        # (e.g. "QA0"), alongside the long-standing letter+digit+alnum pattern.
+        apply(
+          expand.grid(lets, LETTERS, 0:9),
+          MARGIN = 1,
+          FUN = paste0,
+          collapse = ""
+        )
       )
     )
   )
@@ -189,7 +199,7 @@ expand_range_major.icd10cm <- function(start, end, defined = TRUE) {
   # we expand the start to end range of chapter and sub-chapter definitions.
   se <- toupper(trimws(as_char_no_warn(c(start, end))))
   unique_mjrs <- if (defined) {
-    unique(icd10cm2019$three_digit)
+    unique(get_icd10cm_active()$three_digit)
   } else {
     .icd10cm_get_majors_possible("A00", "Z99")
   }

@@ -56,15 +56,15 @@ Leading zeroes in the decimal form are not ambiguous. Although
 }
 \section{Methods (by class)}{
 \itemize{
-\item \code{icd10}: Test whether generic ICD-10 code is valid
+\item \code{is_valid(icd10)}: Test whether generic ICD-10 code is valid
 
-\item \code{icd10fr}: Test whether generic ICD-10-FR code is valid
+\item \code{is_valid(icd10fr)}: Test whether generic ICD-10-FR code is valid
 
-\item \code{icd9}: Test whether generic ICD-10 code is valid
+\item \code{is_valid(icd9)}: Test whether generic ICD-10 code is valid
 
-\item \code{comorbidity_map}: Validate a mapping of ICD codes to comorbidities.
+\item \code{is_valid(comorbidity_map)}: Validate a mapping of ICD codes to comorbidities.
+
 }}
-
 \section{Three-digit validation}{
  \code{icd9_is_valid_major} validates just
   the 'major' three-digit part of an ICD-9 code. This can in fact be provided

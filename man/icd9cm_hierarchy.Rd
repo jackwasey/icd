@@ -36,7 +36,7 @@ Rich text descriptions here:
 Unlike \code{\link{get_icd9cm2014_leaf}} and friends, these data frames
 contain the full structure of the ICD-9-CM scheme up to the three-digit
 codes. Unlike the equivalent ICD-10-CM data frames (e.g.,
-\code{\link{icd10cm2019}}), they do not have columns indicating billable/leaf
+\code{\link{icd10cm2026}}), they do not have columns indicating billable/leaf
 status, or chapter designations.
 }
 \details{

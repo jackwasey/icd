@@ -1,7 +1,7 @@
 Package: icd
 Title: Comorbidity Calculations and Tools for ICD-9 and ICD-10
     Codes
-Version: 4.0.9.9000
+Version: 4.0.10
 Authors@R:
     c(person(given = "Jack O.",
              family = "Wasey",
@@ -55,7 +55,7 @@ Description: Calculate comorbidities, medical risk scores, and
     computation includes Hierarchical Condition Codes, and an
     implementation of AHRQ Clinical Classifications. Risk scores include
     those of Charlson and van Walraven.  US Clinical Modification, Word
-    Health Organization, Belgian and French ICD-10 codes are supported,
+    Health Organization, and French ICD-10 codes are supported,
     most of which are downloaded on demand.
 License: GPL-3
 URL: https://jackwasey.github.io/icd/
@@ -93,4 +93,4 @@ Encoding: UTF-8
 Language: en-US
 LazyData: true
 LazyDataCompression: xz
-RoxygenNote: 7.1.1
+Config/roxygen2/version: 8.0.0

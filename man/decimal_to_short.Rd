@@ -28,27 +28,27 @@ correctness of the shortened codes.
 }
 \section{Methods (by class)}{
 \itemize{
-\item \code{icd9}: convert ICD-9 codes from decimal to short
+\item \code{decimal_to_short(icd9)}: convert ICD-9 codes from decimal to short
 format
 
-\item \code{icd10}: convert ICD-10 codes from decimal to short
+\item \code{decimal_to_short(icd10)}: convert ICD-10 codes from decimal to short
 format
 
-\item \code{icd10cm}: convert ICD-10-CM codes from decimal to short
+\item \code{decimal_to_short(icd10cm)}: convert ICD-10-CM codes from decimal to short
 format
 
-\item \code{default}: Guess ICD version and convert decimal to
+\item \code{decimal_to_short(default)}: Guess ICD version and convert decimal to
 short format
-}}
 
+}}
 \seealso{
-Other ICD data conversion: 
-\code{\link{comorbid_df_to_mat}()},
-\code{\link{comorbid_mat_to_df}()},
+Other ICD data conversion:
+\code{\link[=comorbid_df_to_mat]{comorbid_df_to_mat()}},
+\code{\link[=comorbid_mat_to_df]{comorbid_mat_to_df()}},
 \code{\link{convert}},
-\code{\link{long_to_wide}()},
-\code{\link{short_to_decimal}()},
-\code{\link{wide_to_long}()}
+\code{\link[=long_to_wide]{long_to_wide()}},
+\code{\link[=short_to_decimal]{short_to_decimal()}},
+\code{\link[=wide_to_long]{wide_to_long()}}
 }
 \concept{ICD data conversion}
 \keyword{internal}

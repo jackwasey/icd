@@ -63,17 +63,17 @@ source tree of this package.
 }
 \section{Methods (by class)}{
 \itemize{
-\item \code{icd9}: Check whether ICD-9 code are defined. (ICD-9-CM by
+\item \code{is_defined(icd9)}: Check whether ICD-9 code are defined. (ICD-9-CM by
 default)
 
-\item \code{icd10cm}: Same for ICD-10-CM
+\item \code{is_defined(icd10cm)}: Same for ICD-10-CM
 
-\item \code{icd10}: Same for ICD-10, temporarily using ICD-10-CM until
+\item \code{is_defined(icd10)}: Same for ICD-10, temporarily using ICD-10-CM until
 ICD-10 WHO is available in this package
 
-\item \code{default}: default method which will guess the ICD version (9
+\item \code{is_defined(default)}: default method which will guess the ICD version (9
 vs 10, maybe WHO vs CM or other in the future) and dispatches again on that
 type.
-}}
 
+}}
 \keyword{internal}

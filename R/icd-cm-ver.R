@@ -20,7 +20,7 @@ set_icd10cm_active_year <- function(ver, check_exists = TRUE) {
 #' @rdname set_icd10cm_active_year
 #' @export
 get_icd10cm_active_year <- function() {
-  ver <- .get_opt("icd10cm_active_year", default = "2019")
+  ver <- .get_opt("icd10cm_active_year", default = "2026")
   .dbg("getting options: icd10cm_active_year: ", ver)
   ver <- as.character(ver)
   if (!grepl("^[[:digit:]]+$", ver)) {
@@ -115,7 +115,7 @@ get_icd10cm_available <- function(dx = TRUE,
   stopifnot(is.logical(dx), length(dx) == 1)
   stopifnot(is.logical(return_year), length(return_year) == 1)
   pc_str <- ifelse(dx, "", "_pc")
-  res <- as.character(2014:2019)
+  res <- if (dx) as.character(2014:2026) else as.character(2014:2019)
   if (return_year) {
     res
   } else {
@@ -128,10 +128,10 @@ get_icd10cm_available <- function(dx = TRUE,
 #' @keywords datasets
 #' @examples
 #' a <- get_icd10cm_latest()
-#' identical(a, icd10cm2019)
+#' identical(a, icd10cm2026)
 #' @export
 get_icd10cm_latest <- function() {
-  icd10cm2019
+  icd10cm2026
 }
 
 #' Evaluate code with a particular version of ICD-10-CM

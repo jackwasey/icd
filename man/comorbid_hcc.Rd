@@ -54,17 +54,17 @@ annually) are applied to create the HCCs.
 }
 \section{Functions}{
 \itemize{
-\item \code{icd9_comorbid_hcc}: Get HCCs from a data frame of ICD-9 codes
+\item \code{icd9_comorbid_hcc()}: Get HCCs from a data frame of ICD-9 codes
 
-\item \code{icd10_comorbid_hcc}: Get HCCs from a data frame of ICD-10 codes
+\item \code{icd10_comorbid_hcc()}: Get HCCs from a data frame of ICD-10 codes
+
 }}
-
 \seealso{
-Other comorbidity computations: 
-\code{\link{comorbid}()}
+Other comorbidity computations:
+\code{\link[=comorbid]{comorbid()}}
 
-Other comorbidities: 
-\code{\link{comorbid}()},
+Other comorbidities:
+\code{\link[=comorbid]{comorbid()}},
 \code{\link{icd10_map_ahrq_pcs}},
 \code{\link{icd9_map_ahrq}},
 \code{\link{icd9_map_elix}},

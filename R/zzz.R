@@ -94,7 +94,7 @@ utils::globalVariables(c(
   "icd9_majors",
   "icd10_sub_chapters",
   "icd10_chapters",
-  "icd10cm2019",
+  "icd10cm2026",
   "icd9cm_hierarchy"
 ))
 
