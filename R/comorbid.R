@@ -144,8 +144,8 @@ comorbid <- function(x,
   switch_ver_cmb(x,
     funs = list(icd9 = icd9_comorbid, icd10 = icd10_comorbid),
     map = map, visit_name = visit_name, icd_name = icd_name,
-    short_code = short_code, return_df = return_df,
-    return_binary = return_binary, ...
+    short_code = short_code, short_map = short_map,
+    return_df = return_df, return_binary = return_binary, ...
   )
 }
 
@@ -208,6 +208,9 @@ icd10_comorbid_reduce <- function(x = x,
                                   ...) {
   if (!short_code) {
     x[icd_name] <- lapply(x[icd_name], decimal_to_short.icd10)
+  }
+  if (!short_map) {
+    map <- lapply(map, decimal_to_short.icd10)
   }
   # TODO: could  reduce list of input visits here, as we are scanning the codes
   # TODO: must we factor here?

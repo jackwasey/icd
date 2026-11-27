@@ -248,3 +248,42 @@ test_that("Alcoholic fatty liver", {
   )
   expect_true(all(res[, "Alcohol"]))
 })
+
+test_that("icd10_comorbid and comorbid convert decimal maps when short_map is FALSE", {
+  pts_dec <- data.frame(
+    id = c("p1", "p2", "p3"),
+    icd10 = c("E11.9", "I21.01", "Z00.00"),
+    stringsAsFactors = FALSE
+  )
+  pts_short <- data.frame(
+    id = c("p1", "p2", "p3"),
+    icd10 = c("E119", "I2101", "Z0000"),
+    stringsAsFactors = FALSE
+  )
+  map_dec <- list(dm = c("E11.9"), mi = c("I21.0"))
+  map_short <- list(dm = c("E119"), mi = c("I210"))
+  expected <- icd10_comorbid(pts_short, map = map_short, short_code = TRUE, short_map = TRUE)
+  expect_identical(unname(expected[, "dm"]), c(TRUE, FALSE, FALSE))
+  expect_identical(unname(expected[, "mi"]), c(FALSE, TRUE, FALSE))
+
+  expect_identical(
+    icd10_comorbid(pts_dec, map = map_dec, short_code = FALSE, short_map = FALSE),
+    expected
+  )
+  expect_identical(
+    icd10_comorbid(pts_short, map = map_dec, short_code = TRUE, short_map = FALSE),
+    expected
+  )
+  expect_identical(
+    icd10_comorbid(pts_dec, map = map_dec),
+    expected
+  )
+  expect_identical(
+    comorbid(pts_dec, map = map_dec, short_code = FALSE, short_map = FALSE),
+    expected
+  )
+  expect_identical(
+    comorbid(pts_short, map = map_dec),
+    expected
+  )
+})
